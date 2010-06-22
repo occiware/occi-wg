@@ -19,7 +19,7 @@
     canonical URL) can have multiple representations which may or may not be
     hypertext (e.g. HTML). Metadata including associations between resources
     is exposed via HTTP headers (e.g. the Link: header), except in the case of
-    collections where Atom is used as the meta-model. </para>
+    collections where Atom is used as the meta-model.</para>
   </section>
 
   <section>
@@ -114,12 +114,35 @@
 
     <glosslist>
       <glossentry>
+        <glossterm>COPY (Duplicate)</glossterm>
+
+        <glossdef>
+          <para><quote>The COPY method creates a duplicate of the source
+          resource identified by the Request-URI, in the destination resource
+          identified by the URI in the Destination header.</quote><xref
+          linkend="rfc4918" /></para>
+        </glossdef>
+      </glossentry>
+
+      <glossentry>
         <glossterm>HEAD (Retrieve - Metadata Only)</glossterm>
 
         <glossdef>
           <para><quote>The HEAD method is identical to GET except that the
           server MUST NOT return a message-body in the response.</quote><xref
           linkend="rfc2616" /></para>
+        </glossdef>
+      </glossentry>
+
+      <glossentry>
+        <glossterm>MOVE (Relocate)</glossterm>
+
+        <glossdef>
+          <para><quote>The MOVE operation on a non-collection resource is the
+          logical equivalent of a copy (COPY), followed by consistency
+          maintenance processing, followed by a delete of the source, where
+          all three actions are performed in a single operation.</quote><xref
+          linkend="rfc4918" /></para>
         </glossdef>
       </glossentry>
 
@@ -138,8 +161,9 @@
     <bridgehead>Collections</bridgehead>
 
     <para>Where an operation returns multiple resources (e.g. categories,
-    searches) this is referred to as a <glossterm>collection</glossterm>.
-    Depending on the format these are returned as:</para>
+    searches) this is referred to as a <glossterm>collection</glossterm>
+    (<uri>http://purl.org/occi/collection</uri>). Depending on the format
+    these are returned as:</para>
 
     <itemizedlist>
       <listitem>
@@ -399,8 +423,8 @@
   <section>
     <title>Kinds</title>
 
-    <para>Different types of resources are called kinds and live in the
-    <uri>http://purl.org/occi/kind</uri>/ namespace.</para>
+    <para>Different types of resources are called kinds. Those defined by OCCI
+    live in the <uri>http://purl.org/occi/kind</uri>/ namespace.</para>
 
     <tip>
       <para>The word <quote>type</quote> is not used in this context in order
@@ -1003,7 +1027,7 @@ link[0].title: Link to alternate representation</screen>
       <date>1999-06</date>
     </biblioentry>
 
-    <biblioentry xreflabel="RFC2617" xml:id="rfc2617_1">
+    <biblioentry xreflabel="RFC2617" xml:id="rfc2617">
       <title>RFC 2617 - HTTP Authentication: Basic and Digest Access
       Authentication</title>
 
@@ -1014,6 +1038,19 @@ link[0].title: Link to alternate representation</screen>
       </org>
 
       <date>1999-06</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC4918" xml:id="rfc4918">
+      <title>RFC 4918 - HTTP Extensions for Web Distributed Authoring and
+      Versioning (WebDAV)</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://tools.ietf.org/html/rfc4918</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>2007-06</date>
     </biblioentry>
 
     <biblioentry xreflabel="OAuth" xml:id="oauth">
@@ -1068,7 +1105,7 @@ link[0].title: Link to alternate representation</screen>
 
     <bibliomixed>Informative References</bibliomixed>
 
-    <biblioentry xreflabel="RESTfulWebServices" xml:id="rws">
+    <biblioentry xreflabel="RWS" xml:id="rws">
       <title>RESTful Web Services</title>
 
       <address><uri xlink:href="http://oreilly.com/catalog/9780596529260/">http://oreilly.com/catalog/9780596529260/</uri></address>
@@ -1088,6 +1125,40 @@ link[0].title: Link to alternate representation</screen>
       </author>
 
       <date>2007-05</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="LINK" xml:id="link">
+      <title>Web Linking</title>
+
+      <address><uri
+          xlink:href="http://tools.ietf.org/html/draft-nottingham-http-link-header">http://tools.ietf.org/html/draft-nottingham-http-link-header</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <author>
+        <personname>Mark Nottingham</personname>
+      </author>
+
+      <date>2009-07-12</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="CATEGORY" xml:id="category">
+      <title>Web Categories</title>
+
+      <address><uri
+          xlink:href="http://tools.ietf.org/html/draft-johnston-http-category-header">http://tools.ietf.org/html/draft-johnston-http-category-header</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <author>
+        <personname>Sam Johnston</personname>
+      </author>
+
+      <date>2009-07-1</date>
     </biblioentry>
   </bibliography>
 </article>
