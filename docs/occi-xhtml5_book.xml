@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>Open Cloud Computing Interface - XHTML5 rendering</title>
+
+    <author>
+      <personname><firstname>OCCI</firstname><surname>working
+      group</surname></personname>
+
+      <affiliation>
+        <orgname>OGF</orgname>
+      </affiliation>
+    </author>
+  </info>
+
+  <bridgehead renderas="sect4">Status of This Document</bridgehead>
+
+  <para>This document provides information to the Cloud and Grid community.
+  Distribution is unlimited.</para>
+
+  <bridgehead renderas="sect4">Copyright Notice</bridgehead>
+
+  <para>Copyright (c) Open Grid Forum (2009). All Rights Reserved.</para>
+
+  <bridgehead renderas="sect4">Abstract</bridgehead>
+
+  <para>This document is part of the Open Cloud Computing Interface (OCCI)
+  specification document series. The OCCI document series describes what each
+  OCCI compatible interface needs to provide. The overall OCCI specification
+  itself is setup modular to be extensbible and includes the following
+  parts:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>The OCCI Core &amp; Models</para>
+    </listitem>
+
+    <listitem>
+      <para>The OCCI Infrastructure Models</para>
+    </listitem>
+
+    <listitem>
+      <para>OCCI XHTML5 rendering</para>
+    </listitem>
+
+    <listitem>
+      <para>OCCI HTTP Header rendering</para>
+    </listitem>
+  </itemizedlist>
+
+  <para>Each of these parts is described in a separate document so the overall
+  specification comes in the form of a document series. Where as this document
+  describes the OCCI XHTML5 rendering.This can be used as a User Interface
+  rendering for OCCI.</para>
+
+  <para>All these parts and the information within are mandatory for
+  implementors (unless otherwise specified).</para>
+
+  <section>
+    <xi:include href="occi-xhtml5.xml" xpointer="xpointer(/*/*)">
+      <xi:fallback>
+        <para>
+          <emphasis>FIXME: MISSING XINCLUDE CONTENT</emphasis>
+        </para>
+      </xi:fallback>
+    </xi:include>
+  </section>
+
+  <section>
+    <title>Contributors</title>
+
+    <para>The following people have contributed to this document.</para>
+
+    <table>
+      <title>List of contributors</title>
+
+      <tgroup cols="3">
+        <thead>
+          <row>
+            <entry align="center">Name</entry>
+
+            <entry align="center">Affiliation</entry>
+
+            <entry align="center">Contact</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>Andy Edmonds</entry>
+
+            <entry>Intel - SLA@SOI project</entry>
+
+            <entry>andy@edmonds.be</entry>
+          </row>
+
+          <row>
+            <entry>Sam Johnston</entry>
+
+            <entry>Australian Online Solutions</entry>
+
+            <entry>samj@samj.net</entry>
+          </row>
+
+          <row>
+            <entry>Thijs Metsch</entry>
+
+            <entry>Sun Microsystems - RESERVOIR project</entry>
+
+            <entry>thijs.metsch@sun.com</entry>
+          </row>
+
+          <row>
+            <entry>Gary Mazzaferro</entry>
+
+            <entry>OCCI Counselour - Exxia, Inc.</entry>
+
+            <entry>garymazzaferro@gmail.com</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+
+  <section>
+    <title>Intellectual Property Statement</title>
+
+    <para>The OGF takes no position regarding the validity or scope of any
+    intellectual property or other rights that might be claimed to pertain to
+    the implementation or use of the technology described in this document or
+    the extent to which any license under such rights might or might not be
+    available; neither does it represent that it has made any effort to
+    identify any such rights. Copies of claims of rights made available for
+    publication and any assurances of licenses to be made available, or the
+    result of an attempt made to obtain a general license or permission for
+    the use of such proprietary rights by implementers or users of this
+    specification can be obtained from the OGF Secretariat.</para>
+
+    <para>The OGF invites any interested party to bring to its attention any
+    copyrights, patents or patent applications, or other proprietary rights
+    which may cover technology that may be required to practice this
+    recommendation. Please address the information to the OGF Executive
+    Director.</para>
+  </section>
+
+  <section>
+    <title>Disclaimer</title>
+
+    <para>This document and the information contained herein is provided on an
+    “As Is” basis and the OGF disclaims all warranties, express or implied,
+    including but not limited to any warranty that the use of the information
+    herein will not infringe any rights or any implied warranties of
+    merchantability or fitness for a particular purpose.</para>
+  </section>
+
+  <section>
+    <title>Full Copyright Notice</title>
+
+    <para>Copyright (C) Open Grid Forum (2009). All Rights Reserved.</para>
+
+    <para>This document and translations of it may be copied and furnished to
+    others, and derivative works that comment on or otherwise explain it or
+    assist in its implementation may be prepared, copied, published and
+    distributed, in whole or in part, without restriction of any kind,
+    provided that the above copyright notice and this paragraph are included
+    on all such copies and derivative works. However, this document itself may
+    not be modified in any way, such as by removing the copyright notice or
+    references to the OGF or other organizations, except as needed for the
+    purpose of developing Grid Recommendations in which case the procedures
+    for copyrights defined in the OGF Document process must be followed, or as
+    required to translate it into languages other than English.</para>
+
+    <para>The limited permissions granted above are perpetual and will not be
+    revoked by the OGF or its successors or assignees.</para>
+  </section>
+</article>
