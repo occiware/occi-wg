@@ -133,7 +133,7 @@
       <xsl:choose>
         <xsl:when test="$position = 'left'">
           <fo:block>
-            <xsl:text>GFD-R</xsl:text>
+            <xsl:text>GFD-I.162</xsl:text>
           </fo:block>
 
           <fo:block> Open Cloud Computing Interface </fo:block>
@@ -143,11 +143,11 @@
 
         <xsl:when test="$position = 'right'">
           <fo:block>
-            <xsl:text>OCCI-wg</xsl:text>
+            <xsl:text>Thijs Metsch, Sun Microsystems</xsl:text>
           </fo:block>
 
           <fo:block>
-            <xsl:text>Jan. 12, 2010</xsl:text>
+            <xsl:text>Jan. 14, 2010</xsl:text>
           </fo:block>
         </xsl:when>
       </xsl:choose>
