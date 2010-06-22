@@ -10,11 +10,7 @@
     <title>OCCI Text Format</title>
 
     <author>
-      <personname><firstname>Sam</firstname><surname>Johnston</surname></personname>
-
-      <affiliation>
-        <orgname>Australian Online Solutions</orgname>
-      </affiliation>
+      <orgname>OCCI-WG</orgname>
     </author>
 
     <pubdate>2009-09-15</pubdate>
@@ -52,10 +48,9 @@
   <section>
     <title>Specification</title>
 
-    <para>The text rendering is based on the HTTP
-    <computeroutput>message-header</computeroutput> type [<xref
-    linkend="rfc2616" />], which is the same generic format as that given in
-    <xref linkend="rfc2822" />.</para>
+    <para>The text rendering is based on the <xref linkend="rfc2616" /> (HTTP)
+    <computeroutput>message-header</computeroutput> type, which is the same
+    generic format as that given in <xref linkend="rfc2822" />.</para>
 
     <para>It is identical to the
     <computeroutput>generic-message</computeroutput> type except that there is
@@ -98,8 +93,12 @@ OCCI-Summary: A virtual compute resource
 OCCI-Author-Name: John Citizen
 OCCI-Updated: 2009-12-31T12:59:59Z
 ETag: "dad86c61eea237932f"
-Category: compute; scheme="http://purl.org/occi/kind/"; label="Compute Resource"
-Link: &lt;http://example.com/products/1234&gt;; rel="alternate"; title="Alternate representation"</screen></para>
+Category: compute;
+  scheme="http://purl.org/occi/kind/";
+  label="Compute Resource"
+Link: &lt;http://example.com/products/1234&gt;;
+  rel="alternate";
+  title="Alternate representation"</screen></para>
   </section>
 
   <bibliography>
