@@ -16,15 +16,10 @@
     as a Service (IaaS)". A "Resource Oriented Architecture (ROA)", it is as
     close as possible to the underlying HyperText Transfer Protocol (HTTP),
     deviating only where absolutely necessary. Each resource (identified by a
-    canonical URL) has zero or more representations which may or may not be
+    canonical URL) can have multiple representations which may or may not be
     hypertext (e.g. HTML). Metadata including associations between resources
     is exposed via HTTP headers (e.g. the Link: header), except in the case of
     collections where Atom is used as the meta-model.</para>
-
-    <tip>
-      <para>Some resources can be interacted with but not rendered due to the
-      nature of the resource or prevailing security policies.</para>
-    </tip>
   </section>
 
   <section>
@@ -51,9 +46,9 @@
     <para>Create, Retrieve, Update and Delete (CRUD) operations map to the
     POST, GET, PUT and DELETE HTTP verbs respectively. HEAD and OPTIONS verbs
     may be used to retrieve metadata and valid operations without the entity
-    body to improve performance. WebDAV definitions are used for MOVE and
-    COPY. All existing HTTP features is available for caching, proxying,
-    gatewaying and other advanced functionality.</para>
+    body to improve performance. Additionally, all existing HTTP functionality
+    is available for caching, proxying, gatewaying and other advanced
+    functionality.</para>
 
     <glosslist>
       <glossentry>
@@ -184,8 +179,14 @@
       <para>Servers <emphasis>may</emphasis> set and clients
       <emphasis>may</emphasis> accept <glossterm>cookies</glossterm> in order
       to maintain authentication state between requests. Such sessions
-      <emphasis>should not</emphasis> be used for other purposes in line with
-      RESTful principles.<xref linkend="rfc2109" /></para>
+      <emphasis>should not</emphasis> be used for other purposes.<xref
+      linkend="rfc2109" /></para>
+
+      <warning>
+        <para>Authentication mechanisms that pass sensitive information (e.g.
+        <code>Basic</code>) <emphasis>must</emphasis> use SSL/TLS
+        encryption.</para>
+      </warning>
 
       <remark>TODO: Consider adding support for SAML 2.</remark>
     </section>
@@ -193,8 +194,7 @@
     <section>
       <title>Detection</title>
 
-      <remark>This section should be optional, or removed if there is a risk
-      of it becoming a cruft repository/interoperability nightmare.</remark>
+      <remark>This section should be optional!</remark>
 
       <para>Clients can detect the presence of the interface from the presence
       of a specific well-known URI at the web server root (as detected via a
@@ -353,331 +353,228 @@
   </section>
 
   <section>
-    <title>Model</title>
+    <title>Collections</title>
 
-    <para></para>
+    <para>Where an operation returns multiple resources (e.g. categories,
+    searches) this is referred to as a <glossterm>collection</glossterm>
+    (<uri>http://purl.org/occi/collection</uri>). Depending on the format
+    these are returned as:</para>
 
-    <section>
-      <title>Kinds</title>
+    <itemizedlist>
+      <listitem>
+        <para>A list of pointers to resources (e.g. <computeroutput
+        xlink:href="http://tools.ietf.org/html/rfc2483#section-5">text/uri-list</computeroutput>)</para>
+      </listitem>
 
-      <para>Different types of resources are called
-      <glossterm>kind</glossterm>s.</para>
+      <listitem>
+        <para>A list of pointers to resources with metadata (e.g.
+        <computeroutput>application/atom+xml</computeroutput> with
+        <computeroutput>link</computeroutput> to content)</para>
+      </listitem>
 
-      <para>Kinds defined by this standard live in the
-      <uri>http://purl.org/occi/kind</uri>/ namespace but anyone can define a
-      new action by allocating a URI they control.</para>
+      <listitem>
+        <para>A list of embedded resources and metadata (e.g.
+        <computeroutput>application/atom+xml</computeroutput> with
+        <computeroutput>content</computeroutput> embedded)</para>
+      </listitem>
+    </itemizedlist>
 
-      <para>Each resource <emphasis>must</emphasis> specify a
-      <glossterm>category</glossterm> within the <glossterm>scheme</glossterm>
-      <quote><uri>http://purl.org/occi/kind</uri></quote>.</para>
-
-      <tip>
-        <para>The word <glossterm>type</glossterm> is not used in this context
-        in order to avoid confusion with Internet media types.</para>
-      </tip>
-
-      <remark>These were previously called nouns but this still allowed for
-      confusion with "type". Google also use "kinds" for GData.</remark>
-
-      <table>
-        <title>Kinds</title>
-
-        <tgroup cols="3">
-          <colspec align="center" />
-
-          <thead>
-            <row>
-              <entry align="left">Kind</entry>
-
-              <entry>URI</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry
-              align="left"><computeroutput>compute</computeroutput></entry>
-
-              <entry><uri>http://purl.org/occi/noun/compute</uri></entry>
-
-              <entry>Information processing resources</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>network</computeroutput></entry>
-
-              <entry><uri>http://purl.org/occi/noun/network</uri></entry>
-
-              <entry>Interconnection resources</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>storage</computeroutput></entry>
-
-              <entry><uri>http://purl.org/occi/noun/storage</uri></entry>
-
-              <entry>Recorded information resources</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-      <remark>This belongs in OCCI Infrastructure</remark>
-    </section>
+    <para>Any given URL can be a collection and/or advertise
+    <glossterm>link</glossterm>s to other <glossterm>collection</glossterm>s
+    using the <quote>collection</quote> <glossterm>link
+    relation</glossterm>.</para>
 
     <section>
-      <title>Attributes</title>
+      <title>Paging</title>
 
-      <para></para>
-    </section>
-
-    <section>
-      <title>Actions</title>
-
-      <para>An <glossterm>action</glossterm> is some process that can be
-      carried out on one or more <glossterm>resource</glossterm>s. Each
-      available <glossterm>action</glossterm> for a given
-      <glossterm>resource</glossterm> is indicated via a
-      <glossterm>link</glossterm> with the
-      <computeroutput>action</computeroutput> class.</para>
-
-      <para>Actions defined by this standard reside under the
-      <uri>http://purl.org/occi/action/</uri> namespace but anyone can define
-      a new action by allocating a URI they control.</para>
-
-      <screen>&lt;link rel="http://purl.org/occi/action/restart#cold" class="action" title="Cold Restart" href="http://example.com/123/restart;type=cold" /&gt;</screen>
-
-      <para>An <glossterm>action</glossterm> is triggered via an HTTP POST and
-      depending on the action requested (e.g.
-      <computeroutput>resize</computeroutput>), parameters
-      <emphasis>may</emphasis> be provided using HTML forms (e.g.
-      <computeroutput>application/x-www-form-encoded</computeroutput>).</para>
-
-      <para>Synchronous events <emphasis>may</emphasis> return
-      <computeroutput>200 OK</computeroutput> on successful completion or
-      <computeroutput>201 Created</computeroutput> and a
-      <computeroutput>Location:</computeroutput> header indicating a new
-      sub-resource for audit purposes.</para>
-
-      <para>In the event that the <glossterm>action</glossterm> does not
-      complete immediately it <emphasis>should</emphasis> return
-      <computeroutput>HTTP 202 Accepted</computeroutput> and a
-      <computeroutput>Location:</computeroutput> header indicating a new
-      sub-resource where status and other pertinent information can be
-      obtained.</para>
+      <para>Collections <emphasis>may</emphasis> be divided into
+      <glossterm>page</glossterm>s, with each linking to the
+      <quote>first</quote>, <quote>last</quote>, <quote>next</quote> and
+      <quote>previous</quote> <glossterm>link relation</glossterm>s.</para>
     </section>
   </section>
 
   <section>
-    <title>Meta model</title>
+    <title>Linking</title>
 
-    <para></para>
+    <para>Existing linking standards defined for Atom [<xref
+    linkend="rfc4287" />], HTTP [<xref linkend="link" />] and HTML [<xref
+    linkend="html5" />] are used to indicate associations between resources.
+    All formats <emphasis>must</emphasis> support
+    <glossterm>in-band</glossterm> linking including:</para>
 
-    <section>
-      <title>Categories</title>
+    <itemizedlist>
+      <listitem>
+        <para>Link relations (e.g.
+        <computeroutput>rel="alternate"</computeroutput>)</para>
+      </listitem>
 
-      <para><glossterm>Category</glossterm> information allows for flexible
-      organisation of resources into one or more vocabularies (each of which
-      is referred to as a <glossterm>scheme</glossterm>). The meta-model was
-      derived from Atom, consisting of three attributes:</para>
+      <listitem>
+        <para>Pointers to resources (e.g.
+        <computeroutput>href="http://example.com/"</computeroutput>)</para>
+      </listitem>
 
-      <glosslist>
-        <glossentry>
-          <glossterm>term</glossterm>
+      <listitem>
+        <para>Internet media types (e.g.
+        <computeroutput>type="text/html"</computeroutput>)</para>
+      </listitem>
 
-          <glossdef>
-            <para>The term itself (e.g. <quote>snow-leopard</quote>)</para>
-          </glossdef>
-        </glossentry>
+      <listitem>
+        <para>Extensibility (e.g.
+        <computeroutput>attribute="value"</computeroutput>)</para>
+      </listitem>
+    </itemizedlist>
 
-        <glossentry>
-          <glossterm>scheme (optional)</glossterm>
+    <table>
+      <title>Link Relations</title>
 
-          <glossdef>
-            <para>The vocabulary (e.g. <quote>breed</quote>)</para>
-          </glossdef>
-        </glossentry>
+      <tgroup cols="2">
+        <colspec align="center" />
 
-        <glossentry>
-          <glossterm>label (optional)</glossterm>
+        <thead>
+          <row>
+            <entry align="left">Relation</entry>
 
-          <glossdef>
-            <para>A human-friendly display name for the term (e.g. <quote>Snow
-            Leopard</quote>)</para>
-          </glossdef>
-        </glossentry>
-      </glosslist>
-    </section>
+            <entry>Description</entry>
+          </row>
+        </thead>
 
-    <section>
-      <title>Collections</title>
+        <tbody>
+          <row>
+            <entry
+            align="left"><computeroutput>collection</computeroutput></entry>
 
-      <para>Where an operation returns multiple resources (e.g. categories,
-      searches) this is referred to as a <glossterm>collection</glossterm>.
-      Depending on the format these are returned as:</para>
+            <entry>Several resources grouped together or considered as a
+            whole. [OCCI] <remark>Refer to discussion about up/down
+            parent/child asc/desc etc. on atom-syntax and
+            ietf-http-wg</remark></entry>
+          </row>
 
-      <itemizedlist>
-        <listitem>
-          <para>A list of pointers to resources (e.g. <computeroutput
-          xlink:href="http://tools.ietf.org/html/rfc2483#section-5">text/uri-list</computeroutput>)</para>
-        </listitem>
+          <row>
+            <entry align="left"><computeroutput>first</computeroutput></entry>
 
-        <listitem>
-          <para>A list of pointers to resources with metadata (e.g.
-          <computeroutput>application/atom+xml</computeroutput> with
-          <computeroutput>link</computeroutput> to content)</para>
-        </listitem>
+            <entry><quote>An IRI that refers to the furthest preceding
+            resource in a series of resources.</quote> [<xref
+            linkend="link" />]</entry>
+          </row>
 
-        <listitem>
-          <para>A list of embedded resources and metadata (e.g.
-          <computeroutput>application/atom+xml</computeroutput> with
-          <computeroutput>content</computeroutput> embedded)</para>
-        </listitem>
-      </itemizedlist>
+          <row>
+            <entry align="left"><computeroutput>help</computeroutput></entry>
 
-      <para>Any given URL can be a collection and/or advertise
-      <glossterm>link</glossterm>s to other <glossterm>collection</glossterm>s
-      using the <quote>collection</quote> <glossterm>link
-      relation</glossterm>.</para>
+            <entry><quote>The referenced document provides further help
+            information for the page as a whole.</quote> [<xref
+            linkend="html5" />]</entry>
+          </row>
 
-      <section>
-        <title>Paging</title>
+          <row>
+            <entry align="left"><computeroutput>icon</computeroutput></entry>
 
-        <para>Collections <emphasis>may</emphasis> be divided into
-        <glossterm>page</glossterm>s, with each linking to the
-        <quote>first</quote>, <quote>last</quote>, <quote>next</quote> and
-        <quote>previous</quote> <glossterm>link relation</glossterm>s.</para>
-      </section>
-    </section>
+            <entry><quote>The specified resource is an icon representing the
+            page or site, and should be used by the user agent when
+            representing the page in the user interface.</quote> [<xref
+            linkend="html5" />]</entry>
+          </row>
 
-    <section>
-      <title>Linking</title>
+          <row>
+            <entry align="left"><computeroutput>last</computeroutput></entry>
 
-      <para>Existing linking standards defined for Atom [<xref
-      linkend="rfc4287" />], HTTP [<xref linkend="link" />] and HTML [<xref
-      linkend="html5" />] are used to indicate associations between resources.
-      All formats <emphasis>must</emphasis> support
-      <glossterm>in-band</glossterm> linking including:</para>
+            <entry><quote>An IRI that refers to the furthest following
+            resource in a series of resources.</quote> [<xref
+            linkend="link" />]</entry>
+          </row>
 
-      <itemizedlist>
-        <listitem>
-          <para>Link relations (e.g.
-          <computeroutput>rel="alternate"</computeroutput>)</para>
-        </listitem>
+          <row>
+            <entry align="left"><computeroutput>next</computeroutput></entry>
 
-        <listitem>
-          <para>Pointers to resources (e.g.
-          <computeroutput>href="http://example.com/"</computeroutput>)</para>
-        </listitem>
+            <entry><quote>A URI that refers to the immediately following
+            document in a series of documents.</quote> [<xref
+            linkend="link" />]</entry>
+          </row>
 
-        <listitem>
-          <para>Internet media types (e.g.
-          <computeroutput>type="text/html"</computeroutput>)</para>
-        </listitem>
+          <row>
+            <entry
+            align="left"><computeroutput>previous</computeroutput></entry>
 
-        <listitem>
-          <para>Extensibility (e.g.
-          <computeroutput>attribute="value"</computeroutput>)</para>
-        </listitem>
-      </itemizedlist>
+            <entry><quote>A URI that refers to the immediately preceding
+            document in a series of documents.</quote> [<xref
+            linkend="link" />]</entry>
+          </row>
 
-      <table>
-        <title>Link Relations</title>
+          <row>
+            <entry
+            align="left"><computeroutput>search</computeroutput></entry>
 
-        <tgroup cols="2">
-          <colspec align="center" />
+            <entry><quote>The referenced document provides an interface
+            specifically for searching the document and its related
+            resources.</quote> [<xref linkend="html5" />, <xref
+            linkend="opensearch" />]</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
 
-          <thead>
-            <row>
-              <entry align="left">Relation</entry>
+  <section>
+    <title>Kinds</title>
 
-              <entry>Description</entry>
-            </row>
-          </thead>
+    <para>Different types of resources are called
+    <glossterm>kind</glossterm>s. Anybody can define new
+    <glossterm>kind</glossterm>s and those defined by OCCI live in the
+    <uri>http://purl.org/occi/kind</uri>/ namespace.</para>
 
-          <tbody>
-            <row>
-              <entry
-              align="left"><computeroutput>collection</computeroutput></entry>
+    <tip>
+      <para>The word <glossterm>type</glossterm> is not used in this context
+      in order to avoid confusion with Internet media types.</para>
+    </tip>
 
-              <entry>Several resources grouped together or considered as a
-              whole. [OCCI] <remark>Refer to discussion about up/down
-              parent/child asc/desc etc. on atom-syntax and
-              ietf-http-wg</remark></entry>
-            </row>
+    <table>
+      <title>Kinds</title>
 
-            <row>
-              <entry
-              align="left"><computeroutput>first</computeroutput></entry>
+      <tgroup cols="3">
+        <colspec align="center" />
 
-              <entry><quote>An IRI that refers to the furthest preceding
-              resource in a series of resources.</quote> [<xref
-              linkend="link" />]</entry>
-            </row>
+        <thead>
+          <row>
+            <entry align="left">Kind</entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>help</computeroutput></entry>
+            <entry>URI</entry>
 
-              <entry><quote>The referenced document provides further help
-              information for the page as a whole.</quote> [<xref
-              linkend="html5" />]</entry>
-            </row>
+            <entry>Description</entry>
+          </row>
+        </thead>
 
-            <row>
-              <entry
-              align="left"><computeroutput>icon</computeroutput></entry>
+        <tbody>
+          <row>
+            <entry
+            align="left"><computeroutput>compute</computeroutput></entry>
 
-              <entry><quote>The specified resource is an icon representing the
-              page or site, and should be used by the user agent when
-              representing the page in the user interface.</quote> [<xref
-              linkend="html5" />]</entry>
-            </row>
+            <entry><uri>http://purl.org/occi/kind/compute</uri></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>last</computeroutput></entry>
+            <entry>Information processing resources</entry>
+          </row>
 
-              <entry><quote>An IRI that refers to the furthest following
-              resource in a series of resources.</quote> [<xref
-              linkend="link" />]</entry>
-            </row>
+          <row>
+            <entry
+            align="left"><computeroutput>network</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>next</computeroutput></entry>
+            <entry><uri>http://purl.org/occi/kind/network</uri></entry>
 
-              <entry><quote>A URI that refers to the immediately following
-              document in a series of documents.</quote> [<xref
-              linkend="link" />]</entry>
-            </row>
+            <entry>Interconnection resources</entry>
+          </row>
 
-            <row>
-              <entry
-              align="left"><computeroutput>previous</computeroutput></entry>
+          <row>
+            <entry
+            align="left"><computeroutput>storage</computeroutput></entry>
 
-              <entry><quote>A URI that refers to the immediately preceding
-              document in a series of documents.</quote> [<xref
-              linkend="link" />]</entry>
-            </row>
+            <entry><uri>http://purl.org/occi/kind/storage</uri></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>search</computeroutput></entry>
+            <entry>Recorded information resources</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
 
-              <entry><quote>The referenced document provides an interface
-              specifically for searching the document and its related
-              resources.</quote> [<xref linkend="html5" />, <xref
-              linkend="opensearch" />]</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-    </section>
+    <remark>This belongs in OCCI Infrastructure</remark>
   </section>
 
   <section>
@@ -687,7 +584,7 @@
     rendering in <emphasis>at least</emphasis> the following formats:</para>
 
     <section>
-      <title>Plain text</title>
+      <title>Plain Text</title>
 
       <para>The following is an example of an OCCI resource in
       <computeroutput>application/occi+txt</computeroutput> format, which is
@@ -724,19 +621,6 @@ category[0].label: Widgets
 link[0].href: http://example.com/products/1234
 link[0].rel: alternate
 link[0].title: Link to alternate representation</screen>
-    </section>
-  </section>
-
-  <section>
-    <title>Extensibility</title>
-
-    <para></para>
-
-    <section>
-      <title>Foreign markup</title>
-
-      <para>Implementations <emphasis>must</emphasis> accept and forward but
-      otherwise ignore markup they do not understand.</para>
     </section>
   </section>
 
@@ -1139,7 +1023,7 @@ link[0].title: Link to alternate representation</screen>
 
     <para>Encryption is not required by the specification in order to cater
     for sites that do not or can not use it (e.g. due to export restrictions,
-    performance reasons, etc.), however SSL/TLS <emphasis>should</emphasis> be
+    performance reasons, etc.), however SSL/TLS <emphasis>must</emphasis> be
     used over public networks including the Internet.</para>
   </section>
 
