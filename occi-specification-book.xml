@@ -41,10 +41,6 @@
   </section>
 
   <section>
-    <xi:include href="occi-faq.xml" xpointer="xpointer(/*/*)" />
-  </section>
-
-  <section>
     <xi:include href="occi-core.xml" xpointer="xpointer(/*/*)" />
   </section>
 
