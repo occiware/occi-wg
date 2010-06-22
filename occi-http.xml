@@ -7,7 +7,7 @@
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
-    <title>OCCI Machine Interface (HTTP)</title>
+    <title>OCCI HTTP Binding</title>
 
     <author>
       <orgname>OCCI-WG</orgname>
@@ -62,7 +62,7 @@
     <title>Example</title>
 
     <section>
-      <title>POST Request</title>
+      <title>Request</title>
 
       <screen>POST /compute/123 HTTP/1.1
 Host: example.com
@@ -77,7 +77,7 @@ Set-Link: &lt;http://example.com/products/1234&gt;;
     </section>
 
     <section>
-      <title>GET Response</title>
+      <title>Response</title>
 
       <screen>Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
 Attribute: title="Compute Resource #123"
