@@ -31,7 +31,7 @@
     of links.</para>
 
     <screen>&gt; GET /us-east/webapp/vm01 HTTP/1.1
-&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OpenSSL/0.9.8k zlib/1.2.3
+&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4
 &gt; Host: cloud.example.com
 &gt; Accept: */*
 &gt; 
@@ -313,7 +313,7 @@
         <title>Registry Entries</title>
 
         <table>
-          <title>Common Attributes</title>
+          <title>Core Attributes</title>
 
           <tgroup cols="3">
             <colspec align="center" />
@@ -523,6 +523,35 @@
         <remark>TODO: Pull query interface from GData:
         http://code.google.com/apis/gdata/docs/2.0/reference.html#Queries</remark>
       </section>
+
+      <section>
+        <title>Registry Entries</title>
+
+        <table>
+          <title>Core Category Schemes</title>
+
+          <tgroup cols="2">
+            <colspec align="center" />
+
+            <thead>
+              <row>
+                <entry align="left">Scheme</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/kind/</computeroutput></entry>
+
+                <entry>OCCI Kinds</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
     </section>
 
     <section>
@@ -617,7 +646,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
         <title>Registry Entries</title>
 
         <table>
-          <title>Link Relations</title>
+          <title>Core Link Relations</title>
 
           <tgroup cols="2">
             <colspec align="center" />
