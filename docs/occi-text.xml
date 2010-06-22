@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>OCCI Text</title>
+
+    <author>
+      <personname><firstname>Sam</firstname><surname>Johnston</surname></personname>
+
+      <affiliation>
+        <orgname>Australian Online Solutions</orgname>
+      </affiliation>
+    </author>
+
+    <pubdate>2009-09-15</pubdate>
+  </info>
+
+  <section>
+    <title>Overview</title>
+
+    <para>Text is the simplest possible rendering, which is most useful for
+    simple clients including:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Manual manipulation by developers, system administrators,
+        etc.</para>
+      </listitem>
+
+      <listitem>
+        <para>Monitoring systems</para>
+      </listitem>
+
+      <listitem>
+        <para>Scripts</para>
+      </listitem>
+
+      <listitem>
+        <para>Scheduled cron jobs</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>It is served using the <computeroutput>text/occi</computeroutput>
+    Internet media type.</para>
+  </section>
+
+  <section>
+    <title>Specification</title>
+
+    <para>The text rendering is based on the HTTP
+    <computeroutput>message-header</computeroutput> type [<xref
+    linkend="rfc2616" />].</para>
+
+    <para>It is identical to the
+    <computeroutput>generic-message</computeroutput> type except that there is
+    no <computeroutput>start-line</computeroutput> (Request-Line |
+    Status-Line) and both <computeroutput>entity-body</computeroutput> and
+    <computeroutput>message-header</computeroutput> fields are
+    optional.</para>
+
+    <para>Web Categories [<xref linkend="category" />] and Web Linking [<xref
+    linkend="link" />] specifications are used for the meta-model.</para>
+
+    <section>
+      <title>ABNF</title>
+
+      <screen>occi-resource  = *( message-header CRLF )
+                 [ CRLF entity-body ]
+entity-body    = *OCTET
+message-header = field-name ":" [ field-value ]
+field-name     = token
+field-value    = *( field-content | LWS )
+field-content  = &lt;the OCTETs making up the field-value
+                 and consisting of either *TEXT or combinations
+                 of token, separators, and quoted-string&gt;</screen>
+    </section>
+  </section>
+
+  <section>
+    <title>Example</title>
+
+    <para><screen>OCCI-Id: urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770
+OCCI-Title: Compute Resource #123
+OCCI-Summary: A virtual compute resource
+OCCI-Author-Name: John Citizen
+OCCI-Updated: 2009-12-31T12:59:59Z
+ETag: "dad86c61eea237932f"
+Category: compute; scheme="http://purl.org/occi/kind/"; label="Compute Resource"
+Link: &lt;http://example.com/products/1234&gt;; rel="alternate"; title="Alternate representation"</screen></para>
+  </section>
+
+  <bibliography>
+    <bibliomixed>Normative References</bibliomixed>
+
+    <biblioentry xreflabel="RFC2616" xml:id="rfc2616">
+      <title>RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://tools.ietf.org/html/rfc2616</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>1999-06</date>
+    </biblioentry>
+
+    <bibliomixed>Informative References</bibliomixed>
+
+    <biblioentry xreflabel="CATEGORY" xml:id="category">
+      <title>Web Categories</title>
+
+      <address><uri
+          xlink:href="http://tools.ietf.org/html/draft-johnston-http-category-header">http://tools.ietf.org/html/draft-johnston-http-category-header</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <author>
+        <personname>Sam Johnston</personname>
+      </author>
+
+      <date>2009-07-1</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="LINK" xml:id="link">
+      <title>Web Linking</title>
+
+      <address><uri
+          xlink:href="http://tools.ietf.org/html/draft-nottingham-http-link-header">http://tools.ietf.org/html/draft-nottingham-http-link-header</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <author>
+        <personname>Mark Nottingham</personname>
+      </author>
+
+      <date>2009-07-12</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="HTML5-article" xml:id="html5-article">
+      <title>Designing a great HTTP API - why heavyweight XML is not the
+      answer</title>
+
+      <address><uri
+          xlink:href="http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/">http://www.elastichosts.com/blog/2009/01/01/designing-a-great-http-api/</uri></address>
+
+      <author>
+        <orgname>ElasticHosts</orgname>
+      </author>
+
+      <date>2009-01-01</date>
+    </biblioentry>
+  </bibliography>
+</article>

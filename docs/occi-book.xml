@@ -181,6 +181,7 @@
 <xi:include href="occi-core.xml" xpointer="element(/1)" />
 <xi:include href="occi-atom.xml" xpointer="element(/1)" />
 <xi:include href="occi-json.xml" xpointer="element(/1)" />
+<xi:include href="occi-text.xml" xpointer="element(/1)" />
 <xi:include href="occi-xhtml5.xml" xpointer="element(/1)" />
 <xi:include href="occi-infrastructure.xml" xpointer="element(/1)" />
 <xi:include href="occi-registries.xml" xpointer="element(/1)" />
