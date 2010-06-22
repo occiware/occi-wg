@@ -87,17 +87,19 @@
   <section>
     <title>Contributors</title>
 
-    <para>The following people acively contributed to this document</para>
+    <para>Next to the members of the OCCI working group the following people actively contributed to this document:</para>
 
     <table>
       <title>List of contributors</title>
 
-      <tgroup cols="2">
+      <tgroup cols="3">
         <thead>
           <row>
             <entry align="center">Name</entry>
 
             <entry align="center">Affiliation</entry>
+
+            <entry align="center">Contact</entry>
           </row>
         </thead>
 
@@ -106,30 +108,40 @@
             <entry>Andy Edmonds</entry>
 
             <entry>Intel - SLA@SOI project</entry>
+
+            <entry>andrewx.edmonds@intel.com</entry>
           </row>
 
           <row>
             <entry>Sam Johnston (Editor)</entry>
 
             <entry>Australian Online Solutions</entry>
+
+            <entry>samj@samj.net</entry>
           </row>
 
           <row>
             <entry>Gary Mazzaferro</entry>
 
             <entry>OCCI Counselour - Exxia, Inc.</entry>
+
+            <entry>garymazzaferro@gmail.com</entry>
           </row>
 
           <row>
             <entry>Thijs Metsch (Editor)</entry>
 
             <entry>Sun Microsystems - RESERVOIR project</entry>
+
+            <entry>thijs.metsch@sun.com</entry>
           </row>
 
           <row>
             <entry>Andre Merzky</entry>
 
-            <entry>TBD...</entry>
+            <entry>Lousiana State University</entry>
+
+            <entry>andre@merzky.net</entry>
           </row>
         </tbody>
       </tgroup>
