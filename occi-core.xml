@@ -40,9 +40,16 @@
 &lt; Expires: -1
 &lt; Cache-Control: private, max-age=0
 &lt; Content-Type: application/ovf
-&lt; Link: &lt;/us-east/webapp/vm01;start&gt;; rel="http://purl.org/occi/action/start"; title="Start"
-&lt; Link: &lt;/us-east/webapp/build.pdf&gt;; rel="related"; title="Documentation"; type="application/pdf"
-&lt; Category: compute; scheme="http://purl.org/occi/kind/"; label="Compute Resource"
+&lt; Link: &lt;/us-east/webapp/vm01;start&gt;;
+&lt;       rel="http://purl.org/occi/action/start";
+&lt;       title="Start"
+&lt; Link: &lt;/us-east/webapp/build.pdf&gt;;
+&lt;       rel="related";
+&lt;       title="Documentation";
+&lt;       type="application/pdf"
+&lt; Category: compute;
+&lt;       label="Compute Resource";
+&lt;       scheme="http://purl.org/occi/kind/"
 &lt; Server: occi-server/1.0
 &lt; Connection: close
 &lt;
@@ -315,7 +322,9 @@
       <glossterm>link</glossterm> with the
       <computeroutput>action</computeroutput> class.</para>
 
-      <screen>Link: &lt;/us-east/webapp/vm01;start&gt;; rel="http://purl.org/occi/action/start"; title="Start"</screen>
+      <screen>Link: &lt;/us-east/webapp/vm01;start&gt;;
+      rel="http://purl.org/occi/action/start";
+      title="Start"</screen>
 
       <para>Actions defined by this standard reside under the
       <uri>http://purl.org/occi/action/</uri> namespace but anyone can define
@@ -427,7 +436,9 @@
         </glossentry>
       </glosslist>
 
-      <screen>Category: compute; scheme="http://purl.org/occi/kind/"; label="Compute Resource"</screen>
+      <screen>Category: compute;
+      label="Compute Resource";
+      scheme="http://purl.org/occi/kind/"</screen>
 
       <para>Category schemes and/or terms defined by this standard reside
       throughout the <uri>http://purl.org/occi/</uri> namespace but anyone can
@@ -481,7 +492,9 @@
         resources.</para>
       </tip>
 
-      <screen>Link: &lt;http://example.com/123/audit&gt;; rel="http://purl.org/occi/collection/audit"; title="Audit Entries"</screen>
+      <screen>Link: &lt;http://example.com/123/audit&gt;;
+      rel="http://purl.org/occi/collection/audit";
+      title="Audit Entries"</screen>
 
       <section>
         <title>Paging</title>
@@ -529,7 +542,10 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
         </listitem>
       </itemizedlist>
 
-      <screen>Link: &lt;/us-east/webapp/build.pdf&gt;; rel="related"; title="Documentation"; type="application/pdf"</screen>
+      <screen>Link: &lt;/us-east/webapp/build.pdf&gt;;
+      rel="related";
+      title="Documentation";
+      type="application/pdf"</screen>
 
       <para><glossterm>Link relation</glossterm>s defined by this standard
       reside under the <uri>http://purl.org/occi/rel</uri> namespace but
