@@ -16,15 +16,10 @@
     as a Service (IaaS)". A "Resource Oriented Architecture (ROA)", it is as
     close as possible to the underlying HyperText Transfer Protocol (HTTP),
     deviating only where absolutely necessary. Each resource (identified by a
-    canonical URL) has zero or more representations which may or may not be
+    canonical URL) can have multiple representations which may or may not be
     hypertext (e.g. HTML). Metadata including associations between resources
     is exposed via HTTP headers (e.g. the Link: header), except in the case of
     collections where Atom is used as the meta-model.</para>
-
-    <tip>
-      <para>Some resources can be interacted with but not rendered due to the
-      nature of the resource or prevailing security policies.</para>
-    </tip>
   </section>
 
   <section>
@@ -51,9 +46,9 @@
     <para>Create, Retrieve, Update and Delete (CRUD) operations map to the
     POST, GET, PUT and DELETE HTTP verbs respectively. HEAD and OPTIONS verbs
     may be used to retrieve metadata and valid operations without the entity
-    body to improve performance. WebDAV definitions are used for MOVE and
-    COPY. All existing HTTP features is available for caching, proxying,
-    gatewaying and other advanced functionality.</para>
+    body to improve performance. Additionally, all existing HTTP functionality
+    is available for caching, proxying, gatewaying and other advanced
+    functionality.</para>
 
     <glosslist>
       <glossentry>
@@ -184,8 +179,14 @@
       <para>Servers <emphasis>may</emphasis> set and clients
       <emphasis>may</emphasis> accept <glossterm>cookies</glossterm> in order
       to maintain authentication state between requests. Such sessions
-      <emphasis>should not</emphasis> be used for other purposes in line with
-      RESTful principles.<xref linkend="rfc2109" /></para>
+      <emphasis>should not</emphasis> be used for other purposes.<xref
+      linkend="rfc2109" /></para>
+
+      <warning>
+        <para>Authentication mechanisms that pass sensitive information (e.g.
+        <code>Basic</code>) <emphasis>must</emphasis> use SSL/TLS
+        encryption.</para>
+      </warning>
 
       <remark>TODO: Consider adding support for SAML 2.</remark>
     </section>
@@ -355,8 +356,9 @@
     <title>Collections</title>
 
     <para>Where an operation returns multiple resources (e.g. categories,
-    searches) this is referred to as a <glossterm>collection</glossterm>.
-    Depending on the format these are returned as:</para>
+    searches) this is referred to as a <glossterm>collection</glossterm>
+    (<uri>http://purl.org/occi/collection</uri>). Depending on the format
+    these are returned as:</para>
 
     <itemizedlist>
       <listitem>
@@ -513,19 +515,17 @@
   </section>
 
   <section>
-    <title>Nouns</title>
+    <title>Kinds</title>
 
     <para>Different types of resources are called
-    <glossterm>noun</glossterm>s. Anyone can define new
-    <glossterm>noun</glossterm>s and those defined by OCCI live in the
-    <uri>http://purl.org/occi/noun</uri>/ namespace.</para>
+    <glossterm>kind</glossterm>s. Anybody can define new
+    <glossterm>kind</glossterm>s and those defined by OCCI live in the
+    <uri>http://purl.org/occi/kind</uri>/ namespace.</para>
 
     <tip>
       <para>The word <glossterm>type</glossterm> is not used in this context
       in order to avoid confusion with Internet media types.</para>
     </tip>
-
-    <remark>Should these be "nouns" or "kinds" (ala Google GData)?</remark>
 
     <table>
       <title>Kinds</title>
@@ -548,7 +548,7 @@
             <entry
             align="left"><computeroutput>compute</computeroutput></entry>
 
-            <entry><uri>http://purl.org/occi/noun/compute</uri></entry>
+            <entry><uri>http://purl.org/occi/kind/compute</uri></entry>
 
             <entry>Information processing resources</entry>
           </row>
@@ -557,7 +557,7 @@
             <entry
             align="left"><computeroutput>network</computeroutput></entry>
 
-            <entry><uri>http://purl.org/occi/noun/network</uri></entry>
+            <entry><uri>http://purl.org/occi/kind/network</uri></entry>
 
             <entry>Interconnection resources</entry>
           </row>
@@ -566,7 +566,7 @@
             <entry
             align="left"><computeroutput>storage</computeroutput></entry>
 
-            <entry><uri>http://purl.org/occi/noun/storage</uri></entry>
+            <entry><uri>http://purl.org/occi/kind/storage</uri></entry>
 
             <entry>Recorded information resources</entry>
           </row>
@@ -1023,7 +1023,7 @@ link[0].title: Link to alternate representation</screen>
 
     <para>Encryption is not required by the specification in order to cater
     for sites that do not or can not use it (e.g. due to export restrictions,
-    performance reasons, etc.), however SSL/TLS <emphasis>should</emphasis> be
+    performance reasons, etc.), however SSL/TLS <emphasis>must</emphasis> be
     used over public networks including the Internet.</para>
   </section>
 
