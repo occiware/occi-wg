@@ -67,13 +67,13 @@ Attributes:
 &lt;/ul&gt;
 
 Actions:
-&lt;form method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" /&gt;&lt;/form&gt;
-&lt;form method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" /&gt;&lt;/form&gt;
-&lt;form method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" /&gt;&lt;/form&gt;
+&lt;form method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" alt="Start" /&gt;&lt;/form&gt;
+&lt;form method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" alt="Stop" /&gt;&lt;/form&gt;
+&lt;form method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" alt="Restart" /&gt;&lt;/form&gt;
 
 Download
-&lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" /&gt;&lt;/a&gt;
-&lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;&lt;img src="xen-logo.png" /&gt;&lt;/a&gt;
+&lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" alt="OVF" /&gt;&lt;/a&gt;
+&lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;&lt;img src="xen-logo.png" alt="Xen" /&gt;&lt;/a&gt;
 
 &lt;/body&gt;
 &lt;/html&gt;</screen>
