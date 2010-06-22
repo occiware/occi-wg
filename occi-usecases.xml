@@ -18,9 +18,9 @@
 
     <para>There is a need for a standard interface for dynamic infrastructure
     provisioning. While doing so it must be guaranteed and verified that the
-    infrastructure provisioning uses 'machine-readable' SLAs. <citerefentry>
-        <refentrytitle>(SLA_SOI)</refentrytitle>
-      </citerefentry></para>
+    infrastructure provisioning uses 'machine-readable' SLAs. <footnote>
+        <para>SLA@SOI project website - http://sla-at-soi.eu</para>
+      </footnote></para>
 
     <bridgehead>Functional Requirements</bridgehead>
 
@@ -91,10 +91,10 @@
     cycle. The SM operates over the Cloud infrastructure automatically as the
     service demands. In a way, the SM maps the service configuration and needs
     to calls to the Cloud infrastructure, so many of the requirements imposed
-    by the SM are due to the flexibility that the SM aims to provide to SPs.
-    (<citerefentry>
-        <refentrytitle>RV</refentrytitle>
-      </citerefentry>)</para>
+    by the SM are due to the flexibility that the SM aims to provide to
+    SPs.<footnote>
+        <para>RESERVOIR project website - http://www.reservoir-fp7.eu</para>
+      </footnote></para>
 
     <bridgehead>Functional Requirements</bridgehead>
 
@@ -262,9 +262,9 @@
     OpenNebula to manage Virtual Machines from different cloud providers.
     Currently, there are two set of plugins for OpenNebula to access Amazon
     EC2 and ElasticHosts cloud providers that leverage the use of both cloud
-    providers in a transparent fashion for the end user. (<citerefentry>
-        <refentrytitle>ONE</refentrytitle>
-      </citerefentry>)</para>
+    providers in a transparent fashion for the end user.<footnote>
+        <para>OpenNebula website - http://www.opennebula.org</para>
+      </footnote></para>
 
     <bridgehead>Functional Requirements</bridgehead>
 
@@ -480,7 +480,7 @@
     IaaS. Cloud providers implementing EC2 as well as other proprietary and
     open cloud APIs may not implement OCCI. To help ensure that the OCCI API
     would be capable of interfacing to EC2 though gateways, minimizing the
-    impact to provider operations. </para>
+    impact to provider operations.</para>
 
     <bridgehead>Functional Requirements</bridgehead>
 

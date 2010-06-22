@@ -26,7 +26,7 @@
 
   <bridgehead renderas="sect4">Copyright Notice</bridgehead>
 
-  <para>Copyright (c) Open Grid Forum (2009). All Rights Reserved.</para>
+  <para>Copyright (c) Open Grid Forum (2009,2010). All Rights Reserved.</para>
 
   <bridgehead renderas="sect4">Abstract</bridgehead>
 
@@ -99,9 +99,7 @@
 
     <para>Similar work has been done in the Cloud Computing Use Case group.
     This document is published as the 'Cloud Computing Use Cases Whitepaper'.
-    <citerefentry>
-        <refentrytitle>CCUCW</refentrytitle>
-      </citerefentry></para>
+    <xref linkend="CCUCW" /></para>
   </section>
 
   <section>
@@ -227,7 +225,8 @@
   <section>
     <title>Full Copyright Notice</title>
 
-    <para>Copyright (C) Open Grid Forum (2009). All Rights Reserved.</para>
+    <para>Copyright (C) Open Grid Forum (2009,2010). All Rights
+    Reserved.</para>
 
     <para>This document and translations of it may be copied and furnished to
     others, and derivative works that comment on or otherwise explain it or
@@ -249,96 +248,17 @@
     <title>References</title>
 
     <bibliolist>
-      <biblioentry>
-        <abbrev>CCUCW</abbrev>
+      <biblioentry xreflabel="CCUCW" xml:id="CCUCW">
+        <title>Cloud Computing Use Cases Whitepaper</title>
 
-        <author>
+        <address><uri
+            xlink:href="http://www.scribd.com/doc/17929394/Cloud-Computing-Use-Cases-Whitepaper">http://www.scribd.com/doc/17929394/Cloud-Computing-Use-Cases-Whitepaper</uri></address>
+
+        <org>
           <orgname>Cloud Computing Use Case Discussion Group</orgname>
-        </author>
+        </org>
 
-        <address>http://www.scribd.com/doc/17929394/Cloud-Computing-Use-Cases-Whitepaper</address>
-
-        <phrase>Cloud Computing Use Cases Whitepaper</phrase>
-      </biblioentry>
-
-      <biblioentry>
-        <abbrev>CS</abbrev>
-
-        <address>http://www.rackspacecloud.com/cloud_hosting_products/servers/api</address>
-
-        <phrase>Cloud Servers API</phrase>
-      </biblioentry>
-
-      <biblioentry>
-        <abbrev>EC2</abbrev>
-
-        <address>http://aws.amazon.com/ec2/</address>
-
-        <phrase>Amazon Elastic Compute Cloud</phrase>
-      </biblioentry>
-
-      <biblioentry>
-        <abbrev>EH</abbrev>
-
-        <address>http://www.elastichosts.com/products/api</address>
-
-        <phrase>ElasticHosts API</phrase>
-      </biblioentry>
-
-      <biblioentry>
-        <abbrev>FS</abbrev>
-
-        <address>https://api.flexiscale.com/current/doc/</address>
-
-        <phrase>Flexiscale API</phrase>
-      </biblioentry>
-
-      <biblioentry>
-        <abbrev>GG</abbrev>
-
-        <address>http://wiki.gogrid.com/wiki/index.php/API</address>
-
-        <phrase>GoGrid API</phrase>
-      </biblioentry>
-
-      <biblioentry>
-        <abbrev>ONE</abbrev>
-
-        <address>http://www.opennebula.org/</address>
-
-        <phrase>OpenNebula website</phrase>
-      </biblioentry>
-
-      <biblioentry>
-        <abbrev>RV</abbrev>
-
-        <address>http://www.reservoir-fp7.eu/</address>
-
-        <phrase>RESERVOIR project website</phrase>
-      </biblioentry>
-
-      <biblioentry>
-        <abbrev>SC</abbrev>
-
-        <address>http://kenai.com/projects/suncloudapis/pages/Home</address>
-
-        <phrase>The Sun Cloud API</phrase>
-      </biblioentry>
-
-      <biblioentry>
-        <abbrev>SLA_SOI</abbrev>
-
-        <address>http://sla-at-soi.eu/</address>
-
-        <phrase>SLA@SOI project website</phrase>
-      </biblioentry>
-
-      <biblioentry>
-        <abbrev>VM</abbrev>
-
-        <address>http://www.vmware.com/products/vsphere/</address>
-
-        <phrase>VWware vSphere</phrase>
+        <date>2009-08</date>
       </biblioentry>
     </bibliolist>
   </section>
