@@ -52,6 +52,11 @@
   <section>
     <title>Examples</title>
 
+    <para>This is an example of creating a compute resource, specifying only
+    an id and an alternate representation. The resource's attributes are
+    assigned default values, which are determined by the provider, and are
+    visible in the example response.</para>
+
     <section>
       <title>POST Request</title>
 

@@ -391,7 +391,9 @@
 
         <tip>
           <para>Don't keep clients waiting - if you're not sure to return
-          immediately then give them a resource they can monitor.</para>
+          immediately then give them a resource they can monitor. For example
+          by responding with an 202 Accepted return code and include a
+          location: header, as described.</para>
         </tip>
       </section>
 
