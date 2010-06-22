@@ -22,7 +22,7 @@ var occi = {};
  
 occi.uri = document.location.href; 
 occi.xhr = null; 
- 
+
 if (window.XMLHttpRequest) { 
     // code for Firefox, Mozilla, IE7, etc. 
       occi.xhr = new XMLHttpRequest(); 
@@ -39,22 +39,62 @@ occi.test = function() {
                 document.getElementById("header").innerHTML = x; 
             } 
         } 
-        occi.xhr.open("HEAD",occi.URI, true); 
+        occi.xhr.open("HEAD",occi.URI, true);
         occi.xhr.send(); 
     } else { 
         alert("Your browser does not support XMLHTTP."); 
     }
 }
 
-occi.open = function(uri, method) {
+occi.open = function(method, uri, headers, callback) {
 	method = method || 'GET';
 	if (occi.xhr!=null) { 
         occi.xhr.onreadystatechange = function() { 
             if(occi.xhr.readyState == 4) { 
-                // do something with the xhr
+                callback();
             } 
         } 
-        occi.xhr.open(method, uri, true); 
+        // TODO: catch error for unsupported method and use override
+        occi.xhr.open(method, uri, true);
+        occi.xhr.setReqeustHeader('X-HTTP-Method-Override', method);
+        // TODO: foreach header
+        for (var h in headers) {
+		   occi.xhr.setReqeustHeader(h, headers[h]);
+		}
+        occi.xhr.send(); 
+    } else { 
+        alert("Your browser does not support XMLHTTP."); 
+    }
+}
+
+occi.copy = function(src, dst, callback) {
+	occi.open()
+	if (occi.xhr!=null) { 
+        occi.xhr.onreadystatechange = function() { 
+            if(occi.xhr.readyState == 4) { 
+                callback();
+            } 
+        } 
+        occi.xhr.open('COPY', src, true);
+        occi.xhr.setReqeustHeader('X-HTTP-Method-Override', 'COPY');
+        occi.xhr.setReqeustHeader('Destination', dst);
+        occi.xhr.send(); 
+    } else { 
+        alert("Your browser does not support XMLHTTP."); 
+    }
+}
+
+occi.move = function(src, dst, callback) {
+	occi.open()
+	if (occi.xhr!=null) { 
+        occi.xhr.onreadystatechange = function() { 
+            if(occi.xhr.readyState == 4) { 
+                callback();
+            } 
+        } 
+        occi.xhr.open('MOVE', src, true);
+        occi.xhr.setReqeustHeader('X-HTTP-Method-Override', 'MOVE');
+        occi.xhr.setReqeustHeader('Destination', dst);
         occi.xhr.send(); 
     } else { 
         alert("Your browser does not support XMLHTTP."); 
