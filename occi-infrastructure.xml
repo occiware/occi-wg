@@ -11,34 +11,42 @@
   <para>OCCI Infrastructure defines three kinds and various extensions
   relating to management of cloud infrastructure services (IaaS).</para>
 
-  <table>
-    <title>Common Attributes</title>
+  <section>
+    <title>Example</title>
 
-    <tgroup cols="3">
-      <colspec align="center" />
-
-      <thead>
-        <row>
-          <entry align="left">Attribute</entry>
-
-          <entry>Type</entry>
-
-          <entry>Description</entry>
-        </row>
-      </thead>
-
-      <tbody>
-        <row>
-          <entry
-          align="left"><computeroutput>occi.infrastructure.hostname</computeroutput></entry>
-
-          <entry>String</entry>
-
-          <entry>Valid DNS hostname for the resource (may be FQDN)</entry>
-        </row>
-      </tbody>
-    </tgroup>
-  </table>
+    <screen>&gt; GET /us-east/webapp/vm01 HTTP/1.1
+&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OCCI/1.0
+&gt; Host: cloud.example.com
+&gt; Accept: */*
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Date: Sat, 10 Oct 2009 12:56:51 GMT
+&lt; Content-Type: application/ovf
+&lt; Link: &lt;/us-east/webapp/vm01;start&gt;;
+&lt;       rel="http://purl.org/occi/action#start";
+&lt;       title="Start"
+&lt; Link: &lt;/networks/dmz&gt;;
+&lt;       rel="http://purl.org/occi/kind#network";
+&lt;       title="DMZ";
+&lt;       address="192.168.0.1/24";
+&lt;       interface="eth0"
+&lt; Link: &lt;/storage/disk1&gt;;
+&lt;       rel="http://purl.org/occi/kind#storage";
+&lt;       title="Quorum Disk";
+&lt;       device="sda"
+&lt; Link: &lt;/us-east/webapp/build.pdf&gt;;
+&lt;       rel="related";
+&lt;       title="Documentation";
+&lt;       type="application/pdf"
+&lt; Category: compute;
+&lt;       label="Compute Resource";
+&lt;       scheme="http://purl.org/occi/kind#"
+&lt; Server: occi-server/1.0 (linux) OCCI/1.0
+&lt; Connection: close
+&lt;
+&lt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+...</screen>
+  </section>
 
   <section>
     <title>Kinds</title>
@@ -69,7 +77,7 @@
             <entry
             align="left"><computeroutput>compute</computeroutput></entry>
 
-            <entry><uri>http://purl.org/occi/kind/compute</uri></entry>
+            <entry><uri>http://purl.org/occi/kind#compute</uri></entry>
 
             <entry>Information processing resources</entry>
           </row>
@@ -78,7 +86,7 @@
             <entry
             align="left"><computeroutput>network</computeroutput></entry>
 
-            <entry><uri>http://purl.org/occi/kind/network</uri></entry>
+            <entry><uri>http://purl.org/occi/kind#network</uri></entry>
 
             <entry>Interconnection resources</entry>
           </row>
@@ -87,7 +95,7 @@
             <entry
             align="left"><computeroutput>storage</computeroutput></entry>
 
-            <entry><uri>http://purl.org/occi/kind/storage</uri></entry>
+            <entry><uri>http://purl.org/occi/kind#storage</uri></entry>
 
             <entry>Recorded information resources</entry>
           </row>
@@ -136,9 +144,18 @@
                 <entry
                 align="left"><computeroutput>occi.compute.cores</computeroutput></entry>
 
-                <entry>Integer</entry>
+                <entry>Float</entry>
 
                 <entry>Number of CPU cores (e.g. 1, 2)</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>occi.compute.hostname</computeroutput></entry>
+
+                <entry>String</entry>
+
+                <entry>Valid DNS hostname for the resource.</entry>
               </row>
 
               <row>
@@ -161,36 +178,87 @@
 
               <row>
                 <entry
-                align="left"><computeroutput>occi.compute.memory.speed</computeroutput></entry>
-
-                <entry>Float (10^9 bytes/second)</entry>
-
-                <entry>RAM speed in Gbit/s (e.g.
-                <computeroutput>17</computeroutput> for PC-8500 DDR3 per <xref
-                linkend="infrastructure-bandwidths" />)</entry>
-              </row>
-
-              <row>
-                <entry
-                align="left"><computeroutput>occi.compute.memory.reliability</computeroutput></entry>
-
-                <entry>Enum (standard, checksum)</entry>
-
-                <entry>Qualitative measure of RAM reliability (e.g.
-                ECC)</entry>
-              </row>
-
-              <row>
-                <entry
                 align="left"><computeroutput>occi.compute.status</computeroutput></entry>
 
-                <entry>Enum (active, inactive, standby)</entry>
+                <entry>Enum (active, inactive, suspended)</entry>
 
                 <entry>Status of the compute resource</entry>
               </row>
             </tbody>
           </tgroup>
         </table>
+      </section>
+
+      <section>
+        <title>Actions</title>
+
+        <para>A number of common states are defined:</para>
+
+        <table>
+          <title>Compute Actions</title>
+
+          <tgroup cols="3">
+            <colspec align="center" />
+
+            <thead>
+              <row>
+                <entry align="left">Actions</entry>
+
+                <entry>Target State</entry>
+
+                <entry>Parameters</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/action#start</computeroutput></entry>
+
+                <entry><computeroutput>active</computeroutput></entry>
+
+                <entry>None</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/action#stop</computeroutput></entry>
+
+                <entry><computeroutput>inactive</computeroutput></entry>
+
+                <entry><parameter>type</parameter> Enum
+                (<parameter>graceful</parameter> [default],
+                <parameter>acpioff</parameter>,
+                <parameter>poweroff</parameter>)</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/action#restart</computeroutput></entry>
+
+                <entry><computeroutput>active</computeroutput></entry>
+
+                <entry><parameter>type</parameter> Enum
+                (<parameter>graceful</parameter> [default],
+                <parameter>warm</parameter>,
+                <parameter>cold</parameter>)</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/action#suspend</computeroutput></entry>
+
+                <entry><computeroutput>suspended</computeroutput></entry>
+
+                <entry><parameter>type</parameter> Enum
+                (<parameter>hibernate</parameter> [default],
+                <parameter>suspend</parameter>)</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <remark>TODO: Check supported suspend states.</remark>
       </section>
     </section>
 
@@ -294,6 +362,50 @@
           </tgroup>
         </table>
       </section>
+
+      <section>
+        <title>Actions</title>
+
+        <para>A number of common states are defined:</para>
+
+        <table>
+          <title>Network Actions</title>
+
+          <tgroup cols="3">
+            <colspec align="center" />
+
+            <thead>
+              <row>
+                <entry align="left">Actions</entry>
+
+                <entry>Target State</entry>
+
+                <entry>Parameters</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/action#down</computeroutput></entry>
+
+                <entry><computeroutput>inactive</computeroutput></entry>
+
+                <entry>None</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/action#up</computeroutput></entry>
+
+                <entry><computeroutput>active</computeroutput></entry>
+
+                <entry>None</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
     </section>
 
     <section>
@@ -326,15 +438,6 @@
             <tbody>
               <row>
                 <entry
-                align="left"><computeroutput>occi.storage.persistency</computeroutput></entry>
-
-                <entry>Enum (transient, persistent [default], durable)</entry>
-
-                <entry>Qualitative device persistence (e.g. transient)</entry>
-              </row>
-
-              <row>
-                <entry
                 align="left"><computeroutput>occi.storage.size</computeroutput></entry>
 
                 <entry>Float (10^9 bytes)</entry>
@@ -346,22 +449,84 @@
 
               <row>
                 <entry
-                align="left"><computeroutput>occi.storage.speed</computeroutput></entry>
+                align="left"><computeroutput>occi.storage.status</computeroutput></entry>
 
-                <entry>Integer (10^6 bytes/second)</entry>
+                <entry>Enum (<parameter>online</parameter>,
+                <parameter>offline</parameter>,
+                <parameter>degraded</parameter>)</entry>
 
-                <entry>Drive speed in MB/s (e.g.
-                <computeroutput>600</computeroutput> for SAS/SATA-600 <xref
-                linkend="infrastructure-bandwidths" />)</entry>
+                <entry>Currenty status of the storage resource</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+
+      <section>
+        <title>Actions</title>
+
+        <para>A number of common states are defined:</para>
+
+        <table>
+          <title>Storage Actions</title>
+
+          <tgroup cols="3">
+            <colspec align="center" />
+
+            <thead>
+              <row>
+                <entry align="left">Actions</entry>
+
+                <entry>Target State</entry>
+
+                <entry>Parameters</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/action#backup</computeroutput></entry>
+
+                <entry><computeroutput>unchanged</computeroutput></entry>
+
+                <entry>None</entry>
               </row>
 
               <row>
                 <entry
-                align="left"><computeroutput>occi.storage.status</computeroutput></entry>
+                align="left"><computeroutput>http://purl.org/occi/action#offline</computeroutput></entry>
 
-                <entry>Enum (online, offline, standby, degraded)</entry>
+                <entry><computeroutput>offline</computeroutput></entry>
 
-                <entry>Currenty status of the storage resource</entry>
+                <entry>None</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/action#online</computeroutput></entry>
+
+                <entry><computeroutput>online</computeroutput></entry>
+
+                <entry>None</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/action#resize</computeroutput></entry>
+
+                <entry><computeroutput>unchanged</computeroutput></entry>
+
+                <entry><parameter>size</parameter> float (10^9 bytes)</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/action#snapshot</computeroutput></entry>
+
+                <entry><computeroutput>unchanged</computeroutput></entry>
+
+                <entry>None</entry>
               </row>
             </tbody>
           </tgroup>

@@ -45,22 +45,6 @@
         linkend="http-rfc2483" /></para>
       </listitem>
     </itemizedlist>
-
-    <para>In all cases the same process as for Cookies (defined in <xref
-    linkend="http-rfc2965" />) is used to set/get headers, where
-    <computeroutput>[Set-]Attribute:</computeroutput>,
-    <computeroutput>[Set-]Category:</computeroutput> and
-    <computeroutput>[Set-]Link:</computeroutput> are used in place of
-    <computeroutput>Cookie:</computeroutput> and
-    <computeroutput>Set-Cookie:</computeroutput>.
-    <computeroutput>Set-*</computeroutput> headers may also be included on PUT
-    or POST requests (including empty POSTs in order to update the metadata
-    independently of the representation).</para>
-
-    <para>Existing values can be discarded by sending a
-    <computeroutput>Set-*</computeroutput> header with the
-    <computeroutput>discard</computeroutput> attribute and updated atomically
-    by providing a new value in the same HTTP transaction.</para>
   </section>
 
   <section>
@@ -72,11 +56,11 @@
       <screen>POST /compute/123 HTTP/1.1
 Host: example.com
 Content-Length: 0
-Set-Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
-Set-Category: compute;
+Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
+Category: compute;
   scheme="http://purl.org/occi/kind/";
   label="Compute Resource"
-Set-Link: &lt;http://example.com/products/1234&gt;;
+Link: &lt;http://example.com/products/1234&gt;;
   rel="alternate";
   title="Alternate representation"</screen>
     </section>
