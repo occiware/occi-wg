@@ -11,20 +11,29 @@
   <section>
     <title>Introduction</title>
 
-    <para>The Open Cloud Computing Interface is an open community consensus
-    API, initially targeting cloud infrastructure services or "Infrastructure
-    as a Service (IaaS)". It is as close as possible to the underlying
-    HyperText Transfer Protocol (HTTP), deviating only where absolutely
-    necessary, and can be described as a "Resource Oriented Architecture
-    (ROA)".<xref linkend="rws" /> Each resource (identified by a canonical
-    URL) has zero or more representations which may or may not be hypertext
-    (e.g. HTML). Metadata including associations between resources is exposed
-    via HTTP headers (e.g. the Link: header), except in the case of
-    collections where Atom is used as the meta-model.</para>
+    <para>The Open Cloud Computing Interface is an open protocol for cloud
+    computing services. It is as close as possible to the underlying HyperText
+    Transfer Protocol (HTTP), deviating only where absolutely necessary, and
+    can be described as a "Resource Oriented Architecture (ROA)".<xref
+    linkend="rws" /></para>
+
+    <para>Each resource (identified by a canonical URL) has one or more
+    representations which may or may not be hypertext (e.g. HTML). Metadata
+    including associations between resources is exposed via HTTP headers (e.g.
+    the Link: header).</para>
+
+    <para>In this way OCCI is not responsible for the representations
+    themselves, rather it enables users to organise and group resources
+    together to build arbitrarily complex systems and relies on existing
+    standards for rendering. HTTP content negotiation is used to select
+    between alternative representations, which can also be advertised by way
+    of links.</para>
 
     <tip>
       <para>Some resources can be interacted with but not rendered due to the
-      nature of the resource or prevailing security policies.</para>
+      nature of the resource or prevailing security policies (for example, an
+      operator may be able to backup a machine without knowing anything about
+      it).</para>
     </tip>
   </section>
 
