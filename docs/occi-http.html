@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>OCCI Machine Interface (HTTP)</title><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"/></head><body><div class="article" title="OCCI Machine Interface (HTTP)"><div class="titlepage"><div><div><h1 class="title"><a id="id36063441"/>OCCI Machine Interface (HTTP)</h1></div><div><div class="author"><h3 class="author"><span class="orgname">OCCI-WG</span></h3></div></div><div><p class="pubdate">2009-10-07</p></div></div><hr/></div><div class="section" title="Specification"><div class="titlepage"><div><div><h2 class="title"><a id="id36063463"/>Specification</h2></div></div></div><p>The HTTP binding is the default binding for OCCI:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>The HTTP binding is defined by <a class="xref" href="#http-rfc2616" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1">RFC2616</a>
-        (HTTP).</p></li><li class="listitem"><p>Web Categories [<a class="xref" href="#http-category" title="Web Categories">CATEGORY</a>] and Web
-        Linking [<a class="xref" href="#http-link" title="Web Linking">LINK</a>] specifications are used for the
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>OCCI Machine Interface (HTTP)</title><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"/></head><body><div class="article" title="OCCI Machine Interface (HTTP)"><div class="titlepage"><div><div><h1 class="title"><a id="id36063441"/>OCCI Machine Interface (HTTP)</h1></div><div><div class="author"><h3 class="author"><span class="orgname">OCCI-WG</span></h3></div></div><div><p class="pubdate">2009-10-07</p></div></div><hr/></div><div class="section" title="Specification"><div class="titlepage"><div><div><h2 class="title"><a id="id36063463"/>Specification</h2></div></div></div><p>The HTTP binding for OCCI provides a machine interface, delivering
+    resources in their native formats:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>The HTTP binding is defined by <a class="xref" href="#http-rfc2616" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1">RFC2616</a>
+        (HTTP).</p></li><li class="listitem"><p>Web Linking [<a class="xref" href="#http-link" title="Web Linking">LINK</a>] and Web Categories
+        [<a class="xref" href="#http-category" title="Web Categories">CATEGORY</a>] specifications are used for the
         meta-model.</p></li><li class="listitem"><p>Server-side cookies ("Attributes") are used for name-value
         pairs.</p></li><li class="listitem"><p>Collections are transferred as the
-        <code class="computeroutput">text/uri-list</code> content type (defined
-        in RFC 2169, Appendix A).</p></li></ul></div><p>In all cases the process defined in <a class="xref" href="#http-rfc2965" title="RFC 2965 - HTTP State Management Mechanism">RFC2965</a>
-    is used to set/get <code class="computeroutput">message-header</code>s, where
+        <code class="computeroutput">text/uri-list</code> content type.<a class="xref" href="#http-rfc2483" title="RFC 2483 - URI Resolution Services Necessary for URN Resolution">RFC2483</a></p></li></ul></div><p>In all cases the same process as for Cookies (defined in <a class="xref" href="#http-rfc2965" title="RFC 2965 - HTTP State Management Mechanism">RFC2965</a>) is used to set/get headers, where
     <code class="computeroutput">[Set-]Attribute:</code>,
     <code class="computeroutput">[Set-]Category:</code> and
     <code class="computeroutput">[Set-]Link:</code> are used in place of
     <code class="computeroutput">Cookie:</code> and
-    <code class="computeroutput">Set-Cookie:</code>.</p><p><code class="computeroutput">Set-*</code> headers may be included on
-    PUT or POST requests (including empty POSTs in order to update the
-    metadata independently of the representation).</p><p>Existing values can be discarded by sending a
+    <code class="computeroutput">Set-Cookie:</code>.
+    <code class="computeroutput">Set-*</code> headers may also be included on PUT
+    or POST requests (including empty POSTs in order to update the metadata
+    independently of the representation).</p><p>Existing values can be discarded by sending a
     <code class="computeroutput">Set-*</code> header with the
-    <code class="computeroutput">discard</code> attribute and updated by
-    providing a new value at the same time. When combined in a single HTTP
-    transaction such updates <span class="emphasis"><em>should</em></span> be atomic.</p></div><div class="section" title="Example"><div class="titlepage"><div><div><h2 class="title"><a id="id36063568"/>Example</h2></div></div></div><div class="section" title="POST Request"><div class="titlepage"><div><div><h3 class="title"><a id="id36063573"/>POST Request</h3></div></div></div><pre class="screen">POST /compute/123 HTTP/1.1
+    <code class="computeroutput">discard</code> attribute and updated atomically
+    by providing a new value in the same HTTP transaction.</p></div><div class="section" title="Example"><div class="titlepage"><div><div><h2 class="title"><a id="id36063562"/>Example</h2></div></div></div><div class="section" title="POST Request"><div class="titlepage"><div><div><h3 class="title"><a id="id36063567"/>POST Request</h3></div></div></div><pre class="screen">POST /compute/123 HTTP/1.1
 Host: example.com
 Content-Length: 0
 Set-Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
@@ -27,7 +26,7 @@ Set-Category: compute;
   label="Compute Resource"
 Set-Link: &lt;http://example.com/products/1234&gt;;
   rel="alternate";
-  title="Alternate representation"</pre></div><div class="section" title="GET Response"><div class="titlepage"><div><div><h3 class="title"><a id="id36063588"/>GET Response</h3></div></div></div><pre class="screen">Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
+  title="Alternate representation"</pre></div><div class="section" title="GET Response"><div class="titlepage"><div><div><h3 class="title"><a id="id36063583"/>GET Response</h3></div></div></div><pre class="screen">Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
 Attribute: title="Compute Resource #123"
 Attribute: summary="A virtual compute resource"
 Attribute: updated="2009-12-31T12:59:59Z"
@@ -45,11 +44,14 @@ Link: &lt;http://example.com/products/1234&gt;;
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;ovf:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:ovf="http://schemas.dmtf.org/ovf/1/envelope"
-&lt;!-- snip --&gt;</pre></div></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36063606"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36063608"/><p class="bibliomixed">Normative References</p></div><div class="biblioentry" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1"><a id="http-rfc2616"/><p>[RFC2616] <span class="title"><i>RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2616" target="">http://tools.ietf.org/html/rfc2616</a></code>. </span><span class="org">
+&lt;!-- snip --&gt;</pre></div></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36063600"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36063603"/><p class="bibliomixed">Normative References</p></div><div class="biblioentry" title="RFC 2483 - URI Resolution Services Necessary for URN Resolution"><a id="http-rfc2483"/><p>[RFC2483] <span class="title"><i>RFC 2483 - URI Resolution Services Necessary for URN
+      Resolution</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2109" target="">http://tools.ietf.org/html/rfc2483#section-5</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">1999-01. </span></p></div><div class="biblioentry" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1"><a id="http-rfc2616"/><p>[RFC2616] <span class="title"><i>RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2616" target="">http://tools.ietf.org/html/rfc2616</a></code>. </span><span class="org">
         <span class="orgname">Internet Engineering Task Force (IETF)</span>
       </span><span class="date">1999-06. </span></p></div><div class="biblioentry" title="RFC 2965 - HTTP State Management Mechanism"><a id="http-rfc2965"/><p>[RFC2965] <span class="title"><i>RFC 2965 - HTTP State Management Mechanism</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2822" target="">http://tools.ietf.org/html/rfc2965</a></code>. </span><span class="org">
         <span class="orgname">Internet Engineering Task Force (IETF)</span>
-      </span><span class="date">2000-10. </span></p></div><div class="bibliomixed"><a id="id36063667"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry" title="Web Categories"><a id="http-category"/><p>[CATEGORY] <span class="title"><i>Web Categories</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/draft-johnston-http-category-header" target="">http://tools.ietf.org/html/draft-johnston-http-category-header</a></code>. </span><span class="org">
+      </span><span class="date">2000-10. </span></p></div><div class="bibliomixed"><a id="id36063689"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry" title="Web Categories"><a id="http-category"/><p>[CATEGORY] <span class="title"><i>Web Categories</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/draft-johnston-http-category-header" target="">http://tools.ietf.org/html/draft-johnston-http-category-header</a></code>. </span><span class="org">
         <span class="orgname">Internet Engineering Task Force (IETF)</span>
       </span><span class="author">Sam Johnston. </span><span class="date">2009-07-1. </span></p></div><div class="biblioentry" title="Web Linking"><a id="http-link"/><p>[LINK] <span class="title"><i>Web Linking</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/draft-nottingham-http-link-header" target="">http://tools.ietf.org/html/draft-nottingham-http-link-header</a></code>. </span><span class="org">
         <span class="orgname">Internet Engineering Task Force (IETF)</span>
