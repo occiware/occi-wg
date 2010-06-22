@@ -11,34 +11,43 @@
   <section>
     <title>Introduction</title>
 
-    <para>The Open Cloud Computing Interface is an open protocol for cloud
-    computing services. It is as close as possible to the underlying HyperText
-    Transfer Protocol (HTTP), deviating only where absolutely necessary, and
-    can be described as a "Resource Oriented Architecture (ROA)".<xref
-    linkend="core-rws" /> All existing HTTP features are available for
-    caching, proxying, gatewaying and other advanced functionality.</para>
+    <para>The Open Cloud Computing Interface (OCCI) is an open protocol for
+    all cloud computing services. A RESTful interface, it deviates from the
+    underlying HyperText Transfer Protocol (HTTP) only where absolutely
+    necessary and can be described as a "Resource Oriented Architecture
+    (ROA)".<xref linkend="core-rws" /> Unlike other envelope-based protocols
+    which operate in-band, all existing HTTP features are available for
+    caching, proxying, gatewaying and other advanced functionality such as
+    partial GETs.</para>
 
-    <para>Each resource (identified by a canonical URL) has one or more
-    representations which may or may not be hypertext (e.g. HTML). Metadata
-    including associations between resources is exposed via HTTP headers (e.g.
-    the Link: header).</para>
+    <para>Each resource is identified by URL(s) and has one or more
+    representations which may include a hypertext (e.g. XHTML5) rendering for
+    direct end-user accessibility. HTTP content negotiation is used to select
+    between alternative representations and metadata including associations
+    between resources is exposed via HTTP headers (e.g. the
+    <computeroutput>Link:</computeroutput> and
+    <computeroutput>Category:</computeroutput> headers).</para>
 
     <para>In this way OCCI is not responsible for the representations
     themselves, rather it enables users to organise and group resources
-    together to build arbitrarily complex systems and relies on existing
-    standards for rendering. HTTP content negotiation is used to select
-    between alternative representations, which can also be advertised by way
-    of links.</para>
+    together to build arbitrarily complex systems of inter-related resources.
+    It relies on existing standards for rendering and does not make any
+    recommendations of one standard format over any other.</para>
+
+    <tip>
+      <para>This is the case for the World Wide Web today where many image,
+      video and other supporting formats co-exist. Browsers support a number
+      of the common formats and users choose the most appropriate for the
+      task.</para>
+    </tip>
 
     <screen>&gt; GET /us-east/webapp/vm01 HTTP/1.1
-&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4
+&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OCCI/1.0
 &gt; Host: cloud.example.com
 &gt; Accept: */*
 &gt; 
 &lt; HTTP/1.1 200 OK
 &lt; Date: Sat, 10 Oct 2009 12:56:51 GMT
-&lt; Expires: -1
-&lt; Cache-Control: private, max-age=0
 &lt; Content-Type: application/ovf
 &lt; Link: &lt;/us-east/webapp/vm01;start&gt;;
 &lt;       rel="http://purl.org/occi/action/start";
@@ -50,7 +59,7 @@
 &lt; Category: compute;
 &lt;       label="Compute Resource";
 &lt;       scheme="http://purl.org/occi/kind/"
-&lt; Server: occi-server/1.0
+&lt; Server: occi-server/1.0 (linux) OCCI/1.0
 &lt; Connection: close
 &lt;
 &lt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -233,11 +242,15 @@
     <section>
       <title>Versioning</title>
 
-      <para>Every request <emphasis>should</emphasis> include an
-      <computeroutput>occi.version</computeroutput> attribute indicating the
-      version of the API requested (e.g.
-      <computeroutput>1.0</computeroutput>). If none is provided the latest
-      available version <emphasis>shall</emphasis> be used.</para>
+      <para>Servers and clients <emphasis>should</emphasis> indicate the
+      latest version of OCCI they support (e.g.
+      <computeroutput>1.0</computeroutput>) by way of the
+      <computeroutput>Server:</computeroutput> and
+      <computeroutput>User-Agent:</computeroutput> headers respectively, using
+      the token <quote><computeroutput>OCCI</computeroutput></quote> (e.g.
+      <quote><computeroutput>OCCI/1.0</computeroutput></quote>). If none is
+      provided the latest available version <emphasis>shall</emphasis> be
+      used.</para>
     </section>
   </section>
 
@@ -285,10 +298,8 @@
 
       <para>An <glossterm>attribute</glossterm> is a specification that
       defines a property of an object. It is expressed in the form of
-      key-value pairs.</para>
-
-      <para>Attributes are divided into namespaces which are separated by the
-      dot character (<quote>.</quote>).</para>
+      key-value pairs. Attributes are divided into namespaces which are
+      separated by the dot character (<quote>.</quote>).</para>
 
       <tip>
         <para>This scalable approach was derived from the Mozilla Firefox
@@ -315,7 +326,7 @@
         <table>
           <title>Core Attributes</title>
 
-          <tgroup cols="3">
+          <tgroup cols="4">
             <colspec align="center" />
 
             <thead>
@@ -323,6 +334,8 @@
                 <entry align="left">Attribute</entry>
 
                 <entry>Description</entry>
+
+                <entry>Type</entry>
 
                 <entry>Example</entry>
               </row>
@@ -333,7 +346,9 @@
                 <entry
                 align="left"><computeroutput>occi.id</computeroutput></entry>
 
-                <entry>Immutable identifier for the resource (URI)</entry>
+                <entry>Immutable identifier for the resource</entry>
+
+                <entry>URI</entry>
 
                 <entry><uri>urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770</uri></entry>
               </row>
@@ -342,7 +357,9 @@
                 <entry
                 align="left"><computeroutput>occi.title</computeroutput></entry>
 
-                <entry>Display name for the resource (String)</entry>
+                <entry>Display name for the resource</entry>
+
+                <entry>String</entry>
 
                 <entry><computeroutput>Compute Resource
                 #123</computeroutput></entry>
@@ -352,7 +369,9 @@
                 <entry
                 align="left"><computeroutput>occi.summary</computeroutput></entry>
 
-                <entry>Description of the resource (String)</entry>
+                <entry>Description of the resource</entry>
+
+                <entry>String</entry>
 
                 <entry><computeroutput>A virtual compute
                 resource</computeroutput></entry>
@@ -362,7 +381,9 @@
                 <entry
                 align="left"><computeroutput>occi.version</computeroutput></entry>
 
-                <entry>Specification version (Float)</entry>
+                <entry>Specification version</entry>
+
+                <entry>Float</entry>
 
                 <entry><computeroutput>1.0</computeroutput></entry>
               </row>
@@ -497,10 +518,6 @@
         </glossentry>
       </glosslist>
 
-      <screen>Category: compute;
-      label="Compute Resource";
-      scheme="http://purl.org/occi/kind/"</screen>
-
       <para>Category schemes and/or terms defined by this standard reside
       throughout the <uri>http://purl.org/occi/</uri> namespace but anyone can
       define a new scheme by allocating a URI they control.</para>
@@ -516,6 +533,14 @@
         <computeroutput>Windows</computeroutput>,
         <computeroutput>Linux</computeroutput>) and patch levels (e.g.</para>
       </tip>
+
+      <section>
+        <title>Examples</title>
+
+        <screen>Category: compute;
+      label="Compute Resource";
+      scheme="http://purl.org/occi/kind/"</screen>
+      </section>
 
       <section>
         <title>Querying</title>
@@ -560,7 +585,8 @@
       <para>Where an operation could return multiple resources (e.g.
       categories, searches) this is referred to as a
       <glossterm>collection</glossterm>. Collections are returned as a list of
-      links in <computeroutput>text/uri-list</computeroutput> format.</para>
+      URLs in <computeroutput>text/uri-list</computeroutput> format.<xref
+      linkend="core-rfc2483" /></para>
 
       <tip>
         <para>Collections are passed by reference for simplicity rather than
@@ -571,20 +597,35 @@
         encodings add significant overhead.</para>
       </tip>
 
-      <para>Any given URL can be a collection and/or advertise
-      <glossterm>link</glossterm>s to other <glossterm>collection</glossterm>s
-      using the <computeroutput>collection</computeroutput> class.</para>
+      <section>
+        <title>Examples</title>
 
-      <tip>
-        <para>The root (<quote>/</quote>) <emphasis>should</emphasis> expose
-        collections <glossterm>in-band</glossterm> and/or
-        <glossterm>out-of-band</glossterm> in order for clients to discover
-        resources.</para>
-      </tip>
+        <screen># OCCI Example Collection
+/examples/custom-extension
+/examples/lamp-multi-vm
+/examples/lamp
+/examples/myservice</screen>
+      </section>
 
-      <screen>Link: &lt;http://example.com/123/audit&gt;;
+      <section>
+        <title>Advertising</title>
+
+        <para>Any given URL can be a collection and/or advertise
+        <glossterm>link</glossterm>s to other
+        <glossterm>collection</glossterm>s using the
+        <computeroutput>collection</computeroutput> class:</para>
+
+        <screen>Link: &lt;http://example.com/123/audit&gt;;
       rel="http://purl.org/occi/collection/audit";
       title="Audit Entries"</screen>
+
+        <tip>
+          <para>The root (<quote>/</quote>) <emphasis>should</emphasis> expose
+          collections <glossterm>in-band</glossterm> and/or
+          <glossterm>out-of-band</glossterm> in order for clients to discover
+          resources.</para>
+        </tip>
+      </section>
 
       <section>
         <title>Paging</title>
@@ -841,6 +882,19 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       </org>
 
       <date>1997-02</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC2483" xml:id="core-rfc2483">
+      <title>RFC 2483 - URI Resolution Services Necessary for URN
+      Resolution</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2109">http://tools.ietf.org/html/rfc2483#section-5</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>1999-01</date>
     </biblioentry>
 
     <biblioentry xreflabel="RFC2616" xml:id="core-rfc2616">
