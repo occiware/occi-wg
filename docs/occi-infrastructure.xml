@@ -30,7 +30,7 @@
       <tbody>
         <row>
           <entry
-          align="left"><computeroutput>hostname</computeroutput></entry>
+          align="left"><computeroutput>OCCI-Infrastructure-Hostname</computeroutput></entry>
 
           <entry>String</entry>
 
@@ -43,8 +43,10 @@
   <section>
     <title>Kinds</title>
 
-    <para>Cloud infrastructure can be modeled using three primary nouns:
-    compute, network and storage.</para>
+    <para>Cloud infrastructure can be modeled using three primary kinds:
+    <computeroutput>compute</computeroutput>,
+    <computeroutput>network</computeroutput> and
+    <computeroutput>storage</computeroutput>.</para>
 
     <table>
       <title>Kinds</title>
@@ -67,7 +69,7 @@
             <entry
             align="left"><computeroutput>compute</computeroutput></entry>
 
-            <entry><uri>http://purl.org/occi/noun/compute</uri></entry>
+            <entry><uri>http://purl.org/occi/kind/compute</uri></entry>
 
             <entry>Information processing resources</entry>
           </row>
@@ -76,7 +78,7 @@
             <entry
             align="left"><computeroutput>network</computeroutput></entry>
 
-            <entry><uri>http://purl.org/occi/noun/network</uri></entry>
+            <entry><uri>http://purl.org/occi/kind/network</uri></entry>
 
             <entry>Interconnection resources</entry>
           </row>
@@ -85,7 +87,7 @@
             <entry
             align="left"><computeroutput>storage</computeroutput></entry>
 
-            <entry><uri>http://purl.org/occi/noun/storage</uri></entry>
+            <entry><uri>http://purl.org/occi/kind/storage</uri></entry>
 
             <entry>Recorded information resources</entry>
           </row>
@@ -118,7 +120,7 @@
           <tbody>
             <row>
               <entry
-              align="left"><computeroutput>compute.cpu.arch</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Compute-CPU-Arch</computeroutput></entry>
 
               <entry>Enum (x86, x64)</entry>
 
@@ -127,7 +129,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>compute.cpu.cores</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Compute-CPU-Cores</computeroutput></entry>
 
               <entry>Integer</entry>
 
@@ -136,7 +138,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>compute.cpu.speed</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Compute-CPU-Speed</computeroutput></entry>
 
               <entry>Float (10^9 Hertz)</entry>
 
@@ -145,7 +147,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>compute.memory.size</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Compute-Memory-Size</computeroutput></entry>
 
               <entry>Float (10^6 bytes)</entry>
 
@@ -154,7 +156,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>compute.memory.speed</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Compute-Memory-Speed</computeroutput></entry>
 
               <entry>Float (10^9 bps)</entry>
 
@@ -163,7 +165,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>compute.memory.reliability</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Compute-Memory-Reliability</computeroutput></entry>
 
               <entry>Enum (standard, checksum)</entry>
 
@@ -199,7 +201,7 @@
           <tbody>
             <row>
               <entry
-              align="left"><computeroutput>network.vlan-id</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Network-VLAN-Id</computeroutput></entry>
 
               <entry>Integer (0..4095)</entry>
 
@@ -208,7 +210,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>network.vlan-tag</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Network-VLAN-Tag</computeroutput></entry>
 
               <entry>Token</entry>
 
@@ -217,7 +219,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>network.ipv4[i].gateway</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Network-IPv4-n-Address</computeroutput></entry>
 
               <entry>IPv4 Address</entry>
 
@@ -226,7 +228,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>network.ipv4[i].netmask</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Network-IPv4-n-Netmask</computeroutput></entry>
 
               <entry>IPv4 Address</entry>
 
@@ -235,7 +237,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>network.ipv4[i].network</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Network-IPv4-n-Network</computeroutput></entry>
 
               <entry>IPv4 Address</entry>
 
@@ -244,7 +246,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>network.ipv4[i].cidr</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Network-IPv4-n-CIDR</computeroutput></entry>
 
               <entry>Integer (0..32)</entry>
 
@@ -253,6 +255,8 @@
           </tbody>
         </tgroup>
       </table>
+
+      <remark>TODO: Tidy up network interface addressing.</remark>
     </section>
 
     <section>
@@ -280,7 +284,7 @@
           <tbody>
             <row>
               <entry
-              align="left"><computeroutput>storage.reliability</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Storage-Reliability</computeroutput></entry>
 
               <entry>Enum (transient, persistent, reliable)</entry>
 
@@ -289,7 +293,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>storage.size</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Storage-Size</computeroutput></entry>
 
               <entry>Integer (10^9 bytes)</entry>
 
