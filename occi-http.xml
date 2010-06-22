@@ -7,82 +7,79 @@
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
-    <title>OCCI Text Format</title>
+    <title>OCCI HTTP Binding</title>
 
     <author>
       <orgname>OCCI-WG</orgname>
     </author>
 
-    <pubdate>2009-09-15</pubdate>
+    <pubdate>2009-10-07</pubdate>
   </info>
-
-  <section>
-    <title>Overview</title>
-
-    <para>Text is the simplest possible rendering, which is most useful for
-    simple clients including:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Manual manipulation by developers, system administrators,
-        etc.</para>
-      </listitem>
-
-      <listitem>
-        <para>Monitoring systems</para>
-      </listitem>
-
-      <listitem>
-        <para>Scripts</para>
-      </listitem>
-
-      <listitem>
-        <para>Scheduled cron jobs</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>It is served using the <computeroutput>text/occi</computeroutput>
-    Internet media type.</para>
-  </section>
 
   <section>
     <title>Specification</title>
 
-    <para>The text rendering is based on the <xref linkend="rfc2616" /> (HTTP)
-    <computeroutput>message-header</computeroutput> type, which is the same
-    generic format as that given in <xref linkend="rfc2822" />.</para>
+    <para>The HTTP binding is the default binding for OCCI:</para>
 
-    <para>It is identical to the
-    <computeroutput>generic-message</computeroutput> type except that there is
-    no <computeroutput>start-line</computeroutput> (Request-Line |
-    Status-Line) and <computeroutput>message-header</computeroutput> fields
-    required by HTTP are optional.</para>
+    <itemizedlist>
+      <listitem>
+        <para>The HTTP binding is defined by <xref linkend="rfc2616" />
+        (HTTP).</para>
+      </listitem>
 
-    <para>Web Categories [<xref linkend="category" />] and Web Linking [<xref
-    linkend="link" />] specifications are used for the meta-model.</para>
+      <listitem>
+        <para>Web Categories [<xref linkend="category" />] and Web Linking
+        [<xref linkend="link" />] specifications are used for the
+        meta-model.</para>
+      </listitem>
 
-    <section>
-      <title>ABNF</title>
+      <listitem>
+        <para>Server-side cookies ("Attributes") are used for name-value
+        pairs.</para>
+      </listitem>
+    </itemizedlist>
 
-      <screen>occi-collection = *( occi-resource CRLF )
-occi-resource   = *( message-header CRLF )
-message-header  = field-name ":" [ field-value ]
-field-name      = token
-field-value     = *( field-content | LWS )
-field-content   = &lt;the OCTETs making up the field-value
-                  and consisting of either *TEXT or combinations
-                  of token, separators, and quoted-string&gt;</screen>
-    </section>
+    <para>In all cases the process defined in <xref linkend="rfc2965" /> is
+    used to set/get <computeroutput>message-header</computeroutput>s except
+    <computeroutput>[Set-]Attribute:</computeroutput>,
+    <computeroutput>[Set-]Category:</computeroutput> and
+    <computeroutput>[Set-]Link:</computeroutput> are used in place of
+    <computeroutput>Cookie:</computeroutput> and
+    <computeroutput>Set-Cookie:</computeroutput>.</para>
+
+    <para><computeroutput>Set-*</computeroutput> headers may be included on
+    PUT or POST requests (including empty POSTs in order to update the
+    metadata independently of the representation).</para>
   </section>
 
   <section>
     <title>Example</title>
 
-    <para><screen>OCCI-Id: urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770
-OCCI-Title: Compute Resource #123
-OCCI-Summary: A virtual compute resource
-OCCI-Author-Name: John Citizen
-OCCI-Updated: 2009-12-31T12:59:59Z
+    <section>
+      <title>Request</title>
+
+      <screen>POST /compute/123 HTTP/1.1
+Host: example.com
+Content-Length: 0
+Set-Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
+Set-Category: compute;
+  scheme="http://purl.org/occi/kind/";
+  label="Compute Resource"
+Set-Link: &lt;http://example.com/products/1234&gt;;
+  rel="alternate";
+  title="Alternate representation"</screen>
+    </section>
+
+    <section>
+      <title>Response</title>
+
+      <screen>Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
+Attribute: title="Compute Resource #123"
+Attribute: summary="A virtual compute resource"
+Attribute: updated="2009-12-31T12:59:59Z"
+Attribute: compute.cores=2
+Attribute: compute.speed=3000
+Attribute: compute.memory=2048
 ETag: "dad86c61eea237932f"
 Category: compute;
   scheme="http://purl.org/occi/kind/";
@@ -91,8 +88,11 @@ Link: &lt;http://example.com/products/1234&gt;;
   rel="alternate";
   title="Alternate representation"
 
-OCCI-Id: urn:uuid:c9524696-39de-43fe-a662-4d32e74c8ad2
-...</screen></para>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;ovf:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:ovf="http://schemas.dmtf.org/ovf/1/envelope"
+&lt;!-- snip --&gt;</screen>
+    </section>
   </section>
 
   <bibliography>
@@ -110,16 +110,16 @@ OCCI-Id: urn:uuid:c9524696-39de-43fe-a662-4d32e74c8ad2
       <date>1999-06</date>
     </biblioentry>
 
-    <biblioentry xreflabel="RFC2822" xml:id="rfc2822">
-      <title>RFC 2822 - Internet Message Format</title>
+    <biblioentry xreflabel="RFC2965" xml:id="rfc2965">
+      <title>RFC 2965 - HTTP State Management Mechanism </title>
 
-      <address><uri xlink:href="http://tools.ietf.org/html/rfc2822">http://tools.ietf.org/html/rfc2822</uri></address>
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2822">http://tools.ietf.org/html/rfc2965</uri></address>
 
       <org>
         <orgname>Internet Engineering Task Force (IETF)</orgname>
       </org>
 
-      <date>2001-04</date>
+      <date>2000-10</date>
     </biblioentry>
 
     <bibliomixed>Informative References</bibliomixed>
