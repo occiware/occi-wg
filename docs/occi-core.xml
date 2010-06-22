@@ -541,6 +541,10 @@ Acme-Network-Identifier: dmz</screen>
         <computeroutput>Windows</computeroutput>,
         <computeroutput>Linux</computeroutput>) and patch levels (e.g. </para>
       </tip>
+
+      <remark>Consider moving to link relations for categories so as to be
+      compatible with existing standards rather than creating new
+      ones.</remark>
     </section>
 
     <section>
@@ -679,7 +683,7 @@ Acme-Network-Identifier: dmz</screen>
                   </listitem>
 
                   <listitem>
-                    <para>The <computeroutput>title</computeroutput> is
+                    <para>The <computeroutput>label</computeroutput> is
                     optional and indicated by the
                     <computeroutput>title</computeroutput> attribute.</para>
                   </listitem>
@@ -858,6 +862,65 @@ Acme-Network-Identifier: dmz</screen>
 
             <glossdef>
               <para>N/A</para>
+            </glossdef>
+          </glossentry>
+        </glosslist>
+      </section>
+
+      <section>
+        <title>Link Relation Type Registry</title>
+
+        <para>The following <glossterm>link relation</glossterm>s are to be
+        registered:</para>
+
+        <glosslist>
+          <glossentry>
+            <glossterm>Relation Name</glossterm>
+
+            <glossdef>
+              <para>category</para>
+            </glossdef>
+          </glossentry>
+
+          <glossentry>
+            <glossterm>Description</glossterm>
+
+            <glossdef>
+              <para>Assigns the link's context to a category, whereby the
+              <computeroutput>scheme</computeroutput> is required and
+              indicated by the <computeroutput>href</computeroutput>
+              attribute, the <computeroutput>label</computeroutput> is
+              optional and indicated by the
+              <computeroutput>title</computeroutput> attribute and the
+              <computeroutput>term</computeroutput> is required and indicated
+              by the <computeroutput>term</computeroutput> extended
+              attribute.</para>
+            </glossdef>
+          </glossentry>
+
+          <glossentry>
+            <glossterm>References</glossterm>
+
+            <glossdef>
+              <itemizedlist>
+                <listitem>
+                  <para>Atom [<xref linkend="rfc4287" />]</para>
+                </listitem>
+
+                <listitem>
+                  <para>OCCI [this specification]</para>
+                </listitem>
+              </itemizedlist>
+            </glossdef>
+          </glossentry>
+
+          <glossentry>
+            <glossterm>Notes</glossterm>
+
+            <glossdef>
+              <para>Category meta-model was derived from Atom for use with
+              OCCI. This relation was defined for compatibility with existing
+              standards including HTTP and HTML.</para>
             </glossdef>
           </glossentry>
         </glosslist>

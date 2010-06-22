@@ -8,7 +8,7 @@
          xmlns:db="http://docbook.org/ns/docbook">
   <title>OCCI Use Cases</title>
 
-  <para>The following section describes the Use Cases which were gathered
+  <para>The following section describes the use cases which were gathered
   during the requirements analyses for the OCCI working group. They are used
   to set up the requirements and later on to verify the OCCI
   specification.</para>
@@ -85,7 +85,7 @@
   <section>
     <title>Service Manager to control the Life cycle of Services</title>
 
-    <para>This Use Case is based in the 'Service Manager' (SM) layer of the
+    <para>This use case is based in the 'Service Manager' (SM) layer of the
     RESERVOIR project architecture. 'Service Providers' (SP) willing to deploy
     their service on the Cloud use this layer to control the service life
     cycle. The SM operates over the Cloud infrastructure automatically as the
@@ -253,9 +253,9 @@
     pool of physical resources It offers three main functionalities: backend
     of a public cloud, manage a virtual infrastructure in the data-center or
     cluster (private cloud), achieve cloud interoperation (hybrid cloud), the
-    latter being relevant in this Use Case.</para>
+    latter being relevant in this use case.</para>
 
-    <para>The aim of this Use Case is to state the requirements that an API
+    <para>The aim of this use case is to state the requirements that an API
     for cloud providers should take into account in order to expose an
     interface that will enable the management of groups of Virtual Machines
     across them. These requirements are gathered from the experience using
@@ -417,7 +417,7 @@
   <section>
     <title>AJAX web front-end directly calling API</title>
 
-    <para>This Use Case describes the ability to create web front-ends for
+    <para>This use case describes the ability to create web front-ends for
     Clouds. A cloud provider implements their customer web front-end as an
     entirely client-side AJAX application calling the OCCI API
     directly.</para>
@@ -476,11 +476,10 @@
   <section>
     <title>Wrapping EC2 in OCCI</title>
 
-    <para>At the time of this writing, Amazon EC2 is popular cloud API for
-    IaaS. Cloud providers implementing EC2 as well as other proprietary and
-    open cloud APIs may not implement OCCI. To help ensure that the OCCI API
-    would be capable of interfacing to EC2 though gateways, minimizing the
-    impact to provider operations. </para>
+    <para>Amazon EC2 is the de-facto standard for IaaS today. While Amazon is
+    unlikely to join the OCCI process at first, we must ensure that that the
+    OCCI API would be capable of interfacing to EC2 so that gateways can be
+    written and so that Amazon could join at a later date.</para>
 
     <bridgehead>Functional Requirements</bridgehead>
 
@@ -589,7 +588,7 @@
 
     <para>An end user wishes to view and control all of his cloud-based
     resources in a lightweight (perhaps AJAX-based) console, perhaps the same
-    web front-end referred to in this Use Case: AJAX web front-end directly
+    web front-end referred to in this use case: AJAX web front-end directly
     calling API</para>
 
     <bridgehead>Functional Requirements</bridgehead>
