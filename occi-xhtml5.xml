@@ -31,9 +31,7 @@
 
     <para>XHTML5 is used to describe a user-friendly rendering of the object,
     optionally with images, icons, javascript, etc. embedded. It is also
-    marked up with RDFa attributes so as it is also machine readable. The use
-    of RDFa is used throughout XHTML5 renderings where ever
-    appropriate.</para>
+    marked up with RDFa attributes so as it is also machine readable.</para>
 
     <para>Pages are typically either lists of resources (e.g.
     <computeroutput>&lt;ul&gt;</computeroutput>,
@@ -46,58 +44,38 @@
 
       <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-  &lt;head&gt;
-    &lt;title&gt;OCCI: My Virtual Machine&lt;/title&gt;
-    &lt;meta http-equiv="Content-Type" content="text/html;charset=utf-8" /&gt;
-    &lt;!-- Here links to related resources can be inserted here --&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;OCCI: My Virtual Machine&lt;/title&gt;
+  &lt;meta http-equiv="Content-Type" content="text/html;charset=utf-8" /&gt;
+&lt;/head&gt;
 
-  &lt;/head&gt;
+&lt;body xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:occi="http://purl.org/occi/"&gt;
 
-  &lt;body xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:occi="http://purl.org/occi/"&gt;
+&lt;h1 property="occi:title"&gt;My Virtual Machine&lt;/h1&gt;
+&lt;span property="occi:summary"&gt;A simple sample virtual machine&lt;/span&gt;
 
-    &lt;!-- Here we add all properties related to the VM --&gt;
-    &lt;!-- Properties that are read/write are enclosed by the &lt;FORM&gt; element --&gt;
-    &lt;!-- Properties that are read-only are enclosed by any valid HTML5 element EXCEPT &lt;FORM&gt;--&gt;
-    &lt;!-- Whether a property is read/write or read-only is an implementation detail settled by the provider--&gt;
+Console:
+&lt;a href="/myvm/console.png" rel="http://purl.org/occi/compute#console" type="image/png"&gt;&lt;img src="/myvm/console-thumb.png" /&gt;&lt;/a&gt;
+&lt;a href="ssh://myvm:22" rel="http://purl.org/occi/compute#console" &gt;SSH&lt;/a&gt;
 
+Attributes:
+&lt;ul&gt;
+  &lt;li&gt;ID: &lt;span property="occi:id"&gt;urn:uuid:164a3064-1176-4de3-b24e-e16dc8c2d4ed&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;Cores: &lt;span property="occi:compute.cores"&gt;2&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;Memory: &lt;span property="occi:compute.memory"&gt;2048&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-    &lt;!-- Here a set of read-only properties are exposed using RDFa vocabularly to enhance semantics --&gt;
-    &lt;h1 property="occi:title"&gt;My Virtual Machine&lt;/h1&gt;
-    &lt;span property="occi:summary"&gt;A simple sample virtual machine&lt;/span&gt;
+Actions:
+&lt;form class="action" method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" alt="Start" /&gt;&lt;/form&gt;
+&lt;form class="action" method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" alt="Stop" /&gt;&lt;/form&gt;
+&lt;form class="action" method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" alt="Restart" /&gt;&lt;/form&gt;
 
-    Console:
-    &lt;a href="/myvm/console.png" rel="http://purl.org/occi/compute#console" type="image/png"&gt;&lt;img src="/myvm/console-thumb.png" /&gt;&lt;/a&gt;
-    &lt;a href="ssh://myvm:22" rel="http://purl.org/occi/compute#console" &gt;SSH&lt;/a&gt;
+Download
+&lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" alt="OVF" /&gt;&lt;/a&gt;
+&lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;&lt;img src="xen-logo.png" alt="Xen" /&gt;&lt;/a&gt;
 
-    &lt;!-- Here a set of read/write properties are exposed via a HTML5 form. --&gt;
-    &lt;!-- The HTML5 FORM supports all the basic HTTP verbs required by REST --&gt;
-    Attributes:
-    &lt;form method="POST" action="/myvm"&gt;
-      &lt;ul&gt;
-        &lt;li&gt;ID: &lt;input type="text" name="id" value="urn:uuid:164a3064-1176-4de3-b24e-e16dc8c2d4ed" /&gt;&lt;/li&gt;
-        &lt;li&gt;Cores: &lt;select name="compute.cores"&gt;&lt;option&gt;1&lt;/option&gt;&lt;option selected&gt;2&lt;/option&gt;&lt;option&gt;4&lt;/option&gt;&lt;/select&gt;&lt;/li&gt;
-        &lt;li&gt;Memory: &lt;span property="occi:compute.memory"&gt;2048&lt;/span&gt;&lt;/li&gt;
-      &lt;/ul&gt;
-      &lt;input type="submit" value="Save" /&gt;
-    &lt;/form&gt;
-
-    &lt;!-- OCCI actions are equivocal and map to HTML5 forms --&gt;
-    Actions:
-    &lt;form class="action" method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" alt="Start" /&gt;&lt;/form&gt;
-    &lt;form class="action" method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" alt="Stop" /&gt;&lt;/form&gt;
-    &lt;form class="action" method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" alt="Restart" /&gt;&lt;/form&gt;
-    &lt;form class="action" method="POST" action="/myvm;resize"&gt;
-      &lt;select name="compute.cores"&gt;&lt;option&gt;1&lt;/option&gt;&lt;option&gt;2&lt;/option&gt;&lt;option&gt;4&lt;/option&gt;&lt;/select&gt;
-      &lt;input type="text" name="compute.memory" value="2048" /&gt;&lt;input type="image" src="occi-resize.png" alt="Resize" &gt;
-    &lt;/form&gt;
-    &lt;form class="action" method="DELETE" action="/myvm"&gt;&lt;input type="image" src="occi-delete.png" alt="Delete" /&gt;&lt;/form&gt;
-
-    Download
-    &lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" alt="OVF" /&gt;&lt;/a&gt;
-    &lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;&lt;img src="xen-logo.png" alt="Xen" /&gt;&lt;/a&gt;
-
-  &lt;/body&gt;
+&lt;/body&gt;
 &lt;/html&gt;</screen>
 
       <section>
