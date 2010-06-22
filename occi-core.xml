@@ -6,13 +6,13 @@
          xmlns:m="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
-  <title>OCCI Core Specification</title>
+  <title>OCCI Core Specification &amp; Models</title>
 
   <section>
     <title>Introduction</title>
 
     <para>The Open Cloud Computing Interface (OCCI) is an open protocol for
-    all cloud computing services. A RESTful interface, it deviates from the
+    all cloud computing services. As a RESTful interface, it deviates from the
     underlying HyperText Transfer Protocol (HTTP) only where absolutely
     necessary and can be described as a "Resource Oriented Architecture
     (ROA)".<xref linkend="core-rws" /> Unlike other envelope-based protocols

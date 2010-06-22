@@ -6,15 +6,17 @@
          xmlns:m="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
-  <info>
-    <title>OCCI Machine Interface (HTTP)</title>
+  <title>OCCI HTTP Header rendering</title>
 
-    <author>
-      <orgname>OCCI-WG</orgname>
-    </author>
+  <section>
+    <title>Introduction</title>
 
-    <pubdate>2009-10-07</pubdate>
-  </info>
+    <para>In this section we detail the requirements need to support the HTTP
+    header rendering of the OCCI Model. This is a lightweight yet
+    all-encompassing means to describe infrastructure. It provides the
+    capability to send a native (e.g. OVF, VMX) representation along as the
+    HTTP body for clients that can digest such a native rendering.</para>
+  </section>
 
   <section>
     <title>Specification</title>
@@ -48,7 +50,7 @@
   </section>
 
   <section>
-    <title>Example</title>
+    <title>Examples</title>
 
     <section>
       <title>POST Request</title>
