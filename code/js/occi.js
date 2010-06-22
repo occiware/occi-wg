@@ -18,28 +18,45 @@
  * Authors: 
  *          
  */
-var OCCIclient = {}; 
+var occi = {}; 
  
-OCCIclient.URI = document.location.href; 
-OCCIclient.XHR = null; 
+occi.uri = document.location.href; 
+occi.xhr = null; 
  
 if (window.XMLHttpRequest) { 
     // code for Firefox, Mozilla, IE7, etc. 
-      OCCIclient.XHR = new XMLHttpRequest(); 
+      occi.xhr = new XMLHttpRequest(); 
 } else if (window.ActiveXObject) { 
     // code for IE6, IE5 
-      OCCIclient.XHR = new ActiveXObject("Microsoft.XMLHTTP"); 
+      occi.xhr = new ActiveXObject("Microsoft.XMLHTTP"); 
 } 
 
-if (OCCIclient.XHR!=null) { 
-    OCCIclient.XHR.onreadystatechange = function() { 
-        if(OCCIclient.XHR.readyState == 4) { 
-              x = OCCIclient.XHR.getAllResponseHeaders(); 
-             document.getElementById("header").innerHTML = x; 
-          } 
-    } 
-    OCCIclient.XHR.open("HEAD",OCCIclient.URI, true); 
-    OCCIclient.XHR.send(); 
-} else { 
-    alert("Your browser does not support XMLHTTP."); 
+occi.test = function() {
+    if (occi.xhr!=null) { 
+        occi.xhr.onreadystatechange = function() { 
+            if(occi.xhr.readyState == 4) { 
+                x = occi.xhr.getAllResponseHeaders(); 
+                document.getElementById("header").innerHTML = x; 
+            } 
+        } 
+        occi.xhr.open("HEAD",occi.URI, true); 
+        occi.xhr.send(); 
+    } else { 
+        alert("Your browser does not support XMLHTTP."); 
+    }
+}
+
+occi.open = function(uri, method) {
+	method = method || 'GET';
+	if (occi.xhr!=null) { 
+        occi.xhr.onreadystatechange = function() { 
+            if(occi.xhr.readyState == 4) { 
+                // do something with the xhr
+            } 
+        } 
+        occi.xhr.open(method, uri, true); 
+        occi.xhr.send(); 
+    } else { 
+        alert("Your browser does not support XMLHTTP."); 
+    }
 }
