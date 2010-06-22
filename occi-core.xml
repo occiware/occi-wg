@@ -662,33 +662,6 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
             <tbody>
               <row>
                 <entry
-                align="left"><para><computeroutput>category</computeroutput>
-                (<uri>http://purl.org/occi/rel#category</uri>)</para></entry>
-
-                <entry><para>A category mapping whereby:</para><itemizedlist>
-                    <listitem>
-                      <para>The <computeroutput>scheme</computeroutput> is
-                      required and indicated by the
-                      <computeroutput>href</computeroutput> attribute.</para>
-                    </listitem>
-
-                    <listitem>
-                      <para>The <computeroutput>label</computeroutput> is
-                      optional and indicated by the
-                      <computeroutput>title</computeroutput> attribute.</para>
-                    </listitem>
-
-                    <listitem>
-                      <para>The <computeroutput>term</computeroutput> is
-                      required and indicated by the
-                      <computeroutput>term</computeroutput> extended
-                      attribute.</para>
-                    </listitem>
-                  </itemizedlist></entry>
-              </row>
-
-              <row>
-                <entry
                 align="left"><computeroutput>collection</computeroutput>
                 (<uri>http://purl.org/occi/rel#collection</uri>)</entry>
 
@@ -713,7 +686,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
 
                 <entry><quote>An IRI that refers to the furthest preceding
                 resource in a series of resources.</quote> [<xref
-                linkend="link" />]</entry>
+                linkend="core-link" />]</entry>
               </row>
 
               <row>
@@ -722,7 +695,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
 
                 <entry><quote>The referenced document provides further help
                 information for the page as a whole.</quote> [<xref
-                linkend="html5" />]</entry>
+                linkend="core-html5" />]</entry>
               </row>
 
               <row>
@@ -732,7 +705,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
                 <entry><quote>The specified resource is an icon representing
                 the page or site, and should be used by the user agent when
                 representing the page in the user interface.</quote> [<xref
-                linkend="html5" />]</entry>
+                linkend="core-html5" />]</entry>
               </row>
 
               <row>
@@ -741,7 +714,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
 
                 <entry><quote>An IRI that refers to the furthest following
                 resource in a series of resources.</quote> [<xref
-                linkend="link" />]</entry>
+                linkend="core-link" />]</entry>
               </row>
 
               <row>
@@ -750,7 +723,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
 
                 <entry><quote>A URI that refers to the immediately following
                 document in a series of documents.</quote> [<xref
-                linkend="link" />]</entry>
+                linkend="core-link" />]</entry>
               </row>
 
               <row>
@@ -759,7 +732,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
 
                 <entry><quote>A URI that refers to the immediately preceding
                 document in a series of documents.</quote> [<xref
-                linkend="link" />]</entry>
+                linkend="core-link" />]</entry>
               </row>
 
               <row>
@@ -768,8 +741,8 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
 
                 <entry><quote>The referenced document provides an interface
                 specifically for searching the document and its related
-                resources.</quote> [<xref linkend="html5" />, <xref
-                linkend="opensearch" />]</entry>
+                resources.</quote> [<xref linkend="core-html5" />, <xref
+                linkend="core-opensearch" />]</entry>
               </row>
 
               <row>
@@ -778,7 +751,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
 
                 <entry><quote>Identifies a resource equivalent to the
                 containing element</quote> [<xref
-                linkend="rfc4287" />]</entry>
+                linkend="core-rfc4287" />]</entry>
               </row>
             </tbody>
           </tgroup>
