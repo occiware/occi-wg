@@ -8,194 +8,227 @@
          xmlns:db="http://docbook.org/ns/docbook">
   <title>OCCI Registries</title>
 
-  <table>
-    <title>HTTP Status Codes</title>
+  <para>Extensibility of OCCI relies heavily on registries, which allow the
+  working group to initially specify the minimum required functionatliy based
+  on existing implementations while also catering for future evolution.</para>
 
-    <tgroup cols="3">
-      <thead>
-        <row>
-          <entry>Code</entry>
+  <para>Implementors who wish to extend the specification can do so by way of
+  a process TBD in which their request is assessed within a fixed time frame
+  of 7-30 days. If the request is found to be useful for interoperability then
+  it will be accepted and entered into the registry.</para>
 
-          <entry>Description</entry>
+  <para>If rejected the implementor can still use custom extensions which will
+  be preserved but otherwise ignored by other implementations which do not
+  understand them.</para>
 
-          <entry>Example</entry>
-        </row>
-      </thead>
+  <tip>
+    <para>This document seeds the registries which are to be hosted in an
+    editable medium such as a database, spreadsheet or wiki.</para>
+  </tip>
 
-      <tbody>
-        <row>
-          <entry>200 OK</entry>
+  <section>
+    <title>Core</title>
 
-          <entry>Request completed successfully</entry>
+    <section>
+      <title>Common Attributes</title>
 
-          <entry>Response is returned</entry>
-        </row>
+      <table>
+        <title>Common Attributes</title>
 
-        <row>
-          <entry>201 Created</entry>
+        <tgroup cols="3">
+          <colspec align="center" />
 
-          <entry>Request completed successfully, resource was
-          created</entry>
+          <thead>
+            <row>
+              <entry align="left">Attribute</entry>
 
-          <entry>Pointer to new resource returned</entry>
-        </row>
+              <entry>Description</entry>
 
-        <row>
-          <entry>202 Accepted</entry>
+              <entry>Example</entry>
+            </row>
+          </thead>
 
-          <entry>Request accepted, processing not completed</entry>
+          <tbody>
+            <row>
+              <entry
+              align="left"><computeroutput>occi.id</computeroutput></entry>
 
-          <entry>Workload starting but not yet active</entry>
-        </row>
+              <entry>Immutable identifier for the resource</entry>
 
-        <row>
-          <entry>301 Moved Permanently</entry>
+              <entry><uri>urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770</uri></entry>
+            </row>
 
-          <entry>Resource has been assigned a new permanent URI</entry>
+            <row>
+              <entry
+              align="left"><computeroutput>occi.title</computeroutput></entry>
 
-          <entry>Workload migrated to another installation</entry>
-        </row>
+              <entry>Display name for the resource</entry>
 
-        <row>
-          <entry>302 Found</entry>
+              <entry><computeroutput>Compute Resource
+              #123</computeroutput></entry>
+            </row>
 
-          <entry>Resource resides temporarily under a different URI</entry>
+            <row>
+              <entry
+              align="left"><computeroutput>occi.summary</computeroutput></entry>
 
-          <entry>Alias pointing to UUID can be updated</entry>
-        </row>
+              <entry>Description of the resource</entry>
 
-        <row>
-          <entry>304 Not Modified</entry>
+              <entry><computeroutput>A virtual compute
+              resource</computeroutput></entry>
+            </row>
 
-          <entry>Conditional GET on resource that is unchanged</entry>
+            <row>
+              <entry
+              align="left"><computeroutput>occi.version</computeroutput></entry>
 
-          <entry>Client already has the latest version of the
-          resource</entry>
-        </row>
+              <entry>Specification version</entry>
 
-        <row>
-          <entry>400 Bad Request</entry>
+              <entry><computeroutput>1.0</computeroutput></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
 
-          <entry>Request could not be understood by the server due to
-          malformed syntax</entry>
+    <section>
+      <title>Link Relations</title>
 
-          <entry>Client sent a representation that was unable to be
-          understood</entry>
-        </row>
+      <table>
+        <title>Link Relations</title>
 
-        <row>
-          <entry>401 Unauthorized</entry>
+        <tgroup cols="2">
+          <colspec align="center" />
 
-          <entry>The request requires user authentication</entry>
+          <thead>
+            <row>
+              <entry align="left">Relation</entry>
 
-          <entry>Client must retry with authentication</entry>
-        </row>
+              <entry>Description</entry>
+            </row>
+          </thead>
 
-        <row>
-          <entry>402 Payment Required</entry>
+          <tbody>
+            <row>
+              <entry
+              align="left"><para><computeroutput>category</computeroutput>
+              (<uri>http://purl.org/occi/rel#category</uri>)</para></entry>
 
-          <entry>The server has refused to fulfill the request</entry>
+              <entry><para>A category mapping whereby:</para><itemizedlist>
+                  <listitem>
+                    <para>The <computeroutput>scheme</computeroutput> is
+                    required and indicated by the
+                    <computeroutput>href</computeroutput> attribute.</para>
+                  </listitem>
 
-          <entry>Credit limit exceeded</entry>
-        </row>
+                  <listitem>
+                    <para>The <computeroutput>label</computeroutput> is
+                    optional and indicated by the
+                    <computeroutput>title</computeroutput> attribute.</para>
+                  </listitem>
 
-        <row>
-          <entry>403 Forbidden</entry>
+                  <listitem>
+                    <para>The <computeroutput>term</computeroutput> is
+                    required and indicated by the
+                    <computeroutput>term</computeroutput> extended
+                    attribute.</para>
+                  </listitem>
+                </itemizedlist></entry>
+            </row>
 
-          <entry>The server understood the request, but is refusing to
-          fulfill it</entry>
+            <row>
+              <entry align="left"><computeroutput>collection</computeroutput>
+              (<uri>http://purl.org/occi/rel#collection</uri>)</entry>
 
-          <entry>Attempt to access resource without permission</entry>
-        </row>
+              <entry><para>A related collection whereby:</para><itemizedlist>
+                  <listitem>
+                    <para>The root of the collection is indicated by the
+                    <computeroutput>href</computeroutput> attribute.</para>
+                  </listitem>
 
-        <row>
-          <entry>404 Not Found</entry>
+                  <listitem>
+                    <para>The <glossterm>kind</glossterm> of the collection is
+                    indicated by the <computeroutput>kind</computeroutput>
+                    extended attribute.</para>
+                  </listitem>
+                </itemizedlist></entry>
+            </row>
 
-          <entry>The server has not found the resource</entry>
+            <row>
+              <entry
+              align="left"><computeroutput>first</computeroutput></entry>
 
-          <entry>Feed or entry unknown</entry>
-        </row>
+              <entry><quote>An IRI that refers to the furthest preceding
+              resource in a series of resources.</quote> [<xref
+              linkend="link" />]</entry>
+            </row>
 
-        <row>
-          <entry>405 Method Not Allowed</entry>
+            <row>
+              <entry
+              align="left"><computeroutput>help</computeroutput></entry>
 
-          <entry>The method specified is not allowed for the
-          resource</entry>
+              <entry><quote>The referenced document provides further help
+              information for the page as a whole.</quote> [<xref
+              linkend="html5" />]</entry>
+            </row>
 
-          <entry>Attempt to delete an immutable resource</entry>
-        </row>
+            <row>
+              <entry
+              align="left"><computeroutput>icon</computeroutput></entry>
 
-        <row>
-          <entry>406 Not Acceptable</entry>
+              <entry><quote>The specified resource is an icon representing the
+              page or site, and should be used by the user agent when
+              representing the page in the user interface.</quote> [<xref
+              linkend="html5" />]</entry>
+            </row>
 
-          <entry>The resource is not capable of requested content
-          characteristics</entry>
+            <row>
+              <entry
+              align="left"><computeroutput>last</computeroutput></entry>
 
-          <entry>Unsupported output format requested</entry>
-        </row>
+              <entry><quote>An IRI that refers to the furthest following
+              resource in a series of resources.</quote> [<xref
+              linkend="link" />]</entry>
+            </row>
 
-        <row>
-          <entry>409 Conflict</entry>
+            <row>
+              <entry
+              align="left"><computeroutput>next</computeroutput></entry>
 
-          <entry>Request is in conflict with the current state of the
-          resource</entry>
+              <entry><quote>A URI that refers to the immediately following
+              document in a series of documents.</quote> [<xref
+              linkend="link" />]</entry>
+            </row>
 
-          <entry>Resource updated by a third-party in the interim</entry>
-        </row>
+            <row>
+              <entry
+              align="left"><computeroutput>previous</computeroutput></entry>
 
-        <row>
-          <entry>410 Gone</entry>
+              <entry><quote>A URI that refers to the immediately preceding
+              document in a series of documents.</quote> [<xref
+              linkend="link" />]</entry>
+            </row>
 
-          <entry>Resource is gone, no forwarding address</entry>
+            <row>
+              <entry
+              align="left"><computeroutput>search</computeroutput></entry>
 
-          <entry>Resource was deleted</entry>
-        </row>
+              <entry><quote>The referenced document provides an interface
+              specifically for searching the document and its related
+              resources.</quote> [<xref linkend="html5" />, <xref
+              linkend="opensearch" />]</entry>
+            </row>
 
-        <row>
-          <entry>500 Internal Server Error</entry>
+            <row>
+              <entry
+              align="left"><computeroutput>self</computeroutput></entry>
 
-          <entry>Server encountered an unexpected condition</entry>
-
-          <entry>An unknown failure has occurred (e.g. out of
-          memory)</entry>
-        </row>
-
-        <row>
-          <entry>501 Not Implemented</entry>
-
-          <entry>Functionality required to fulfill request is not
-          implemented</entry>
-
-          <entry>A missing extension was called</entry>
-        </row>
-
-        <row>
-          <entry>502 Bad Gateway</entry>
-
-          <entry>An invalid response was received from an upstream
-          server</entry>
-
-          <entry>The gateway received a malformed response from a
-          node</entry>
-        </row>
-
-        <row>
-          <entry>503 Service Unavailable</entry>
-
-          <entry>Server is temporarily unable to handle the request</entry>
-
-          <entry>Server may be overloaded or down for maintenance</entry>
-        </row>
-
-        <row>
-          <entry>504 Gateway Timeout</entry>
-
-          <entry>No response was received from an upstream server</entry>
-
-          <entry>The gateway did not receive a response within the timeout
-          period</entry>
-        </row>
-      </tbody>
-    </tgroup>
-  </table>
+              <entry><quote>Identifies a resource equivalent to the containing
+              element</quote> [<xref linkend="rfc4287" />]</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
 </article>
