@@ -162,6 +162,8 @@
 
     <bridgehead>Versioning</bridgehead>
 
+    <remark>Do we need to cater for versioning?</remark>
+
     <para>Clients and servers should expose the protocol version (e.g.
     OCCI/1.0) via the User-Agent and Server HTTP headers respectively. Should
     second or subsequent versions of the descriptor format be required the
@@ -202,6 +204,8 @@
     <section>
       <title>Detection</title>
 
+      <remark>This section should be optional!</remark>
+
       <para>Clients can detect the presence of the interface from the presence
       of a specific well-known URI at the web server root (as detected via a
       successful HTTP HEAD or GET):</para>
@@ -235,8 +239,8 @@
       <title>Configuration</title>
 
       <para>Clients <emphasis>should</emphasis> retrieve configuration
-      metadata (e.g. icons, logos, SLAs, supported kinds, etc.) from the "feed
-      of feeds" at the following well-known URI:</para>
+      metadata (e.g. icons, logos, SLAs, supported kinds, etc.) from the
+      following well-known URI:</para>
 
       <para><uri>http://example.com/.well-known/occi/feeds</uri></para>
 
@@ -393,18 +397,43 @@
     <section>
       <title>Paging</title>
 
-      <para>Collections may be divided into <glossterm>page</glossterm>s, with
-      each linking to the <quote>first</quote>, <quote>last</quote>,
-      <quote>next</quote> and <quote>previous</quote> <glossterm>link
-      relation</glossterm>s.</para>
+      <para>Collections <emphasis>may</emphasis> be divided into
+      <glossterm>page</glossterm>s, with each linking to the
+      <quote>first</quote>, <quote>last</quote>, <quote>next</quote> and
+      <quote>previous</quote> <glossterm>link relation</glossterm>s.</para>
     </section>
   </section>
 
   <section>
-    <title>Link Relations</title>
+    <title>Linking</title>
 
-    <para>Existing standard mechanisms defined for Atom, HTTP and HTML are
-    used to indicate associations between resources.</para>
+    <para>Existing linking standards defined for Atom [<xref
+    linkend="rfc4287" />], HTTP [<xref linkend="link" />] and HTML [<xref
+    linkend="html5" />] are used to indicate associations between resources.
+    All formats <emphasis>must</emphasis> support
+    <glossterm>in-band</glossterm> linking including:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Link relations (e.g.
+        <computeroutput>rel="alternate"</computeroutput>)</para>
+      </listitem>
+
+      <listitem>
+        <para>Pointers to resources (e.g.
+        <computeroutput>href="http://example.com/"</computeroutput>)</para>
+      </listitem>
+
+      <listitem>
+        <para>Internet media types (e.g.
+        <computeroutput>type="text/html"</computeroutput>)</para>
+      </listitem>
+
+      <listitem>
+        <para>Extensibility (e.g.
+        <computeroutput>attribute="value"</computeroutput>)</para>
+      </listitem>
+    </itemizedlist>
 
     <table>
       <title>Link Relations</title>
@@ -422,27 +451,52 @@
 
         <tbody>
           <row>
+            <entry
+            align="left"><computeroutput>collection</computeroutput></entry>
+
+            <entry>Several resources grouped together or considered as a
+            whole. [OCCI]</entry>
+          </row>
+
+          <row>
             <entry align="left"><computeroutput>first</computeroutput></entry>
 
             <entry><quote>An IRI that refers to the furthest preceding
-            resource in a series of resources.</quote><xref
-            linkend="link" /></entry>
+            resource in a series of resources.</quote> [<xref
+            linkend="link" />]</entry>
+          </row>
+
+          <row>
+            <entry align="left"><computeroutput>help</computeroutput></entry>
+
+            <entry><quote>The referenced document provides further help
+            information for the page as a whole.</quote> [<xref
+            linkend="html5" />]</entry>
+          </row>
+
+          <row>
+            <entry align="left"><computeroutput>icon</computeroutput></entry>
+
+            <entry><quote>The specified resource is an icon representing the
+            page or site, and should be used by the user agent when
+            representing the page in the user interface.</quote> [<xref
+            linkend="html5" />]</entry>
           </row>
 
           <row>
             <entry align="left"><computeroutput>last</computeroutput></entry>
 
             <entry><quote>An IRI that refers to the furthest following
-            resource in a series of resources.</quote><xref
-            linkend="link" /></entry>
+            resource in a series of resources.</quote> [<xref
+            linkend="link" />]</entry>
           </row>
 
           <row>
             <entry align="left"><computeroutput>next</computeroutput></entry>
 
             <entry><quote>A URI that refers to the immediately following
-            document in a series of documents.</quote><xref
-            linkend="link" /></entry>
+            document in a series of documents.</quote> [<xref
+            linkend="link" />]</entry>
           </row>
 
           <row>
@@ -450,15 +504,18 @@
             align="left"><computeroutput>previous</computeroutput></entry>
 
             <entry><quote>A URI that refers to the immediately preceding
-            document in a series of documents.</quote><xref
-            linkend="link" /></entry>
+            document in a series of documents.</quote> [<xref
+            linkend="link" />]</entry>
           </row>
 
           <row>
             <entry
             align="left"><computeroutput>search</computeroutput></entry>
 
-            <entry>OpenSearch Interface<xref linkend="opensearch" /></entry>
+            <entry><quote>The referenced document provides an interface
+            specifically for searching the document and its related
+            resources.</quote> [<xref linkend="html5" />, <xref
+            linkend="opensearch" />]</entry>
           </row>
         </tbody>
       </tgroup>
@@ -468,12 +525,14 @@
   <section>
     <title>Kinds</title>
 
-    <para>Different types of resources are called kinds. Those defined by OCCI
-    live in the <uri>http://purl.org/occi/kind</uri>/ namespace.</para>
+    <para>Different types of resources are called
+    <glossterm>kind</glossterm>s. Anybody can define new
+    <glossterm>kind</glossterm>s and those defined by OCCI live in the
+    <uri>http://purl.org/occi/kind</uri>/ namespace.</para>
 
     <tip>
-      <para>The word <quote>type</quote> is not used in this context in order
-      to avoid confusion with Internet media types.</para>
+      <para>The word <glossterm>type</glossterm> is not used in this context
+      in order to avoid confusion with Internet media types.</para>
     </tip>
 
     <table>
@@ -1051,8 +1110,20 @@ link[0].title: Link to alternate representation</screen>
 
       <glossdef>
         <para><quote>Sending of metadata and control information in the same
-        band, on the same channel, as used for data.</quote> [<uri
+        band, on the same channel, as used for data</quote>, for example, by
+        embedding it in HTML. [<uri
         xlink:href="http://en.wikipedia.org/wiki/In-band">http://en.wikipedia.org/wiki/In-band</uri>]</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>kind</glossterm>
+
+      <glossdef>
+        <para><quote>A category of things distinguished by some common
+        characteristic or quality</quote>, for example events, messages,
+        media. [<uri
+        xlink:href="http://wordnetweb.princeton.edu/perl/webwn?s=kind">http://wordnetweb.princeton.edu/perl/webwn?s=kind</uri>]</para>
       </glossdef>
     </glossentry>
 
@@ -1061,8 +1132,20 @@ link[0].title: Link to alternate representation</screen>
 
       <glossdef>
         <para><quote>Communications which occur outside of a previously
-        established communications method or channel.</quote> [<uri
+        established communications method or channel</quote>, for example, in
+        HTTP headers. [<uri
         xlink:href="http://en.wikipedia.org/wiki/Out-of-band_signaling">http://en.wikipedia.org/wiki/Out-of-band_signaling</uri>]</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>type</glossterm>
+
+      <glossdef>
+        <para>Internet media (<acronym>MIME</acronym>) type as defined by
+        RFC2045 [<uri>http://tools.ietf.org/html/rfc2045</uri>] and RFC2046
+        [<uri
+        xlink:href="http://tools.ietf.org/html/rfc2046">http://tools.ietf.org/html/rfc2046</uri>]</para>
       </glossdef>
     </glossentry>
   </glossary>
@@ -1120,20 +1203,6 @@ link[0].title: Link to alternate representation</screen>
       <date>2007-06</date>
     </biblioentry>
 
-    <biblioentry xreflabel="OAuth" xml:id="oauth">
-      <title>OAuth</title>
-
-      <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://oauth.net/core/1.0</uri></address>
-
-      <org>
-        <orgname>OAuth Core Workgroup</orgname>
-      </org>
-
-      <address><email>spec@oauth.net</email></address>
-
-      <date>2007-12-04</date>
-    </biblioentry>
-
     <biblioentry xreflabel="OpenSearch" xml:id="opensearch">
       <title>OpenSearch 1.1</title>
 
@@ -1171,6 +1240,72 @@ link[0].title: Link to alternate representation</screen>
     </biblioentry>
 
     <bibliomixed>Informative References</bibliomixed>
+
+    <biblioentry xreflabel="RFC4287" xml:id="rfc4287">
+      <title>RFC 4287 - The Atom Syndication Format</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://tools.ietf.org/html/rfc4287</uri></address>
+
+      <author>
+        <personname>Robert Syre</personname>
+      </author>
+
+      <author>
+        <personname>Mark Nottingham</personname>
+      </author>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>2005-12</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="HTML5" xml:id="html5">
+      <title>HTML 5</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://www.w3.org/TR/html5/</uri></address>
+
+      <author>
+        <personname>Ian Hickson</personname>
+
+        <affiliation>
+          <org>
+            <orgname>Google, Inc.</orgname>
+          </org>
+        </affiliation>
+      </author>
+
+      <author>
+        <personname>David Hyatt</personname>
+
+        <affiliation>
+          <org>
+            <orgname>Apple, Inc.</orgname>
+          </org>
+        </affiliation>
+      </author>
+
+      <org>
+        <orgname>World Wide Web Consortium (W3C)</orgname>
+      </org>
+
+      <date>2009-08-25</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="OAuth" xml:id="oauth">
+      <title>OAuth</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://oauth.net/core/1.0</uri></address>
+
+      <org>
+        <orgname>OAuth Core Workgroup</orgname>
+      </org>
+
+      <address><email>spec@oauth.net</email></address>
+
+      <date>2007-12-04</date>
+    </biblioentry>
 
     <biblioentry xreflabel="RWS" xml:id="rws">
       <title>RESTful Web Services</title>

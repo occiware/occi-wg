@@ -27,13 +27,13 @@
     <quote>abstract language</quote> (the <quote>World Wide Web's markup
     language</quote>). It is served using the
     <computeroutput>application/xhtml+xml</computeroutput> Internet media
-    type. <xref linkend="html5" /></para>
+    type. <xref linkend="html5_1" /></para>
   </section>
 
   <bibliography>
     <bibliomixed>Normative References</bibliomixed>
 
-    <biblioentry xreflabel="HTML5" xml:id="html5">
+    <biblioentry xreflabel="HTML5" xml:id="html5_1">
       <title>HTML 5</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://www.w3.org/TR/html5/</uri></address>
@@ -88,7 +88,7 @@
       <title>Misunderstanding Markup: XHTML 2/HTML 5 Comic Strip</title>
 
       <address><uri
-          xlink:href="http://samj.net/2009/05/is-atompub-already-http-of-cloud.html">http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/</uri></address>
+          xlink:href="http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/">http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/</uri></address>
 
       <author>
         <personname>Jeremy Keith</personname>
