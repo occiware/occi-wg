@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>OCCI Application</title>
+
+  <para>The OCCI Application specification defines kinds and extensions
+  relating to management of cloud application services (SaaS).</para>
+
+  <table>
+    <title>Common Attributes</title>
+
+    <tgroup cols="3">
+      <colspec align="center" />
+
+      <thead>
+        <row>
+          <entry align="left">Attribute</entry>
+
+          <entry>Type</entry>
+
+          <entry>Description</entry>
+        </row>
+      </thead>
+
+      <tbody>
+        <row>
+          <entry
+          align="left"><computeroutput>occi.application.version</computeroutput></entry>
+
+          <entry>Float (e.g. 1.0)</entry>
+
+          <entry>Version of the OCCI Application specification</entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
+
+  <section>
+    <title>Kinds</title>
+
+    <para>Cloud application services can be modeled using the following
+    primary kinds:</para>
+
+    <table>
+      <title>Kinds</title>
+
+      <tgroup cols="3">
+        <colspec align="center" />
+
+        <thead>
+          <row>
+            <entry align="left">Kind</entry>
+
+            <entry>URI</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry
+            align="left"><computeroutput>contact</computeroutput></entry>
+
+            <entry><uri>http://purl.org/occi/kind/contact</uri></entry>
+
+            <entry>A contact; a person, a venue such as a club or a
+            restaurant, or an organisation.</entry>
+          </row>
+
+          <row>
+            <entry
+            align="left"><computeroutput>document</computeroutput></entry>
+
+            <entry><uri>http://purl.org/occi/kind/document</uri></entry>
+
+            <entry>A word processing document</entry>
+          </row>
+
+          <row>
+            <entry align="left"><computeroutput>event</computeroutput></entry>
+
+            <entry><uri>http://purl.org/occi/kind/event</uri></entry>
+
+            <entry>A calendar event</entry>
+          </row>
+
+          <row>
+            <entry
+            align="left"><computeroutput>presentation</computeroutput></entry>
+
+            <entry><uri>http://purl.org/occi/kind/presentation</uri></entry>
+
+            <entry>A visual representation</entry>
+          </row>
+
+          <row>
+            <entry
+            align="left"><computeroutput>spreadsheet</computeroutput></entry>
+
+            <entry><uri>http://purl.org/occi/kind/spreadsheet</uri></entry>
+
+            <entry>A worksheet</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <section>
+      <title>Contact</title>
+
+      <para>A contact is a person, venue, organisation, etc.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Extensions</title>
+
+    <para>Various extensions provide for more advanced management
+    functionality such as billing, monitoring and reporting.</para>
+  </section>
+
+  <bibliography>
+    <bibliomixed>Normative References</bibliomixed>
+
+    <bibliomixed>Informative References</bibliomixed>
+
+    <biblioentry xreflabel="Wikipedia" xml:id="wikipedia">
+      <title>Google Data Protocol (GData)</title>
+
+      <address><uri
+          xlink:href="http://en.wikipedia.org/wiki/List_of_device_bandwidths">http://code.google.com/apis/gdata/</uri></address>
+
+      <author>
+        <orgname>Google</orgname>
+      </author>
+    </biblioentry>
+  </bibliography>
+</article>
