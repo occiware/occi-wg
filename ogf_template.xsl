@@ -147,7 +147,7 @@
           </fo:block>
 
           <fo:block>
-            <xsl:text>Nov. 26, 2009</xsl:text>
+            <xsl:text>Dev. 1, 2009</xsl:text>
           </fo:block>
         </xsl:when>
       </xsl:choose>
