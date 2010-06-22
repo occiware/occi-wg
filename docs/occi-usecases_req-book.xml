@@ -55,32 +55,33 @@
   </section>
 
   <section>
-    <xi:include href="occi-usecases.xml" xpointer="xpointer(/*/*)" />
+    <xi:include href="occi-usecases.xml" xpointer="xpointer(/*/*)">
+      <xi:fallback>
+        <para>
+          <emphasis>FIXME: MISSING XINCLUDE CONTENT</emphasis>
+        </para>
+      </xi:fallback>
+    </xi:include>
   </section>
 
   <section>
-    <xi:include href="occi-requirements.xml" xpointer="xpointer(/*/*)" />
+    <xi:include href="occi-requirements.xml" xpointer="xpointer(/*/*)">
+      <xi:fallback>
+        <para>
+          <emphasis>FIXME: MISSING XINCLUDE CONTENT</emphasis>
+        </para>
+      </xi:fallback>
+    </xi:include>
   </section>
 
   <section>
-    <xi:include href="occi-feature-matrix.xml" xpointer="xpointer(/*/*)" />
-
-    <para>For more details review the API of the different providers.
-    <citerefentry>
-        <refentrytitle>EC2</refentrytitle>
-      </citerefentry><citerefentry>
-        <refentrytitle>EH</refentrytitle>
-      </citerefentry><citerefentry>
-        <refentrytitle>FS</refentrytitle>
-      </citerefentry><citerefentry>
-        <refentrytitle>GG</refentrytitle>
-      </citerefentry><citerefentry>
-        <refentrytitle>SC</refentrytitle>
-      </citerefentry><citerefentry>
-        <refentrytitle>CS</refentrytitle>
-      </citerefentry><citerefentry>
-        <refentrytitle>VM</refentrytitle>
-      </citerefentry></para>
+    <xi:include href="occi-feature-matrix.xml" xpointer="xpointer(/*/*)">
+      <xi:fallback>
+        <para>
+          <emphasis>FIXME: MISSING XINCLUDE CONTENT</emphasis>
+        </para>
+      </xi:fallback>
+    </xi:include>
   </section>
 
   <section>
