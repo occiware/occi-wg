@@ -108,8 +108,9 @@
         <computeroutput>User-Agent:</computeroutput> headers respectively,
         using the token <quote><computeroutput>OCCI</computeroutput></quote>
         (e.g. <quote><computeroutput>OCCI/1.0</computeroutput></quote>). If
-        none is provided the latest available version
-        <emphasis>shall</emphasis> be used.</para>
+        none is provided the latest (highest supported version number)
+        available version offered by the server <emphasis>should</emphasis> be
+        used.</para>
       </section>
     </section>
 
@@ -498,8 +499,11 @@
 
             <tgroup cols="4">
               <colspec colname="col1" colnum="1" colwidth="1*" />
+
               <colspec colname="col2" colnum="2" colwidth="1*" />
+
               <colspec colname="col3" colnum="3" colwidth="1*" />
+
               <colspec colname="col4" colnum="4" colwidth="2*" />
 
               <thead>
@@ -860,6 +864,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class=
 
           <tgroup cols="2">
             <colspec colname="col1" colnum="1" colwidth="1*" />
+
             <colspec colname="col2" colnum="2" colwidth="3*" />
 
             <thead>
