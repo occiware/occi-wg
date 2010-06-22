@@ -121,7 +121,7 @@
 				<xsl:when test="$position = 'left'">
 				
 				<fo:block>
-					<xsl:text>GFD-I</xsl:text>
+					<xsl:text>GFD-C</xsl:text>
 				</fo:block>
                 <fo:block> 
                     Open Cloud Computing Interface
@@ -133,9 +133,7 @@
 
 				<xsl:when test="$position = 'right'">
 				<fo:block>
-				    <xsl:apply-templates select="//author"/>
-					<xsl:text>,</xsl:text>
-				    <xsl:apply-templates select="//author/affiliation"/>
+					<xsl:text>Open Cloud Computing Interface</xsl:text>
 				</fo:block>
                 <fo:block> 
 					<xsl:text>September 16, 2009</xsl:text>
