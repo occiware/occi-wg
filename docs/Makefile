@@ -18,9 +18,9 @@ core: occi-core.xml
 	xsltproc --output occi-core.fo --xinclude --stringparam paper.type A4 --stringparam generate.toc "" $(XSL)/docbook-xsl-ns-1.74.3/fo/docbook.xsl occi-core.xml
 	java org.apache.fop.cli.Main -fo occi-core.fo -pdf occi-core.pdf
 
-http: occi-http.xml
-	xsltproc --output occi-http.html --xinclude --stringparam paper.type A4 --stringparam generate.toc "" $(XSL)/docbook-xsl-ns-1.74.3/xhtml-1_1/docbook.xsl occi-http.xml
-	xsltproc --output occi-http.fo --xinclude --stringparam paper.type A4 --stringparam generate.toc "" $(XSL)/docbook-xsl-ns-1.74.3/fo/docbook.xsl occi-http.xml
+text: occi-text.xml
+	xsltproc --output occi-text.html --xinclude --stringparam paper.type A4 --stringparam generate.toc "" $(XSL)/docbook-xsl-ns-1.74.3/xhtml-1_1/docbook.xsl occi-text.xml
+	xsltproc --output occi-text.fo --xinclude --stringparam paper.type A4 --stringparam generate.toc "" $(XSL)/docbook-xsl-ns-1.74.3/fo/docbook.xsl occi-text.xml
 	java org.apache.fop.cli.Main -fo occi-text.fo -pdf occi-text.pdf
 
 infrastructure: occi-infrastructure.xml
