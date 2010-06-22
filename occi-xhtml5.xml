@@ -13,7 +13,7 @@
       <orgname>OCCI-WG</orgname>
     </author>
 
-    <pubdate>2009-09-06</pubdate>
+    <pubdate>2009-10-21</pubdate>
   </info>
 
   <section>
@@ -24,6 +24,43 @@
     language</quote>). It is served using the
     <computeroutput>application/xhtml+xml</computeroutput> Internet media
     type. <xref linkend="xhtml5-html5" /></para>
+  </section>
+
+  <section>
+    <title>Javascript</title>
+
+    <para>Asynchronous Javascript may be used to deliver interactivity without
+    having to reload the page.</para>
+
+    <section>
+      <title>Example</title>
+
+      <screen>var OCCIclient = {};
+            
+OCCIclient.URI = document.location.href;
+OCCIclient.XHR = null;
+            
+if (window.XMLHttpRequest) {
+  // code for Firefox, Mozilla, IE7, etc.
+  OCCIclient.XHR = new XMLHttpRequest();
+} else if (window.ActiveXObject) {
+  // code for IE6, IE5
+  OCCIclient.XHR = new ActiveXObject("Microsoft.XMLHTTP");
+}
+
+if (OCCIclient.XHR!=null) {
+  OCCIclient.XHR.onreadystatechange = function() {
+    if(OCCIclient.XHR.readyState == 4) {
+      x = OCCIclient.XHR.getAllResponseHeaders();
+      document.getElementById("header").innerHTML = x;
+    }
+  }
+  OCCIclient.XHR.open("HEAD",OCCIclient.URI, true);
+  OCCIclient.XHR.send();
+} else {
+  alert("Your browser does not support XMLHTTP.");
+}</screen>
+    </section>
   </section>
 
   <bibliography>
