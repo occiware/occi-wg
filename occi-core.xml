@@ -27,17 +27,19 @@
 
     <bridgehead>URL Namespace</bridgehead>
 
-    <para>An OCCI interface is defined by a single URL entry point (and
-    optionally, suitable credentials for HTTP based authentication schemes).
-    <remark>Implementors should also expose an AtomPub service document at the
-    root to enable enumeration of resource types, supported formats and
-    categories.</remark></para>
+    <para>The interface is defined by a single URL entry point which will
+    either be a <glossterm>collection</glossterm>, contain
+    <glossterm>link</glossterm>(s) to <glossterm>collection</glossterm>(s)
+    (<glossterm>in-band</glossterm> and/or <glossterm>out-of-band</glossterm>)
+    or both.</para>
 
     <bridgehead>Nouns, Verbs and Attributes</bridgehead>
 
     <para>Interfaces expose "nouns" which have "attributes" and on which
     "verbs" can be performed. The attributes are exposed as key-value pairs
-    and appropriate verbs as links, following HATEOAS principles.</para>
+    and applicable verbs as links, following HATEOAS principles (whereby state
+    transitions are defined <glossterm>in-band</glossterm> rather than via
+    rules).</para>
 
     <bridgehead>CRUD Operations</bridgehead>
 
@@ -258,6 +260,8 @@
         technology from the interface itself (e.g. Apache multiviews).</para>
       </tip>
 
+      <remark>TODO: Detection of category information.</remark>
+
       <table>
         <title>Configuration Attributes</title>
 
@@ -399,8 +403,8 @@
   <section>
     <title>Link Relations</title>
 
-    <para>Existing standard mechanisms are used to indicate associations
-    between resources.</para>
+    <para>Existing standard mechanisms defined for Atom, HTTP and HTML are
+    used to indicate associations between resources.</para>
 
     <table>
       <title>Link Relations</title>
@@ -1040,6 +1044,28 @@ link[0].title: Link to alternate representation</screen>
       </section>
     </section>
   </section>
+
+  <glossary>
+    <glossentry>
+      <glossterm>in-band</glossterm>
+
+      <glossdef>
+        <para><quote>Sending of metadata and control information in the same
+        band, on the same channel, as used for data.</quote> [<uri
+        xlink:href="http://en.wikipedia.org/wiki/In-band">http://en.wikipedia.org/wiki/In-band</uri>]</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>out-of-band</glossterm>
+
+      <glossdef>
+        <para><quote>Communications which occur outside of a previously
+        established communications method or channel.</quote> [<uri
+        xlink:href="http://en.wikipedia.org/wiki/Out-of-band_signaling">http://en.wikipedia.org/wiki/Out-of-band_signaling</uri>]</para>
+      </glossdef>
+    </glossentry>
+  </glossary>
 
   <bibliography>
     <bibliomixed>Normative References</bibliomixed>
