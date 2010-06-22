@@ -1,0 +1,18 @@
+Intro/Charter
+Use Cases
+Walkthrough
+OCCI Core || Common Behaviours
+	Verbs (e.g. GET, POST, PUT, DELETE)
+	Attributes (e.g. title, summary)
+	Extensions (e.g. categories, progress, monitoring)
+OCCI Infrastructure || Entity Model
+	Nouns
+		Compute
+		Network
+		Storage
+	Interactions || Requests/Responses
+    Extensions (e.g. state machine?)
+OCCI Platform [future]
+OCCI Application [future]
+OCCI Registries
+References

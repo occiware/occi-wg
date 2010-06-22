@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>OCCI Atom</title>
+
+    <author>
+      <personname><firstname>Sam</firstname><surname>Johnston</surname></personname>
+
+      <affiliation>
+        <orgname>Australian Online Solutions</orgname>
+      </affiliation>
+    </author>
+
+    <pubdate>2009-09-06</pubdate>
+  </info>
+
+  <section>
+    <title>Overview</title>
+
+    <para>The Atom Syndication Format is <quote>an XML-based Web content and
+    metadata syndication format</quote>.<xref linkend="rfc4287" /></para>
+  </section>
+
+  <bibliography>
+    <bibliomixed>Normative References</bibliomixed>
+
+    <biblioentry xreflabel="RFC4287" xml:id="rfc4287">
+      <title>RFC 4287 - The Atom Syndication Format</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://tools.ietf.org/html/rfc4287</uri></address>
+
+      <author>
+        <personname>Robert Syre</personname>
+      </author>
+
+      <author>
+        <personname>Mark Nottingham</personname>
+      </author>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>2005-12</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC5023" xml:id="rfc5023">
+      <title>RFC 5023 - The Atom Publishing Protocol</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc5023">http://tools.ietf.org/html/rfc5023</uri></address>
+
+      <author>
+        <personname>Joe Gregorio</personname>
+
+        <affiliation>
+          <org>
+            <orgname>Google</orgname>
+          </org>
+        </affiliation>
+      </author>
+
+      <author>
+        <personname>Bill de hÓra</personname>
+
+        <affiliation>
+          <org>
+            <orgname>NewBay Software</orgname>
+          </org>
+        </affiliation>
+      </author>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>2007-10</date>
+    </biblioentry>
+
+    <bibliomixed>Informative References</bibliomixed>
+
+    <biblioentry xreflabel="RFC2617" xml:id="rfc2617">
+      <title>Is AtomPub already the HTTP of cloud computing?</title>
+
+      <address><uri
+          xlink:href="http://samj.net/2009/05/is-atompub-already-http-of-cloud.html">http://samj.net/2009/05/is-atompub-already-http-of-cloud.html</uri></address>
+
+      <author>
+        <personname>Sam Johnston</personname>
+      </author>
+
+      <org>
+        <orgname>Australian Online Solutions</orgname>
+      </org>
+
+      <date>2009-05-24</date>
+    </biblioentry>
+  </bibliography>
+</article>
