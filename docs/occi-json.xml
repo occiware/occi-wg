@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>OCCI JSON</title>
+
+    <author>
+      <personname><firstname>Sam</firstname><surname>Johnston</surname></personname>
+
+      <affiliation>
+        <orgname>Australian Online Solutions</orgname>
+      </affiliation>
+    </author>
+
+    <pubdate>2009-09-06</pubdate>
+  </info>
+
+  <section>
+    <title>Overview</title>
+
+    <para>JavaScript Object Notation (<acronym>JSON</acronym>) is <quote>a
+    lightweight data-interchange format</quote> that is <quote>easy for humans
+    to read and write</quote> and <quote>easy for machines to parse and
+    generate</quote>.<xref linkend="json" /></para>
+
+    <para>It is most useful for:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Web interfaces</para>
+      </listitem>
+
+      <listitem>
+        <para>JavaScript code</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The following is an example of an OCCI resource in
+    <computeroutput>application/occi+json</computeroutput> format:</para>
+
+    <screen>{
+    "id": "f63aaa26-30b7-4a30-91ca-1d03c1e52214",
+    "title": "Resource #1",
+    "summary": "Web resource for demonstration purposes",
+    "author": {
+        "name": "Acme, Inc."
+    },
+    "updated": "2009-12-31T12:59:59Z",
+    "etag": "46dd20-23-464015228e7c0",
+    "category": [{
+        "term": "widget",
+        "scheme": "http://example.com/products",
+        "label": "Widgets"
+    }],
+    "link": [{
+        "href": "http://example.com/products/1234",
+        "rel": "alternate",
+        "title": "Link to alternate representation"
+    }]
+}</screen>
+  </section>
+
+  <bibliography>
+    <bibliomixed>Normative References</bibliomixed>
+
+    <biblioentry xreflabel="RFC4627" xml:id="rfc4627">
+      <title>RFC 4627 - The application/json Media Type for JavaScript Object
+      Notation (JSON)</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc4627">http://tools.ietf.org/html/rfc4627</uri></address>
+
+      <author>
+        <personname>Douglas Crockford</personname>
+      </author>
+
+      <org>
+        <orgname>JSON.org</orgname>
+      </org>
+
+      <date>2006-07</date>
+    </biblioentry>
+
+    <bibliomixed>Informative References</bibliomixed>
+
+    <biblioentry xreflabel="JSON" xml:id="json">
+      <title>JavaScript Object Notation (JSON)</title>
+
+      <address><uri xlink:href="http://json.org/">http://json.org/</uri></address>
+
+      <author>
+        <personname>Douglas Crockford</personname>
+      </author>
+
+      <org>
+        <orgname>JSON.org</orgname>
+      </org>
+    </biblioentry>
+  </bibliography>
+</article>

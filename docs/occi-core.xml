@@ -181,11 +181,12 @@
 
       <para>Servers <emphasis>may</emphasis> require that requests be
       authenticated using standard HTTP-based authentication mechanisms
-      (including OAuth). They indicate this requirement by returning
-      <code>HTTP 401</code> with a <code>WWW-Authenticate</code> header and a
-      suitable challenge (e.g. <code>Basic</code>, <code>Digest</code>,
-      <code>OAuth</code>). The client then includes appropriate
-      <code>Authorization</code> headers in its responses.</para>
+      (including OAuth).<xref linkend="oauth" /> They indicate this
+      requirement by returning <code>HTTP 401</code> with a
+      <code>WWW-Authenticate</code> header and a suitable challenge (e.g.
+      <code>Basic</code>, <code>Digest</code>, <code>OAuth</code>). The client
+      then includes appropriate <code>Authorization</code> headers in its
+      responses.<xref linkend="rfc2617" /></para>
 
       <para>Servers <emphasis>may</emphasis> set and clients
       <emphasis>may</emphasis> accept <glossterm>cookies</glossterm> in order
@@ -375,7 +376,7 @@
           <row>
             <entry align="left">Relation</entry>
 
-            <entry>Title</entry>
+            <entry>URI</entry>
 
             <entry>Description</entry>
           </row>
@@ -386,7 +387,7 @@
             <entry
             align="left"><computeroutput>search</computeroutput></entry>
 
-            <entry>Search</entry>
+            <entry>N/A</entry>
 
             <entry>OpenSearch Interface</entry>
           </row>
@@ -396,46 +397,71 @@
   </section>
 
   <section>
+    <title>Kinds</title>
+
+    <para>Different types of resources are called kinds and live in the
+    <uri>http://purl.org/occi/kind</uri>/ namespace.</para>
+
+    <tip>
+      <para>The word <quote>type</quote> is not used in this context in order
+      to avoid confusion with Internet media types.</para>
+    </tip>
+
+    <table>
+      <title>Kinds</title>
+
+      <tgroup cols="3">
+        <colspec align="center" />
+
+        <thead>
+          <row>
+            <entry align="left">Kind</entry>
+
+            <entry>URI</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry
+            align="left"><computeroutput>compute</computeroutput></entry>
+
+            <entry><uri>http://purl.org/occi/kind/compute</uri></entry>
+
+            <entry>Information processing resources</entry>
+          </row>
+
+          <row>
+            <entry
+            align="left"><computeroutput>network</computeroutput></entry>
+
+            <entry><uri>http://purl.org/occi/kind/network</uri></entry>
+
+            <entry>Interconnection resources</entry>
+          </row>
+
+          <row>
+            <entry
+            align="left"><computeroutput>storage</computeroutput></entry>
+
+            <entry><uri>http://purl.org/occi/kind/storage</uri></entry>
+
+            <entry>Recorded information resources</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <remark>This belongs in OCCI Infrastructure</remark>
+  </section>
+
+  <section>
     <title>Formats</title>
 
     <para>All server implementations <emphasis>must</emphasis> support
     rendering in <emphasis>at least</emphasis> the following formats:</para>
-
-    <section>
-      <title>Atom XML (application/occi+xml)</title>
-
-      <para>The following is an example of an OCCI resource in
-      <computeroutput>application/occi+xml</computeroutput> format, which is
-      most useful for advanced clients including:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Desktop management clients</para>
-        </listitem>
-
-        <listitem>
-          <para>Network management systems</para>
-        </listitem>
-
-        <listitem>
-          <para>Intercloud communication</para>
-        </listitem>
-      </itemizedlist>
-
-      <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;entry xmlns="http://www.w3.org/2005/Atom" xmlns:occi="http://purl.org/net/occi"&gt;
-  &lt;id&gt;http://example.com/products/1234&lt;/id&gt;
-  &lt;title&gt;Resource #1&lt;/title&gt;
-  &lt;summary&gt;Web resource for demonstration purposes&lt;/summary&gt;
-  &lt;author&gt;
-     &lt;name&gt;Acme, Inc.&lt;/name&gt;
-  &lt;/author&gt;
-  &lt;updated&gt;2005-07-31T12:29:29Z&lt;/updated&gt;
-  &lt;occi:etag&gt;46dd20-23-464015228e7c0&lt;/occi:etag&gt;
-  &lt;category term="widget" scheme="http://example.com/products" label="Widgets" /&gt;
-  &lt;link rel="alternate" href="http://example.com/products/1234" title="Link to myself" /&gt;
-&lt;/entry&gt;</screen>
-    </section>
 
     <section>
       <title>Plain Text</title>
@@ -475,45 +501,6 @@ category[0].label: Widgets
 link[0].href: http://example.com/products/1234
 link[0].rel: alternate
 link[0].title: Link to alternate representation</screen>
-    </section>
-
-    <section>
-      <title>JSON (application/occi+json)</title>
-
-      <para>The following is an example of an OCCI resource in
-      <computeroutput>application/occi+json</computeroutput> format, which is
-      most useful for:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Web interfaces</para>
-        </listitem>
-
-        <listitem>
-          <para>JavaScript code</para>
-        </listitem>
-      </itemizedlist>
-
-      <screen>{
-    "id": "f63aaa26-30b7-4a30-91ca-1d03c1e52214",
-    "title": "Resource #1",
-    "summary": "Web resource for demonstration purposes",
-    "author": {
-        "name": "Acme, Inc."
-    },
-    "updated": "2009-12-31T12:59:59Z",
-    "etag": "46dd20-23-464015228e7c0",
-    "category": [{
-        "term": "widget",
-        "scheme": "http://example.com/products",
-        "label": "Widgets"
-    }],
-    "link": [{
-        "href": "http://example.com/products/1234",
-        "rel": "alternate",
-        "title": "Link to alternate representation"
-    }]
-}</screen>
     </section>
   </section>
 
@@ -1016,7 +1003,7 @@ link[0].title: Link to alternate representation</screen>
       <date>1999-06</date>
     </biblioentry>
 
-    <biblioentry xreflabel="RFC2617" xml:id="rfc2617_1">
+    <biblioentry xreflabel="RFC2617" xml:id="rfc2617">
       <title>RFC 2617 - HTTP Authentication: Basic and Digest Access
       Authentication</title>
 
@@ -1030,16 +1017,17 @@ link[0].title: Link to alternate representation</screen>
     </biblioentry>
 
     <biblioentry xreflabel="OAuth" xml:id="oauth">
-      <title>RFC 4287 - HTTP Authentication: Basic and Digest Access
-      Authentication</title>
+      <title>OAuth</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://oauth.net/core/1.0</uri></address>
 
       <org>
-        <orgname>Internet Engineering Task Force (IETF)</orgname>
+        <orgname>OAuth Core Workgroup</orgname>
       </org>
 
-      <date>1999-06</date>
+      <address><email>spec@oauth.net</email></address>
+
+      <date>2007-12-04</date>
     </biblioentry>
 
     <biblioentry xreflabel="OpenSearch" xml:id="opensearch">
@@ -1079,5 +1067,27 @@ link[0].title: Link to alternate representation</screen>
     </biblioentry>
 
     <bibliomixed>Informative References</bibliomixed>
+
+    <biblioentry xreflabel="RESTfulWebServices" xml:id="rws">
+      <title>RESTful Web Services</title>
+
+      <address><uri xlink:href="http://oreilly.com/catalog/9780596529260/">http://oreilly.com/catalog/9780596529260/</uri></address>
+
+      <biblioid class="isbn">9780596529260</biblioid>
+
+      <org>
+        <orgname>O'Reilly Media</orgname>
+      </org>
+
+      <author>
+        <personname>Leonard Richardson</personname>
+      </author>
+
+      <author>
+        <personname>Sam Ruby</personname>
+      </author>
+
+      <date>2007-05</date>
+    </biblioentry>
   </bibliography>
 </article>

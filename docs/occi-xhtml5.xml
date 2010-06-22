@@ -67,7 +67,7 @@
 
     <bibliomixed>Informative References</bibliomixed>
 
-    <biblioentry xreflabel="g" xml:id="rfc2617">
+    <biblioentry xreflabel="RFC2617" xml:id="rfc2617">
       <title>Is HTTP the HTTP of cloud computing?</title>
 
       <address><uri
@@ -84,7 +84,7 @@
       <date>2009-05-25</date>
     </biblioentry>
 
-    <biblioentry xreflabel="HTML5-article" xml:id="html5-article">
+    <biblioentry xreflabel="RFC2617" xml:id="rfc2617">
       <title>Misunderstanding Markup: XHTML 2/HTML 5 Comic Strip</title>
 
       <address><uri
