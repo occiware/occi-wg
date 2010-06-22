@@ -8,5 +8,8 @@ handlers:
   static_dir: static
   secure: optional
 
+- url: /test.*
+  script: gaeunit.py
+
 - url: .*
   script: main.py
