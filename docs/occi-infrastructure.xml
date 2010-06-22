@@ -14,7 +14,7 @@
   <table>
     <title>Common Attributes</title>
 
-    <tgroup cols="3">
+    <tgroup cols="4">
       <colspec align="center" />
 
       <thead>
@@ -24,6 +24,8 @@
           <entry>Type</entry>
 
           <entry>Description</entry>
+
+          <entry>Mandatory/Optional</entry>
         </row>
       </thead>
 
@@ -35,6 +37,8 @@
           <entry>String</entry>
 
           <entry>Valid DNS hostname for the resource (may be FQDN)</entry>
+
+          <entry>Mandatory</entry>
         </row>
       </tbody>
     </tgroup>
@@ -51,7 +55,7 @@
     <table>
       <title>Kinds</title>
 
-      <tgroup cols="3">
+      <tgroup cols="4">
         <colspec align="center" />
 
         <thead>
@@ -61,6 +65,8 @@
             <entry>URI</entry>
 
             <entry>Description</entry>
+
+            <entry>Mandatory/Optional</entry>
           </row>
         </thead>
 
@@ -72,6 +78,8 @@
             <entry><uri>http://purl.org/occi/kind/compute</uri></entry>
 
             <entry>Information processing resources</entry>
+
+            <entry>Mandatory</entry>
           </row>
 
           <row>
@@ -81,6 +89,8 @@
             <entry><uri>http://purl.org/occi/kind/network</uri></entry>
 
             <entry>Interconnection resources</entry>
+
+            <entry>Mandatory</entry>
           </row>
 
           <row>
@@ -90,6 +100,8 @@
             <entry><uri>http://purl.org/occi/kind/storage</uri></entry>
 
             <entry>Recorded information resources</entry>
+
+            <entry>Mandatory</entry>
           </row>
         </tbody>
       </tgroup>
@@ -104,7 +116,7 @@
       <table>
         <title>Compute Attributes</title>
 
-        <tgroup cols="3">
+        <tgroup cols="4">
           <colspec align="center" />
 
           <thead>
@@ -114,6 +126,8 @@
               <entry>Type</entry>
 
               <entry>Description</entry>
+
+              <entry>Mandatory/Optional</entry>
             </row>
           </thead>
 
@@ -125,6 +139,8 @@
               <entry>Enum (x86, x64)</entry>
 
               <entry>CPU Architecture (e.g. x64)</entry>
+
+              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -134,6 +150,8 @@
               <entry>Integer</entry>
 
               <entry>Number of CPU cores (e.g. 1, 2)</entry>
+
+              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -143,6 +161,8 @@
               <entry>Float (10^9 Hertz)</entry>
 
               <entry>Clock speed in gigahertz (e.g. 2.4)</entry>
+
+              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -152,6 +172,8 @@
               <entry>Float (10^6 bytes)</entry>
 
               <entry>RAM in megabytes (e.g. 8192)</entry>
+
+              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -163,6 +185,8 @@
               <entry>RAM speed in Gbit/s (e.g.
               <computeroutput>17</computeroutput> for PC-8500 DDR3 per <xref
               linkend="wikipedia" />)</entry>
+
+              <entry>Optional</entry>
             </row>
 
             <row>
@@ -172,6 +196,8 @@
               <entry>Enum (standard, checksum)</entry>
 
               <entry>Qualitative measure of RAM reliability (e.g. ECC)</entry>
+
+              <entry>Optional</entry>
             </row>
           </tbody>
         </tgroup>
@@ -187,7 +213,7 @@
       <table>
         <title>Network Attributes</title>
 
-        <tgroup cols="3">
+        <tgroup cols="4">
           <colspec align="center" />
 
           <thead>
@@ -197,6 +223,8 @@
               <entry>Type</entry>
 
               <entry>Description</entry>
+
+              <entry>Mandatory/Optional</entry>
             </row>
           </thead>
 
@@ -209,6 +237,8 @@
 
               <entry>802.1q VLAN ID (e.g.
               <computeroutput>4095</computeroutput>)</entry>
+
+              <entry>Optional</entry>
             </row>
 
             <row>
@@ -219,6 +249,8 @@
 
               <entry>Tag based VLANs (e.g.
               <computeroutput>external-dmz</computeroutput>)</entry>
+
+              <entry>Optional</entry>
             </row>
 
             <row>
@@ -230,6 +262,8 @@
               <entry>IP gateway address or network address where there is none
               (e.g. <computeroutput>192.168.0.1/24</computeroutput>,
               <computeroutput>2001:db8:a::123/64</computeroutput>)</entry>
+
+              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -256,6 +290,8 @@
                     preconfiguration or manual allocation</para>
                   </listitem>
                 </itemizedlist></entry>
+
+              <entry>Mandatory</entry>
             </row>
           </tbody>
         </tgroup>
@@ -273,7 +309,7 @@
       <table>
         <title>Storage Attributes</title>
 
-        <tgroup cols="3">
+        <tgroup cols="4">
           <colspec align="center" />
 
           <thead>
@@ -283,39 +319,67 @@
               <entry>Type</entry>
 
               <entry>Description</entry>
+
+              <entry>Mandatory/Optional</entry>
             </row>
           </thead>
 
           <tbody>
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Storage-Reliability</computeroutput></entry>
+              align="left"><computeroutput>storage.retention-duration</computeroutput></entry>
 
-              <entry>Enum (transient, persistent, reliable)</entry>
+              <entry>Time</entry>
 
-              <entry>Qualitative device persistence (e.g. transient)</entry>
+              <entry>The duration the storage instance is retained after
+              deletion</entry>
+
+              <entry>Optional</entry>
             </row>
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Storage-Size</computeroutput></entry>
+              align="left"><computeroutput>storage.capacity</computeroutput></entry>
 
-              <entry>Integer (10^9 bytes)</entry>
+              <entry>Integer plus "IEC60027-2 unit prefix"</entry>
 
-              <entry>Drive size in gigabytes (e.g.
-              <computeroutput>40</computeroutput>,
-              <computeroutput>0.00144</computeroutput>)</entry>
+              <entry>Maximum size of the storage resource.</entry>
+
+              <entry>Mandatory</entry>
             </row>
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Storage-Speed</computeroutput></entry>
+              align="left"><computeroutput>storage.size</computeroutput></entry>
 
-              <entry>Integer (10^6 bytes/second)</entry>
+              <entry>Integer plus "IEC60027-2 unit prefix"</entry>
 
-              <entry>Drive speed in MB/s (e.g.
-              <computeroutput>600</computeroutput> for SAS/SATA-600 <xref
-              linkend="wikipedia" />)</entry>
+              <entry>Size of the storage resource capacity in use.</entry>
+
+              <entry>Mandatory</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>storage.status</computeroutput></entry>
+
+              <entry>Enum (Online, Offline, Standby, Degraded)</entry>
+
+              <entry>The current operating status of the storage
+              resource</entry>
+
+              <entry>Optional</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>storage.class</computeroutput></entry>
+
+              <entry>Enum (Volatile, Maintained)</entry>
+
+              <entry>The operating class of storage</entry>
+
+              <entry>Mandatory</entry>
             </row>
           </tbody>
         </tgroup>
