@@ -1,0 +1,905 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>OGF OCCI-WG Deliverables</title><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"/></head><body><div class="book" title="OGF OCCI-WG Deliverables"><div class="titlepage"><div><div><h1 class="title"><a id="id36063441"/>OGF OCCI-WG Deliverables</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Sam</span> <span class="surname">Johnston</span></h3><span class="contrib">WG Secretary</span> <span class="contrib">Author</span> <div class="affiliation"><span class="orgname">Australian Online Solutions<br/></span></div></div></div><div><div class="author"><h3 class="author"><span class="firstname">Thijs</span> <span class="surname">Metsch</span></h3><span class="contrib">Co-Chair</span> <span class="contrib">Author</span> <div class="affiliation"><span class="orgname">Sun Microsystems<br/></span></div></div></div><div><div class="author"><h3 class="author"><span class="firstname">Andrew</span> <span class="surname">Edmonds</span></h3><span class="contrib">Co-Chair</span> <span class="contrib">Author</span> <div class="affiliation"><span class="orgname">Intel<br/></span></div></div></div><div><div class="author"><h3 class="author"><span class="firstname">Alexis</span> <span class="surname">Richardson</span></h3><span class="contrib">Co-Chair</span> <div class="affiliation"><span class="orgname">Rabbit Technologies<br/></span></div></div></div><div><p class="pubdate">July 2009</p></div></div><hr/></div><div class="article" title="OCCI Use Cases"><div class="titlepage"><div><div><h2 class="title"><a id="id36063864"/>OCCI Use Cases</h2></div></div><hr/></div><p>The following section describes the Use Cases which were gathered
+  during the requirements analyses for the OCCI working group. They are used
+  to set up the requirements and later on to verify the OCCI
+  specification.</p><div class="section" title="SLA-aware cloud infrastructure using SLA@SOI"><div class="titlepage"><div><div><h2 class="title"><a id="id36065051"/>SLA-aware cloud infrastructure using SLA@SOI</h2></div></div></div><p>There is a need for a standard interface for dynamic infrastructure
+    provisioning. While doing so it must be guaranteed and verified that the
+    infrastructure provisioning uses 'machine-readable' SLAs. <span class="citerefentry"><span class="refentrytitle">(SLA_SOI)</span></span></p><h3><a id="id36065067"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>VM Description: request format important - In this area is where
+        there is least coherency amongst providers.</p></li><li class="listitem"><p>VM Description: a means to add non-functional constraints on
+        functional attributes.</p></li><li class="listitem"><p>VM Management: all parameters in the request should be
+        "monitor-able" and verifiable. Full control of resources (VMs)
+        allocated required; at a minimum: start, stop, suspend, resume.</p></li><li class="listitem"><p>VM Monitoring: Monitoring non-functional constraints declared in
+        provisioning request</p></li><li class="listitem"><p>Network Management: resources assignable by network tag -
+        defaults of public and private further sub-categorisation could be
+        allowed e.g. tag of web could be assigned to the public network
+        group.</p></li><li class="listitem"><p>Storage Management: simple mount points, reuse storage SaaS
+        offerings</p></li></ul></div><h3><a id="id36065121"/>Non-functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Security: Transport and user level (ACLs? oAuth?)
+        security</p></li><li class="listitem"><p>Quality of Service: Can be many - Part of service offering from
+        the infrastructure provider e.g. Security, QoS, geo-location,
+        isolation levels - NFPs are the basic building blocks of
+        differentiating IaaS providers.</p></li><li class="listitem"><p>Scheduling Information: When a particular resource is to be run.
+        Also in which order should a collection of resources be ran in the
+        case that one resource is dependent on another.</p></li></ul></div></div><div class="section" title="Service Manager to control the Life cycle of Services"><div class="titlepage"><div><div><h2 class="title"><a id="id36065154"/>Service Manager to control the Life cycle of Services</h2></div></div></div><p>This Use Case is based in the 'Service Manager' (SM) layer of the
+    RESERVOIR project architecture. 'Service Providers' (SP) willing to deploy
+    their service on the Cloud use this layer to control the service life
+    cycle. The SM operates over the Cloud infrastructure automatically as the
+    service demands. In a way, the SM maps the service configuration and needs
+    to calls to the Cloud infrastructure, so many of the requirements imposed
+    by the SM are due to the flexibility that the SM aims to provide to SPs.
+    (<span class="citerefentry"><span class="refentrytitle">RV</span></span>)</p><h3><a id="id36065175"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Network Management: There should be methods for the Allocation
+        of private networks, where VMs can be attached to. A special network
+        (e.g. 'Public Network') should be available. When some network
+        interface is attached to it, the infrastructure must assign a public
+        IP address.</p></li><li class="listitem"><p>Image Management: There should be methods to register, upload,
+        update and download disk images.</p></li><li class="listitem"><p>VM Description: It should be possible to describe all the VM
+        hardware components and their attributes, along with any restriction
+        regarding the VM location:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Memory: Size</p></li><li class="listitem"><p>CPU: Architecture, amount of CPU's and speed.</p></li><li class="listitem"><p>Disk: Size, Interface (SCSI, IDE, SATA...), RAID (yes/no,
+            and RAID level), Disk image to mount, Automatic backup (yes/no,
+            backups frequency...).</p></li><li class="listitem"><p>Network: Interfaces, for each interface its bandwidth, and
+            Network they are attached to.</p></li><li class="listitem"><p>Geographical restrictions: Location(s) where the VM
+            can/cannot be deployed (for example for legal purposes).</p></li><li class="listitem"><p>Migration allowed (yes/no): If migration is supported by the
+            infrastructure, this flag sets if it is allowed for the VM.</p></li></ul></div></li><li class="listitem"><p>VM Management: There should be methods to allow the SM to change
+        the VM state (for example, from ACTIVE to SUSPENDED), if such
+        transition is allowed by the infrastructure (i.e. is defined in the
+        OCCI's State Machine). The description of a VM can be changed when the
+        machine is running (ACTIVE, SUSPENDED...). But it will not be taken
+        into account until the machine is stopped and started again, unless it
+        is a change regarding geographical or migration restrictions. Each
+        disk backup will have an id, as the images defined by the SM. Methods
+        to download any backup should be provided. As each backup is, after
+        all, a disk image, it should be possible to mount it on any VM. For
+        example, it should be possible to stop a VM, change its configuration
+        so its disk mounts this backup image, and restart the VM.</p></li><li class="listitem"><p>Monitoring: The status (We use the term 'status' when talking
+        about monitoring, and try not to use the term 'state' to avoid
+        confusion with the states of the OCCI State Machine.) representation
+        of any element is given as a list of keys and their values. For
+        example, the status of a memory component could be given by the amount
+        of memory used and the cache memory. Then, the keys could be: 'used'
+        and 'cache' with the values '142MB' and '430MB'. Both the request and
+        the reply use the corresponding element identifier. Two types of
+        monitoring should be supported:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Pull based: The SM can request the status of any element it
+            has registered: VMs, networks... Also, the SM can request the
+            status of components, for example, the status of certain disk of a
+            certain VM.</p></li><li class="listitem"><p>Publish/subscribe based: The SM can subscribe to be notified
+            about events on the VMs and/or Networks. Some of the events to be
+            notified are:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Errors on some component of a VM.</p></li><li class="listitem"><p>Changes on the state of a VM (e.g. from ACTIVE to
+                SUSPENDED).</p></li><li class="listitem"><p>Periodic notifications about some element state. The
+                frequency of this notifications can be configured in the
+                subscription message.</p></li></ul></div></li></ul></div></li><li class="listitem"><p>Error messages: If a VM could not be created, or a image could
+        not be uploaded, etc... the platform should return an error message
+        carrying a detailed description of the reason.</p></li><li class="listitem"><p>Identifications: Networks, VMs and images should have unique
+        IDs, (UUIDs, URIs, or the like). It is to be determined whether
+        components of VMs (disks, memory...) should have an unique ID too. IDs
+        are assigned by the Cloud infrastructure when the corresponding
+        element is created.</p></li></ul></div><h3><a id="id36065349"/>Non-functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Both for hardware configuration and monitoring values there
+        should be a clear, standard way to set which magnitude the value
+        represents. For example, when setting the memory size to '2', it must
+        be clear that we refer to GBs and not to MBs. An option would be
+        setting the value to '2GB', another would be allowing to set both the
+        value and the magnitude: value '2' and magnitude 'GB'.</p></li><li class="listitem"><p>Protocols: The transport, message format, and state
+        representation should use open and standard protocols, each one which
+        strong software support (i.e. libraries and frameworks available for
+        several programming languages).</p></li></ul></div></div><div class="section" title="Interoperability across Cloud Infrastructures using OpenNebula"><div class="titlepage"><div><div><h2 class="title"><a id="id36065377"/>Interoperability across Cloud Infrastructures using
+    OpenNebula</h2></div></div></div><p>OpenNebula is a Virtual Infrastructure Engine, being enhanced in the
+    RESERVOIR project, which allows the management of Virtual Machines on a
+    pool of physical resources It offers three main functionalities: backend
+    of a public cloud, manage a virtual infrastructure in the data-center or
+    cluster (private cloud), achieve cloud interoperation (hybrid cloud), the
+    latter being relevant in this Use Case.</p><p>The aim of this Use Case is to state the requirements that an API
+    for cloud providers should take into account in order to expose an
+    interface that will enable the management of groups of Virtual Machines
+    across them. These requirements are gathered from the experience using
+    OpenNebula to manage Virtual Machines from different cloud providers.
+    Currently, there are two set of plugins for OpenNebula to access Amazon
+    EC2 and ElasticHosts cloud providers that leverage the use of both cloud
+    providers in a transparent fashion for the end user. (<span class="citerefentry"><span class="refentrytitle">ONE</span></span>)</p><h3><a id="id36065405"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>VM Description: Virtual Machines should be described
+        consistently across cloud providers using a slim set of indispensable
+        attributes, such as:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Memory: Amount of RAM needed by the Virtual Machine</p></li><li class="listitem"><p>CPU: Number of CPUs needed by the Virtual Machine (this
+            needs to be normalized)</p></li><li class="listitem"><p>Disk: Disks that will conform the basic filesystem and
+            possibly others for the Virtual Machine</p></li><li class="listitem"><p>Network: How many network interface this Virtual Machine
+            should have, and where should be attached</p></li></ul></div></li><li class="listitem"><p>VM Management: API should offer functionality to enforce
+        operations upon Virtual Machines, such as:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>DEPLOY: Launches the Virtual Machine</p></li><li class="listitem"><p>SHUTDOWN: Shutdown the Virtual Machine</p></li><li class="listitem"><p>CANCEL: Cancels the Virtual Machine in case of failure, or
+            destroys it if it is running</p></li><li class="listitem"><p>CHECKPOINT: Creates a snapshot of the Virtual Machine</p></li><li class="listitem"><p>SAVE: Creates a snapshot of the Virtual Machine AND suspends
+            it</p></li><li class="listitem"><p>RESTORE: Resumes a Virtual Machine from a previous
+            snapshot</p></li><li class="listitem"><p>POLL: Retrieves information about Virtual Machine state and
+            consumption attributes (percentage of Memory, CPU used, bytes
+            transferred, and so on)</p></li></ul></div></li><li class="listitem"><p>Additionally, Virtual Machines should be in one of the following
+        states:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>PENDING: VM is waiting for a physical resource slot.</p></li><li class="listitem"><p>BOOTING: VM is being booted</p></li><li class="listitem"><p>RUNNING: VM is active, it should be able to start offering a
+            service</p></li><li class="listitem"><p>SUSPENDED: VM is suspended, waiting for a resume.</p></li><li class="listitem"><p>SHUTDOWN: VM is being shutdown.</p></li><li class="listitem"><p>CANCEL: VM has been canceled by the user or by a
+            scheduler.</p></li><li class="listitem"><p>FAILED: VM crashed or hasn't started properly.</p></li></ul></div></li><li class="listitem"><p>Network Management: API should expose functionality to</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Create Private Virtual Networks</p></li><li class="listitem"><p>Attach Public IP to Virtual Machine</p></li></ul></div></li><li class="listitem"><p>Image Management: The ability to upload disk images is
+        fundamental to virtual machine management to avoid the need to
+        reinstall software for each cloud provider. The upload process should
+        return an identifier to be used in the Virtual Machine
+        Description.</p></li></ul></div><h3><a id="id36065615"/>Non-functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Security: Security should be handled using X509 certificates for
+        authentication. Also, authorization can be based on said certificates
+        and ACL lists.</p></li><li class="listitem"><p>Quality of Service: When used in conjunction with Haizea,
+        OpenNebula provides advanced reservation functionality. Cloud
+        providers API should provide similar capabilities to ensure proper
+        QoS.</p></li></ul></div></div><div class="section" title="AJAX web front-end directly calling API"><div class="titlepage"><div><div><h2 class="title"><a id="id36065640"/>AJAX web front-end directly calling API</h2></div></div></div><p>This Use Case describes the ability to create web front-ends for
+    Clouds. A cloud provider implements their customer web front-end as an
+    entirely client-side AJAX application calling the OCCI API
+    directly.</p><h3><a id="id36065651"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Completeness: API must be contain complete set of calls to
+        completely specify and control cloud (but this is likely only ~15-20
+        verbs on ~3-4 nouns!)</p></li><li class="listitem"><p>Responsiveness: Calls must return swiftly. In particular, we
+        should provide a simple and quick call to poll the _list_ of servers,
+        drives, etc. that exist without listing all of their properties, since
+        this is computationally much cheaper for the cloud to return, and will
+        need to be regularly polled to catch any servers, etc. that are
+        created outside of the interface.</p></li></ul></div><h3><a id="id36065677"/>Non-functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Syntax: A simple JSON syntax for the API will make the AJAX
+        interface much simpler to implement</p></li></ul></div></div><div class="section" title="Single technical integration to support multiple service providers"><div class="titlepage"><div><div><h2 class="title"><a id="id36065693"/>Single technical integration to support multiple service
+    providers</h2></div></div></div><p>Today, each cloud provider (ElasticHosts, GoGrid, Amazon, etc.)
+    integrates independently with every other player in the cloud ecosystem
+    (CohesiveFT, RightScale, etc), producing O(n^2) separate technical
+    integrations. In the future, if all cloud providers and cloud ecosystem
+    partners use a single standard API, then we have O(n) technical
+    integrations, and all potential partnerships can immediately
+    interoperate.</p><h3><a id="id36065706"/>Non-functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Uptake: Standardized IaaS API needs strong uptake in by both
+        cloud providers and cloud ecosystem.</p></li></ul></div></div><div class="section" title="Wrapping EC2 in OCCI"><div class="titlepage"><div><div><h2 class="title"><a id="id36065722"/>Wrapping EC2 in OCCI</h2></div></div></div><p>At the time of this writing, Amazon EC2 is popular cloud API for
+    IaaS. Cloud providers implementing EC2 as well as other proprietary and
+    open cloud APIs may not implement OCCI. To help ensure that the OCCI API
+    would be capable of interfacing to EC2 though gateways, minimizing the
+    impact to provider operations. </p><h3><a id="id36065734"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Semantics: Must include the ability to fully describe core EC2
+        objects and operations</p></li></ul></div><h3><a id="id36065749"/>Non-functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>A gateway to support the integration of OCCI and EC2</p></li></ul></div></div><div class="section" title="Automated Business Continuity and Disaster Recovery"><div class="titlepage"><div><div><h2 class="title"><a id="id36065764"/>Automated Business Continuity and Disaster Recovery</h2></div></div></div><p>Maintain a up-to-date remote shadows of physical and/or virtual
+    machines, such that in the event of a disaster it is possible to start and
+    switch to the remote machines.</p><h3><a id="id36065775"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>VM Description: Metadata mapping to legacy systems</p></li><li class="listitem"><p>VM Management: Automated management in the event of a disaster
+        (e.g. startup, IP changes).</p></li><li class="listitem"><p>Network Management: Runtime alteration of IPs</p></li><li class="listitem"><p>Image Management: Advanced, rsync style updates to synchronise
+        machines with physical equivalents (e.g. rsync block devices to remote
+        raw disk files).</p></li></ul></div><h3><a id="id36065813"/>Non-functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Quality of Service: Reservation of capacity sufficient for fail
+        over</p></li></ul></div></div><div class="section" title="Simple scripting of cloud from Unix shell"><div class="titlepage"><div><div><h2 class="title"><a id="id36065829"/>Simple scripting of cloud from Unix shell</h2></div></div></div><p>An end user wishes to script a simple task (such as starting a
+    server at midnight every night and shutting it down an hour later,
+    automating fail over, reporting, etc.). They are using a typical
+    Unix/Linux setup, so would like to write a simple cron job which carries
+    this out.</p><h3><a id="id36065840"/>Non-functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Syntax: This should be as simple as possible to place minimal
+        barriers to entry on the user. The user should not need any
+        development tools or libraries. They should be able to write 1-2 lines
+        of shell script, posting a simple &lt;5 lines of command data using
+        curl, wget, etc.</p></li></ul></div></div><div class="section" title="Typical web hosting cluster"><div class="titlepage"><div><div><h2 class="title"><a id="id36065858"/>Typical web hosting cluster</h2></div></div></div><p>An end-user runs a typical web hosting cluster on a cloud, with: n
+    database servers, m front-end web server (bursting to x under load) and a
+    load balancer (either a specialized virtual machine or provided by the
+    cloud like GoGrid).</p><h3><a id="id36065870"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Completeness: The API should be able to fully express this
+        cluster, which will require at least: (n+m+x) virtual machines,
+        storage for each virtual machine, two networks (a private one
+        connecting the machines, and the public Internet also connected to the
+        load balancer), a fixed static IP for the website on the public
+        Internet, possible specification of the load balancer itself.</p></li></ul></div></div><div class="section" title="Manage cloud resources from a centralized dashboard"><div class="titlepage"><div><div><h2 class="title"><a id="id36065888"/>Manage cloud resources from a centralized dashboard</h2></div></div></div><p>An end user wishes to view and control all of his cloud-based
+    resources in a lightweight (perhaps AJAX-based) console, perhaps the same
+    web front-end referred to in this Use Case: AJAX web front-end directly
+    calling API</p><h3><a id="id36065900"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Completeness: Every resource provided by the cloud is
+        discoverable by the API, and every action that can be performed on all
+        these resources is also available via the API, together with actuators
+        to actually perform those actions, and all the attributes of the
+        resources are available via the API.</p></li><li class="listitem"><p>Responsiveness: Calls must return swiftly. In particular, we
+        should provide a simple and quick call to poll the _list_ of servers,
+        drives, etc. that exist without listing all of their properties, since
+        this is computationally much cheaper for the cloud to return, and will
+        need to be regularly polled to catch any servers, etc. that are
+        created outside of the interface. (text copied from AJAX web front-end
+        directly calling API)</p></li><li class="listitem"><p>Categorizability: (there's gotta be a better word...) The client
+        must be able to identify what type each resource is in order to
+        display like-typed resources together and in order to provide separate
+        UI views that might be specialized for certain resource types. For
+        example, the client must be able to differentiate between a compute
+        resource that does not represent an actual CPU (perhaps this is a
+        compute template) and between a compute resource that actually
+        represents a running CPU. The interface for actually-running CPUs
+        might display the current IP address of the instance and allow you to
+        SSH into the instance, while a different tab in the interface might
+        display all the compute templates and allow you to instantiate
+        instances from them.</p></li><li class="listitem"><p>Taggability: Every resource discoverable by the API must be able
+        to be tagged by the user. This supports the oft-occurring situation
+        where resources, though they are identified by the
+        implementation-specific identifier, are easily identified using
+        terminology defined by the user for his specific context. For example,
+        one might tag resource "/compute/instanceABCDEFG" with the label
+        "database server", and the resource "/storage/disk12345678" with the
+        label "superSecretCorporateData".</p></li><li class="listitem"><p>Searchability: The ability to request lists of resources must
+        allow an optional filter that can specify a category or tag upon which
+        to filter the results. This allows one to further limit their view to,
+        for example, resources tagged "productionEnvironment", or resources of
+        the category "storage".</p></li></ul></div><h3><a id="id36065962"/>Non-functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Usability: This should be a user interface with context-menus
+        and context-aware links that allow the user to easily see what actions
+        can be performed for each resource.</p></li></ul></div></div><div class="section" title="Compute Cloud"><div class="titlepage"><div><div><h2 class="title"><a id="id36065979"/>Compute Cloud</h2></div></div></div><p>A cloud provider implements a RESTful API for provisioning,
+    executing, and monitoring of tasks.</p><h3><a id="id36065989"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Secure: API must be secured to ensure that only authorized
+        identities are permitted to use the API.</p></li><li class="listitem"><p>Resource: An endpoint must be created for external monitoring,
+        status, and auditing of the task. This endpoint would be responsive to
+        RESTful calls supporting AJAX and other clients.</p></li><li class="listitem"><p>Scripted: The target system needs to understand and process
+        directives which would be provided with the task. These directives
+        would include the ability to pull binaries or data onto the system,
+        run executables, and status the system resources.</p></li></ul></div><h3><a id="id36066021"/>Non-functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Single Compute Method: The resultant service should be the same
+        service that can be used for many other purposes. It could be used for
+        monitoring of system health, system life-cycle management, system
+        patching, and configuration changes. If this was the only service on
+        the system initially, it could then be used to build up the other
+        services in a plug-in manner.</p></li></ul></div></div><div class="section" title="Multiple Allocation"><div class="titlepage"><div><div><h2 class="title"><a id="id36066040"/>Multiple Allocation</h2></div></div></div><p>Allocate a whole cluster with one call.</p><h3><a id="id36066049"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Definition of groups: There should be a way to define groups of
+        computers. In the example of a cluster, there would be two groups: The
+        Headnode and a couple of Workernodes.</p></li><li class="listitem"><p>Information: For configuration of the members of the defined
+        groups, there should be way (maybe a URL) to find out about all groups
+        and their basic configurations. In the example, the Headnode would
+        want to know IPs or Hostnames of all Workernodes. The workernodes will
+        need to know this, as well _and_ they need to know, that the headnode
+        is in a different group.</p></li></ul></div></div><div class="section" title="Cloud Consumer Discovery of Cloud Provider's VM Input and Output Format Support"><div class="titlepage"><div><div><h2 class="title"><a id="id36066076"/>Cloud Consumer Discovery of Cloud Provider's VM Input and Output
+    Format Support</h2></div></div></div><p>A cloud consumer would like to discover the VM input and output
+    formats accepted and delivered by the cloud provider.</p><h3><a id="id36066087"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>The provider supplies an API which is availed over unsecured
+        network connections.</p></li><li class="listitem"><p>The provider supplies an API which is availed over secured
+        network connections.</p></li><li class="listitem"><p>The provider supplied API is availed for all consumer
+        authentication and authorization levels.</p></li><li class="listitem"><p>The provider supplied API identifies the supported VM input
+        formats API uniquely and commonly across all providers.</p></li><li class="listitem"><p>The provider supplied API identifies the supported VM output
+        formats API uniquely and commonly across all providers.</p></li><li class="listitem"><p>The provider supplied API identifies the supported VM formats
+        uniquely and commonly across all providers.</p></li><li class="listitem"><p>The provider API identifies mutliple supported VM input formats
+        as a list uniquely and commonly across all providers</p></li><li class="listitem"><p>The provider API identifier is unique and and consistent across
+        all API representations.</p></li><li class="listitem"><p>The provider API VM input and output format identifiers are
+        unique and and consistent across all providers.</p></li><li class="listitem"><p>The reported VM input and output formats are not required to be
+        symetrical and equal and in consistent order.</p></li></ul></div></div><div class="section" title="Cloud Consumer Discovery of Cloud Provider's Dataset Input and Output Format Support"><div class="titlepage"><div><div><h2 class="title"><a id="id36066173"/>Cloud Consumer Discovery of Cloud Provider's Dataset Input and
+    Output Format Support</h2></div></div></div><p>A cloud consumer would like to discover the Dataset input and output
+    formats accepted and delivered by the cloud
+    provider.</p><h3><a id="id36066183"/>Functional Requirements</h3><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>The provider supplies an API which is availed over unsecured
+          network connections.</p></li><li class="listitem"><p>The provider supplies an API which is availed over secured
+          network connections.</p></li><li class="listitem"><p>The provider supplied API is availed for all consumer
+          authentication and authorization levels.</p></li><li class="listitem"><p>The provider supplied API identifies the supported Dataset
+          input formats API uniquely and commonly across all providers.</p></li><li class="listitem"><p>The provider supplied API identifies the supported Dataset
+          output formats API uniquely and commonly across all
+          providers.</p></li><li class="listitem"><p>The provider supplied API identifies the supported Dataset
+          formats uniquely and commonly across all providers.</p></li><li class="listitem"><p>The provider API identifies multiple supported Dataset formats
+          as a list uniquely and commonly across all providers</p></li><li class="listitem"><p>The provider API identifier is unique and and consistent
+          across all API representations.</p></li><li class="listitem"><p>The provider API Dataset input and output format identifiers
+          are unique and and consistent across all providers.</p></li><li class="listitem"><p>The reported Dataset input and output formats are not required
+          to be symetrical and equal and in consistent order.</p></li></ul></div></div></div><div class="article" title="OCCI Requirements"><div class="titlepage"><div><div><h2 class="title"><a id="id36063880"/>OCCI Requirements</h2></div></div><hr/></div><div class="section" title="Functional Requirements"><div class="titlepage"><div><div><h2 class="title"><a id="id36066814"/>Functional Requirements</h2></div></div></div><p>This section deals with the funtional requirements. The requirments
+    have been split up in tables and prioritized.</p><div class="table"><a id="id36066824"/><p class="title"><b>Table 1. Functional requirements on VM description</b></p><div class="table-contents"><table summary="Functional requirements on VM description" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: center">ID</th><th style="text-align: center">Description</th><th style="text-align: center">Usecases</th><th style="text-align: center">Priority</th></tr></thead><tbody><tr><td>A.1.1</td><td>Attributes to define memory, CPU, disk and network
+            requirements should be available.</td><td>2.2, 2.3, 2.6</td><td>High</td></tr><tr><td>A.1.2.</td><td>Attributes to define placement constraints, such as
+            geographical location must be supported</td><td>2.2</td><td>Medium</td></tr><tr><td>A.1.3.</td><td>A attributes should demonstrate if migration is supported
+            by the infrastructure</td><td>2.2</td><td>Medium</td></tr><tr><td>A.1.4.</td><td>The API should be able to fully express a cluster (e.g. 5
+            VMs, storage for each VM, two networks (a private one connecting
+            the machines, and the public internet also connected to the load
+            balancer), a fixed static IP for the website on the public
+            internet)</td><td>2.9</td><td>High</td></tr><tr><td>A.1.5.</td><td>A means to add constraints (non-functional, functional) on
+            attributes which are declared in a provisioning request</td><td>2.1</td><td>High</td></tr><tr><td>A.1.6.</td><td>Support the scheduling of resource execution. Allow
+            provisioned resources to be execute sometime in the future from
+            the original request</td><td>2.1</td><td>Medium</td></tr><tr><td>A.1.7.</td><td>Common operating systems should be supported</td><td>-</td><td>High</td></tr><tr><td>A.1.8.</td><td>Resources should be grouped according to provider
+            policies</td><td>-</td><td>High</td></tr><tr><td>A.1.9.</td><td>Then requesting new resource(s) the request must be fully
+            complete/describing</td><td>-</td><td>High</td></tr></tbody></table></div></div><br class="table-break"/><div class="table"><a id="id36067066"/><p class="title"><b>Table 2. Functional requirements on VM management</b></p><div class="table-contents"><table summary="Functional requirements on VM management" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: center">ID</th><th style="text-align: center">Description</th><th style="text-align: center">Usecases</th><th style="text-align: center">Priority</th></tr></thead><tbody><tr><td>A.2.1.</td><td>Methods to start, stop, suspend and resume VMs must be
+            available</td><td>2.1, 2.2, 2.3, 2.5, 2.11, 2.10</td><td>High</td></tr><tr><td>A.2.2.</td><td>Automated management in the event of a disaster should be
+            supported</td><td>2.1, 2.7</td><td>Low</td></tr><tr><td>A.2.3.</td><td>Provide IDs for each backup disk and images</td><td>2.2</td><td>High</td></tr><tr><td>A.2.4.</td><td>Provide methods to donwload any backup</td><td>2.2</td><td>Medium</td></tr><tr><td>A.2.5.</td><td>API should offer functionality to enforce the following
+            operations: deploy, shutdown, cancel, checkpoint, save, restore,
+            poll (could be merged with monitoring)</td><td>2.3</td><td>High</td></tr><tr><td>A.2.6.</td><td>The state model should include: pending, booting, running,
+            suspended, shutdown, cancel, failed</td><td>2.3</td><td>Medium</td></tr><tr><td>A.2.7.</td><td>Listing collections should be possible without listing all
+            properties for each entry</td><td>2.4</td><td>Medium</td></tr><tr><td>A.2.8.</td><td>Allow resource representations to be updated and have those
+            changes trigger events/changes upon VMs</td><td>-</td><td>Low</td></tr><tr><td>A.2.9.</td><td>Support the usage of terminal, web, desktop and automated
+            management interfaces</td><td>2.10</td><td>Low</td></tr><tr><td>A.2.10.</td><td>Support the migration of resources from a physical resource
+            to the cloud, from a cloud to another cloud and from a virtual
+            resource to the cloud (This is a topic regarding
+            Interoperability)</td><td>-</td><td>Medium</td></tr><tr><td>A.2.11.</td><td>Support a subset of all functions of today IaaS based
+            Clouds (e.g. Amaton EC2)</td><td>2.6</td><td>Medium</td></tr><tr><td>A.2.12.</td><td>A common interface should be used which can be supported by
+            many Cloud service providers (regarding Infrastructure and Data
+            interfaces).</td><td>2.13, 2.14</td><td>Medium</td></tr></tbody></table></div></div><br class="table-break"/><div class="table"><a id="id36067354"/><p class="title"><b>Table 3. Functional requirements on Network management</b></p><div class="table-contents"><table summary="Functional requirements on Network management" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: center">ID</th><th style="text-align: center">Description</th><th style="text-align: center">Usecases</th><th style="text-align: center">Priority</th></tr></thead><tbody><tr><td>A.3.1.</td><td>Support the creation of VPNs</td><td>2.3</td><td>Low</td></tr><tr><td>A.3.2.</td><td>Support multiple network connection (Public and
+            Private)</td><td>2.1, 2.2, 2.3</td><td>High</td></tr><tr><td>A.3.3.</td><td>It must be possible to attach and change IPs at
+            runtime</td><td>2.3, 2.7</td><td>Medium</td></tr><tr><td>A.3.4.</td><td>Support a tagging mechanism for a group of network
+            connections</td><td>2.1, 2.2, 2.3</td><td>Low</td></tr><tr><td>A.3.5.</td><td>Support network setups which allow an 'Intercloud' setup
+            (This relates to Integration)</td><td>-</td><td>Medium</td></tr></tbody></table></div></div><br class="table-break"/><div class="table"><a id="id36067513"/><p class="title"><b>Table 4. Functional requirements on Storage management</b></p><div class="table-contents"><table summary="Functional requirements on Storage management" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: center">ID</th><th style="text-align: center">Description</th><th style="text-align: center">Usecases</th><th style="text-align: center">Priority</th></tr></thead><tbody><tr><td>A.4.1.</td><td>Allow the usage of URIs as mount points - allows reuse of
+            Storage service offerings</td><td>2.1</td><td>High</td></tr><tr><td>A.4.2.</td><td>Allow the attachment of additional storage resources at
+            runtime</td><td>-</td><td>Medium</td></tr></tbody></table></div></div><br class="table-break"/><div class="table"><a id="id36067619"/><p class="title"><b>Table 5. Functional requirements on Image management</b></p><div class="table-contents"><table summary="Functional requirements on Image management" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: center">ID</th><th style="text-align: center">Description</th><th style="text-align: center">Usecases</th><th style="text-align: center">Priority</th></tr></thead><tbody><tr><td>A.5.1.</td><td>Methods which are capable to register, upload, update and
+            download disk images must be available.</td><td>2.2</td><td>Medium</td></tr><tr><td>A.5.2.</td><td>Updates based on rsync commands to synchronize machines
+            with physical equivalents should be supported</td><td>2.7</td><td>Medium</td></tr><tr><td>A.5.3.</td><td>When an upload completes successfully, an identifier should
+            be returned</td><td>2.2</td><td>Low</td></tr></tbody></table></div></div><br class="table-break"/><div class="table"><a id="id36067744"/><p class="title"><b>Table 6. Identifications/References</b></p><div class="table-contents"><table summary="Identifications/References" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: center">ID</th><th style="text-align: center">Description</th><th style="text-align: center">Usecases</th><th style="text-align: center">Priority</th></tr></thead><tbody><tr><td>A.6.1.</td><td>Unique IDs for VM images and their components must be
+            available</td><td>2.2, 2.13, 2.14</td><td>High</td></tr><tr><td>A.6.2.</td><td>It must be possbile to tag resources and their
+            components</td><td>2.10, 2.12</td><td>Medium</td></tr><tr><td>A.6.3.</td><td>It must be possible to search for resources based on e.g.
+            tags.</td><td>2.10, 2.12</td><td>Medium</td></tr></tbody></table></div></div><br class="table-break"/><div class="table"><a id="id36067867"/><p class="title"><b>Table 7. Monitoring</b></p><div class="table-contents"><table summary="Monitoring" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: center">ID</th><th style="text-align: center">Description</th><th style="text-align: center">Usecases</th><th style="text-align: center">Priority</th></tr></thead><tbody><tr><td>A.7.1.</td><td>Support pull-based monitoring that request the status of
+            the elements such as network , VM ...</td><td>2.1, 2.2, 2.3</td><td>Medium</td></tr><tr><td>A.7.2.</td><td>Support for a publish/subscribe pattern that request events
+            which occur in the VM or networks (such as Errors on some
+            component, changes in the VM state and other periodic
+            notifications)</td><td>2.2</td><td>Medium</td></tr><tr><td>A.7.3.</td><td>Attributes that define simple quick call to poll the list
+            of servers, drives, etc should monitorable</td><td>2.4</td><td>Low</td></tr><tr><td>A.7.4.</td><td>Attributes about resource consumption of the VM from the
+            hypervisor (CPU, memory...) should be monitorable</td><td>2.1, 2.2</td><td>Medium</td></tr><tr><td>A.7.5.</td><td>Management reports should be generated from in some of the
+            following formats XML, PDF</td><td>-</td><td>Low</td></tr></tbody></table></div></div><br class="table-break"/></div><div class="section" title="Non-functional Requirements"><div class="titlepage"><div><div><h2 class="title"><a id="id36068030"/>Non-functional Requirements</h2></div></div></div><p>This section deals with all the non-funtional requirements.</p><div class="table"><a id="id36068040"/><p class="title"><b>Table 8. Security requirements</b></p><div class="table-contents"><table summary="Security requirements" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: center">ID</th><th style="text-align: center">Description</th><th style="text-align: center">Usecases</th><th style="text-align: center">Priority</th></tr></thead><tbody><tr><td>B.1.1.</td><td>Support the usage of X509 Certificates</td><td>2.3, 2.13, 2.14</td><td>High</td></tr><tr><td>B.1.2.</td><td>Support the usage of ACLs</td><td>B.1, 2.1</td><td>High</td></tr><tr><td>B.1.3.</td><td>Attributes to define Security levels should be available in
+            the descriptions</td><td>2.1</td><td>High</td></tr><tr><td>B.1.4.</td><td>Transport and user level security should be given</td><td>2.1, 2.13, 2.14</td><td>High</td></tr><tr><td>B.1.5.</td><td>Allow geographical region to be specified</td><td>B.4</td><td>High</td></tr></tbody></table></div></div><br class="table-break"/><div class="table"><a id="id36068198"/><p class="title"><b>Table 9. Quality of Service</b></p><div class="table-contents"><table summary="Quality of Service" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: center">ID</th><th style="text-align: center">Description</th><th style="text-align: center">Usecases</th><th style="text-align: center">Priority</th></tr></thead><tbody><tr><td>B.2.1.</td><td>Support capacities requirements for recovery / failover
+            cases</td><td>2.7</td><td>Low</td></tr><tr><td>B.2.2.</td><td>Support of attributes in the VM description to define QoS
+            level (this also includes the reponse times)</td><td>2.1</td><td>High</td></tr><tr><td>B.2.3.</td><td>Support of attributes in the VM describing the Isolation
+            level</td><td>2.1</td><td>Medium</td></tr><tr><td>B.2.4.</td><td>Support of attributes for an advanced reservation
+            functionality</td><td>2.3</td><td>Low</td></tr><tr><td>B.2.5.</td><td>Allow VM response times to be specified</td><td>B.4</td><td>High</td></tr></tbody></table></div></div><br class="table-break"/><div class="table"><a id="id36068357"/><p class="title"><b>Table 10. Syntax</b></p><div class="table-contents"><table summary="Syntax" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: center">ID</th><th style="text-align: center">Description</th><th style="text-align: center">Usecases</th><th style="text-align: center">Priority</th></tr></thead><tbody><tr><td>B.3.1.</td><td>No development tools or libraries should be needed by the
+            end-user</td><td>2.8</td><td>Medium</td></tr><tr><td>B.3.2.</td><td>Support simple JSON syntax to suppot Ajax interface</td><td>2.4, 2.10</td><td>Medium</td></tr><tr><td>B.3.3.</td><td>Clear definition of units (MB, GB etc) should be used in
+            the requests (Like those defined by IEC 60027-2 A.2)</td><td>A.2, 2.4</td><td>Medium</td></tr></tbody></table></div></div><br class="table-break"/><div class="table"><a id="id36068481"/><p class="title"><b>Table 11. Backup/Disaster recovery</b></p><div class="table-contents"><table summary="Backup/Disaster recovery" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: center">ID</th><th style="text-align: center">Description</th><th style="text-align: center">Usecases</th><th style="text-align: center">Priority</th></tr></thead><tbody><tr><td>B.4.1.</td><td>Support a backup functionality of cloud resources</td><td>-</td><td>Low</td></tr><tr><td>B.4.2.</td><td>The interface should reconsider failover, disaster recovery
+            and business continuity plans</td><td>-</td><td>Medium</td></tr></tbody></table></div></div><br class="table-break"/></div></div><div class="article" title="OCCI Walkthrough"><div class="titlepage"><div><div><h2 class="title"><a id="id36066277"/>OCCI Walkthrough</h2></div></div><hr/></div><div class="section" title="Overview"><div class="titlepage"><div><div><h2 class="title"><a id="id36066634"/>Overview</h2></div><div><h3 class="subtitle">THIS WALKTHROUGH DOCUMENT DOES NOT REFLECT THE CURRENT STATE OF
+    THE SPECIFICATION. IT WILL BE UPDATED ON PUBLICATION.</h3></div></div></div><p>The Open Cloud Computing Interface (OCCI) is an API for managing
+    cloud infrastructure services (also known as Infrastructure as a Service
+    or IaaS) which strictly adheres to REpresentational State Transfer (REST)
+    principles and is closely tied to HyperText Tranfer Protocol (HTTP). For
+    simplicity and scalability reasons it specifically avoids Remote Procedure
+    Call (RPC) style interfaces and can essentially be implemented as a
+    horizontally scalable document repository with which both nodes and
+    clients interact.</p><p>This document describes a step-by-step walkthrough of performing
+    various tasks as at the time of writing.</p></div><div class="section" title="Getting Started"><div class="titlepage"><div><div><h2 class="title"><a id="id36066657"/>Getting Started</h2></div></div></div><h3><a id="id36066663"/>Connecting</h3><p>Each implementation has a single OCCI end-point URL (we'll use
+    http://example.com/) and everything you need to know is linked from this
+    point - configuring clients is just a case of providing this parameter. In
+    the simplest case the end-point may contain only a single resource or type
+    of resource (e.g. a hypervisor burnt into the BIOS of a motherboard
+    exposing compute resources, a network switch/router exposing network
+    resources or a SAN exposing storage resources) and at the other end of the
+    spectrum it may provide access to a global cloud infrastructure (e.g. the
+    "Great Global Grid" or GGG). You will only ever see those resources to
+    which you have access to (typically all of them for a private cloud or a
+    small subset for a public cloud) and flexible categorisation and search
+    provide fine-grained control which resources are returned, allowing OCCI
+    to handle the largest of installations. You will always connect to this
+    end-point over HTTP(S) and given the simplicity of the interface most
+    user-agents are suitable, including libraries (e.g. urllib2, LWP), command
+    line tools (e.g. curl, wget) and full blown browsers (e.g.
+    Firefox).</p><h3><a id="id36066669"/>Authenticating</h3><p>When you connect you will normally be challenged to authenticate via
+    HTTP (this is not always the case - in secure/offline environments it may
+    not be necessary) and will need to do so via the specified mechanism. It
+    is anticipated that most implementations will require HTTP Basic
+    Authentication over SSL/TLS so at the very least you should support this
+    (fortunately almost all user-agents already do), but more advanced
+    mechanisms such as NTLM or Kerberos may be deployed. Certain types of
+    accesses (such as a compute resource querying OCCI for introspection and
+    configuration) may be possible anonymously (having already been
+    authenticated by interface and/or IP address). Should you be redirected by
+    the API to a node, storage device, etc. (for example, to retrieve a large
+    binary representation) then you should either be able to transparently
+    authenticate or a signed URL should be provided. That is, a single set of
+    credentials is all that is required to access the entire system from any
+    point.</p><h3><a id="id36066676"/>Representations</h3><p>As the resource itself (e.g. a physical machine, storage array or
+    network switch) cannot be transferred over HTTP (at least not yet!) we
+    instead make available one or more representations of that resource. For
+    example, an API modeling a person might return a picture, fingerprints,
+    identity document(s) or even a digitised DNA sequence, but not the person
+    themselves. A circle might be represented by SVG drawing primatives or any
+    three distinct points on the curve. For cloud infrastructure there are
+    many useful representations, and while OCCI standardises a number of them
+    for interoperability purposes, an implementation is free to implement
+    others in order to best serve the specific needs of their users and to
+    differentiate from other offerings. Other examples include:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Open Cloud Computing Interface (OCCI) descriptor format
+        (application/occi+xml)</p></li><li class="listitem"><p>Open Virtualisation Format (OVF) file
+        (application/ovf+xml?)</p></li><li class="listitem"><p>Open Virtualisation Archive (OVA) file
+        (application/x-ova?)</p></li><li class="listitem"><p>Screenshot of the console (image/png)</p></li><li class="listitem"><p>Access to the console (application/x-vnc)</p></li></ul></div><p>The client indicates which representation(s) it desires by way of
+    the URL and/or HTTP Accept headers (e.g. HTTP Content Negotiation) and if
+    the server is unable to satisfy the request then it should return HTTP 406
+    Not Acceptable.</p><h3><a id="id36066735"/>Descriptors</h3><p>In addition to the protocol itself, OCCI defines a simple key/value
+    based descriptor format for cloud infrastructure resources:</p><div class="glosslist"><dl><dt>compute</dt><dd><p>Provides computational services, ranging from dedicated
+          physical machines (e.g. Dedibox) to virtual machines (e.g. Amazon
+          EC2) to slices/zones/containers (e.g. Mosso Cloud Servers).</p></dd><dt>network</dt><dd><p>Provides connectivity between machines and the outside world.
+          Usually virtual and may or may not be connected to a physical
+          segment.</p></dd><dt>storage</dt><dd><p>Provides storage services, typically via magnetic mass storage
+          devices (e.g. hard drives, RAID arrays, SANs).</p></dd></dl></div><p>Given the simplicity of the format it is trivial to translate
+    between wire formats including plain text, JSON, XML and others. For
+    example:</p><pre class="screen">occi.compute.cores 2
+compute.speed 3200
+compute.memory 2048</pre><h3><a id="id36066800"/>Identifiers</h3><p>Each resource is identified by its dereferenceable URL which is by
+    definition unique, giving information about the origin and type of the
+    resource as well as a local identifier (the combination of which forms a
+    globally unique compound key). The primary drawback is that the more
+    information that goes into the key (and therefore the more transparent it
+    is), the more likely it is to change. For example, if you migrate a
+    resource from one implementation to another then its identifier will
+    change (though in this instance the source should provide a HTTP 301 Moved
+    Permanently response along with the new location, assuming it is known, or
+    HTTP 410 Gone otherwise).</p><p>In order to realise the benefit of transparent, dereferenceable
+    identifiers while still being able to track resources through their entire
+    lifecycle an immutable UUID attribute should be allocated which will
+    remain with the resource throughout its life. This is particularly
+    important where the same resource (e.g. a network) appears in multiple
+    places.</p><p>New implementations should use type 4 (random) UUIDs anyway, as
+    these can be safely allocated by any node without consulting a
+    register/sequence, but where existing identifiers are available they
+    should be used instead (e.g.
+    http://amazon.com/compute/ami-ef48af86).</p></div><div class="section" title="Operations"><div class="titlepage"><div><div><h2 class="title"><a id="id36064772"/>Operations</h2></div></div></div><h3><a id="id36064777"/>Create</h3><p>To create a resource simply POST it to the appropropriate collection
+    (e.g. /compute, /network or /storage) as an HTML form (supported by
+    virtually all user agents) or in another supported format (e.g.
+    OVF):</p><pre class="screen">POST /compute HTTP/1.1
+Host: example.com
+Content-Length: 35
+Content-Type: application/x-www-form-urlencoded
+
+compute.cores=2&amp;compute.memory=2048</pre><p>Rather than generating the new resource from scratch you may also be
+    given the option to GET a template and POST or PUT it back (for example,
+    where "small", "medium" and "large" instances or pre-configured appliances
+    are offered).</p><h3><a id="id36064797"/>Retrieve</h3><p>The simplest command is to retrieve a single resource by conducting
+    a HTTP GET on its URL (which doubles as its identifier):</p><pre class="screen">GET /compute/b10fa926-41a6-4125-ae94-bfad2670ca87 HTTP/1.1
+Host: example.com</pre><p>This will return <em><span class="remark">a HTTP 300 Multiple Choices response
+    containing a list of available representations for the resource as well as
+    a suggestion in the form of a HTTP Location: header of</span></em> the
+    default rendering, which should be HTML (thereby allowing standard
+    browsers to access the API directly). An arbitrary number of alternatives
+    may also be returned by way of HTTP Link: headers.</p><p>If you just need to know what representations are available you
+    should make a HEAD request instead of a GET - this will return the
+    metadata in the headers without the default rendering.</p><p>Some requests (such as searches) will need to return a collection of
+    resources. There are two options:</p><div class="glosslist"><dl><dt>Pass-by-reference</dt><dd><p>A plain text or HTML list of links is provided but each needs
+          to be retrieved separately, resulting in O(n+1) performance.</p></dd><dt>Pass-by-value</dt><dd><p>A wrapper format such as Atom is used to deliver [links to]
+          the content as well as the metadata (e.g. links, associations,
+          cahching information, etc.), resulting in O(1) performance.</p></dd></dl></div><h3><a id="id36064863"/>Update</h3><p>Updating resources is trivial - simply GET the resource, modify it
+    as necessary and PUT it back where you found it.</p><h3><a id="id36064871"/>Delete</h3><p>Simply <code class="computeroutput">DELETE</code> the resource:</p><pre class="screen">DELETE /compute/b10fa926-41a6-4125-ae94-bfad2670ca87 HTTP/1.1
+Host: example.com</pre></div><div class="section" title="Sub-resource Collections"><div class="titlepage"><div><div><h2 class="title"><a id="id36064886"/>Sub-resource Collections</h2></div></div></div><p><em><span class="remark">(For want of a better name) </span></em></p><p>Each resource may expose collections for functions such as logging,
+    auditing, change control, documentation and other operations (e.g.
+    http://example.com/compute/123/log/456) in addition to any required by
+    OCCI. As usual CRUD operations map to HTTP verbs (as above) and clients
+    can either PUT entries directly if they know or will generate the
+    identifiers, or POST them to the collection if this will be handled on the
+    server side (using POST Once Exactly (POE) to ensure idempotency).</p><h3><a id="id36064904"/>Requests</h3><p>Requests are used to trigger state changes and other operations such
+    as backups, snapshots, migrations and invasive reconfigurations (such as
+    storage resource resizing). Those that do not complete immediately
+    (returning HTTP 200 OK or similar) must be handled asynchronously
+    (returning HTTP 201 Accepted or similar).</p><pre class="screen">POST /compute/123/requests HTTP/1.1
+Host: example.com
+Content-Length: 35
+Content-Type: application/x-www-form-urlencoded
+
+state=shutdown&amp;type=acpioff</pre><p>The actual operation may not start immediately (for example, backups
+    which are only handled daily at midnight) and may take some time to
+    complete (for example a secure erase which requires multiple passes over
+    the disk). Clients can poll for status periodically or use server push (or
+    a non-HTTP technology such as XMPP) to monitor for events.</p></div></div><div class="article" title="OCCI Frequently Asked Questions"><div class="titlepage"><div><div><h2 class="title"><a id="id36066287"/>OCCI Frequently Asked Questions</h2></div></div><hr/></div><div class="section" title="General"><div class="titlepage"><div><div><h2 class="title"><a id="id36066406"/>General</h2></div></div></div><div class="glosslist"><dl><dt>Who created the Open Cloud Computing Interface
+        (OCCI)?</dt><dd><p>The Open Grid Forum (OGF)'s Open Cloud Computing Interface
+          Working Group (OCCI-WG) created the Open Cloud Computing Interface
+          (OCCI).</p></dd><dt>Who are the Open Cloud Computing Interface Working Group
+        (OCCI-WG) officials?</dt><dd><p>Andrew Edmonds (Intel, SLA@SOI), Thijs Metsch (Sun
+          Microsystems) and Alexis Richardson (Rabbit Technologies Ltd) are
+          the chairs, and Sam Johnston (Australian Online Solutions) is the
+          secretary.</p></dd><dt>Who else was involved?</dt><dd><p>Around 200 individuals representing over 100 companies were
+          involved in the development of the Open Cloud Computing Interface
+          (OCCI).</p></dd></dl></div></div><div class="section" title="Use Cases"><div class="titlepage"><div><div><h2 class="title"><a id="id36066463"/>Use Cases</h2></div></div></div><div class="glosslist"><dl><dt>How were the use cases collected?</dt><dd><p>Use cases were solicited from the working group mailing list
+          as well as other external sources.</p></dd></dl></div></div><div class="section" title="Technical"><div class="titlepage"><div><div><h2 class="title"><a id="id36066488"/>Technical</h2></div></div></div><div class="glosslist"><dl><dt>Why didn't you invent your own XML
+        representation?</dt><dd><p>See Tim Bray's Don’t Invent XML
+          Languages post.</p></dd></dl></div></div></div><div class="article" title="OCCI Core Specification"><div class="titlepage"><div><div><h2 class="title"><a id="id36068729"/>OCCI Core Specification</h2></div></div><hr/></div><div class="section" title="Introduction"><div class="titlepage"><div><div><h2 class="title"><a id="id36069560"/>Introduction</h2></div></div></div><p>The Open Cloud Computing Interface (OCCI) is an open protocol for
+    all cloud computing services. A RESTful interface, it deviates from the
+    underlying HyperText Transfer Protocol (HTTP) only where absolutely
+    necessary and can be described as a "Resource Oriented Architecture
+    (ROA)".<a class="xref" href="#core-rws" title="RESTful Web Services">RWS</a> Unlike other envelope-based protocols
+    which operate in-band, all existing HTTP features are available for
+    caching, proxying, gatewaying and other advanced functionality such as
+    partial GETs.</p><p>Each resource is identified by URL(s) and has one or more
+    representations which may include a hypertext (e.g. XHTML5) rendering for
+    direct end-user accessibility. As such OCCI can present both a machine
+    interface (using native resource renderings) and a user interface (using
+    HTML markup with forms and other web technologies such as
+    Javascript/Ajax). HTTP content negotiation is used to select between
+    alternative representations and metadata including associations between
+    resources is exposed via HTTP headers (e.g. the
+    <code class="computeroutput">Link:</code> and
+    <code class="computeroutput">Category:</code> headers).</p><p>In this way OCCI is not responsible for the representations
+    themselves, rather it enables users to organise and group resources
+    together to build arbitrarily complex systems of inter-related resources.
+    It relies on existing standards for rendering and does not make any
+    recommendations of one standard format over any other.</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>This is the case for the World Wide Web today where many image,
+      video and other supporting formats co-exist. Browsers support a number
+      of the common formats and users choose the most appropriate for the
+      task.</p></div><div class="section" title="Example"><div class="titlepage"><div><div><h3 class="title"><a id="id36069607"/>Example</h3></div></div></div><pre class="screen">&gt; GET /us-east/webapp/vm01 HTTP/1.1
+&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OCCI/1.0
+&gt; Host: cloud.example.com
+&gt; Accept: */*
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Date: Sat, 10 Oct 2009 12:56:51 GMT
+&lt; Content-Type: application/ovf
+&lt; Link: &lt;/us-east/webapp/vm01;start&gt;;
+&lt;       rel="http://purl.org/occi/action/start";
+&lt;       title="Start"
+&lt; Link: &lt;/us-east/webapp/build.pdf&gt;;
+&lt;       rel="related";
+&lt;       title="Documentation";
+&lt;       type="application/pdf"
+&lt; Category: compute;
+&lt;       label="Compute Resource";
+&lt;       scheme="http://purl.org/occi/kind/"
+&lt; Server: occi-server/1.0 (linux) OCCI/1.0
+&lt; Connection: close
+&lt;
+&lt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt; &lt;Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+&lt;           xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1"
+&lt;           xmlns="http://schemas.dmtf.org/ovf/envelope/1"
+&lt;           xml:lang="en-US"&gt;
+...</pre></div></div><div class="section" title="Basics"><div class="titlepage"><div><div><h2 class="title"><a id="id36069626"/>Basics</h2></div></div></div><div class="section" title="Entry point"><div class="titlepage"><div><div><h3 class="title"><a id="id36069631"/>Entry point</h3></div></div></div><p>The interface is defined by a single URL entry point which will
+      either be a <em class="glossterm">collection</em>, contain
+      <em class="glossterm">link</em>(s) to <em class="glossterm">collection</em>(s)
+      or both.</p></div><div class="section" title="Kinds, Actions &amp; Attributes"><div class="titlepage"><div><div><h3 class="title"><a id="id36069653"/>Kinds, Actions &amp; Attributes</h3></div></div></div><p>An interface exposes "kinds" which have "attributes" and on which
+      "actions" can be performed. The attributes are exposed as key-value
+      pairs and applicable actions as links, following the REST hypertext
+      constraint (whereby state transitions are defined
+      <em class="glossterm">in-band</em> rather than via rules).</p></div><div class="section" title="HTTP Verbs"><div class="titlepage"><div><div><h3 class="title"><a id="id36069669"/>HTTP Verbs</h3></div></div></div><p>Create, Retrieve, Update and Delete (CRUD) operations map to the
+      POST, GET, PUT and DELETE HTTP verbs respectively. HEAD and OPTIONS
+      verbs may be used to retrieve metadata and valid operations without the
+      entity body to improve performance. WebDAV definitions are used for
+      MKCOL, MOVE and COPY.</p><div class="glosslist"><dl><dt>POST (Create)</dt><dd><p><span class="quote">“<span class="quote">The POST method is used to request that the origin
+            server accept the entity enclosed in the request as a new
+            subordinate of the resource identified by the Request-URI in the
+            Request-Line.</span>”</span><a class="xref" href="#core-rfc2616" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1">RFC2616</a></p><p>POSTing a representation (e.g. OVF) to a collection (e.g.
+            /compute) will result in a new resource being created (e.g.
+            /compute/123) and returned in the Location: header. POST is also
+            used with HTML form data to trigger verbs (e.g. restart)</p></dd><dt>GET (Retrieve - Metadata and Entity)</dt><dd><p><span class="quote">“<span class="quote">The GET method means retrieve whatever information
+            (in the form of an entity) is identified by the
+            Request-URI.</span>”</span><a class="xref" href="#core-rfc2616" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1">RFC2616</a></p><p>GETting a resource (e.g. /compute/123) will return a
+            representation of that resource in the most appropriate supported
+            format specified by the client in the Accept header. Otherwise
+            "406 Not Acceptable" will be returned.</p></dd><dt>PUT (Create or Update)</dt><dd><p><span class="quote">“<span class="quote">The PUT method requests that the enclosed entity be
+            stored under the supplied Request-URI.</span>”</span><a class="xref" href="#core-rfc2616" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1">RFC2616</a></p><p>PUTting a representation (e.g. OVF) to a URL (e.g.
+            /compute/123) will result in the resource being created or
+            updated. The URL is known or selected by the client (in which case
+            UUIDs should be used), in contrast to POSTs where the URL is
+            selected by the server.</p></dd><dt>DELETE (Delete)</dt><dd><p><span class="quote">“<span class="quote">The DELETE method requests that the origin server
+            delete the resource identified by the Request-URI.</span>”</span><a class="xref" href="#core-rfc2616" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1">RFC2616</a></p><p>DELETE results in the deletion of the resource (and
+            everything "under" it, as appropriate).</p></dd></dl></div><p>Additionally the following HTTP methods are used:</p><div class="glosslist"><dl><dt>COPY (Duplicate)</dt><dd><p><span class="quote">“<span class="quote">The COPY method creates a duplicate of the source
+            resource identified by the Request-URI, in the destination
+            resource identified by the URI in the Destination
+            header.</span>”</span><a class="xref" href="#core-rfc4918" title="RFC 4918 - HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)">RFC4918</a></p></dd><dt>HEAD (Retrieve - Metadata Only)</dt><dd><p><span class="quote">“<span class="quote">The HEAD method is identical to GET except that the
+            server MUST NOT return a message-body in the
+            response.</span>”</span><a class="xref" href="#core-rfc2616" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1">RFC2616</a></p></dd><dt>MKCOL (Make Collection)</dt><dd><p><span class="quote">“<span class="quote">MKCOL creates a new collection resource at the
+            location specified by the Request-URI.</span>”</span><a class="xref" href="#core-rfc4918" title="RFC 4918 - HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)">RFC4918</a></p></dd><dt>MOVE (Relocate)</dt><dd><p><span class="quote">“<span class="quote">The MOVE operation on a non-collection resource is
+            the logical equivalent of a copy (COPY), followed by consistency
+            maintenance processing, followed by a delete of the source, where
+            all three actions are performed in a single
+            operation.</span>”</span><a class="xref" href="#core-rfc4918" title="RFC 4918 - HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)">RFC4918</a></p></dd><dt>OPTIONS</dt><dd><p><span class="quote">“<span class="quote">The OPTIONS method represents a request for
+            information about the communication options available on the
+            request/response chain identified by the Request-URI.</span>”</span><a class="xref" href="#core-rfc2616" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1">RFC2616</a></p></dd></dl></div></div></div><div class="section" title="Connection"><div class="titlepage"><div><div><h2 class="title"><a id="id36069890"/>Connection</h2></div></div></div><div class="section" title="Authentication"><div class="titlepage"><div><div><h3 class="title"><a id="id36069896"/>Authentication</h3></div></div></div><p>Servers <span class="emphasis"><em>may</em></span> require that requests be
+      authenticated using standard HTTP-based authentication mechanisms
+      (including OAuth).<a class="xref" href="#core-oauth" title="OAuth">OAuth</a> They indicate this
+      requirement by returning <code class="code">HTTP 401</code> with a
+      <code class="code">WWW-Authenticate</code> header and a suitable challenge (e.g.
+      <code class="code">Basic</code>, <code class="code">Digest</code>, <code class="code">OAuth</code>). The client
+      then includes appropriate <code class="code">Authorization</code> headers in its
+      responses.<a class="xref" href="#core-rfc2617" title="RFC 2617 - HTTP Authentication: Basic and Digest Access Authentication">RFC2617</a></p><p>Servers <span class="emphasis"><em>may</em></span> set and clients
+      <span class="emphasis"><em>may</em></span> accept <em class="glossterm">cookies</em> in order
+      to maintain authentication state between requests. Such sessions
+      <span class="emphasis"><em>should not</em></span> be used for other purposes (such as
+      server-side state) in line with RESTful principles.<a class="xref" href="#core-rfc2109" title="RFC 2109 - HTTP State Management Mechanism">RFC2109</a></p></div><div class="section" title="Versioning"><div class="titlepage"><div><div><h3 class="title"><a id="id36069962"/>Versioning</h3></div></div></div><p>Servers and clients <span class="emphasis"><em>should</em></span> indicate the
+      latest version of OCCI they support (e.g.
+      <code class="computeroutput">1.0</code>) by way of the
+      <code class="computeroutput">Server:</code> and
+      <code class="computeroutput">User-Agent:</code> headers respectively, using
+      the token <span class="quote">“<span class="quote"><code class="computeroutput">OCCI</code></span>”</span> (e.g.
+      <span class="quote">“<span class="quote"><code class="computeroutput">OCCI/1.0</code></span>”</span>). If none is
+      provided the latest available version <span class="emphasis"><em>shall</em></span> be
+      used.</p></div></div><div class="section" title="Model"><div class="titlepage"><div><div><h2 class="title"><a id="id36070001"/>Model</h2></div></div></div><p>The model defines the objects themselves without regard to how they
+    interrelate.</p><div class="section" title="Kinds"><div class="titlepage"><div><div><h3 class="title"><a id="id36070011"/>Kinds</h3></div></div></div><p>Each category of resources distinguished by some common
+      characteristic or quality is called a <em class="glossterm">kind</em> (e.g.
+      <code class="computeroutput">compute</code>,
+      <code class="computeroutput">network</code>,
+      <code class="computeroutput">storage</code>,
+      <code class="computeroutput">queue</code>,
+      <code class="computeroutput">application</code>,
+      <code class="computeroutput">contact</code>).</p><p>Kinds defined by this standard live in the
+      <code class="uri">http://purl.org/occi/kind/</code> namespace but anyone can define a
+      new kind by allocating a URI they control.</p><div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>Defining your own kinds can lead to interoperability problems
+        and should be a last resort reserved for unique functionality. A
+        simple peer review process is available for extending the registries
+        which should be used where possible.</p></div><p>Each resource <span class="emphasis"><em>must</em></span> specify a kind by way of a
+      <em class="glossterm">category</em> within the <em class="glossterm">scheme</em>
+      <span class="quote">“<span class="quote"><code class="uri">http://purl.org/occi/kind/</code></span>”</span>.</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>The word <em class="glossterm">type</em> is not used in this context
+        in order to avoid confusion with Internet media types.</p></div></div><div class="section" title="Attributes"><div class="titlepage"><div><div><h3 class="title"><a id="id36070094"/>Attributes</h3></div></div></div><p>An <em class="glossterm">attribute</em> is a specification that
+      defines a property of an object. It is expressed in the form of
+      key-value pairs. Attributes are divided into namespaces which are
+      separated by the dot character (<span class="quote">“<span class="quote">.</span>”</span>).</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>This scalable approach was derived from the Mozilla Firefox
+        <code class="uri">about:config</code> page.</p></div><p>Attributes defined by this standard reside under the
+      <code class="computeroutput">occi</code> namespace (e.g.
+      "<code class="computeroutput">occi.abc</code>") but anyone can define a new
+      attribute by allocating a unique namespace based on their reversed
+      Internet domain (e.g.
+      <span class="quote">“<span class="quote"><code class="computeroutput">com.cisco.cdp</code></span>”</span>).</p><div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>Defining your own attributes can lead to interoperability
+        problems and should be a last resort reserved for unique
+        functionality. A simple peer review process is available for extending
+        the registries which should be used where possible.</p></div><div class="section" title="Registry Entries"><div class="titlepage"><div><div><h4 class="title"><a id="id36070148"/>Registry Entries</h4></div></div></div><div class="table"><a id="id36070154"/><p class="title"><b>Table 1. Core Attributes</b></p><div class="table-contents"><table summary="Core Attributes" border="1"><colgroup><col style="text-align: center"/><col/><col/><col/></colgroup><thead><tr><th style="text-align: left">Attribute</th><th>Description</th><th>Type</th><th>Example</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">occi.id</code></td><td>Immutable identifier for the resource</td><td>URI</td><td><code class="uri">urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.title</code></td><td>Display name for the resource</td><td>String</td><td><code class="computeroutput">Compute Resource
+                #123</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.summary</code></td><td>Description of the resource</td><td>String</td><td><code class="computeroutput">A virtual compute
+                resource</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.version</code></td><td>Specification version</td><td>Float</td><td><code class="computeroutput">1.0</code></td></tr></tbody></table></div></div><br class="table-break"/></div></div><div class="section" title="Actions"><div class="titlepage"><div><div><h3 class="title"><a id="id36070289"/>Actions</h3></div></div></div><p>An <em class="glossterm">action</em> is some process that can be
+      carried out on one or more <em class="glossterm">resource</em>s.</p><p>Each available <em class="glossterm">action</em> for a given
+      <em class="glossterm">resource</em> is indicated via a
+      <em class="glossterm">link</em> with the
+      <code class="computeroutput">action</code> class.</p><pre class="screen">Link: &lt;/us-east/webapp/vm01;start&gt;;
+      rel="http://purl.org/occi/action/start";
+      title="Start"</pre><p>Actions defined by this standard reside under the
+      <code class="uri">http://purl.org/occi/action/</code> namespace but anyone can define
+      a new action by allocating a URI they control.</p><div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>Defining your own actions can lead to interoperability problems
+        and should be a last resort reserved for unique functionality. A
+        simple peer review process is available for extending the registries
+        which should be used where possible.</p></div><p>An <em class="glossterm">action</em> is triggered via an HTTP POST and
+      depending on the action requested (e.g.
+      <code class="computeroutput">resize</code>), parameters
+      <span class="emphasis"><em>may</em></span> be provided using HTML forms (e.g.
+      <code class="computeroutput">application/x-www-form-encoded</code>). In the
+      case of HTML-based renderings the actions can therefore be actual HTML
+      forms.</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Some resources can be interacted with but not rendered due to
+        the nature of the resource or prevailing security policies (for
+        example, an operator may be able to backup a machine without knowing
+        anything about it).</p></div><div class="section" title="Asynchronous Actions"><div class="titlepage"><div><div><h4 class="title"><a id="id36070373"/>Asynchronous Actions</h4></div></div></div><p>Synchronous actions <span class="emphasis"><em>may</em></span> return
+        <code class="computeroutput">200 OK</code> on successful completion or
+        <code class="computeroutput">201 Created</code> with a
+        <code class="computeroutput">Location:</code> header indicating a new
+        resource for audit purposes.</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Assume that clients are paranoid and want audit trails for all
+          but the most trivial of actions.</p></div><p>In the event that the <em class="glossterm">action</em> does not
+        complete immediately it <span class="emphasis"><em>should</em></span> return
+        <code class="computeroutput">HTTP 202 Accepted</code> and a
+        <code class="computeroutput">Location:</code> header indicating a new
+        resource where status and other pertinent information can be
+        obtained.</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Don't keep clients waiting - if you're not sure to return
+          immediately then give them a resource they can monitor.</p></div></div><div class="section" title="Advanced Actions"><div class="titlepage"><div><div><h4 class="title"><a id="id36070433"/>Advanced Actions</h4></div></div></div><p>The specific parameters required and allowable values for them
+        depend on the action and for advanced actions <span class="emphasis"><em>may</em></span>
+        require sending of custom <em class="glossterm">content type</em>s rather
+        than
+        <code class="computeroutput">application/x-www-form-encoded</code>.</p></div></div></div><div class="section" title="Meta-model"><div class="titlepage"><div><div><h2 class="title"><a id="id36070458"/>Meta-model</h2></div></div></div><p>The meta-model defines how objects interrelate.</p><div class="section" title="Categories"><div class="titlepage"><div><div><h3 class="title"><a id="id36070467"/>Categories</h3></div></div></div><p><em class="glossterm">Category</em> information allows for flexible
+      organisation of resources into one or more vocabularies (each of which
+      is referred to as a <em class="glossterm">scheme</em>).</p><p>The meta-model was derived from Atom, consisting of three
+      attributes:</p><div class="glosslist"><dl><dt>term</dt><dd><p>The term itself (e.g.
+            <span class="quote">“<span class="quote"><code class="computeroutput">compute</code></span>”</span>)</p></dd><dt>scheme (optional)</dt><dd><p>The vocabulary (e.g.
+            <span class="quote">“<span class="quote"><code class="computeroutput">http://purl.org/occi/kind/</code></span>”</span>)</p></dd><dt>label (optional)</dt><dd><p>A human-friendly display name for the term (e.g.
+            <span class="quote">“<span class="quote"><code class="computeroutput">Compute
+            Resource</code></span>”</span>)</p></dd></dl></div><p>Category schemes and/or terms defined by this standard reside
+      throughout the <code class="uri">http://purl.org/occi/</code> namespace but anyone can
+      define a new scheme by allocating a URI they control.</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Categories provide a flexible way to manage resources by
+        taxonomy (categories) and/or folksonomy (tags), where both can be
+        shared between [groups of] users or globally. For example, users can
+        create schemes for resource locations (e.g.
+        <code class="computeroutput">US-East</code>,
+        <code class="computeroutput">US-West</code>,
+        <code class="computeroutput">Europe</code>), operating systems (e.g.
+        <code class="computeroutput">Windows</code>,
+        <code class="computeroutput">Linux</code>) and patch levels (e.g.</p></div><div class="section" title="Examples"><div class="titlepage"><div><div><h4 class="title"><a id="id36070583"/>Examples</h4></div></div></div><pre class="screen">Category: compute;
+      label="Compute Resource";
+      scheme="http://purl.org/occi/kind/"</pre></div><div class="section" title="Querying"><div class="titlepage"><div><div><h4 class="title"><a id="id36070594"/>Querying</h4></div></div></div><p class="remark"><i><span class="remark">TODO: Pull query interface from GData:
+        http://code.google.com/apis/gdata/docs/2.0/reference.html#Queries</span></i></p></div><div class="section" title="Registry Entries"><div class="titlepage"><div><div><h4 class="title"><a id="id36070605"/>Registry Entries</h4></div></div></div><div class="table"><a id="id36070611"/><p class="title"><b>Table 2. Core Category Schemes</b></p><div class="table-contents"><table summary="Core Category Schemes" border="1"><colgroup><col style="text-align: center"/><col/></colgroup><thead><tr><th style="text-align: left">Scheme</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">http://purl.org/occi/kind/</code></td><td>OCCI Kinds</td></tr></tbody></table></div></div><br class="table-break"/></div></div><div class="section" title="Collections"><div class="titlepage"><div><div><h3 class="title"><a id="id36070664"/>Collections</h3></div></div></div><p>Where an operation could return multiple resources (e.g.
+      categories, searches) this is referred to as a
+      <em class="glossterm">collection</em>. Collections are returned as a list of
+      URLs in <code class="computeroutput">text/uri-list</code> format.<a class="xref" href="#core-rfc2483" title="RFC 2483 - URI Resolution Services Necessary for URN Resolution">RFC2483</a></p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Collections are passed by reference for simplicity rather than
+        performance reasons, requiring O(n+1) requests. Including metadata
+        (requiring a wrapper format like Atom or SOAP) and/or the data itself
+        would provide O(1) performance, though passing by value should only be
+        considered where the representations are known to be small as such
+        encodings add significant overhead.</p></div><div class="section" title="Examples"><div class="titlepage"><div><div><h4 class="title"><a id="id36070694"/>Examples</h4></div></div></div><pre class="screen"># OCCI Example Collection
+/examples/custom-extension
+/examples/lamp-multi-vm
+/examples/lamp
+/examples/myservice</pre></div><div class="section" title="Advertising"><div class="titlepage"><div><div><h4 class="title"><a id="id36070706"/>Advertising</h4></div></div></div><p>Any given URL can be a collection and/or advertise
+        <em class="glossterm">link</em>s to other
+        <em class="glossterm">collection</em>s using the
+        <code class="computeroutput">collection</code> class:</p><pre class="screen">Link: &lt;http://example.com/123/audit&gt;;
+      rel="http://purl.org/occi/collection/audit";
+      title="Audit Entries"</pre><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>The root (<span class="quote">“<span class="quote">/</span>”</span>) <span class="emphasis"><em>should</em></span> expose
+          collections <em class="glossterm">in-band</em> and/or
+          <em class="glossterm">out-of-band</em> in order for clients to discover
+          resources.</p></div></div><div class="section" title="Paging"><div class="titlepage"><div><div><h4 class="title"><a id="id36070753"/>Paging</h4></div></div></div><p>Collections <span class="emphasis"><em>may</em></span> be divided into
+        <em class="glossterm">page</em>s, with each linking to the
+        <span class="quote">“<span class="quote">first</span>”</span>, <span class="quote">“<span class="quote">last</span>”</span>, <span class="quote">“<span class="quote">next</span>”</span> and
+        <span class="quote">“<span class="quote">previous</span>”</span> <em class="glossterm">link relation</em>s.</p><pre class="screen">Link: &lt;http://example.com/xyz;start=0&gt;; rel="first"
+Link: &lt;http://example.com/xyz;start=400&gt;; rel="previous"
+Link: &lt;http://example.com/xyz;start=500&gt;; rel="self"
+Link: &lt;http://example.com/xyz;start=600&gt;; rel="next"
+Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</pre></div></div><div class="section" title="Linking"><div class="titlepage"><div><div><h3 class="title"><a id="id36070795"/>Linking</h3></div></div></div><p>Web linking standards for HTTP [<a class="xref" href="#core-link" title="Web Linking">LINK</a>] and
+      HTML [<a class="xref" href="#core-html5" title="HTML 5">HTML5</a>] are used to indicate associations
+      between resources. All formats <span class="emphasis"><em>must</em></span> support
+      <em class="glossterm">in-band</em> linking including:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Link relations (e.g.
+          <code class="computeroutput">rel="alternate"</code>)</p></li><li class="listitem"><p>Pointers to resources (e.g.
+          <code class="computeroutput">href="http://example.com/"</code>)</p></li><li class="listitem"><p>Internet media types (e.g.
+          <code class="computeroutput">type="text/html"</code>)</p></li><li class="listitem"><p>Extensibility (e.g.
+          <code class="computeroutput">attribute="value"</code>)</p></li></ul></div><pre class="screen">Link: &lt;/us-east/webapp/build.pdf&gt;;
+      rel="related";
+      title="Documentation";
+      type="application/pdf"</pre><p><em class="glossterm">Link relation</em>s defined by this standard
+      reside under the <code class="uri">http://purl.org/occi/rel</code> namespace but
+      anyone can define a new <em class="glossterm">link relation</em> by
+      allocating a URI they control.</p><div class="section" title="Registry Entries"><div class="titlepage"><div><div><h4 class="title"><a id="id36071020"/>Registry Entries</h4></div></div></div><div class="table"><a id="id36071026"/><p class="title"><b>Table 3. Core Link Relations</b></p><div class="table-contents"><table summary="Core Link Relations" border="1"><colgroup><col style="text-align: center"/><col/></colgroup><thead><tr><th style="text-align: left">Relation</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">collection</code>
+                (<code class="uri">http://purl.org/occi/rel#collection</code>)</td><td><p>A related collection whereby:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>The root of the collection is indicated by the
+                      <code class="computeroutput">href</code> attribute.</p></li><li class="listitem"><p>The <em class="glossterm">kind</em> of the collection
+                      is indicated by the
+                      <code class="computeroutput">kind</code> extended
+                      attribute.</p></li></ul></div></td></tr><tr><td style="text-align: left"><code class="computeroutput">first</code></td><td><span class="quote">“<span class="quote">An IRI that refers to the furthest preceding
+                resource in a series of resources.</span>”</span> [<a class="xref" href="#core-link" title="Web Linking">LINK</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">help</code></td><td><span class="quote">“<span class="quote">The referenced document provides further help
+                information for the page as a whole.</span>”</span> [<a class="xref" href="#core-html5" title="HTML 5">HTML5</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">icon</code></td><td><span class="quote">“<span class="quote">The specified resource is an icon representing
+                the page or site, and should be used by the user agent when
+                representing the page in the user interface.</span>”</span> [<a class="xref" href="#core-html5" title="HTML 5">HTML5</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">last</code></td><td><span class="quote">“<span class="quote">An IRI that refers to the furthest following
+                resource in a series of resources.</span>”</span> [<a class="xref" href="#core-link" title="Web Linking">LINK</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">next</code></td><td><span class="quote">“<span class="quote">A URI that refers to the immediately following
+                document in a series of documents.</span>”</span> [<a class="xref" href="#core-link" title="Web Linking">LINK</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">previous</code></td><td><span class="quote">“<span class="quote">A URI that refers to the immediately preceding
+                document in a series of documents.</span>”</span> [<a class="xref" href="#core-link" title="Web Linking">LINK</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">search</code></td><td><span class="quote">“<span class="quote">The referenced document provides an interface
+                specifically for searching the document and its related
+                resources.</span>”</span> [<a class="xref" href="#core-html5" title="HTML 5">HTML5</a>, <a class="xref" href="#core-opensearch" title="OpenSearch 1.1">OpenSearch</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">self</code></td><td><span class="quote">“<span class="quote">Identifies a resource equivalent to the
+                containing element</span>”</span> [<a class="xref" href="#core-rfc4287" title="RFC 4287 - The Atom Syndication Format">RFC4287</a>]</td></tr></tbody></table></div></div><br class="table-break"/></div></div></div><div class="section" title="Extensibility"><div class="titlepage"><div><div><h2 class="title"><a id="id36071290"/>Extensibility</h2></div></div></div><p>The interface is fully extensible, both via a public peer review
+    process (in order to update the specification itself, usually via
+    registries) and via independent allocation of unique namespaces (in order
+    to cater for vendor-specific enhancements).</p><div class="section" title="Foreign markup"><div class="titlepage"><div><div><h3 class="title"><a id="id36071301"/>Foreign markup</h3></div></div></div><p>Implementations <span class="emphasis"><em>must</em></span> accept and forward but
+      otherwise ignore markup they do not understand.</p></div></div><div class="section" title="Security Considerations"><div class="titlepage"><div><div><h2 class="title"><a id="id36071317"/>Security Considerations</h2></div></div></div><p>Encryption is not required by the specification in order to cater
+    for sites that do not or can not use it (e.g. due to export restrictions,
+    performance reasons, etc.), however SSL/TLS <span class="emphasis"><em>should</em></span> be
+    used over public networks including the Internet.</p></div><div class="glossary" title="Glossary"><div class="titlepage"><div><div><h2 class="title"><a id="id36071333"/>Glossary</h2></div></div></div><dl><dt>in-band</dt><dd><p><span class="quote">“<span class="quote">Sending of metadata and control information in the same
+        band, on the same channel, as used for data</span>”</span>, for example, by
+        embedding it in HTML. [<code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/In-band" target="">http://en.wikipedia.org/wiki/In-band</a></code>]</p></dd><dt>kind</dt><dd><p><span class="quote">“<span class="quote">A category of things distinguished by some common
+        characteristic or quality</span>”</span>, for example events, messages,
+        media. [<code class="uri"><a class="uri" href="http://wordnetweb.princeton.edu/perl/webwn?s=kind" target="">http://wordnetweb.princeton.edu/perl/webwn?s=kind</a></code>]</p></dd><dt>out-of-band</dt><dd><p><span class="quote">“<span class="quote">Communications which occur outside of a previously
+        established communications method or channel</span>”</span>, for example, in
+        HTTP headers. [<code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/Out-of-band_signaling" target="">http://en.wikipedia.org/wiki/Out-of-band_signaling</a></code>]</p></dd><dt>type</dt><dd><p>Internet media (<acronym class="acronym">MIME</acronym>) type.</p></dd></dl></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36071424"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36071426"/><p class="bibliomixed">Normative References</p></div><div class="biblioentry" title="RFC 2109 - HTTP State Management Mechanism"><a id="core-rfc2109"/><p>[RFC2109] <span class="title"><i>RFC 2109 - HTTP State Management Mechanism</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2109" target="">http://tools.ietf.org/html/rfc2109</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">1997-02. </span></p></div><div class="biblioentry" title="RFC 2483 - URI Resolution Services Necessary for URN Resolution"><a id="core-rfc2483"/><p>[RFC2483] <span class="title"><i>RFC 2483 - URI Resolution Services Necessary for URN
+      Resolution</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2109" target="">http://tools.ietf.org/html/rfc2483#section-5</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">1999-01. </span></p></div><div class="biblioentry" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1"><a id="core-rfc2616"/><p>[RFC2616] <span class="title"><i>RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2616" target="">http://tools.ietf.org/html/rfc2616</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">1999-06. </span></p></div><div class="biblioentry" title="RFC 2617 - HTTP Authentication: Basic and Digest Access Authentication"><a id="core-rfc2617"/><p>[RFC2617] <span class="title"><i>RFC 2617 - HTTP Authentication: Basic and Digest Access
+      Authentication</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2616" target="">http://tools.ietf.org/html/rfc2617</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">1999-06. </span></p></div><div class="biblioentry" title="RFC 3339 - Date and Time on the Internet: Timestamps"><a id="core-rfc3339"/><p>[RFC3339] <span class="title"><i>RFC 3339 - Date and Time on the Internet: Timestamps</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc3339" target="">http://tools.ietf.org/html/rfc3339</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">2002-07. </span></p></div><div class="biblioentry" title="RFC 4918 - HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)"><a id="core-rfc4918"/><p>[RFC4918] <span class="title"><i>RFC 4918 - HTTP Extensions for Web Distributed Authoring and
+      Versioning (WebDAV)</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2616" target="">http://tools.ietf.org/html/rfc4918</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">2007-06. </span></p></div><div class="biblioentry" title="OpenSearch 1.1"><a id="core-opensearch"/><p>[OpenSearch] <span class="title"><i>OpenSearch 1.1</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2616" target="">http://www.opensearch.org/Specifications/OpenSearch/1.1</a></code>. </span><span class="org">
+        <span class="orgname">A9.com, Inc. (an Amazon company)</span>
+      </span><span class="author">Clinton DeWitt. </span><span class="collab"><span class="personname">Joel Tesler</span>. </span><span class="collab"><span class="personname">Michael Fagan</span>. </span><span class="collab"><span class="personname">Joe Gregorio</span>. </span><span class="collab"><span class="personname">Aaron Sauve</span>. </span><span class="collab"><span class="personname">James Snell</span>. </span><span class="date">2009. </span></p></div><div class="bibliomixed"><a id="id36071680"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry" title="RFC 4287 - The Atom Syndication Format"><a id="core-rfc4287"/><p>[RFC4287] <span class="title"><i>RFC 4287 - The Atom Syndication Format</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target="">http://tools.ietf.org/html/rfc4287</a></code>. </span><span class="author">Robert Syre. </span><span class="author">Mark Nottingham. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">2005-12. </span></p></div><div class="biblioentry" title="HTML 5"><a id="core-html5"/><p>[HTML5] <span class="title"><i>HTML 5</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target="">http://www.w3.org/TR/html5/</a></code>. </span><span class="author">Ian Hickson. </span><span class="author">David Hyatt. </span><span class="org">
+        <span class="orgname">World Wide Web Consortium (W3C)</span>
+      </span><span class="date">2009-08-25. </span></p></div><div class="biblioentry" title="OAuth"><a id="core-oauth"/><p>[OAuth] <span class="title"><i>OAuth</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2616" target="">http://oauth.net/core/1.0</a></code>. </span><span class="org">
+        <span class="orgname">OAuth Core Workgroup</span>
+      </span><span class="address"><code class="email">&lt;<a class="email" href="mailto:spec@oauth.net">spec@oauth.net</a>&gt;</code>. </span><span class="date">2007-12-04. </span></p></div><div class="biblioentry" title="RESTful Web Services"><a id="core-rws"/><p>[RWS] <span class="title"><i>RESTful Web Services</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://oreilly.com/catalog/9780596529260/" target="">http://oreilly.com/catalog/9780596529260/</a></code>. </span><span class="biblioid">9780596529260. </span><span class="org">
+        <span class="orgname">O'Reilly Media</span>
+      </span><span class="author">Leonard Richardson. </span><span class="author">Sam Ruby. </span><span class="date">2007-05. </span></p></div><div class="biblioentry" title="Web Linking"><a id="core-link"/><p>[LINK] <span class="title"><i>Web Linking</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/draft-nottingham-http-link-header" target="">http://tools.ietf.org/html/draft-nottingham-http-link-header</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="author">Mark Nottingham. </span><span class="date">2009-07-12. </span></p></div><div class="biblioentry" title="Web Categories"><a id="core-category"/><p>[CATEGORY] <span class="title"><i>Web Categories</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/draft-johnston-http-category-header" target="">http://tools.ietf.org/html/draft-johnston-http-category-header</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="author">Sam Johnston. </span><span class="date">2009-07-1. </span></p></div></div></div><div class="article" title="OCCI Machine Interface (HTTP)"><div class="titlepage"><div><div><h1 class="title"><a id="id36063431"/>OCCI Machine Interface (HTTP)</h1></div><div><div class="author"><h3 class="author"><span class="orgname">OCCI-WG</span></h3></div></div><div><p class="pubdate">2009-10-07</p></div></div><hr/></div><div class="section" title="Specification"><div class="titlepage"><div><div><h2 class="title"><a id="id36069472"/>Specification</h2></div></div></div><p>The HTTP binding for OCCI provides a machine interface, delivering
+    resources in their native formats:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>The HTTP binding is defined by <a class="xref" href="#http-rfc2616" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1">RFC2616</a>
+        (HTTP).</p></li><li class="listitem"><p>Web Linking [<a class="xref" href="#http-link" title="Web Linking">LINK</a>] and Web Categories
+        [<a class="xref" href="#http-category" title="Web Categories">CATEGORY</a>] specifications are used for the
+        meta-model.</p></li><li class="listitem"><p>Server-side cookies ("Attributes") are used for name-value
+        pairs.</p></li><li class="listitem"><p>Collections are transferred as the
+        <code class="computeroutput">text/uri-list</code> content type.<a class="xref" href="#http-rfc2483" title="RFC 2483 - URI Resolution Services Necessary for URN Resolution">RFC2483</a></p></li></ul></div><p>In all cases the same process as for Cookies (defined in <a class="xref" href="#http-rfc2965" title="RFC 2965 - HTTP State Management Mechanism">RFC2965</a>) is used to set/get headers, where
+    <code class="computeroutput">[Set-]Attribute:</code>,
+    <code class="computeroutput">[Set-]Category:</code> and
+    <code class="computeroutput">[Set-]Link:</code> are used in place of
+    <code class="computeroutput">Cookie:</code> and
+    <code class="computeroutput">Set-Cookie:</code>.
+    <code class="computeroutput">Set-*</code> headers may also be included on PUT
+    or POST requests (including empty POSTs in order to update the metadata
+    independently of the representation).</p><p>Existing values can be discarded by sending a
+    <code class="computeroutput">Set-*</code> header with the
+    <code class="computeroutput">discard</code> attribute and updated atomically
+    by providing a new value in the same HTTP transaction.</p></div><div class="section" title="Example"><div class="titlepage"><div><div><h2 class="title"><a id="id36068816"/>Example</h2></div></div></div><div class="section" title="POST Request"><div class="titlepage"><div><div><h3 class="title"><a id="id36068822"/>POST Request</h3></div></div></div><pre class="screen">POST /compute/123 HTTP/1.1
+Host: example.com
+Content-Length: 0
+Set-Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
+Set-Category: compute;
+  scheme="http://purl.org/occi/kind/";
+  label="Compute Resource"
+Set-Link: &lt;http://example.com/products/1234&gt;;
+  rel="alternate";
+  title="Alternate representation"</pre></div><div class="section" title="GET Response"><div class="titlepage"><div><div><h3 class="title"><a id="id36068835"/>GET Response</h3></div></div></div><pre class="screen">Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
+Attribute: title="Compute Resource #123"
+Attribute: summary="A virtual compute resource"
+Attribute: updated="2009-12-31T12:59:59Z"
+Attribute: compute.cores=2
+Attribute: compute.speed=3000
+Attribute: compute.memory=2048
+ETag: "dad86c61eea237932f"
+Category: compute;
+  scheme="http://purl.org/occi/kind/";
+  label="Compute Resource"
+Link: &lt;http://example.com/products/1234&gt;;
+  rel="alternate";
+  title="Alternate representation"
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;ovf:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:ovf="http://schemas.dmtf.org/ovf/1/envelope"
+&lt;!-- snip --&gt;</pre></div></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36068852"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36068854"/><p class="bibliomixed">Normative References</p></div><div class="biblioentry" title="RFC 2483 - URI Resolution Services Necessary for URN Resolution"><a id="http-rfc2483"/><p>[RFC2483] <span class="title"><i>RFC 2483 - URI Resolution Services Necessary for URN
+      Resolution</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2109" target="">http://tools.ietf.org/html/rfc2483#section-5</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">1999-01. </span></p></div><div class="biblioentry" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1"><a id="http-rfc2616"/><p>[RFC2616] <span class="title"><i>RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2616" target="">http://tools.ietf.org/html/rfc2616</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">1999-06. </span></p></div><div class="biblioentry" title="RFC 2965 - HTTP State Management Mechanism"><a id="http-rfc2965"/><p>[RFC2965] <span class="title"><i>RFC 2965 - HTTP State Management Mechanism</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2822" target="">http://tools.ietf.org/html/rfc2965</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">2000-10. </span></p></div><div class="bibliomixed"><a id="id36068946"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry" title="Web Categories"><a id="http-category"/><p>[CATEGORY] <span class="title"><i>Web Categories</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/draft-johnston-http-category-header" target="">http://tools.ietf.org/html/draft-johnston-http-category-header</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="author">Sam Johnston. </span><span class="date">2009-07-1. </span></p></div><div class="biblioentry" title="Web Linking"><a id="http-link"/><p>[LINK] <span class="title"><i>Web Linking</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/draft-nottingham-http-link-header" target="">http://tools.ietf.org/html/draft-nottingham-http-link-header</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="author">Mark Nottingham. </span><span class="date">2009-07-12. </span></p></div><div class="biblioentry" title="Designing a great HTTP API - why heavyweight XML is not the answer"><a id="html5-article"/><p>[HTML5-article] <span class="title"><i>Designing a great HTTP API - why heavyweight XML is not the
+      answer</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/" target="">http://www.elastichosts.com/blog/2009/01/01/designing-a-great-http-api/</a></code>. </span><span class="author">. </span><span class="date">2009-01-01. </span></p></div></div></div><div class="article" title="OCCI Infrastructure"><div class="titlepage"><div><div><h2 class="title"><a id="id36063963"/>OCCI Infrastructure</h2></div></div><hr/></div><p>OCCI Infrastructure defines three kinds and various extensions
+  relating to management of cloud infrastructure services (IaaS).</p><div class="table"><a id="id36064319"/><p class="title"><b>Table 1. Common Attributes</b></p><div class="table-contents"><table summary="Common Attributes" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">occi.infrastructure.hostname</code></td><td>String</td><td>Valid DNS hostname for the resource (may be FQDN)</td></tr></tbody></table></div></div><br class="table-break"/><div class="section" title="Kinds"><div class="titlepage"><div><div><h2 class="title"><a id="id36064376"/>Kinds</h2></div></div></div><p>Cloud infrastructure can be modeled using three primary kinds:
+    <code class="computeroutput">compute</code>,
+    <code class="computeroutput">network</code> and
+    <code class="computeroutput">storage</code>.</p><div class="table"><a id="id36064395"/><p class="title"><b>Table 2. Kinds</b></p><div class="table-contents"><table summary="Kinds" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Kind</th><th>URI</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">compute</code></td><td><code class="uri">http://purl.org/occi/kind/compute</code></td><td>Information processing resources</td></tr><tr><td style="text-align: left"><code class="computeroutput">network</code></td><td><code class="uri">http://purl.org/occi/kind/network</code></td><td>Interconnection resources</td></tr><tr><td style="text-align: left"><code class="computeroutput">storage</code></td><td><code class="uri">http://purl.org/occi/kind/storage</code></td><td>Recorded information resources</td></tr></tbody></table></div></div><br class="table-break"/><div class="section" title="Compute"><div class="titlepage"><div><div><h3 class="title"><a id="id36064928"/>Compute</h3></div></div></div><p>A compute resource is capable of conducting computations (e.g. a
+      virtual machine).</p><div class="section" title="Attributes"><div class="titlepage"><div><div><h4 class="title"><a id="id36064938"/>Attributes</h4></div></div></div><p>The following attributes apply to this kind:</p><div class="table"><a id="id36064947"/><p class="title"><b>Table 3. Compute Attributes</b></p><div class="table-contents"><table summary="Compute Attributes" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">occi.compute.architecture</code></td><td>Enum (x86, x64)</td><td>CPU Architecture (e.g. x64)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.compute.cores</code></td><td>Integer</td><td>Number of CPU cores (e.g. 1, 2)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.compute.speed</code></td><td>Float (10^9 Hertz)</td><td>Clock speed in gigahertz (e.g. 2.4)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.compute.memory</code></td><td>Float (10^6 bytes)</td><td>RAM in megabytes (e.g. 8192)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.compute.memory.speed</code></td><td>Float (10^9 bytes/second)</td><td>RAM speed in Gbit/s (e.g.
+                <code class="computeroutput">17</code> for PC-8500 DDR3 per <a class="xref" href="#infrastructure-bandwidths" title="Wikipedia: List of device bandwidths">Wikipedia</a>)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.compute.memory.reliability</code></td><td>Enum (standard, checksum)</td><td>Qualitative measure of RAM reliability (e.g.
+                ECC)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.compute.status</code></td><td>Enum (active, inactive, standby)</td><td>Status of the compute resource</td></tr></tbody></table></div></div><br class="table-break"/></div><div class="section" title="Representations"><div class="titlepage"><div><div><h4 class="title"><a id="id36066594"/>Representations</h4></div></div></div><p>The following representation formats are identified (but not
+        necessarily recommended) as possible candidates for this kind:</p><div class="table"><a id="id36066604"/><p class="title"><b>Table 4. Compute Representations</b></p><div class="table-contents"><table summary="Compute Representations" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Name</th><th>Type</th><th>Specification</th></tr></thead><tbody><tr><td style="text-align: left">Citrix Xen Virtual Appliance (XVA)
+                [deprecated]</td><td>application/octet-stream</td><td><a class="xref" href="#infrastructure-xva" title="CTX121652 Overview of the Open Virtualisation Format">VHD</a></td></tr><tr><td style="text-align: left">Open Virtualisation Appliance
+                (OVA)</td><td>application/ova+xml</td><td><a class="xref" href="#infrastructure-ovf" title="DSP0243 Open Virtualisation Format (OVF)">OVF</a></td></tr><tr><td style="text-align: left">Open Virtualisation Format (OVF)</td><td>application/ovf+xml</td><td><a class="xref" href="#infrastructure-ovf" title="DSP0243 Open Virtualisation Format (OVF)">OVF</a></td></tr></tbody></table></div></div><br class="table-break"/></div></div><div class="section" title="Network"><div class="titlepage"><div><div><h3 class="title"><a id="id36066373"/>Network</h3></div></div></div><p>A network resource is capable of transferring data (e.g. a virtual
+      network or VLAN).</p><div class="section" title="Attributes"><div class="titlepage"><div><div><h4 class="title"><a id="id36066382"/>Attributes</h4></div></div></div><p>The following attributes apply to this kind:</p><div class="table"><a id="id36066392"/><p class="title"><b>Table 5. Network Attributes</b></p><div class="table-contents"><table summary="Network Attributes" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">occi.network.vlan</code></td><td>Integer (0..4095)</td><td>802.1q VLAN ID (e.g.
+                <code class="computeroutput">4095</code>)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.network.label</code></td><td>Token</td><td>Tag based VLANs (e.g.
+                <code class="computeroutput">external-dmz</code>)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.network.address</code></td><td>IPv4 or IPv6 Address (in CIDR notation)</td><td>Internet Protocol (IP) network address (e.g.
+                <code class="computeroutput">192.168.0.0/24</code>,
+                <code class="computeroutput">fc00::/7</code>)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.network.gateway</code></td><td>IPv4 or IPv6 Address (in CIDR notation)</td><td>Internet Protocol (IP) network address (e.g.
+                <code class="computeroutput">192.168.0.0/24</code>,
+                <code class="computeroutput">fc00::1/64</code>)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.network.allocation</code></td><td>Enum (<code class="computeroutput">auto</code>,
+                <code class="computeroutput">dhcp</code>,
+                <code class="computeroutput">manual</code>)</td><td><p>Address allocation mechanism:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p><code class="computeroutput">auto</code> is handled
+                      automatically by infrastructure and/or guest
+                      agent</p></li><li class="listitem"><p><code class="computeroutput">dhcp</code> uses
+                      network-based allocation protocol(s)</p></li><li class="listitem"><p><code class="computeroutput">manual</code> requires
+                      preconfiguration or manual allocation</p></li></ul></div></td></tr></tbody></table></div></div><br class="table-break"/></div><div class="section" title="Representations"><div class="titlepage"><div><div><h4 class="title"><a id="id36072134"/>Representations</h4></div></div></div><p>The following representation formats are identified (but not
+        necessarily recommended) as possible candidates for this kind:</p><div class="table"><a id="id36072144"/><p class="title"><b>Table 6. Network Representations</b></p><div class="table-contents"><table summary="Network Representations" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Name</th><th>Type</th><th>Specification</th></tr></thead><tbody><tr><td style="text-align: left">N/A</td><td>N/A</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"/></div></div><div class="section" title="Storage"><div class="titlepage"><div><div><h3 class="title"><a id="id36072203"/>Storage</h3></div></div></div><p>A storage resource is capable of mass storage of data (e.g. a
+      virtual hard drive).</p><div class="section" title="Attributes"><div class="titlepage"><div><div><h4 class="title"><a id="id36072213"/>Attributes</h4></div></div></div><p>The following attributes apply to this kind:</p><div class="table"><a id="id36072222"/><p class="title"><b>Table 7. Storage Attributes</b></p><div class="table-contents"><table summary="Storage Attributes" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">occi.storage.reliability</code></td><td>Enum (transient, persistent, reliable)</td><td>Qualitative device persistence (e.g. transient)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.storage.size</code></td><td>Integer (10^9 bytes)</td><td>Drive size in gigabytes (e.g.
+                <code class="computeroutput">40</code>,
+                <code class="computeroutput">0.00144</code>)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.storage.speed</code></td><td>Integer (10^6 bytes/second)</td><td>Drive speed in MB/s (e.g.
+                <code class="computeroutput">600</code> for SAS/SATA-600 <a class="xref" href="#infrastructure-bandwidths" title="Wikipedia: List of device bandwidths">Wikipedia</a>)</td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.storage.status</code></td><td>Enum (online, offline, standby, degraded)</td><td>Currenty status of the storage resource</td></tr></tbody></table></div></div><br class="table-break"/></div><div class="section" title="Representations"><div class="titlepage"><div><div><h4 class="title"><a id="id36072351"/>Representations</h4></div></div></div><p>The following representation formats are identified (but not
+        necessarily recommended) as possible candidates for this kind:</p><div class="table"><a id="id36072361"/><p class="title"><b>Table 8. Storage Representations</b></p><div class="table-contents"><table summary="Storage Representations" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Name</th><th>Type</th><th>Specification</th></tr></thead><tbody><tr><td style="text-align: left">ISO image format</td><td>application/x-iso9660-image</td><td><a class="xref" href="#infrastructure-iso" title="Wikipedia - ISO 9660">ISO</a></td></tr><tr><td style="text-align: left">Microsoft Virtual Hard Disk</td><td>application/octet-stream</td><td><a class="xref" href="#infrastructure-vhd" title="Microsoft Virtual Hard Disk (VHD) Image Format Specification">VHD</a></td></tr><tr><td style="text-align: left">QEMU qcow2 image format</td><td>application/x-qemu-qcow2</td><td><a class="xref" href="#infrastructure-qcow2" title="QCOW2 Image Format">QCOW2</a></td></tr><tr><td style="text-align: left">Raw disk format (IMA, IMG, RAW,
+                etc.)</td><td>application/octet-stream</td><td><a class="xref" href="#infrastructure-raw" title="Wikipedia - Disk Image">RAW</a></td></tr><tr><td style="text-align: left">Virtualbox Virtual Disk Image
+                [undocumented]</td><td>application/octet-stream</td><td><a class="xref" href="#infrastructure-vdi" title="Virtualbox Source Code - Virtual Disk Image (VDI)">VDI</a></td></tr><tr><td style="text-align: left">VMware Virtual Disk Format</td><td>application/octet-stream</td><td><a class="xref" href="#infrastructure-vmdk" title="VMware Virtual Disk Format">VMDK</a></td></tr></tbody></table></div></div><br class="table-break"/></div></div></div><div class="section" title="Extensions"><div class="titlepage"><div><div><h2 class="title"><a id="id36072517"/>Extensions</h2></div></div></div><p>Various extensions provide for more advanced management
+    functionality such as billing, monitoring and reporting.</p></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36072528"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36072531"/><p class="bibliomixed">Normative References</p></div><div class="bibliomixed"><a id="id36072534"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry" title="CTX121652 Overview of the Open Virtualisation Format"><a id="infrastructure-xva"/><p>[VHD] <span class="title"><i>CTX121652 Overview of the Open Virtualisation Format</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/List_of_device_bandwidths" target="">http://support.citrix.com/article/CTX121652</a></code>. </span><span class="author">. </span></p></div><div class="biblioentry" title="Wikipedia - Disk Image"><a id="infrastructure-raw"/><p>[RAW] <span class="title"><i>Wikipedia - Disk Image</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/List_of_device_bandwidths" target="">http://en.wikipedia.org/wiki/Disk_image</a></code>. </span><span class="author">. </span></p></div><div class="biblioentry" title="DSP0243 Open Virtualisation Format (OVF)"><a id="infrastructure-ovf"/><p>[OVF] <span class="title"><i>DSP0243 Open Virtualisation Format (OVF)</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/List_of_device_bandwidths" target="">http://www.dmtf.org/standards/published_documents/DSP0243_1.0.0.pdf</a></code>. </span><span class="author">. </span></p></div><div class="biblioentry" title="Wikipedia - ISO 9660"><a id="infrastructure-iso"/><p>[ISO] <span class="title"><i>Wikipedia - ISO 9660</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/List_of_device_bandwidths" target="">http://en.wikipedia.org/wiki/ISO_9660</a></code>. </span><span class="author">. </span></p></div><div class="biblioentry" title="QCOW2 Image Format"><a id="infrastructure-qcow2"/><p>[QCOW2] <span class="title"><i>QCOW2 Image Format</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/List_of_device_bandwidths" target="">http://www.gnome.org/~markmc/qcow-image-format.html</a></code>. </span><span class="author">. </span></p></div><div class="biblioentry" title="VMware Virtual Disk Format"><a id="infrastructure-vmdk"/><p>[VMDK] <span class="title"><i>VMware Virtual Disk Format</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://www.vmware.com/app/vmdk/?src=vmdk" target="">http://www.vmware.com/app/vmdk/?src=vmdk</a></code>. </span><span class="author">. </span></p></div><div class="biblioentry" title="Virtualbox Source Code - Virtual Disk Image (VDI)"><a id="infrastructure-vdi"/><p>[VDI] <span class="title"><i>Virtualbox Source Code - Virtual Disk Image (VDI)</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://www.virtualbox.org/svn/vbox/trunk/src/VBox/Devices/Storage/VDICore.h" target="">http://www.virtualbox.org/svn/vbox/trunk/src/VBox/Devices/Storage/VDICore.h</a></code>. </span><span class="author">. </span></p></div><div class="biblioentry" title="Microsoft Virtual Hard Disk (VHD) Image Format Specification"><a id="infrastructure-vhd"/><p>[VHD] <span class="title"><i>Microsoft Virtual Hard Disk (VHD) Image Format
+      Specification</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/List_of_device_bandwidths" target="">http://technet.microsoft.com/en-us/virtualserver/bb676673.aspx</a></code>. </span><span class="author">. </span></p></div><div class="biblioentry" title="Wikipedia: List of device bandwidths"><a id="infrastructure-bandwidths"/><p>[Wikipedia] <span class="title"><i>Wikipedia: List of device bandwidths</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/List_of_device_bandwidths" target="">http://en.wikipedia.org/wiki/List_of_device_bandwidths</a></code>. </span><span class="author">. </span></p></div></div></div><div class="article" title="OCCI Search Extension"><div class="titlepage"><div><div><h1 class="title"><a id="id36064500"/>OCCI Search Extension</h1></div><div><div class="author"><h3 class="author"><span class="orgname">OCCI-WG</span></h3></div></div><div><p class="pubdate">2009-09-15</p></div></div><hr/></div><div class="section" title="Overview"><div class="titlepage"><div><div><h2 class="title"><a id="id36064606"/>Overview</h2></div></div></div><p><em class="glossterm">OpenSearch</em> is used to advertise the search
+    interface:</p><p><span class="quote">“<span class="quote">Search clients can use OpenSearch description documents to
+    learn about the public interface of a search engine. These description
+    documents contain parameterized URL templates that indicate how the search
+    client should make search requests. Search engines can use the OpenSearch
+    response elements to add search metadata to results in a variety of
+    content formats.</span>”</span><a class="xref" href="#">???</a></p></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36064630"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36064632"/><p class="bibliomixed">Normative References</p></div><div class="bibliomixed"><a id="id36064636"/><p class="bibliomixed">Informative References</p></div></div></div><div class="article" title="OCCI Status Extension"><div class="titlepage"><div><div><h1 class="title"><a id="id36064491"/>OCCI Status Extension</h1></div><div><div class="author"><h3 class="author"><span class="orgname">OCCI-WG</span></h3></div></div><div><p class="pubdate">2009-09-15</p></div></div><hr/></div><div class="section" title="Status"><div class="titlepage"><div><div><h2 class="title"><a id="id36064016"/>Status</h2></div></div></div><p>Status reporting allows clients to monitor the status of a given
+    task.</p><div class="table"><a id="id36064025"/><p class="title"><b>Table 1. Status Attributes</b></p><div class="table-contents"><table summary="Status Attributes" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">status.message</code></td><td>String</td><td>Human readable status message</td></tr><tr><td style="text-align: left"><code class="computeroutput">status.percentage</code></td><td>Float (0..100)</td><td>Percentage complete (0=not started, 100=finished)</td></tr><tr><td style="text-align: left"><code class="computeroutput">status.rate.average</code></td><td>Float</td><td>Average rate of progress</td></tr><tr><td style="text-align: left"><code class="computeroutput">status.rate.current</code></td><td>Float</td><td>Current rate of progress</td></tr><tr><td style="text-align: left"><code class="computeroutput">status.rate.units</code></td><td>String</td><td>Units (e.g. <code class="computeroutput">MB/s</code>)</td></tr><tr><td style="text-align: left"><code class="computeroutput">status.work.completed</code></td><td>Float</td><td>Work completed</td></tr><tr><td style="text-align: left"><code class="computeroutput">status.work.remaining</code></td><td>Float</td><td>Work remaining</td></tr><tr><td style="text-align: left"><code class="computeroutput">status.work.units</code></td><td>String</td><td>Units (e.g. <code class="computeroutput">MB</code>)</td></tr><tr><td style="text-align: left"><code class="computeroutput">status.time.start</code></td><td>Date/Time</td><td>Start time</td></tr><tr><td style="text-align: left"><code class="computeroutput">status.time.finish</code></td><td>Date/Time</td><td>Finish time (may be an estimate)</td></tr><tr><td style="text-align: left"><code class="computeroutput">status.time.remaining</code></td><td>Time</td><td>Remaining time (may be an estimate)</td></tr></tbody></table></div></div><br class="table-break"/></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36063976"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36063978"/><p class="bibliomixed">Normative References</p></div><div class="bibliomixed"><a id="id36063982"/><p class="bibliomixed">Informative References</p></div></div></div><div class="article" title="OCCI Tasks Extension"><div class="titlepage"><div><div><h1 class="title"><a id="id36064243"/>OCCI Tasks Extension</h1></div><div><div class="author"><h3 class="author"><span class="orgname">OCCI-WG</span></h3></div></div><div><p class="pubdate">2009-09-15</p></div></div><hr/></div><div class="section" title="Overview"><div class="titlepage"><div><div><h2 class="title"><a id="id36064541"/>Overview</h2></div></div></div><p>Asynchronous operations ("tasks") immediately return HTTP
+    <code class="computeroutput">202 Accepted</code> with a
+    <code class="computeroutput">Location:</code> header pointing to a simple
+    task [sub]resource. This allows tasks to be monitored
+    (<code class="computeroutput">GET</code>), updated
+    (<code class="computeroutput">PUT</code>) and canceled
+    (<code class="computeroutput">DELETE</code>). Completed tasks
+    <span class="emphasis"><em>may</em></span> be deleted immediately, after a reasonable period
+    of time (allowing clients to retrieve status) or retained indefinitely for
+    audit purposes.</p><p>The collection of tasks for a given resource (including the
+    entry-point itself for global tasks) is advertised under the
+    <code class="computeroutput">http://purl.org/occi#tasks</code> link relation
+    and new tasks should be submitted via HTTP
+    <code class="computeroutput">POST</code> to the supplied
+    <code class="computeroutput">href</code>.</p><div class="table"><a id="id36064687"/><p class="title"><b>Table 1. Task Attributes</b></p><div class="table-contents"><table summary="Task Attributes" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">task.type</code></td><td>Token</td><td>Task type (e.g.
+            <code class="computeroutput">backup</code>)</td></tr><tr><td style="text-align: left"><code class="computeroutput">task.sub-type</code></td><td>Token</td><td>Task sub-type (e.g.
+            <code class="computeroutput">incremental</code>)</td></tr><tr><td style="text-align: left"><code class="computeroutput">task.schedule[i]</code></td><td>String</td><td>Task schedule (e.g. "<code class="computeroutput">every Friday at
+            21:00</code>")</td></tr></tbody></table></div></div><br class="table-break"/></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36068607"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36068610"/><p class="bibliomixed">Normative References</p></div><div class="bibliomixed"><a id="id36068613"/><p class="bibliomixed">Informative References</p></div></div></div><div class="article" title="OCCI Registries"><div class="titlepage"><div><div><h2 class="title"><a id="id36064517"/>OCCI Registries</h2></div></div><hr/></div><p>Extensibility of OCCI relies heavily on registries, which allow the
+  working group to initially specify the minimum required functionatliy based
+  on existing implementations while also catering for future evolution.</p><p>Implementors who wish to extend the specification can do so by way of
+  a process TBD in which their request is assessed within a fixed time frame
+  of 7-30 days. If the request is found to be useful for interoperability then
+  it will be accepted and entered into the registry.</p><p>If rejected the implementor can still use custom extensions which will
+  be preserved but otherwise ignored by other implementations which do not
+  understand them.</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>This document seeds the registries which are to be hosted in an
+    editable medium such as a database, spreadsheet or wiki.</p></div><div class="section" title="Core"><div class="titlepage"><div><div><h2 class="title"><a id="id36069210"/>Core</h2></div></div></div><div class="section" title="Common Attributes"><div class="titlepage"><div><div><h3 class="title"><a id="id36069216"/>Common Attributes</h3></div></div></div><div class="table"><a id="id36069222"/><p class="title"><b>Table 1. Common Attributes</b></p><div class="table-contents"><table summary="Common Attributes" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Attribute</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">occi.id</code></td><td>Immutable identifier for the resource</td><td><code class="uri">urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.title</code></td><td>Display name for the resource</td><td><code class="computeroutput">Compute Resource
+              #123</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.summary</code></td><td>Description of the resource</td><td><code class="computeroutput">A virtual compute
+              resource</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">occi.version</code></td><td>Specification version</td><td><code class="computeroutput">1.0</code></td></tr></tbody></table></div></div><br class="table-break"/></div><div class="section" title="Link Relations"><div class="titlepage"><div><div><h3 class="title"><a id="id36069337"/>Link Relations</h3></div></div></div><div class="table"><a id="id36069343"/><p class="title"><b>Table 2. Link Relations</b></p><div class="table-contents"><table summary="Link Relations" border="1"><colgroup><col style="text-align: center"/><col/></colgroup><thead><tr><th style="text-align: left">Relation</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><p><code class="computeroutput">category</code>
+              (<code class="uri">http://purl.org/occi/rel#category</code>)</p></td><td><p>A category mapping whereby:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>The <code class="computeroutput">scheme</code> is
+                    required and indicated by the
+                    <code class="computeroutput">href</code> attribute.</p></li><li class="listitem"><p>The <code class="computeroutput">label</code> is
+                    optional and indicated by the
+                    <code class="computeroutput">title</code> attribute.</p></li><li class="listitem"><p>The <code class="computeroutput">term</code> is
+                    required and indicated by the
+                    <code class="computeroutput">term</code> extended
+                    attribute.</p></li></ul></div></td></tr><tr><td style="text-align: left"><code class="computeroutput">collection</code>
+              (<code class="uri">http://purl.org/occi/rel#collection</code>)</td><td><p>A related collection whereby:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>The root of the collection is indicated by the
+                    <code class="computeroutput">href</code> attribute.</p></li><li class="listitem"><p>The <em class="glossterm">kind</em> of the collection is
+                    indicated by the <code class="computeroutput">kind</code>
+                    extended attribute.</p></li></ul></div></td></tr><tr><td style="text-align: left"><code class="computeroutput">first</code></td><td><span class="quote">“<span class="quote">An IRI that refers to the furthest preceding
+              resource in a series of resources.</span>”</span> [<a class="xref" href="#">???</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">help</code></td><td><span class="quote">“<span class="quote">The referenced document provides further help
+              information for the page as a whole.</span>”</span> [<a class="xref" href="#">???</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">icon</code></td><td><span class="quote">“<span class="quote">The specified resource is an icon representing the
+              page or site, and should be used by the user agent when
+              representing the page in the user interface.</span>”</span> [<a class="xref" href="#">???</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">last</code></td><td><span class="quote">“<span class="quote">An IRI that refers to the furthest following
+              resource in a series of resources.</span>”</span> [<a class="xref" href="#">???</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">next</code></td><td><span class="quote">“<span class="quote">A URI that refers to the immediately following
+              document in a series of documents.</span>”</span> [<a class="xref" href="#">???</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">previous</code></td><td><span class="quote">“<span class="quote">A URI that refers to the immediately preceding
+              document in a series of documents.</span>”</span> [<a class="xref" href="#">???</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">search</code></td><td><span class="quote">“<span class="quote">The referenced document provides an interface
+              specifically for searching the document and its related
+              resources.</span>”</span> [<a class="xref" href="#">???</a>, <a class="xref" href="#">???</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">self</code></td><td><span class="quote">“<span class="quote">Identifies a resource equivalent to the containing
+              element</span>”</span> [<a class="xref" href="#">???</a>]</td></tr></tbody></table></div></div><br class="table-break"/></div></div></div><div class="article" title="OCCI Legal Notices"><div class="titlepage"><div><div><h2 class="title"><a id="id36064521"/>OCCI Legal Notices</h2></div></div><hr/></div><div class="section" title="Intellectual Property Statement"><div class="titlepage"><div><div><h2 class="title"><a id="id36064300"/>Intellectual Property Statement</h2></div></div></div><p>The OGF takes no position regarding the validity or scope of any
+    intellectual property or other rights that might be claimed to pertain to
+    the implementation or use of the technology described in this document or
+    the extent to which any license under such rights might or might not be
+    available; neither does it represent that it has made any effort to
+    identify any such rights. Copies of claims of rights made available for
+    publication and any assurances of licenses to be made available, or the
+    result of an attempt made to obtain a general license or permission for
+    the use of such proprietary rights by implementers or users of this
+    specification can be obtained from the OGF Secretariat.</p><p>The OGF invites any interested party to bring to its attention any
+    copyrights, patents or patent applications, or other proprietary rights
+    which may cover technology that may be required to practice this
+    recommendation. Please address the information to the OGF Executive
+    Director.</p></div><div class="section" title="Disclaimer"><div class="titlepage"><div><div><h2 class="title"><a id="id36064311"/>Disclaimer</h2></div></div></div><p>This document and the information contained herein is provided on an
+    “As Is” basis and the OGF disclaims all warranties, express or implied,
+    including but not limited to any warranty that the use of the information
+    herein will not infringe any rights or any implied warranties of
+    merchantability or fitness for a particular purpose.</p></div><div class="section" title="Full Copyright Notice"><div class="titlepage"><div><div><h2 class="title"><a id="id36069511"/>Full Copyright Notice</h2></div></div></div><p>Copyright (C) Open Grid Forum (2009). All Rights Reserved.</p><p>This document and translations of it may be copied and furnished to
+    others, and derivative works that comment on or otherwise explain it or
+    assist in its implementation may be prepared, copied, published and
+    distributed, in whole or in part, without restriction of any kind,
+    provided that the above copyright notice and this paragraph are included
+    on all such copies and derivative works. However, this document itself may
+    not be modified in any way, such as by removing the copyright notice or
+    references to the OGF or other organizations, except as needed for the
+    purpose of developing Grid Recommendations in which case the procedures
+    for copyrights defined in the OGF Document process must be followed, or as
+    required to translate it into languages other than English.</p><p>The limited permissions granted above are perpetual and will not be
+    revoked by the OGF or its successors or assignees.</p></div></div></div></body></html>
