@@ -67,9 +67,9 @@ Attributes:
 &lt;/ul&gt;
 
 Actions:
-&lt;form method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" alt="Start" /&gt;&lt;/form&gt;
-&lt;form method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" alt="Stop" /&gt;&lt;/form&gt;
-&lt;form method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" alt="Restart" /&gt;&lt;/form&gt;
+&lt;form class="action" method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" alt="Start" /&gt;&lt;/form&gt;
+&lt;form class="action" method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" alt="Stop" /&gt;&lt;/form&gt;
+&lt;form class="action" method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" alt="Restart" /&gt;&lt;/form&gt;
 
 Download
 &lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" alt="OVF" /&gt;&lt;/a&gt;
@@ -104,7 +104,7 @@ Compute Resources:
     &lt;td&gt;Formats&lt;/td&gt;
   &lt;/th&gt;
   &lt;tr typeof="occi:compute" about="/myvm"&gt;
-    &lt;td&gt;&lt;a href="/myvm/console.png" rel="http://purl.org/occi/compute#console" type="image/png"&gt;&lt;img src="/myvm/console-thumb.png" /&gt;&lt;/a&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;a href="/myvm/console.png" rel="alternate http://purl.org/occi/compute#console" type="image/png"&gt;&lt;img src="/myvm/console-thumb.png" /&gt;&lt;/a&gt;&lt;/td&gt;
     &lt;td property="occi:title"&gt;urn:uuid:164a3064-1176-4de3-b24e-e16dc8c2d4ed&lt;/td&gt;
     &lt;td&gt;
       &lt;span property="occi:title"&gt;My Virtual Machine&lt;/span&gt;&lt;br /&gt;
@@ -113,9 +113,9 @@ Compute Resources:
     &lt;td property="occi:compute.cores"&gt;2&lt;/td&gt;
     &lt;td property="occi:compute.memory"&gt;2048&lt;/td&gt;
     &lt;td&gt;
-      &lt;form method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" alt="Start" /&gt;&lt;/form&gt;
-      &lt;form method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" alt="Stop" /&gt;&lt;/form&gt;
-      &lt;form method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" alt="Restart" /&gt;&lt;/form&gt;
+      &lt;form class="action" method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" alt="Start" /&gt;&lt;/form&gt;
+      &lt;form class="action" method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" alt="Stop" /&gt;&lt;/form&gt;
+      &lt;form class="action" method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" alt="Restart" /&gt;&lt;/form&gt;
     &lt;/td&gt;
     &lt;td&gt;
       &lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" alt="OVF" /&gt;&lt;/a&gt;
