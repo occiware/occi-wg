@@ -301,7 +301,8 @@
       <title>Attributes</title>
 
       <para>An <glossterm>attribute</glossterm> is a specification that
-      defines a property of an object, in the form of key-value pairs.</para>
+      defines a property of an object. It is expressed in the form of
+      key-value pairs.</para>
 
       <para>Attributes are divided into namespaces which are separated by the
       dash character (<quote>-</quote>). They <emphasis>must</emphasis> be
@@ -416,8 +417,9 @@ Acme-Network-Identifier: dmz</screen>
       <title>Actions</title>
 
       <para>An <glossterm>action</glossterm> is some process that can be
-      carried out on one or more <glossterm>resource</glossterm>s. Each
-      available <glossterm>action</glossterm> for a given
+      carried out on one or more <glossterm>resource</glossterm>s.</para>
+
+      <para>Each available <glossterm>action</glossterm> for a given
       <glossterm>resource</glossterm> is indicated via a
       <glossterm>link</glossterm> with the
       <computeroutput>action</computeroutput> class.</para>
@@ -442,10 +444,12 @@ Acme-Network-Identifier: dmz</screen>
       depending on the action requested (e.g.
       <computeroutput>resize</computeroutput>), parameters
       <emphasis>may</emphasis> be provided using HTML forms (e.g.
-      <computeroutput>application/x-www-form-encoded</computeroutput>). The
-      specific parameters required and allowable values for them depend on the
-      action and for advanced actions <emphasis>may</emphasis> require sending
-      of custom <glossterm>content type</glossterm>s rather than
+      <computeroutput>application/x-www-form-encoded</computeroutput>).</para>
+
+      <para>The specific parameters required and allowable values for them
+      depend on the action and for advanced actions <emphasis>may</emphasis>
+      require sending of custom <glossterm>content type</glossterm>s rather
+      than
       <computeroutput>application/x-www-form-encoded</computeroutput>.</para>
 
       <para>Synchronous actions <emphasis>may</emphasis> return
@@ -483,8 +487,10 @@ Acme-Network-Identifier: dmz</screen>
 
       <para><glossterm>Category</glossterm> information allows for flexible
       organisation of resources into one or more vocabularies (each of which
-      is referred to as a <glossterm>scheme</glossterm>). The meta-model was
-      derived from Atom, consisting of three attributes:</para>
+      is referred to as a <glossterm>scheme</glossterm>).</para>
+
+      <para>The meta-model was derived from Atom, consisting of three
+      attributes:</para>
 
       <glosslist>
         <glossentry>
@@ -516,23 +522,35 @@ Acme-Network-Identifier: dmz</screen>
         </glossentry>
       </glosslist>
 
-      <warning>
-        <para>Categories provide an ultimately flexible way to manage
-        resources by taxonomy (categories) and/or folksonomy (tags), where
-        both can be shared between [groups of] users or globally.</para>
-      </warning>
-
       <screen>&lt;category term="compute"
           scheme="http://purl.org/occi/kind/"
           label="Compute Resource" /&gt;</screen>
+
+      <para>Category schemes and/or terms defined by this standard reside
+      throughout the <uri>http://purl.org/occi/</uri> namespace but anyone can
+      define a new scheme by allocating a URI they control.</para>
+
+      <tip>
+        <para>Categories provide a flexible way to manage resources by
+        taxonomy (categories) and/or folksonomy (tags), where both can be
+        shared between [groups of] users or globally. For example, users can
+        create schemes for resource locations (e.g.
+        <computeroutput>US-East</computeroutput>,
+        <computeroutput>US-West</computeroutput>,
+        <computeroutput>Europe</computeroutput>), operating systems (e.g.
+        <computeroutput>Windows</computeroutput>,
+        <computeroutput>Linux</computeroutput>) and patch levels (e.g. </para>
+      </tip>
     </section>
 
     <section>
       <title>Collections</title>
 
       <para>Where an operation returns multiple resources (e.g. categories,
-      searches) this is referred to as a <glossterm>collection</glossterm>.
-      Depending on the format these are returned as:</para>
+      searches) this is referred to as a
+      <glossterm>collection</glossterm>.</para>
+
+      <para>Depending on the format these are returned as:</para>
 
       <itemizedlist>
         <listitem>
@@ -566,7 +584,9 @@ Acme-Network-Identifier: dmz</screen>
 
       <tip>
         <para>The root (<quote>/</quote>) <emphasis>should</emphasis> expose
-        collections in order for clients to discover resources.</para>
+        collections <glossterm>in-band</glossterm> and/or
+        <glossterm>out-of-band</glossterm> in order for clients to discover
+        resources.</para>
       </tip>
 
       <screen>&lt;link rel="http://purl.org/occi/collection/audit"
@@ -626,6 +646,11 @@ Acme-Network-Identifier: dmz</screen>
       href="http://example.com/user-guide.pdf"
       type="application/pdf" /&gt;</screen>
 
+      <para><glossterm>Link relation</glossterm>s defined by this standard
+      reside under the <uri>http://purl.org/occi/rel</uri> namespace but
+      anyone can define a new <glossterm>link relation</glossterm> by
+      allocating a URI they control.</para>
+
       <table>
         <title>Link Relations</title>
 
@@ -641,6 +666,33 @@ Acme-Network-Identifier: dmz</screen>
           </thead>
 
           <tbody>
+            <row>
+              <entry
+              align="left"><para><computeroutput>category</computeroutput>
+              (<computeroutput>http://purl.org/occi/rel#category</computeroutput>)</para></entry>
+
+              <entry><para>A category mapping whereby:</para><itemizedlist>
+                  <listitem>
+                    <para>The <computeroutput>scheme</computeroutput> is
+                    required and indicated by the
+                    <computeroutput>href</computeroutput> attribute.</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>The <computeroutput>title</computeroutput> is
+                    optional and indicated by the
+                    <computeroutput>title</computeroutput> attribute.</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>The <computeroutput>term</computeroutput> is
+                    required and indicated by the
+                    <computeroutput>term</computeroutput> extended
+                    attribute.</para>
+                  </listitem>
+                </itemizedlist></entry>
+            </row>
+
             <row>
               <entry
               align="left"><computeroutput>first</computeroutput></entry>
