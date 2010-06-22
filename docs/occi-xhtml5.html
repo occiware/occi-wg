@@ -1,59 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>OCCI User Interface (XHTML5)</title><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"/></head><body><div class="article" title="OCCI User Interface (XHTML5)"><div class="titlepage"><div><div><h1 class="title"><a id="id36063441"/>OCCI User Interface (XHTML5)</h1></div><div><div class="author"><h3 class="author"><span class="orgname">OCCI-WG</span></h3></div></div><div><p class="pubdate">2009-10-21</p></div></div><hr/></div><div class="section" title="Overview"><div class="titlepage"><div><div><h2 class="title"><a id="id36063463"/>Overview</h2></div></div></div><p>XHTML5 is an XML-based <span class="quote">“<span class="quote">concrete syntax</span>”</span> of the HTML5
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>OCCI User Interface (XHTML5)</title><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"/></head><body><div class="article" title="OCCI User Interface (XHTML5)"><div class="titlepage"><div><div><h1 class="title"><a id="id36063441"/>OCCI User Interface (XHTML5)</h1></div><div><div class="author"><h3 class="author"><span class="orgname">OCCI-WG</span></h3></div></div><div><p class="pubdate"/></div></div><hr/></div><div class="section" title="Overview"><div class="titlepage"><div><div><h2 class="title"><a id="id36063462"/>Overview</h2></div></div></div><p>XHTML5 is an XML-based <span class="quote">“<span class="quote">concrete syntax</span>”</span> of the HTML5
     <span class="quote">“<span class="quote">abstract language</span>”</span> (the <span class="quote">“<span class="quote">World Wide Web's markup
-    language</span>”</span>). It is served using the
+    language</span>”</span>). For the purposes of this rendering specification we
+    mandate XHTML5 over HTML5 as it is valid to present HTML5 that is not
+    well-formed. It is served using the
     <code class="computeroutput">application/xhtml+xml</code> Internet media
-    type.<a class="xref" href="#xhtml5-html5" title="HTML 5">HTML5</a></p></div><div class="section" title="XHTML5"><div class="titlepage"><div><div><h2 class="title"><a id="id36063488"/>XHTML5</h2></div></div></div><p>XHTML5 is used to describe a user-friendly rendering of the object,
+    type.<a class="xref" href="#xhtml5-html5" title="HTML 5">HTML5</a></p></div><div class="section" title="XHTML5"><div class="titlepage"><div><div><h2 class="title"><a id="id36063489"/>XHTML5</h2></div></div></div><p>XHTML5 is used to describe a user-friendly rendering of the object,
     optionally with images, icons, javascript, etc. embedded. It is also
-    marked up with RDFa attributes so as it is also machine readable.</p><p>Pages are typically either lists of resources (e.g.
+    marked up with RDFa attributes so as it is also machine readable. The use
+    of RDFa to demarcate semantic content is used throughout the XHTML5
+    renderings where ever appropriate. This combination of RDFa and XHTML5 is
+    a W3C Recommendation.</p><p>Pages are typically either lists of resources (e.g.
     <code class="computeroutput">&lt;ul&gt;</code>,
     <code class="computeroutput">&lt;ol&gt;</code>,
     <code class="computeroutput">&lt;tr&gt;</code> etc.) or a rendering of an
-    individual resource.</p><div class="section" title="Example"><div class="titlepage"><div><div><h3 class="title"><a id="id36063513"/>Example</h3></div></div></div><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    individual resource. To declare an OCCI attribute (e.g.
+    <code class="computeroutput">compute.memory</code>), the RDFa
+    <code class="computeroutput">property</code> attribute is used. Links in the
+    <code class="computeroutput">&lt;head&gt;</code> are specified using the
+    HTML5 <code class="computeroutput">&lt;link&gt;</code> element. Links in the
+    <code class="computeroutput">&lt;body&gt;</code> are specified using the
+    HTML5 <code class="computeroutput">&lt;a&gt;</code> element. Properties and
+    links that are defined to be read-only will appear in the head or body of
+    the appropriate document. To signal to clients that a property is
+    read-write (i.e. modifiable), the set of modifiable properties must be
+    encapsulated in a form <em><span class="remark">&lt;!--| there is some work remaining to be
+    specified here as all specifications are somewhat deficient - discuss at
+    confcall |--&gt;</span></em>.</p><div class="section" title="Examples"><div class="titlepage"><div><div><h3 class="title"><a id="id36063543"/>Examples</h3></div></div></div><p>What follows is an example representation of an OCCI compute
+      resource rendered as XHTML5. The resource contains read-only and
+      read-write attributes as well as link attributes of the resource.</p><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE html&gt;
-&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"&gt;
-&lt;head&gt;
-  &lt;title&gt;OCCI: My Virtual Machine&lt;/title&gt;
-  &lt;meta http-equiv="Content-Type" content="text/html;charset=utf-8" /&gt;
-&lt;/head&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;title&gt;OCCI: My Virtual Machine&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html;charset=utf-8" /&gt;
+    &lt;!-- Here links to related resources are inserted --&gt;
 
-&lt;body xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:occi="http://purl.org/occi/"&gt;
+  &lt;/head&gt;
 
-&lt;h1 property="occi:title"&gt;My Virtual Machine&lt;/h1&gt;
-&lt;span property="occi:summary"&gt;A simple sample virtual machine&lt;/span&gt;
+  &lt;body xmlns:dc="http://purl.org/dc/elements/1.1/" 
+        xmlns:occi="http://purl.org/occi/"&gt;
 
-Console:
-&lt;a href="/myvm/console.png" rel="http://purl.org/occi/compute#console" type="image/png"&gt;&lt;img src="/myvm/console-thumb.png" /&gt;&lt;/a&gt;
-&lt;a href="ssh://myvm:22" rel="http://purl.org/occi/compute#console" &gt;SSH&lt;/a&gt;
+    &lt;!-- 
+    Here we add all properties related to the compute resource
+    Properties that are read/write are enclosed by the &lt;FORM&gt; element
+    Properties that are read-only are enclosed by any valid HTML5 
+      element EXCEPT &lt;FORM&gt;
+    Whether a property is read/write or read-only is an implementation
+      detail settled by the provider
+    --&gt;
 
-Attributes:
-&lt;ul&gt;
-  &lt;li&gt;ID: &lt;span property="occi:id"&gt;urn:uuid:164a3064-1176-4de3-b24e-e16dc8c2d4ed&lt;/span&gt;&lt;/li&gt;
-  &lt;li&gt;Cores: &lt;span property="occi:compute.cores"&gt;2&lt;/span&gt;&lt;/li&gt;
-  &lt;li&gt;Memory: &lt;span property="occi:compute.memory"&gt;2048&lt;/span&gt;&lt;/li&gt;
-&lt;/ul&gt;
 
-Actions:
-&lt;form class="action" method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" alt="Start" /&gt;&lt;/form&gt;
-&lt;form class="action" method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" alt="Stop" /&gt;&lt;/form&gt;
-&lt;form class="action" method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" alt="Restart" /&gt;&lt;/form&gt;
+    &lt;!-- Here a set of read-only properties are exposed using RDFa 
+         vocabularly to signal semantics --&gt;
+    &lt;h1 property="occi:title"&gt;My Virtual Machine&lt;/h1&gt;
+    &lt;span property="occi:summary"&gt;A simple sample virtual machine&lt;/span&gt;
 
-Download
-&lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" alt="OVF" /&gt;&lt;/a&gt;
-&lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;&lt;img src="xen-logo.png" alt="Xen" /&gt;&lt;/a&gt;
+    Console:
+    &lt;a href="/myvm/console.png" rel="http://purl.org/occi/compute#console"
+       type="image/png"&gt;&lt;img src="/myvm/console-thumb.png" /&gt;&lt;/a&gt;
+    &lt;a href="ssh://myvm:22" 
+       rel="http://purl.org/occi/compute#console"&gt;SSH&lt;/a&gt;
 
-&lt;/body&gt;
-&lt;/html&gt;</pre><div class="section" title="Collections"><div class="titlepage"><div><div><h4 class="title"><a id="id36063522"/>Collections</h4></div></div></div><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;!-- Here a set of read/write properties are exposed via a HTML5 form. --&gt;
+    &lt;!-- The HTML5 FORM supports all the basic HTTP verbs required by REST --&gt;
+    Attributes:
+    &lt;form method="POST" action="/myvm"&gt;
+      &lt;ul&gt;
+        &lt;li&gt;ID: &lt;input type="text" name="id" 
+            value="urn:uuid:164a3064-1176-4de3-b24e-e16dc8c2d4ed" /&gt;
+        &lt;/li&gt;
+        &lt;li&gt;Cores: 
+            &lt;select name="compute.cores"&gt;
+              &lt;option&gt;1&lt;/option&gt;&lt;option selected&gt;2&lt;/option&gt;&lt;option&gt;3&lt;/option&gt;
+            &lt;/select&gt;
+        &lt;/li&gt;
+        &lt;li&gt;Memory: &lt;span property="occi:compute.memory"&gt;2048&lt;/span&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;input type="submit" value="Save" /&gt;
+    &lt;/form&gt;
+
+    &lt;!-- OCCI actions are equivocal and map to HTML5 forms --&gt;
+    Actions:
+    &lt;form class="action" method="POST" action="/myvm;start"&gt;
+      &lt;input type="image" src="occi-start.png" alt="Start" /&gt;
+    &lt;/form&gt;
+    &lt;form class="action" method="POST" action="/myvm;stop"&gt;
+      &lt;input type="image" src="occi-stop.png" alt="Stop" /&gt;
+    &lt;/form&gt;
+    &lt;form class="action" method="POST" action="/myvm;restart"&gt;
+      &lt;input type="image" src="occi-restart.png" alt="Restart" /&gt;
+    &lt;/form&gt;
+    &lt;form class="action" method="POST" action="/myvm;resize"&gt;
+      &lt;select name="compute.cores"&gt;
+        &lt;option&gt;1&lt;/option&gt;&lt;option&gt;2&lt;/option&gt;&lt;option&gt;4&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;input type="text" name="compute.memory" value="2048" /&gt;
+      &lt;input type="image" src="occi-resize.png" alt="Resize" &gt;
+    &lt;/form&gt;
+    &lt;form class="action" method="DELETE" action="/myvm"&gt;
+      &lt;input type="image" src="occi-delete.png" alt="Delete" /&gt;
+    &lt;/form&gt;
+
+    Download
+    &lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;
+      &lt;img src="ovf-logo.png" alt="OVF" /&gt;
+    &lt;/a&gt;
+    &lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;
+      &lt;img src="xen-logo.png" alt="Xen" /&gt;
+    &lt;/a&gt;
+
+  &lt;/body&gt;
+&lt;/html&gt;</pre><div class="section" title="Collections"><div class="titlepage"><div><div><h4 class="title"><a id="id36063558"/>Collections</h4></div></div></div><p>What follows is an example representation of an OCCI compute
+        resource collection rendered as XHTML5. The resources of the
+        collection are displayed with read-only attributes.</p><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE html&gt;
 
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"&gt;
 &lt;head&gt;
   &lt;title&gt;OCCI: My Cloud&lt;/title&gt;
-  &lt;meta http-equiv="Content-Type" content="text/html;charset=utf-8" /&gt;
+  &lt;meta http-equiv="Content-Type" content="text/html;charset=utf-8"/&gt;
 &lt;/head&gt;
 
-&lt;body xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:occi="http://purl.org/occi/"&gt;
+&lt;body xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      xmlns:occi="http://purl.org/occi/"&gt;
 &lt;h1&gt;My Cloud&lt;/h1&gt;
 
 Compute Resources:
@@ -68,31 +140,53 @@ Compute Resources:
   &lt;/th&gt;
   &lt;tr typeof="occi:compute" about="/myvm"&gt;
     &lt;td&gt;
-      &lt;a href="/myvm/console.png" rel="http://purl.org/occi/compute#console" type="image/png"&gt;&lt;img src="/myvm/console-thumb.png" /&gt;&lt;/a&gt;
-      &lt;a href="ssh://myvm:22" rel="http://purl.org/occi/compute#console" &gt;SSH&lt;/a&gt;
+      &lt;a href="/myvm/console.png" 
+         rel="http://purl.org/occi/compute#console" type="image/png"&gt;
+        &lt;img src="/myvm/console-thumb.png" /&gt;
+      &lt;/a&gt;
+      &lt;a href="ssh://myvm:22" 
+         rel="http://purl.org/occi/compute#console"&gt;SSH&lt;/a&gt;
     &lt;/td&gt;
-    &lt;td property="occi:title"&gt;urn:uuid:164a3064-1176-4de3-b24e-e16dc8c2d4ed&lt;/td&gt;
+    &lt;td property="occi:title"&gt;
+      urn:uuid:164a3064-1176-4de3-b24e-e16dc8c2d4ed
+    &lt;/td&gt;
     &lt;td&gt;
-      &lt;span property="occi:title"&gt;My Virtual Machine&lt;/span&gt;&lt;br /&gt;
-      &lt;span property="occi:summary"&gt;A simple sample virtual machine&lt;/span&gt;&lt;br /&gt;
+      &lt;span property="occi:title"&gt;
+        My Virtual Machine
+      &lt;/span&gt;&lt;br/&gt;
+      &lt;span property="occi:summary"&gt;
+        A simple sample virtual machine
+      &lt;/span&gt;&lt;br/&gt;
     &lt;/td&gt;
     &lt;td property="occi:compute.cores"&gt;2&lt;/td&gt;
     &lt;td property="occi:compute.memory"&gt;2048&lt;/td&gt;
     &lt;td&gt;
-      &lt;form class="action" method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" alt="Start" /&gt;&lt;/form&gt;
-      &lt;form class="action" method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" alt="Stop" /&gt;&lt;/form&gt;
-      &lt;form class="action" method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" alt="Restart" /&gt;&lt;/form&gt;
+      &lt;form class="action" method="POST" action="/myvm;start"&gt;
+        &lt;input type="image" src="occi-start.png" alt="Start" /&gt;
+      &lt;/form&gt;
+      &lt;form class="action" method="POST" action="/myvm;stop"&gt;
+        &lt;input type="image" src="occi-stop.png" alt="Stop" /&gt;
+      &lt;/form&gt;
+      &lt;form class="action" method="POST" action="/myvm;restart"&gt;
+        &lt;input type="image" src="occi-restart.png" alt="Restart" /&gt;
+      &lt;/form&gt;
     &lt;/td&gt;
     &lt;td&gt;
-      &lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" alt="OVF" /&gt;&lt;/a&gt;
-      &lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;&lt;img src="xen-logo.png" alt="Xen" /&gt;&lt;/a&gt;
+      &lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;
+        &lt;img src="ovf-logo.png" alt="OVF" /&gt;
+      &lt;/a&gt;
+      &lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;
+        &lt;img src="xen-logo.png" alt="Xen" /&gt;
+      &lt;/a&gt;
     &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/table&gt;
 
 &lt;/body&gt;
-&lt;/html&gt;</pre></div></div></div><div class="section" title="Javascript"><div class="titlepage"><div><div><h2 class="title"><a id="id36063534"/>Javascript</h2></div></div></div><p>Asynchronous Javascript may be used to deliver interactivity without
-    having to reload the page.</p><div class="section" title="Example"><div class="titlepage"><div><div><h3 class="title"><a id="id36063544"/>Example</h3></div></div></div><pre class="screen">var OCCIclient = {};
+&lt;/html&gt;</pre></div></div></div><div class="section" title="Javascript"><div class="titlepage"><div><div><h2 class="title"><a id="id36063575"/>Javascript</h2></div></div></div><p>Asynchronous Javascript may be used to deliver interactivity without
+    having to reload the page.</p><div class="section" title="Example"><div class="titlepage"><div><div><h3 class="title"><a id="id36063584"/>Example</h3></div></div></div><p>In this example, a HTTP request for a resource is asked for and
+      using the OCCI JavaScript client, demonstrates the ability of reading
+      HTML5 headers.</p><pre class="screen">var OCCIclient = {};
             
 OCCIclient.URI = document.location.href;
 OCCIclient.XHR = null;
@@ -116,10 +210,10 @@ if (OCCIclient.XHR!=null) {
   OCCIclient.XHR.send();
 } else {
   alert("Your browser does not support XMLHTTP.");
-}</pre></div></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36063561"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36063563"/><p class="bibliomixed">Normative References</p></div><div class="biblioentry" title="HTML 5"><a id="xhtml5-html5"/><p>[HTML5] <span class="title"><i>HTML 5</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target="">http://www.w3.org/TR/html5/</a></code>. </span><span class="author">Ian Hickson. </span><span class="author">David Hyatt. </span><span class="org">
+}</pre></div></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36063605"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36063607"/><p class="bibliomixed">Normative References</p></div><div class="biblioentry" title="HTML 5"><a id="xhtml5-html5"/><p>[HTML5] <span class="title"><i>HTML 5</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target="">http://www.w3.org/TR/html5/</a></code>. </span><span class="author">Ian Hickson. </span><span class="author">David Hyatt. </span><span class="org">
         <span class="orgname">World Wide Web Consortium (W3C)</span>
-      </span><span class="date">2009-08-25. </span></p></div><div class="biblioentry" title="RDFa"><a id="xhtml5-rdfa"/><p>[RDFa] <span class="title"><i>RDFa</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target=""/></code>. </span><span class="author">. </span><span class="org">
+      </span><span class="date">2009-08-25. </span></p></div><div class="biblioentry" title="RDFa"><a id="xhtml5-rdfa"/><p>[RDFa] <span class="title"><i>RDFa</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target="">http://www.w3.org/TR/xhtml-rdfa-primer/</a></code>. </span><span class="author">Ben Adida, Creative Commons. </span><span class="org">
         <span class="orgname">World Wide Web Consortium (W3C)</span>
-      </span><span class="date">. </span></p></div><div class="bibliomixed"><a id="id36063664"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry" title="Is HTTP the HTTP of cloud computing?"><a id="xhtml5-http-article"/><p>[http-article] <span class="title"><i>Is HTTP the HTTP of cloud computing?</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://samj.net/2009/05/is-atompub-already-http-of-cloud.html" target="">http://samj.net/2009/05/is-http-http-of-cloud-computing.html</a></code>. </span><span class="author">Sam Johnston. </span><span class="org">
+      </span><span class="date">2008-10-14. </span></p></div><div class="bibliomixed"><a id="id36063716"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry" title="Is HTTP the HTTP of cloud computing?"><a id="xhtml5-http-article"/><p>[http-article] <span class="title"><i>Is HTTP the HTTP of cloud computing?</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://samj.net/2009/05/is-atompub-already-http-of-cloud.html" target="">http://samj.net/2009/05/is-http-http-of-cloud-computing.html</a></code>. </span><span class="author">Sam Johnston. </span><span class="org">
         <span class="orgname">Australian Online Solutions</span>
       </span><span class="date">2009-05-25. </span></p></div><div class="biblioentry" title="Misunderstanding Markup: XHTML 2/HTML 5 Comic Strip"><a id="xhtml5-html5-article"/><p>[HTML5-article] <span class="title"><i>Misunderstanding Markup: XHTML 2/HTML 5 Comic Strip</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/" target="">http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/</a></code>. </span><span class="author">Jeremy Keith. </span><span class="author">Brad Colbow. </span><span class="date">2009-07-29. </span></p></div></div></div></body></html>
