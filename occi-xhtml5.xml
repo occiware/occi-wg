@@ -13,7 +13,7 @@
       <orgname>OCCI-WG</orgname>
     </author>
 
-    <pubdate>2009-10-21</pubdate>
+    <pubdate></pubdate>
   </info>
 
   <section>
@@ -21,7 +21,9 @@
 
     <para>XHTML5 is an XML-based <quote>concrete syntax</quote> of the HTML5
     <quote>abstract language</quote> (the <quote>World Wide Web's markup
-    language</quote>). It is served using the
+    language</quote>). For the purposes of this rendering specification we
+    mandate XHTML5 over HTML5 as it is valid to present HTML5 that is not
+    well-formed. It is served using the
     <computeroutput>application/xhtml+xml</computeroutput> Internet media
     type.<xref linkend="xhtml5-html5" /></para>
   </section>
@@ -32,17 +34,34 @@
     <para>XHTML5 is used to describe a user-friendly rendering of the object,
     optionally with images, icons, javascript, etc. embedded. It is also
     marked up with RDFa attributes so as it is also machine readable. The use
-    of RDFa is used throughout XHTML5 renderings where ever
-    appropriate.</para>
+    of RDFa to demarcate semantic content is used throughout the XHTML5
+    renderings where ever appropriate. This combination of RDFa and XHTML5 is
+    a W3C Recommendation. </para>
 
     <para>Pages are typically either lists of resources (e.g.
     <computeroutput>&lt;ul&gt;</computeroutput>,
     <computeroutput>&lt;ol&gt;</computeroutput>,
     <computeroutput>&lt;tr&gt;</computeroutput> etc.) or a rendering of an
-    individual resource.</para>
+    individual resource. To declare an OCCI attribute (e.g.
+    <computeroutput>compute.memory</computeroutput>), the RDFa
+    <computeroutput>property</computeroutput> attribute is used. Links in the
+    <computeroutput>&lt;head&gt;</computeroutput> are specified using the
+    HTML5 <computeroutput>&lt;link&gt;</computeroutput> element. Links in the
+    <computeroutput>&lt;body&gt;</computeroutput> are specified using the
+    HTML5 <computeroutput>&lt;a&gt;</computeroutput> element. Properties and
+    links that are defined to be read-only will appear in the head or body of
+    the appropriate document. To signal to clients that a property is
+    read-write (i.e. modifiable), the set of modifiable properties must be
+    encapsulated in a form <remark>&lt;!--| there is some work remaining to be
+    specified here as all specifications are somewhat deficient - discuss at
+    confcall |--&gt;</remark>.</para>
 
     <section>
-      <title>Example</title>
+      <title>Examples</title>
+
+      <para>What follows is an example representation of an OCCI compute
+      resource rendered as XHTML5. The resource contains read-only and
+      read-write attributes as well as link attributes of the resource.</para>
 
       <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE html&gt;
@@ -50,19 +69,19 @@
   &lt;head&gt;
     &lt;title&gt;OCCI: My Virtual Machine&lt;/title&gt;
     &lt;meta http-equiv="Content-Type" content="text/html;charset=utf-8" /&gt;
-    &lt;!-- Here links to related resources can be inserted here --&gt;
+    &lt;!-- Here links to related resources are inserted --&gt;
 
   &lt;/head&gt;
 
   &lt;body xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:occi="http://purl.org/occi/"&gt;
 
-    &lt;!-- Here we add all properties related to the VM --&gt;
+    &lt;!-- Here we add all properties related to the compute resource --&gt;
     &lt;!-- Properties that are read/write are enclosed by the &lt;FORM&gt; element --&gt;
     &lt;!-- Properties that are read-only are enclosed by any valid HTML5 element EXCEPT &lt;FORM&gt;--&gt;
     &lt;!-- Whether a property is read/write or read-only is an implementation detail settled by the provider--&gt;
 
 
-    &lt;!-- Here a set of read-only properties are exposed using RDFa vocabularly to enhance semantics --&gt;
+    &lt;!-- Here a set of read-only properties are exposed using RDFa vocabularly to signal semantics --&gt;
     &lt;h1 property="occi:title"&gt;My Virtual Machine&lt;/h1&gt;
     &lt;span property="occi:summary"&gt;A simple sample virtual machine&lt;/span&gt;
 
@@ -102,6 +121,10 @@
 
       <section>
         <title>Collections</title>
+
+        <para>What follows is an example representation of an OCCI compute
+        resource collection rendered as XHTML5. The resources of the
+        collection are displayed with read-only attributes.</para>
 
         <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE html&gt;
@@ -163,6 +186,10 @@ Compute Resources:
 
     <section>
       <title>Example</title>
+
+      <para>In this example, a HTTP request for a resource is asked for and
+      using the OCCI JavaScript client, demonstrates the ability of reading
+      HTML5 headers.</para>
 
       <screen>var OCCIclient = {};
             
@@ -230,14 +257,14 @@ if (OCCIclient.XHR!=null) {
     <biblioentry xreflabel="RDFa" xml:id="xhtml5-rdfa">
       <title>RDFa</title>
 
-      <address><uri xlink:href="http://tools.ietf.org/html/rfc4287"></uri></address>
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://www.w3.org/TR/xhtml-rdfa-primer/</uri></address>
 
       <author>
-        <personname></personname>
+        <personname>Ben Adida, Creative Commons</personname>
 
         <affiliation>
           <org>
-            <orgname></orgname>
+            <orgname>Mark Birbeck, webBackplane</orgname>
           </org>
         </affiliation>
       </author>
@@ -246,7 +273,7 @@ if (OCCIclient.XHR!=null) {
         <orgname>World Wide Web Consortium (W3C)</orgname>
       </org>
 
-      <date></date>
+      <date>2008-10-14</date>
     </biblioentry>
 
     <bibliomixed>Informative References</bibliomixed>
