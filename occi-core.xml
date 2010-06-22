@@ -20,11 +20,11 @@
     caching, proxying, gatewaying and other advanced functionality such as
     partial GETs.</para>
 
-    <para>Each resource is identified by URL(s) and has one or more
-    representations which may include a hypertext (e.g. XHTML5) rendering for
-    direct end-user accessibility. As such OCCI can present both a machine
-    interface (using native resource renderings) and a user interface (using
-    HTML markup with forms and other web technologies such as
+    <para>Each resource is identified by URL(s) and has one or more native
+    representations as well as an XHTML5 rendering for direct end-user
+    accessibility with embedded semantic web markup. As such OCCI can present
+    both a machine interface (using native resource renderings) and a user
+    interface (using HTML markup with forms and other web technologies such as
     Javascript/Ajax). HTTP content negotiation is used to select between
     alternative representations and metadata including associations between
     resources is exposed via HTTP headers (e.g. the
@@ -56,7 +56,7 @@
 &lt; Date: Sat, 10 Oct 2009 12:56:51 GMT
 &lt; Content-Type: application/ovf
 &lt; Link: &lt;/us-east/webapp/vm01;start&gt;;
-&lt;       rel="http://purl.org/occi/action/start";
+&lt;       rel="http://purl.org/occi/action#start";
 &lt;       title="Start"
 &lt; Link: &lt;/us-east/webapp/build.pdf&gt;;
 &lt;       rel="related";
@@ -64,7 +64,7 @@
 &lt;       type="application/pdf"
 &lt; Category: compute;
 &lt;       label="Compute Resource";
-&lt;       scheme="http://purl.org/occi/kind/"
+&lt;       scheme="http://purl.org/occi/kind"
 &lt; Server: occi-server/1.0 (linux) OCCI/1.0
 &lt; Connection: close
 &lt;
@@ -86,7 +86,8 @@
       <para>The interface is defined by a single URL entry point which will
       either be a <glossterm>collection</glossterm>, contain
       <glossterm>link</glossterm>(s) to <glossterm>collection</glossterm>(s)
-      or both.</para>
+      or both. All resources <emphasis>must</emphasis> be discoverable via
+      [chains of] links from the entry point.</para>
     </section>
 
     <section>
@@ -358,9 +359,9 @@
             <tbody>
               <row>
                 <entry
-                align="left"><computeroutput>occi.id</computeroutput></entry>
+                align="left"><computeroutput>id</computeroutput></entry>
 
-                <entry>Immutable identifier for the resource</entry>
+                <entry>Immutable, unique identifier for the resource</entry>
 
                 <entry>URI</entry>
 
@@ -369,7 +370,7 @@
 
               <row>
                 <entry
-                align="left"><computeroutput>occi.title</computeroutput></entry>
+                align="left"><computeroutput>title</computeroutput></entry>
 
                 <entry>Display name for the resource</entry>
 
@@ -381,7 +382,7 @@
 
               <row>
                 <entry
-                align="left"><computeroutput>occi.summary</computeroutput></entry>
+                align="left"><computeroutput>summary</computeroutput></entry>
 
                 <entry>Description of the resource</entry>
 
@@ -393,7 +394,7 @@
 
               <row>
                 <entry
-                align="left"><computeroutput>occi.version</computeroutput></entry>
+                align="left"><computeroutput>version</computeroutput></entry>
 
                 <entry>Specification version</entry>
 
@@ -605,10 +606,10 @@
       <tip>
         <para>Collections are passed by reference for simplicity rather than
         performance reasons, requiring O(n+1) requests. Including metadata
-        (requiring a wrapper format like Atom or SOAP) and/or the data itself
-        would provide O(1) performance, though passing by value should only be
-        considered where the representations are known to be small as such
-        encodings add significant overhead.</para>
+        (via a wrapper format like Atom or SOAP) and/or the data itself would
+        provide O(1) performance, though this "pass by value" approach should
+        only be considered where the representations are known to be small as
+        encoding adds significant overhead.</para>
       </tip>
 
       <section>
@@ -630,6 +631,7 @@
         <computeroutput>collection</computeroutput> class:</para>
 
         <screen>Link: &lt;http://example.com/123/audit&gt;;
+      class=collection;
       rel="http://purl.org/occi/collection/audit";
       title="Audit Entries"</screen>
 
