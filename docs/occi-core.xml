@@ -194,8 +194,8 @@
       <title>Versioning</title>
 
       <para>Every request <emphasis>should</emphasis> include an
-      <computeroutput>OCCI-Version:</computeroutput> HTTP header indicating
-      the version of the API requested (e.g.
+      <computeroutput>OCCI-Version</computeroutput> HTTP header indicating the
+      version of the API requested (e.g.
       <computeroutput>1.0</computeroutput>). If none is provided the latest
       available version <emphasis>shall</emphasis> be used.</para>
     </section>
@@ -341,6 +341,15 @@ Acme-Network-Identifier: dmz</screen>
               linkend="rfc3339" />]</entry>
 
               <entry><computeroutput>2020-12-31T23:59:59Z</computeroutput></entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>OCCI-Version</computeroutput></entry>
+
+              <entry>Specification version</entry>
+
+              <entry><computeroutput>1.0</computeroutput></entry>
             </row>
 
             <row>
