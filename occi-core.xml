@@ -189,6 +189,16 @@
 
       <remark>TODO: Add support for SAML 2?</remark>
     </section>
+
+    <section>
+      <title>Versioning</title>
+
+      <para>Every request <emphasis>should</emphasis> include an
+      <computeroutput>OCCI-Version:</computeroutput> HTTP header indicating
+      the version of the API requested (e.g.
+      <computeroutput>1.0</computeroutput>). If none is provided the latest
+      available version <emphasis>shall</emphasis> be used.</para>
+    </section>
   </section>
 
   <section>
