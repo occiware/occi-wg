@@ -36,8 +36,8 @@ occi-usecases.pdf: $(SRC)
 	fop occi-book.fo $@
 
 occi-specification.pdf: $(SRC)
-	$(XSLTPROC) --output occi-book.fo   --stringparam generate.toc "" ogf_template.xsl occi-specification-book.xml
-	fop occi-book.fo $@
+	$(XSLTPROC) --output occi-book.fo   --stringparam generate.toc "article toc" ogf_template.xsl occi-specification-book.xml
+	fop -r occi-book.fo $@
 
 show1: doc1
 	evince occi-usecases.pdf
