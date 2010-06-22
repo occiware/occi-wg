@@ -22,9 +22,12 @@
 
     <para>Each resource is identified by URL(s) and has one or more
     representations which may include a hypertext (e.g. XHTML5) rendering for
-    direct end-user accessibility. HTTP content negotiation is used to select
-    between alternative representations and metadata including associations
-    between resources is exposed via HTTP headers (e.g. the
+    direct end-user accessibility. As such OCCI can present both a machine
+    interface (using native resource renderings) and a user interface (using
+    HTML markup with forms and other web technologies such as
+    Javascript/Ajax). HTTP content negotiation is used to select between
+    alternative representations and metadata including associations between
+    resources is exposed via HTTP headers (e.g. the
     <computeroutput>Link:</computeroutput> and
     <computeroutput>Category:</computeroutput> headers).</para>
 
@@ -41,7 +44,10 @@
       task.</para>
     </tip>
 
-    <screen>&gt; GET /us-east/webapp/vm01 HTTP/1.1
+    <section>
+      <title>Example</title>
+
+      <screen>&gt; GET /us-east/webapp/vm01 HTTP/1.1
 &gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OCCI/1.0
 &gt; Host: cloud.example.com
 &gt; Accept: */*
@@ -68,153 +74,160 @@
 &lt;           xmlns="http://schemas.dmtf.org/ovf/envelope/1"
 &lt;           xml:lang="en-US"&gt;
 ...</screen>
+    </section>
   </section>
 
   <section>
     <title>Basics</title>
 
-    <bridgehead>URL Namespace</bridgehead>
+    <section>
+      <title>Entry point</title>
 
-    <para>The interface is defined by a single URL entry point which will
-    either be a <glossterm>collection</glossterm>, contain
-    <glossterm>link</glossterm>(s) to <glossterm>collection</glossterm>(s) or
-    both.</para>
+      <para>The interface is defined by a single URL entry point which will
+      either be a <glossterm>collection</glossterm>, contain
+      <glossterm>link</glossterm>(s) to <glossterm>collection</glossterm>(s)
+      or both.</para>
+    </section>
 
-    <bridgehead>Kinds, Actions and Attributes</bridgehead>
+    <section>
+      <title>Kinds, Actions &amp; Attributes</title>
 
-    <para>An interface exposes "kinds" which have "attributes" and on which
-    "actions" can be performed. The attributes are exposed as key-value pairs
-    and applicable actions as links, following the REST hypertext constraint
-    (whereby state transitions are defined <glossterm>in-band</glossterm>
-    rather than via rules).</para>
+      <para>An interface exposes "kinds" which have "attributes" and on which
+      "actions" can be performed. The attributes are exposed as key-value
+      pairs and applicable actions as links, following the REST hypertext
+      constraint (whereby state transitions are defined
+      <glossterm>in-band</glossterm> rather than via rules).</para>
+    </section>
 
-    <bridgehead>CRUD Operations</bridgehead>
+    <section>
+      <title>HTTP Verbs</title>
 
-    <para>Create, Retrieve, Update and Delete (CRUD) operations map to the
-    POST, GET, PUT and DELETE HTTP verbs respectively. HEAD and OPTIONS verbs
-    may be used to retrieve metadata and valid operations without the entity
-    body to improve performance. WebDAV definitions are used for MKCOL, MOVE
-    and COPY.</para>
+      <para>Create, Retrieve, Update and Delete (CRUD) operations map to the
+      POST, GET, PUT and DELETE HTTP verbs respectively. HEAD and OPTIONS
+      verbs may be used to retrieve metadata and valid operations without the
+      entity body to improve performance. WebDAV definitions are used for
+      MKCOL, MOVE and COPY.</para>
 
-    <glosslist>
-      <glossentry>
-        <glossterm>POST (Create)</glossterm>
+      <glosslist>
+        <glossentry>
+          <glossterm>POST (Create)</glossterm>
 
-        <glossdef>
-          <para><quote>The POST method is used to request that the origin
-          server accept the entity enclosed in the request as a new
-          subordinate of the resource identified by the Request-URI in the
-          Request-Line.</quote><xref linkend="core-rfc2616" /></para>
+          <glossdef>
+            <para><quote>The POST method is used to request that the origin
+            server accept the entity enclosed in the request as a new
+            subordinate of the resource identified by the Request-URI in the
+            Request-Line.</quote><xref linkend="core-rfc2616" /></para>
 
-          <para>POSTing a representation (e.g. OVF) to a collection (e.g.
-          /compute) will result in a new resource being created (e.g.
-          /compute/123) and returned in the Location: header. POST is also
-          used with HTML form data to trigger verbs (e.g. restart)</para>
-        </glossdef>
-      </glossentry>
+            <para>POSTing a representation (e.g. OVF) to a collection (e.g.
+            /compute) will result in a new resource being created (e.g.
+            /compute/123) and returned in the Location: header. POST is also
+            used with HTML form data to trigger verbs (e.g. restart)</para>
+          </glossdef>
+        </glossentry>
 
-      <glossentry>
-        <glossterm>GET (Retrieve - Metadata and Entity)</glossterm>
+        <glossentry>
+          <glossterm>GET (Retrieve - Metadata and Entity)</glossterm>
 
-        <glossdef>
-          <para><quote>The GET method means retrieve whatever information (in
-          the form of an entity) is identified by the
-          Request-URI.</quote><xref linkend="core-rfc2616" /></para>
+          <glossdef>
+            <para><quote>The GET method means retrieve whatever information
+            (in the form of an entity) is identified by the
+            Request-URI.</quote><xref linkend="core-rfc2616" /></para>
 
-          <para>GETting a resource (e.g. /compute/123) will return a
-          representation of that resource in the most appropriate supported
-          format specified by the client in the Accept header. Otherwise "406
-          Not Acceptable" will be returned.</para>
-        </glossdef>
-      </glossentry>
+            <para>GETting a resource (e.g. /compute/123) will return a
+            representation of that resource in the most appropriate supported
+            format specified by the client in the Accept header. Otherwise
+            "406 Not Acceptable" will be returned.</para>
+          </glossdef>
+        </glossentry>
 
-      <glossentry>
-        <glossterm>PUT (Create or Update)</glossterm>
+        <glossentry>
+          <glossterm>PUT (Create or Update)</glossterm>
 
-        <glossdef>
-          <para><quote>The PUT method requests that the enclosed entity be
-          stored under the supplied Request-URI.</quote><xref
-          linkend="core-rfc2616" /></para>
+          <glossdef>
+            <para><quote>The PUT method requests that the enclosed entity be
+            stored under the supplied Request-URI.</quote><xref
+            linkend="core-rfc2616" /></para>
 
-          <para>PUTting a representation (e.g. OVF) to a URL (e.g.
-          /compute/123) will result in the resource being created or updated.
-          The URL is known or selected by the client (in which case UUIDs
-          should be used), in contrast to POSTs where the URL is selected by
-          the server.</para>
-        </glossdef>
-      </glossentry>
+            <para>PUTting a representation (e.g. OVF) to a URL (e.g.
+            /compute/123) will result in the resource being created or
+            updated. The URL is known or selected by the client (in which case
+            UUIDs should be used), in contrast to POSTs where the URL is
+            selected by the server.</para>
+          </glossdef>
+        </glossentry>
 
-      <glossentry>
-        <glossterm>DELETE (Delete)</glossterm>
+        <glossentry>
+          <glossterm>DELETE (Delete)</glossterm>
 
-        <glossdef>
-          <para><quote>The DELETE method requests that the origin server
-          delete the resource identified by the Request-URI.</quote><xref
-          linkend="core-rfc2616" /></para>
+          <glossdef>
+            <para><quote>The DELETE method requests that the origin server
+            delete the resource identified by the Request-URI.</quote><xref
+            linkend="core-rfc2616" /></para>
 
-          <para>DELETE results in the deletion of the resource (and everything
-          "under" it, as appropriate).</para>
-        </glossdef>
-      </glossentry>
-    </glosslist>
+            <para>DELETE results in the deletion of the resource (and
+            everything "under" it, as appropriate).</para>
+          </glossdef>
+        </glossentry>
+      </glosslist>
 
-    <para>Additionally the following HTTP methods are used:</para>
+      <para>Additionally the following HTTP methods are used:</para>
 
-    <glosslist>
-      <glossentry>
-        <glossterm>COPY (Duplicate)</glossterm>
+      <glosslist>
+        <glossentry>
+          <glossterm>COPY (Duplicate)</glossterm>
 
-        <glossdef>
-          <para><quote>The COPY method creates a duplicate of the source
-          resource identified by the Request-URI, in the destination resource
-          identified by the URI in the Destination header.</quote><xref
-          linkend="core-rfc4918" /></para>
-        </glossdef>
-      </glossentry>
+          <glossdef>
+            <para><quote>The COPY method creates a duplicate of the source
+            resource identified by the Request-URI, in the destination
+            resource identified by the URI in the Destination
+            header.</quote><xref linkend="core-rfc4918" /></para>
+          </glossdef>
+        </glossentry>
 
-      <glossentry>
-        <glossterm>HEAD (Retrieve - Metadata Only)</glossterm>
+        <glossentry>
+          <glossterm>HEAD (Retrieve - Metadata Only)</glossterm>
 
-        <glossdef>
-          <para><quote>The HEAD method is identical to GET except that the
-          server MUST NOT return a message-body in the response.</quote><xref
-          linkend="core-rfc2616" /></para>
-        </glossdef>
-      </glossentry>
+          <glossdef>
+            <para><quote>The HEAD method is identical to GET except that the
+            server MUST NOT return a message-body in the
+            response.</quote><xref linkend="core-rfc2616" /></para>
+          </glossdef>
+        </glossentry>
 
-      <glossentry>
-        <glossterm>MKCOL (Make Collection)</glossterm>
+        <glossentry>
+          <glossterm>MKCOL (Make Collection)</glossterm>
 
-        <glossdef>
-          <para><quote>MKCOL creates a new collection resource at the location
-          specified by the Request-URI.</quote><xref
-          linkend="core-rfc4918" /></para>
-        </glossdef>
-      </glossentry>
+          <glossdef>
+            <para><quote>MKCOL creates a new collection resource at the
+            location specified by the Request-URI.</quote><xref
+            linkend="core-rfc4918" /></para>
+          </glossdef>
+        </glossentry>
 
-      <glossentry>
-        <glossterm>MOVE (Relocate)</glossterm>
+        <glossentry>
+          <glossterm>MOVE (Relocate)</glossterm>
 
-        <glossdef>
-          <para><quote>The MOVE operation on a non-collection resource is the
-          logical equivalent of a copy (COPY), followed by consistency
-          maintenance processing, followed by a delete of the source, where
-          all three actions are performed in a single operation.</quote><xref
-          linkend="core-rfc4918" /></para>
-        </glossdef>
-      </glossentry>
+          <glossdef>
+            <para><quote>The MOVE operation on a non-collection resource is
+            the logical equivalent of a copy (COPY), followed by consistency
+            maintenance processing, followed by a delete of the source, where
+            all three actions are performed in a single
+            operation.</quote><xref linkend="core-rfc4918" /></para>
+          </glossdef>
+        </glossentry>
 
-      <glossentry>
-        <glossterm>OPTIONS</glossterm>
+        <glossentry>
+          <glossterm>OPTIONS</glossterm>
 
-        <glossdef>
-          <para><quote>The OPTIONS method represents a request for information
-          about the communication options available on the request/response
-          chain identified by the Request-URI.</quote><xref
-          linkend="core-rfc2616" /></para>
-        </glossdef>
-      </glossentry>
-    </glosslist>
+          <glossdef>
+            <para><quote>The OPTIONS method represents a request for
+            information about the communication options available on the
+            request/response chain identified by the Request-URI.</quote><xref
+            linkend="core-rfc2616" /></para>
+          </glossdef>
+        </glossentry>
+      </glosslist>
+    </section>
   </section>
 
   <section>
