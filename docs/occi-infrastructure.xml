@@ -263,8 +263,6 @@
             </tbody>
           </tgroup>
         </table>
-
-        <remark>TODO: Check supported suspend states.</remark>
       </section>
     </section>
 
