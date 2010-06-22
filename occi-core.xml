@@ -497,7 +497,10 @@
             <title>Core Attributes</title>
 
             <tgroup cols="4">
-              <colspec align="center" />
+              <colspec colname="col1" colnum="1" colwidth="1*" />
+              <colspec colname="col2" colnum="2" colwidth="1*" />
+              <colspec colname="col3" colnum="3" colwidth="1*" />
+              <colspec colname="col4" colnum="4" colwidth="2*" />
 
               <thead>
                 <row>
@@ -856,7 +859,8 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class=
           <title>Core Link Relations</title>
 
           <tgroup cols="2">
-            <colspec align="center" />
+            <colspec colname="col1" colnum="1" colwidth="1*" />
+            <colspec colname="col2" colnum="2" colwidth="3*" />
 
             <thead>
               <row>
