@@ -86,12 +86,6 @@
     </collab>
 
     <collab>
-      <personname><firstname>Randy</firstname><surname>Bias</surname></personname>
-
-      <orgname>GoGrid</orgname>
-    </collab>
-
-    <collab>
       <orgname>CohesiveFT</orgname>
     </collab>
 
@@ -167,6 +161,10 @@
       <orgname>Sun Microsystems</orgname>
     </collab>
 
+    <collab>
+      <personname><firstname>Mike</firstname><surname>Kelly</surname></personname>
+    </collab>
+
     <org>
       <orgname>Open Grid Forum (OGF)</orgname>
     </org>
@@ -174,16 +172,27 @@
     <pubdate>July 2009</pubdate>
   </info>
 
-<xi:include href="occi-usecases.xml" xpointer="element(/1)" />
-<xi:include href="occi-requirements.xml" xpointer="element(/1)" />
-<xi:include href="occi-walkthrough.xml" xpointer="element(/1)" />
-<xi:include href="occi-faq.xml" xpointer="element(/1)" />
-<xi:include href="occi-core.xml" xpointer="element(/1)" />
-<xi:include href="occi-http.xml" xpointer="element(/1)" />
-<xi:include href="occi-infrastructure.xml" xpointer="element(/1)" />
-<xi:include href="occi-search.xml" xpointer="element(/1)" />
-<xi:include href="occi-status.xml" xpointer="element(/1)" />
-<xi:include href="occi-tasks.xml" xpointer="element(/1)" />
-<xi:include href="occi-registries.xml" xpointer="element(/1)" />
-<xi:include href="occi-copyright.xml" xpointer="element(/1)" />
+  <xi:include href="occi-usecases.xml" xpointer="element(/1)" />
+
+  <xi:include href="occi-requirements.xml" xpointer="element(/1)" />
+
+  <xi:include href="occi-walkthrough.xml" xpointer="element(/1)" />
+
+  <xi:include href="occi-faq.xml" xpointer="element(/1)" />
+
+  <xi:include href="occi-core.xml" xpointer="element(/1)" />
+
+  <xi:include href="occi-http.xml" xpointer="element(/1)" />
+
+  <xi:include href="occi-infrastructure.xml" xpointer="element(/1)" />
+
+  <xi:include href="occi-search.xml" xpointer="element(/1)" />
+
+  <xi:include href="occi-status.xml" xpointer="element(/1)" />
+
+  <xi:include href="occi-tasks.xml" xpointer="element(/1)" />
+
+  <xi:include href="occi-registries.xml" xpointer="element(/1)" />
+
+  <xi:include href="occi-copyright.xml" xpointer="element(/1)" />
 </book>
