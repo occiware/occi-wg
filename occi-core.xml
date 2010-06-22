@@ -202,7 +202,7 @@
       <title>Versioning</title>
 
       <para>Every request <emphasis>should</emphasis> include an
-      <computeroutput>OCCI-Version</computeroutput> HTTP header indicating the
+      <computeroutput>occi.version</computeroutput> attribute indicating the
       version of the API requested (e.g.
       <computeroutput>1.0</computeroutput>). If none is provided the latest
       available version <emphasis>shall</emphasis> be used.</para>
@@ -256,24 +256,22 @@
       key-value pairs.</para>
 
       <para>Attributes are divided into namespaces which are separated by the
-      dash character (<quote>-</quote>). They <emphasis>must</emphasis> be
+      dot character (<quote>.</quote>). They <emphasis>must</emphasis> be
       handled as case-insensitive but <emphasis>should</emphasis> be
       case-preserving by default (depending on the format).</para>
 
       <tip>
         <para>This scalable approach was derived from the Mozilla Firefox
-        <uri>about:config</uri> page, though the <quote>.</quote> separator
-        was replaced with <quote>-</quote> for maximum compatibility with
-        various formats.</para>
+        <uri>about:config</uri> page.</para>
       </tip>
 
       <para>Attributes defined by this standard reside under the
-      <computeroutput>OCCI</computeroutput> namespace (e.g.
-      "<computeroutput>OCCI-ABC</computeroutput>") but anyone can define a new
-      attribute by allocating a unique namespace under
-      <quote><computeroutput>X-</computeroutput></quote> (e.g.
-      <quote><computeroutput>X-Acme-ABC</computeroutput></quote>). A number of
-      attributes are common to all <glossterm>kind</glossterm>s.</para>
+      <computeroutput>occi</computeroutput> namespace (e.g.
+      "<computeroutput>occi.abc</computeroutput>") but anyone can define a new
+      attribute by allocating a unique namespace based on their reversed
+      Internet domain (e.g.
+      <quote><computeroutput>com.cisco.cdp</computeroutput></quote>). A number
+      of attributes are common to all <glossterm>kind</glossterm>s.</para>
 
       <warning>
         <para>Defining your own attributes can lead to interoperability
@@ -282,10 +280,10 @@
         the registries which should be used where possible.</para>
       </warning>
 
-      <screen>OCCI-Compute-Cores: 2
-OCCI-Compute-Speed: 3000
-OCCI-Memory-Size: 8192
-Acme-Network-Identifier: dmz</screen>
+      <screen>Attribute: occi.compute.cores=2
+Attribute: occi.compute.speed=3000
+Attribute: occi.memory.size=8192
+Attribute: com.cisco.cdp=enabled</screen>
 
       <table>
         <title>Common Attributes</title>
@@ -306,7 +304,7 @@ Acme-Network-Identifier: dmz</screen>
           <tbody>
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Id</computeroutput></entry>
+              align="left"><computeroutput>occi.id</computeroutput></entry>
 
               <entry>Immutable identifier for the resource</entry>
 
@@ -315,16 +313,7 @@ Acme-Network-Identifier: dmz</screen>
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Kind</computeroutput></entry>
-
-              <entry>Kind of resource</entry>
-
-              <entry><computeroutput>compute</computeroutput></entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>OCCI-Title</computeroutput></entry>
+              align="left"><computeroutput>occi.title</computeroutput></entry>
 
               <entry>Display name for the resource</entry>
 
@@ -334,7 +323,7 @@ Acme-Network-Identifier: dmz</screen>
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Summary</computeroutput></entry>
+              align="left"><computeroutput>occi.summary</computeroutput></entry>
 
               <entry>Description of the resource</entry>
 
@@ -344,39 +333,11 @@ Acme-Network-Identifier: dmz</screen>
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Author-Name</computeroutput></entry>
-
-              <entry>Owner of the resource</entry>
-
-              <entry><computeroutput>John Citizen</computeroutput></entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>OCCI-Updated</computeroutput></entry>
-
-              <entry>Last updated date/time [<xref
-              linkend="rfc3339" />]</entry>
-
-              <entry><computeroutput>2020-12-31T23:59:59Z</computeroutput></entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>OCCI-Version</computeroutput></entry>
+              align="left"><computeroutput>occi.version</computeroutput></entry>
 
               <entry>Specification version</entry>
 
               <entry><computeroutput>1.0</computeroutput></entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>ETag</computeroutput></entry>
-
-              <entry>HTTP Entity Tags [<xref linkend="rfc2616" />]</entry>
-
-              <entry><computeroutput>"dad86c61eea237932f"</computeroutput></entry>
             </row>
           </tbody>
         </tgroup>
