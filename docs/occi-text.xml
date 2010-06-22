@@ -55,14 +55,8 @@
     <para>It is identical to the
     <computeroutput>generic-message</computeroutput> type except that there is
     no <computeroutput>start-line</computeroutput> (Request-Line |
-    Status-Line) and both <computeroutput>message-body</computeroutput> and
-    required <computeroutput>message-header</computeroutput> fields are
-    optional.</para>
-
-    <para>Where an optional <computeroutput>message-body</computeroutput> is
-    provided the relevant <computeroutput>entity-header</computeroutput>s
-    (e.g. <quote><computeroutput>Content-Type:</computeroutput></quote>)
-    <emphasis>must</emphasis> also be included.</para>
+    Status-Line) and <computeroutput>message-header</computeroutput> fields
+    required by HTTP are optional.</para>
 
     <para>Web Categories [<xref linkend="category" />] and Web Linking [<xref
     linkend="link" />] specifications are used for the meta-model.</para>
@@ -70,17 +64,14 @@
     <section>
       <title>ABNF</title>
 
-      <screen>occi-resource  = *( message-header CRLF )
-                 [ CRLF message-body ]
-message-body = entity-body
-               | &lt;entity-body encoded as per Transfer-Encoding&gt;
-entity-body    = *OCTET
-message-header = field-name ":" [ field-value ]
-field-name     = token
-field-value    = *( field-content | LWS )
-field-content  = &lt;the OCTETs making up the field-value
-                 and consisting of either *TEXT or combinations
-                 of token, separators, and quoted-string&gt;</screen>
+      <screen>occi-collection = *( occi-resource CRLF )
+occi-resource   = *( message-header CRLF )
+message-header  = field-name ":" [ field-value ]
+field-name      = token
+field-value     = *( field-content | LWS )
+field-content   = &lt;the OCTETs making up the field-value
+                  and consisting of either *TEXT or combinations
+                  of token, separators, and quoted-string&gt;</screen>
     </section>
   </section>
 
@@ -98,7 +89,10 @@ Category: compute;
   label="Compute Resource"
 Link: &lt;http://example.com/products/1234&gt;;
   rel="alternate";
-  title="Alternate representation"</screen></para>
+  title="Alternate representation"
+
+OCCI-Id: urn:uuid:c9524696-39de-43fe-a662-4d32e74c8ad2
+...</screen></para>
   </section>
 
   <bibliography>
