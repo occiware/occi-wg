@@ -222,7 +222,7 @@
 
                 <entry>application/octet-stream</entry>
 
-                <entry><xref linkend="XVA" /></entry>
+                <entry><xref linkend="infrastructure-xva" /></entry>
               </row>
 
               <row>
@@ -231,7 +231,7 @@
 
                 <entry>application/ova+xml</entry>
 
-                <entry><xref linkend="OVF" /></entry>
+                <entry><xref linkend="infrastructure-ovf" /></entry>
               </row>
 
               <row>
@@ -239,7 +239,7 @@
 
                 <entry>application/ovf+xml</entry>
 
-                <entry><xref linkend="OVF" /></entry>
+                <entry><xref linkend="infrastructure-ovf" /></entry>
               </row>
             </tbody>
           </tgroup>
@@ -484,7 +484,7 @@
 
                 <entry>application/x-iso9660-image</entry>
 
-                <entry><xref linkend="ISO" /></entry>
+                <entry><xref linkend="infrastructure-iso" /></entry>
               </row>
 
               <row>
@@ -500,7 +500,7 @@
 
                 <entry>application/x-qemu-qcow2</entry>
 
-                <entry><xref linkend="QCOW2" /></entry>
+                <entry><xref linkend="infrastructure-qcow2" /></entry>
               </row>
 
               <row>
@@ -509,7 +509,7 @@
 
                 <entry>application/octet-stream</entry>
 
-                <entry><xref linkend="RAW" /></entry>
+                <entry><xref linkend="infrastructure-raw" /></entry>
               </row>
 
               <row>
@@ -518,7 +518,7 @@
 
                 <entry>application/octet-stream</entry>
 
-                <entry><xref linkend="VDI" /></entry>
+                <entry><xref linkend="infrastructure-vdi" /></entry>
               </row>
 
               <row>
@@ -526,7 +526,7 @@
 
                 <entry>application/octet-stream</entry>
 
-                <entry><xref linkend="VMDK" /></entry>
+                <entry><xref linkend="infrastructure-vmdk" /></entry>
               </row>
             </tbody>
           </tgroup>
@@ -558,7 +558,7 @@
       </author>
     </biblioentry>
 
-    <biblioentry xreflabel="RAW" xml:id="infrastructure-disk-image">
+    <biblioentry xreflabel="RAW" xml:id="infrastructure-raw">
       <title>Wikipedia - Disk Image</title>
 
       <address><uri
@@ -569,7 +569,7 @@
       </author>
     </biblioentry>
 
-    <biblioentry xreflabel="VHD" xml:id="infrastructure-ovf">
+    <biblioentry xreflabel="OVF" xml:id="infrastructure-ovf">
       <title>DSP0243 Open Virtualisation Format (OVF)</title>
 
       <address><uri
