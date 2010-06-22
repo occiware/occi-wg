@@ -1,0 +1,1359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>OCCI Core Specification &amp; Models</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The Open Cloud Computing Interface (OCCI) is an open protocol for
+    cloud computing services. It initially targets the infrastructure services
+    (IaaS) layer but its modular design which extends this OCCI Core
+    Specification allows for future targeting of the platform services (PaaS)
+    and application services (SaaS) layers on a future roadmap.</para>
+
+    <para>A Representational State Transfer (REST) protocol, it deviates from
+    the underlying HyperText Transfer Protocol (HTTP) only where absolutely
+    necessary and could be described as a "Resource Oriented Architecture
+    (ROA)".<xref linkend="core-rws" /> Unlike other envelope-based protocols
+    such as Atom and SOAP (which describe complex XML-based structures for
+    data transferred within the HTTP payload, essentially duplicating HTTP's
+    built in header-based metadata functionality), OCCI provides a "clean
+    channel" over which any suitable format can travel without modification or
+    wrapping, using HTTP to its full extent in the way it was intended. OCCI
+    also uses various HTTP verbs in transactions rather than tunneling
+    everything over POST, as was the case with SOAP and the various WS-*
+    protocols. As such all existing HTTP features are available for caching,
+    proxying, gatewaying and other advanced functionality such as partial
+    GETs.</para>
+
+    <para>Each resource (i.e. a compute node) is identified by URL(s) and has
+    one or more native representations (i.e. Open Virtualisation Format or
+    OVF) as well as a generic XHTML5 rendering. The latter allows for direct
+    end-user accessibility with well-formed, embedded semantic web markup for
+    consumption by both human and machine clients. As such OCCI simultaneously
+    presents both a machine interface (using native resource renderings) and a
+    user interface (using HTML markup with forms and other web technologies
+    such as Javascript/Ajax) so as to satisfy all common use cases. HTTP
+    content negotiation is used to select between alternative representations
+    and metadata including associations between resources is exposed via HTTP
+    headers (e.g. the <computeroutput>Link:</computeroutput> and
+    <computeroutput>Category:</computeroutput> headers).</para>
+
+    <para>In this way OCCI is not responsible for the representations
+    themselves, rather it enables users to organise and group resources
+    together to build arbitrarily complex systems of inter-related resources.
+    It relies on existing standards for rendering and does not make any
+    recommendations of one standard format over any other, in the same way as
+    the Internet has many popular image formats.</para>
+
+    <section>
+      <title>Example</title>
+
+      <screen>&gt; GET /us-east/webapp/vm01 HTTP/1.1
+&gt; Host: cloud.example.com
+&gt; Accept: */*
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Content-Type: application/ovf
+&lt; Link: &lt;/us-east/webapp/vm01;start&gt;;
+&lt;       rel="http://purl.org/occi/action#start";
+&lt;       title="Start"
+&lt; Link: &lt;/us-east/webapp/build.pdf&gt;;
+&lt;       rel="related";
+&lt;       title="Documentation";
+&lt;       type="application/pdf"
+&lt; Category: compute;
+&lt;       label="Compute Resource";
+&lt;       scheme="http://purl.org/occi/kind#"
+&lt; Server: occi-server/1.0 (linux) OCCI/1.0
+&lt; Connection: close
+&lt;
+&lt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+...</screen>
+    </section>
+  </section>
+
+  <section>
+    <title>Essentials</title>
+
+    <section>
+      <title>Connection</title>
+
+      <section>
+        <title>Authentication</title>
+
+        <para>Servers <emphasis>may</emphasis> require that requests be
+        authenticated using standard HTTP-based authentication mechanisms
+        (including OAuth).<xref linkend="core-oauth" /> They indicate this
+        requirement by returning <code>HTTP 401</code> with a
+        <code>WWW-Authenticate</code> header and a suitable challenge (e.g.
+        <code>Basic</code>, <code>Digest</code>, <code>OAuth</code>).</para>
+
+        <screen>&gt; GET / HTTP/1.1
+&gt; Host: cloud.example.com
+&gt; 
+&lt; HTTP/1.1 401 Unauthorized
+&lt; WWW-Authenticate: OAuth realm="http://sp.example.com/"</screen>
+
+        <para>The client then includes appropriate <code>Authorization</code>
+        headers in its responses:<xref linkend="core-rfc2617" /></para>
+
+        <screen>&gt; GET / HTTP/1.1
+&gt; Authorization: OAuth realm="http://sp.example.com/",
+&gt;                oauth_consumer_key="0685bd9184jfhq22",
+&gt;                oauth_token="ad180jjd733klru7",
+&gt;                oauth_signature_method="HMAC-SHA1",
+&gt;                oauth_signature="wOJIO9A2W5mFwDgiDvZbTSMK%2FPY%3D",
+&gt;                oauth_timestamp="137131200",
+&gt;                oauth_nonce="4572616e48616d6d65724c61686176",
+&gt;                oauth_version="1.0"</screen>
+      </section>
+
+      <section>
+        <title>Cookies</title>
+
+        <para>Servers <emphasis>may</emphasis> set and clients
+        <emphasis>may</emphasis> accept <glossterm>cookies</glossterm> in
+        order to maintain authentication state between requests:<xref
+        linkend="core-rfc2109" /></para>
+
+        <screen>Set-Cookie: session=4732518c5fe6dbeb8429cdda11d65c3d; domain=.example.com; path=/</screen>
+
+        <warning>
+          <para>Such sessions <emphasis>should not</emphasis> be used for
+          other purposes (such as server-side state) in line with RESTful
+          principles.</para>
+        </warning>
+      </section>
+
+      <section>
+        <title>Versioning</title>
+
+        <para>Servers and clients <emphasis>should</emphasis> indicate the
+        latest version of OCCI they support (e.g.
+        <computeroutput>1.0</computeroutput>) by way of the
+        <computeroutput>Server:</computeroutput> and
+        <computeroutput>User-Agent:</computeroutput> headers respectively,
+        using the token <quote><computeroutput>OCCI</computeroutput></quote>
+        (e.g. <quote><computeroutput>OCCI/1.0</computeroutput></quote>). If
+        none is provided the latest (highest supported version number)
+        available version offered by the server <emphasis>should</emphasis> be
+        used:</para>
+
+        <screen>&gt; GET / HTTP/1.1
+&gt; Host: cloud.example.com
+&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OCCI/1.0
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Server: Apache/2.2.13 (Unix) OCCI/1.0</screen>
+      </section>
+    </section>
+
+    <section>
+      <title>Addressing</title>
+
+      <para>A single entry point is defined by a URL (e.g.
+      <uri>http://cloud.example.com/</uri>) which may be a collection of
+      resources or some other page as defined by the implementor (e.g. a
+      descriptive web page). Therefore OCCI is fully compatible with any
+      existing web presence such as a marketing site or landing page.</para>
+
+      <para>All resources <emphasis>must</emphasis> be addressible by URLs
+      (whose structure is opaque and at the discretion of the implementor) and
+      discoverable via search and/or link traversal from the entry point.
+      Clients <emphasis>should not</emphasis> rely on "rules" to construct
+      URLs, rather learning them from URLs previously retrieved, in line with
+      RESTful principles:</para>
+
+      <screen>&gt; GET /-/compute/ HTTP/1.1
+&gt; Accept: text/uri-list
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Content-type: text/uri-list
+&lt;
+&lt; /us-east/new-york/node17
+&lt; /us-west/san-francisco/node43
+&lt; /europe/paris/node38</screen>
+
+      <section>
+        <title>Virtual Addressing</title>
+
+        <para>Implementations may segment the URL space in order to achieve
+        Internet scale deployments. For example, the single entry point may be
+        geographically distributed and load balanced while subsets are
+        allocated to different regions, clusters, nodes, etc. (e.g.
+        <uri>http://cloud.example.com/us/node01/vm01</uri> -&gt;
+        <uri>http://node01.us.example.com/vm01</uri>). This can be done
+        without the knowledge of the client (using HTTP reverse proxies) or on
+        the client side (using HTTP redirects). Each subset
+        <emphasis>should</emphasis> be capable of acting as a standalone OCCI
+        end point or as part of a larger system, such that clients can access
+        the entire cloud or a single region, cluster or individual node
+        directly and aggregators can consolidate multiple clouds into a single
+        <quote>hybrid</quote> cloud.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Bootstrapping</title>
+
+      <para>Clients will typically conduct a
+      <computeroutput>GET</computeroutput> or
+      <computeroutput>HEAD</computeroutput> request on the root
+      (<quote><uri>/</uri></quote>) and discover the category search
+      interface, from which they can learn the supported categories/kinds and
+      retrieve some or all of them. If they know the URL for the resource they
+      wish to interact with (e.g. scripts &amp; cron jobs) then they can
+      bypass the discovery process and manipulate it directly.</para>
+
+      <example>
+        <title>Example bootstrap</title>
+
+        <para>Retrieve a collection of desired resources (having already
+        discovered the category search URL and available categories):</para>
+
+        <screen># detect category search interface
+&gt; GET / HTTP/1.1
+&gt; Host: cloud.example.com
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Content-type: text/html
+&lt; Link: &lt;/-/&gt;; rel="search"; title="Category Search"
+&lt;
+&lt; &lt;html&gt;
+&lt; &lt;head&gt;
+&lt; &lt;...&gt;
+&lt;
+# detect categories
+&gt; GET /-/ HTTP/1.1
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Content-length: 0
+&lt; 
+&lt; Category: compute; label="Compute Resource"; scheme="http://purl.org/occi/kind#"
+&lt; Category: network; label="Network Resource"; scheme="http://purl.org/occi/kind#"
+&lt; Category: storage; label="Storage Resource"; scheme="http://purl.org/occi/kind#"
+&lt; Category: us-east; label="US East Coast"; scheme="http://example.com/locations"
+&lt; Category: us-west; label="US West Coast"; scheme="http://example.com/locations"
+&lt; Category: demo; label="My Customer Demo"; scheme="http://example.com/~user/"
+&lt;
+# retrieve category
+&gt; GET /-/compute HTTP/1.1
+&gt; 
+&gt; HTTP/1.1 200 OK
+&gt; Content-type: text/uri-list
+&gt; 
+&gt; /node1
+&gt; /node2
+&gt;
+# retrieve resource
+&gt; GET /node1 HTTP/1.1
+&gt; 
+&gt; HTTP/1.1 200 OK
+&gt; Content-type: application/ovf
+&gt; &lt;...&gt;</screen>
+      </example>
+    </section>
+  </section>
+
+  <section>
+    <title>Operations</title>
+
+    <section>
+      <title>HTTP Verbs</title>
+
+      <para>Create, Retrieve, Update and Delete (CRUD) operations map to the
+      POST, GET, PUT and DELETE HTTP verbs respectively. HEAD and OPTIONS
+      verbs may be used to retrieve metadata and valid operations without the
+      entity body to improve performance. WebDAV definitions are used for
+      MKCOL, MOVE and COPY.</para>
+
+      <warning>
+        <para>Some providers may implement a subset of these operations, and
+        those available to you for a given resource (if any) may depend on
+        security policy. Be prepared to handle exceptions if you attempt to
+        call operations that are not available to you.</para>
+      </warning>
+
+      <glosslist>
+        <glossentry>
+          <glossterm>POST (Create)</glossterm>
+
+          <glossdef>
+            <para><quote>The POST method is used to request that the origin
+            server accept the entity enclosed in the request as a new
+            subordinate of the resource identified by the Request-URI in the
+            Request-Line.</quote><xref linkend="core-rfc2616" /></para>
+
+            <para>POSTing a representation (e.g. OVF) to a collection (e.g.
+            /compute) will result in a new resource being created (e.g.
+            /compute/123) and returned in the Location: header. POST is also
+            used with HTML form data to trigger verbs (e.g. restart)</para>
+          </glossdef>
+        </glossentry>
+
+        <glossentry>
+          <glossterm>GET (Retrieve - Metadata and Entity)</glossterm>
+
+          <glossdef>
+            <para><quote>The GET method means retrieve whatever information
+            (in the form of an entity) is identified by the
+            Request-URI.</quote><xref linkend="core-rfc2616" /></para>
+
+            <para>GETting a resource (e.g. /compute/123) will return a
+            representation of that resource in the most appropriate supported
+            format specified by the client in the Accept header. Otherwise
+            "406 Not Acceptable" will be returned.</para>
+          </glossdef>
+        </glossentry>
+
+        <glossentry>
+          <glossterm>PUT (Create or Update)</glossterm>
+
+          <glossdef>
+            <para><quote>The PUT method requests that the enclosed entity be
+            stored under the supplied Request-URI.</quote><xref
+            linkend="core-rfc2616" /></para>
+
+            <para>PUTting a representation (e.g. OVF) to a URL (e.g.
+            /compute/123) will result in the resource being created or
+            updated. The URL is known or selected by the client, in contrast
+            to POSTs where the URL is selected by the server.</para>
+          </glossdef>
+        </glossentry>
+
+        <glossentry>
+          <glossterm>DELETE (Delete)</glossterm>
+
+          <glossdef>
+            <para><quote>The DELETE method requests that the origin server
+            delete the resource identified by the Request-URI.</quote><xref
+            linkend="core-rfc2616" /></para>
+
+            <para>DELETE results in the deletion of the resource (and
+            everything "under" it, as appropriate).</para>
+          </glossdef>
+        </glossentry>
+      </glosslist>
+
+      <tip>
+        <para>It is possible to instruct the server to create a resource based
+        on a default configuration (without requiring client support) by doing
+        an empty POST/PUT, specifying <quote><computeroutput>Content-type:
+        application/occi</computeroutput></quote> (such that the web server
+        knows where to route the request) and specifying the appropriate
+        <parameter>kind</parameter> category (such that OCCI knows what to
+        create).</para>
+      </tip>
+
+      <para>Additionally the following HTTP methods are used:</para>
+
+      <glosslist>
+        <glossentry>
+          <glossterm>COPY (Duplicate)</glossterm>
+
+          <glossdef>
+            <para><quote>The COPY method creates a duplicate of the source
+            resource identified by the Request-URI, in the destination
+            resource identified by the URI in the Destination
+            header.</quote><xref linkend="core-rfc4918" /></para>
+          </glossdef>
+        </glossentry>
+
+        <glossentry>
+          <glossterm>HEAD (Retrieve - Metadata Only)</glossterm>
+
+          <glossdef>
+            <para><quote>The HEAD method is identical to GET except that the
+            server MUST NOT return a message-body in the
+            response.</quote><xref linkend="core-rfc2616" /></para>
+          </glossdef>
+        </glossentry>
+
+        <glossentry>
+          <glossterm>MKCOL (Make Collection)</glossterm>
+
+          <glossdef>
+            <para><quote>MKCOL creates a new collection resource at the
+            location specified by the Request-URI.</quote><xref
+            linkend="core-rfc4918" /></para>
+          </glossdef>
+        </glossentry>
+
+        <glossentry>
+          <glossterm>MOVE (Relocate)</glossterm>
+
+          <glossdef>
+            <para><quote>The MOVE operation on a non-collection resource is
+            the logical equivalent of a copy (COPY), followed by consistency
+            maintenance processing, followed by a delete of the source, where
+            all three actions are performed in a single
+            operation.</quote><xref linkend="core-rfc4918" /></para>
+          </glossdef>
+        </glossentry>
+
+        <glossentry>
+          <glossterm>OPTIONS</glossterm>
+
+          <glossdef>
+            <para><quote>The OPTIONS method represents a request for
+            information about the communication options available on the
+            request/response chain identified by the Request-URI.</quote><xref
+            linkend="core-rfc2616" /></para>
+          </glossdef>
+        </glossentry>
+      </glosslist>
+
+      <tip>
+        <para>Implementors may offer full WebDAV support in order to allow
+        clients to enumerate the entire tree, interact with the resources via
+        standard file managers (e.g. Windows Explorer, Mac OS X Finder),
+        etc.</para>
+      </tip>
+    </section>
+
+    <section>
+      <title>Actions</title>
+
+      <para>An <glossterm>action</glossterm> is some process that can be
+      carried out on one or more <glossterm>resource</glossterm>s, which may
+      result in a state change and/or the creation of new resource(s).</para>
+
+      <tip>
+        <para>Use common sense to decide what functionality should be exposed
+        by way of actions and consult the list of existing actions and verbs
+        before creating your own. For example it does not make sense to resize
+        a storage resource by setting the <quote>size</quote> attribute
+        (indeed there may not be space available or the filesystem may not
+        support resizing and in any case the operation will take some time),
+        nor to start a machine by changing the state from
+        <quote>stopped</quote> to <quote>running</quote>.</para>
+      </tip>
+
+      <para>Each available <glossterm>action</glossterm> for a given
+      <glossterm>resource</glossterm> is indicated via a
+      <glossterm>link</glossterm> with <parameter>class</parameter> extension
+      set to <quote><parameter>action</parameter></quote> (such that clients
+      can identify actions, including those from third-parties, without
+      deriving meaning from the <parameter>rel</parameter> URI).</para>
+
+      <screen>Link: &lt;/us-east/webapp/vm01;start&gt;;
+      rel="http://purl.org/occi/action#start";
+      class="action";
+      title="Start"</screen>
+
+      <para>Actions defined by this standard reside under the
+      <uri>http://purl.org/occi/action#</uri> namespace but anyone can define
+      a new action by allocating a URI they control.</para>
+
+      <warning>
+        <para>Defining your own actions can lead to interoperability problems
+        and should be a last resort reserved for unique functionality. A
+        simple peer review process is available for extending the registries
+        which should be used where possible.</para>
+      </warning>
+
+      <para>An <glossterm>action</glossterm> is triggered via an HTTP POST and
+      depending on the action requested (e.g.
+      <computeroutput>resize</computeroutput>), parameters
+      <emphasis>may</emphasis> be provided using HTML forms (e.g.
+      <computeroutput>application/x-www-form-urlencoded</computeroutput>). In
+      the case of HTML-based renderings the actions can therefore be actual
+      HTML forms.</para>
+
+      <tip>
+        <para>Some resources can be interacted with but not rendered due to
+        the nature of the resource or prevailing security policies (for
+        example, an operator may be able to backup a machine without knowing
+        anything about it).</para>
+      </tip>
+
+      <section>
+        <title>Asynchronous Actions</title>
+
+        <para>Synchronous actions <emphasis>may</emphasis> return
+        <computeroutput>200 OK</computeroutput> on successful completion or
+        <computeroutput>201 Created</computeroutput> with a
+        <computeroutput>Location:</computeroutput> header indicating a new
+        resource for audit purposes.</para>
+
+        <tip>
+          <para>Assume that clients are paranoid and want audit trails for all
+          but the most trivial of actions.</para>
+        </tip>
+
+        <para>In the event that the <glossterm>action</glossterm> does not
+        complete immediately it <emphasis>should</emphasis> return
+        <computeroutput>HTTP 202 Accepted</computeroutput> and a
+        <computeroutput>Location:</computeroutput> header indicating a new
+        resource where status and other pertinent information can be
+        obtained.</para>
+
+        <tip>
+          <para>Don't keep clients waiting - if you're not sure to return
+          immediately then give them a resource they can monitor. For example
+          by responding with an 202 Accepted return code and include a
+          location: header, as described.</para>
+        </tip>
+      </section>
+
+      <section>
+        <title>Advanced Actions</title>
+
+        <para>The specific parameters required and allowable values for them
+        depend on the action and for advanced actions <emphasis>may</emphasis>
+        require sending of custom <glossterm>content type</glossterm>s rather
+        than
+        <computeroutput>application/x-www-form-encoded</computeroutput>.</para>
+      </section>
+
+      <section>
+        <title>State Machines</title>
+
+        <para>State machines are maintained on the server side and possible
+        transitions are advertised to the client by way of action links. The
+        links offered to a given client may depend on the resource, its
+        current state, security policy, etc.</para>
+
+        <tip>
+          <para>Many state transitions will not be effected immediately so be
+          prepared to handle asynchronous responses.</para>
+        </tip>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Model</title>
+
+    <para>The model defines the objects and how they interrelate. An interface
+    exposes "kinds" which have "attributes" and on which "actions" can be
+    performed. The attributes are exposed as key-value pairs and applicable
+    actions as links, following the REST hypertext constraint (whereby state
+    transitions are defined <glossterm>in-band</glossterm> rather than via
+    rules).</para>
+
+    <section>
+      <title>Kinds</title>
+
+      <para>Each category of resources distinguished by some common
+      characteristic or quality is called a <glossterm>kind</glossterm> (e.g.
+      <computeroutput>compute</computeroutput>,
+      <computeroutput>network</computeroutput>,
+      <computeroutput>storage</computeroutput>,
+      <computeroutput>queue</computeroutput>,
+      <computeroutput>application</computeroutput>,
+      <computeroutput>contact</computeroutput>).</para>
+
+      <para>Kinds defined by this standard live in the
+      <uri>http://purl.org/occi/kind/</uri> namespace but anyone can define a
+      new kind by using a URI they control as the term.</para>
+
+      <warning>
+        <para>Defining your own kinds can lead to interoperability problems
+        and should be a last resort reserved for unique functionality. A
+        simple peer review process is available for extending the registries
+        which should be used where possible.</para>
+      </warning>
+
+      <para>Each resource <emphasis>must</emphasis> specify a kind by way of a
+      <glossterm>category</glossterm> within the <glossterm>scheme</glossterm>
+      <quote><uri>http://purl.org/occi/kind#</uri></quote>.</para>
+
+      <tip>
+        <para>The word <glossterm>type</glossterm> is not used in this context
+        in order to avoid confusion with Internet media types.</para>
+      </tip>
+
+      <section>
+        <title>Attributes</title>
+
+        <para>An <glossterm>attribute</glossterm> is a specification that
+        defines a property of an object. It is expressed in the form of
+        key-value pairs. Attributes are divided into namespaces which are
+        separated by the dot character (<quote>.</quote>).</para>
+
+        <tip>
+          <para>This scalable approach was derived from the Mozilla Firefox
+          <uri>about:config</uri> page.</para>
+        </tip>
+
+        <para>Attributes defined by this standard reside at the root but
+        anyone can define a new attribute by allocating a unique namespace
+        based on their reversed Internet domain (e.g.
+        <quote><computeroutput>com.example.attribute</computeroutput></quote>).</para>
+
+        <warning>
+          <para>Defining your own attributes can lead to interoperability
+          problems and should be a last resort reserved for unique
+          functionality. A simple peer review process is available for
+          extending the registries which should be used where possible.</para>
+        </warning>
+
+        <section>
+          <title>Registry Entries</title>
+
+          <table>
+            <title>Core Attributes</title>
+
+            <tgroup cols="4">
+              <colspec colname="col1" colnum="1" colwidth="1*" />
+
+              <colspec colname="col2" colnum="2" colwidth="1*" />
+
+              <colspec colname="col3" colnum="3" colwidth="1*" />
+
+              <colspec colname="col4" colnum="4" colwidth="2*" />
+
+              <thead>
+                <row>
+                  <entry align="left">Attribute</entry>
+
+                  <entry>Description</entry>
+
+                  <entry>Type</entry>
+
+                  <entry>Example</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry
+                  align="left"><computeroutput>id</computeroutput></entry>
+
+                  <entry>Immutable, unique identifier for the resource</entry>
+
+                  <entry>URI</entry>
+
+                  <entry><uri>urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770</uri>
+                  or <uri>urn:aws:ami-123456</uri></entry>
+                </row>
+
+                <row>
+                  <entry
+                  align="left"><computeroutput>title</computeroutput></entry>
+
+                  <entry>Display name for the resource</entry>
+
+                  <entry>String</entry>
+
+                  <entry><computeroutput>Compute Resource
+                  #123</computeroutput></entry>
+                </row>
+
+                <row>
+                  <entry
+                  align="left"><computeroutput>summary</computeroutput></entry>
+
+                  <entry>Description of the resource</entry>
+
+                  <entry>String</entry>
+
+                  <entry><computeroutput>A virtual compute
+                  resource</computeroutput></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </section>
+      </section>
+    </section>
+
+    <section xml:id="categories">
+      <title>Categories</title>
+
+      <para><glossterm>Category</glossterm> information allows for flexible
+      organisation of resources into one or more vocabularies (each of which
+      is referred to as a <glossterm>scheme</glossterm>).</para>
+
+      <para>The category model was derived from Atom and consists of three
+      attributes:</para>
+
+      <glosslist>
+        <glossentry>
+          <glossterm>term</glossterm>
+
+          <glossdef>
+            <para>The term itself (e.g.
+            <quote><computeroutput>compute</computeroutput></quote>)</para>
+          </glossdef>
+        </glossentry>
+
+        <glossentry>
+          <glossterm>scheme (optional)</glossterm>
+
+          <glossdef>
+            <para>The vocabulary (e.g.
+            <quote><computeroutput>http://purl.org/occi/kind#</computeroutput></quote>)</para>
+          </glossdef>
+        </glossentry>
+
+        <glossentry>
+          <glossterm>label (optional)</glossterm>
+
+          <glossdef>
+            <para>A human-friendly display name for the term (e.g.
+            <quote><computeroutput>Compute
+            Resource</computeroutput></quote>)</para>
+          </glossdef>
+        </glossentry>
+      </glosslist>
+
+      <para>Category schemes and/or terms defined by this standard reside
+      throughout the <uri>http://purl.org/occi/</uri> namespace but anyone can
+      define a new scheme by allocating a URI they control.</para>
+
+      <tip>
+        <para>Categories provide a flexible way to manage resources by
+        taxonomy (categories) and/or folksonomy (tags), where both can be
+        shared between [groups of] users or globally. For example, users can
+        create schemes for resource locations (e.g.
+        <computeroutput>US-East</computeroutput>,
+        <computeroutput>US-West</computeroutput>,
+        <computeroutput>Europe</computeroutput>), operating systems (e.g.
+        <computeroutput>Windows</computeroutput>,
+        <computeroutput>Linux</computeroutput>) and patch levels (e.g.</para>
+      </tip>
+
+      <example>
+        <title>Category examples</title>
+
+        <para>OCCI kinds are represented by a category:</para>
+
+        <screen>Category: compute;
+      label="Compute Resource";
+      scheme="http://purl.org/occi/kind#"</screen>
+
+        <para>Implementors and users can also define their own vocabularies by
+        defining schemes:</para>
+
+        <screen>Category: cluster1;
+      label="Cluster #1";
+      scheme="http://example.com/clusters#"</screen>
+      </example>
+
+      <section>
+        <title>Querying</title>
+
+        <para>The category query interface can be accessed by constructing an
+        URL with the desired categories added to the path. Categories can be
+        negated by prefixing with <quote>-</quote> and schemes may be
+        specified with braces.</para>
+
+        <example>
+          <title>Example category query</title>
+
+          <para>Locate the category search root (which
+          <emphasis>should</emphasis> be <uri>/-/</uri>):</para>
+
+          <screen>&gt; HEAD / HTTP/1.1
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Link: &lt;/-/&gt;; rel="search"; title="Category Search"</screen>
+
+          <para>Discover the available categories (which will all be returned
+          in the same format as they appear in the HTTP headers):</para>
+
+          <screen>&gt; GET /-/ HTTP/1.1
+&gt; Accept: */*
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Content-type: application/occi
+&lt; 
+&lt; Category: compute; label="Compute Resource"; scheme="http://purl.org/occi/kind#"
+&lt; Category: network; label="Network Resource"; scheme="http://purl.org/occi/kind#"
+&lt; Category: storage; label="Storage Resource"; scheme="http://purl.org/occi/kind#"
+&lt; Category: us-east; label="US East Coast"; scheme="http://example.com/locations"
+&lt; Category: us-west; label="US West Coast"; scheme="http://example.com/locations"
+&lt; Category: demo; label="My Customer Demo"; scheme="http://example.com/~user/"</screen>
+
+          <para>Query the category search interface for the desired
+          category(s):</para>
+
+          <screen>&gt; GET /-/compute/us-west HTTP/1.1
+&gt; Accept: text/uri-list
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Content-type: text/uri-list
+&lt; 
+&lt; /vm01
+&lt; /webapp/web01
+&lt; /webapp/web02
+&lt; /webapp/db01</screen>
+        </example>
+      </section>
+
+      <section>
+        <title>Registry Entries</title>
+
+        <table>
+          <title>Core Category Schemes</title>
+
+          <tgroup cols="3">
+            <colspec align="center" />
+
+            <thead>
+              <row>
+                <entry align="left">Scheme</entry>
+
+                <entry>Description</entry>
+
+                <entry>Example</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/kind#</computeroutput></entry>
+
+                <entry>OCCI Kinds</entry>
+
+                <entry><computeroutput>compute</computeroutput></entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/category#countries</computeroutput></entry>
+
+                <entry>ISO Country Codes</entry>
+
+                <entry><computeroutput>us</computeroutput></entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/category#us-states</computeroutput></entry>
+
+                <entry>US States</entry>
+
+                <entry><computeroutput>ca</computeroutput></entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/category#operating-systems</computeroutput></entry>
+
+                <entry>Operating Systems</entry>
+
+                <entry><computeroutput>linux</computeroutput></entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>http://purl.org/occi/category#regulations</computeroutput></entry>
+
+                <entry>Regulation compliance</entry>
+
+                <entry><computeroutput>sox</computeroutput></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>Other categories schemes can be added to the registry.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Collections</title>
+
+      <para>Where an operation could return multiple resources (e.g.
+      categories, searches) this is referred to as a
+      <glossterm>collection</glossterm>. Collections are returned as a list of
+      URLs in <computeroutput>text/uri-list</computeroutput> format.<xref
+      linkend="core-rfc2483" /></para>
+
+      <tip>
+        <para>Collections are passed by reference for simplicity rather than
+        performance reasons, requiring O(n+1) requests. Including metadata
+        (via a wrapper format like Atom or SOAP) and/or the data itself would
+        provide O(1) performance, though this "pass by value" approach should
+        only be considered where the representations are known to be small as
+        encoding adds significant overhead.</para>
+      </tip>
+
+      <example>
+        <title>Example collection</title>
+
+        <screen># OCCI Example Collection
+/examples/custom-extension
+/examples/lamp-multi-vm
+/examples/lamp
+/examples/myservice</screen>
+      </example>
+
+      <section>
+        <title>Paging</title>
+
+        <para>Collections <emphasis>may</emphasis> be divided into
+        <glossterm>page</glossterm>s, with each linking to the
+        <quote>first</quote>, <quote>last</quote>, <quote>next</quote> and
+        <quote>previous</quote> <glossterm>link relation</glossterm>s. The
+        required <parameter>class</parameter> extension, with the value of
+        <parameter>paging</parameter>, allows clients to group links together
+        in the user interface and the server to specify e.g. "Next 10", "Next
+        100", etc.</para>
+
+        <screen>Link: &lt;http://example.com/xyz;start=0&gt;; rel="first"; title="First"; class="paging"
+Link: &lt;http://example.com/xyz;start=400&gt;; rel="previous"; title="Previous"; class="paging"
+Link: &lt;http://example.com/xyz;start=500&gt;; rel="self"; title="Self"; class="paging"
+Link: &lt;http://example.com/xyz;start=600&gt;; rel="next"; title="Next"; class="paging"
+Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class="paging"</screen>
+      </section>
+    </section>
+
+    <section>
+      <title>Linking</title>
+
+      <para>Web linking standards for HTTP [<xref linkend="core-link" />] and
+      HTML [<xref linkend="core-html5" />] are used to indicate associations
+      between resources. All formats <emphasis>must</emphasis> support
+      <glossterm>in-band</glossterm> linking including:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Link relations (e.g.
+          <computeroutput>rel="alternate"</computeroutput>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Pointers to resources (e.g.
+          <computeroutput>href="http://example.com/"</computeroutput>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Internet media types (e.g.
+          <computeroutput>type="text/html"</computeroutput>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Extensibility (e.g.
+          <computeroutput>attribute="value"</computeroutput>)</para>
+        </listitem>
+      </itemizedlist>
+
+      <screen>Link: &lt;/us-east/webapp/build.pdf&gt;;
+      rel="related";
+      title="Documentation";
+      type="application/pdf"</screen>
+
+      <para><glossterm>Link relation</glossterm>s defined by this standard
+      reside under the <uri>http://purl.org/occi/rel</uri> namespace but
+      anyone can define a new <glossterm>link relation</glossterm> by
+      allocating a URI they control.</para>
+
+      <section>
+        <title>Registry Entries</title>
+
+        <table>
+          <title>Core Link Relations</title>
+
+          <tgroup cols="2">
+            <colspec colname="col1" colnum="1" colwidth="1*" />
+
+            <colspec colname="col2" colnum="2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry align="left">Relation</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry
+                align="left"><computeroutput>first</computeroutput></entry>
+
+                <entry><quote>An IRI that refers to the furthest preceding
+                resource in a series of resources.</quote> [<xref
+                linkend="core-link" />]</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>help</computeroutput></entry>
+
+                <entry><quote>The referenced document provides further help
+                information for the page as a whole.</quote> [<xref
+                linkend="core-html5" />]</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>icon</computeroutput></entry>
+
+                <entry><quote>The specified resource is an icon representing
+                the page or site, and should be used by the user agent when
+                representing the page in the user interface.</quote> [<xref
+                linkend="core-html5" />]</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>last</computeroutput></entry>
+
+                <entry><quote>An IRI that refers to the furthest following
+                resource in a series of resources.</quote> [<xref
+                linkend="core-link" />]</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>next</computeroutput></entry>
+
+                <entry><quote>A URI that refers to the immediately following
+                document in a series of documents.</quote> [<xref
+                linkend="core-link" />]</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>previous</computeroutput></entry>
+
+                <entry><quote>A URI that refers to the immediately preceding
+                document in a series of documents.</quote> [<xref
+                linkend="core-link" />]</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>search</computeroutput></entry>
+
+                <entry><quote>The referenced document provides an interface
+                specifically for searching the document and its related
+                resources.</quote> [<xref linkend="core-html5" />, <xref
+                linkend="core-opensearch" />]</entry>
+              </row>
+
+              <row>
+                <entry
+                align="left"><computeroutput>self</computeroutput></entry>
+
+                <entry><quote>Identifies a resource equivalent to the
+                containing element</quote> [<xref
+                linkend="core-rfc4287" />]</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Extensibility</title>
+
+    <para>The interface is fully extensible, both via a public peer review
+    process (in order to update the specification itself, usually via
+    registries) and via independent allocation of unique namespaces (in order
+    to cater for vendor-specific enhancements).</para>
+
+    <section>
+      <title>Foreign markup</title>
+
+      <para>Implementations <emphasis>must</emphasis> accept and forward but
+      otherwise ignore markup they do not understand.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Security Considerations</title>
+
+    <para>Encryption is not required by the specification in order to cater
+    for sites that do not or can not use it (e.g. due to export restrictions,
+    performance reasons, etc.), however SSL/TLS <emphasis>should</emphasis> be
+    used over public networks including the Internet.</para>
+  </section>
+
+  <glossary>
+    <glossentry>
+      <glossterm>in-band</glossterm>
+
+      <glossdef>
+        <para><quote>Sending of metadata and control information in the same
+        band, on the same channel, as used for data</quote>, for example, by
+        embedding it in HTML. [<uri
+        xlink:href="http://en.wikipedia.org/wiki/In-band">http://en.wikipedia.org/wiki/In-band</uri>]</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>kind</glossterm>
+
+      <glossdef>
+        <para><quote>A category of things distinguished by some common
+        characteristic or quality</quote>, for example events, messages,
+        media. [<uri
+        xlink:href="http://wordnetweb.princeton.edu/perl/webwn?s=kind">http://wordnetweb.princeton.edu/perl/webwn?s=kind</uri>]</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>out-of-band</glossterm>
+
+      <glossdef>
+        <para><quote>Communications which occur outside of a previously
+        established communications method or channel</quote>, for example, in
+        HTTP headers. [<uri
+        xlink:href="http://en.wikipedia.org/wiki/Out-of-band_signaling">http://en.wikipedia.org/wiki/Out-of-band_signaling</uri>]</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>type</glossterm>
+
+      <glossdef>
+        <para>Internet media (<acronym>MIME</acronym>) type.</para>
+      </glossdef>
+    </glossentry>
+  </glossary>
+
+  <bibliography>
+    <bibliomixed>Normative References</bibliomixed>
+
+    <biblioentry xreflabel="RFC2109" xml:id="core-rfc2109">
+      <title>RFC 2109 - HTTP State Management Mechanism</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2109">http://tools.ietf.org/html/rfc2109</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>1997-02</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC2483" xml:id="core-rfc2483">
+      <title>RFC 2483 - URI Resolution Services Necessary for URN
+      Resolution</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2109">http://tools.ietf.org/html/rfc2483#section-5</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>1999-01</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC2616" xml:id="core-rfc2616">
+      <title>RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://tools.ietf.org/html/rfc2616</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>1999-06</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC2617" xml:id="core-rfc2617">
+      <title>RFC 2617 - HTTP Authentication: Basic and Digest Access
+      Authentication</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://tools.ietf.org/html/rfc2617</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>1999-06</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC3339" xml:id="core-rfc3339">
+      <title>RFC 3339 - Date and Time on the Internet: Timestamps</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc3339">http://tools.ietf.org/html/rfc3339</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>2002-07</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC4918" xml:id="core-rfc4918">
+      <title>RFC 4918 - HTTP Extensions for Web Distributed Authoring and
+      Versioning (WebDAV)</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://tools.ietf.org/html/rfc4918</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>2007-06</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="OpenSearch" xml:id="core-opensearch">
+      <title>OpenSearch 1.1</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://www.opensearch.org/Specifications/OpenSearch/1.1</uri></address>
+
+      <org>
+        <orgname>A9.com, Inc. (an Amazon company)</orgname>
+      </org>
+
+      <author>
+        <personname>Clinton DeWitt</personname>
+      </author>
+
+      <collab>
+        <personname>Joel Tesler</personname>
+      </collab>
+
+      <collab>
+        <personname>Michael Fagan</personname>
+      </collab>
+
+      <collab>
+        <personname>Joe Gregorio</personname>
+      </collab>
+
+      <collab>
+        <personname>Aaron Sauve</personname>
+      </collab>
+
+      <collab>
+        <personname>James Snell</personname>
+      </collab>
+
+      <date>2009</date>
+    </biblioentry>
+
+    <bibliomixed>Informative References</bibliomixed>
+
+    <biblioentry xreflabel="RFC4287" xml:id="core-rfc4287">
+      <title>RFC 4287 - The Atom Syndication Format</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://tools.ietf.org/html/rfc4287</uri></address>
+
+      <author>
+        <personname>Robert Syre</personname>
+      </author>
+
+      <author>
+        <personname>Mark Nottingham</personname>
+      </author>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>2005-12</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="HTML5" xml:id="core-html5">
+      <title>HTML 5</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://www.w3.org/TR/html5/</uri></address>
+
+      <author>
+        <personname>Ian Hickson</personname>
+
+        <affiliation>
+          <org>
+            <orgname>Google, Inc.</orgname>
+          </org>
+        </affiliation>
+      </author>
+
+      <author>
+        <personname>David Hyatt</personname>
+
+        <affiliation>
+          <org>
+            <orgname>Apple, Inc.</orgname>
+          </org>
+        </affiliation>
+      </author>
+
+      <org>
+        <orgname>World Wide Web Consortium (W3C)</orgname>
+      </org>
+
+      <date>2009-08-25</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="OAuth" xml:id="core-oauth">
+      <title>OAuth</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://oauth.net/core/1.0</uri></address>
+
+      <org>
+        <orgname>OAuth Core Workgroup</orgname>
+      </org>
+
+      <address><email>spec@oauth.net</email></address>
+
+      <date>2007-12-04</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RWS" xml:id="core-rws">
+      <title>RESTful Web Services</title>
+
+      <address><uri xlink:href="http://oreilly.com/catalog/9780596529260/">http://oreilly.com/catalog/9780596529260/</uri></address>
+
+      <biblioid class="isbn">9780596529260</biblioid>
+
+      <org>
+        <orgname>O'Reilly Media</orgname>
+      </org>
+
+      <author>
+        <personname>Leonard Richardson</personname>
+      </author>
+
+      <author>
+        <personname>Sam Ruby</personname>
+      </author>
+
+      <date>2007-05</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="LINK" xml:id="core-link">
+      <title>Web Linking</title>
+
+      <address><uri
+          xlink:href="http://tools.ietf.org/html/draft-nottingham-http-link-header">http://tools.ietf.org/html/draft-nottingham-http-link-header</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <author>
+        <personname>Mark Nottingham</personname>
+      </author>
+
+      <date>2009-07-12</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="CATEGORY" xml:id="core-category">
+      <title>Web Categories</title>
+
+      <address><uri
+          xlink:href="http://tools.ietf.org/html/draft-johnston-http-category-header">http://tools.ietf.org/html/draft-johnston-http-category-header</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <author>
+        <personname>Sam Johnston</personname>
+      </author>
+
+      <date>2009-07-1</date>
+    </biblioentry>
+  </bibliography>
+</article>

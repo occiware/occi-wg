@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>OCCI HTTP Header rendering</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>In this section we detail the requirements need to support the HTTP
+    header rendering of the OCCI Model. This is a lightweight yet
+    all-encompassing means to describe infrastructure. It provides the
+    capability to send a native (e.g. OVF, VMX) representation along as the
+    HTTP body for clients that can digest such a native rendering.</para>
+  </section>
+
+  <section>
+    <title>Specification</title>
+
+    <para>The HTTP binding for OCCI provides a machine interface, delivering
+    resources in their native formats:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The HTTP binding is defined by <xref linkend="http-rfc2616" />
+        (HTTP).</para>
+      </listitem>
+
+      <listitem>
+        <para>Web Linking [<xref linkend="http-link" />] and Web Categories
+        [<xref linkend="http-category" />] specifications are used for the
+        meta-model.</para>
+      </listitem>
+
+      <listitem>
+        <para>Server-side cookies ("Attributes") are used for name-value
+        pairs.</para>
+      </listitem>
+
+      <listitem>
+        <para>Collections are transferred as the
+        <computeroutput>text/uri-list</computeroutput> content type.<xref
+        linkend="http-rfc2483" /></para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Examples</title>
+
+    <para>This is an example of creating a compute resource, specifying only
+    an id and an alternate representation. The resource's attributes are
+    assigned default values, which are determined by the provider, and are
+    visible in the example response.</para>
+
+    <section>
+      <title>POST Request</title>
+
+      <screen>POST /compute/123 HTTP/1.1
+Host: example.com
+Content-Length: 0
+Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
+Category: compute;
+  scheme="http://purl.org/occi/kind/";
+  label="Compute Resource"
+Link: &lt;http://example.com/products/1234&gt;;
+  rel="alternate";
+  title="Alternate representation"</screen>
+    </section>
+
+    <section>
+      <title>GET Response</title>
+
+      <screen>Attribute: id="urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770"
+Attribute: title="Compute Resource #123"
+Attribute: summary="A virtual compute resource"
+Attribute: updated="2009-12-31T12:59:59Z"
+Attribute: compute.cores=2
+Attribute: compute.speed=3000
+Attribute: compute.memory=2048
+ETag: "dad86c61eea237932f"
+Category: compute;
+  scheme="http://purl.org/occi/kind/";
+  label="Compute Resource"
+Link: &lt;http://example.com/products/1234&gt;;
+  rel="alternate";
+  title="Alternate representation"
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;ovf:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:ovf="http://schemas.dmtf.org/ovf/1/envelope"
+&lt;!-- snip --&gt;</screen>
+    </section>
+  </section>
+
+  <bibliography>
+    <bibliomixed>Normative References</bibliomixed>
+
+    <biblioentry xreflabel="RFC2483" xml:id="http-rfc2483">
+      <title>RFC 2483 - URI Resolution Services Necessary for URN
+      Resolution</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2109">http://tools.ietf.org/html/rfc2483#section-5</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>1999-01</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC2616" xml:id="http-rfc2616">
+      <title>RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://tools.ietf.org/html/rfc2616</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>1999-06</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC2965" xml:id="http-rfc2965">
+      <title>RFC 2965 - HTTP State Management Mechanism</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2822">http://tools.ietf.org/html/rfc2965</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>2000-10</date>
+    </biblioentry>
+
+    <bibliomixed>Informative References</bibliomixed>
+
+    <biblioentry xreflabel="CATEGORY" xml:id="http-category">
+      <title>Web Categories</title>
+
+      <address><uri
+          xlink:href="http://tools.ietf.org/html/draft-johnston-http-category-header">http://tools.ietf.org/html/draft-johnston-http-category-header</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <author>
+        <personname>Sam Johnston</personname>
+      </author>
+
+      <date>2009-07-1</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="LINK" xml:id="http-link">
+      <title>Web Linking</title>
+
+      <address><uri
+          xlink:href="http://tools.ietf.org/html/draft-nottingham-http-link-header">http://tools.ietf.org/html/draft-nottingham-http-link-header</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <author>
+        <personname>Mark Nottingham</personname>
+      </author>
+
+      <date>2009-07-12</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="HTML5-article" xml:id="html5-article">
+      <title>Designing a great HTTP API - why heavyweight XML is not the
+      answer</title>
+
+      <address><uri
+          xlink:href="http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/">http://www.elastichosts.com/blog/2009/01/01/designing-a-great-http-api/</uri></address>
+
+      <author>
+        <orgname>ElasticHosts</orgname>
+      </author>
+
+      <date>2009-01-01</date>
+    </biblioentry>
+  </bibliography>
+</article>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xml" href="occi-to-text.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:occi="http://purl.org/occi" xmlns:network="http://purl.org/occi/network" xmlns:compute="http://purl.org/occi/compute" xmlns:storage="http://purl.org/occi/storage" xmlns:state="http://purl.org/occi/state">
+
+  <title>Acme Cloud</title>
+  <category term="cloud" label="Cloud" />
+  <link rel="self" href="http://example.com/"/>
+  <updated>2009-12-31T23:59:59Z</updated>
+  <author>
+    <name>John Doe</name>
+  </author>
+  <id>urn:uuid:bdde18fa-6e73-43d3-aca3-0423a63adfad</id>
+
+  <entry occi:etag="NZomIzI2OTsmIzM0NTue">
+    <title>Virtual Machine</title>
+    <category term="compute" label="Compute" />
+    <compute:cores arch="x64">2</compute:cores>
+    <compute:speed>2Ghz</compute:speed>
+    <compute:memory>2048</compute:memory>
+    <link href="http://example.com/ce17aa70-168a-4119-841c-8042ec423387"/>
+    <link title="Network Interface" rel="http://purl.org/occi/network#interface" network:interface="eth0" href="http://example.com/b1e63ba5-fc33-460b-98c0-2ac97afa9d5d"/>
+    <link title="Start" rel="http://purl.org/occi/state" state:target="active" href="http://example.com/b1e63ba5-fc33-460b-98c0-2ac97afa9d5d/state/start"/>
+    <id>urn:uuid:ce17aa70-168a-4119-841c-8042ec423387</id>
+    <updated>2009-12-31T23:59:59Z</updated>
+    <summary>A virtual machine to demonstrate OCCI.</summary>
+  </entry>
+
+  <entry occi:etag="NZomIzI2OTsmIzM0NTue">
+    <title>Virtual Network</title>
+    <category term="network" label="Network" />
+    <network:address type="ipv4">192.168.0.10</network:address>
+    <network:address type="ipv4">192.168.0.11</network:address>
+    <network:address type="ipv4">192.168.0.12</network:address>
+    <network:gateway type="ipv4">192.168.0.1</network:gateway>
+    <network:netmask type="ipv4">255.255.0.0</network:netmask>
+    <network:vlan>4094</network:vlan>
+    <link href="http://example.com/b1e63ba5-fc33-460b-98c0-2ac97afa9d5d"/>
+    <id>urn:uuid:b1e63ba5-fc33-460b-98c0-2ac97afa9d5d</id>
+    <updated>2009-12-31T23:59:59Z</updated>
+    <summary>A secure, internal virtual network.</summary>
+  </entry>
+ 
+</feed>
