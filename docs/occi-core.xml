@@ -52,7 +52,6 @@
       <title>Example</title>
 
       <screen>&gt; GET /us-east/webapp/vm01 HTTP/1.1
-&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OCCI/1.0
 &gt; Host: cloud.example.com
 &gt; Accept: */*
 &gt; 
@@ -90,16 +89,43 @@
         (including OAuth).<xref linkend="core-oauth" /> They indicate this
         requirement by returning <code>HTTP 401</code> with a
         <code>WWW-Authenticate</code> header and a suitable challenge (e.g.
-        <code>Basic</code>, <code>Digest</code>, <code>OAuth</code>). The
-        client then includes appropriate <code>Authorization</code> headers in
-        its responses.<xref linkend="core-rfc2617" /></para>
+        <code>Basic</code>, <code>Digest</code>, <code>OAuth</code>). </para>
+
+        <screen>&gt; GET / HTTP/1.1
+&gt; Host: cloud.example.com
+&gt; 
+&lt; HTTP/1.1 401 Unauthorized
+&lt; WWW-Authenticate: OAuth realm="http://sp.example.com/"</screen>
+
+        <para>The client then includes appropriate <code>Authorization</code>
+        headers in its responses:<xref linkend="core-rfc2617" /></para>
+
+        <screen>&gt; GET / HTTP/1.1
+&gt; Authorization: OAuth realm="http://sp.example.com/",
+&gt;                oauth_consumer_key="0685bd9184jfhq22",
+&gt;                oauth_token="ad180jjd733klru7",
+&gt;                oauth_signature_method="HMAC-SHA1",
+&gt;                oauth_signature="wOJIO9A2W5mFwDgiDvZbTSMK%2FPY%3D",
+&gt;                oauth_timestamp="137131200",
+&gt;                oauth_nonce="4572616e48616d6d65724c61686176",
+&gt;                oauth_version="1.0"</screen>
+      </section>
+
+      <section>
+        <title>Cookies</title>
 
         <para>Servers <emphasis>may</emphasis> set and clients
         <emphasis>may</emphasis> accept <glossterm>cookies</glossterm> in
-        order to maintain authentication state between requests. Such sessions
-        <emphasis>should not</emphasis> be used for other purposes (such as
-        server-side state) in line with RESTful principles.<xref
+        order to maintain authentication state between requests:<xref
         linkend="core-rfc2109" /></para>
+
+        <screen>Set-Cookie: session=4732518c5fe6dbeb8429cdda11d65c3d; domain=.example.com; path=/</screen>
+
+        <warning>
+          <para>Such sessions <emphasis>should not</emphasis> be used for
+          other purposes (such as server-side state) in line with RESTful
+          principles.</para>
+        </warning>
       </section>
 
       <section>
@@ -114,7 +140,14 @@
         (e.g. <quote><computeroutput>OCCI/1.0</computeroutput></quote>). If
         none is provided the latest (highest supported version number)
         available version offered by the server <emphasis>should</emphasis> be
-        used.</para>
+        used:</para>
+
+        <screen>&gt; GET / HTTP/1.1
+&gt; Host: cloud.example.com
+&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OCCI/1.0
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Server: Apache/2.2.13 (Unix) OCCI/1.0</screen>
       </section>
     </section>
 
