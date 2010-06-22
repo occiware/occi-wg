@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>OCCI Text Format</title><meta name="generator" content="DocBook XSL-NS Stylesheets V1.74.3"/></head><body><div class="article" xml:lang="en"><div class="titlepage"><div><div><h1 class="title"><a id="id439229"/>OCCI Text Format</h1></div><div><div class="author"><h3 class="author"><span class="orgname">OCCI-WG</span></h3></div></div><div><p class="pubdate">2009-09-15</p></div></div><hr/></div><div class="section" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id439257"/>Overview</h2></div></div></div><p>Text is the simplest possible rendering, which is most useful for
+    simple clients including:</p><div class="itemizedlist"><ul><li><p>Manual manipulation by developers, system administrators,
+        etc.</p></li><li><p>Monitoring systems</p></li><li><p>Scripts</p></li><li><p>Scheduled cron jobs</p></li></ul></div><p>It is served using the <code class="computeroutput">text/occi</code>
+    Internet media type.</p></div><div class="section" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id439308"/>Specification</h2></div></div></div><p>The text rendering is based on the <a class="xref" href="#rfc2616" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1">RFC2616</a> (HTTP)
+    <code class="computeroutput">message-header</code> type, which is the same
+    generic format as that given in <a class="xref" href="#rfc2822" title="RFC 2822 - Internet Message Format">RFC2822</a>.</p><p>It is identical to the
+    <code class="computeroutput">generic-message</code> type except that there is
+    no <code class="computeroutput">start-line</code> (Request-Line |
+    Status-Line) and <code class="computeroutput">message-header</code> fields
+    required by HTTP are optional.</p><p>Web Categories [<a class="xref" href="#category" title="Web Categories">CATEGORY</a>] and Web Linking [<a class="xref" href="#link" title="Web Linking">LINK</a>] specifications are used for the meta-model.</p><div class="section" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id439360"/>ABNF</h3></div></div></div><pre class="screen">occi-collection = *( occi-resource CRLF )
+occi-resource   = *( message-header CRLF )
+message-header  = field-name ":" [ field-value ]
+field-name      = token
+field-value     = *( field-content | LWS )
+field-content   = &lt;the OCTETs making up the field-value
+                  and consisting of either *TEXT or combinations
+                  of token, separators, and quoted-string&gt;</pre></div></div><div class="section" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id439381"/>Example</h2></div></div></div><pre class="screen">OCCI-Id: urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770
+OCCI-Title: Compute Resource #123
+OCCI-Summary: A virtual compute resource
+OCCI-Author-Name: John Citizen
+OCCI-Updated: 2009-12-31T12:59:59Z
+ETag: "dad86c61eea237932f"
+Category: compute;
+  scheme="http://purl.org/occi/kind/";
+  label="Compute Resource"
+Link: &lt;http://example.com/products/1234&gt;;
+  rel="alternate";
+  title="Alternate representation"
+
+OCCI-Id: urn:uuid:c9524696-39de-43fe-a662-4d32e74c8ad2
+...</pre></div><div class="bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id439392"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id439394"/><p class="bibliomixed">Normative References</p></div><div class="biblioentry"><a id="rfc2616"/><p>[RFC2616] <span class="title"><i>RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2616" target="">http://tools.ietf.org/html/rfc2616</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">1999-06. </span></p></div><div class="biblioentry"><a id="rfc2822"/><p>[RFC2822] <span class="title"><i>RFC 2822 - Internet Message Format</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2822" target="">http://tools.ietf.org/html/rfc2822</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="date">2001-04. </span></p></div><div class="bibliomixed"><a id="id439457"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry"><a id="category"/><p>[CATEGORY] <span class="title"><i>Web Categories</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/draft-johnston-http-category-header" target="">http://tools.ietf.org/html/draft-johnston-http-category-header</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="author">Sam Johnston. </span><span class="date">2009-07-1. </span></p></div><div class="biblioentry"><a id="link"/><p>[LINK] <span class="title"><i>Web Linking</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/draft-nottingham-http-link-header" target="">http://tools.ietf.org/html/draft-nottingham-http-link-header</a></code>. </span><span class="org">
+        <span class="orgname">Internet Engineering Task Force (IETF)</span>
+      </span><span class="author">Mark Nottingham. </span><span class="date">2009-07-12. </span></p></div><div class="biblioentry"><a id="html5-article"/><p>[HTML5-article] <span class="title"><i>Designing a great HTTP API - why heavyweight XML is not the
+      answer</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/" target="">http://www.elastichosts.com/blog/2009/01/01/designing-a-great-http-api/</a></code>. </span><span class="author">. </span><span class="date">2009-01-01. </span></p></div></div></div></body></html>
