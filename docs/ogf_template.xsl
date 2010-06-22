@@ -80,6 +80,17 @@
     <xsl:attribute name="space-after.maximum">0.8em</xsl:attribute>
   </xsl:attribute-set>
 
+<!-- temporary in there for para numbering -->
+<xsl:template match="para[parent::section or parent::chapter]">
+  <fo:block xsl:use-attribute-sets="normal.para.spacing">
+    <xsl:call-template name="anchor"/>
+    <xsl:number count="para[parent::section or parent::chapter]" level="any"/>
+    <xsl:text>. </xsl:text>
+    <xsl:apply-templates/>
+  </fo:block>
+</xsl:template>
+
+
   <!-- no author -->
   <xsl:template match="author" mode="titlepage.mode">
     <fo:block>
