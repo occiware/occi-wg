@@ -184,6 +184,9 @@
 <xi:include href="occi-text.xml" xpointer="element(/1)" />
 <xi:include href="occi-xhtml5.xml" xpointer="element(/1)" />
 <xi:include href="occi-infrastructure.xml" xpointer="element(/1)" />
+<xi:include href="occi-search.xml" xpointer="element(/1)" />
+<xi:include href="occi-status.xml" xpointer="element(/1)" />
+<xi:include href="occi-tasks.xml" xpointer="element(/1)" />
 <xi:include href="occi-registries.xml" xpointer="element(/1)" />
 <xi:include href="occi-copyright.xml" xpointer="element(/1)" />
 </book>
