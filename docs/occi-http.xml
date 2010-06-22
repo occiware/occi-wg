@@ -37,6 +37,12 @@
         <para>Server-side cookies ("Attributes") are used for name-value
         pairs.</para>
       </listitem>
+
+      <listitem>
+        <para>Collections are transferred as the
+        <computeroutput>text/uri-list</computeroutput> content type (defined
+        in RFC 2169, Appendix A).</para>
+      </listitem>
     </itemizedlist>
 
     <para>In all cases the process defined in <xref linkend="rfc2965" /> is
