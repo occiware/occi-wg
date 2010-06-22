@@ -13,12 +13,13 @@
 
     <para>The Open Cloud Computing Interface is an open community consensus
     API, initially targeting cloud infrastructure services or "Infrastructure
-    as a Service (IaaS)". A "Resource Oriented Architecture (ROA)", it is as
-    close as possible to the underlying HyperText Transfer Protocol (HTTP),
-    deviating only where absolutely necessary. Each resource (identified by a
-    canonical URL) has zero or more representations which may or may not be
-    hypertext (e.g. HTML). Metadata including associations between resources
-    is exposed via HTTP headers (e.g. the Link: header), except in the case of
+    as a Service (IaaS)". It is as close as possible to the underlying
+    HyperText Transfer Protocol (HTTP), deviating only where absolutely
+    necessary, and can be described as a "Resource Oriented Architecture
+    (ROA)".<xref linkend="rws" /> Each resource (identified by a canonical
+    URL) has zero or more representations which may or may not be hypertext
+    (e.g. HTML). Metadata including associations between resources is exposed
+    via HTTP headers (e.g. the Link: header), except in the case of
     collections where Atom is used as the meta-model.</para>
 
     <tip>
@@ -280,11 +281,6 @@
         the registries which should be used where possible.</para>
       </warning>
 
-      <screen>Attribute: occi.compute.cores=2
-Attribute: occi.compute.speed=3000
-Attribute: occi.memory.size=8192
-Attribute: com.cisco.cdp=enabled</screen>
-
       <table>
         <title>Common Attributes</title>
 
@@ -473,11 +469,11 @@ Attribute: com.cisco.cdp=enabled</screen>
         <computeroutput>Linux</computeroutput>) and patch levels (e.g.</para>
       </tip>
 
-      <remark>TODO: Consider moving to link relations for categories so as to
-      be compatible with existing standards rather than creating new ones.
-      LINK is already standardised within HTML and HTTP and the Web Linking
-      Internet-Draft will proceed to standard status. The Web Category draft
-      is less sure, particularly where a workaround exists.</remark>
+      <section>
+        <title>Querying</title>
+
+        <para></para>
+      </section>
     </section>
 
     <section>
