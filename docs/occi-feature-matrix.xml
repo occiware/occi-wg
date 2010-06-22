@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>Cloud API feature Matrix</title>
+
+  <para>Existing APIs for IaaS based Clouds already fulfill some of the Use
+  cases and also address some requirements. The following list of APIs have
+  been evaluated during the creation of the OCCI working group process.</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>OCCI - Open Cloud Computing Interface</para>
+    </listitem>
+
+    <listitem>
+      <para>EC2 - Amazon Elastic Compute Cloud</para>
+    </listitem>
+
+    <listitem>
+      <para>EH - ElasticHosts</para>
+    </listitem>
+
+    <listitem>
+      <para>FS - Flexiscale</para>
+    </listitem>
+
+    <listitem>
+      <para>GG - GoGrid</para>
+    </listitem>
+
+    <listitem>
+      <para>SC - Sun Cloud API</para>
+    </listitem>
+
+    <listitem>
+      <para>CS - Rackspace Cloud Servers</para>
+    </listitem>
+
+    <listitem>
+      <para>VM - WMware vSphere</para>
+    </listitem>
+  </itemizedlist>
+
+  <para>While this is not a complete or in depth evaultation of the APIs the
+  following Matrix can used as a basic reference point for API
+  comparism.</para>
+
+  <table>
+    <title>Cloud API feature matrix</title>
+
+    <tgroup cols="10">
+      <colspec colname="col1" colnum="1" colwidth="2*" />
+
+      <colspec colname="col2" colnum="2" colwidth="2*" />
+
+      <colspec colname="col3" colnum="3" colwidth="1*" />
+
+      <colspec colname="col4" colnum="4" colwidth="1*" />
+
+      <colspec colname="col5" colnum="5" colwidth="1*" />
+
+      <colspec colname="col6" colnum="6" colwidth="1*" />
+
+      <colspec colname="col7" colnum="7" colwidth="1*" />
+
+      <colspec colname="col8" colnum="8" colwidth="1*" />
+
+      <colspec colname="col9" colnum="9" colwidth="1*" />
+
+      <colspec colname="col10" colnum="10" colwidth="1*" />
+
+      <thead>
+        <row>
+          <entry align="center">Feature</entry>
+
+          <entry align="center">Requirement</entry>
+
+          <entry align="center">OCCI</entry>
+
+          <entry align="center">EC2</entry>
+
+          <entry align="center">EH</entry>
+
+          <entry align="center">FS</entry>
+
+          <entry align="center">GG</entry>
+
+          <entry align="center">SC</entry>
+
+          <entry align="center">CS</entry>
+
+          <entry align="center">VM</entry>
+        </row>
+      </thead>
+
+      <tbody>
+        <row>
+          <entry>Authentication via HTTP</entry>
+
+          <entry>Client compatibility</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+        </row>
+
+        <row>
+          <entry>Authentication via request signing</entry>
+
+          <entry>Untrusted third-party requests</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>?</entry>
+        </row>
+
+        <row>
+          <entry>Ephermal compute resources</entry>
+
+          <entry>Lightweight servers</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>?</entry>
+        </row>
+
+        <row>
+          <entry>Persistent compute resources</entry>
+
+          <entry>Stopped servers</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+        </row>
+
+        <row>
+          <entry>Ephermal storage resources</entry>
+
+          <entry>Temporary Storage</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+        </row>
+
+        <row>
+          <entry>Persistent storage resources</entry>
+
+          <entry>Permanent Storage</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+        </row>
+
+        <row>
+          <entry>Multiple storage resources</entry>
+
+          <entry>Complex architectures</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+        </row>
+
+        <row>
+          <entry>Multiple network resources</entry>
+
+          <entry>Complex architectures</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+        </row>
+
+        <row>
+          <entry>Static IPs</entry>
+
+          <entry>Internet-facing applications</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+        </row>
+
+        <row>
+          <entry>Firewalling</entry>
+
+          <entry>Basic network security</entry>
+
+          <entry>?</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+        </row>
+
+        <row>
+          <entry>Load Balancing</entry>
+
+          <entry>Horizontal scalability</entry>
+
+          <entry>?</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+        </row>
+
+        <row>
+          <entry>Billing</entry>
+
+          <entry>Business</entry>
+
+          <entry>?</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>?</entry>
+        </row>
+
+        <row>
+          <entry>Resource categories</entry>
+
+          <entry>Organization of resources</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>?</entry>
+        </row>
+
+        <row>
+          <entry>Resource search</entry>
+
+          <entry>Finding Resources</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>?</entry>
+        </row>
+
+        <row>
+          <entry>Resource tagging</entry>
+
+          <entry>Organization of resources</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>?</entry>
+        </row>
+
+        <row>
+          <entry>Collections (pass-by-reference)</entry>
+
+          <entry>Enumeration</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>OK</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>N/A</entry>
+
+          <entry>?</entry>
+        </row>
+
+        <row>
+          <entry>Collections (pass-by-value)</entry>
+
+          <entry>Serialisation</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>OK</entry>
+
+          <entry>?</entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
+
+  <para>For more details review the API of the different providers.
+  <citerefentry>
+      <refentrytitle>EC2</refentrytitle>
+    </citerefentry><citerefentry>
+      <refentrytitle>EH</refentrytitle>
+    </citerefentry><citerefentry>
+      <refentrytitle>FS</refentrytitle>
+    </citerefentry><citerefentry>
+      <refentrytitle>GG</refentrytitle>
+    </citerefentry><citerefentry>
+      <refentrytitle>SC</refentrytitle>
+    </citerefentry><citerefentry>
+      <refentrytitle>CS</refentrytitle>
+    </citerefentry><citerefentry>
+      <refentrytitle>VM</refentrytitle>
+    </citerefentry></para>
+</article>
