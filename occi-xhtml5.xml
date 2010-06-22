@@ -14,10 +14,11 @@
     <para>XHTML5 is an XML-based <quote>concrete syntax</quote> of the HTML5
     <quote>abstract language</quote> (the <quote>World Wide Web's markup
     language</quote>). For the purposes of this rendering specification we
-    mandate XHTML5 over HTML5 as it is valid to present HTML5 that is not
-    well-formed. It is served using the
-    <computeroutput>application/xhtml+xml</computeroutput> Internet media
-    type.<xref linkend="xhtml5-html5" /></para>
+    mandate XHTML5 as opposed to HTML5. This is because XHTML5 must be
+    well-formed, whereas HTML5 need not be, and the protocol's accessibility
+    to machine parsers is greatly facilitated by requiring a well-formed
+    rendering. The XHTML5 response is served using the application/xhtml+xml
+    internet media type.<xref linkend="xhtml5-html5" /></para>
   </section>
 
   <section>
