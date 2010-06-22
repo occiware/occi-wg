@@ -361,11 +361,10 @@
       <title>Kinds</title>
 
       <para>Different types of resources are called
-      <glossterm>kind</glossterm>s.</para>
-
-      <para>Kinds defined by this standard live in the
-      <uri>http://purl.org/occi/kind</uri>/ namespace but anyone can define a
-      new action by allocating a URI they control.</para>
+      <glossterm>kind</glossterm>s (e.g.
+      <computeroutput>compute</computeroutput>). Kinds defined by this
+      standard live in the <uri>http://purl.org/occi/kind</uri>/ namespace but
+      anyone can define a new action by allocating a URI they control.</para>
 
       <para>Each resource <emphasis>must</emphasis> specify a
       <glossterm>category</glossterm> within the <glossterm>scheme</glossterm>
@@ -375,58 +374,6 @@
         <para>The word <glossterm>type</glossterm> is not used in this context
         in order to avoid confusion with Internet media types.</para>
       </tip>
-
-      <remark>These were previously called nouns but this still allowed for
-      confusion with "type". Google also use "kinds" for GData.</remark>
-
-      <table>
-        <title>Kinds</title>
-
-        <tgroup cols="3">
-          <colspec align="center" />
-
-          <thead>
-            <row>
-              <entry align="left">Kind</entry>
-
-              <entry>URI</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry
-              align="left"><computeroutput>compute</computeroutput></entry>
-
-              <entry><uri>http://purl.org/occi/noun/compute</uri></entry>
-
-              <entry>Information processing resources</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>network</computeroutput></entry>
-
-              <entry><uri>http://purl.org/occi/noun/network</uri></entry>
-
-              <entry>Interconnection resources</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>storage</computeroutput></entry>
-
-              <entry><uri>http://purl.org/occi/noun/storage</uri></entry>
-
-              <entry>Recorded information resources</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-      <remark>This belongs in OCCI Infrastructure</remark>
     </section>
 
     <section>
@@ -445,7 +392,10 @@
       <glossterm>link</glossterm> with the
       <computeroutput>action</computeroutput> class.</para>
 
-      <screen>&lt;link rel="http://purl.org/occi/action/restart#cold" class="action" title="Cold Restart" href="http://example.com/123/restart;type=cold" /&gt;</screen>
+      <screen>&lt;link rel="http://purl.org/occi/action/restart#cold"
+      class="action"
+      title="Cold Restart"
+      href="http://example.com/123/restart;type=cold" /&gt;</screen>
 
       <para>Actions defined by this standard reside under the
       <uri>http://purl.org/occi/action/</uri> namespace but anyone can define
