@@ -235,12 +235,6 @@
 &gt; Content-type: application/ovf
 &gt; &lt;...&gt;</screen>
       </example>
-
-      <tip>
-        <para>This discovery mechanism was selected so as to be compatible
-        with existing content hosted at the same URL (e.g.
-        <uri>http://cloud.example.com</uri>).</para>
-      </tip>
     </section>
   </section>
 
