@@ -82,19 +82,40 @@
 
           <entry align="center">OCCI</entry>
 
-          <entry align="center">EC2</entry>
+          <entry align="center">EC2<footnote>
+              <para>Amazon Elastic Compute Cloud -
+              http://aws.amazon.com/ec2</para>
+            </footnote></entry>
 
-          <entry align="center">EH</entry>
+          <entry align="center">EH<footnote>
+              <para>ElasticHosts API -
+              http://www.elastichosts.com/products/api</para>
+            </footnote></entry>
 
-          <entry align="center">FS</entry>
+          <entry align="center">FS<footnote>
+              <para>Flexiscale API -
+              http://api.flexiscale.com/current/doc</para>
+            </footnote></entry>
 
-          <entry align="center">GG</entry>
+          <entry align="center">GG<footnote>
+              <para>GoGrid API -
+              http://wiki.gogrid.com/wiki/index.php/API</para>
+            </footnote></entry>
 
-          <entry align="center">SC</entry>
+          <entry align="center">SC<footnote>
+              <para>The Sun Cloud API -
+              http://www.kenai.com/projects/suncloudapis/pages/Home</para>
+            </footnote></entry>
 
-          <entry align="center">CS</entry>
+          <entry align="center">CS<footnote>
+              <para>Cloud Server API -
+              http://www.rackspacecloud.com/cloud_hosting_products/servers/api</para>
+            </footnote></entry>
 
-          <entry align="center">VM</entry>
+          <entry align="center">VM<footnote>
+              <para>VMware vSphere -
+              http://www.vmware.com/products/vsphere</para>
+            </footnote></entry>
         </row>
       </thead>
 
@@ -475,21 +496,4 @@
       </tbody>
     </tgroup>
   </table>
-
-  <para>For more details review the API of the different providers.
-  <citerefentry>
-      <refentrytitle>EC2</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>EH</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>FS</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>GG</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>SC</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>CS</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>VM</refentrytitle>
-    </citerefentry></para>
 </article>
