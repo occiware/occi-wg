@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>OCCI Infrastructure</title>
+
+  <para>OCCI Infrastructure defines three nouns and various extensions
+  relating to management of cloud infrastructure services (IaaS).</para>
+
+  <table>
+    <title>Common Attributes</title>
+
+    <tgroup cols="3">
+      <colspec align="center" />
+
+      <thead>
+        <row>
+          <entry align="left">Attribute</entry>
+
+          <entry>Type</entry>
+
+          <entry>Description</entry>
+        </row>
+      </thead>
+
+      <tbody>
+        <row>
+          <entry
+          align="left"><computeroutput>hostname</computeroutput></entry>
+
+          <entry>String</entry>
+
+          <entry>Valid DNS hostname for the resource (may be FQDN)</entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
+
+  <section>
+    <title>Nouns</title>
+
+    <para>Cloud infrastructure can be modeled using three primary nouns:
+    compute, network and storage.</para>
+
+    <section>
+      <title>Compute</title>
+
+      <para>A compute resource is capable of conducting computations (e.g. a
+      virtual machine).</para>
+
+      <table>
+        <title>Compute Attributes</title>
+
+        <tgroup cols="3">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="left">Attribute</entry>
+
+              <entry>Type</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry
+              align="left"><computeroutput>compute.cpu.arch</computeroutput></entry>
+
+              <entry>Enum (x86, x64)</entry>
+
+              <entry>CPU Architecture (e.g. x64)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>compute.cpu.cores</computeroutput></entry>
+
+              <entry>Integer</entry>
+
+              <entry>Number of CPU cores (e.g. 1, 2)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>compute.cpu.speed</computeroutput></entry>
+
+              <entry>Float (10^9 Hertz)</entry>
+
+              <entry>Clock speed in gigahertz (e.g. 2.4)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>compute.memory.size</computeroutput></entry>
+
+              <entry>Float (10^6 bytes)</entry>
+
+              <entry>RAM in megabytes (e.g. 2048)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>compute.memory.speed</computeroutput></entry>
+
+              <entry>Float (10^9 bps)</entry>
+
+              <entry>RAM speed in Gbit/s (e.g. 256)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>compute.memory.reliability</computeroutput></entry>
+
+              <entry>Enum (standard, checksum)</entry>
+
+              <entry>Qualitative measure of RAM reliability (e.g. ECC)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Network</title>
+
+      <para>A network resource is capable of transferring data (e.g. a virtual
+      network or VLAN).</para>
+
+      <table>
+        <title>Network Attributes</title>
+
+        <tgroup cols="3">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="left">Attribute</entry>
+
+              <entry>Type</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry
+              align="left"><computeroutput>network.vlan-id</computeroutput></entry>
+
+              <entry>Integer (0..4095)</entry>
+
+              <entry>802.1q VLAN ID (e.g. 4095)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>network.vlan-tag</computeroutput></entry>
+
+              <entry>Token</entry>
+
+              <entry>Tag based VLANs (e.g. external-dmz)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>network.ipv4[i].gateway</computeroutput></entry>
+
+              <entry>IPv4 Address</entry>
+
+              <entry>IPv4 gateway address (e.g. 192.168.0.1)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>network.ipv4[i].netmask</computeroutput></entry>
+
+              <entry>IPv4 Address</entry>
+
+              <entry>IPv4 netmask address (e.g. 255.255.255.0)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>network.ipv4[i].network</computeroutput></entry>
+
+              <entry>IPv4 Address</entry>
+
+              <entry>IPv4 network address (e.g. 192.168.0.0)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>network.ipv4[i].cidr</computeroutput></entry>
+
+              <entry>Integer (0..32)</entry>
+
+              <entry>Netmask in CIDR notation (e.g. 24)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Storage</title>
+
+      <para>A storage resource is capable of mass storage of data (e.g. a
+      virtual hard drive).</para>
+
+      <table>
+        <title>Storage Attributes</title>
+
+        <tgroup cols="3">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="left">Attribute</entry>
+
+              <entry>Type</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry
+              align="left"><computeroutput>storage.retention-duration</computeroutput></entry>
+
+              <entry>Time</entry>
+
+              <entry>The duration the storage instance is retained after
+              deletion</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>storage.capacity</computeroutput></entry>
+
+              <entry>Integer plus "IEC60027-2 unit prefix"</entry>
+
+              <entry>Maximum size of the storage resource.</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>storage.size</computeroutput></entry>
+
+              <entry>Integer plus "IEC60027-2 unit prefix"</entry>
+
+              <entry>Size of the storage resource capacity in use.</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>storage.status</computeroutput></entry>
+
+              <entry>Enum (Online, Offline, Standby, Degraded)</entry>
+
+              <entry>The current operating status of the storage
+              resource</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>storage.class</computeroutput></entry>
+
+              <entry>Enum (Volatile, Maintained)</entry>
+
+              <entry>The operating class of storage</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+
+  <section>
+    <title>Extensions</title>
+
+    <para>Various extensions provide for more advanced management
+    functionality such as billing, monitoring and reporting.</para>
+
+    <section>
+      <title>State machine (state)</title>
+
+      <para>The state machine extension allows for the modeling of arbitrarily
+      complex state machines and associated transitions (e.g. start, stop,
+      restart).</para>
+    </section>
+  </section>
+</article>
