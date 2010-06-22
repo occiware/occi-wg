@@ -30,28 +30,28 @@
 
   <bridgehead renderas="sect4">Abstract</bridgehead>
 
-  <para>This document is an informal description of Use Cases and requirements
-  for the OOCI Cloud API. Created by the Open Cloud Computing Interface
-  working group. This document records the needs of IaaS Cloud computing
-  managers and administrators in the form of Use Cases. The Use Cases serve as
-  the primary guide for the development of API requirements. The document is
-  the first deliverable to demonstrate and validate the features of the Open
-  Cloud Computing Interface.</para>
+  <para>This document is an informal document describing the use cases and
+  requirements for a Cloud API. It was created as part of the deviverables of
+  the Open Cloud Computing Interface working group. The document is the first
+  deliverable and will be used to demonstrate and validate the features of the
+  Open Cloud Computing Interface.</para>
 
   <section>
     <title>Introduction</title>
 
-    <para>This document includes all the Use Cases and requirements which were
-    gathered in the working group.</para>
+    <para>This document includes all the use cases and requirements which were
+    gathered in the working group. The next two sections hold the use cases
+    and the requirements. Each use cases is defined by name and a set of
+    functional and non-functional requirements. All the requirements are
+    catagorized and formatted in tables. Each requirement is (whenever
+    possible) mapped to a use case. Priorities have been added to all
+    requirements. Currently available Cloud APIs are compared in a feature
+    matrix.</para>
 
-    <para>This document is organized in to three sections: Use Cases,
-    Requirements and a comparison matrix of current Cloud APIs. In this
-    document, Use Cases are defined by name and a set of functional and
-    non-functional requirements. All requirements are catagorized and
-    formatted in tables. Each requirement is (whenever possible) mapped to a
-    Use Case. Priorities have been assigned to all requirements. The Cloud API
-    comparison matrix itemizes generalized and detail features of each API and
-    indicates which API supports each feature.</para>
+    <para>Another document describing Use case for Cloud computing is
+    published as 'Cloud Computing Use Cases Whitepaper'. <citerefentry>
+        <refentrytitle>CCUCW</refentrytitle>
+      </citerefentry></para>
   </section>
 
   <section>
@@ -69,15 +69,15 @@
     <citerefentry>
         <refentrytitle>EC2</refentrytitle>
       </citerefentry><citerefentry>
-        <refentrytitle>EH</refentrytitle>
+        <refentrytitle> EH </refentrytitle>
       </citerefentry><citerefentry>
-        <refentrytitle>FS</refentrytitle>
+        <refentrytitle>FS </refentrytitle>
       </citerefentry><citerefentry>
-        <refentrytitle>GG</refentrytitle>
+        <refentrytitle>GG </refentrytitle>
       </citerefentry><citerefentry>
-        <refentrytitle>SC</refentrytitle>
+        <refentrytitle>SC </refentrytitle>
       </citerefentry><citerefentry>
-        <refentrytitle>CS</refentrytitle>
+        <refentrytitle>CS </refentrytitle>
       </citerefentry><citerefentry>
         <refentrytitle>VM</refentrytitle>
       </citerefentry></para>
@@ -93,21 +93,15 @@
     secure, highly recognized (commonly known and implemented) and last but
     not least standardized.</para>
 
-    <para>This working group plans to use these Use Cases and requirements for
+    <para>This working group plans to use these use cases and requirements for
     the creation of an Cloud API.</para>
-
-    <para>Similar work has been done in the Cloud Computing Use Case group.
-    This document is published as the 'Cloud Computing Use Cases Whitepaper'.
-    <citerefentry>
-        <refentrytitle>CCUCW</refentrytitle>
-      </citerefentry></para>
   </section>
 
   <section>
     <title>Contributors</title>
 
     <para>The following people have contributed to the requirements gathering
-    and Use Case documentation.</para>
+    and use case documentation.</para>
 
     <table>
       <title>List of contributors</title>
@@ -156,12 +150,6 @@
             <entry>Thijs Metsch (Editor)</entry>
 
             <entry>Sun Microsystems - RESERVOIR project</entry>
-          </row>
-
-          <row>
-            <entry>Gary Mazzaferro</entry>
-
-            <entry>OCCI Counselour - Exxia, Inc.</entry>
           </row>
 
           <row>
