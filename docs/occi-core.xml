@@ -255,110 +255,14 @@
       </tip>
 
       <remark>TODO: Detection of category information.</remark>
-
-      <table>
-        <title>Configuration Attributes</title>
-
-        <tgroup cols="4">
-          <colspec align="center" />
-
-          <thead>
-            <row>
-              <entry align="left">Attribute</entry>
-
-              <entry>Type</entry>
-
-              <entry>Description</entry>
-
-              <entry>Example</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry
-              align="left"><computeroutput>/feed/id</computeroutput></entry>
-
-              <entry>URI</entry>
-
-              <entry>Immutable identifier for the cloud</entry>
-
-              <entry><uri>http://aws.example.com/</uri></entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>/feed/occi:version</computeroutput></entry>
-
-              <entry>String</entry>
-
-              <entry>OCCI version string</entry>
-
-              <entry>1.0</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>/feed/title</computeroutput></entry>
-
-              <entry>String</entry>
-
-              <entry>Display name for the cloud</entry>
-
-              <entry>Acme Web Services</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>/feed/subtitle</computeroutput></entry>
-
-              <entry>String</entry>
-
-              <entry>Description of the cloud</entry>
-
-              <entry>A web service that provides resizable compute
-              capacity</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>/feed/author/name</computeroutput></entry>
-
-              <entry>String</entry>
-
-              <entry>Service provider</entry>
-
-              <entry>Acme, Inc.</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>/feed/entry/*</computeroutput></entry>
-
-              <entry>Entry</entry>
-
-              <entry>Available</entry>
-
-              <entry>Elastic Compute Cloud</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-      <remark>TODO: Remove Atom from this section.</remark>
-
-      <tip>
-        <para>Metadata can be concatenated to create a "feed of
-        clouds".</para>
-      </tip>
     </section>
   </section>
 
   <section>
     <title>Model</title>
 
-    <para>The model defines the objects themselves without paying attention to
-    how they interrelate.</para>
+    <para>The model defines the objects themselves without regard to how they
+    interrelate.</para>
 
     <section>
       <title>Kinds</title>
@@ -376,16 +280,16 @@
       <uri>http://purl.org/occi/kind</uri>/ namespace but anyone can define a
       new action by allocating a URI they control.</para>
 
-      <tip>
+      <warning>
         <para>Defining your own kinds can lead to interoperability problems
         and should be a last resort reserved for unique functionality. A
         simple peer review process is available for extending the registries
         which should be used where possible.</para>
-      </tip>
+      </warning>
 
-      <para>Each resource <emphasis>must</emphasis> specify a
+      <para>Each resource <emphasis>must</emphasis> specify a kind by way of a
       <glossterm>category</glossterm> within the <glossterm>scheme</glossterm>
-      <quote><uri>http://purl.org/occi/kind</uri></quote>.</para>
+      <quote><uri>http://purl.org/occi/kind/</uri></quote>.</para>
 
       <tip>
         <para>The word <glossterm>type</glossterm> is not used in this context
@@ -414,13 +318,98 @@
       <para>Attributes defined by this standard reside under the
       <computeroutput>OCCI</computeroutput> namespace (e.g.
       "<computeroutput>OCCI-X</computeroutput>") but anyone can define a new
-      attribute by allocating a unique namespace (e.g.
-      <quote>Acme</quote>).</para>
+      attribute by allocating a unique namespace (e.g. <quote>Acme</quote>). A
+      number of attributes are common to all
+      <glossterm>kind</glossterm>s.</para>
+
+      <warning>
+        <para>Defining your own attributes can lead to interoperability
+        problems and should be a last resort reserved for unique
+        functionality. A simple peer review process is available for extending
+        the registries which should be used where possible.</para>
+      </warning>
 
       <screen>OCCI-Compute-Cores: 2
 OCCI-Compute-Speed: 3000
 OCCI-Memory-Size: 8192
 Acme-Network-Identifier: dmz</screen>
+
+      <table>
+        <title>Common Attributes</title>
+
+        <tgroup cols="3">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="left">Attribute</entry>
+
+              <entry>Description</entry>
+
+              <entry>Example</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry
+              align="left"><computeroutput>OCCI-Id</computeroutput></entry>
+
+              <entry>Immutable identifier for the resource</entry>
+
+              <entry><uri>urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770</uri></entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>OCCI-Title</computeroutput></entry>
+
+              <entry>Display name for the resource</entry>
+
+              <entry><computeroutput>Compute Resource
+              #123</computeroutput></entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>OCCI-SubTitle</computeroutput></entry>
+
+              <entry>Description of the resource</entry>
+
+              <entry><computeroutput>A virtual compute
+              resource</computeroutput></entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>OCCI-Author-Name</computeroutput></entry>
+
+              <entry>Owner of the resource</entry>
+
+              <entry><computeroutput>John Citizen</computeroutput></entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>OCCI-ETag</computeroutput></entry>
+
+              <entry>HTTP Entity Tags [<xref linkend="rfc2616" />]</entry>
+
+              <entry><computeroutput>dad86c61eea237932f201009e5431609</computeroutput></entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>OCCI-Updated</computeroutput></entry>
+
+              <entry>Last updated date/time [<xref
+              linkend="rfc3339" />]</entry>
+
+              <entry><computeroutput>2020-12-31T23:59:59Z</computeroutput></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </section>
 
     <section>
@@ -442,12 +431,12 @@ Acme-Network-Identifier: dmz</screen>
       <uri>http://purl.org/occi/action/</uri> namespace but anyone can define
       a new action by allocating a URI they control.</para>
 
-      <tip>
+      <warning>
         <para>Defining your own actions can lead to interoperability problems
         and should be a last resort reserved for unique functionality. A
         simple peer review process is available for extending the registries
         which should be used where possible.</para>
-      </tip>
+      </warning>
 
       <para>An <glossterm>action</glossterm> is triggered via an HTTP POST and
       depending on the action requested (e.g.
@@ -456,13 +445,14 @@ Acme-Network-Identifier: dmz</screen>
       <computeroutput>application/x-www-form-encoded</computeroutput>). The
       specific parameters required and allowable values for them depend on the
       action and for advanced actions <emphasis>may</emphasis> require sending
-      of custom <glossterm>content type</glossterm>s.</para>
+      of custom <glossterm>content type</glossterm>s rather than
+      <computeroutput>application/x-www-form-encoded</computeroutput>.</para>
 
       <para>Synchronous actions <emphasis>may</emphasis> return
       <computeroutput>200 OK</computeroutput> on successful completion or
       <computeroutput>201 Created</computeroutput> with a
       <computeroutput>Location:</computeroutput> header indicating a new
-      sub-resource for audit purposes.</para>
+      resource for audit purposes.</para>
 
       <tip>
         <para>Assume that clients are paranoid and want audit trails for all
@@ -473,12 +463,12 @@ Acme-Network-Identifier: dmz</screen>
       complete immediately it <emphasis>should</emphasis> return
       <computeroutput>HTTP 202 Accepted</computeroutput> and a
       <computeroutput>Location:</computeroutput> header indicating a new
-      sub-resource where status and other pertinent information can be
+      resource where status and other pertinent information can be
       obtained.</para>
 
       <tip>
         <para>Don't keep clients waiting - if you're not sure to return
-        immediately then give them a sub-resource they can monitor.</para>
+        immediately then give them a resource they can monitor.</para>
       </tip>
     </section>
   </section>
@@ -501,7 +491,8 @@ Acme-Network-Identifier: dmz</screen>
           <glossterm>term</glossterm>
 
           <glossdef>
-            <para>The term itself (e.g. <quote>snow-leopard</quote>)</para>
+            <para>The term itself (e.g.
+            <quote><computeroutput>compute</computeroutput></quote>)</para>
           </glossdef>
         </glossentry>
 
@@ -509,7 +500,8 @@ Acme-Network-Identifier: dmz</screen>
           <glossterm>scheme (optional)</glossterm>
 
           <glossdef>
-            <para>The vocabulary (e.g. <quote>breed</quote>)</para>
+            <para>The vocabulary (e.g.
+            <quote><computeroutput>http://purl.org/occi/kind/</computeroutput></quote>)</para>
           </glossdef>
         </glossentry>
 
@@ -517,11 +509,22 @@ Acme-Network-Identifier: dmz</screen>
           <glossterm>label (optional)</glossterm>
 
           <glossdef>
-            <para>A human-friendly display name for the term (e.g. <quote>Snow
-            Leopard</quote>)</para>
+            <para>A human-friendly display name for the term (e.g.
+            <quote><computeroutput>Compute
+            Resource</computeroutput></quote>)</para>
           </glossdef>
         </glossentry>
       </glosslist>
+
+      <warning>
+        <para>Categories provide an ultimately flexible way to manage
+        resources by taxonomy (categories) and/or folksonomy (tags), where
+        both can be shared between [groups of] users or globally.</para>
+      </warning>
+
+      <screen>&lt;category term="compute"
+          scheme="http://purl.org/occi/kind/"
+          label="Compute Resource" /&gt;</screen>
     </section>
 
     <section>
@@ -550,9 +553,21 @@ Acme-Network-Identifier: dmz</screen>
         </listitem>
       </itemizedlist>
 
+      <tip>
+        <para>Most collections should be pointers to resources with metadata
+        for performance reasons - O(1) rather than O(n+1) for pointers alone.
+        The resources themselves should only be embedded when they are known
+        to be of a reasonable size.</para>
+      </tip>
+
       <para>Any given URL can be a collection and/or advertise
       <glossterm>link</glossterm>s to other <glossterm>collection</glossterm>s
       using the <computeroutput>collection</computeroutput> class.</para>
+
+      <tip>
+        <para>The root (<quote>/</quote>) <emphasis>should</emphasis> expose
+        collections in order for clients to discover resources.</para>
+      </tip>
 
       <screen>&lt;link rel="http://purl.org/occi/collection/audit"
       class="collection"
@@ -606,6 +621,11 @@ Acme-Network-Identifier: dmz</screen>
         </listitem>
       </itemizedlist>
 
+      <screen>&lt;link rel="related"
+      title="System Documentation"
+      href="http://example.com/user-guide.pdf"
+      type="application/pdf" /&gt;</screen>
+
       <table>
         <title>Link Relations</title>
 
@@ -621,16 +641,6 @@ Acme-Network-Identifier: dmz</screen>
           </thead>
 
           <tbody>
-            <row>
-              <entry
-              align="left"><computeroutput>collection</computeroutput></entry>
-
-              <entry>Several resources grouped together or considered as a
-              whole. [OCCI] <remark>Refer to discussion about up/down
-              parent/child asc/desc etc. on atom-syntax and
-              ietf-http-wg</remark></entry>
-            </row>
-
             <row>
               <entry
               align="left"><computeroutput>first</computeroutput></entry>
@@ -774,183 +784,6 @@ link[0].title: Link to alternate representation</screen>
 
   <section>
     <title>Extensions</title>
-
-    <section>
-      <title>Caching</title>
-
-      <para>Caching information improves performance by allowing clients to
-      track freshness of cached objects.</para>
-
-      <table>
-        <title>Caching Attributes</title>
-
-        <tgroup cols="3">
-          <colspec align="center" />
-
-          <thead>
-            <row>
-              <entry align="left">Attribute</entry>
-
-              <entry>Type</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry
-              align="left"><computeroutput>etag</computeroutput></entry>
-
-              <entry>String</entry>
-
-              <entry>ETag (must match HTTP headers where present)</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>updated</computeroutput></entry>
-
-              <entry>Date</entry>
-
-              <entry>Time last updated
-              (<computeroutput>atom:updated</computeroutput>)</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-    </section>
-
-    <section>
-      <title>Categories</title>
-
-      <para>Categories allow for simple, flexible organisation of
-      information.</para>
-
-      <table>
-        <title>Category Attributes</title>
-
-        <tgroup cols="3">
-          <colspec align="center" />
-
-          <thead>
-            <row>
-              <entry align="left">Attribute</entry>
-
-              <entry>Type</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry
-              align="left"><computeroutput>category[i].term</computeroutput></entry>
-
-              <entry>Token</entry>
-
-              <entry>Category name
-              (<computeroutput>atom:term</computeroutput>)</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>category[i].scheme</computeroutput></entry>
-
-              <entry>URI</entry>
-
-              <entry>Category vocabulary/schema
-              (<computeroutput>atom:scheme</computeroutput>)</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>category[i].label</computeroutput></entry>
-
-              <entry>String</entry>
-
-              <entry>Human readable label
-              (<computeroutput>atom:label</computeroutput>)</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-    </section>
-
-    <section>
-      <title>Links</title>
-
-      <para>Linking allows resources to refer to:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Alternative representations</para>
-        </listitem>
-
-        <listitem>
-          <para>Sub-collections</para>
-        </listitem>
-
-        <listitem>
-          <para>Other nouns</para>
-        </listitem>
-
-        <listitem>
-          <para>Related resources</para>
-        </listitem>
-      </itemizedlist>
-
-      <table>
-        <title>Linking Attributes</title>
-
-        <tgroup cols="3">
-          <colspec align="center" />
-
-          <thead>
-            <row>
-              <entry align="left">Attribute</entry>
-
-              <entry>Type</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry
-              align="left"><computeroutput>link[i].href</computeroutput></entry>
-
-              <entry>URI</entry>
-
-              <entry>Link target
-              (<computeroutput>atom:link[@href]</computeroutput>)</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>link[i].rel</computeroutput></entry>
-
-              <entry>URI</entry>
-
-              <entry>Link relation
-              (<computeroutput>atom:link[@rel]</computeroutput>)</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>link[i].title</computeroutput></entry>
-
-              <entry>String</entry>
-
-              <entry>Human readable title
-              (<computeroutput>atom:link[@title]</computeroutput>)</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-    </section>
 
     <section>
       <title>Search</title>
@@ -1328,6 +1161,18 @@ link[0].title: Link to alternate representation</screen>
       </org>
 
       <date>1999-06</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC3339" xml:id="rfc3339">
+      <title>RFC 3339 - Date and Time on the Internet: Timestamps</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc3339">http://tools.ietf.org/html/rfc3339</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>2002-07</date>
     </biblioentry>
 
     <biblioentry xreflabel="RFC4918" xml:id="rfc4918">
