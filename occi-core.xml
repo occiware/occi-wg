@@ -88,7 +88,7 @@
       </glossentry>
 
       <glossentry>
-        <glossterm>PUT (Update)</glossterm>
+        <glossterm>PUT (Create or Update)</glossterm>
 
         <glossdef>
           <para><quote>The PUT method requests that the enclosed entity be
@@ -221,7 +221,7 @@
 
       <para>Kinds defined by this standard live in the
       <uri>http://purl.org/occi/kind/</uri> namespace but anyone can define a
-      new action by allocating a URI they control.</para>
+      new kind by allocating a URI they control.</para>
 
       <warning>
         <para>Defining your own kinds can lead to interoperability problems
@@ -261,10 +261,11 @@
 
       <para>Attributes defined by this standard reside under the
       <computeroutput>OCCI</computeroutput> namespace (e.g.
-      "<computeroutput>OCCI-X</computeroutput>") but anyone can define a new
-      attribute by allocating a unique namespace (e.g. <quote>Acme</quote>). A
-      number of attributes are common to all
-      <glossterm>kind</glossterm>s.</para>
+      "<computeroutput>OCCI-ABC</computeroutput>") but anyone can define a new
+      attribute by allocating a unique namespace under
+      <quote><computeroutput>X-</computeroutput></quote> (e.g.
+      <quote><computeroutput>X-Acme-ABC</computeroutput></quote>). A number of
+      attributes are common to all <glossterm>kind</glossterm>s.</para>
 
       <warning>
         <para>Defining your own attributes can lead to interoperability
@@ -302,6 +303,15 @@ Acme-Network-Identifier: dmz</screen>
               <entry>Immutable identifier for the resource</entry>
 
               <entry><uri>urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770</uri></entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>OCCI-Kind</computeroutput></entry>
+
+              <entry>Kind of resource</entry>
+
+              <entry><computeroutput>compute</computeroutput></entry>
             </row>
 
             <row>
@@ -992,15 +1002,39 @@ Acme-Network-Identifier: dmz</screen>
 
       <glossdef>
         <para>Internet media (<acronym>MIME</acronym>) type as defined by
-        RFC2045 [<uri>http://tools.ietf.org/html/rfc2045</uri>] and RFC2046
-        [<uri
-        xlink:href="http://tools.ietf.org/html/rfc2046">http://tools.ietf.org/html/rfc2046</uri>]</para>
+        <xref linkend="rfc2045" /> and <xref linkend="rfc2046" /></para>
       </glossdef>
     </glossentry>
   </glossary>
 
   <bibliography>
     <bibliomixed>Normative References</bibliomixed>
+
+    <biblioentry xreflabel="RFC2045" xml:id="rfc2045">
+      <title>RFC 2045 - Multipurpose Internet Mail Extensions (MIME) Part One:
+      Format of Internet Message Bodies</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2045">http://tools.ietf.org/html/rfc2045</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>1996-11</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC2046" xml:id="rfc2046">
+      <title>RFC 2046 - Multipurpose Internet Mail Extensions (MIME) Part Two:
+      Media Types</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2046">http://tools.ietf.org/html/rfc2046</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>1996-11</date>
+    </biblioentry>
 
     <biblioentry xreflabel="RFC2109" xml:id="rfc2109">
       <title>RFC 2109 - HTTP State Management Mechanism</title>

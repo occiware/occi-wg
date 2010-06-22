@@ -151,16 +151,18 @@
 
               <entry>Float (10^6 bytes)</entry>
 
-              <entry>RAM in megabytes (e.g. 2048)</entry>
+              <entry>RAM in megabytes (e.g. 8192)</entry>
             </row>
 
             <row>
               <entry
               align="left"><computeroutput>OCCI-Compute-Memory-Speed</computeroutput></entry>
 
-              <entry>Float (10^9 bps)</entry>
+              <entry>Float (10^9 bytes/second)</entry>
 
-              <entry>RAM speed in Gbit/s (e.g. 256)</entry>
+              <entry>RAM speed in Gbit/s (e.g.
+              <computeroutput>17</computeroutput> for PC-8500 DDR3 per <xref
+              linkend="wikipedia" />)</entry>
             </row>
 
             <row>
@@ -201,56 +203,59 @@
           <tbody>
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Network-VLAN-Id</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Network-VLAN</computeroutput></entry>
 
               <entry>Integer (0..4095)</entry>
 
-              <entry>802.1q VLAN ID (e.g. 4095)</entry>
+              <entry>802.1q VLAN ID (e.g.
+              <computeroutput>4095</computeroutput>)</entry>
             </row>
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Network-VLAN-Tag</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Network-Label</computeroutput></entry>
 
               <entry>Token</entry>
 
-              <entry>Tag based VLANs (e.g. external-dmz)</entry>
+              <entry>Tag based VLANs (e.g.
+              <computeroutput>external-dmz</computeroutput>)</entry>
             </row>
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Network-IPv4-n-Address</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Network-Address</computeroutput></entry>
 
-              <entry>IPv4 Address</entry>
+              <entry>IPv4 or IPv6 Address (in CIDR notation)</entry>
 
-              <entry>IPv4 gateway address (e.g. 192.168.0.1)</entry>
+              <entry>IP gateway address or network address where there is none
+              (e.g. <computeroutput>192.168.0.1/24</computeroutput>,
+              <computeroutput>2001:db8:a::123/64</computeroutput>)</entry>
             </row>
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Network-IPv4-n-Netmask</computeroutput></entry>
+              align="left"><computeroutput>OCCI-Network-Allocation</computeroutput></entry>
 
-              <entry>IPv4 Address</entry>
+              <entry>Enum (<computeroutput>auto</computeroutput>,
+              <computeroutput>dhcp</computeroutput>,
+              <computeroutput>manual</computeroutput>)</entry>
 
-              <entry>IPv4 netmask address (e.g. 255.255.255.0)</entry>
-            </row>
+              <entry><para>Address allocation mechanism:</para><itemizedlist>
+                  <listitem>
+                    <para><computeroutput>auto</computeroutput> is handled
+                    automatically by infrastructure and/or guest agent</para>
+                  </listitem>
 
-            <row>
-              <entry
-              align="left"><computeroutput>OCCI-Network-IPv4-n-Network</computeroutput></entry>
+                  <listitem>
+                    <para><computeroutput>dhcp</computeroutput> uses
+                    network-based allocation protocol(s)</para>
+                  </listitem>
 
-              <entry>IPv4 Address</entry>
-
-              <entry>IPv4 network address (e.g. 192.168.0.0)</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>OCCI-Network-IPv4-n-CIDR</computeroutput></entry>
-
-              <entry>Integer (0..32)</entry>
-
-              <entry>Netmask in CIDR notation (e.g. 24)</entry>
+                  <listitem>
+                    <para><computeroutput>manual</computeroutput> requires
+                    preconfiguration or manual allocation</para>
+                  </listitem>
+                </itemizedlist></entry>
             </row>
           </tbody>
         </tgroup>
@@ -297,7 +302,20 @@
 
               <entry>Integer (10^9 bytes)</entry>
 
-              <entry>Drive size in gigabytes (e.g. 40)</entry>
+              <entry>Drive size in gigabytes (e.g.
+              <computeroutput>40</computeroutput>,
+              <computeroutput>0.00144</computeroutput>)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>OCCI-Storage-Speed</computeroutput></entry>
+
+              <entry>Integer (10^6 bytes/second)</entry>
+
+              <entry>Drive speed in MB/s (e.g.
+              <computeroutput>600</computeroutput> for SAS/SATA-600 <xref
+              linkend="wikipedia" />)</entry>
             </row>
           </tbody>
         </tgroup>
@@ -310,13 +328,22 @@
 
     <para>Various extensions provide for more advanced management
     functionality such as billing, monitoring and reporting.</para>
-
-    <section>
-      <title>State machine (state)</title>
-
-      <para>The state machine extension allows for the modeling of arbitrarily
-      complex state machines and associated transitions (e.g. start, stop,
-      restart).</para>
-    </section>
   </section>
+
+  <bibliography>
+    <bibliomixed>Normative References</bibliomixed>
+
+    <bibliomixed>Informative References</bibliomixed>
+
+    <biblioentry xreflabel="Wikipedia" xml:id="wikipedia">
+      <title>Wikipedia: List of device bandwidths</title>
+
+      <address><uri
+          xlink:href="http://en.wikipedia.org/wiki/List_of_device_bandwidths">http://en.wikipedia.org/wiki/List_of_device_bandwidths</uri></address>
+
+      <author>
+        <orgname>Wikipedia</orgname>
+      </author>
+    </biblioentry>
+  </bibliography>
 </article>
