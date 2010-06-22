@@ -501,7 +501,7 @@ Acme-Network-Identifier: dmz</screen>
         <computeroutput>US-West</computeroutput>,
         <computeroutput>Europe</computeroutput>), operating systems (e.g.
         <computeroutput>Windows</computeroutput>,
-        <computeroutput>Linux</computeroutput>) and patch levels (e.g. </para>
+        <computeroutput>Linux</computeroutput>) and patch levels (e.g.</para>
       </tip>
 
       <remark>TODO: Consider moving to link relations for categories so as to
@@ -514,8 +514,8 @@ Acme-Network-Identifier: dmz</screen>
     <section>
       <title>Collections</title>
 
-      <para>Where an operation returns multiple resources (e.g. categories,
-      searches) this is referred to as a
+      <para>Where an operation could return multiple resources (e.g.
+      categories, searches) this is referred to as a
       <glossterm>collection</glossterm>.</para>
 
       <para>Depending on the format these are returned as:</para>

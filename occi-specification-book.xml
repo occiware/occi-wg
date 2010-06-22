@@ -12,8 +12,9 @@
 
   <bridgehead renderas="sect4">Status of This Document</bridgehead>
 
-  <para>This document provides information to the Cloud and Grid community.
-  Distribution is unlimited.</para>
+  <para>This document provides information to the Cloud and Grid community. It
+  is the second deliverable of the Open Cloud Computing Interface (OCCI)
+  working group. Distribution is unlimited.</para>
 
   <bridgehead renderas="sect4">Copyright Notice</bridgehead>
 
@@ -21,8 +22,7 @@
 
   <bridgehead renderas="sect4">Abstract</bridgehead>
 
-  <para>This document is the second deliverable of the Open Cloud Computing
-  Interface working group. It describes a slim and extensible Interface for
+  <para>The document describes a slim and extensible Interface for
   Infrastructre as a Service (IaaS) model based Clouds. The document consist
   of several modular parts which each can be used without the others. After a
   walkthrough the OCCI Core is described followed up by some renderings. Those
@@ -30,20 +30,35 @@
   Infrastructure part of OCCI is described next. Finally the Registries are
   summed up.</para>
 
+  <para>The OCCI Specification is very modulare and consist of several parts.
+  OCCI core specification forms the foundation of this and upcoming
+  specification parts. The focus for this deliverable is on virtual workloads
+  which can be deployed on 'Infrastructure as a Service' based Clouds.
+  Therefore the second part describes the OCCI Infrastructure. Also a
+  rendering is provided which makes this implementation ready to
+  implement.</para>
+
+  <para>For future developements renderings might change. As well as other
+  parts of the Cloud stack can be described using the OCCI Core as a
+  foundation.</para>
+
   <section>
     <title>Introduction</title>
 
     <para>An overview of the document.</para>
   </section>
-<!--
+
+  <!--
   <section>
     <xi:include href="occi-walkthrough.xml" xpointer="xpointer(/*/*)" />
   </section>
 -->
+
   <section>
     <xi:include href="occi-core.xml" xpointer="xpointer(/*/*)" />
   </section>
-<!--
+
+  <!--
   <section>
     <xi:include href="occi-atom.xml" xpointer="xpointer(/*/*)" />
   </section>
@@ -65,12 +80,12 @@
   <section>
     <xi:include href="occi-infrastructure.xml" xpointer="xpointer(/*/*)" />
   </section>
-  
+
   <section>
     <xi:include href="occi-http.xml" xpointer="xpointer(/*/*)" />
   </section>
 
-<!--
+  <!--
   <section>
     <xi:include href="occi-search.xml" xpointer="xpointer(/*/*)" />
   </section>
@@ -87,10 +102,12 @@
     <xi:include href="occi-registries.xml" xpointer="xpointer(/*/*)" />
   </section>
 -->
+
   <section>
     <title>Contributors</title>
 
-    <para>Next to the members of the OCCI working group the following people actively contributed to this document:</para>
+    <para>Next to the members of the OCCI working group the following people
+    actively contributed to this document:</para>
 
     <table>
       <title>List of contributors</title>
