@@ -40,7 +40,7 @@
 &lt; Expires: -1
 &lt; Cache-Control: private, max-age=0
 &lt; Content-Type: application/ovf
-&lt; Link: &lt;/us-east/webapp/vm01;action=start&gt;; rel="http://purl.org/occi/action/start"; title="Start"
+&lt; Link: &lt;/us-east/webapp/vm01;start&gt;; rel="http://purl.org/occi/action/start"; title="Start"
 &lt; Link: &lt;/us-east/webapp/build.pdf&gt;; rel="related"; title="Documentation"; type="application/pdf"
 &lt; Category: compute; scheme="http://purl.org/occi/kind/"; label="Compute Resource"
 &lt; Server: occi-server/1.0
@@ -52,13 +52,6 @@
 &lt;           xmlns="http://schemas.dmtf.org/ovf/envelope/1"
 &lt;           xml:lang="en-US"&gt;
 ...</screen>
-
-    <tip>
-      <para>Some resources can be interacted with but not rendered due to the
-      nature of the resource or prevailing security policies (for example, an
-      operator may be able to backup a machine without knowing anything about
-      it).</para>
-    </tip>
   </section>
 
   <section>
@@ -380,10 +373,7 @@
       <glossterm>link</glossterm> with the
       <computeroutput>action</computeroutput> class.</para>
 
-      <screen>&lt;link rel="http://purl.org/occi/action/restart#cold"
-      class="action"
-      title="Cold Restart"
-      href="http://example.com/123/restart;type=cold" /&gt;</screen>
+      <screen>Link: &lt;/us-east/webapp/vm01;start&gt;; rel="http://purl.org/occi/action/start"; title="Start"</screen>
 
       <para>Actions defined by this standard reside under the
       <uri>http://purl.org/occi/action/</uri> namespace but anyone can define
@@ -403,6 +393,13 @@
       <computeroutput>application/x-www-form-encoded</computeroutput>). In the
       case of HTML-based renderings the actions can therefore be actual HTML
       forms.</para>
+
+      <tip>
+        <para>Some resources can be interacted with but not rendered due to
+        the nature of the resource or prevailing security policies (for
+        example, an operator may be able to backup a machine without knowing
+        anything about it).</para>
+      </tip>
 
       <section>
         <title>Asynchronous Actions</title>
@@ -488,9 +485,7 @@
         </glossentry>
       </glosslist>
 
-      <screen>&lt;category term="compute"
-          scheme="http://purl.org/occi/kind/"
-          label="Compute Resource" /&gt;</screen>
+      <screen>Category: compute; scheme="http://purl.org/occi/kind/"; label="Compute Resource"</screen>
 
       <para>Category schemes and/or terms defined by this standard reside
       throughout the <uri>http://purl.org/occi/</uri> namespace but anyone can
@@ -529,7 +524,8 @@
         performance reasons, requiring O(n+1) requests. Including metadata
         (requiring a wrapper format like Atom or SOAP) and/or the data itself
         would provide O(1) performance, though passing by value should only be
-        considered where the representations are known to be small.</para>
+        considered where the representations are known to be small as such
+        encodings add significant overhead.</para>
       </tip>
 
       <para>Any given URL can be a collection and/or advertise
@@ -543,10 +539,7 @@
         resources.</para>
       </tip>
 
-      <screen>&lt;link rel="http://purl.org/occi/collection/audit"
-      class="collection"
-      title="Audit Entries"
-      href="http://example.com/123/audit" /&gt;</screen>
+      <screen>Link: &lt;http://example.com/123/audit&gt;; rel="http://purl.org/occi/collection/audit"; title="Audit Entries"</screen>
 
       <section>
         <title>Paging</title>
@@ -556,21 +549,20 @@
         <quote>first</quote>, <quote>last</quote>, <quote>next</quote> and
         <quote>previous</quote> <glossterm>link relation</glossterm>s.</para>
 
-        <screen>&lt;link rel="first" href="http://example.com/xyz;start=0" /&gt;
-&lt;link rel="previous" href="http://example.com/xyz;start=400" /&gt;
-&lt;link rel="self" href="http://example.com/xyz;start=500" /&gt;
-&lt;link rel="next" href="http://example.com/xyz;start=600" /&gt;
-&lt;link rel="last" href="http://example.com/xyz;start=900" /&gt;</screen>
+        <screen>Link: &lt;http://example.com/xyz;start=0&gt;; rel="first"
+Link: &lt;http://example.com/xyz;start=400&gt;; rel="previous"
+Link: &lt;http://example.com/xyz;start=500&gt;; rel="self"
+Link: &lt;http://example.com/xyz;start=600&gt;; rel="next"
+Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       </section>
     </section>
 
     <section>
       <title>Linking</title>
 
-      <para>Existing linking standards defined for Atom [<xref
-      linkend="rfc4287" />], HTTP [<xref linkend="link" />] and HTML [<xref
-      linkend="html5" />] are used to indicate associations between resources.
-      All formats <emphasis>must</emphasis> support
+      <para>Web linking standards for HTTP [<xref linkend="link" />] and HTML
+      [<xref linkend="html5" />] are used to indicate associations between
+      resources. All formats <emphasis>must</emphasis> support
       <glossterm>in-band</glossterm> linking including:</para>
 
       <itemizedlist>
@@ -595,10 +587,7 @@
         </listitem>
       </itemizedlist>
 
-      <screen>&lt;link rel="related"
-      title="System Documentation"
-      href="http://example.com/user-guide.pdf"
-      type="application/pdf" /&gt;</screen>
+      <screen>Link: &lt;/us-east/webapp/build.pdf&gt;; rel="related"; title="Documentation"; type="application/pdf"</screen>
 
       <para><glossterm>Link relation</glossterm>s defined by this standard
       reside under the <uri>http://purl.org/occi/rel</uri> namespace but
