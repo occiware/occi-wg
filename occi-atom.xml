@@ -24,8 +24,8 @@
     <title>Overview</title>
 
     <para>The Atom Syndication Format is <quote>an XML-based Web content and
-    metadata syndication format</quote><xref linkend="rfc4287" />. It is most
-    useful for advanced clients including:</para>
+    metadata syndication format</quote><xref linkend="rfc4287_1" />. It is
+    most useful for advanced clients including:</para>
 
     <itemizedlist>
       <listitem>
@@ -62,7 +62,7 @@
   <bibliography>
     <bibliomixed>Normative References</bibliomixed>
 
-    <biblioentry xreflabel="RFC4287" xml:id="rfc4287">
+    <biblioentry xreflabel="RFC4287" xml:id="rfc4287_1">
       <title>RFC 4287 - The Atom Syndication Format</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://tools.ietf.org/html/rfc4287</uri></address>
