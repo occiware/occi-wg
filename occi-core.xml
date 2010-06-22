@@ -158,36 +158,6 @@
       </glossentry>
     </glosslist>
 
-    <bridgehead>Collections</bridgehead>
-
-    <para>Where an operation returns multiple resources (e.g. categories,
-    searches) this is referred to as a <glossterm>collection</glossterm>
-    (<uri>http://purl.org/occi/collection</uri>). Depending on the format
-    these are returned as:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>A list of pointers to resources (e.g. <computeroutput
-        xlink:href="http://tools.ietf.org/html/rfc2483#section-5">text/uri-list</computeroutput>)</para>
-      </listitem>
-
-      <listitem>
-        <para>A list of pointers to resources with metadata (e.g.
-        <computeroutput>application/atom+xml</computeroutput> with
-        <computeroutput>link</computeroutput> to content)</para>
-      </listitem>
-
-      <listitem>
-        <para>A list of embedded resources and metadata (e.g.
-        <computeroutput>application/atom+xml</computeroutput> with
-        <computeroutput>content</computeroutput> embedded)</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>Metadata that would normally appear in the HTTP headers appears in
-    standard Atom elements with the entity-body itself being passed by
-    reference or by value in the Atom content element.</para>
-
     <bridgehead>Versioning</bridgehead>
 
     <para>Clients and servers should expose the protocol version (e.g.
@@ -385,6 +355,48 @@
   </section>
 
   <section>
+    <title>Collections</title>
+
+    <para>Where an operation returns multiple resources (e.g. categories,
+    searches) this is referred to as a <glossterm>collection</glossterm>
+    (<uri>http://purl.org/occi/collection</uri>). Depending on the format
+    these are returned as:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>A list of pointers to resources (e.g. <computeroutput
+        xlink:href="http://tools.ietf.org/html/rfc2483#section-5">text/uri-list</computeroutput>)</para>
+      </listitem>
+
+      <listitem>
+        <para>A list of pointers to resources with metadata (e.g.
+        <computeroutput>application/atom+xml</computeroutput> with
+        <computeroutput>link</computeroutput> to content)</para>
+      </listitem>
+
+      <listitem>
+        <para>A list of embedded resources and metadata (e.g.
+        <computeroutput>application/atom+xml</computeroutput> with
+        <computeroutput>content</computeroutput> embedded)</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Any given URL can be a collection and/or advertise
+    <glossterm>link</glossterm>s to other <glossterm>collection</glossterm>s
+    using the <quote>collection</quote> <glossterm>link
+    relation</glossterm>.</para>
+
+    <section>
+      <title>Paging</title>
+
+      <para>Collections may be divided into <glossterm>page</glossterm>s, with
+      each linking to the <quote>first</quote>, <quote>last</quote>,
+      <quote>next</quote> and <quote>previous</quote> <glossterm>link
+      relation</glossterm>s.</para>
+    </section>
+  </section>
+
+  <section>
     <title>Link Relations</title>
 
     <para>Existing standard mechanisms are used to indicate associations
@@ -393,14 +405,12 @@
     <table>
       <title>Link Relations</title>
 
-      <tgroup cols="3">
+      <tgroup cols="2">
         <colspec align="center" />
 
         <thead>
           <row>
             <entry align="left">Relation</entry>
-
-            <entry>URI</entry>
 
             <entry>Description</entry>
           </row>
@@ -408,12 +418,43 @@
 
         <tbody>
           <row>
+            <entry align="left"><computeroutput>first</computeroutput></entry>
+
+            <entry><quote>An IRI that refers to the furthest preceding
+            resource in a series of resources.</quote><xref
+            linkend="link" /></entry>
+          </row>
+
+          <row>
+            <entry align="left"><computeroutput>last</computeroutput></entry>
+
+            <entry><quote>An IRI that refers to the furthest following
+            resource in a series of resources.</quote><xref
+            linkend="link" /></entry>
+          </row>
+
+          <row>
+            <entry align="left"><computeroutput>next</computeroutput></entry>
+
+            <entry><quote>A URI that refers to the immediately following
+            document in a series of documents.</quote><xref
+            linkend="link" /></entry>
+          </row>
+
+          <row>
+            <entry
+            align="left"><computeroutput>previous</computeroutput></entry>
+
+            <entry><quote>A URI that refers to the immediately preceding
+            document in a series of documents.</quote><xref
+            linkend="link" /></entry>
+          </row>
+
+          <row>
             <entry
             align="left"><computeroutput>search</computeroutput></entry>
 
-            <entry>N/A</entry>
-
-            <entry>OpenSearch Interface</entry>
+            <entry>OpenSearch Interface<xref linkend="opensearch" /></entry>
           </row>
         </tbody>
       </tgroup>
@@ -952,7 +993,7 @@ link[0].title: Link to alternate representation</screen>
           </listitem>
 
           <listitem>
-            <para>application/occi+xml</para>
+            <para>application/occi+atom</para>
           </listitem>
         </itemizedlist>
       </section>
