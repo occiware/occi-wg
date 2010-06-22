@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>OCCI Registries</title>
+
+  <para>Extensibility of OCCI relies heavily on registries, which allow the
+  working group to initially specify the minimum required functionatliy based
+  on existing implementations while also catering for future evolution.</para>
+
+  <para>Implementors who wish to extend the specification can do so by way of
+  a process TBD in which their request is assessed within a fixed time frame
+  of 7-30 days. If the request is found to be useful for interoperability then
+  it will be accepted and entered into the registry.</para>
+
+  <para>If rejected the implementor can still use custom extensions which will
+  be preserved but otherwise ignored by other implementations which do not
+  understand them.</para>
+
+  <tip>
+    <para>This document seeds the registries which are to be hosted in an
+    editable medium such as a database, spreadsheet or wiki.</para>
+  </tip>
+
+  <section>
+    <title>Core</title>
+
+    <section>
+      <title>Common Attributes</title>
+
+      <table>
+        <title>Common Attributes</title>
+
+        <tgroup cols="3">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="left">Attribute</entry>
+
+              <entry>Description</entry>
+
+              <entry>Example</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry
+              align="left"><computeroutput>occi.id</computeroutput></entry>
+
+              <entry>Immutable identifier for the resource</entry>
+
+              <entry><uri>urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770</uri></entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>occi.title</computeroutput></entry>
+
+              <entry>Display name for the resource</entry>
+
+              <entry><computeroutput>Compute Resource
+              #123</computeroutput></entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>occi.summary</computeroutput></entry>
+
+              <entry>Description of the resource</entry>
+
+              <entry><computeroutput>A virtual compute
+              resource</computeroutput></entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>occi.version</computeroutput></entry>
+
+              <entry>Specification version</entry>
+
+              <entry><computeroutput>1.0</computeroutput></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Link Relations</title>
+
+      <table>
+        <title>Link Relations</title>
+
+        <tgroup cols="2">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="left">Relation</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry
+              align="left"><para><computeroutput>category</computeroutput>
+              (<uri>http://purl.org/occi/rel#category</uri>)</para></entry>
+
+              <entry><para>A category mapping whereby:</para><itemizedlist>
+                  <listitem>
+                    <para>The <computeroutput>scheme</computeroutput> is
+                    required and indicated by the
+                    <computeroutput>href</computeroutput> attribute.</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>The <computeroutput>label</computeroutput> is
+                    optional and indicated by the
+                    <computeroutput>title</computeroutput> attribute.</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>The <computeroutput>term</computeroutput> is
+                    required and indicated by the
+                    <computeroutput>term</computeroutput> extended
+                    attribute.</para>
+                  </listitem>
+                </itemizedlist></entry>
+            </row>
+
+            <row>
+              <entry align="left"><computeroutput>collection</computeroutput>
+              (<uri>http://purl.org/occi/rel#collection</uri>)</entry>
+
+              <entry><para>A related collection whereby:</para><itemizedlist>
+                  <listitem>
+                    <para>The root of the collection is indicated by the
+                    <computeroutput>href</computeroutput> attribute.</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>The <glossterm>kind</glossterm> of the collection is
+                    indicated by the <computeroutput>kind</computeroutput>
+                    extended attribute.</para>
+                  </listitem>
+                </itemizedlist></entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>first</computeroutput></entry>
+
+              <entry><quote>An IRI that refers to the furthest preceding
+              resource in a series of resources.</quote> [<xref
+              linkend="link" />]</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>help</computeroutput></entry>
+
+              <entry><quote>The referenced document provides further help
+              information for the page as a whole.</quote> [<xref
+              linkend="html5" />]</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>icon</computeroutput></entry>
+
+              <entry><quote>The specified resource is an icon representing the
+              page or site, and should be used by the user agent when
+              representing the page in the user interface.</quote> [<xref
+              linkend="html5" />]</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>last</computeroutput></entry>
+
+              <entry><quote>An IRI that refers to the furthest following
+              resource in a series of resources.</quote> [<xref
+              linkend="link" />]</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>next</computeroutput></entry>
+
+              <entry><quote>A URI that refers to the immediately following
+              document in a series of documents.</quote> [<xref
+              linkend="link" />]</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>previous</computeroutput></entry>
+
+              <entry><quote>A URI that refers to the immediately preceding
+              document in a series of documents.</quote> [<xref
+              linkend="link" />]</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>search</computeroutput></entry>
+
+              <entry><quote>The referenced document provides an interface
+              specifically for searching the document and its related
+              resources.</quote> [<xref linkend="html5" />, <xref
+              linkend="opensearch" />]</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>self</computeroutput></entry>
+
+              <entry><quote>Identifies a resource equivalent to the containing
+              element</quote> [<xref linkend="rfc4287" />]</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+</article>

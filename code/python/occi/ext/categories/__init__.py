@@ -1,0 +1,26 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# 
+# $Id$
+# Copyright © 2009 Sam Johnston <samj@samj.net> http://samj.net/
+#                  Australian Online Solutions Pty Ltd http://www.aos.net.au/
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+# 
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import occi
+
+class CategoriesExtension(occi.ext.Extension):
+
+  def __init__(self):
+    occi.ext.Extension.__init__(self, name='categories')
