@@ -41,10 +41,57 @@
   </table>
 
   <section>
-    <title>Nouns</title>
+    <title>Kinds</title>
 
     <para>Cloud infrastructure can be modeled using three primary nouns:
     compute, network and storage.</para>
+
+    <table>
+      <title>Kinds</title>
+
+      <tgroup cols="3">
+        <colspec align="center" />
+
+        <thead>
+          <row>
+            <entry align="left">Kind</entry>
+
+            <entry>URI</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry
+            align="left"><computeroutput>compute</computeroutput></entry>
+
+            <entry><uri>http://purl.org/occi/noun/compute</uri></entry>
+
+            <entry>Information processing resources</entry>
+          </row>
+
+          <row>
+            <entry
+            align="left"><computeroutput>network</computeroutput></entry>
+
+            <entry><uri>http://purl.org/occi/noun/network</uri></entry>
+
+            <entry>Interconnection resources</entry>
+          </row>
+
+          <row>
+            <entry
+            align="left"><computeroutput>storage</computeroutput></entry>
+
+            <entry><uri>http://purl.org/occi/noun/storage</uri></entry>
+
+            <entry>Recorded information resources</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
 
     <section>
       <title>Compute</title>
