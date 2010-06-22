@@ -69,10 +69,6 @@
 &lt; Connection: close
 &lt;
 &lt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt; &lt;Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-&lt;           xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1"
-&lt;           xmlns="http://schemas.dmtf.org/ovf/envelope/1"
-&lt;           xml:lang="en-US"&gt;
 ...</screen>
     </section>
   </section>
