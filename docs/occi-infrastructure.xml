@@ -8,8 +8,14 @@
          xmlns:db="http://docbook.org/ns/docbook">
   <title>OCCI Infrastructure</title>
 
-  <para>OCCI Infrastructure defines three kinds and various extensions
-  relating to management of cloud infrastructure services (IaaS).</para>
+  <section>
+    <title>Introduction</title>
+
+    <para>OCCI Infrastructure defines three kinds and various extensions
+    relating to management of cloud infrastructure services (IaaS). With the
+    help of these kinds and possible extensions Virtual Machine deplyoment,
+    management and monitoring can be described.</para>
+  </section>
 
   <section>
     <title>Example</title>
@@ -543,8 +549,6 @@
   </section>
 
   <bibliography>
-    <bibliomixed>Normative References</bibliomixed>
-
     <bibliomixed>Informative References</bibliomixed>
 
     <biblioentry xreflabel="VHD" xml:id="infrastructure-xva">

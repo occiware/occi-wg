@@ -6,18 +6,10 @@
          xmlns:m="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
-  <info>
-    <title>OCCI User Interface (XHTML5)</title>
-
-    <author>
-      <orgname>OCCI-WG</orgname>
-    </author>
-
-    <pubdate></pubdate>
-  </info>
+  <title>OCCI XHTML5 rendering</title>
 
   <section>
-    <title>Overview</title>
+    <title>Introduction</title>
 
     <para>XHTML5 is an XML-based <quote>concrete syntax</quote> of the HTML5
     <quote>abstract language</quote> (the <quote>World Wide Web's markup
