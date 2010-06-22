@@ -257,9 +257,7 @@
       key-value pairs.</para>
 
       <para>Attributes are divided into namespaces which are separated by the
-      dot character (<quote>.</quote>). They <emphasis>must</emphasis> be
-      handled as case-insensitive but <emphasis>should</emphasis> be
-      case-preserving by default (depending on the format).</para>
+      dot character (<quote>.</quote>).</para>
 
       <tip>
         <para>This scalable approach was derived from the Mozilla Firefox
@@ -472,7 +470,8 @@
       <section>
         <title>Querying</title>
 
-        <para></para>
+        <remark>TODO: Pull query interface from GData:
+        http://code.google.com/apis/gdata/docs/2.0/reference.html#Queries</remark>
       </section>
     </section>
 
