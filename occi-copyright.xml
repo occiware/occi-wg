@@ -6,7 +6,6 @@
          xmlns:m="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
-
   <title>OCCI Legal Notices</title>
 
   <section>
@@ -41,7 +40,7 @@
   </section>
 
   <section>
-    <title>Full Copyright Notice</title>
+    <title>Open Grid Forum Copyright Notice</title>
 
     <para>Copyright (C) Open Grid Forum (2009). All Rights Reserved.</para>
 
@@ -59,5 +58,29 @@
 
     <para>The limited permissions granted above are perpetual and will not be
     revoked by the OGF or its successors or assignees.</para>
+  </section>
+
+  <section>
+    <title>Creative Commons Copyright Notice</title>
+
+    <para>The Open Cloud Computing Interface (OCCI) by Open Grid Forum is
+    dual-licensed under a Creative Commons Attribution 3.0 Unported License
+    (<uri
+    xlink:href="http://creativecommons.org/licenses/by-sa/3.0/">http://creativecommons.org/licenses/by/3.0/</uri>).
+    Portions of the document(s) are copyright:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Rackspace Hosting Inc.</para>
+      </listitem>
+
+      <listitem>
+        <para>ServePath, LLC t/a GoGrid</para>
+      </listitem>
+
+      <listitem>
+        <para>Sun Microsystems, Inc.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </article>
