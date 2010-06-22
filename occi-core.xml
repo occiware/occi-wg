@@ -161,21 +161,25 @@
       <para>A single entry point is defined by a URL (e.g.
       <uri>http://cloud.example.com/</uri>) which may be a collection of
       resources or some other page as defined by the implementor (e.g. a
-      marketing or landing page). All resources <emphasis>must</emphasis> be
-      addressible by URLs (whose structure is opaque and at the discretion of
-      the implementor) and discoverable via search and/or link traversal from
-      the entry point. Clients <emphasis>should not</emphasis> rely on "rules"
-      to construct URLs, rather learning them from URLs previously retrieved,
-      in line with RESTful principles:</para>
+      descriptive web page). Therefore OCCI is fully compatible with any
+      existing web presence such as a marketing site or landing page.</para>
 
-      <screen>&gt; GET /-/compudte HTTP/1.1
+      <para>All resources <emphasis>must</emphasis> be addressible by URLs
+      (whose structure is opaque and at the discretion of the implementor) and
+      discoverable via search and/or link traversal from the entry point.
+      Clients <emphasis>should not</emphasis> rely on "rules" to construct
+      URLs, rather learning them from URLs previously retrieved, in line with
+      RESTful principles:</para>
+
+      <screen>&gt; GET /-/compute/ HTTP/1.1
 &gt; Accept: text/uri-list
 &gt; 
 &lt; HTTP/1.1 200 OK
 &lt; Content-type: text/uri-list
 &lt;
-&lt; /node1
-&lt; /node2</screen>
+&lt; /us-east/new-york/node17
+&lt; /us-west/san-francisco/node43
+&lt; /europe/paris/node38</screen>
     </section>
 
     <section>
@@ -186,7 +190,9 @@
       <computeroutput>HEAD</computeroutput> request on the root
       (<quote><uri>/</uri></quote>) and discover the category search
       interface, from which they can learn the supported categories/kinds and
-      retrieve some or all of them.</para>
+      retrieve some or all of them. If they know the URL for the resource they
+      wish to interact with (e.g. scripts &amp; cron jobs) then they can
+      bypass the discovery process and manipulate it directly.</para>
 
       <example>
         <title>Example bootstrap</title>
