@@ -130,7 +130,7 @@
 
     <bibliomixed>Informative References</bibliomixed>
 
-    <biblioentry xreflabel="Wikipedia" xml:id="wikipedia">
+    <biblioentry xreflabel="GData" xml:id="application-gdata">
       <title>Google Data Protocol (GData)</title>
 
       <address><uri

@@ -15,8 +15,8 @@
     computing services. It is as close as possible to the underlying HyperText
     Transfer Protocol (HTTP), deviating only where absolutely necessary, and
     can be described as a "Resource Oriented Architecture (ROA)".<xref
-    linkend="rws" /> All existing HTTP features are available for caching,
-    proxying, gatewaying and other advanced functionality.</para>
+    linkend="core-rws" /> All existing HTTP features are available for
+    caching, proxying, gatewaying and other advanced functionality.</para>
 
     <para>Each resource (identified by a canonical URL) has one or more
     representations which may or may not be hypertext (e.g. HTML). Metadata
@@ -95,7 +95,7 @@
           <para><quote>The POST method is used to request that the origin
           server accept the entity enclosed in the request as a new
           subordinate of the resource identified by the Request-URI in the
-          Request-Line.</quote><xref linkend="rfc2616" /></para>
+          Request-Line.</quote><xref linkend="core-rfc2616" /></para>
 
           <para>POSTing a representation (e.g. OVF) to a collection (e.g.
           /compute) will result in a new resource being created (e.g.
@@ -110,7 +110,7 @@
         <glossdef>
           <para><quote>The GET method means retrieve whatever information (in
           the form of an entity) is identified by the
-          Request-URI.</quote><xref linkend="rfc2616" /></para>
+          Request-URI.</quote><xref linkend="core-rfc2616" /></para>
 
           <para>GETting a resource (e.g. /compute/123) will return a
           representation of that resource in the most appropriate supported
@@ -125,7 +125,7 @@
         <glossdef>
           <para><quote>The PUT method requests that the enclosed entity be
           stored under the supplied Request-URI.</quote><xref
-          linkend="rfc2616" /></para>
+          linkend="core-rfc2616" /></para>
 
           <para>PUTting a representation (e.g. OVF) to a URL (e.g.
           /compute/123) will result in the resource being created or updated.
@@ -141,7 +141,7 @@
         <glossdef>
           <para><quote>The DELETE method requests that the origin server
           delete the resource identified by the Request-URI.</quote><xref
-          linkend="rfc2616" /></para>
+          linkend="core-rfc2616" /></para>
 
           <para>DELETE results in the deletion of the resource (and everything
           "under" it, as appropriate).</para>
@@ -159,7 +159,7 @@
           <para><quote>The COPY method creates a duplicate of the source
           resource identified by the Request-URI, in the destination resource
           identified by the URI in the Destination header.</quote><xref
-          linkend="rfc4918" /></para>
+          linkend="core-rfc4918" /></para>
         </glossdef>
       </glossentry>
 
@@ -169,7 +169,7 @@
         <glossdef>
           <para><quote>The HEAD method is identical to GET except that the
           server MUST NOT return a message-body in the response.</quote><xref
-          linkend="rfc2616" /></para>
+          linkend="core-rfc2616" /></para>
         </glossdef>
       </glossentry>
 
@@ -179,7 +179,7 @@
         <glossdef>
           <para><quote>MKCOL creates a new collection resource at the location
           specified by the Request-URI.</quote><xref
-          linkend="rfc4918" /></para>
+          linkend="core-rfc4918" /></para>
         </glossdef>
       </glossentry>
 
@@ -191,7 +191,7 @@
           logical equivalent of a copy (COPY), followed by consistency
           maintenance processing, followed by a delete of the source, where
           all three actions are performed in a single operation.</quote><xref
-          linkend="rfc4918" /></para>
+          linkend="core-rfc4918" /></para>
         </glossdef>
       </glossentry>
 
@@ -202,7 +202,7 @@
           <para><quote>The OPTIONS method represents a request for information
           about the communication options available on the request/response
           chain identified by the Request-URI.</quote><xref
-          linkend="rfc2616" /></para>
+          linkend="core-rfc2616" /></para>
         </glossdef>
       </glossentry>
     </glosslist>
@@ -216,18 +216,18 @@
 
       <para>Servers <emphasis>may</emphasis> require that requests be
       authenticated using standard HTTP-based authentication mechanisms
-      (including OAuth).<xref linkend="oauth" /> They indicate this
+      (including OAuth).<xref linkend="core-oauth" /> They indicate this
       requirement by returning <code>HTTP 401</code> with a
       <code>WWW-Authenticate</code> header and a suitable challenge (e.g.
       <code>Basic</code>, <code>Digest</code>, <code>OAuth</code>). The client
       then includes appropriate <code>Authorization</code> headers in its
-      responses.<xref linkend="rfc2617" /></para>
+      responses.<xref linkend="core-rfc2617" /></para>
 
       <para>Servers <emphasis>may</emphasis> set and clients
       <emphasis>may</emphasis> accept <glossterm>cookies</glossterm> in order
       to maintain authentication state between requests. Such sessions
       <emphasis>should not</emphasis> be used for other purposes in line with
-      RESTful principles.<xref linkend="rfc2109" /></para>
+      RESTful principles.<xref linkend="core-rfc2109" /></para>
     </section>
 
     <section>
@@ -515,9 +515,9 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
     <section>
       <title>Linking</title>
 
-      <para>Web linking standards for HTTP [<xref linkend="link" />] and HTML
-      [<xref linkend="html5" />] are used to indicate associations between
-      resources. All formats <emphasis>must</emphasis> support
+      <para>Web linking standards for HTTP [<xref linkend="core-link" />] and
+      HTML [<xref linkend="core-html5" />] are used to indicate associations
+      between resources. All formats <emphasis>must</emphasis> support
       <glossterm>in-band</glossterm> linking including:</para>
 
       <itemizedlist>
@@ -617,8 +617,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       <glossterm>type</glossterm>
 
       <glossdef>
-        <para>Internet media (<acronym>MIME</acronym>) type as defined by
-        <xref linkend="rfc2045" /> and <xref linkend="rfc2046" /></para>
+        <para>Internet media (<acronym>MIME</acronym>) type.</para>
       </glossdef>
     </glossentry>
   </glossary>
@@ -626,33 +625,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
   <bibliography>
     <bibliomixed>Normative References</bibliomixed>
 
-    <biblioentry xreflabel="RFC2045" xml:id="rfc2045">
-      <title>RFC 2045 - Multipurpose Internet Mail Extensions (MIME) Part One:
-      Format of Internet Message Bodies</title>
-
-      <address><uri xlink:href="http://tools.ietf.org/html/rfc2045">http://tools.ietf.org/html/rfc2045</uri></address>
-
-      <org>
-        <orgname>Internet Engineering Task Force (IETF)</orgname>
-      </org>
-
-      <date>1996-11</date>
-    </biblioentry>
-
-    <biblioentry xreflabel="RFC2046" xml:id="rfc2046">
-      <title>RFC 2046 - Multipurpose Internet Mail Extensions (MIME) Part Two:
-      Media Types</title>
-
-      <address><uri xlink:href="http://tools.ietf.org/html/rfc2046">http://tools.ietf.org/html/rfc2046</uri></address>
-
-      <org>
-        <orgname>Internet Engineering Task Force (IETF)</orgname>
-      </org>
-
-      <date>1996-11</date>
-    </biblioentry>
-
-    <biblioentry xreflabel="RFC2109" xml:id="rfc2109">
+    <biblioentry xreflabel="RFC2109" xml:id="core-rfc2109">
       <title>RFC 2109 - HTTP State Management Mechanism</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc2109">http://tools.ietf.org/html/rfc2109</uri></address>
@@ -664,7 +637,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       <date>1997-02</date>
     </biblioentry>
 
-    <biblioentry xreflabel="RFC2616" xml:id="rfc2616">
+    <biblioentry xreflabel="RFC2616" xml:id="core-rfc2616">
       <title>RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://tools.ietf.org/html/rfc2616</uri></address>
@@ -676,7 +649,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       <date>1999-06</date>
     </biblioentry>
 
-    <biblioentry xreflabel="RFC2617" xml:id="rfc2617">
+    <biblioentry xreflabel="RFC2617" xml:id="core-rfc2617">
       <title>RFC 2617 - HTTP Authentication: Basic and Digest Access
       Authentication</title>
 
@@ -689,7 +662,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       <date>1999-06</date>
     </biblioentry>
 
-    <biblioentry xreflabel="RFC3339" xml:id="rfc3339">
+    <biblioentry xreflabel="RFC3339" xml:id="core-rfc3339">
       <title>RFC 3339 - Date and Time on the Internet: Timestamps</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc3339">http://tools.ietf.org/html/rfc3339</uri></address>
@@ -701,7 +674,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       <date>2002-07</date>
     </biblioentry>
 
-    <biblioentry xreflabel="RFC4918" xml:id="rfc4918">
+    <biblioentry xreflabel="RFC4918" xml:id="core-rfc4918">
       <title>RFC 4918 - HTTP Extensions for Web Distributed Authoring and
       Versioning (WebDAV)</title>
 
@@ -714,7 +687,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       <date>2007-06</date>
     </biblioentry>
 
-    <biblioentry xreflabel="OpenSearch" xml:id="opensearch">
+    <biblioentry xreflabel="OpenSearch" xml:id="core-opensearch">
       <title>OpenSearch 1.1</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://www.opensearch.org/Specifications/OpenSearch/1.1</uri></address>
@@ -752,7 +725,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
 
     <bibliomixed>Informative References</bibliomixed>
 
-    <biblioentry xreflabel="RFC4287" xml:id="rfc4287">
+    <biblioentry xreflabel="RFC4287" xml:id="core-rfc4287">
       <title>RFC 4287 - The Atom Syndication Format</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://tools.ietf.org/html/rfc4287</uri></address>
@@ -772,7 +745,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       <date>2005-12</date>
     </biblioentry>
 
-    <biblioentry xreflabel="HTML5" xml:id="html5">
+    <biblioentry xreflabel="HTML5" xml:id="core-html5">
       <title>HTML 5</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://www.w3.org/TR/html5/</uri></address>
@@ -804,7 +777,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       <date>2009-08-25</date>
     </biblioentry>
 
-    <biblioentry xreflabel="OAuth" xml:id="oauth">
+    <biblioentry xreflabel="OAuth" xml:id="core-oauth">
       <title>OAuth</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc2616">http://oauth.net/core/1.0</uri></address>
@@ -818,7 +791,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       <date>2007-12-04</date>
     </biblioentry>
 
-    <biblioentry xreflabel="RWS" xml:id="rws">
+    <biblioentry xreflabel="RWS" xml:id="core-rws">
       <title>RESTful Web Services</title>
 
       <address><uri xlink:href="http://oreilly.com/catalog/9780596529260/">http://oreilly.com/catalog/9780596529260/</uri></address>
@@ -840,7 +813,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       <date>2007-05</date>
     </biblioentry>
 
-    <biblioentry xreflabel="LINK" xml:id="link">
+    <biblioentry xreflabel="LINK" xml:id="core-link">
       <title>Web Linking</title>
 
       <address><uri
@@ -857,7 +830,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"</screen>
       <date>2009-07-12</date>
     </biblioentry>
 
-    <biblioentry xreflabel="CATEGORY" xml:id="category">
+    <biblioentry xreflabel="CATEGORY" xml:id="core-category">
       <title>Web Categories</title>
 
       <address><uri

@@ -162,7 +162,7 @@
 
               <entry>RAM speed in Gbit/s (e.g.
               <computeroutput>17</computeroutput> for PC-8500 DDR3 per <xref
-              linkend="wikipedia" />)</entry>
+              linkend="infrastructure-bandwidths" />)</entry>
             </row>
 
             <row>
@@ -324,7 +324,7 @@
 
               <entry>Drive speed in MB/s (e.g.
               <computeroutput>600</computeroutput> for SAS/SATA-600 <xref
-              linkend="wikipedia" />)</entry>
+              linkend="infrastructure-bandwidths" />)</entry>
             </row>
 
             <row>
@@ -353,7 +353,7 @@
 
     <bibliomixed>Informative References</bibliomixed>
 
-    <biblioentry xreflabel="Wikipedia" xml:id="wikipedia">
+    <biblioentry xreflabel="Wikipedia" xml:id="infrastructure-bandwidths">
       <title>Wikipedia: List of device bandwidths</title>
 
       <address><uri
