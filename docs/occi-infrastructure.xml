@@ -101,90 +101,150 @@
       <para>A compute resource is capable of conducting computations (e.g. a
       virtual machine).</para>
 
-      <table>
-        <title>Compute Attributes</title>
+      <section>
+        <title>Attributes</title>
 
-        <tgroup cols="3">
-          <colspec align="center" />
+        <para>The following attributes apply to this kind:</para>
 
-          <thead>
-            <row>
-              <entry align="left">Attribute</entry>
+        <table>
+          <title>Compute Attributes</title>
 
-              <entry>Type</entry>
+          <tgroup cols="3">
+            <colspec align="center" />
 
-              <entry>Description</entry>
-            </row>
-          </thead>
+            <thead>
+              <row>
+                <entry align="left">Attribute</entry>
 
-          <tbody>
-            <row>
-              <entry
-              align="left"><computeroutput>occi.compute.architecture</computeroutput></entry>
+                <entry>Type</entry>
 
-              <entry>Enum (x86, x64)</entry>
+                <entry>Description</entry>
+              </row>
+            </thead>
 
-              <entry>CPU Architecture (e.g. x64)</entry>
-            </row>
+            <tbody>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.compute.architecture</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.compute.cores</computeroutput></entry>
+                <entry>Enum (x86, x64)</entry>
 
-              <entry>Integer</entry>
+                <entry>CPU Architecture (e.g. x64)</entry>
+              </row>
 
-              <entry>Number of CPU cores (e.g. 1, 2)</entry>
-            </row>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.compute.cores</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.compute.speed</computeroutput></entry>
+                <entry>Integer</entry>
 
-              <entry>Float (10^9 Hertz)</entry>
+                <entry>Number of CPU cores (e.g. 1, 2)</entry>
+              </row>
 
-              <entry>Clock speed in gigahertz (e.g. 2.4)</entry>
-            </row>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.compute.speed</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.compute.memory</computeroutput></entry>
+                <entry>Float (10^9 Hertz)</entry>
 
-              <entry>Float (10^6 bytes)</entry>
+                <entry>Clock speed in gigahertz (e.g. 2.4)</entry>
+              </row>
 
-              <entry>RAM in megabytes (e.g. 8192)</entry>
-            </row>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.compute.memory</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.compute.memory.speed</computeroutput></entry>
+                <entry>Float (10^6 bytes)</entry>
 
-              <entry>Float (10^9 bytes/second)</entry>
+                <entry>RAM in megabytes (e.g. 8192)</entry>
+              </row>
 
-              <entry>RAM speed in Gbit/s (e.g.
-              <computeroutput>17</computeroutput> for PC-8500 DDR3 per <xref
-              linkend="infrastructure-bandwidths" />)</entry>
-            </row>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.compute.memory.speed</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.compute.memory.reliability</computeroutput></entry>
+                <entry>Float (10^9 bytes/second)</entry>
 
-              <entry>Enum (standard, checksum)</entry>
+                <entry>RAM speed in Gbit/s (e.g.
+                <computeroutput>17</computeroutput> for PC-8500 DDR3 per <xref
+                linkend="infrastructure-bandwidths" />)</entry>
+              </row>
 
-              <entry>Qualitative measure of RAM reliability (e.g. ECC)</entry>
-            </row>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.compute.memory.reliability</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.compute.status</computeroutput></entry>
+                <entry>Enum (standard, checksum)</entry>
 
-              <entry>Enum (active, inactive, standby)</entry>
+                <entry>Qualitative measure of RAM reliability (e.g.
+                ECC)</entry>
+              </row>
 
-              <entry>Status of the compute resource</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.compute.status</computeroutput></entry>
+
+                <entry>Enum (active, inactive, standby)</entry>
+
+                <entry>Status of the compute resource</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+
+      <section>
+        <title>Representations</title>
+
+        <para>The following representation formats are identified (but not
+        necessarily recommended) as possible candidates for this kind:</para>
+
+        <table>
+          <title>Compute Representations</title>
+
+          <tgroup cols="3">
+            <colspec align="center" />
+
+            <thead>
+              <row>
+                <entry align="left">Name</entry>
+
+                <entry>Type</entry>
+
+                <entry>Specification</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry align="left">Citrix Xen Virtual Appliance (XVA)
+                [deprecated]</entry>
+
+                <entry>application/octet-stream</entry>
+
+                <entry><xref linkend="XVA" /></entry>
+              </row>
+
+              <row>
+                <entry align="left">Open Virtualisation Appliance
+                (OVA)</entry>
+
+                <entry>application/ova+xml</entry>
+
+                <entry><xref linkend="OVF" /></entry>
+              </row>
+
+              <row>
+                <entry align="left">Open Virtualisation Format (OVF)</entry>
+
+                <entry>application/ovf+xml</entry>
+
+                <entry><xref linkend="OVF" /></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
     </section>
 
     <section>
@@ -193,84 +253,135 @@
       <para>A network resource is capable of transferring data (e.g. a virtual
       network or VLAN).</para>
 
-      <table>
-        <title>Network Attributes</title>
+      <section>
+        <title>Attributes</title>
 
-        <tgroup cols="3">
-          <colspec align="center" />
+        <para>The following attributes apply to this kind:</para>
 
-          <thead>
-            <row>
-              <entry align="left">Attribute</entry>
+        <table>
+          <title>Network Attributes</title>
 
-              <entry>Type</entry>
+          <tgroup cols="3">
+            <colspec align="center" />
 
-              <entry>Description</entry>
-            </row>
-          </thead>
+            <thead>
+              <row>
+                <entry align="left">Attribute</entry>
 
-          <tbody>
-            <row>
-              <entry
-              align="left"><computeroutput>occi.network.vlan</computeroutput></entry>
+                <entry>Type</entry>
 
-              <entry>Integer (0..4095)</entry>
+                <entry>Description</entry>
+              </row>
+            </thead>
 
-              <entry>802.1q VLAN ID (e.g.
-              <computeroutput>4095</computeroutput>)</entry>
-            </row>
+            <tbody>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.network.vlan</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.network.label</computeroutput></entry>
+                <entry>Integer (0..4095)</entry>
 
-              <entry>Token</entry>
+                <entry>802.1q VLAN ID (e.g.
+                <computeroutput>4095</computeroutput>)</entry>
+              </row>
 
-              <entry>Tag based VLANs (e.g.
-              <computeroutput>external-dmz</computeroutput>)</entry>
-            </row>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.network.label</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.network.address</computeroutput></entry>
+                <entry>Token</entry>
 
-              <entry>IPv4 or IPv6 Address (in CIDR notation)</entry>
+                <entry>Tag based VLANs (e.g.
+                <computeroutput>external-dmz</computeroutput>)</entry>
+              </row>
 
-              <entry>IP gateway address or network address where there is none
-              (e.g. <computeroutput>192.168.0.1/24</computeroutput>,
-              <computeroutput>2001:db8:a::123/64</computeroutput>)</entry>
-            </row>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.network.address</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.network.allocation</computeroutput></entry>
+                <entry>IPv4 or IPv6 Address (in CIDR notation)</entry>
 
-              <entry>Enum (<computeroutput>auto</computeroutput>,
-              <computeroutput>dhcp</computeroutput>,
-              <computeroutput>manual</computeroutput>)</entry>
+                <entry>Internet Protocol (IP) network address (e.g.
+                <computeroutput>192.168.0.0/24</computeroutput>,
+                <computeroutput>fc00::/7</computeroutput>)</entry>
+              </row>
 
-              <entry><para>Address allocation mechanism:</para><itemizedlist>
-                  <listitem>
-                    <para><computeroutput>auto</computeroutput> is handled
-                    automatically by infrastructure and/or guest agent</para>
-                  </listitem>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.network.gateway</computeroutput></entry>
 
-                  <listitem>
-                    <para><computeroutput>dhcp</computeroutput> uses
-                    network-based allocation protocol(s)</para>
-                  </listitem>
+                <entry>IPv4 or IPv6 Address (in CIDR notation)</entry>
 
-                  <listitem>
-                    <para><computeroutput>manual</computeroutput> requires
-                    preconfiguration or manual allocation</para>
-                  </listitem>
-                </itemizedlist></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
+                <entry>Internet Protocol (IP) network address (e.g.
+                <computeroutput>192.168.0.0/24</computeroutput>,
+                <computeroutput>fc00::1/64</computeroutput>)</entry>
+              </row>
 
-      <remark>TODO: Tidy up network interface addressing.</remark>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.network.allocation</computeroutput></entry>
+
+                <entry>Enum (<computeroutput>auto</computeroutput>,
+                <computeroutput>dhcp</computeroutput>,
+                <computeroutput>manual</computeroutput>)</entry>
+
+                <entry><para>Address allocation mechanism:</para><itemizedlist>
+                    <listitem>
+                      <para><computeroutput>auto</computeroutput> is handled
+                      automatically by infrastructure and/or guest
+                      agent</para>
+                    </listitem>
+
+                    <listitem>
+                      <para><computeroutput>dhcp</computeroutput> uses
+                      network-based allocation protocol(s)</para>
+                    </listitem>
+
+                    <listitem>
+                      <para><computeroutput>manual</computeroutput> requires
+                      preconfiguration or manual allocation</para>
+                    </listitem>
+                  </itemizedlist></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+
+      <section>
+        <title>Representations</title>
+
+        <para>The following representation formats are identified (but not
+        necessarily recommended) as possible candidates for this kind:</para>
+
+        <table>
+          <title>Network Representations</title>
+
+          <tgroup cols="3">
+            <colspec align="center" />
+
+            <thead>
+              <row>
+                <entry align="left">Name</entry>
+
+                <entry>Type</entry>
+
+                <entry>Specification</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry align="left">N/A</entry>
+
+                <entry>N/A</entry>
+
+                <entry>N/A</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
     </section>
 
     <section>
@@ -279,65 +390,148 @@
       <para>A storage resource is capable of mass storage of data (e.g. a
       virtual hard drive).</para>
 
-      <table>
-        <title>Storage Attributes</title>
+      <section>
+        <title>Attributes</title>
 
-        <tgroup cols="3">
-          <colspec align="center" />
+        <para>The following attributes apply to this kind:</para>
 
-          <thead>
-            <row>
-              <entry align="left">Attribute</entry>
+        <table>
+          <title>Storage Attributes</title>
 
-              <entry>Type</entry>
+          <tgroup cols="3">
+            <colspec align="center" />
 
-              <entry>Description</entry>
-            </row>
-          </thead>
+            <thead>
+              <row>
+                <entry align="left">Attribute</entry>
 
-          <tbody>
-            <row>
-              <entry
-              align="left"><computeroutput>occi.storage.reliability</computeroutput></entry>
+                <entry>Type</entry>
 
-              <entry>Enum (transient, persistent, reliable)</entry>
+                <entry>Description</entry>
+              </row>
+            </thead>
 
-              <entry>Qualitative device persistence (e.g. transient)</entry>
-            </row>
+            <tbody>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.storage.reliability</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.storage.size</computeroutput></entry>
+                <entry>Enum (transient, persistent, reliable)</entry>
 
-              <entry>Integer (10^9 bytes)</entry>
+                <entry>Qualitative device persistence (e.g. transient)</entry>
+              </row>
 
-              <entry>Drive size in gigabytes (e.g.
-              <computeroutput>40</computeroutput>,
-              <computeroutput>0.00144</computeroutput>)</entry>
-            </row>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.storage.size</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.storage.speed</computeroutput></entry>
+                <entry>Integer (10^9 bytes)</entry>
 
-              <entry>Integer (10^6 bytes/second)</entry>
+                <entry>Drive size in gigabytes (e.g.
+                <computeroutput>40</computeroutput>,
+                <computeroutput>0.00144</computeroutput>)</entry>
+              </row>
 
-              <entry>Drive speed in MB/s (e.g.
-              <computeroutput>600</computeroutput> for SAS/SATA-600 <xref
-              linkend="infrastructure-bandwidths" />)</entry>
-            </row>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.storage.speed</computeroutput></entry>
 
-            <row>
-              <entry
-              align="left"><computeroutput>occi.storage.status</computeroutput></entry>
+                <entry>Integer (10^6 bytes/second)</entry>
 
-              <entry>Enum (online, offline, standby, degraded)</entry>
+                <entry>Drive speed in MB/s (e.g.
+                <computeroutput>600</computeroutput> for SAS/SATA-600 <xref
+                linkend="infrastructure-bandwidths" />)</entry>
+              </row>
 
-              <entry>Currenty status of the storage resource</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
+              <row>
+                <entry
+                align="left"><computeroutput>occi.storage.status</computeroutput></entry>
+
+                <entry>Enum (online, offline, standby, degraded)</entry>
+
+                <entry>Currenty status of the storage resource</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+
+      <section>
+        <title>Representations</title>
+
+        <para>The following representation formats are identified (but not
+        necessarily recommended) as possible candidates for this kind:</para>
+
+        <table>
+          <title>Storage Representations</title>
+
+          <tgroup cols="3">
+            <colspec align="center" />
+
+            <thead>
+              <row>
+                <entry align="left">Name</entry>
+
+                <entry>Type</entry>
+
+                <entry>Specification</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry align="left">ISO image format</entry>
+
+                <entry>application/x-iso9660-image</entry>
+
+                <entry><xref linkend="ISO" /></entry>
+              </row>
+
+              <row>
+                <entry align="left">Microsoft Virtual Hard Disk</entry>
+
+                <entry>application/octet-stream</entry>
+
+                <entry><xref linkend="infrastructure-vhd" /></entry>
+              </row>
+
+              <row>
+                <entry align="left">QEMU qcow2 image format</entry>
+
+                <entry>application/x-qemu-qcow2</entry>
+
+                <entry><xref linkend="QCOW2" /></entry>
+              </row>
+
+              <row>
+                <entry align="left">Raw disk format (IMA, IMG, RAW,
+                etc.)</entry>
+
+                <entry>application/octet-stream</entry>
+
+                <entry><xref linkend="RAW" /></entry>
+              </row>
+
+              <row>
+                <entry align="left">Virtualbox Virtual Disk Image
+                [undocumented]</entry>
+
+                <entry>application/octet-stream</entry>
+
+                <entry><xref linkend="VDI" /></entry>
+              </row>
+
+              <row>
+                <entry align="left">VMware Virtual Disk Format</entry>
+
+                <entry>application/octet-stream</entry>
+
+                <entry><xref linkend="VMDK" /></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
     </section>
   </section>
 
@@ -352,6 +546,94 @@
     <bibliomixed>Normative References</bibliomixed>
 
     <bibliomixed>Informative References</bibliomixed>
+
+    <biblioentry xreflabel="VHD" xml:id="infrastructure-xva">
+      <title>CTX121652 Overview of the Open Virtualisation Format</title>
+
+      <address><uri
+          xlink:href="http://en.wikipedia.org/wiki/List_of_device_bandwidths">http://support.citrix.com/article/CTX121652</uri></address>
+
+      <author>
+        <orgname>Citrix Systems</orgname>
+      </author>
+    </biblioentry>
+
+    <biblioentry xreflabel="RAW" xml:id="infrastructure-disk-image">
+      <title>Wikipedia - Disk Image</title>
+
+      <address><uri
+          xlink:href="http://en.wikipedia.org/wiki/List_of_device_bandwidths">http://en.wikipedia.org/wiki/Disk_image</uri></address>
+
+      <author>
+        <orgname>Wikipedia</orgname>
+      </author>
+    </biblioentry>
+
+    <biblioentry xreflabel="VHD" xml:id="infrastructure-ovf">
+      <title>DSP0243 Open Virtualisation Format (OVF)</title>
+
+      <address><uri
+          xlink:href="http://en.wikipedia.org/wiki/List_of_device_bandwidths">http://www.dmtf.org/standards/published_documents/DSP0243_1.0.0.pdf</uri></address>
+
+      <author>
+        <orgname>DMTF</orgname>
+      </author>
+    </biblioentry>
+
+    <biblioentry xreflabel="ISO" xml:id="infrastructure-iso">
+      <title>Wikipedia - ISO 9660</title>
+
+      <address><uri
+          xlink:href="http://en.wikipedia.org/wiki/List_of_device_bandwidths">http://en.wikipedia.org/wiki/ISO_9660</uri></address>
+
+      <author>
+        <orgname>Wikipedia</orgname>
+      </author>
+    </biblioentry>
+
+    <biblioentry xreflabel="QCOW2" xml:id="infrastructure-qcow2">
+      <title>QCOW2 Image Format</title>
+
+      <address><uri
+          xlink:href="http://en.wikipedia.org/wiki/List_of_device_bandwidths">http://www.gnome.org/~markmc/qcow-image-format.html</uri></address>
+
+      <author>
+        <orgname>Mark McLoughlin</orgname>
+      </author>
+    </biblioentry>
+
+    <biblioentry xreflabel="VMDK" xml:id="infrastructure-vmdk">
+      <title>VMware Virtual Disk Format</title>
+
+      <address><uri xlink:href="http://www.vmware.com/app/vmdk/?src=vmdk">http://www.vmware.com/app/vmdk/?src=vmdk</uri></address>
+
+      <author>
+        <orgname>VMware</orgname>
+      </author>
+    </biblioentry>
+
+    <biblioentry xreflabel="VDI" xml:id="infrastructure-vdi">
+      <title>Virtualbox Source Code - Virtual Disk Image (VDI)</title>
+
+      <address><uri
+          xlink:href="http://www.virtualbox.org/svn/vbox/trunk/src/VBox/Devices/Storage/VDICore.h">http://www.virtualbox.org/svn/vbox/trunk/src/VBox/Devices/Storage/VDICore.h</uri></address>
+
+      <author>
+        <orgname>Sun Microsystems</orgname>
+      </author>
+    </biblioentry>
+
+    <biblioentry xreflabel="VHD" xml:id="infrastructure-vhd">
+      <title>Microsoft Virtual Hard Disk (VHD) Image Format
+      Specification</title>
+
+      <address><uri
+          xlink:href="http://en.wikipedia.org/wiki/List_of_device_bandwidths">http://technet.microsoft.com/en-us/virtualserver/bb676673.aspx</uri></address>
+
+      <author>
+        <orgname>Microsoft</orgname>
+      </author>
+    </biblioentry>
 
     <biblioentry xreflabel="Wikipedia" xml:id="infrastructure-bandwidths">
       <title>Wikipedia: List of device bandwidths</title>
