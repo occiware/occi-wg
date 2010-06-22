@@ -23,7 +23,111 @@
     <quote>abstract language</quote> (the <quote>World Wide Web's markup
     language</quote>). It is served using the
     <computeroutput>application/xhtml+xml</computeroutput> Internet media
-    type. <xref linkend="xhtml5-html5" /></para>
+    type.<xref linkend="xhtml5-html5" /></para>
+  </section>
+
+  <section>
+    <title>XHTML5</title>
+
+    <para>XHTML5 is used to describe a user-friendly rendering of the object,
+    optionally with images, icons, javascript, etc. embedded. It is also
+    marked up with RDFa attributes so as it is also machine readable.</para>
+
+    <para>Pages are typically either lists of resources (e.g.
+    <computeroutput>&lt;ul&gt;</computeroutput>,
+    <computeroutput>&lt;ol&gt;</computeroutput>,
+    <computeroutput>&lt;tr&gt;</computeroutput> etc.) or a rendering of an
+    individual resource.</para>
+
+    <section>
+      <title>Example</title>
+
+      <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;
+
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;OCCI: My Virtual Machine&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:occi="http://purl.org/occi/"&gt;
+
+&lt;h1 property="occi:title"&gt;My Virtual Machine&lt;/h1&gt;
+&lt;span property="occi:summary"&gt;A simple sample virtual machine&lt;/span&gt;
+
+Console:
+&lt;a href="/myvm/console.png" rel="http://purl.org/occi/compute#console" type="image/png"&gt;&lt;img src="/myvm/console-thumb.png" /&gt;
+
+Attributes:
+&lt;ul&gt;
+  &lt;li&gt;ID: &lt;span property="occi:id"&gt;urn:uuid:164a3064-1176-4de3-b24e-e16dc8c2d4ed&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;Cores: &lt;span property="occi:compute.cores"&gt;2&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;Memory: &lt;span property="occi:compute.memory"&gt;2048&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+Actions:
+&lt;form method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" /&gt;&lt;/form&gt;
+&lt;form method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" /&gt;&lt;/form&gt;
+&lt;form method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" /&gt;&lt;/form&gt;
+
+Download
+&lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" /&gt;&lt;/a&gt;
+&lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;&lt;img src="xen-logo.png" /&gt;&lt;/a&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</screen>
+
+      <section>
+        <title>Collections</title>
+
+        <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;
+
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;OCCI: My Cloud&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:occi="http://purl.org/occi/"&gt;
+&lt;h1&gt;My Cloud&lt;/h1&gt;
+
+Compute Resources:
+&lt;table&gt;
+  &lt;th&gt;
+    &lt;td&gt;Console&lt;/td&gt;
+    &lt;td&gt;ID&lt;/td&gt;
+    &lt;td&gt;Cores&lt;/td&gt;
+    &lt;td&gt;Memory&lt;/td&gt;
+    &lt;td&gt;Actions&lt;/td&gt;
+    &lt;td&gt;Formats&lt;/td&gt;
+  &lt;/th&gt;
+  &lt;tr typeof="occi:compute" about="/myvm"&gt;
+    &lt;td&gt;&lt;a href="/myvm/console.png" rel="http://purl.org/occi/compute#console" type="image/png"&gt;&lt;img src="/myvm/console-thumb.png" /&gt;&lt;/td&gt;
+    &lt;td property="occi:title"&gt;urn:uuid:164a3064-1176-4de3-b24e-e16dc8c2d4ed&lt;/td&gt;
+    &lt;td&gt;
+      &lt;span property="occi:title"&gt;My Virtual Machine&lt;/span&gt;&lt;br /&gt;
+      &lt;span property="occi:summary"&gt;A simple sample virtual machine&lt;/span&gt;&lt;br /&gt;
+    &lt;/td&gt;
+    &lt;td property="occi:compute.cores"&gt;2&lt;/td&gt;
+    &lt;td property="occi:compute.memory"&gt;2048&lt;/td&gt;
+    &lt;td&gt;
+      &lt;form method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" /&gt;&lt;/form&gt;
+      &lt;form method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" /&gt;&lt;/form&gt;
+      &lt;form method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" /&gt;&lt;/form&gt;
+    &lt;/td&gt;
+    &lt;td&gt;
+      &lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" /&gt;&lt;/a&gt;
+      &lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;&lt;img src="xen-logo.png" /&gt;&lt;/a&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</screen>
+      </section>
+    </section>
   </section>
 
   <section>
@@ -96,6 +200,28 @@ if (OCCIclient.XHR!=null) {
       </org>
 
       <date>2009-08-25</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RDFa" xml:id="xhtml5-rdfa">
+      <title>RDFa</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc4287"></uri></address>
+
+      <author>
+        <personname></personname>
+
+        <affiliation>
+          <org>
+            <orgname></orgname>
+          </org>
+        </affiliation>
+      </author>
+
+      <org>
+        <orgname>World Wide Web Consortium (W3C)</orgname>
+      </org>
+
+      <date></date>
     </biblioentry>
 
     <bibliomixed>Informative References</bibliomixed>
