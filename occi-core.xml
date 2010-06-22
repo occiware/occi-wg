@@ -15,7 +15,8 @@
     computing services. It is as close as possible to the underlying HyperText
     Transfer Protocol (HTTP), deviating only where absolutely necessary, and
     can be described as a "Resource Oriented Architecture (ROA)".<xref
-    linkend="rws" /></para>
+    linkend="rws" /> All existing HTTP features are available for caching,
+    proxying, gatewaying and other advanced functionality.</para>
 
     <para>Each resource (identified by a canonical URL) has one or more
     representations which may or may not be hypertext (e.g. HTML). Metadata
@@ -44,26 +45,24 @@
 
     <para>The interface is defined by a single URL entry point which will
     either be a <glossterm>collection</glossterm>, contain
-    <glossterm>link</glossterm>(s) to <glossterm>collection</glossterm>(s)
-    (<glossterm>in-band</glossterm> and/or <glossterm>out-of-band</glossterm>)
-    or both.</para>
+    <glossterm>link</glossterm>(s) to <glossterm>collection</glossterm>(s) or
+    both.</para>
 
     <bridgehead>Kinds, Actions and Attributes</bridgehead>
 
     <para>An interface exposes "kinds" which have "attributes" and on which
     "actions" can be performed. The attributes are exposed as key-value pairs
-    and applicable actions as links, following HATEOAS principles (whereby
-    state transitions are defined <glossterm>in-band</glossterm> rather than
-    via rules).</para>
+    and applicable actions as links, following the REST hypertext constraint
+    (whereby state transitions are defined <glossterm>in-band</glossterm>
+    rather than via rules).</para>
 
     <bridgehead>CRUD Operations</bridgehead>
 
     <para>Create, Retrieve, Update and Delete (CRUD) operations map to the
     POST, GET, PUT and DELETE HTTP verbs respectively. HEAD and OPTIONS verbs
     may be used to retrieve metadata and valid operations without the entity
-    body to improve performance. WebDAV definitions are used for MOVE and
-    COPY. All existing HTTP features is available for caching, proxying,
-    gatewaying and other advanced functionality.</para>
+    body to improve performance. WebDAV definitions are used for MKCOL, MOVE
+    and COPY.</para>
 
     <glosslist>
       <glossentry>
@@ -378,36 +377,46 @@
       depending on the action requested (e.g.
       <computeroutput>resize</computeroutput>), parameters
       <emphasis>may</emphasis> be provided using HTML forms (e.g.
-      <computeroutput>application/x-www-form-encoded</computeroutput>).</para>
+      <computeroutput>application/x-www-form-encoded</computeroutput>). In the
+      case of HTML-based renderings the actions can therefore be actual HTML
+      forms.</para>
 
-      <para>The specific parameters required and allowable values for them
-      depend on the action and for advanced actions <emphasis>may</emphasis>
-      require sending of custom <glossterm>content type</glossterm>s rather
-      than
-      <computeroutput>application/x-www-form-encoded</computeroutput>.</para>
+      <section>
+        <title>Asynchronous Actions</title>
 
-      <para>Synchronous actions <emphasis>may</emphasis> return
-      <computeroutput>200 OK</computeroutput> on successful completion or
-      <computeroutput>201 Created</computeroutput> with a
-      <computeroutput>Location:</computeroutput> header indicating a new
-      resource for audit purposes.</para>
+        <para>Synchronous actions <emphasis>may</emphasis> return
+        <computeroutput>200 OK</computeroutput> on successful completion or
+        <computeroutput>201 Created</computeroutput> with a
+        <computeroutput>Location:</computeroutput> header indicating a new
+        resource for audit purposes.</para>
 
-      <tip>
-        <para>Assume that clients are paranoid and want audit trails for all
-        but the most trivial of actions.</para>
-      </tip>
+        <tip>
+          <para>Assume that clients are paranoid and want audit trails for all
+          but the most trivial of actions.</para>
+        </tip>
 
-      <para>In the event that the <glossterm>action</glossterm> does not
-      complete immediately it <emphasis>should</emphasis> return
-      <computeroutput>HTTP 202 Accepted</computeroutput> and a
-      <computeroutput>Location:</computeroutput> header indicating a new
-      resource where status and other pertinent information can be
-      obtained.</para>
+        <para>In the event that the <glossterm>action</glossterm> does not
+        complete immediately it <emphasis>should</emphasis> return
+        <computeroutput>HTTP 202 Accepted</computeroutput> and a
+        <computeroutput>Location:</computeroutput> header indicating a new
+        resource where status and other pertinent information can be
+        obtained.</para>
 
-      <tip>
-        <para>Don't keep clients waiting - if you're not sure to return
-        immediately then give them a resource they can monitor.</para>
-      </tip>
+        <tip>
+          <para>Don't keep clients waiting - if you're not sure to return
+          immediately then give them a resource they can monitor.</para>
+        </tip>
+      </section>
+
+      <section>
+        <title>Advanced Actions</title>
+
+        <para>The specific parameters required and allowable values for them
+        depend on the action and for advanced actions <emphasis>may</emphasis>
+        require sending of custom <glossterm>content type</glossterm>s rather
+        than
+        <computeroutput>application/x-www-form-encoded</computeroutput>.</para>
+      </section>
     </section>
   </section>
 
