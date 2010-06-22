@@ -159,16 +159,6 @@
         </glossdef>
       </glossentry>
     </glosslist>
-
-    <bridgehead>Versioning</bridgehead>
-
-    <remark>Do we need to cater for versioning?</remark>
-
-    <para>Clients and servers should expose the protocol version (e.g.
-    OCCI/1.0) via the User-Agent and Server HTTP headers respectively. Should
-    second or subsequent versions of the descriptor format be required the
-    version will be added to the Internet media type (e.g.
-    application/occi2+xml).</para>
   </section>
 
   <section>
@@ -455,7 +445,9 @@
             align="left"><computeroutput>collection</computeroutput></entry>
 
             <entry>Several resources grouped together or considered as a
-            whole. [OCCI]</entry>
+            whole. [OCCI] <remark>Refer to discussion about up/down
+            parent/child asc/desc etc. on atom-syntax and
+            ietf-http-wg</remark></entry>
           </row>
 
           <row>
