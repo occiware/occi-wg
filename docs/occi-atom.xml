@@ -84,7 +84,7 @@
 
     <bibliomixed>Informative References</bibliomixed>
 
-    <biblioentry xreflabel="RFC2617" xml:id="rfc2617">
+    <biblioentry xreflabel="atom-pub-article" xml:id="atom-pub-article">
       <title>Is AtomPub already the HTTP of cloud computing?</title>
 
       <address><uri
