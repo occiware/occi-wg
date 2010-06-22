@@ -12,19 +12,29 @@
     <title>Introduction</title>
 
     <para>The Open Cloud Computing Interface (OCCI) is an open protocol for
-    all cloud computing services. As a RESTful interface, it deviates from the
-    underlying HyperText Transfer Protocol (HTTP) only where absolutely
-    necessary and can be described as a "Resource Oriented Architecture
-    (ROA)".<xref linkend="core-rws" /> Unlike other envelope-based protocols
-    which operate in-band, all existing HTTP features are available for
-    caching, proxying, gatewaying and other advanced functionality such as
-    partial GETs.</para>
+    cloud computing services. It initially targets the infrastructure services
+    (IaaS) layer but its modular design which extends this OCCI Core
+    Specification allows for future targeting of the platform services (PaaS)
+    and application services (SaaS) layers on a future roadmap.</para>
 
-    <para>Each resource is identified by URL(s) and has one or more native
-    representations as well as an XHTML5 rendering for direct end-user
-    accessibility with embedded semantic web markup. As such OCCI can present
-    both a machine interface (using native resource renderings) and a user
-    interface (using HTML markup with forms and other web technologies such as
+    <para>A Representational State Transfer (REST) interface, it deviates from
+    the underlying HyperText Transfer Protocol (HTTP) only where absolutely
+    necessary and could be described as a "Resource Oriented Architecture
+    (ROA)".<xref linkend="core-rws" /> Unlike other envelope-based protocols
+    such as Atom and SOAP, (which describe complex XML-based structures for
+    data transferred within the HTTP payload), OCCI provides a "clean channel"
+    over which any suitable format can travel without modification or
+    wrapping. As such all existing HTTP features are available for caching,
+    proxying, gatewaying and other advanced functionality such as partial
+    GETs.</para>
+
+    <para>Each resource (i.e. a compute node) is identified by URL(s) and has
+    one or more native representations (i.e. Open Virtualisation Format or
+    OVF) as well as an XHTML5 rendering. The latter allows for direct end-user
+    accessibility with embedded semantic web markup for consumption by both
+    human and machine clients. As such OCCI simultaneously presents both a
+    machine interface (using native resource renderings) and a user interface
+    (using HTML markup with forms and other web technologies such as
     Javascript/Ajax). HTTP content negotiation is used to select between
     alternative representations and metadata including associations between
     resources is exposed via HTTP headers (e.g. the
@@ -35,14 +45,8 @@
     themselves, rather it enables users to organise and group resources
     together to build arbitrarily complex systems of inter-related resources.
     It relies on existing standards for rendering and does not make any
-    recommendations of one standard format over any other.</para>
-
-    <tip>
-      <para>This is the case for the World Wide Web today where many image,
-      video and other supporting formats co-exist. Browsers support a number
-      of the common formats and users choose the most appropriate for the
-      task.</para>
-    </tip>
+    recommendations of one standard format over any other, in the same way as
+    the Internet has many popular image formats.</para>
 
     <section>
       <title>Example</title>
