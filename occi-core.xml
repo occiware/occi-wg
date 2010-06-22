@@ -142,6 +142,16 @@
       </glossentry>
 
       <glossentry>
+        <glossterm>MKCOL (Make Collection)</glossterm>
+
+        <glossdef>
+          <para><quote>MKCOL creates a new collection resource at the location
+          specified by the Request-URI.</quote><xref
+          linkend="rfc4918" /></para>
+        </glossdef>
+      </glossentry>
+
+      <glossentry>
         <glossterm>MOVE (Relocate)</glossterm>
 
         <glossdef>
@@ -186,8 +196,6 @@
       to maintain authentication state between requests. Such sessions
       <emphasis>should not</emphasis> be used for other purposes in line with
       RESTful principles.<xref linkend="rfc2109" /></para>
-
-      <remark>TODO: Add support for SAML 2?</remark>
     </section>
 
     <section>
