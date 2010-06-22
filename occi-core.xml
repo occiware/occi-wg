@@ -637,12 +637,10 @@
       <section>
         <title>Querying</title>
 
-        <para>The category query interface follows Google's GData example,
-        whereby the URL is constructed by inserting the desired categories
-        into the path. Categories can be negated by prefixing with
-        <quote>-</quote> and schemes may be specified with braces.</para>
-
-        <remark>TODO: Expand from GData docs.</remark>
+        <para>The category query interface can be accessed by constructing an
+        URL with the desired categories added to the path. Categories can be
+        negated by prefixing with <quote>-</quote> and schemes may be
+        specified with braces.</para>
 
         <example>
           <title>Example category query</title>
@@ -745,15 +743,6 @@
 
               <row>
                 <entry
-                align="left"><computeroutput>http://purl.org/occi/category#ms-patches</computeroutput></entry>
-
-                <entry>Microsoft Patches</entry>
-
-                <entry><computeroutput>q123456</computeroutput></entry>
-              </row>
-
-              <row>
-                <entry
                 align="left"><computeroutput>http://purl.org/occi/category#regulations</computeroutput></entry>
 
                 <entry>Regulation compliance</entry>
@@ -764,7 +753,7 @@
           </tgroup>
         </table>
 
-        <remark>TODO: Remove non-core category schemes to registries.</remark>
+        <para>Other categories schemes can be added to the registry.</para>
       </section>
     </section>
 
@@ -969,9 +958,6 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class=
 
       <para>Implementations <emphasis>must</emphasis> accept and forward but
       otherwise ignore markup they do not understand.</para>
-
-      <remark>TODO: Consider adding mustIgnore/mustUnderstand
-      attributes.</remark>
     </section>
   </section>
 
