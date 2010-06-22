@@ -19,54 +19,7 @@
     canonical URL) can have multiple representations which may or may not be
     hypertext (e.g. HTML). Metadata including associations between resources
     is exposed via HTTP headers (e.g. the Link: header), except in the case of
-    collections where Atom is used as the meta-model. <table>
-        <title>Common Attributes</title>
-
-        <tgroup cols="3">
-          <colspec align="center" />
-
-          <thead>
-            <row>
-              <entry align="left">Attribute</entry>
-
-              <entry>Type</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry align="left"><computeroutput>id</computeroutput></entry>
-
-              <entry>String <remark>(Typically UUID Type 4)</remark></entry>
-
-              <entry>Random, immutable unique identifier
-              (<computeroutput>atom:id</computeroutput>)</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>title</computeroutput></entry>
-
-              <entry>String</entry>
-
-              <entry>Human readable title
-              (<computeroutput>atom:title</computeroutput>)</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>summary</computeroutput></entry>
-
-              <entry>String</entry>
-
-              <entry>Summary
-              (<computeroutput>atom:summary</computeroutput>)</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table></para>
+    collections where Atom is used as the meta-model. </para>
   </section>
 
   <section>
@@ -415,31 +368,27 @@
     <table>
       <title>Link Relations</title>
 
-      <tgroup cols="4">
+      <tgroup cols="3">
         <colspec align="center" />
 
         <thead>
           <row>
             <entry align="left">Relation</entry>
 
-            <entry>Type</entry>
+            <entry>Title</entry>
 
             <entry>Description</entry>
-
-            <entry>Example</entry>
           </row>
         </thead>
 
         <tbody>
           <row>
             <entry
-            align="left"><computeroutput>/feed/id</computeroutput></entry>
+            align="left"><computeroutput>search</computeroutput></entry>
 
-            <entry>URI</entry>
+            <entry>Search</entry>
 
-            <entry>Immutable identifier for the cloud</entry>
-
-            <entry><uri>http://aws.example.com/</uri></entry>
+            <entry>OpenSearch Interface</entry>
           </row>
         </tbody>
       </tgroup>
