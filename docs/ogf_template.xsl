@@ -127,7 +127,7 @@
             <xsl:text>OCCI working group</xsl:text>
           </fo:block>
           <fo:block>
-            <xsl:text>Chgset: 49 - September 29, 2009</xsl:text>
+            <xsl:text>Chgset: 56 - Oct. 8, 2009</xsl:text>
           </fo:block>
         </xsl:when>
       </xsl:choose>

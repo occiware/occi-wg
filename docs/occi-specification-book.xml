@@ -35,15 +35,15 @@
 
     <para>An overview of the document.</para>
   </section>
-
+<!--
   <section>
     <xi:include href="occi-walkthrough.xml" xpointer="xpointer(/*/*)" />
   </section>
-
+-->
   <section>
     <xi:include href="occi-core.xml" xpointer="xpointer(/*/*)" />
   </section>
-
+<!--
   <section>
     <xi:include href="occi-atom.xml" xpointer="xpointer(/*/*)" />
   </section>
@@ -60,10 +60,17 @@
     <xi:include href="occi-xhtml5.xml" xpointer="xpointer(/*/*)" />
   </section>
 
+-->
+
   <section>
     <xi:include href="occi-infrastructure.xml" xpointer="xpointer(/*/*)" />
   </section>
+  
+  <section>
+    <xi:include href="occi-http.xml" xpointer="xpointer(/*/*)" />
+  </section>
 
+<!--
   <section>
     <xi:include href="occi-search.xml" xpointer="xpointer(/*/*)" />
   </section>
@@ -79,7 +86,7 @@
   <section>
     <xi:include href="occi-registries.xml" xpointer="xpointer(/*/*)" />
   </section>
-
+-->
   <section>
     <title>Contributors</title>
 
