@@ -8,13 +8,13 @@
          xmlns:db="http://docbook.org/ns/docbook">
   <title>OCCI Infrastructure</title>
 
-  <para>OCCI Infrastructure defines three nouns and various extensions
+  <para>OCCI Infrastructure defines three kinds and various extensions
   relating to management of cloud infrastructure services (IaaS).</para>
 
   <table>
     <title>Common Attributes</title>
 
-    <tgroup cols="4">
+    <tgroup cols="3">
       <colspec align="center" />
 
       <thead>
@@ -24,8 +24,6 @@
           <entry>Type</entry>
 
           <entry>Description</entry>
-
-          <entry>Mandatory/Optional</entry>
         </row>
       </thead>
 
@@ -37,8 +35,6 @@
           <entry>String</entry>
 
           <entry>Valid DNS hostname for the resource (may be FQDN)</entry>
-
-          <entry>Mandatory</entry>
         </row>
       </tbody>
     </tgroup>
@@ -59,7 +55,7 @@
       <table>
         <title>Compute Attributes</title>
 
-        <tgroup cols="4">
+        <tgroup cols="3">
           <colspec align="center" />
 
           <thead>
@@ -69,8 +65,6 @@
               <entry>Type</entry>
 
               <entry>Description</entry>
-
-              <entry>Mandatory/Optional</entry>
             </row>
           </thead>
 
@@ -82,8 +76,6 @@
               <entry>Enum (x86, x64)</entry>
 
               <entry>CPU Architecture (e.g. x64)</entry>
-
-              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -93,8 +85,6 @@
               <entry>Integer</entry>
 
               <entry>Number of CPU cores (e.g. 1, 2)</entry>
-
-              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -104,8 +94,6 @@
               <entry>Float (10^9 Hertz)</entry>
 
               <entry>Clock speed in gigahertz (e.g. 2.4)</entry>
-
-              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -115,8 +103,6 @@
               <entry>Float (10^6 bytes)</entry>
 
               <entry>RAM in megabytes (e.g. 2048)</entry>
-
-              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -126,8 +112,6 @@
               <entry>Float (10^9 bps)</entry>
 
               <entry>RAM speed in Gbit/s (e.g. 256)</entry>
-
-              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -137,8 +121,6 @@
               <entry>Enum (standard, checksum)</entry>
 
               <entry>Qualitative measure of RAM reliability (e.g. ECC)</entry>
-
-              <entry>Optional</entry>
             </row>
           </tbody>
         </tgroup>
@@ -154,7 +136,7 @@
       <table>
         <title>Network Attributes</title>
 
-        <tgroup cols="4">
+        <tgroup cols="3">
           <colspec align="center" />
 
           <thead>
@@ -164,8 +146,6 @@
               <entry>Type</entry>
 
               <entry>Description</entry>
-
-              <entry>Mandatory/Optional</entry>
             </row>
           </thead>
 
@@ -177,8 +157,6 @@
               <entry>Integer (0..4095)</entry>
 
               <entry>802.1q VLAN ID (e.g. 4095)</entry>
-
-              <entry>Optional</entry>
             </row>
 
             <row>
@@ -188,8 +166,6 @@
               <entry>Token</entry>
 
               <entry>Tag based VLANs (e.g. external-dmz)</entry>
-
-              <entry>Optional</entry>
             </row>
 
             <row>
@@ -199,8 +175,6 @@
               <entry>IPv4 Address</entry>
 
               <entry>IPv4 gateway address (e.g. 192.168.0.1)</entry>
-
-              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -210,8 +184,6 @@
               <entry>IPv4 Address</entry>
 
               <entry>IPv4 netmask address (e.g. 255.255.255.0)</entry>
-
-              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -221,8 +193,6 @@
               <entry>IPv4 Address</entry>
 
               <entry>IPv4 network address (e.g. 192.168.0.0)</entry>
-
-              <entry>Mandatory</entry>
             </row>
 
             <row>
@@ -232,8 +202,6 @@
               <entry>Integer (0..32)</entry>
 
               <entry>Netmask in CIDR notation (e.g. 24)</entry>
-
-              <entry>Optional</entry>
             </row>
           </tbody>
         </tgroup>
@@ -249,7 +217,7 @@
       <table>
         <title>Storage Attributes</title>
 
-        <tgroup cols="4">
+        <tgroup cols="3">
           <colspec align="center" />
 
           <thead>
@@ -259,72 +227,26 @@
               <entry>Type</entry>
 
               <entry>Description</entry>
-
-              <entry>Mandatory/Optional</entry>
             </row>
           </thead>
 
           <tbody>
             <row>
               <entry
-              align="left"><computeroutput>storage.retention-duration</computeroutput></entry>
+              align="left"><computeroutput>storage.reliability</computeroutput></entry>
 
-              <entry>Time</entry>
+              <entry>Enum (transient, persistent, reliable)</entry>
 
-              <entry>The duration the storage instance is retained after
-              deletion</entry>
-
-              <entry>Optional</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>storage.capacity</computeroutput></entry>
-
-              <entry>Integer plus "IEC60027-2 unit prefix"</entry>
-
-              <entry>Maximum size of the storage resource.</entry>
-
-              <entry>Mandatory</entry>
+              <entry>Qualitative device persistence (e.g. transient)</entry>
             </row>
 
             <row>
               <entry
               align="left"><computeroutput>storage.size</computeroutput></entry>
 
-              <entry>Integer plus "IEC60027-2 unit prefix"</entry>
+              <entry>Integer (10^9 bytes)</entry>
 
-              <entry>Size of the storage resource capacity in use.</entry>
-
-              <entry>Mandatory</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>storage.status</computeroutput></entry>
-
-              <entry>Enum (Online, Offline, Standby, Degraded)</entry>
-
-              <entry>The current operating status of the storage
-              resource</entry>
-
-              <entry>Optional</entry>
-            </row>
-
-            <row>
-              <entry
-              align="left"><computeroutput>storage.class</computeroutput></entry>
-
-              <entry>Enum (Volatile, Persistant, Durable)</entry>
-
-              <entry>The operating class of storage defines as: Volatile - The
-              data in the storage will be destroyed after the compute resource
-              is "turned off". Persistant - The data in the storage will
-              remain after the compute resource is "turned off". Durable - The
-              data error rates are better than 1 per 1.0 E15 bits transferred.
-              </entry>
-
-              <entry>Mandatory</entry>
+              <entry>Drive size in gigabytes (e.g. 40)</entry>
             </row>
           </tbody>
         </tgroup>
