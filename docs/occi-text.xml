@@ -7,7 +7,7 @@
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
-    <title>OCCI Text</title>
+    <title>OCCI Text Format</title>
 
     <author>
       <personname><firstname>Sam</firstname><surname>Johnston</surname></personname>
@@ -54,14 +54,20 @@
 
     <para>The text rendering is based on the HTTP
     <computeroutput>message-header</computeroutput> type [<xref
-    linkend="rfc2616" />].</para>
+    linkend="rfc2616" />], which is the same generic format as that given in
+    <xref linkend="rfc2822" />.</para>
 
     <para>It is identical to the
     <computeroutput>generic-message</computeroutput> type except that there is
     no <computeroutput>start-line</computeroutput> (Request-Line |
-    Status-Line) and both <computeroutput>entity-body</computeroutput> and
-    <computeroutput>message-header</computeroutput> fields are
+    Status-Line) and both <computeroutput>message-body</computeroutput> and
+    required <computeroutput>message-header</computeroutput> fields are
     optional.</para>
+
+    <para>Where an optional <computeroutput>message-body</computeroutput> is
+    provided the relevant <computeroutput>entity-header</computeroutput>s
+    (e.g. <quote><computeroutput>Content-Type:</computeroutput></quote>)
+    <emphasis>must</emphasis> also be included.</para>
 
     <para>Web Categories [<xref linkend="category" />] and Web Linking [<xref
     linkend="link" />] specifications are used for the meta-model.</para>
@@ -70,7 +76,9 @@
       <title>ABNF</title>
 
       <screen>occi-resource  = *( message-header CRLF )
-                 [ CRLF entity-body ]
+                 [ CRLF message-body ]
+message-body = entity-body
+               | &lt;entity-body encoded as per Transfer-Encoding&gt;
 entity-body    = *OCTET
 message-header = field-name ":" [ field-value ]
 field-name     = token
@@ -107,6 +115,18 @@ Link: &lt;http://example.com/products/1234&gt;; rel="alternate"; title="Alternat
       </org>
 
       <date>1999-06</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC2822" xml:id="rfc2822">
+      <title>RFC 2822 - Internet Message Format</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2822">http://tools.ietf.org/html/rfc2822</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>2001-04</date>
     </biblioentry>
 
     <bibliomixed>Informative References</bibliomixed>
