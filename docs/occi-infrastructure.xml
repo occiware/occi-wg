@@ -173,6 +173,15 @@
 
               <entry>Qualitative measure of RAM reliability (e.g. ECC)</entry>
             </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>OCCI-Compute-Status</computeroutput></entry>
+
+              <entry>Enum (active, inactive, standby)</entry>
+
+              <entry>Status of the compute resource</entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -316,6 +325,15 @@
               <entry>Drive speed in MB/s (e.g.
               <computeroutput>600</computeroutput> for SAS/SATA-600 <xref
               linkend="wikipedia" />)</entry>
+            </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>OCCI-Storage-Status</computeroutput></entry>
+
+              <entry>Enum (online, offline, standby, degraded)</entry>
+
+              <entry>Currenty status of the storage resource</entry>
             </row>
           </tbody>
         </tgroup>
