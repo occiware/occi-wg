@@ -4,32 +4,36 @@
     cloud computing services. It initially targets the infrastructure services
     (IaaS) layer but its modular design which extends this OCCI Core
     Specification allows for future targeting of the platform services (PaaS)
-    and application services (SaaS) layers on a future roadmap.</p><p>A Representational State Transfer (REST) interface, it deviates from
+    and application services (SaaS) layers on a future roadmap.</p><p>A Representational State Transfer (REST) protocol, it deviates from
     the underlying HyperText Transfer Protocol (HTTP) only where absolutely
     necessary and could be described as a "Resource Oriented Architecture
     (ROA)".<a class="xref" href="#core-rws" title="RESTful Web Services">RWS</a> Unlike other envelope-based protocols
-    such as Atom and SOAP, (which describe complex XML-based structures for
-    data transferred within the HTTP payload), OCCI provides a "clean channel"
-    over which any suitable format can travel without modification or
-    wrapping. As such all existing HTTP features are available for caching,
+    such as Atom and SOAP (which describe complex XML-based structures for
+    data transferred within the HTTP payload, essentially duplicating HTTP's
+    built in header-based metadata functionality), OCCI provides a "clean
+    channel" over which any suitable format can travel without modification or
+    wrapping, using HTTP to its full extent in the way it was intended. OCCI
+    also uses various HTTP verbs in transactions rather than tunneling
+    everything over POST, as was the case with SOAP and the various WS-*
+    protocols. As such all existing HTTP features are available for caching,
     proxying, gatewaying and other advanced functionality such as partial
     GETs.</p><p>Each resource (i.e. a compute node) is identified by URL(s) and has
     one or more native representations (i.e. Open Virtualisation Format or
-    OVF) as well as an XHTML5 rendering. The latter allows for direct end-user
-    accessibility with embedded semantic web markup for consumption by both
-    human and machine clients. As such OCCI simultaneously presents both a
-    machine interface (using native resource renderings) and a user interface
-    (using HTML markup with forms and other web technologies such as
-    Javascript/Ajax). HTTP content negotiation is used to select between
-    alternative representations and metadata including associations between
-    resources is exposed via HTTP headers (e.g. the
-    <code class="computeroutput">Link:</code> and
+    OVF) as well as a generic XHTML5 rendering. The latter allows for direct
+    end-user accessibility with well-formed, embedded semantic web markup for
+    consumption by both human and machine clients. As such OCCI simultaneously
+    presents both a machine interface (using native resource renderings) and a
+    user interface (using HTML markup with forms and other web technologies
+    such as Javascript/Ajax) so as to satisfy all common use cases. HTTP
+    content negotiation is used to select between alternative representations
+    and metadata including associations between resources is exposed via HTTP
+    headers (e.g. the <code class="computeroutput">Link:</code> and
     <code class="computeroutput">Category:</code> headers).</p><p>In this way OCCI is not responsible for the representations
     themselves, rather it enables users to organise and group resources
     together to build arbitrarily complex systems of inter-related resources.
     It relies on existing standards for rendering and does not make any
     recommendations of one standard format over any other, in the same way as
-    the Internet has many popular image formats.</p><div class="section" title="Example"><div class="titlepage"><div><div><h3 class="title"><a id="id36063496"/>Example</h3></div></div></div><pre class="screen">&gt; GET /us-east/webapp/vm01 HTTP/1.1
+    the Internet has many popular image formats.</p><div class="section" title="Example"><div class="titlepage"><div><div><h3 class="title"><a id="id36063499"/>Example</h3></div></div></div><pre class="screen">&gt; GET /us-east/webapp/vm01 HTTP/1.1
 &gt; Host: cloud.example.com
 &gt; Accept: */*
 &gt; 
@@ -49,7 +53,7 @@
 &lt; Connection: close
 &lt;
 &lt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-...</pre></div></div><div class="section" title="Essentials"><div class="titlepage"><div><div><h2 class="title"><a id="id36063518"/>Essentials</h2></div></div></div><div class="section" title="Connection"><div class="titlepage"><div><div><h3 class="title"><a id="id36063523"/>Connection</h3></div></div></div><div class="section" title="Authentication"><div class="titlepage"><div><div><h4 class="title"><a id="id36063528"/>Authentication</h4></div></div></div><p>Servers <span class="emphasis"><em>may</em></span> require that requests be
+...</pre></div></div><div class="section" title="Essentials"><div class="titlepage"><div><div><h2 class="title"><a id="id36063521"/>Essentials</h2></div></div></div><div class="section" title="Connection"><div class="titlepage"><div><div><h3 class="title"><a id="id36063526"/>Connection</h3></div></div></div><div class="section" title="Authentication"><div class="titlepage"><div><div><h4 class="title"><a id="id36063531"/>Authentication</h4></div></div></div><p>Servers <span class="emphasis"><em>may</em></span> require that requests be
         authenticated using standard HTTP-based authentication mechanisms
         (including OAuth).<a class="xref" href="#core-oauth" title="OAuth">OAuth</a> They indicate this
         requirement by returning <code class="code">HTTP 401</code> with a
@@ -67,11 +71,11 @@
 &gt;                oauth_signature="wOJIO9A2W5mFwDgiDvZbTSMK%2FPY%3D",
 &gt;                oauth_timestamp="137131200",
 &gt;                oauth_nonce="4572616e48616d6d65724c61686176",
-&gt;                oauth_version="1.0"</pre></div><div class="section" title="Cookies"><div class="titlepage"><div><div><h4 class="title"><a id="id36063586"/>Cookies</h4></div></div></div><p>Servers <span class="emphasis"><em>may</em></span> set and clients
+&gt;                oauth_version="1.0"</pre></div><div class="section" title="Cookies"><div class="titlepage"><div><div><h4 class="title"><a id="id36063589"/>Cookies</h4></div></div></div><p>Servers <span class="emphasis"><em>may</em></span> set and clients
         <span class="emphasis"><em>may</em></span> accept <em class="glossterm">cookies</em> in
         order to maintain authentication state between requests:<a class="xref" href="#core-rfc2109" title="RFC 2109 - HTTP State Management Mechanism">RFC2109</a></p><pre class="screen">Set-Cookie: session=4732518c5fe6dbeb8429cdda11d65c3d; domain=.example.com; path=/</pre><div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>Such sessions <span class="emphasis"><em>should not</em></span> be used for
           other purposes (such as server-side state) in line with RESTful
-          principles.</p></div></div><div class="section" title="Versioning"><div class="titlepage"><div><div><h4 class="title"><a id="id36063624"/>Versioning</h4></div></div></div><p>Servers and clients <span class="emphasis"><em>should</em></span> indicate the
+          principles.</p></div></div><div class="section" title="Versioning"><div class="titlepage"><div><div><h4 class="title"><a id="id36063627"/>Versioning</h4></div></div></div><p>Servers and clients <span class="emphasis"><em>should</em></span> indicate the
         latest version of OCCI they support (e.g.
         <code class="computeroutput">1.0</code>) by way of the
         <code class="computeroutput">Server:</code> and
@@ -85,7 +89,7 @@
 &gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OCCI/1.0
 &gt; 
 &lt; HTTP/1.1 200 OK
-&lt; Server: Apache/2.2.13 (Unix) OCCI/1.0</pre></div></div><div class="section" title="Addressing"><div class="titlepage"><div><div><h3 class="title"><a id="id36063666"/>Addressing</h3></div></div></div><p>The entry point is defined by a single URL which may be a
+&lt; Server: Apache/2.2.13 (Unix) OCCI/1.0</pre></div></div><div class="section" title="Addressing"><div class="titlepage"><div><div><h3 class="title"><a id="id36063668"/>Addressing</h3></div></div></div><p>The entry point is defined by a single URL which may be a
       collection of resources or some other page as defined by the implementor
       (e.g. a landing page). All resources <span class="emphasis"><em>must</em></span> be
       addressible by URLs (whose structure is opaque and at the discretion of
@@ -95,7 +99,7 @@
         <code class="computeroutput">HEAD</code> request on the root
         (<span class="quote">“<span class="quote"><code class="uri">/</code></span>”</span>) and discover the category search
         interface, from which they can learn the supported categories/kinds
-        and retrieve some or all of them.</p></div><div class="example"><a id="id36063699"/><p class="title"><b>Example 1. Example entry point</b></p><div class="example-contents"><p>Retrieve a collection of desired resources (having already
+        and retrieve some or all of them.</p></div><div class="example"><a id="id36063702"/><p class="title"><b>Example 1. Example entry point</b></p><div class="example-contents"><p>Retrieve a collection of desired resources (having already
         discovered the category search URL and available categories):</p><pre class="screen">&gt; GET /-/compute HTTP/1.1
 &gt; Accept: text/uri-list
 &gt; 
@@ -105,7 +109,7 @@
 &lt; /node1
 &lt; /node2</pre></div></div><br class="example-break"/><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>This discovery mechanism was selected so as to be compatible
         with existing content hosted at the same URL (e.g.
-        <code class="uri">http://cloud.example.com</code>).</p></div></div></div><div class="section" title="Operations"><div class="titlepage"><div><div><h2 class="title"><a id="id36063729"/>Operations</h2></div></div></div><div class="section" title="HTTP Verbs"><div class="titlepage"><div><div><h3 class="title"><a id="id36063735"/>HTTP Verbs</h3></div></div></div><p>Create, Retrieve, Update and Delete (CRUD) operations map to the
+        <code class="uri">http://cloud.example.com</code>).</p></div></div></div><div class="section" title="Operations"><div class="titlepage"><div><div><h2 class="title"><a id="id36063732"/>Operations</h2></div></div></div><div class="section" title="HTTP Verbs"><div class="titlepage"><div><div><h3 class="title"><a id="id36063738"/>HTTP Verbs</h3></div></div></div><p>Create, Retrieve, Update and Delete (CRUD) operations map to the
       POST, GET, PUT and DELETE HTTP verbs respectively. HEAD and OPTIONS
       verbs may be used to retrieve metadata and valid operations without the
       entity body to improve performance. WebDAV definitions are used for
@@ -150,7 +154,7 @@
             request/response chain identified by the Request-URI.</span>”</span><a class="xref" href="#core-rfc2616" title="RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1">RFC2616</a></p></dd></dl></div><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Implementors may offer full WebDAV support in order to allow
         clients to enumerate the entire tree, interact with the resources via
         standard file managers (e.g. Windows Explorer, Mac OS X Finder),
-        etc.</p></div></div><div class="section" title="Actions"><div class="titlepage"><div><div><h3 class="title"><a id="id36063980"/>Actions</h3></div></div></div><p>An <em class="glossterm">action</em> is some process that can be
+        etc.</p></div></div><div class="section" title="Actions"><div class="titlepage"><div><div><h3 class="title"><a id="id36063982"/>Actions</h3></div></div></div><p>An <em class="glossterm">action</em> is some process that can be
       carried out on one or more <em class="glossterm">resource</em>s, which may
       result in a state change and/or the creation of new resource(s).</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Use common sense to decide what functionality should be exposed
         by way of actions and consult the list of existing actions and verbs
@@ -181,7 +185,7 @@
       HTML forms.</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Some resources can be interacted with but not rendered due to
         the nature of the resource or prevailing security policies (for
         example, an operator may be able to backup a machine without knowing
-        anything about it).</p></div><div class="section" title="Asynchronous Actions"><div class="titlepage"><div><div><h4 class="title"><a id="id36064094"/>Asynchronous Actions</h4></div></div></div><p>Synchronous actions <span class="emphasis"><em>may</em></span> return
+        anything about it).</p></div><div class="section" title="Asynchronous Actions"><div class="titlepage"><div><div><h4 class="title"><a id="id36064097"/>Asynchronous Actions</h4></div></div></div><p>Synchronous actions <span class="emphasis"><em>may</em></span> return
         <code class="computeroutput">200 OK</code> on successful completion or
         <code class="computeroutput">201 Created</code> with a
         <code class="computeroutput">Location:</code> header indicating a new
@@ -194,20 +198,20 @@
         obtained.</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Don't keep clients waiting - if you're not sure to return
           immediately then give them a resource they can monitor. For example
           by responding with an 202 Accepted return code and include a
-          location: header, as described.</p></div></div><div class="section" title="Advanced Actions"><div class="titlepage"><div><div><h4 class="title"><a id="id36064154"/>Advanced Actions</h4></div></div></div><p>The specific parameters required and allowable values for them
+          location: header, as described.</p></div></div><div class="section" title="Advanced Actions"><div class="titlepage"><div><div><h4 class="title"><a id="id36064157"/>Advanced Actions</h4></div></div></div><p>The specific parameters required and allowable values for them
         depend on the action and for advanced actions <span class="emphasis"><em>may</em></span>
         require sending of custom <em class="glossterm">content type</em>s rather
         than
-        <code class="computeroutput">application/x-www-form-encoded</code>.</p></div><div class="section" title="State Machines"><div class="titlepage"><div><div><h4 class="title"><a id="id36064175"/>State Machines</h4></div></div></div><p>State machines are maintained on the server side and possible
+        <code class="computeroutput">application/x-www-form-encoded</code>.</p></div><div class="section" title="State Machines"><div class="titlepage"><div><div><h4 class="title"><a id="id36064178"/>State Machines</h4></div></div></div><p>State machines are maintained on the server side and possible
         transitions are advertised to the client by way of action links. The
         links offered to a given client may depend on the resource, its
         current state, security policy, etc.</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Many state transitions will not be effected immediately so be
-          prepared to handle asynchronous responses.</p></div></div></div></div><div class="section" title="Model"><div class="titlepage"><div><div><h2 class="title"><a id="id36064197"/>Model</h2></div></div></div><p>The model defines the objects and how they interrelate. An interface
+          prepared to handle asynchronous responses.</p></div></div></div></div><div class="section" title="Model"><div class="titlepage"><div><div><h2 class="title"><a id="id36064200"/>Model</h2></div></div></div><p>The model defines the objects and how they interrelate. An interface
     exposes "kinds" which have "attributes" and on which "actions" can be
     performed. The attributes are exposed as key-value pairs and applicable
     actions as links, following the REST hypertext constraint (whereby state
     transitions are defined <em class="glossterm">in-band</em> rather than via
-    rules).</p><div class="section" title="Kinds"><div class="titlepage"><div><div><h3 class="title"><a id="id36064212"/>Kinds</h3></div></div></div><p>Each category of resources distinguished by some common
+    rules).</p><div class="section" title="Kinds"><div class="titlepage"><div><div><h3 class="title"><a id="id36064215"/>Kinds</h3></div></div></div><p>Each category of resources distinguished by some common
       characteristic or quality is called a <em class="glossterm">kind</em> (e.g.
       <code class="computeroutput">compute</code>,
       <code class="computeroutput">network</code>,
@@ -222,7 +226,7 @@
         which should be used where possible.</p></div><p>Each resource <span class="emphasis"><em>must</em></span> specify a kind by way of a
       <em class="glossterm">category</em> within the <em class="glossterm">scheme</em>
       <span class="quote">“<span class="quote"><code class="uri">http://purl.org/occi/kind#</code></span>”</span>.</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>The word <em class="glossterm">type</em> is not used in this context
-        in order to avoid confusion with Internet media types.</p></div><div class="section" title="Attributes"><div class="titlepage"><div><div><h4 class="title"><a id="id36064291"/>Attributes</h4></div></div></div><p>An <em class="glossterm">attribute</em> is a specification that
+        in order to avoid confusion with Internet media types.</p></div><div class="section" title="Attributes"><div class="titlepage"><div><div><h4 class="title"><a id="id36064294"/>Attributes</h4></div></div></div><p>An <em class="glossterm">attribute</em> is a specification that
         defines a property of an object. It is expressed in the form of
         key-value pairs. Attributes are divided into namespaces which are
         separated by the dot character (<span class="quote">“<span class="quote">.</span>”</span>).</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>This scalable approach was derived from the Mozilla Firefox
@@ -232,7 +236,7 @@
         <span class="quote">“<span class="quote"><code class="computeroutput">com.example.attribute</code></span>”</span>).</p><div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>Defining your own attributes can lead to interoperability
           problems and should be a last resort reserved for unique
           functionality. A simple peer review process is available for
-          extending the registries which should be used where possible.</p></div><div class="section" title="Registry Entries"><div class="titlepage"><div><div><h5 class="title"><a id="id36064337"/>Registry Entries</h5></div></div></div><div class="table"><a id="id36064343"/><p class="title"><b>Table 1. Core Attributes</b></p><div class="table-contents"><table summary="Core Attributes" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: left">Attribute</th><th>Description</th><th>Type</th><th>Example</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">id</code></td><td>Immutable, unique identifier for the resource</td><td>URI</td><td><code class="uri">urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770</code>
+          extending the registries which should be used where possible.</p></div><div class="section" title="Registry Entries"><div class="titlepage"><div><div><h5 class="title"><a id="id36064340"/>Registry Entries</h5></div></div></div><div class="table"><a id="id36064346"/><p class="title"><b>Table 1. Core Attributes</b></p><div class="table-contents"><table summary="Core Attributes" border="1"><colgroup><col/><col/><col/><col/></colgroup><thead><tr><th style="text-align: left">Attribute</th><th>Description</th><th>Type</th><th>Example</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">id</code></td><td>Immutable, unique identifier for the resource</td><td>URI</td><td><code class="uri">urn:uuid:d0e9f0d0-f62d-4f28-bc90-23b0bd871770</code>
                   or <code class="uri">urn:aws:ami-123456</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">title</code></td><td>Display name for the resource</td><td>String</td><td><code class="computeroutput">Compute Resource
                   #123</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">summary</code></td><td>Description of the resource</td><td>String</td><td><code class="computeroutput">A virtual compute
                   resource</code></td></tr></tbody></table></div></div><br class="table-break"/></div></div></div><div class="section" title="Categories"><div class="titlepage"><div><div><h3 class="title"><a id="categories"/>Categories</h3></div></div></div><p><em class="glossterm">Category</em> information allows for flexible
@@ -252,15 +256,15 @@
         <code class="computeroutput">US-West</code>,
         <code class="computeroutput">Europe</code>), operating systems (e.g.
         <code class="computeroutput">Windows</code>,
-        <code class="computeroutput">Linux</code>) and patch levels (e.g.</p></div><div class="example"><a id="id36064592"/><p class="title"><b>Example 2. Category examples</b></p><div class="example-contents"><p>OCCI kinds are represented by a category:</p><pre class="screen">Category: compute;
+        <code class="computeroutput">Linux</code>) and patch levels (e.g.</p></div><div class="example"><a id="id36064595"/><p class="title"><b>Example 2. Category examples</b></p><div class="example-contents"><p>OCCI kinds are represented by a category:</p><pre class="screen">Category: compute;
       label="Compute Resource";
       scheme="http://purl.org/occi/kind#"</pre><p>Implementors and users can also define their own vocabularies by
         defining schemes:</p><pre class="screen">Category: cluster1;
       label="Cluster #1";
-      scheme="http://example.com/clusters#"</pre></div></div><br class="example-break"/><div class="section" title="Querying"><div class="titlepage"><div><div><h4 class="title"><a id="id36064614"/>Querying</h4></div></div></div><p>The category query interface can be accessed by constructing an
+      scheme="http://example.com/clusters#"</pre></div></div><br class="example-break"/><div class="section" title="Querying"><div class="titlepage"><div><div><h4 class="title"><a id="id36064617"/>Querying</h4></div></div></div><p>The category query interface can be accessed by constructing an
         URL with the desired categories added to the path. Categories can be
         negated by prefixing with <span class="quote">“<span class="quote">-</span>”</span> and schemes may be
-        specified with braces.</p><div class="example"><a id="id36064628"/><p class="title"><b>Example 3. Example category query</b></p><div class="example-contents"><p>Locate the category search root (which
+        specified with braces.</p><div class="example"><a id="id36064631"/><p class="title"><b>Example 3. Example category query</b></p><div class="example-contents"><p>Locate the category search root (which
           <span class="emphasis"><em>should</em></span> be <code class="uri">/-/</code>):</p><pre class="screen">&gt; HEAD / HTTP/1.1
 &gt; 
 &lt; HTTP/1.1 200 OK
@@ -286,7 +290,7 @@
 &lt; /vm01
 &lt; /webapp/web01
 &lt; /webapp/web02
-&lt; /webapp/db01</pre></div></div><br class="example-break"/></div><div class="section" title="Registry Entries"><div class="titlepage"><div><div><h4 class="title"><a id="id36064676"/>Registry Entries</h4></div></div></div><div class="table"><a id="id36064682"/><p class="title"><b>Table 2. Core Category Schemes</b></p><div class="table-contents"><table summary="Core Category Schemes" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Scheme</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">http://purl.org/occi/kind#</code></td><td>OCCI Kinds</td><td><code class="computeroutput">compute</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">http://purl.org/occi/category#countries</code></td><td>ISO Country Codes</td><td><code class="computeroutput">us</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">http://purl.org/occi/category#us-states</code></td><td>US States</td><td><code class="computeroutput">ca</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">http://purl.org/occi/category#operating-systems</code></td><td>Operating Systems</td><td><code class="computeroutput">linux</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">http://purl.org/occi/category#regulations</code></td><td>Regulation compliance</td><td><code class="computeroutput">sox</code></td></tr></tbody></table></div></div><br class="table-break"/><p>Other categories schemes can be added to the registry.</p></div></div><div class="section" title="Collections"><div class="titlepage"><div><div><h3 class="title"><a id="id36064812"/>Collections</h3></div></div></div><p>Where an operation could return multiple resources (e.g.
+&lt; /webapp/db01</pre></div></div><br class="example-break"/></div><div class="section" title="Registry Entries"><div class="titlepage"><div><div><h4 class="title"><a id="id36064679"/>Registry Entries</h4></div></div></div><div class="table"><a id="id36064685"/><p class="title"><b>Table 2. Core Category Schemes</b></p><div class="table-contents"><table summary="Core Category Schemes" border="1"><colgroup><col style="text-align: center"/><col/><col/></colgroup><thead><tr><th style="text-align: left">Scheme</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">http://purl.org/occi/kind#</code></td><td>OCCI Kinds</td><td><code class="computeroutput">compute</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">http://purl.org/occi/category#countries</code></td><td>ISO Country Codes</td><td><code class="computeroutput">us</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">http://purl.org/occi/category#us-states</code></td><td>US States</td><td><code class="computeroutput">ca</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">http://purl.org/occi/category#operating-systems</code></td><td>Operating Systems</td><td><code class="computeroutput">linux</code></td></tr><tr><td style="text-align: left"><code class="computeroutput">http://purl.org/occi/category#regulations</code></td><td>Regulation compliance</td><td><code class="computeroutput">sox</code></td></tr></tbody></table></div></div><br class="table-break"/><p>Other categories schemes can be added to the registry.</p></div></div><div class="section" title="Collections"><div class="titlepage"><div><div><h3 class="title"><a id="id36064815"/>Collections</h3></div></div></div><p>Where an operation could return multiple resources (e.g.
       categories, searches) this is referred to as a
       <em class="glossterm">collection</em>. Collections are returned as a list of
       URLs in <code class="computeroutput">text/uri-list</code> format.<a class="xref" href="#core-rfc2483" title="RFC 2483 - URI Resolution Services Necessary for URN Resolution">RFC2483</a></p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Collections are passed by reference for simplicity rather than
@@ -294,11 +298,11 @@
         (via a wrapper format like Atom or SOAP) and/or the data itself would
         provide O(1) performance, though this "pass by value" approach should
         only be considered where the representations are known to be small as
-        encoding adds significant overhead.</p></div><div class="example"><a id="id36064842"/><p class="title"><b>Example 4. Example collection</b></p><div class="example-contents"><pre class="screen"># OCCI Example Collection
+        encoding adds significant overhead.</p></div><div class="example"><a id="id36064845"/><p class="title"><b>Example 4. Example collection</b></p><div class="example-contents"><pre class="screen"># OCCI Example Collection
 /examples/custom-extension
 /examples/lamp-multi-vm
 /examples/lamp
-/examples/myservice</pre></div></div><br class="example-break"/><div class="section" title="Paging"><div class="titlepage"><div><div><h4 class="title"><a id="id36064853"/>Paging</h4></div></div></div><p>Collections <span class="emphasis"><em>may</em></span> be divided into
+/examples/myservice</pre></div></div><br class="example-break"/><div class="section" title="Paging"><div class="titlepage"><div><div><h4 class="title"><a id="id36064856"/>Paging</h4></div></div></div><p>Collections <span class="emphasis"><em>may</em></span> be divided into
         <em class="glossterm">page</em>s, with each linking to the
         <span class="quote">“<span class="quote">first</span>”</span>, <span class="quote">“<span class="quote">last</span>”</span>, <span class="quote">“<span class="quote">next</span>”</span> and
         <span class="quote">“<span class="quote">previous</span>”</span> <em class="glossterm">link relation</em>s. The
@@ -309,7 +313,7 @@
 Link: &lt;http://example.com/xyz;start=400&gt;; rel="previous"; title="Previous"; class="paging"
 Link: &lt;http://example.com/xyz;start=500&gt;; rel="self"; title="Self"; class="paging"
 Link: &lt;http://example.com/xyz;start=600&gt;; rel="next"; title="Next"; class="paging"
-Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class="paging"</pre></div></div><div class="section" title="Linking"><div class="titlepage"><div><div><h3 class="title"><a id="id36064906"/>Linking</h3></div></div></div><p>Web linking standards for HTTP [<a class="xref" href="#core-link" title="Web Linking">LINK</a>] and
+Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class="paging"</pre></div></div><div class="section" title="Linking"><div class="titlepage"><div><div><h3 class="title"><a id="id36064908"/>Linking</h3></div></div></div><p>Web linking standards for HTTP [<a class="xref" href="#core-link" title="Web Linking">LINK</a>] and
       HTML [<a class="xref" href="#core-html5" title="HTML 5">HTML5</a>] are used to indicate associations
       between resources. All formats <span class="emphasis"><em>must</em></span> support
       <em class="glossterm">in-band</em> linking including:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Link relations (e.g.
@@ -322,7 +326,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class=
       type="application/pdf"</pre><p><em class="glossterm">Link relation</em>s defined by this standard
       reside under the <code class="uri">http://purl.org/occi/rel</code> namespace but
       anyone can define a new <em class="glossterm">link relation</em> by
-      allocating a URI they control.</p><div class="section" title="Registry Entries"><div class="titlepage"><div><div><h4 class="title"><a id="id36064994"/>Registry Entries</h4></div></div></div><div class="table"><a id="id36064999"/><p class="title"><b>Table 3. Core Link Relations</b></p><div class="table-contents"><table summary="Core Link Relations" border="1"><colgroup><col/><col/></colgroup><thead><tr><th style="text-align: left">Relation</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">first</code></td><td><span class="quote">“<span class="quote">An IRI that refers to the furthest preceding
+      allocating a URI they control.</p><div class="section" title="Registry Entries"><div class="titlepage"><div><div><h4 class="title"><a id="id36064996"/>Registry Entries</h4></div></div></div><div class="table"><a id="id36065002"/><p class="title"><b>Table 3. Core Link Relations</b></p><div class="table-contents"><table summary="Core Link Relations" border="1"><colgroup><col/><col/></colgroup><thead><tr><th style="text-align: left">Relation</th><th>Description</th></tr></thead><tbody><tr><td style="text-align: left"><code class="computeroutput">first</code></td><td><span class="quote">“<span class="quote">An IRI that refers to the furthest preceding
                 resource in a series of resources.</span>”</span> [<a class="xref" href="#core-link" title="Web Linking">LINK</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">help</code></td><td><span class="quote">“<span class="quote">The referenced document provides further help
                 information for the page as a whole.</span>”</span> [<a class="xref" href="#core-html5" title="HTML 5">HTML5</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">icon</code></td><td><span class="quote">“<span class="quote">The specified resource is an icon representing
                 the page or site, and should be used by the user agent when
@@ -332,20 +336,20 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class=
                 document in a series of documents.</span>”</span> [<a class="xref" href="#core-link" title="Web Linking">LINK</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">search</code></td><td><span class="quote">“<span class="quote">The referenced document provides an interface
                 specifically for searching the document and its related
                 resources.</span>”</span> [<a class="xref" href="#core-html5" title="HTML 5">HTML5</a>, <a class="xref" href="#core-opensearch" title="OpenSearch 1.1">OpenSearch</a>]</td></tr><tr><td style="text-align: left"><code class="computeroutput">self</code></td><td><span class="quote">“<span class="quote">Identifies a resource equivalent to the
-                containing element</span>”</span> [<a class="xref" href="#core-rfc4287" title="RFC 4287 - The Atom Syndication Format">RFC4287</a>]</td></tr></tbody></table></div></div><br class="table-break"/></div></div></div><div class="section" title="Extensibility"><div class="titlepage"><div><div><h2 class="title"><a id="id36065212"/>Extensibility</h2></div></div></div><p>The interface is fully extensible, both via a public peer review
+                containing element</span>”</span> [<a class="xref" href="#core-rfc4287" title="RFC 4287 - The Atom Syndication Format">RFC4287</a>]</td></tr></tbody></table></div></div><br class="table-break"/></div></div></div><div class="section" title="Extensibility"><div class="titlepage"><div><div><h2 class="title"><a id="id36065215"/>Extensibility</h2></div></div></div><p>The interface is fully extensible, both via a public peer review
     process (in order to update the specification itself, usually via
     registries) and via independent allocation of unique namespaces (in order
-    to cater for vendor-specific enhancements).</p><div class="section" title="Foreign markup"><div class="titlepage"><div><div><h3 class="title"><a id="id36065223"/>Foreign markup</h3></div></div></div><p>Implementations <span class="emphasis"><em>must</em></span> accept and forward but
-      otherwise ignore markup they do not understand.</p></div></div><div class="section" title="Security Considerations"><div class="titlepage"><div><div><h2 class="title"><a id="id36065238"/>Security Considerations</h2></div></div></div><p>Encryption is not required by the specification in order to cater
+    to cater for vendor-specific enhancements).</p><div class="section" title="Foreign markup"><div class="titlepage"><div><div><h3 class="title"><a id="id36065226"/>Foreign markup</h3></div></div></div><p>Implementations <span class="emphasis"><em>must</em></span> accept and forward but
+      otherwise ignore markup they do not understand.</p></div></div><div class="section" title="Security Considerations"><div class="titlepage"><div><div><h2 class="title"><a id="id36065241"/>Security Considerations</h2></div></div></div><p>Encryption is not required by the specification in order to cater
     for sites that do not or can not use it (e.g. due to export restrictions,
     performance reasons, etc.), however SSL/TLS <span class="emphasis"><em>should</em></span> be
-    used over public networks including the Internet.</p></div><div class="glossary" title="Glossary"><div class="titlepage"><div><div><h2 class="title"><a id="id36065253"/>Glossary</h2></div></div></div><dl><dt>in-band</dt><dd><p><span class="quote">“<span class="quote">Sending of metadata and control information in the same
+    used over public networks including the Internet.</p></div><div class="glossary" title="Glossary"><div class="titlepage"><div><div><h2 class="title"><a id="id36065256"/>Glossary</h2></div></div></div><dl><dt>in-band</dt><dd><p><span class="quote">“<span class="quote">Sending of metadata and control information in the same
         band, on the same channel, as used for data</span>”</span>, for example, by
         embedding it in HTML. [<code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/In-band" target="">http://en.wikipedia.org/wiki/In-band</a></code>]</p></dd><dt>kind</dt><dd><p><span class="quote">“<span class="quote">A category of things distinguished by some common
         characteristic or quality</span>”</span>, for example events, messages,
         media. [<code class="uri"><a class="uri" href="http://wordnetweb.princeton.edu/perl/webwn?s=kind" target="">http://wordnetweb.princeton.edu/perl/webwn?s=kind</a></code>]</p></dd><dt>out-of-band</dt><dd><p><span class="quote">“<span class="quote">Communications which occur outside of a previously
         established communications method or channel</span>”</span>, for example, in
-        HTTP headers. [<code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/Out-of-band_signaling" target="">http://en.wikipedia.org/wiki/Out-of-band_signaling</a></code>]</p></dd><dt>type</dt><dd><p>Internet media (<acronym class="acronym">MIME</acronym>) type.</p></dd></dl></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36065341"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36065343"/><p class="bibliomixed">Normative References</p></div><div class="biblioentry" title="RFC 2109 - HTTP State Management Mechanism"><a id="core-rfc2109"/><p>[RFC2109] <span class="title"><i>RFC 2109 - HTTP State Management Mechanism</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2109" target="">http://tools.ietf.org/html/rfc2109</a></code>. </span><span class="org">
+        HTTP headers. [<code class="uri"><a class="uri" href="http://en.wikipedia.org/wiki/Out-of-band_signaling" target="">http://en.wikipedia.org/wiki/Out-of-band_signaling</a></code>]</p></dd><dt>type</dt><dd><p>Internet media (<acronym class="acronym">MIME</acronym>) type.</p></dd></dl></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36065344"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36065346"/><p class="bibliomixed">Normative References</p></div><div class="biblioentry" title="RFC 2109 - HTTP State Management Mechanism"><a id="core-rfc2109"/><p>[RFC2109] <span class="title"><i>RFC 2109 - HTTP State Management Mechanism</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2109" target="">http://tools.ietf.org/html/rfc2109</a></code>. </span><span class="org">
         <span class="orgname">Internet Engineering Task Force (IETF)</span>
       </span><span class="date">1997-02. </span></p></div><div class="biblioentry" title="RFC 2483 - URI Resolution Services Necessary for URN Resolution"><a id="core-rfc2483"/><p>[RFC2483] <span class="title"><i>RFC 2483 - URI Resolution Services Necessary for URN
       Resolution</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2109" target="">http://tools.ietf.org/html/rfc2483#section-5</a></code>. </span><span class="org">
@@ -362,7 +366,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class=
         <span class="orgname">Internet Engineering Task Force (IETF)</span>
       </span><span class="date">2007-06. </span></p></div><div class="biblioentry" title="OpenSearch 1.1"><a id="core-opensearch"/><p>[OpenSearch] <span class="title"><i>OpenSearch 1.1</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc2616" target="">http://www.opensearch.org/Specifications/OpenSearch/1.1</a></code>. </span><span class="org">
         <span class="orgname">A9.com, Inc. (an Amazon company)</span>
-      </span><span class="author">Clinton DeWitt. </span><span class="collab"><span class="personname">Joel Tesler</span>. </span><span class="collab"><span class="personname">Michael Fagan</span>. </span><span class="collab"><span class="personname">Joe Gregorio</span>. </span><span class="collab"><span class="personname">Aaron Sauve</span>. </span><span class="collab"><span class="personname">James Snell</span>. </span><span class="date">2009. </span></p></div><div class="bibliomixed"><a id="id36065586"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry" title="RFC 4287 - The Atom Syndication Format"><a id="core-rfc4287"/><p>[RFC4287] <span class="title"><i>RFC 4287 - The Atom Syndication Format</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target="">http://tools.ietf.org/html/rfc4287</a></code>. </span><span class="author">Robert Syre. </span><span class="author">Mark Nottingham. </span><span class="org">
+      </span><span class="author">Clinton DeWitt. </span><span class="collab"><span class="personname">Joel Tesler</span>. </span><span class="collab"><span class="personname">Michael Fagan</span>. </span><span class="collab"><span class="personname">Joe Gregorio</span>. </span><span class="collab"><span class="personname">Aaron Sauve</span>. </span><span class="collab"><span class="personname">James Snell</span>. </span><span class="date">2009. </span></p></div><div class="bibliomixed"><a id="id36065589"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry" title="RFC 4287 - The Atom Syndication Format"><a id="core-rfc4287"/><p>[RFC4287] <span class="title"><i>RFC 4287 - The Atom Syndication Format</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target="">http://tools.ietf.org/html/rfc4287</a></code>. </span><span class="author">Robert Syre. </span><span class="author">Mark Nottingham. </span><span class="org">
         <span class="orgname">Internet Engineering Task Force (IETF)</span>
       </span><span class="date">2005-12. </span></p></div><div class="biblioentry" title="HTML 5"><a id="core-html5"/><p>[HTML5] <span class="title"><i>HTML 5</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target="">http://www.w3.org/TR/html5/</a></code>. </span><span class="author">Ian Hickson. </span><span class="author">David Hyatt. </span><span class="org">
         <span class="orgname">World Wide Web Consortium (W3C)</span>

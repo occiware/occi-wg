@@ -17,28 +17,32 @@
     Specification allows for future targeting of the platform services (PaaS)
     and application services (SaaS) layers on a future roadmap.</para>
 
-    <para>A Representational State Transfer (REST) interface, it deviates from
+    <para>A Representational State Transfer (REST) protocol, it deviates from
     the underlying HyperText Transfer Protocol (HTTP) only where absolutely
     necessary and could be described as a "Resource Oriented Architecture
     (ROA)".<xref linkend="core-rws" /> Unlike other envelope-based protocols
-    such as Atom and SOAP, (which describe complex XML-based structures for
-    data transferred within the HTTP payload), OCCI provides a "clean channel"
-    over which any suitable format can travel without modification or
-    wrapping. As such all existing HTTP features are available for caching,
+    such as Atom and SOAP (which describe complex XML-based structures for
+    data transferred within the HTTP payload, essentially duplicating HTTP's
+    built in header-based metadata functionality), OCCI provides a "clean
+    channel" over which any suitable format can travel without modification or
+    wrapping, using HTTP to its full extent in the way it was intended. OCCI
+    also uses various HTTP verbs in transactions rather than tunneling
+    everything over POST, as was the case with SOAP and the various WS-*
+    protocols. As such all existing HTTP features are available for caching,
     proxying, gatewaying and other advanced functionality such as partial
     GETs.</para>
 
     <para>Each resource (i.e. a compute node) is identified by URL(s) and has
     one or more native representations (i.e. Open Virtualisation Format or
-    OVF) as well as an XHTML5 rendering. The latter allows for direct end-user
-    accessibility with embedded semantic web markup for consumption by both
-    human and machine clients. As such OCCI simultaneously presents both a
-    machine interface (using native resource renderings) and a user interface
-    (using HTML markup with forms and other web technologies such as
-    Javascript/Ajax). HTTP content negotiation is used to select between
-    alternative representations and metadata including associations between
-    resources is exposed via HTTP headers (e.g. the
-    <computeroutput>Link:</computeroutput> and
+    OVF) as well as a generic XHTML5 rendering. The latter allows for direct
+    end-user accessibility with well-formed, embedded semantic web markup for
+    consumption by both human and machine clients. As such OCCI simultaneously
+    presents both a machine interface (using native resource renderings) and a
+    user interface (using HTML markup with forms and other web technologies
+    such as Javascript/Ajax) so as to satisfy all common use cases. HTTP
+    content negotiation is used to select between alternative representations
+    and metadata including associations between resources is exposed via HTTP
+    headers (e.g. the <computeroutput>Link:</computeroutput> and
     <computeroutput>Category:</computeroutput> headers).</para>
 
     <para>In this way OCCI is not responsible for the representations
