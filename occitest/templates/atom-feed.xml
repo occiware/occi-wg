@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:occi="http://purl.org/occi/1.0">
+
+  <title>Open Cloud Computing Interface (OCCI) Test</title>
+  <subtitle>A test harness for the Open Cloud Computing Interface (OCCI)</subtitle>
+  <link href="http://www.occi-wg.org/"/>
+  <link href="http://occitest.appspot.com" rel="self"/>
+  <generator uri="http://occitest.appspot.com/" version="1.0">OCCI Test</generator>
+  <icon>http://occitest.appspot.com/static/images/occi-icon.png</icon>
+  <logo>http://occitest.appspot.com/static/images/occi-logo.png</logo>
+  <rights>Copyright (c) 2009 Sam Johnston</rights>
+  <updated>{{ updated }}</updated>
+  <author>
+    <name>Sam Johnston</name>
+    <email>samj@samj.net</email>
+    <uri>http://samj.net</uri>
+  </author>
+  <id>urn:uuid:fc570373-fcdd-4814-a03e-1882cb19d616</id>
+  {% for entry in entries %}
+  <entry>
+{% entry_tags entry %}{% category_tags entry.categories %}{% link_tags entry.links %}  </entry>
+  {% endfor %}
+</feed>
