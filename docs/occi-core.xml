@@ -93,7 +93,7 @@
         (including OAuth).<xref linkend="core-oauth" /> They indicate this
         requirement by returning <code>HTTP 401</code> with a
         <code>WWW-Authenticate</code> header and a suitable challenge (e.g.
-        <code>Basic</code>, <code>Digest</code>, <code>OAuth</code>). </para>
+        <code>Basic</code>, <code>Digest</code>, <code>OAuth</code>).</para>
 
         <screen>&gt; GET / HTTP/1.1
 &gt; Host: cloud.example.com
@@ -180,6 +180,24 @@
 &lt; /us-east/new-york/node17
 &lt; /us-west/san-francisco/node43
 &lt; /europe/paris/node38</screen>
+
+      <section>
+        <title>Virtual Addressing</title>
+
+        <para>Implementations may segment the URL space in order to achieve
+        Internet scale deployments. For example, the single entry point may be
+        geographically distributed and load balanced while subsets are
+        allocated to different regions, clusters, nodes, etc. (e.g.
+        <uri>http://cloud.example.com/us/node01/vm01</uri> -&gt;
+        <uri>http://node01.us.example.com/vm01</uri>). This can be done
+        without the knowledge of the client (using HTTP reverse proxies) or on
+        the client side (using HTTP redirects). Each subset
+        <emphasis>should</emphasis> be capable of acting as a standalone OCCI
+        end point or as part of a larger system, such that clients can access
+        the entire cloud or a single region, cluster or individual node
+        directly and aggregators can consolidate multiple clouds into a single
+        <quote>hybrid</quote> cloud.</para>
+      </section>
     </section>
 
     <section>
