@@ -4,8 +4,92 @@
     <span class="quote">“<span class="quote">abstract language</span>”</span> (the <span class="quote">“<span class="quote">World Wide Web's markup
     language</span>”</span>). It is served using the
     <code class="computeroutput">application/xhtml+xml</code> Internet media
-    type. <a class="xref" href="#xhtml5-html5" title="HTML 5">HTML5</a></p></div><div class="section" title="Javascript"><div class="titlepage"><div><div><h2 class="title"><a id="id36063488"/>Javascript</h2></div></div></div><p>Asynchronous Javascript may be used to deliver interactivity without
-    having to reload the page.</p><div class="section" title="Example"><div class="titlepage"><div><div><h3 class="title"><a id="id36063498"/>Example</h3></div></div></div><pre class="screen">var OCCIclient = {};
+    type.<a class="xref" href="#xhtml5-html5" title="HTML 5">HTML5</a></p></div><div class="section" title="XHTML5"><div class="titlepage"><div><div><h2 class="title"><a id="id36063488"/>XHTML5</h2></div></div></div><p>XHTML5 is used to describe a user-friendly rendering of the object,
+    optionally with images, icons, javascript, etc. embedded. It is also
+    marked up with RDFa attributes so as it is also machine readable.</p><p>Pages are typically either lists of resources (e.g.
+    <code class="computeroutput">&lt;ul&gt;</code>,
+    <code class="computeroutput">&lt;ol&gt;</code>,
+    <code class="computeroutput">&lt;tr&gt;</code> etc.) or a rendering of an
+    individual resource.</p><div class="section" title="Example"><div class="titlepage"><div><div><h3 class="title"><a id="id36063513"/>Example</h3></div></div></div><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;
+
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;OCCI: My Virtual Machine&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:occi="http://purl.org/occi/"&gt;
+
+&lt;h1 property="occi:title"&gt;My Virtual Machine&lt;/h1&gt;
+&lt;span property="occi:summary"&gt;A simple sample virtual machine&lt;/span&gt;
+
+Console:
+&lt;a href="/myvm/console.png" rel="http://purl.org/occi/compute#console" type="image/png"&gt;&lt;img src="/myvm/console-thumb.png" /&gt;
+
+Attributes:
+&lt;ul&gt;
+  &lt;li&gt;ID: &lt;span property="occi:id"&gt;urn:uuid:164a3064-1176-4de3-b24e-e16dc8c2d4ed&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;Cores: &lt;span property="occi:compute.cores"&gt;2&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;Memory: &lt;span property="occi:compute.memory"&gt;2048&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+Actions:
+&lt;form method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" /&gt;&lt;/form&gt;
+&lt;form method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" /&gt;&lt;/form&gt;
+&lt;form method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" /&gt;&lt;/form&gt;
+
+Download
+&lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" /&gt;&lt;/a&gt;
+&lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;&lt;img src="xen-logo.png" /&gt;&lt;/a&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="section" title="Collections"><div class="titlepage"><div><div><h4 class="title"><a id="id36063522"/>Collections</h4></div></div></div><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;
+
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;OCCI: My Cloud&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:occi="http://purl.org/occi/"&gt;
+&lt;h1&gt;My Cloud&lt;/h1&gt;
+
+Compute Resources:
+&lt;table&gt;
+  &lt;th&gt;
+    &lt;td&gt;Console&lt;/td&gt;
+    &lt;td&gt;ID&lt;/td&gt;
+    &lt;td&gt;Cores&lt;/td&gt;
+    &lt;td&gt;Memory&lt;/td&gt;
+    &lt;td&gt;Actions&lt;/td&gt;
+    &lt;td&gt;Formats&lt;/td&gt;
+  &lt;/th&gt;
+  &lt;tr typeof="occi:compute" about="/myvm"&gt;
+    &lt;td&gt;&lt;a href="/myvm/console.png" rel="http://purl.org/occi/compute#console" type="image/png"&gt;&lt;img src="/myvm/console-thumb.png" /&gt;&lt;/td&gt;
+    &lt;td property="occi:title"&gt;urn:uuid:164a3064-1176-4de3-b24e-e16dc8c2d4ed&lt;/td&gt;
+    &lt;td&gt;
+      &lt;span property="occi:title"&gt;My Virtual Machine&lt;/span&gt;&lt;br /&gt;
+      &lt;span property="occi:summary"&gt;A simple sample virtual machine&lt;/span&gt;&lt;br /&gt;
+    &lt;/td&gt;
+    &lt;td property="occi:compute.cores"&gt;2&lt;/td&gt;
+    &lt;td property="occi:compute.memory"&gt;2048&lt;/td&gt;
+    &lt;td&gt;
+      &lt;form method="POST" action="/myvm;start"&gt;&lt;input type="image" src="occi-start.png" /&gt;&lt;/form&gt;
+      &lt;form method="POST" action="/myvm;stop"&gt;&lt;input type="image" src="occi-stop.png" /&gt;&lt;/form&gt;
+      &lt;form method="POST" action="/myvm;restart"&gt;&lt;input type="image" src="occi-restart.png" /&gt;&lt;/form&gt;
+    &lt;/td&gt;
+    &lt;td&gt;
+      &lt;a href="/myvm.ovf" rel="alternate" type="application/ovf+xml"&gt;&lt;img src="ovf-logo.png" /&gt;&lt;/a&gt;
+      &lt;a href="/myvm.xen" rel="alternate" type="application/xen+xml"&gt;&lt;img src="xen-logo.png" /&gt;&lt;/a&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre></div></div></div><div class="section" title="Javascript"><div class="titlepage"><div><div><h2 class="title"><a id="id36063534"/>Javascript</h2></div></div></div><p>Asynchronous Javascript may be used to deliver interactivity without
+    having to reload the page.</p><div class="section" title="Example"><div class="titlepage"><div><div><h3 class="title"><a id="id36063543"/>Example</h3></div></div></div><pre class="screen">var OCCIclient = {};
             
 OCCIclient.URI = document.location.href;
 OCCIclient.XHR = null;
@@ -29,8 +113,10 @@ if (OCCIclient.XHR!=null) {
   OCCIclient.XHR.send();
 } else {
   alert("Your browser does not support XMLHTTP.");
-}</pre></div></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36063514"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36063517"/><p class="bibliomixed">Normative References</p></div><div class="biblioentry" title="HTML 5"><a id="xhtml5-html5"/><p>[HTML5] <span class="title"><i>HTML 5</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target="">http://www.w3.org/TR/html5/</a></code>. </span><span class="author">Ian Hickson. </span><span class="author">David Hyatt. </span><span class="org">
+}</pre></div></div><div class="bibliography" title="Bibliography"><div class="titlepage"><div><div><h2 class="title"><a id="id36063560"/>Bibliography</h2></div></div></div><div class="bibliomixed"><a id="id36063562"/><p class="bibliomixed">Normative References</p></div><div class="biblioentry" title="HTML 5"><a id="xhtml5-html5"/><p>[HTML5] <span class="title"><i>HTML 5</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target="">http://www.w3.org/TR/html5/</a></code>. </span><span class="author">Ian Hickson. </span><span class="author">David Hyatt. </span><span class="org">
         <span class="orgname">World Wide Web Consortium (W3C)</span>
-      </span><span class="date">2009-08-25. </span></p></div><div class="bibliomixed"><a id="id36063580"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry" title="Is HTTP the HTTP of cloud computing?"><a id="xhtml5-http-article"/><p>[http-article] <span class="title"><i>Is HTTP the HTTP of cloud computing?</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://samj.net/2009/05/is-atompub-already-http-of-cloud.html" target="">http://samj.net/2009/05/is-http-http-of-cloud-computing.html</a></code>. </span><span class="author">Sam Johnston. </span><span class="org">
+      </span><span class="date">2009-08-25. </span></p></div><div class="biblioentry" title="RDFa"><a id="xhtml5-rdfa"/><p>[RDFa] <span class="title"><i>RDFa</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://tools.ietf.org/html/rfc4287" target=""/></code>. </span><span class="author">. </span><span class="org">
+        <span class="orgname">World Wide Web Consortium (W3C)</span>
+      </span><span class="date">. </span></p></div><div class="bibliomixed"><a id="id36063664"/><p class="bibliomixed">Informative References</p></div><div class="biblioentry" title="Is HTTP the HTTP of cloud computing?"><a id="xhtml5-http-article"/><p>[http-article] <span class="title"><i>Is HTTP the HTTP of cloud computing?</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://samj.net/2009/05/is-atompub-already-http-of-cloud.html" target="">http://samj.net/2009/05/is-http-http-of-cloud-computing.html</a></code>. </span><span class="author">Sam Johnston. </span><span class="org">
         <span class="orgname">Australian Online Solutions</span>
       </span><span class="date">2009-05-25. </span></p></div><div class="biblioentry" title="Misunderstanding Markup: XHTML 2/HTML 5 Comic Strip"><a id="xhtml5-html5-article"/><p>[HTML5-article] <span class="title"><i>Misunderstanding Markup: XHTML 2/HTML 5 Comic Strip</i>. </span><span class="address"><code class="uri"><a class="uri" href="http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/" target="">http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/</a></code>. </span><span class="author">Jeremy Keith. </span><span class="author">Brad Colbow. </span><span class="date">2009-07-29. </span></p></div></div></div></body></html>
