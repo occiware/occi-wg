@@ -30,22 +30,20 @@
   Infrastructure part of OCCI is described next. Finally the Registries are
   summed up.</para>
 
-  <para>The OCCI Specification is very modulare and consist of several parts.
-  OCCI core specification forms the foundation of this and upcoming
-  specification parts. The focus for this deliverable is on virtual workloads
-  which can be deployed on 'Infrastructure as a Service' based Clouds.
-  Therefore the second part describes the OCCI Infrastructure. Also a
-  rendering is provided which makes this implementation ready to
-  implement.</para>
-
-  <para>For future developements renderings might change. As well as other
-  parts of the Cloud stack can be described using the OCCI Core as a
-  foundation.</para>
-
   <section>
     <title>Introduction</title>
 
-    <para>An overview of the document.</para>
+    <para>The OCCI Specification is very modulare and consist of several
+    parts. OCCI core specification forms the foundation of this and upcoming
+    specification parts. The focus for this deliverable is on virtual
+    workloads which can be deployed on 'Infrastructure as a Service' based
+    Clouds. Therefore the second part describes the OCCI Infrastructure. Also
+    a rendering is provided which makes this implementation ready to
+    implement.</para>
+
+    <para>For future developements renderings might change. As well as other
+    parts of the Cloud stack can be described using the OCCI Core as a
+    foundation.</para>
   </section>
 
   <!--
@@ -124,6 +122,14 @@
         </thead>
 
         <tbody>
+          <row>
+            <entry>Michael Behrens</entry>
+
+            <entry>R2AD</entry>
+
+            <entry>michael.behrens@r2ad.com</entry>
+          </row>
+
           <row>
             <entry>Andy Edmonds</entry>
 
