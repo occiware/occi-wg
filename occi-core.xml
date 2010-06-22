@@ -38,13 +38,13 @@
     (<glossterm>in-band</glossterm> and/or <glossterm>out-of-band</glossterm>)
     or both.</para>
 
-    <bridgehead>Nouns, Verbs and Attributes</bridgehead>
+    <bridgehead>Kinds, Actions and Attributes</bridgehead>
 
-    <para>Interfaces expose "nouns" which have "attributes" and on which
-    "verbs" can be performed. The attributes are exposed as key-value pairs
-    and applicable verbs as links, following HATEOAS principles (whereby state
-    transitions are defined <glossterm>in-band</glossterm> rather than via
-    rules).</para>
+    <para>An interface exposes "kinds" which have "attributes" and on which
+    "actions" can be performed. The attributes are exposed as key-value pairs
+    and applicable actions as links, following HATEOAS principles (whereby
+    state transitions are defined <glossterm>in-band</glossterm> rather than
+    via rules).</para>
 
     <bridgehead>CRUD Operations</bridgehead>
 
@@ -187,7 +187,7 @@
       <emphasis>should not</emphasis> be used for other purposes in line with
       RESTful principles.<xref linkend="rfc2109" /></para>
 
-      <remark>TODO: Consider adding support for SAML 2.</remark>
+      <remark>TODO: Add support for SAML 2?</remark>
     </section>
 
     <section>
@@ -345,6 +345,8 @@
         </tgroup>
       </table>
 
+      <remark>TODO: Remove Atom from this section.</remark>
+
       <tip>
         <para>Metadata can be concatenated to create a "feed of
         clouds".</para>
@@ -355,16 +357,31 @@
   <section>
     <title>Model</title>
 
-    <para></para>
+    <para>The model defines the objects themselves without paying attention to
+    how they interrelate.</para>
 
     <section>
       <title>Kinds</title>
 
-      <para>Different types of resources are called
-      <glossterm>kind</glossterm>s (e.g.
-      <computeroutput>compute</computeroutput>). Kinds defined by this
-      standard live in the <uri>http://purl.org/occi/kind</uri>/ namespace but
-      anyone can define a new action by allocating a URI they control.</para>
+      <para>Each category of resources distinguished by some common
+      characteristic or quality is called a <glossterm>kind</glossterm> (e.g.
+      <computeroutput>compute</computeroutput>,
+      <computeroutput>network</computeroutput>,
+      <computeroutput>storage</computeroutput>,
+      <computeroutput>queue</computeroutput>,
+      <computeroutput>application</computeroutput>,
+      <computeroutput>contact</computeroutput>).</para>
+
+      <para>Kinds defined by this standard live in the
+      <uri>http://purl.org/occi/kind</uri>/ namespace but anyone can define a
+      new action by allocating a URI they control.</para>
+
+      <tip>
+        <para>Defining your own kinds can lead to interoperability problems
+        and should be a last resort reserved for unique functionality. A
+        simple peer review process is available for extending the registries
+        which should be used where possible.</para>
+      </tip>
 
       <para>Each resource <emphasis>must</emphasis> specify a
       <glossterm>category</glossterm> within the <glossterm>scheme</glossterm>
@@ -379,7 +396,31 @@
     <section>
       <title>Attributes</title>
 
-      <para></para>
+      <para>An <glossterm>attribute</glossterm> is a specification that
+      defines a property of an object, in the form of key-value pairs.</para>
+
+      <para>Attributes are divided into namespaces which are separated by the
+      dash character (<quote>-</quote>). They <emphasis>must</emphasis> be
+      handled as case-insensitive but <emphasis>should</emphasis> be
+      case-preserving by default (depending on the format).</para>
+
+      <tip>
+        <para>This scalable approach was derived from the Mozilla Firefox
+        <uri>about:config</uri> page, though the <quote>.</quote> separator
+        was replaced with <quote>-</quote> for maximum compatibility with
+        various formats.</para>
+      </tip>
+
+      <para>Attributes defined by this standard reside under the
+      <computeroutput>OCCI</computeroutput> namespace (e.g.
+      "<computeroutput>OCCI-X</computeroutput>") but anyone can define a new
+      attribute by allocating a unique namespace (e.g.
+      <quote>Acme</quote>).</para>
+
+      <screen>OCCI-Compute-Cores: 2
+OCCI-Compute-Speed: 3000
+OCCI-Memory-Size: 8192
+Acme-Network-Identifier: dmz</screen>
     </section>
 
     <section>
@@ -403,22 +444,30 @@
 
       <tip>
         <para>Defining your own actions can lead to interoperability problems
-        and should be a last resort for unique functionality only. A simple
-        peer review process is available for extending the registries which
-        should be used where possible.</para>
+        and should be a last resort reserved for unique functionality. A
+        simple peer review process is available for extending the registries
+        which should be used where possible.</para>
       </tip>
 
       <para>An <glossterm>action</glossterm> is triggered via an HTTP POST and
       depending on the action requested (e.g.
       <computeroutput>resize</computeroutput>), parameters
       <emphasis>may</emphasis> be provided using HTML forms (e.g.
-      <computeroutput>application/x-www-form-encoded</computeroutput>).</para>
+      <computeroutput>application/x-www-form-encoded</computeroutput>). The
+      specific parameters required and allowable values for them depend on the
+      action and for advanced actions <emphasis>may</emphasis> require sending
+      of custom <glossterm>content type</glossterm>s.</para>
 
-      <para>Synchronous events <emphasis>may</emphasis> return
+      <para>Synchronous actions <emphasis>may</emphasis> return
       <computeroutput>200 OK</computeroutput> on successful completion or
-      <computeroutput>201 Created</computeroutput> and a
+      <computeroutput>201 Created</computeroutput> with a
       <computeroutput>Location:</computeroutput> header indicating a new
       sub-resource for audit purposes.</para>
+
+      <tip>
+        <para>Assume that clients are paranoid and want audit trails for all
+        but the most trivial of actions.</para>
+      </tip>
 
       <para>In the event that the <glossterm>action</glossterm> does not
       complete immediately it <emphasis>should</emphasis> return
@@ -426,13 +475,18 @@
       <computeroutput>Location:</computeroutput> header indicating a new
       sub-resource where status and other pertinent information can be
       obtained.</para>
+
+      <tip>
+        <para>Don't keep clients waiting - if you're not sure to return
+        immediately then give them a sub-resource they can monitor.</para>
+      </tip>
     </section>
   </section>
 
   <section>
-    <title>Meta model</title>
+    <title>Meta-model</title>
 
-    <para></para>
+    <para>The meta-model defines how objects interrelate.</para>
 
     <section>
       <title>Categories</title>
@@ -498,8 +552,12 @@
 
       <para>Any given URL can be a collection and/or advertise
       <glossterm>link</glossterm>s to other <glossterm>collection</glossterm>s
-      using the <quote>collection</quote> <glossterm>link
-      relation</glossterm>.</para>
+      using the <computeroutput>collection</computeroutput> class.</para>
+
+      <screen>&lt;link rel="http://purl.org/occi/collection/audit"
+      class="collection"
+      title="Audit Entries"
+      href="http://example.com/123/audit" /&gt;</screen>
 
       <section>
         <title>Paging</title>
@@ -508,6 +566,12 @@
         <glossterm>page</glossterm>s, with each linking to the
         <quote>first</quote>, <quote>last</quote>, <quote>next</quote> and
         <quote>previous</quote> <glossterm>link relation</glossterm>s.</para>
+
+        <screen>&lt;link rel="first" href="http://example.com/xyz;start=0" /&gt;
+&lt;link rel="previous" href="http://example.com/xyz;start=400" /&gt;
+&lt;link rel="self" href="http://example.com/xyz;start=500" /&gt;
+&lt;link rel="next" href="http://example.com/xyz;start=600" /&gt;
+&lt;link rel="last" href="http://example.com/xyz;start=900" /&gt;</screen>
       </section>
     </section>
 
@@ -631,6 +695,14 @@
               resources.</quote> [<xref linkend="html5" />, <xref
               linkend="opensearch" />]</entry>
             </row>
+
+            <row>
+              <entry
+              align="left"><computeroutput>self</computeroutput></entry>
+
+              <entry><quote>Identifies a resource equivalent to the containing
+              element</quote> [<xref linkend="rfc4287" />]</entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -687,7 +759,10 @@ link[0].title: Link to alternate representation</screen>
   <section>
     <title>Extensibility</title>
 
-    <para></para>
+    <para>The interface is fully extensible, both via a public peer review
+    process (in order to update the specification itself, usually via
+    registries) and via independent allocation of unique namespaces (in order
+    to cater for vendor-specific enhancements).</para>
 
     <section>
       <title>Foreign markup</title>
