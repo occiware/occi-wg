@@ -1003,7 +1003,7 @@ link[0].title: Link to alternate representation</screen>
       <date>1999-06</date>
     </biblioentry>
 
-    <biblioentry xreflabel="RFC2617" xml:id="rfc2617">
+    <biblioentry xreflabel="RFC2617" xml:id="rfc2617_1">
       <title>RFC 2617 - HTTP Authentication: Basic and Digest Access
       Authentication</title>
 
