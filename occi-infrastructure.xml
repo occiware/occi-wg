@@ -30,7 +30,7 @@
       <tbody>
         <row>
           <entry
-          align="left"><computeroutput>OCCI-Infrastructure-Hostname</computeroutput></entry>
+          align="left"><computeroutput>occi.infrastructure.hostname</computeroutput></entry>
 
           <entry>String</entry>
 
@@ -120,7 +120,7 @@
           <tbody>
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Compute-CPU-Arch</computeroutput></entry>
+              align="left"><computeroutput>occi.compute.architecture</computeroutput></entry>
 
               <entry>Enum (x86, x64)</entry>
 
@@ -129,7 +129,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Compute-CPU-Cores</computeroutput></entry>
+              align="left"><computeroutput>occi.compute.cores</computeroutput></entry>
 
               <entry>Integer</entry>
 
@@ -138,7 +138,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Compute-CPU-Speed</computeroutput></entry>
+              align="left"><computeroutput>occi.compute.speed</computeroutput></entry>
 
               <entry>Float (10^9 Hertz)</entry>
 
@@ -147,7 +147,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Compute-Memory-Size</computeroutput></entry>
+              align="left"><computeroutput>occi.compute.memory</computeroutput></entry>
 
               <entry>Float (10^6 bytes)</entry>
 
@@ -156,7 +156,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Compute-Memory-Speed</computeroutput></entry>
+              align="left"><computeroutput>occi.compute.memory.speed</computeroutput></entry>
 
               <entry>Float (10^9 bytes/second)</entry>
 
@@ -167,7 +167,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Compute-Memory-Reliability</computeroutput></entry>
+              align="left"><computeroutput>occi.compute.memory.reliability</computeroutput></entry>
 
               <entry>Enum (standard, checksum)</entry>
 
@@ -176,7 +176,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Compute-Status</computeroutput></entry>
+              align="left"><computeroutput>occi.compute.status</computeroutput></entry>
 
               <entry>Enum (active, inactive, standby)</entry>
 
@@ -212,7 +212,7 @@
           <tbody>
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Network-VLAN</computeroutput></entry>
+              align="left"><computeroutput>occi.network.vlan</computeroutput></entry>
 
               <entry>Integer (0..4095)</entry>
 
@@ -222,7 +222,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Network-Label</computeroutput></entry>
+              align="left"><computeroutput>occi.network.label</computeroutput></entry>
 
               <entry>Token</entry>
 
@@ -232,7 +232,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Network-Address</computeroutput></entry>
+              align="left"><computeroutput>occi.network.address</computeroutput></entry>
 
               <entry>IPv4 or IPv6 Address (in CIDR notation)</entry>
 
@@ -243,7 +243,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Network-Allocation</computeroutput></entry>
+              align="left"><computeroutput>occi.network.allocation</computeroutput></entry>
 
               <entry>Enum (<computeroutput>auto</computeroutput>,
               <computeroutput>dhcp</computeroutput>,
@@ -298,7 +298,7 @@
           <tbody>
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Storage-Reliability</computeroutput></entry>
+              align="left"><computeroutput>occi.storage.reliability</computeroutput></entry>
 
               <entry>Enum (transient, persistent, reliable)</entry>
 
@@ -307,7 +307,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Storage-Size</computeroutput></entry>
+              align="left"><computeroutput>occi.storage.size</computeroutput></entry>
 
               <entry>Integer (10^9 bytes)</entry>
 
@@ -318,7 +318,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Storage-Speed</computeroutput></entry>
+              align="left"><computeroutput>occi.storage.speed</computeroutput></entry>
 
               <entry>Integer (10^6 bytes/second)</entry>
 
@@ -329,7 +329,7 @@
 
             <row>
               <entry
-              align="left"><computeroutput>OCCI-Storage-Status</computeroutput></entry>
+              align="left"><computeroutput>occi.storage.status</computeroutput></entry>
 
               <entry>Enum (online, offline, standby, degraded)</entry>
 
