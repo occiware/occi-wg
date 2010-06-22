@@ -189,73 +189,6 @@
 
       <remark>TODO: Add support for SAML 2?</remark>
     </section>
-
-    <section>
-      <title>Detection</title>
-
-      <remark>This section should be optional, or removed if there is a risk
-      of it becoming a cruft repository/interoperability nightmare.</remark>
-
-      <para>Clients can detect the presence of the interface from the presence
-      of a specific well-known URI at the web server root (as detected via a
-      successful HTTP HEAD or GET):</para>
-
-      <para><uri>http://example.com/.well-known/occi/</uri></para>
-
-      <tip>
-        <para>This may be achieved simply by creating the relevant directory
-        in a static web root (e.g.
-        <code>/var/www/.well-known/occi</code>).</para>
-      </tip>
-
-      <para>This URI <emphasis>should</emphasis> be accessible over HTTP for
-      performance reasons but if a HTTP server is present then this URI
-      <emphasis>must</emphasis> also be accessible over HTTP. Clients
-      <emphasis>may</emphasis> fall back to HTTPS if the HTTP port is closed
-      or use HTTPS exclusively or not at all.</para>
-
-      <tip>
-        <para>If the server responds over HTTP but the request is unsuccessful
-        then the client will understand that the interface is not present. If
-        it does not respond then the client may retry over HTTPS.</para>
-      </tip>
-
-      <para>The URI <emphasis>may</emphasis> require authentication. If it
-      does the client <emphasis>may</emphasis> choose to authenticate or not
-      (in which case the result of the test will be inconclusive).</para>
-    </section>
-
-    <section>
-      <title>Configuration</title>
-
-      <para>Clients <emphasis>should</emphasis> retrieve configuration
-      metadata (e.g. icons, logos, SLAs, supported kinds, etc.) from the
-      following well-known URI:</para>
-
-      <para><uri>http://example.com/.well-known/occi/feeds</uri></para>
-
-      <para>The configuration information includes:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>URIs to collections of supported kinds</para>
-        </listitem>
-
-        <listitem>
-          <para>Provider information (name, contacts, icon, logo)</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>The response returned will contain groups of collectionsbe
-      dependent on the negotiated rendering.</para>
-
-      <tip>
-        <para>This may be one or more static documents served using a separate
-        technology from the interface itself (e.g. Apache multiviews).</para>
-      </tip>
-
-      <remark>TODO: Detection of category information.</remark>
-    </section>
   </section>
 
   <section>
@@ -542,9 +475,9 @@ Acme-Network-Identifier: dmz</screen>
         <computeroutput>Linux</computeroutput>) and patch levels (e.g. </para>
       </tip>
 
-      <remark>Consider moving to link relations for categories so as to be
-      compatible with existing standards rather than creating new ones. LINK
-      is already standardised within HTML and HTTP and the Web Linking
+      <remark>TODO: Consider moving to link relations for categories so as to
+      be compatible with existing standards rather than creating new ones.
+      LINK is already standardised within HTML and HTTP and the Web Linking
       Internet-Draft will proceed to standard status. The Web Category draft
       is less sure, particularly where a workaround exists.</remark>
     </section>
@@ -579,9 +512,9 @@ Acme-Network-Identifier: dmz</screen>
 
       <tip>
         <para>Most collections should be pointers to resources with metadata
-        for performance reasons - O(1) rather than O(n+1) for pointers alone.
-        The resources themselves should only be embedded when they are known
-        to be of a reasonable size.</para>
+        for performance reasons - O(1) rather than O(n+1) requests for
+        pointers alone. The resources themselves should only be embedded when
+        they are known to be of a reasonable size.</para>
       </tip>
 
       <para>Any given URL can be a collection and/or advertise
