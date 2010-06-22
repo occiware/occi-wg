@@ -248,8 +248,9 @@
       <para>Servers <emphasis>may</emphasis> set and clients
       <emphasis>may</emphasis> accept <glossterm>cookies</glossterm> in order
       to maintain authentication state between requests. Such sessions
-      <emphasis>should not</emphasis> be used for other purposes in line with
-      RESTful principles.<xref linkend="core-rfc2109" /></para>
+      <emphasis>should not</emphasis> be used for other purposes (such as
+      server-side state) in line with RESTful principles.<xref
+      linkend="core-rfc2109" /></para>
     </section>
 
     <section>

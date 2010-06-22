@@ -19,7 +19,8 @@
   <section>
     <title>Specification</title>
 
-    <para>The HTTP binding is the default binding for OCCI:</para>
+    <para>The HTTP binding for OCCI provides a machine interface, delivering
+    resources in their native formats:</para>
 
     <itemizedlist>
       <listitem>
@@ -28,8 +29,8 @@
       </listitem>
 
       <listitem>
-        <para>Web Categories [<xref linkend="http-category" />] and Web
-        Linking [<xref linkend="http-link" />] specifications are used for the
+        <para>Web Linking [<xref linkend="http-link" />] and Web Categories
+        [<xref linkend="http-category" />] specifications are used for the
         meta-model.</para>
       </listitem>
 
@@ -40,28 +41,26 @@
 
       <listitem>
         <para>Collections are transferred as the
-        <computeroutput>text/uri-list</computeroutput> content type (defined
-        in RFC 2169, Appendix A).</para>
+        <computeroutput>text/uri-list</computeroutput> content type.<xref
+        linkend="http-rfc2483" /></para>
       </listitem>
     </itemizedlist>
 
-    <para>In all cases the process defined in <xref linkend="http-rfc2965" />
-    is used to set/get <computeroutput>message-header</computeroutput>s, where
+    <para>In all cases the same process as for Cookies (defined in <xref
+    linkend="http-rfc2965" />) is used to set/get headers, where
     <computeroutput>[Set-]Attribute:</computeroutput>,
     <computeroutput>[Set-]Category:</computeroutput> and
     <computeroutput>[Set-]Link:</computeroutput> are used in place of
     <computeroutput>Cookie:</computeroutput> and
-    <computeroutput>Set-Cookie:</computeroutput>.</para>
-
-    <para><computeroutput>Set-*</computeroutput> headers may be included on
-    PUT or POST requests (including empty POSTs in order to update the
-    metadata independently of the representation).</para>
+    <computeroutput>Set-Cookie:</computeroutput>.
+    <computeroutput>Set-*</computeroutput> headers may also be included on PUT
+    or POST requests (including empty POSTs in order to update the metadata
+    independently of the representation).</para>
 
     <para>Existing values can be discarded by sending a
     <computeroutput>Set-*</computeroutput> header with the
-    <computeroutput>discard</computeroutput> attribute and updated by
-    providing a new value at the same time. When combined in a single HTTP
-    transaction such updates <emphasis>should</emphasis> be atomic.</para>
+    <computeroutput>discard</computeroutput> attribute and updated atomically
+    by providing a new value in the same HTTP transaction.</para>
   </section>
 
   <section>
@@ -109,6 +108,19 @@ xmlns:ovf="http://schemas.dmtf.org/ovf/1/envelope"
 
   <bibliography>
     <bibliomixed>Normative References</bibliomixed>
+
+    <biblioentry xreflabel="RFC2483" xml:id="http-rfc2483">
+      <title>RFC 2483 - URI Resolution Services Necessary for URN
+      Resolution</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc2109">http://tools.ietf.org/html/rfc2483#section-5</uri></address>
+
+      <org>
+        <orgname>Internet Engineering Task Force (IETF)</orgname>
+      </org>
+
+      <date>1999-01</date>
+    </biblioentry>
 
     <biblioentry xreflabel="RFC2616" xml:id="http-rfc2616">
       <title>RFC 2616 - Hypertext Transfer Protocol -- HTTP/1.1</title>
