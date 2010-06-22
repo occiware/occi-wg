@@ -127,7 +127,7 @@
             <xsl:text>Open Cloud Computing Interface</xsl:text>
           </fo:block>
           <fo:block>
-            <xsl:text>Changeset: 44 - September 16, 2009</xsl:text>
+            <xsl:text>Chgset: 44 - September 16, 2009</xsl:text>
           </fo:block>
         </xsl:when>
       </xsl:choose>
