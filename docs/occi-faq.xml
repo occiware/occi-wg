@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>OCCI Frequently Asked Questions</title>
+
+  <section>
+    <title>General</title>
+
+    <glosslist>
+      <glossentry>
+        <glossterm>Who created the Open Cloud Computing Interface
+        (OCCI)?</glossterm>
+
+        <glossdef>
+          <para>The Open Grid Forum (OGF)'s Open Cloud Computing Interface
+          Working Group (OCCI-WG) created the Open Cloud Computing Interface
+          (OCCI).</para>
+        </glossdef>
+      </glossentry>
+
+      <glossentry>
+        <glossterm>Who are the Open Cloud Computing Interface Working Group
+        (OCCI-WG) officials?</glossterm>
+
+        <glossdef>
+          <para>Andrew Edmonds (Intel, SLA@SOI), Thijs Metsch (Sun
+          Microsystems) and Alexis Richardson (Rabbit Technologies Ltd) are
+          the chairs, and Sam Johnston (Australian Online Solutions) is the
+          secretary.</para>
+        </glossdef>
+      </glossentry>
+
+      <glossentry>
+        <glossterm>Who else was involved?</glossterm>
+
+        <glossdef>
+          <para>Around 200 individuals representing over 100 companies were
+          involved in the development of the Open Cloud Computing Interface
+          (OCCI).</para>
+        </glossdef>
+      </glossentry>
+    </glosslist>
+  </section>
+
+  <section>
+    <title>Use Cases</title>
+
+    <glosslist>
+      <glossentry>
+        <glossterm>How were the use cases collected?</glossterm>
+
+        <glossdef>
+          <para>Use cases were solicited from the working group mailing list
+          as well as other external sources.</para>
+        </glossdef>
+      </glossentry>
+    </glosslist>
+  </section>
+
+  <section>
+    <title>Technical</title>
+
+    <glosslist>
+      <glossentry>
+        <glossterm>Why didn't you invent your own XML
+        representation?</glossterm>
+
+        <glossdef>
+          <para>See Tim Bray's Don’t Invent XML
+          Languages post.</para>
+        </glossdef>
+      </glossentry>
+    </glosslist>
+  </section>
+</article>
