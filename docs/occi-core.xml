@@ -415,31 +415,27 @@
     <table>
       <title>Link Relations</title>
 
-      <tgroup cols="4">
+      <tgroup cols="3">
         <colspec align="center" />
 
         <thead>
           <row>
             <entry align="left">Relation</entry>
 
-            <entry>Type</entry>
+            <entry>Title</entry>
 
             <entry>Description</entry>
-
-            <entry>Example</entry>
           </row>
         </thead>
 
         <tbody>
           <row>
             <entry
-            align="left"><computeroutput>/feed/id</computeroutput></entry>
+            align="left"><computeroutput>search</computeroutput></entry>
 
-            <entry>URI</entry>
+            <entry>Search</entry>
 
-            <entry>Immutable identifier for the cloud</entry>
-
-            <entry><uri>http://aws.example.com/</uri></entry>
+            <entry>Search Interface</entry>
           </row>
         </tbody>
       </tgroup>
