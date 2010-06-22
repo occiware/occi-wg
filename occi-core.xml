@@ -12,50 +12,43 @@
     <title>Introduction</title>
 
     <para>The Open Cloud Computing Interface (OCCI) is an open protocol for
-    cloud computing services. It initially targets the infrastructure services
-    (IaaS) layer but its modular design which extends this OCCI Core
-    Specification allows for future targeting of the platform services (PaaS)
-    and application services (SaaS) layers on a future roadmap.</para>
-
-    <para>A Representational State Transfer (REST) protocol, it deviates from
-    the underlying HyperText Transfer Protocol (HTTP) only where absolutely
-    necessary and could be described as a "Resource Oriented Architecture
+    all cloud computing services. As a RESTful interface, it deviates from the
+    underlying HyperText Transfer Protocol (HTTP) only where absolutely
+    necessary and can be described as a "Resource Oriented Architecture
     (ROA)".<xref linkend="core-rws" /> Unlike other envelope-based protocols
-    such as Atom and SOAP (which describe complex XML-based structures for
-    data transferred within the HTTP payload, essentially duplicating HTTP's
-    built in header-based metadata functionality), OCCI provides a "clean
-    channel" over which any suitable format can travel without modification or
-    wrapping, using HTTP to its full extent in the way it was intended. OCCI
-    also uses various HTTP verbs in transactions rather than tunneling
-    everything over POST, as was the case with SOAP and the various WS-*
-    protocols. As such all existing HTTP features are available for caching,
-    proxying, gatewaying and other advanced functionality such as partial
-    GETs.</para>
+    which operate in-band, all existing HTTP features are available for
+    caching, proxying, gatewaying and other advanced functionality such as
+    partial GETs.</para>
 
-    <para>Each resource (i.e. a compute node) is identified by URL(s) and has
-    one or more native representations (i.e. Open Virtualisation Format or
-    OVF) as well as a generic XHTML5 rendering. The latter allows for direct
-    end-user accessibility with well-formed, embedded semantic web markup for
-    consumption by both human and machine clients. As such OCCI simultaneously
-    presents both a machine interface (using native resource renderings) and a
-    user interface (using HTML markup with forms and other web technologies
-    such as Javascript/Ajax) so as to satisfy all common use cases. HTTP
-    content negotiation is used to select between alternative representations
-    and metadata including associations between resources is exposed via HTTP
-    headers (e.g. the <computeroutput>Link:</computeroutput> and
+    <para>Each resource is identified by URL(s) and has one or more native
+    representations as well as an XHTML5 rendering for direct end-user
+    accessibility with embedded semantic web markup. As such OCCI can present
+    both a machine interface (using native resource renderings) and a user
+    interface (using HTML markup with forms and other web technologies such as
+    Javascript/Ajax). HTTP content negotiation is used to select between
+    alternative representations and metadata including associations between
+    resources is exposed via HTTP headers (e.g. the
+    <computeroutput>Link:</computeroutput> and
     <computeroutput>Category:</computeroutput> headers).</para>
 
     <para>In this way OCCI is not responsible for the representations
     themselves, rather it enables users to organise and group resources
     together to build arbitrarily complex systems of inter-related resources.
     It relies on existing standards for rendering and does not make any
-    recommendations of one standard format over any other, in the same way as
-    the Internet has many popular image formats.</para>
+    recommendations of one standard format over any other.</para>
+
+    <tip>
+      <para>This is the case for the World Wide Web today where many image,
+      video and other supporting formats co-exist. Browsers support a number
+      of the common formats and users choose the most appropriate for the
+      task.</para>
+    </tip>
 
     <section>
       <title>Example</title>
 
       <screen>&gt; GET /us-east/webapp/vm01 HTTP/1.1
+&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OCCI/1.0
 &gt; Host: cloud.example.com
 &gt; Accept: */*
 &gt; 
@@ -93,43 +86,16 @@
         (including OAuth).<xref linkend="core-oauth" /> They indicate this
         requirement by returning <code>HTTP 401</code> with a
         <code>WWW-Authenticate</code> header and a suitable challenge (e.g.
-        <code>Basic</code>, <code>Digest</code>, <code>OAuth</code>). </para>
-
-        <screen>&gt; GET / HTTP/1.1
-&gt; Host: cloud.example.com
-&gt; 
-&lt; HTTP/1.1 401 Unauthorized
-&lt; WWW-Authenticate: OAuth realm="http://sp.example.com/"</screen>
-
-        <para>The client then includes appropriate <code>Authorization</code>
-        headers in its responses:<xref linkend="core-rfc2617" /></para>
-
-        <screen>&gt; GET / HTTP/1.1
-&gt; Authorization: OAuth realm="http://sp.example.com/",
-&gt;                oauth_consumer_key="0685bd9184jfhq22",
-&gt;                oauth_token="ad180jjd733klru7",
-&gt;                oauth_signature_method="HMAC-SHA1",
-&gt;                oauth_signature="wOJIO9A2W5mFwDgiDvZbTSMK%2FPY%3D",
-&gt;                oauth_timestamp="137131200",
-&gt;                oauth_nonce="4572616e48616d6d65724c61686176",
-&gt;                oauth_version="1.0"</screen>
-      </section>
-
-      <section>
-        <title>Cookies</title>
+        <code>Basic</code>, <code>Digest</code>, <code>OAuth</code>). The
+        client then includes appropriate <code>Authorization</code> headers in
+        its responses.<xref linkend="core-rfc2617" /></para>
 
         <para>Servers <emphasis>may</emphasis> set and clients
         <emphasis>may</emphasis> accept <glossterm>cookies</glossterm> in
-        order to maintain authentication state between requests:<xref
+        order to maintain authentication state between requests. Such sessions
+        <emphasis>should not</emphasis> be used for other purposes (such as
+        server-side state) in line with RESTful principles.<xref
         linkend="core-rfc2109" /></para>
-
-        <screen>Set-Cookie: session=4732518c5fe6dbeb8429cdda11d65c3d; domain=.example.com; path=/</screen>
-
-        <warning>
-          <para>Such sessions <emphasis>should not</emphasis> be used for
-          other purposes (such as server-side state) in line with RESTful
-          principles.</para>
-        </warning>
       </section>
 
       <section>
@@ -144,103 +110,50 @@
         (e.g. <quote><computeroutput>OCCI/1.0</computeroutput></quote>). If
         none is provided the latest (highest supported version number)
         available version offered by the server <emphasis>should</emphasis> be
-        used:</para>
-
-        <screen>&gt; GET / HTTP/1.1
-&gt; Host: cloud.example.com
-&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OCCI/1.0
-&gt; 
-&lt; HTTP/1.1 200 OK
-&lt; Server: Apache/2.2.13 (Unix) OCCI/1.0</screen>
+        used.</para>
       </section>
     </section>
 
     <section>
       <title>Addressing</title>
 
-      <para>A single entry point is defined by a URL (e.g.
-      <uri>http://cloud.example.com/</uri>) which may be a collection of
-      resources or some other page as defined by the implementor (e.g. a
-      descriptive web page). Therefore OCCI is fully compatible with any
-      existing web presence such as a marketing site or landing page.</para>
+      <para>The entry point is defined by a single URL which may be a
+      collection of resources or some other page as defined by the implementor
+      (e.g. a landing page). All resources <emphasis>must</emphasis> be
+      addressible by URLs (whose structure is opaque and at the discretion of
+      the implementor) and discoverable via search and/or link traversal from
+      the entry point.</para>
 
-      <para>All resources <emphasis>must</emphasis> be addressible by URLs
-      (whose structure is opaque and at the discretion of the implementor) and
-      discoverable via search and/or link traversal from the entry point.
-      Clients <emphasis>should not</emphasis> rely on "rules" to construct
-      URLs, rather learning them from URLs previously retrieved, in line with
-      RESTful principles:</para>
+      <tip>
+        <para>Clients will typically conduct a
+        <computeroutput>GET</computeroutput> or
+        <computeroutput>HEAD</computeroutput> request on the root
+        (<quote><uri>/</uri></quote>) and discover the category search
+        interface, from which they can learn the supported categories/kinds
+        and retrieve some or all of them.</para>
+      </tip>
 
-      <screen>&gt; GET /-/compute/ HTTP/1.1
+      <example>
+        <title>Example entry point</title>
+
+        <para>Retrieve a collection of desired resources (having already
+        discovered the category search URL and available categories):</para>
+
+        <screen>&gt; GET /-/compute HTTP/1.1
 &gt; Accept: text/uri-list
 &gt; 
 &lt; HTTP/1.1 200 OK
 &lt; Content-type: text/uri-list
 &lt;
-&lt; /us-east/new-york/node17
-&lt; /us-west/san-francisco/node43
-&lt; /europe/paris/node38</screen>
-    </section>
-
-    <section>
-      <title>Bootstrapping</title>
-
-      <para>Clients will typically conduct a
-      <computeroutput>GET</computeroutput> or
-      <computeroutput>HEAD</computeroutput> request on the root
-      (<quote><uri>/</uri></quote>) and discover the category search
-      interface, from which they can learn the supported categories/kinds and
-      retrieve some or all of them. If they know the URL for the resource they
-      wish to interact with (e.g. scripts &amp; cron jobs) then they can
-      bypass the discovery process and manipulate it directly.</para>
-
-      <example>
-        <title>Example bootstrap</title>
-
-        <para>Retrieve a collection of desired resources (having already
-        discovered the category search URL and available categories):</para>
-
-        <screen># detect category search interface
-&gt; GET / HTTP/1.1
-&gt; Host: cloud.example.com
-&gt; 
-&lt; HTTP/1.1 200 OK
-&lt; Content-type: text/html
-&lt; Link: &lt;/-/&gt;; rel="search"; title="Category Search"
-&lt;
-&lt; &lt;html&gt;
-&lt; &lt;head&gt;
-&lt; &lt;...&gt;
-&lt;
-# detect categories
-&gt; GET /-/ HTTP/1.1
-&gt; 
-&lt; HTTP/1.1 200 OK
-&lt; Content-length: 0
-&lt; 
-&lt; Category: compute; label="Compute Resource"; scheme="http://purl.org/occi/kind#"
-&lt; Category: network; label="Network Resource"; scheme="http://purl.org/occi/kind#"
-&lt; Category: storage; label="Storage Resource"; scheme="http://purl.org/occi/kind#"
-&lt; Category: us-east; label="US East Coast"; scheme="http://example.com/locations"
-&lt; Category: us-west; label="US West Coast"; scheme="http://example.com/locations"
-&lt; Category: demo; label="My Customer Demo"; scheme="http://example.com/~user/"
-&lt;
-# retrieve category
-&gt; GET /-/compute HTTP/1.1
-&gt; 
-&gt; HTTP/1.1 200 OK
-&gt; Content-type: text/uri-list
-&gt; 
-&gt; /node1
-&gt; /node2
-&gt;
-# retrieve resource
-&gt; GET /node1 HTTP/1.1
-&gt; 
-&gt; HTTP/1.1 200 OK
-&gt; Content-type: application/ovf
-&gt; &lt;...&gt;</screen>
+&lt; /node1
+&lt; /node2</screen>
       </example>
+
+      <tip>
+        <para>This discovery mechanism was selected so as to be compatible
+        with existing content hosted at the same URL (e.g.
+        <uri>http://cloud.example.com</uri>).</para>
+      </tip>
     </section>
   </section>
 
