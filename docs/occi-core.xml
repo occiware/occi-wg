@@ -30,6 +30,29 @@
     between alternative representations, which can also be advertised by way
     of links.</para>
 
+    <screen>&gt; GET /us-east/webapp/vm01 HTTP/1.1
+&gt; User-Agent: occi-client/1.0 (linux) libcurl/7.19.4 OpenSSL/0.9.8k zlib/1.2.3
+&gt; Host: cloud.example.com
+&gt; Accept: */*
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Date: Sat, 10 Oct 2009 12:56:51 GMT
+&lt; Expires: -1
+&lt; Cache-Control: private, max-age=0
+&lt; Content-Type: application/ovf
+&lt; Link: &lt;/us-east/webapp/vm01;action=start&gt;; rel="http://purl.org/occi/action/start"; title="Start"
+&lt; Link: &lt;/us-east/webapp/build.pdf&gt;; rel="related"; title="Documentation"; type="application/pdf"
+&lt; Category: compute; scheme="http://purl.org/occi/kind/"; label="Compute Resource"
+&lt; Server: occi-server/1.0
+&lt; Connection: close
+&lt;
+&lt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt; &lt;Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+&lt;           xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1"
+&lt;           xmlns="http://schemas.dmtf.org/ovf/envelope/1"
+&lt;           xml:lang="en-US"&gt;
+...</screen>
+
     <tip>
       <para>Some resources can be interacted with but not rendered due to the
       nature of the resource or prevailing security policies (for example, an
@@ -498,34 +521,15 @@
 
       <para>Where an operation could return multiple resources (e.g.
       categories, searches) this is referred to as a
-      <glossterm>collection</glossterm>.</para>
-
-      <para>Depending on the format these are returned as:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>A list of pointers to resources (e.g. <computeroutput
-          xlink:href="http://tools.ietf.org/html/rfc2483#section-5">text/uri-list</computeroutput>)</para>
-        </listitem>
-
-        <listitem>
-          <para>A list of pointers to resources with metadata (e.g.
-          <computeroutput>application/atom+xml</computeroutput> with
-          <computeroutput>link</computeroutput> to content)</para>
-        </listitem>
-
-        <listitem>
-          <para>A list of embedded resources and metadata (e.g.
-          <computeroutput>application/atom+xml</computeroutput> with
-          <computeroutput>content</computeroutput> embedded)</para>
-        </listitem>
-      </itemizedlist>
+      <glossterm>collection</glossterm>. Collections are returned as a list of
+      links in <computeroutput>text/uri-list</computeroutput> format.</para>
 
       <tip>
-        <para>Most collections should be pointers to resources with metadata
-        for performance reasons - O(1) rather than O(n+1) requests for
-        pointers alone. The resources themselves should only be embedded when
-        they are known to be of a reasonable size.</para>
+        <para>Collections are passed by reference for simplicity rather than
+        performance reasons, requiring O(n+1) requests. Including metadata
+        (requiring a wrapper format like Atom or SOAP) and/or the data itself
+        would provide O(1) performance, though passing by value should only be
+        considered where the representations are known to be small.</para>
       </tip>
 
       <para>Any given URL can be a collection and/or advertise
