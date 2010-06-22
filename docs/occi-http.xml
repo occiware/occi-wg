@@ -46,7 +46,7 @@
     </itemizedlist>
 
     <para>In all cases the process defined in <xref linkend="rfc2965" /> is
-    used to set/get <computeroutput>message-header</computeroutput>s except
+    used to set/get <computeroutput>message-header</computeroutput>s, where
     <computeroutput>[Set-]Attribute:</computeroutput>,
     <computeroutput>[Set-]Category:</computeroutput> and
     <computeroutput>[Set-]Link:</computeroutput> are used in place of
@@ -56,6 +56,12 @@
     <para><computeroutput>Set-*</computeroutput> headers may be included on
     PUT or POST requests (including empty POSTs in order to update the
     metadata independently of the representation).</para>
+
+    <para>Existing values can be discarded by sending a
+    <computeroutput>Set-*</computeroutput> header with the
+    <computeroutput>discard</computeroutput> attribute and updated by
+    providing a new value at the same time. When combined in a single HTTP
+    transaction such updates <emphasis>should</emphasis> be atomic.</para>
   </section>
 
   <section>
@@ -117,7 +123,7 @@ xmlns:ovf="http://schemas.dmtf.org/ovf/1/envelope"
     </biblioentry>
 
     <biblioentry xreflabel="RFC2965" xml:id="rfc2965">
-      <title>RFC 2965 - HTTP State Management Mechanism </title>
+      <title>RFC 2965 - HTTP State Management Mechanism</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc2822">http://tools.ietf.org/html/rfc2965</uri></address>
 
