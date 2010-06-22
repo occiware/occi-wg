@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>OCCI XHTML5</title>
+
+    <author>
+      <personname><firstname>Sam</firstname><surname>Johnston</surname></personname>
+
+      <affiliation>
+        <orgname>Australian Online Solutions</orgname>
+      </affiliation>
+    </author>
+
+    <pubdate>2009-09-06</pubdate>
+  </info>
+
+  <section>
+    <title>Overview</title>
+
+    <para>XHTML5 is an XML-based <quote>concrete syntax</quote> of the HTML5
+    <quote>abstract language</quote> (the <quote>World Wide Web's markup
+    language</quote>). It is served using the
+    <computeroutput>application/xhtml+xml</computeroutput> Internet media
+    type. <xref linkend="html5" /></para>
+  </section>
+
+  <bibliography>
+    <bibliomixed>Normative References</bibliomixed>
+
+    <biblioentry xreflabel="HTML5" xml:id="html5">
+      <title>HTML 5</title>
+
+      <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://www.w3.org/TR/html5/</uri></address>
+
+      <author>
+        <personname>Ian Hickson</personname>
+
+        <affiliation>
+          <org>
+            <orgname>Google, Inc.</orgname>
+          </org>
+        </affiliation>
+      </author>
+
+      <author>
+        <personname>David Hyatt</personname>
+
+        <affiliation>
+          <org>
+            <orgname>Apple, Inc.</orgname>
+          </org>
+        </affiliation>
+      </author>
+
+      <org>
+        <orgname>World Wide Web Consortium (W3C)</orgname>
+      </org>
+
+      <date>2009-08-25</date>
+    </biblioentry>
+
+    <bibliomixed>Informative References</bibliomixed>
+
+    <biblioentry xreflabel="RFC2617" xml:id="rfc2617">
+      <title>Is HTTP the HTTP of cloud computing?</title>
+
+      <address><uri
+          xlink:href="http://samj.net/2009/05/is-atompub-already-http-of-cloud.html">http://samj.net/2009/05/is-http-http-of-cloud-computing.html</uri></address>
+
+      <author>
+        <personname>Sam Johnston</personname>
+      </author>
+
+      <org>
+        <orgname>Australian Online Solutions</orgname>
+      </org>
+
+      <date>2009-05-25</date>
+    </biblioentry>
+
+    <biblioentry xreflabel="RFC2617" xml:id="rfc2617">
+      <title>Misunderstanding Markup: XHTML 2/HTML 5 Comic Strip</title>
+
+      <address><uri
+          xlink:href="http://samj.net/2009/05/is-atompub-already-http-of-cloud.html">http://www.smashingmagazine.com/2009/07/29/misunderstanding-markup-xhtml-2-comic-strip/</uri></address>
+
+      <author>
+        <personname>Jeremy Keith</personname>
+      </author>
+
+      <author>
+        <personname>Brad Colbow</personname>
+      </author>
+
+      <date>2009-07-29</date>
+    </biblioentry>
+  </bibliography>
+</article>
