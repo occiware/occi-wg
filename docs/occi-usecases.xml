@@ -614,18 +614,17 @@
       </listitem>
 
       <listitem>
-        <para>Categorizability: (there's gotta be a better word...) The client
-        must be able to identify what type each resource is in order to
-        display like-typed resources together and in order to provide separate
-        UI views that might be specialized for certain resource types. For
-        example, the client must be able to differentiate between a compute
-        resource that does not represent an actual CPU (perhaps this is a
-        compute template) and between a compute resource that actually
-        represents a running CPU. The interface for actually-running CPUs
-        might display the current IP address of the instance and allow you to
-        SSH into the instance, while a different tab in the interface might
-        display all the compute templates and allow you to instantiate
-        instances from them.</para>
+        <para>Categorizability: The client must be able to identify what type
+        each resource is in order to display like-typed resources together and
+        in order to provide separate UI views that might be specialized for
+        certain resource types. For example, the client must be able to
+        differentiate between a compute resource that does not represent an
+        actual CPU (perhaps this is a compute template) and between a compute
+        resource that actually represents a running CPU. The interface for
+        actually-running CPUs might display the current IP address of the
+        instance and allow you to SSH into the instance, while a different tab
+        in the interface might display all the compute templates and allow you
+        to instantiate instances from them.</para>
       </listitem>
 
       <listitem>
@@ -767,7 +766,7 @@
       </listitem>
 
       <listitem>
-        <para>The provider API identifies mutliple supported VM input formats
+        <para>The provider API identifies multiple supported VM input formats
         as a list uniquely and commonly across all providers</para>
       </listitem>
 

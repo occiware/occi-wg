@@ -31,7 +31,7 @@
   <bridgehead renderas="sect4">Abstract</bridgehead>
 
   <para>This document is an informal description of Use Cases and requirements
-  for the OOCI Cloud API. Created by the Open Cloud Computing Interface
+  for the OCCI Cloud API. Created by the Open Cloud Computing Interface
   working group. This document records the needs of IaaS Cloud computing
   managers and administrators in the form of Use Cases. The Use Cases serve as
   the primary guide for the development of API requirements. The document is
@@ -47,7 +47,7 @@
     <para>This document is organized in to three sections: Use Cases,
     Requirements and a comparison matrix of current Cloud APIs. In this
     document, Use Cases are defined by name and a set of functional and
-    non-functional requirements. All requirements are catagorized and
+    non-functional requirements. All requirements are categorized and
     formatted in tables. Each requirement is (whenever possible) mapped to a
     Use Case. Priorities have been assigned to all requirements. The Cloud API
     comparison matrix itemizes generalized and detail features of each API and
@@ -88,11 +88,11 @@
     <title>Conclusions</title>
 
     <para>The previous sections described to what extent Cloud requirements
-    for an API exist. What’s missing up to now is a general solution that fits
-    most of the needs, is simple to implement, highly responsive (throughput),
-    globally applicable (standard well known as well as dynamic connections),
-    secure, highly recognized (commonly known and implemented) and last but
-    not least standardized.</para>
+    for an API exist. What is missing up to now is a general solution that
+    fits most of the needs, is simple to implement, highly responsive
+    (throughput), globally applicable (standard well known as well as dynamic
+    connections), secure, highly recognized (commonly known and implemented)
+    and last but not least standardized.</para>
 
     <para>This working group plans to use these Use Cases and requirements for
     the creation of an Cloud API.</para>
