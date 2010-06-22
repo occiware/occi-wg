@@ -758,67 +758,6 @@ Attribute: com.cisco.cdp=enabled</screen>
       <title>IANA Considerations</title>
 
       <section>
-        <title>Internet Media Types (MIME Types)</title>
-
-        <para>The following media types are to be registered:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>text/occi</para>
-          </listitem>
-
-          <listitem>
-            <para>application/occi+atom</para>
-          </listitem>
-
-          <listitem>
-            <para>application/occi+json</para>
-          </listitem>
-        </itemizedlist>
-      </section>
-
-      <section>
-        <title>Well-Known URI Registry</title>
-
-        <para>The following well-known URI suffix is to be registered:</para>
-
-        <glosslist>
-          <glossentry>
-            <glossterm>URI Suffix</glossterm>
-
-            <glossdef>
-              <para>/.well-known/<emphasis>occi</emphasis>/</para>
-            </glossdef>
-          </glossentry>
-
-          <glossentry>
-            <glossterm>Change Controller</glossterm>
-
-            <glossdef>
-              <para>OGF</para>
-            </glossdef>
-          </glossentry>
-
-          <glossentry>
-            <glossterm>Specification Document</glossterm>
-
-            <glossdef>
-              <para>Open Cloud Computing Interface (OCCI) [<uri
-              xlink:href="http://purl.org/occi">http://purl.org/occi</uri>]</para>
-            </glossdef>
-          </glossentry>
-
-          <glossentry>
-            <glossterm>Related Information</glossterm>
-
-            <glossdef>
-              <para>N/A</para>
-            </glossdef>
-          </glossentry>
-        </glosslist>
-      </section>
-
-      <section>
         <title>Link Relation Type Registry</title>
 
         <para>The following <glossterm>link relation</glossterm>s are to be
