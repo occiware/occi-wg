@@ -158,29 +158,17 @@
     <section>
       <title>Addressing</title>
 
-      <para>The entry point is defined by a single URL which may be a
-      collection of resources or some other page as defined by the implementor
-      (e.g. a landing page). All resources <emphasis>must</emphasis> be
+      <para>A single entry point is defined by a URL (e.g.
+      <uri>http://cloud.example.com/</uri>) which may be a collection of
+      resources or some other page as defined by the implementor (e.g. a
+      marketing or landing page). All resources <emphasis>must</emphasis> be
       addressible by URLs (whose structure is opaque and at the discretion of
       the implementor) and discoverable via search and/or link traversal from
-      the entry point.</para>
+      the entry point. Clients <emphasis>should not</emphasis> rely on "rules"
+      to construct URLs, rather learning them from URLs previously retrieved,
+      in line with RESTful principles:</para>
 
-      <tip>
-        <para>Clients will typically conduct a
-        <computeroutput>GET</computeroutput> or
-        <computeroutput>HEAD</computeroutput> request on the root
-        (<quote><uri>/</uri></quote>) and discover the category search
-        interface, from which they can learn the supported categories/kinds
-        and retrieve some or all of them.</para>
-      </tip>
-
-      <example>
-        <title>Example entry point</title>
-
-        <para>Retrieve a collection of desired resources (having already
-        discovered the category search URL and available categories):</para>
-
-        <screen>&gt; GET /-/compute HTTP/1.1
+      <screen>&gt; GET /-/compudte HTTP/1.1
 &gt; Accept: text/uri-list
 &gt; 
 &lt; HTTP/1.1 200 OK
@@ -188,6 +176,64 @@
 &lt;
 &lt; /node1
 &lt; /node2</screen>
+    </section>
+
+    <section>
+      <title>Bootstrapping</title>
+
+      <para>Clients will typically conduct a
+      <computeroutput>GET</computeroutput> or
+      <computeroutput>HEAD</computeroutput> request on the root
+      (<quote><uri>/</uri></quote>) and discover the category search
+      interface, from which they can learn the supported categories/kinds and
+      retrieve some or all of them.</para>
+
+      <example>
+        <title>Example bootstrap</title>
+
+        <para>Retrieve a collection of desired resources (having already
+        discovered the category search URL and available categories):</para>
+
+        <screen># detect category search interface
+&gt; GET / HTTP/1.1
+&gt; Host: cloud.example.com
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Content-type: text/html
+&lt; Link: &lt;/-/&gt;; rel="search"; title="Category Search"
+&lt;
+&lt; &lt;html&gt;
+&lt; &lt;head&gt;
+&lt; &lt;...&gt;
+&lt;
+# detect categories
+&gt; GET /-/ HTTP/1.1
+&gt; 
+&lt; HTTP/1.1 200 OK
+&lt; Content-length: 0
+&lt; 
+&lt; Category: compute; label="Compute Resource"; scheme="http://purl.org/occi/kind#"
+&lt; Category: network; label="Network Resource"; scheme="http://purl.org/occi/kind#"
+&lt; Category: storage; label="Storage Resource"; scheme="http://purl.org/occi/kind#"
+&lt; Category: us-east; label="US East Coast"; scheme="http://example.com/locations"
+&lt; Category: us-west; label="US West Coast"; scheme="http://example.com/locations"
+&lt; Category: demo; label="My Customer Demo"; scheme="http://example.com/~user/"
+&lt;
+# retrieve category
+&gt; GET /-/compute HTTP/1.1
+&gt; 
+&gt; HTTP/1.1 200 OK
+&gt; Content-type: text/uri-list
+&gt; 
+&gt; /node1
+&gt; /node2
+&gt;
+# retrieve resource
+&gt; GET /node1 HTTP/1.1
+&gt; 
+&gt; HTTP/1.1 200 OK
+&gt; Content-type: application/ovf
+&gt; &lt;...&gt;</screen>
       </example>
 
       <tip>
