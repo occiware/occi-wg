@@ -15,8 +15,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * Authors: 
- *          
+ * 
+ * CHANGELOG
+ * 2009-10-28 Initial release
+ * 
+ * TODO
+ * - consider adding support for loadable modules ala google.load()
+ *   http://my.opera.com/kilsmo/blog/2009/07/11/libraries-in-javascript
  */
 var occi = {}; 
  
