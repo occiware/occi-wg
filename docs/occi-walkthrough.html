@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>OCCI Walkthrough</title><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"/></head><body><div class="article" title="OCCI Walkthrough"><div class="titlepage"><div><div><h2 class="title"><a id="id36063441"/>OCCI Walkthrough</h2></div></div><hr/></div><div class="section" title="Overview"><div class="titlepage"><div><div><h2 class="title"><a id="id36063450"/>Overview</h2></div><div><h3 class="subtitle">This document may lag behind the actual specification</h3></div></div></div><p>The Open Cloud Computing Interface (OCCI) is an API for managing
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>OCCI Walkthrough</title><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"/></head><body><div class="article" title="OCCI Walkthrough"><div class="titlepage"><div><div><h2 class="title"><a id="id36063441"/>OCCI Walkthrough</h2></div></div><hr/></div><div class="section" title="Overview"><div class="titlepage"><div><div><h2 class="title"><a id="id36063450"/>Overview</h2></div><div><h3 class="subtitle">THIS WALKTHROUGH DOCUMENT DOES NOT REFLECT THE CURRENT STATE OF
+    THE SPECIFICATION. IT WILL BE UPDATED ON PUBLICATION.</h3></div></div></div><p>The Open Cloud Computing Interface (OCCI) is an API for managing
     cloud infrastructure services (also known as Infrastructure as a Service
     or IaaS) which strictly adheres to REpresentational State Transfer (REST)
     principles and is closely tied to HyperText Tranfer Protocol (HTTP). For
@@ -8,7 +9,7 @@
     Call (RPC) style interfaces and can essentially be implemented as a
     horizontally scalable document repository with which both nodes and
     clients interact.</p><p>This document describes a step-by-step walkthrough of performing
-    various tasks as at the time of writing.</p></div><div class="section" title="Getting Started"><div class="titlepage"><div><div><h2 class="title"><a id="id36063472"/>Getting Started</h2></div></div></div><h3><a id="id36063477"/>Connecting</h3><p>Each implementation has a single OCCI end-point URL (we'll use
+    various tasks as at the time of writing.</p></div><div class="section" title="Getting Started"><div class="titlepage"><div><div><h2 class="title"><a id="id36063472"/>Getting Started</h2></div></div></div><h3><a id="id36063478"/>Connecting</h3><p>Each implementation has a single OCCI end-point URL (we'll use
     http://example.com/) and everything you need to know is linked from this
     point - configuring clients is just a case of providing this parameter. In
     the simplest case the end-point may contain only a single resource or type
@@ -64,7 +65,7 @@
     between wire formats including plain text, JSON, XML and others. For
     example:</p><pre class="screen">occi.compute.cores 2
 compute.speed 3200
-compute.memory 2048</pre><h3><a id="id36063608"/>Identifiers</h3><p>Each resource is identified by its dereferenceable URL which is by
+compute.memory 2048</pre><h3><a id="id36063609"/>Identifiers</h3><p>Each resource is identified by its dereferenceable URL which is by
     definition unique, giving information about the origin and type of the
     resource as well as a local identifier (the combination of which forms a
     globally unique compound key). The primary drawback is that the more
@@ -82,7 +83,7 @@ compute.memory 2048</pre><h3><a id="id36063608"/>Identifiers</h3><p>Each resourc
     these can be safely allocated by any node without consulting a
     register/sequence, but where existing identifiers are available they
     should be used instead (e.g.
-    http://amazon.com/compute/ami-ef48af86).</p></div><div class="section" title="Operations"><div class="titlepage"><div><div><h2 class="title"><a id="id36063634"/>Operations</h2></div></div></div><h3><a id="id36063639"/>Create</h3><p>To create a resource simply POST it to the appropropriate collection
+    http://amazon.com/compute/ami-ef48af86).</p></div><div class="section" title="Operations"><div class="titlepage"><div><div><h2 class="title"><a id="id36063638"/>Operations</h2></div></div></div><h3><a id="id36063643"/>Create</h3><p>To create a resource simply POST it to the appropropriate collection
     (e.g. /compute, /network or /storage) as an HTML form (supported by
     virtually all user agents) or in another supported format (e.g.
     OVF):</p><pre class="screen">POST /compute HTTP/1.1
@@ -93,7 +94,7 @@ Content-Type: application/x-www-form-urlencoded
 compute.cores=2&amp;compute.memory=2048</pre><p>Rather than generating the new resource from scratch you may also be
     given the option to GET a template and POST or PUT it back (for example,
     where "small", "medium" and "large" instances or pre-configured appliances
-    are offered).</p><h3><a id="id36063659"/>Retrieve</h3><p>The simplest command is to retrieve a single resource by conducting
+    are offered).</p><h3><a id="id36063663"/>Retrieve</h3><p>The simplest command is to retrieve a single resource by conducting
     a HTTP GET on its URL (which doubles as its identifier):</p><pre class="screen">GET /compute/b10fa926-41a6-4125-ae94-bfad2670ca87 HTTP/1.1
 Host: example.com</pre><p>This will return <em><span class="remark">a HTTP 300 Multiple Choices response
     containing a list of available representations for the resource as well as
@@ -106,15 +107,15 @@ Host: example.com</pre><p>This will return <em><span class="remark">a HTTP 300 M
     resources. There are two options:</p><div class="glosslist"><dl><dt>Pass-by-reference</dt><dd><p>A plain text or HTML list of links is provided but each needs
           to be retrieved separately, resulting in O(n+1) performance.</p></dd><dt>Pass-by-value</dt><dd><p>A wrapper format such as Atom is used to deliver [links to]
           the content as well as the metadata (e.g. links, associations,
-          cahching information, etc.), resulting in O(1) performance.</p></dd></dl></div><h3><a id="id36063721"/>Update</h3><p>Updating resources is trivial - simply GET the resource, modify it
-    as necessary and PUT it back where you found it.</p><h3><a id="id36063728"/>Delete</h3><p>Simply <code class="computeroutput">DELETE</code> the resource:</p><pre class="screen">DELETE /compute/b10fa926-41a6-4125-ae94-bfad2670ca87 HTTP/1.1
-Host: example.com</pre></div><div class="section" title="Sub-resource Collections"><div class="titlepage"><div><div><h2 class="title"><a id="id36063743"/>Sub-resource Collections</h2></div></div></div><p><em><span class="remark">(For want of a better name) </span></em></p><p>Each resource may expose collections for functions such as logging,
+          cahching information, etc.), resulting in O(1) performance.</p></dd></dl></div><h3><a id="id36063725"/>Update</h3><p>Updating resources is trivial - simply GET the resource, modify it
+    as necessary and PUT it back where you found it.</p><h3><a id="id36063733"/>Delete</h3><p>Simply <code class="computeroutput">DELETE</code> the resource:</p><pre class="screen">DELETE /compute/b10fa926-41a6-4125-ae94-bfad2670ca87 HTTP/1.1
+Host: example.com</pre></div><div class="section" title="Sub-resource Collections"><div class="titlepage"><div><div><h2 class="title"><a id="id36063747"/>Sub-resource Collections</h2></div></div></div><p><em><span class="remark">(For want of a better name) </span></em></p><p>Each resource may expose collections for functions such as logging,
     auditing, change control, documentation and other operations (e.g.
     http://example.com/compute/123/log/456) in addition to any required by
     OCCI. As usual CRUD operations map to HTTP verbs (as above) and clients
     can either PUT entries directly if they know or will generate the
     identifiers, or POST them to the collection if this will be handled on the
-    server side (using POST Once Exactly (POE) to ensure idempotency).</p><h3><a id="id36063760"/>Requests</h3><p>Requests are used to trigger state changes and other operations such
+    server side (using POST Once Exactly (POE) to ensure idempotency).</p><h3><a id="id36063764"/>Requests</h3><p>Requests are used to trigger state changes and other operations such
     as backups, snapshots, migrations and invasive reconfigurations (such as
     storage resource resizing). Those that do not complete immediately
     (returning HTTP 200 OK or similar) must be handled asynchronously
