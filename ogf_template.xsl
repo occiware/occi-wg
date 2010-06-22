@@ -13,10 +13,7 @@
 	<xsl:param name="section.autolabel">1</xsl:param>
 	<xsl:param name="chapter.autolabel">1</xsl:param>
 	<xsl:param name="section.autolabel.max.depth">3</xsl:param>
-<!--
-	<xsl:param name="use.extensions" select="1"/>
-	<xsl:param name="linenumbering.extension" select="0"></xsl:param>
--->
+
 <!--
 	<xsl:param name="generate.toc"></xsl:param>
 	<xsl:param name="process.empty.source.toc" select="1"></xsl:param>
@@ -78,39 +75,6 @@
             <xsl:text></xsl:text>
         </fo:block>
     </xsl:template>
-<!--
-<xsl:template match="para/text()">
-  <xsl:call-template name="line.numbering">
-    <xsl:with-param name="content" select="."/>
-    <xsl:with-param name="count" select="1"/>
-  </xsl:call-template>
-</xsl:template>
-
-<xsl:template name="line.numbering">
-  <xsl:param name="content" select="."/>
-  <xsl:param name="count" select="1"/>
-
-  <xsl:number value="$count" format="01 "/>
-
-  <xsl:choose>
-    <xsl:when test="contains($content, '&#xA;')">
-      <xsl:value-of select="substring-before($content, '&#xA;')"/>
-      <xsl:text>&#xA;</xsl:text>
-
-      <xsl:variable name="rest" select="substring-after($content, '&#xA;')"/>
-      <xsl:if test="string-length($rest)">
-        <xsl:call-template name="line.numbering">
-          <xsl:with-param name="content" select="$rest"/>
-          <xsl:with-param name="count" select="$count + 1"/>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="$content"/>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>-->
-
 
 	<!-- modified header -->
 	<xsl:template name="header.content">
@@ -138,7 +102,7 @@
 				    <xsl:apply-templates select="//author/affiliation"/>
 				</fo:block>
                 <fo:block> 
-					<xsl:text>September 16, 2009</xsl:text>
+					<xsl:text>September 3, 2009</xsl:text>
 					</fo:block>
 				</xsl:when>
 			</xsl:choose>

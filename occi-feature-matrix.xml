@@ -47,8 +47,8 @@
   </itemizedlist>
 
   <para>While this is not a complete or in depth evaultation of the APIs the
-  following Matrix can used as a basic reference point for API
-  comparism.</para>
+  following Matrix can used as a basic reference point for API comparism.
+  </para>
 
   <table>
     <title>Cloud API feature matrix</title>
@@ -475,21 +475,4 @@
       </tbody>
     </tgroup>
   </table>
-
-  <para>For more details review the API of the different providers.
-  <citerefentry>
-      <refentrytitle>EC2</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>EH</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>FS</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>GG</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>SC</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>CS</refentrytitle>
-    </citerefentry><citerefentry>
-      <refentrytitle>VM</refentrytitle>
-    </citerefentry></para>
 </article>
