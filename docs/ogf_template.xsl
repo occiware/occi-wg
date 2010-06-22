@@ -124,10 +124,10 @@
 
         <xsl:when test="$position = 'right'">
           <fo:block>
-            <xsl:text>Open Cloud Computing Interface</xsl:text>
+            <xsl:text>OCCI working group</xsl:text>
           </fo:block>
           <fo:block>
-            <xsl:text>Chgset: 47 - September 21, 2009</xsl:text>
+            <xsl:text>Chgset: 49 - September 29, 2009</xsl:text>
           </fo:block>
         </xsl:when>
       </xsl:choose>
