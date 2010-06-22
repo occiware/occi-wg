@@ -4,26 +4,21 @@
 
 XSL=~/Library/XML/XSL/docbook-xsl-ns-1.75.2
 
+ALL_XML_SRC		:= $(wildcard *.xml)
+ALL_HTML_OUT	:= $(subst xml,html,$(ALL_XML_SRC))
+ALL_PDF_OUT		:= $(subst xml,pdf,$(ALL_XML_SRC))
+
 all: html pdf
 
-html: occi-book.html occi-core.html
+html: $(ALL_HTML_OUT)
 
-pdf: occi-book.pdf occi-core.pdf
+pdf: $(ALL_PDF_OUT)
 
-occi-book.html: occi-book.xml
-	xsltproc --output occi-book.html --xinclude --stringparam paper.type A4 --stringparam generate.toc "" $(XSL)/xhtml-1_1/docbook.xsl occi-book.xml
+%.html: %.xml
+	xsltproc --output $@ --xinclude --stringparam paper.type A4 --stringparam generate.toc "" $(XSL)/xhtml-1_1/docbook.xsl $<
 
-occi-book.fo: occi-book.xml
-	xsltproc --output occi-book.fo --xinclude --stringparam paper.type A4 --stringparam generate.toc "" $(XSL)/fo/docbook.xsl occi-book.xml
+%.fo: %.xml
+	xsltproc --output $@ --xinclude --stringparam paper.type A4 --stringparam generate.toc "" $(XSL)/fo/docbook.xsl $<
 
-occi-book.pdf: occi-book.fo
-	java org.apache.fop.cli.Main -fo occi-book.fo -pdf occi-book.pdf
-
-occi-core.html: occi-core.xml
-	xsltproc --output occi-core.html --xinclude --stringparam paper.type A4 --stringparam generate.toc "" $(XSL)/xhtml-1_1/docbook.xsl occi-core.xml
-
-occi-core.fo: occi-core.xml
-	xsltproc --output occi-core.fo --xinclude --stringparam paper.type A4 --stringparam generate.toc "" $(XSL)/fo/docbook.xsl occi-core.xml
-
-occi-core.pdf: occi-core.fo
-	java org.apache.fop.cli.Main -fo occi-core.fo -pdf occi-core.pdf
+%.pdf: %.fo
+	java org.apache.fop.cli.Main -fo $< -pdf $@

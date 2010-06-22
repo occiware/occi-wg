@@ -23,13 +23,13 @@
     <quote>abstract language</quote> (the <quote>World Wide Web's markup
     language</quote>). It is served using the
     <computeroutput>application/xhtml+xml</computeroutput> Internet media
-    type. <xref linkend="html5_1" /></para>
+    type. <xref linkend="xhtml5-html5" /></para>
   </section>
 
   <bibliography>
     <bibliomixed>Normative References</bibliomixed>
 
-    <biblioentry xreflabel="HTML5" xml:id="html5_1">
+    <biblioentry xreflabel="HTML5" xml:id="xhtml5-html5">
       <title>HTML 5</title>
 
       <address><uri xlink:href="http://tools.ietf.org/html/rfc4287">http://www.w3.org/TR/html5/</uri></address>
@@ -63,7 +63,7 @@
 
     <bibliomixed>Informative References</bibliomixed>
 
-    <biblioentry xreflabel="http-article" xml:id="http-article">
+    <biblioentry xreflabel="http-article" xml:id="xhtml5-http-article">
       <title>Is HTTP the HTTP of cloud computing?</title>
 
       <address><uri
@@ -80,7 +80,7 @@
       <date>2009-05-25</date>
     </biblioentry>
 
-    <biblioentry xreflabel="HTML5-article" xml:id="html5-article">
+    <biblioentry xreflabel="HTML5-article" xml:id="xhtml5-html5-article">
       <title>Misunderstanding Markup: XHTML 2/HTML 5 Comic Strip</title>
 
       <address><uri
