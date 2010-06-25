@@ -89,7 +89,7 @@
       <section>
         <title>Authentication</title>
 
-        <para>Servers <emphasis>may</emphasis> require that requests be
+        <para>Servers MAY require that requests be
         authenticated using standard HTTP-based authentication mechanisms
         (including OAuth).<xref linkend="core-oauth" /> They indicate this
         requirement by returning <code>HTTP 401</code> with a
@@ -119,15 +119,15 @@
       <section>
         <title>Cookies</title>
 
-        <para>Servers <emphasis>may</emphasis> set and clients
-        <emphasis>may</emphasis> accept <glossterm>cookies</glossterm> in
+        <para>Servers MAY set and clients
+        MAY accept <glossterm>cookies</glossterm> in
         order to maintain authentication state between requests:<xref
         linkend="core-rfc2109" /></para>
 
         <screen>Set-Cookie: session=4732518c5fe6dbeb8429cdda11d65c3d; domain=.example.com; path=/</screen>
 
         <warning>
-          <para>Such sessions <emphasis>should not</emphasis> be used for
+          <para>Such sessions SHOULD NOT be used for
           other purposes (such as server-side state) in line with RESTful
           principles.</para>
         </warning>
@@ -136,7 +136,7 @@
       <section>
         <title>Versioning</title>
 
-        <para>Servers and clients <emphasis>should</emphasis> indicate the
+        <para>Servers and clients SHOULD indicate the
         latest version of OCCI they support (e.g.
         <computeroutput>1.0</computeroutput>) by way of the
         <computeroutput>Server:</computeroutput> and
@@ -144,7 +144,7 @@
         using the token <quote><computeroutput>OCCI</computeroutput></quote>
         (e.g. <quote><computeroutput>OCCI/1.0</computeroutput></quote>). If
         none is provided the latest (highest supported version number)
-        available version offered by the server <emphasis>should</emphasis> be
+        available version offered by the server SHOULD be
         used:</para>
 
         <screen>&gt; GET / HTTP/1.1
@@ -165,10 +165,10 @@
       descriptive web page). Therefore OCCI is fully compatible with any
       existing web presence such as a marketing site or landing page.</para>
 
-      <para>All resources <emphasis>must</emphasis> be addressible by URLs
+      <para>All resources MUST be addressible by URLs
       (whose structure is opaque and at the discretion of the implementor) and
       discoverable via search and/or link traversal from the entry point.
-      Clients <emphasis>should not</emphasis> rely on "rules" to construct
+      Clients SHOULD NOT rely on "rules" to construct
       URLs, rather learning them from URLs previously retrieved, in line with
       RESTful principles:</para>
 
@@ -192,7 +192,7 @@
         <uri>http://node01.us.example.com/vm01</uri>). This can be done
         without the knowledge of the client (using HTTP reverse proxies) or on
         the client side (using HTTP redirects). Each subset
-        <emphasis>should</emphasis> be capable of acting as a standalone OCCI
+        SHOULD be capable of acting as a standalone OCCI
         end point or as part of a larger system, such that clients can access
         the entire cloud or a single region, cluster or individual node
         directly and aggregators can consolidate multiple clouds into a single
@@ -464,7 +464,7 @@
       <para>An <glossterm>action</glossterm> is triggered via an HTTP POST and
       depending on the action requested (e.g.
       <computeroutput>resize</computeroutput>), parameters
-      <emphasis>may</emphasis> be provided using HTML forms (e.g.
+      MAY be provided using HTML forms (e.g.
       <computeroutput>application/x-www-form-urlencoded</computeroutput>). In
       the case of HTML-based renderings the actions can therefore be actual
       HTML forms.</para>
@@ -479,7 +479,7 @@
       <section>
         <title>Asynchronous Actions</title>
 
-        <para>Synchronous actions <emphasis>may</emphasis> return
+        <para>Synchronous actions MAY return
         <computeroutput>200 OK</computeroutput> on successful completion or
         <computeroutput>201 Created</computeroutput> with a
         <computeroutput>Location:</computeroutput> header indicating a new
@@ -491,7 +491,7 @@
         </tip>
 
         <para>In the event that the <glossterm>action</glossterm> does not
-        complete immediately it <emphasis>should</emphasis> return
+        complete immediately it SHOULD return
         <computeroutput>HTTP 202 Accepted</computeroutput> and a
         <computeroutput>Location:</computeroutput> header indicating a new
         resource where status and other pertinent information can be
@@ -509,7 +509,7 @@
         <title>Advanced Actions</title>
 
         <para>The specific parameters required and allowable values for them
-        depend on the action and for advanced actions <emphasis>may</emphasis>
+        depend on the action and for advanced actions MAY
         require sending of custom <glossterm>content type</glossterm>s rather
         than
         <computeroutput>application/x-www-form-encoded</computeroutput>.</para>
@@ -564,7 +564,7 @@
         which should be used where possible.</para>
       </warning>
 
-      <para>Each resource <emphasis>must</emphasis> specify a kind by way of a
+      <para>Each resource MUST specify a kind by way of a
       <glossterm>category</glossterm> within the <glossterm>scheme</glossterm>
       <quote><uri>http://purl.org/occi/kind#</uri></quote>.</para>
 
@@ -753,7 +753,7 @@
           <title>Example category query</title>
 
           <para>Locate the category search root (which
-          <emphasis>should</emphasis> be <uri>/-/</uri>):</para>
+          SHOULD be <uri>/-/</uri>):</para>
 
           <screen>&gt; HEAD / HTTP/1.1
 &gt; 
@@ -897,7 +897,7 @@
       <section>
         <title>Paging</title>
 
-        <para>Collections <emphasis>may</emphasis> be divided into
+        <para>Collections MAY be divided into
         <glossterm>page</glossterm>s, with each linking to the
         <quote>first</quote>, <quote>last</quote>, <quote>next</quote> and
         <quote>previous</quote> <glossterm>link relation</glossterm>s. The
@@ -919,7 +919,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class=
 
       <para>Web linking standards for HTTP [<xref linkend="core-link" />] and
       HTML [<xref linkend="core-html5" />] are used to indicate associations
-      between resources. All formats <emphasis>must</emphasis> support
+      between resources. All formats MUST support
       <glossterm>in-band</glossterm> linking including:</para>
 
       <itemizedlist>
@@ -1065,7 +1065,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class=
     <section>
       <title>Foreign markup</title>
 
-      <para>Implementations <emphasis>must</emphasis> accept and forward but
+      <para>Implementations MUST accept and forward but
       otherwise ignore markup they do not understand.</para>
     </section>
   </section>
@@ -1075,7 +1075,7 @@ Link: &lt;http://example.com/xyz;start=900&gt;; rel="last"; title="Last"; class=
 
     <para>Encryption is not required by the specification in order to cater
     for sites that do not or can not use it (e.g. due to export restrictions,
-    performance reasons, etc.), however SSL/TLS <emphasis>should</emphasis> be
+    performance reasons, etc.), however SSL/TLS SHOULD be
     used over public networks including the Internet.</para>
   </section>
 
