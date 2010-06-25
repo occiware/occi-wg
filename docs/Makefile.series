@@ -1,6 +1,6 @@
 
 XSL_HTML = /usr/share/xml/docbook/stylesheet/nwalsh/html
-XSL_FO   = /usr/share/xml/docbook/stylesheet/nwalsh/fo
+XSL_FO   = /usr/share/xml/docbook/stylesheet/docbook-xsl/fo
 
 STYLESHEET = ogf_template.xsl
 

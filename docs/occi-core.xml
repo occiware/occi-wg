@@ -43,7 +43,8 @@
     content negotiation is used to select between alternative representations
     and metadata including associations between resources is exposed via HTTP
     headers (e.g. the <computeroutput>Link:</computeroutput> and
-    <computeroutput>Category:</computeroutput> headers).</para>
+    <computeroutput>Category:</computeroutput> headers). The categories allow
+    resources to be grouped - this is done with the help of schemes.</para>
 
     <para>In this way OCCI is not responsible for the representations
     themselves, rather it enables users to organise and group resources
@@ -171,15 +172,14 @@
       URLs, rather learning them from URLs previously retrieved, in line with
       RESTful principles:</para>
 
-      <screen>&gt; GET /-/compute/ HTTP/1.1
-&gt; Accept: text/uri-list
+      <screen>&gt; GET /compute/node1 HTTP/1.1
+&gt; Host: example.com
+&gt; Accept: */*
 &gt; 
-&lt; HTTP/1.1 200 OK
-&lt; Content-type: text/uri-list
-&lt;
-&lt; /us-east/new-york/node17
-&lt; /us-west/san-francisco/node43
-&lt; /europe/paris/node38</screen>
+&lt; HTTP/1.1 200 OK 
+&lt; Server: occi-server/1.0 (linux) OCCI/1.0
+&lt; Date: Wed, 27 Jan 2010 17:26:40 GMT
+&lt; [...]</screen>
 
       <section>
         <title>Virtual Addressing</title>
@@ -454,9 +454,11 @@
 
       <warning>
         <para>Defining your own actions can lead to interoperability problems
-        and should be a last resort reserved for unique functionality. A
-        simple peer review process is available for extending the registries
-        which should be used where possible.</para>
+        and should be a last resort reserved for unique functionality.
+        Extensions to the registry can be made and should be proposed to the
+        OCCI working group first. A review process within the OGF group is
+        available for extending the registries which should be used where
+        possible.</para>
       </warning>
 
       <para>An <glossterm>action</glossterm> is triggered via an HTTP POST and
@@ -775,7 +777,9 @@
 &lt; Category: demo; label="My Customer Demo"; scheme="http://example.com/~user/"</screen>
 
           <para>Query the category search interface for the desired
-          category(s):</para>
+          category(s) (In this case one category: <emphasis>us-west</emphasis>
+          with the <emphasis>http://example.com/locations</emphasis>
+          scheme):</para>
 
           <screen>&gt; GET /-/compute/us-west HTTP/1.1
 &gt; Accept: text/uri-list
