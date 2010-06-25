@@ -46,11 +46,12 @@
     </listitem>
 
     <listitem>
-      <para>OCCI XHTML5 rendering</para>
+      <para>OCCI HTTP Header rendering</para>
     </listitem>
 
     <listitem>
-      <para>OCCI HTTP Header rendering</para>
+      <para>(OCCI XHTML5/RDFa rendering) - <emphasis>to be
+      released</emphasis></para>
     </listitem>
   </itemizedlist>
 
@@ -59,7 +60,10 @@
   describes the OCCI Infrastructure models.</para>
 
   <para>All these parts and the information within are mandatory for
-  implementors (unless otherwise specified).</para>
+  implementors (unless otherwise specified). The key words "MUST", "MUST NOT",
+  "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",
+  "MAY", and "OPTIONAL" in this document are to be interpreted as described in
+  RFC 2119.</para>
 
   <section>
     <xi:include href="occi-infrastructure.xml" xpointer="xpointer(/*/*)">
@@ -74,10 +78,10 @@
   <section>
     <title>Contributors</title>
 
-    <para>The following people have contributed to this document.</para>
+    <para>The following people edited this document:</para>
 
     <table>
-      <title>List of contributors</title>
+      <title>List of editors</title>
 
       <tgroup cols="3">
         <thead>
@@ -96,23 +100,68 @@
 
             <entry>Intel - SLA@SOI project</entry>
 
-            <entry>andy@edmonds.be</entry>
+            <entry>andy at edmonds.be</entry>
           </row>
 
           <row>
             <entry>Sam Johnston</entry>
 
-            <entry>Australian Online Solutions</entry>
+            <entry>Google</entry>
 
-            <entry>samj@samj.net</entry>
+            <entry>samj at samj.net</entry>
           </row>
 
           <row>
             <entry>Thijs Metsch</entry>
 
-            <entry>Sun Microsystems - RESERVOIR project</entry>
+            <entry>Sun Microsystems - RESERVOIR project, Platform
+            Computing</entry>
 
-            <entry>thijs.metsch@sun.com</entry>
+            <entry>tmetsch at platform.com</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>The editors would like to thank the following contributors:</para>
+
+    <table>
+      <title>List of contributors</title>
+
+      <tgroup cols="3">
+        <thead>
+          <row>
+            <entry align="center">Name</entry>
+
+            <entry align="center">Affiliation</entry>
+
+            <entry align="center">Contact</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>Michael Behrens</entry>
+
+            <entry>R2AD</entry>
+
+            <entry>behrens.cloud at r2ad.com</entry>
+          </row>
+
+          <row>
+            <entry>Randy Bias</entry>
+
+            <entry>Cloudscaling</entry>
+
+            <entry>randyb at cloudscaling.com</entry>
+          </row>
+
+          <row>
+            <entry>Richard Davies</entry>
+
+            <entry>ElasticHosts</entry>
+
+            <entry>richard.davies at elastichosts.com</entry>
           </row>
 
           <row>
@@ -120,11 +169,30 @@
 
             <entry>OCCI Counselour - Exxia, Inc.</entry>
 
-            <entry>garymazzaferro@gmail.com</entry>
+            <entry>garymazzaferro at gmail.com</entry>
+          </row>
+
+          <row>
+            <entry>Shlomo Swidler</entry>
+
+            <entry>Orchestratus</entry>
+
+            <entry>shlomo.swidler at orchestratus.com</entry>
+          </row>
+
+          <row>
+            <entry>Chris Webb</entry>
+
+            <entry>ElasticHosts</entry>
+
+            <entry>chris.webb at elastichosts.com</entry>
           </row>
         </tbody>
       </tgroup>
     </table>
+
+    <para>Next to these individual contributions we value the contributions
+    from the OCCI working group.</para>
   </section>
 
   <section>
@@ -161,7 +229,8 @@
   <section>
     <title>Full Copyright Notice</title>
 
-    <para>Copyright (C) Open Grid Forum (2009,2010). All Rights Reserved.</para>
+    <para>Copyright (C) Open Grid Forum (2009,2010). All Rights
+    Reserved.</para>
 
     <para>This document and translations of it may be copied and furnished to
     others, and derivative works that comment on or otherwise explain it or

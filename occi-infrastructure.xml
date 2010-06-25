@@ -179,7 +179,7 @@
 
                 <entry>Float (10^9 bytes)</entry>
 
-                <entry>RAM in megabytes (e.g. 16, 0.512)</entry>
+                <entry>RAM in gigabytes (e.g. 1, 0.512)</entry>
               </row>
 
               <row>
@@ -416,7 +416,14 @@
       <title>Storage</title>
 
       <para>A storage resource is capable of mass storage of data (e.g. a
-      virtual hard drive).</para>
+      virtual hard drive). </para>
+
+      <note>
+        <para>The actions defined here should trigger operations on e.g.
+        virtual images. The implementation of these operations is left to
+        Cloud Storage APIs and the corresponding Storage backend
+        solutions.</para>
+      </note>
 
       <section>
         <title>Attributes</title>

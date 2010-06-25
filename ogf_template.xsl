@@ -20,28 +20,34 @@
   <xsl:param name="chapter.autolabel"> 1 </xsl:param>
 
   <xsl:param name="section.autolabel.max.depth"> 4 </xsl:param>
-  
-  <xsl:param name="shade.verbatim" select="1"></xsl:param>
+
+  <xsl:param name="shade.verbatim" select="1" />
 
   <xsl:attribute-set name="xref.properties">
     <xsl:attribute name="font-family">serif</xsl:attribute>
+
     <xsl:attribute name="font-size">8pt</xsl:attribute>
+
     <xsl:attribute name="font-style">italic</xsl:attribute>
   </xsl:attribute-set>
-  
+
   <!-- line breaking in verbatim -->
+
   <xsl:attribute-set name="monospace.verbatim.properties">
     <xsl:attribute name="wrap-option">wrap</xsl:attribute>
+
     <xsl:attribute name="hyphenation-character">\</xsl:attribute>
   </xsl:attribute-set>
 
   <!-- borders for tips and warnings-->
+
   <xsl:attribute-set name="admonition.properties">
     <xsl:attribute name="border">0.5pt solid black</xsl:attribute>
+
     <xsl:attribute name="padding">0.1in</xsl:attribute>
   </xsl:attribute-set>
 
-  <!-- general use sans-serif font-->  
+  <!-- general use sans-serif font-->
 
   <xsl:attribute-set name="root.properties">
     <xsl:attribute name="font-family">sans-serif</xsl:attribute>
@@ -103,7 +109,8 @@
   </xsl:attribute-set>
 
   <!-- temporary in there for para numbering -->
-<!--
+
+  <!--
   <xsl:template match="para[parent::section or parent::chapter]">
     <fo:block xsl:use-attribute-sets="normal.para.spacing">
       <xsl:call-template name="anchor" />
@@ -147,7 +154,7 @@
           </fo:block>
 
           <fo:block>
-            <xsl:text>Jan. 12, 2010</xsl:text>
+            <xsl:text>Jun. 8, 2010</xsl:text>
           </fo:block>
         </xsl:when>
       </xsl:choose>
