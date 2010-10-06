@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<entry>
-{% entry_tags resource %}{% link_tags resource.links %}</entry>
