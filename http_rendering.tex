@@ -28,6 +28,8 @@
 % some space between header and text...
 \headsep 13pt
 
+\setcounter{secnumdepth}{4}
+
 \begin{document}
 
 % header on first page is different
@@ -56,7 +58,7 @@ This document obsoletes GFD-xxx [REFERENCE].
 
 \underline{Copyright Notice}
 
-Copyright (c) Open Grid Forum (2009-2010). All Rights Reserved.
+Copyright \copyright Open Grid Forum (2009-2010). All Rights Reserved.
 
 \underline{Trademarks}
 
@@ -69,20 +71,200 @@ This document, part of a document series, produced by the OCCI working group wit
 \tableofcontents
 
 \section{Introduction}
-\ldots
+
+The Open Cloud Computing Interface (OCCI) is a RESTful Protocol (and API) for all kinds of Management tasks. Originally initiated to create a remote management API for IaaS model based Services, allowing for the development of interoperable tools for common tasks including deployment, autonomic scaling and monitoring, it now can be used to severe other models as well. To be modular and extensible the current specification itself is currently split into three complimentary documents:
+
+\begin{itemize}
+\item Core – this defines the OCCI model
+\item HTTP Rendering - this defines how to manipulate the core model using the OCCI RESTful API. The document defines how the OCCI model can be communicated and thus serialized using HTTP.
+\item Infrastructure – this defines the infrastructure domain resource types, the required attributes for each and the actions that can be taken on each.
+\end{itemize}
 
 \section{Notational Conventions}
 
 All these parts and the information within are mandatory for implementors (unless otherwise specified). The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119. 
 
-% here come the stuff...
+\section{HTTP Rendering}
+
+\textbf{TBD: Explain CRUD/REST here....}
+
+\subsection{Versioning}
+
+\subsection{Content-type and Accept headers}
+
+\textbf{TBD: describe stuff here.... Impl should react on Accept and Content-type stuff...}
+
+\subsection{Render OCCI model in the HTTP Header}
+
+\textbf{Note:} This is the default rendering mode for OCCI - It is the fallback. In some use cases (Collections, Query Interface) it needs to render stuff using specific Content-types like \textit{'text/uri-list'} or \textit{'text/plain'}
+
+The HTTP header fields MUST follow the specification in RFC 2616. A header field consists of a name followed by a colon (":") and the field value. The format of the field value is specified separately for each of the three header fields, see below.
+
+HTTP header fields MAY appear multiple times in a HTTP request or response. In order to be OCCI compliant the specification of multiple message-header fields according to RFC 2616 (section 4.2) MUST be fully supported. In essence there are two valid representation of multiple HTTP header field values. A header field might either appear several times or as a single header field with a comma-separated list of field values. Due to implementation issues in many web frameworks and client libraries it is RECOMMENDED to use the comma-separated list format for best interoperability.
+
+HTTP header field values which contain separator characters MUST be properly quoted according to RFC 2616.
+
+\subsubsection{HTTP Header Fields}
+
+Three different HTTP header fields are used to render the OCCI model. Each header field value has a different format.
+
+\paragraph{Category Header}
+
+The Category header is defined by the Web Categories specification, http://tools.ietf.org/html/draft-johnston-http-category-header-01. The semantics of the Category header in the OCCI context is described in the OCCI Core \& Models document.
+
+\begin{verbatim}
+Category:<term>;scheme="<scheme>"
+    [;rel=<Comma seperated list of <scheme> + '#' + <term> of related categories>]
+    [;attributes=<comma seperated list of attribute names>]
+    [;title=<Title of this Category>]    
+\end{verbatim}
+
+There is no order for the optional part.
+
+\paragraph{Link Header}
+
+The Link header is defined by the Web Linking specification, http://tools.ietf.org/html/draft-nottingham-http-link-header-10. The semantics of the Link header in the OCCI context is described in the OCCI Core \& Models document.
+
+\begin{verbatim}
+Link:???
+
+or in case it is an Action:
+
+Link:<<URL of the resource>> + ";action=" + <Term of the action>
+\end{verbatim}
+
+\paragraph{Attribute Header}
+
+The Attribute header is used to render the attributes associated with a OCCI Resource. A simple key-value format is used. The field value consist of an attribute name followed by an equal sign ("=") and the attribute value. The attribute value must be quoted if it includes a separator character, see RFC 2616 (page 16).
+
+\begin{verbatim}
+Attribute:<list of comma separated <attribute name>=<attribute value> pairs>
+\end{verbatim}
+
+Valid attribute names for OCCI Resources are specified in appropiate Extension documents.
+
+\subsubsection{Rendering the OCCI model}
+
+The following setups show how the Core Model MUST be rendered. Shown are the HTTP Header fiels which MUST be available in a request from the Client or a response from the Server.
+
+\paragraph{Rendering of a Category}
+\begin{verbatim}
+Required: Category
+Optional: N/A
+\end{verbatim}
+
+\paragraph{Rendering of a Kind}
+\begin{verbatim}
+Required: Category
+Optional: N/A
+\end{verbatim}
+
+\paragraph{Rendering of a Resource}
+\begin{verbatim}
+Required: Category
+Optional: Attribute, Link
+\end{verbatim}
+
+\paragraph{Rendering of a Action}
+\begin{verbatim}
+Required: Category, Link
+Optional: Attribute
+\end{verbatim}
+
+\paragraph{Rendering of a Link}
+\begin{verbatim}
+Required: Category, Link
+Optional: Attribute
+\end{verbatim}
+Please note that Link and Action are rendered almost equaly.
+
+\subsubsection{Special notions for this Content-Type}
+
+The following table demonstrates how request and responses must be implemented by Client and Server and to which operation those reflect:
+
+%Action,what for,request,response
+
+\paragraph{Creation of a Kind}
+If a Kind is to be created the HTTP PUT or HTTP POST method MUST be used. In case of using POST a sub-resource of an existing resource (or the root) will be created. A PUT will create the resource on the provide path. On a successfull operation the HTTP OK 200 code MUST be returned. In case of an error the appropiate HTTP Error code MUST be returned. The request MUST include a rendering of a Kind. The Reponse MUST contain the Return Code and the HTTP Location Header pointing to the newly created Resource.
+
+\paragraph{Retrieval of a Kind}
+\begin{verbatim}
+Note: 
+Request: URL
+Reponse: Return Code + <Rendering of a Kind>
+\end{verbatim}
+
+\paragraph{Update of a Kind}
+\begin{verbatim}
+Note: N/A
+Request: <Rendering of a Kind>
+Reponse: Return Code
+\end{verbatim}
+
+\paragraph{Deletion of a Kind}
+\begin{verbatim}
+Note: N/A
+Request: Just the URL
+Reponse: Return Code
+\end{verbatim}
+
+\paragraph{Triggering an Action}
+\begin{verbatim}
+Note: N/A
+Request: URL + ";action=" + <Term of action>
+Reponse: Return Code
+\end{verbatim}
+
+\paragraph{Retrieval of a list of Categories}
+\begin{verbatim}
+Note: Querying the OCCI interface
+Request: Request on /-/
+Reponse: Location header with comma seperated list of URLs (scheme + '#' + term)
+\end{verbatim}
+
+\paragraph{Retrieval of a list of Kinds}
+\begin{verbatim}
+Note: When a Category is given - only Kinds associated with the Category must be returned, Note that then URL is not '/' only sub resources should be listed
+Request: URL
+Reponse: Location header with comma seperated list of URLs
+\end{verbatim}
+
+\textbf{Note:} to be HTTP compliant the body can contain an empty string
+
+\textbf{Note:} there is no order for the optional parts.
+
+%1.5 Render OCCI model in the HTTP Body
+%
+
+
+%When using this rendering the Server must indicate that it Accept's and uses the 'text/plain' Content-Type and Accept Header fields.
+
+%Note: In case that the Header Attributes become overfull, or collections are used the OCCI model MUST be rendered in the HTTP-Body. This MUST also be done when the Client requests 'text/plain'.
+%
+%1.5.1 Examples
+%
+%See above just that Category, Link and Attribute are now in the body... And ':' becomes '='
+%
+%1.6 Render OCCI model via URL Listings
+%
+%Note: This rendering cannot render Kinds of Categories directly but just Links to them. For concrete rendering of Kinds and Categories the Content-types '*/*', 'text/plain' must be used.
+%
+%1.6.1 Examples
+%
+%Description 	Howto Render 	Used when 	
+%Rendering of a Category 	Not supported 	Client uses Query interface 	
+%Rendering of a Kind 	Not supported 	Client request a Kind 	
+%Rendering of an Action 	Not supported 	Client performs an action 	
+%Rendering of a Link 	??? 		
+%List of Resource 	<list of URIs> 	Listing of (sub)resources 	
+%List of Categories 	<list of <scheme>+<term> URLs> 	Query interface 	
 
 \section{Contributors}
 
 Editors: Andy Edmonds, Thijs Metsch \\
 Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 
-\textbf{TBD - Bunch op people missing here - create table\ldots}
+\textbf{TBD: Bunch op people missing here - create table\ldots}
 
 \section{Glossary}
 
@@ -104,7 +286,7 @@ This document and the information contained herein is provided on an ''As Is'' b
 
 \section{Full Copyright Notice}
 
-Copyright (C) Open Grid Forum (2009-2010). All Rights Reserved.
+Copyright \copyright Open Grid Forum (2009-2010). All Rights Reserved.
 
 This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to the OGF or other organizations, except as needed for the purpose of developing Grid Recommendations in which case the procedures for copyrights defined in the OGF Document process must be followed, or as required to translate it into languages other than English.
 
