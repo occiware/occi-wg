@@ -90,7 +90,11 @@ All these parts and the information within are mandatory for implementors (unles
 
 \subsection{Versioning}
 
+Required: User-agent - server...
+
 \subsection{Content-type and Accept headers}
+
+Required: Accept - Content-type
 
 \textbf{TBD: describe stuff here.... Impl should react on Accept and Content-type stuff...}
 
@@ -137,6 +141,10 @@ Link:<<URL of the resource>> + ";action=" + <Term of the action>
 
 The Attribute header is used to render the attributes associated with a OCCI Resource. A simple key-value format is used. The field value consist of an attribute name followed by an equal sign ("=") and the attribute value. The attribute value must be quoted if it includes a separator character, see RFC 2616 (page 16).
 
+\paragraph{Location Header}
+
+\ldots
+
 \begin{verbatim}
 Attribute:<list of comma separated <attribute name>=<attribute value> pairs>
 \end{verbatim}
@@ -179,12 +187,13 @@ Optional: Attribute
 Please note that Link and Action are rendered almost equaly.
 
 \subsubsection{Special notions for this Content-Type}
-
 The following table demonstrates how request and responses must be implemented by Client and Server and to which operation those reflect:
 
-%Action,what for,request,response
-
 \paragraph{Creation of a Kind}
+The following diagram shows how a Kind can be created:
+
+
+
 If a Kind is to be created the HTTP PUT or HTTP POST method MUST be used. In case of using POST a sub-resource of an existing resource (or the root) will be created. A PUT will create the resource on the provide path. On a successfull operation the HTTP OK 200 code MUST be returned. In case of an error the appropiate HTTP Error code MUST be returned. The request MUST include a rendering of a Kind. The Reponse MUST contain the Return Code and the HTTP Location Header pointing to the newly created Resource.
 
 \paragraph{Retrieval of a Kind}
