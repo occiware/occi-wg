@@ -9,5 +9,8 @@ all:
 show: all
 	evince *.pdf
 
+show-mac: all
+	open *.pdf
+
 clean:
 	rm -rf *.toc *.log *.pdf *.aux
