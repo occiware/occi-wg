@@ -1,6 +1,7 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage{fullpage}
-\usepackage{ifthen}
+\usepackage{graphicx}
+
 \usepackage{fancyhdr}
 \setlength{\headheight}{13pt}
 \pagestyle{fancy}
@@ -189,12 +190,21 @@ Please note that Link and Action are rendered almost equaly.
 \subsubsection{Special notions for this Content-Type}
 The following table demonstrates how request and responses must be implemented by Client and Server and to which operation those reflect:
 
+\paragraph{The HTTP POST Operation behaviour}
+
+The following diagram shows what the Server can return, and what it will return when performing an PORT operation.
+
+\begin{figure}[!h]
+\centering
+\includegraphics{POST_operation.png}
+\caption{My figure}
+\label{the-label-for-cross-referencing}
+\end{figure}
+
+The OCCI service implemetation MUST create sub resource of and existing URN (which can be Root). Action must be exposed by adding \emph{;action=<action term>} to the URI.
+
+
 \paragraph{Creation of a Kind}
-The following diagram shows how a Kind can be created:
-
-
-
-If a Kind is to be created the HTTP PUT or HTTP POST method MUST be used. In case of using POST a sub-resource of an existing resource (or the root) will be created. A PUT will create the resource on the provide path. On a successfull operation the HTTP OK 200 code MUST be returned. In case of an error the appropiate HTTP Error code MUST be returned. The request MUST include a rendering of a Kind. The Reponse MUST contain the Return Code and the HTTP Location Header pointing to the newly created Resource.
 
 \paragraph{Retrieval of a Kind}
 \begin{verbatim}
@@ -280,7 +290,10 @@ Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 \begin{tabular}{l|l}
 Term & Description \\
 \hline
-OCCI & Open Cloud Computing Interface
+OCCI & Open Cloud Computing Interface \\
+URN & Unified Resource Name \\
+URL & TBD \\
+URI & TBD \\
 \end{tabular}
 
 \section{Intellectual Property Statement}
