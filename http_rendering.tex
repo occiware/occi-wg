@@ -85,6 +85,8 @@ The Open Cloud Computing Interface (OCCI) is a RESTful Protocol (and API) for al
 
 All these parts and the information within are mandatory for implementors (unless otherwise specified). The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119. 
 
+UML activity diagrams do not specify how OCCI should be rendered but what possible request and outcomes can be.
+
 \section{HTTP Rendering}
 
 \textbf{TBD: Explain CRUD/REST here....}
@@ -98,6 +100,21 @@ Required: User-agent - server...
 Required: Accept - Content-type
 
 \textbf{TBD: describe stuff here.... Impl should react on Accept and Content-type stuff...}
+
+\subsection{Behaviour of HTTP operations}
+
+\paragraph{The HTTP POST Operation behaviour}
+
+The UML diagram \ref{fig:post_operation} shows what the Server can return, and what it will return when performing an POST operation.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.4]{dia/POST_operation.png}
+	\caption{Behaviour for HTTP Post}
+	\label{fig:post_operation}
+\end{figure}
+
+The OCCI service implemetation MUST create sub resource of and existing URN (which can be Root). Action must be exposed by adding \emph{;action=<action term>} to the URI.
 
 \subsection{Render OCCI model in the HTTP Header}
 
@@ -138,11 +155,11 @@ or in case it is an Action:
 Link:<<URL of the resource>> + ";action=" + <Term of the action>
 \end{verbatim}
 
-\paragraph{Attribute Header}
+\paragraph{X-OCCI-Attribute Header}
 
 The Attribute header is used to render the attributes associated with a OCCI Resource. A simple key-value format is used. The field value consist of an attribute name followed by an equal sign ("=") and the attribute value. The attribute value must be quoted if it includes a separator character, see RFC 2616 (page 16).
 
-\paragraph{Location Header}
+\paragraph{X-OCCI-Location Header}
 
 \ldots
 
@@ -187,96 +204,16 @@ Optional: Attribute
 \end{verbatim}
 Please note that Link and Action are rendered almost equaly.
 
-\subsubsection{Special notions for this Content-Type}
-The following table demonstrates how request and responses must be implemented by Client and Server and to which operation those reflect:
-
-\paragraph{The HTTP POST Operation behaviour}
-
-The following diagram shows what the Server can return, and what it will return when performing an PORT operation.
-
-\begin{figure}[!h]
-\centering
-\includegraphics{POST_operation.png}
-\caption{My figure}
-\label{the-label-for-cross-referencing}
-\end{figure}
-
-The OCCI service implemetation MUST create sub resource of and existing URN (which can be Root). Action must be exposed by adding \emph{;action=<action term>} to the URI.
-
-
-\paragraph{Creation of a Kind}
-
-\paragraph{Retrieval of a Kind}
-\begin{verbatim}
-Note: 
-Request: URL
-Reponse: Return Code + <Rendering of a Kind>
-\end{verbatim}
-
-\paragraph{Update of a Kind}
-\begin{verbatim}
-Note: N/A
-Request: <Rendering of a Kind>
-Reponse: Return Code
-\end{verbatim}
-
-\paragraph{Deletion of a Kind}
-\begin{verbatim}
-Note: N/A
-Request: Just the URL
-Reponse: Return Code
-\end{verbatim}
-
-\paragraph{Triggering an Action}
-\begin{verbatim}
-Note: N/A
-Request: URL + ";action=" + <Term of action>
-Reponse: Return Code
-\end{verbatim}
-
-\paragraph{Retrieval of a list of Categories}
-\begin{verbatim}
-Note: Querying the OCCI interface
-Request: Request on /-/
-Reponse: Location header with comma seperated list of URLs (scheme + '#' + term)
-\end{verbatim}
-
-\paragraph{Retrieval of a list of Kinds}
-\begin{verbatim}
-Note: When a Category is given - only Kinds associated with the Category must be returned, Note that then URL is not '/' only sub resources should be listed
-Request: URL
-Reponse: Location header with comma seperated list of URLs
-\end{verbatim}
-
-\textbf{Note:} to be HTTP compliant the body can contain an empty string
-
-\textbf{Note:} there is no order for the optional parts.
-
-%1.5 Render OCCI model in the HTTP Body
+\subsection{Render OCCI model in the HTTP Body}
 %
-
-
 %When using this rendering the Server must indicate that it Accept's and uses the 'text/plain' Content-Type and Accept Header fields.
-
 %Note: In case that the Header Attributes become overfull, or collections are used the OCCI model MUST be rendered in the HTTP-Body. This MUST also be done when the Client requests 'text/plain'.
-%
-%1.5.1 Examples
 %
 %See above just that Category, Link and Attribute are now in the body... And ':' becomes '='
 %
-%1.6 Render OCCI model via URL Listings
-%
+\subsection{Render OCCI model via URL Listings}
+
 %Note: This rendering cannot render Kinds of Categories directly but just Links to them. For concrete rendering of Kinds and Categories the Content-types '*/*', 'text/plain' must be used.
-%
-%1.6.1 Examples
-%
-%Description 	Howto Render 	Used when 	
-%Rendering of a Category 	Not supported 	Client uses Query interface 	
-%Rendering of a Kind 	Not supported 	Client request a Kind 	
-%Rendering of an Action 	Not supported 	Client performs an action 	
-%Rendering of a Link 	??? 		
-%List of Resource 	<list of URIs> 	Listing of (sub)resources 	
-%List of Categories 	<list of <scheme>+<term> URLs> 	Query interface 	
 
 \section{Contributors}
 
@@ -284,6 +221,54 @@ Editors: Andy Edmonds, Thijs Metsch \\
 Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 
 \textbf{TBD: Bunch op people missing here - create table\ldots}
+
+\section{Appendix}
+
+\subsection{Examples for rendering the OCCI model in the HTTP Header}
+
+\subsubsection{Triggering an Action}
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsubsection{Listing Resource}
+
+\begin{verbatim}
+> GET / HTTP/1.1
+> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+> Host: localhost:8080
+> Accept: */*
+
+< HTTP/1.1 200 OK
+< Location: /4147377d-283d-4947-8696-7c1591e89179
+< Transfer-Encoding: chunked
+< Date: Mon, 11 Oct 2010 15:11:05 GMT
+< Server: CherryPy/3.1.2 WSGI Server
+<
+< 0
+<
+\end{verbatim}
+
+\subsubsection{Request with missing Category rendering}
+
+\begin{verbatim}
+> PUT /21d0171e-6de3-40ab-b595-25e5de607ccc HTTP/1.1
+> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+> Host: localhost:8080
+> Accept: */*
+
+< HTTP/1.1 400 Bad Request
+< Content-Type: text/html
+< Transfer-Encoding: chunked
+< Date: Mon, 11 Oct 2010 15:07:21 GMT
+< Server: CherryPy/3.1.2 WSGI Server
+< 
+< (BadRequest('400 Bad Request',), 'No categories could be found in the header!')
+\end{verbatim}
+
+\subsection{Examples for rendering the OCCI model with uri-lists}
+
+\subsection{Examples for rendering the OCCI model in the HTTP Body}
 
 \section{Glossary}
 
