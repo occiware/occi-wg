@@ -235,6 +235,21 @@ Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 \subsubsection{Triggering an Action}
 
 \begin{verbatim}
+> POST /624034ee-1448-4fca-81f9-1f4f6a525aa4;action=terminate HTTP/1.1
+> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+> Host: localhost:8080
+> Accept: */*
+> Category:terminate;scheme="http://schemas.ogf.org/occi/drmaa/action#"
+
+< HTTP/1.1 200 OK
+< Transfer-Encoding: chunked
+< Date: Mon, 11 Oct 2010 15:27:57 GMT
+< Server: CherryPy/3.1.2 WSGI Server
+< 
+< 2
+< OK
+< 0
+<
 \end{verbatim}
 
 \subsubsection{Listing Resource}
@@ -270,6 +285,26 @@ Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 < Server: CherryPy/3.1.2 WSGI Server
 < 
 < (BadRequest('400 Bad Request',), 'No categories could be found in the header!')
+\end{verbatim}
+
+\subsubsection{Retrieving a Kind}
+
+\begin{verbatim}
+> GET /bb39bdfc-3e78-44c2-8853-114ba3599d76 HTTP/1.1
+> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+> Host: localhost:8080
+> Accept: */*
+
+< HTTP/1.1 200 OK
+< Category: job;scheme=http://schemas.ogf.org/occi/drmaa#
+< Attribute: occi.drmaa.remote_command=/bin/sleep,occi.drmaa.job_state=running,occi.drmaa.args=100,occi.drmaa.job_id=4657
+< Link: </bb39bdfc-3e78-44c2-8853-114ba3599d76;action=terminate>
+< Transfer-Encoding: chunked
+< Date: Mon, 11 Oct 2010 15:23:34 GMT
+< Server: CherryPy/3.1.2 WSGI Server
+< 
+< 0
+<
 \end{verbatim}
 
 \subsection{Examples for rendering the OCCI model with uri-lists}
