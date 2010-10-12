@@ -1,8 +1,10 @@
 
-SOURCE=http_rendering.tex
+HTTP=http_rendering.tex
+INFRA=infrastructure.tex
 
 all:
-	pdflatex ${SOURCE}
+	pdflatex ${HTTP}
+	pdflatex ${INFRA}
 	# bibtex
 	# run pdflatex twice...
 
