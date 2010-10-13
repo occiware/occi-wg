@@ -150,10 +150,11 @@ More information on how OCCI compatible Service should handle the HTTP verbs is 
 
 The UML diagram \ref{fig:post_operation} shows what the Server can return, and what it will return when performing an POST operation.
 
-\begin{figure}[h!]
+\clearpage
+\begin{figure}[!h]
 	\centering
-	\includegraphics[scale=0.4]{dia/POST_operation.png}
-	\caption{Behaviour for HTTP Post}
+	\includegraphics[scale=0.4]{POST_operation.png}
+	\caption{Behaviour for HTTP POST}
 	\label{fig:post_operation}
 \end{figure}
 
@@ -161,9 +162,39 @@ The OCCI service implemetation MUST create sub resource of and existing URN (whi
 
 \subsubsection{The HTTP PUT Operation behaviour}
 
+The UML diagram \ref{fig:put_operation} shows what the Server can return, and what it will return when performing an PUT operation. PUT is used to updated Resources or to create Resources at certain Paths.
+
+\clearpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.4]{PUT_operation.png}
+	\caption{Behaviour for HTTP PUT}
+	\label{fig:put_operation}
+\end{figure}
+
 \subsubsection{The HTTP GET Operation behaviour}
 
+The UML diagram \ref{fig:get_operation} shows what the Server can return, and what it will return when performing an GET operation. GET is used to return Renderings of Resource, Listings of Resource or for Listing of Categories (Discovery).
+
+\clearpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.4]{GET_operation.png}
+	\caption{Behaviour for HTTP GET}
+	\label{fig:get_operation}
+\end{figure}
+
 \subsubsection{The HTTP DELETE Operation behaviour}
+
+The UML diagram \ref{fig:del_operation} shows what the Server can return, and what it will return when performing an DELETE operation.
+
+\clearpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.4]{DELETE_operation.png}
+	\caption{Behaviour for HTTP DELETE}
+	\label{fig:del_operation}
+\end{figure}
 
 \subsection{Render OCCI model in the HTTP Header}
 \label{sec:http_header}
@@ -318,7 +349,7 @@ Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 <
 \end{verbatim}
 
-\subsubsection{Listing Resource}
+\subsubsection{Listing Resources}
 
 \begin{verbatim}
 > GET / HTTP/1.1

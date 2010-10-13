@@ -1,12 +1,11 @@
 
-HTTP=http_rendering.tex
-INFRA=infrastructure.tex
+SOURCE := $(shell egrep -l '^[^%]*\\begin\{document\}' *.tex)
 
 all:
-	pdflatex ${HTTP}
-	pdflatex ${INFRA}
+	dia -t png dia/*.dia
+	pdflatex ${SOURCE}
 	# bibtex
-	# run pdflatex twice...
+	pdflatex ${SOURCE}
 
 show: all
 	evince *.pdf
