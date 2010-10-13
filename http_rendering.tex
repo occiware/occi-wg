@@ -89,7 +89,9 @@ All these parts and the information within are mandatory for implementors (unles
 UML activity diagrams do not specify how OCCI should be rendered but what possible request and outcomes can be.
 
 \section{HTTP Rendering}
-The HTTP Protocol is the underlying core fabric of OCCI and uses all the features of the HTTP and underlying protocols (like self-healing capabilities of TCP) offer. OCCI also builds upong the Resource Oriented Architecture (ROA). ROA's use Representation State Transfer (REST) to cater for client and service interactions. Interaction with the system is by inspection and modification of a set of related resources and their states, be it on the complete state or a sub-set. Resources must be uniquely identified. HTTP is an ideal protocol to use in ROA systems as it provides the means to uniquely identify individual resources through URLs as well as operating upon them with a set of general-purpose HTTP verbs. These HTTP verbs map loosely to the resource related operations of Create (POST), Retrieve (GET), Update (POST/PUT) and Delete (DELETE).
+The HTTP Protocol is the underlying core fabric of OCCI and uses all the features of the HTTP and underlying protocols (like self-healing capabilities of TCP) offer. OCCI also builds upon the Resource Oriented Architecture (ROA). ROA's use Representation State Transfer (REST) to cater for client and service interactions. Interaction with the system is by inspection and modification of a set of related resources and their states, be it on the complete state or a sub-set. Resources must be uniquely identified. HTTP is an ideal protocol to use in ROA systems as it provides the means to uniquely identify individual resources through URLs as well as operating upon them with a set of general-purpose HTTP verbs. These HTTP verbs map loosely to the resource related operations of Create (POST), Retrieve (GET), Update (POST/PUT) and Delete (DELETE).
+
+The following section describe the general behavior for all HTTP based renderings. Later sections will describe the syntax and semantic of how to render the OCCI Core model with different Content-Types.
 
 \subsection{Identification of Resources}
 Each and every resource type instance within an OCCI system must be uniquely identified by URLs. The structure of these URLs is opaque and the system should not assume a static, pre-determined scheme for their structure.
@@ -101,13 +103,13 @@ As OCCI adopts a ROA, REST-based architecture and uses HTTP as the foundation pr
 Verb & RFC Definition & Usage in OCCI context \\
 \hline
 POST & The POST method is used to request that the origin server accept the resource enclosed in the request as a new subordinate of the resource identified by the Request-URI in the Request- Line & This is the verb will be used when creating Kinds. POST can also be used to create a sub-resource of an existing resource type. Action are also triggered using the POST verb. \\
-GET & The GET method means retrieve whatever information (in the form of an resource) is identified by the Request-URI & Retrieving one Kind or Category using GET will result in a representation of the resource. Lists of Kinds and Categories are also retrieved throught GET. \\
+GET & The GET method means retrieve whatever information (in the form of an resource) is identified by the Request-URI & Retrieving one Kind or Category using GET will result in a representation of the resource. Lists of Kinds and Categories are also retrieved through GET. \\
 PUT & The PUT method requests that the enclosed resource be stored under the supplied Request-URI & The PUT verb will be used when updating a Kind or when creating an Kind at a specific location\footnote{In difference to POST where sub-resources will be created}. \\
 DELETE & The DELETE method requests that the origin server delete the resource identified by the Request-URI & This verb is used to destroy instances of Kinds. \\ 
 \end{tabular}
 
 \subsection{Security and Authentication}
-OCCI does not require that an authentication mechanism be used nor does it require that client to service communications are secured. It does recommend that an authentication mechanism be used and that where appropriate, communications are encrypted using HTTP over TLS. The authentication mechanisms that can be used with OCCI are those that can be used with HTTP and TLS, for example Basic [REF], Digest [REF] and OAuth [REF]. If an OCCI service requires authentication the response to a request that MUST be authenticated must be a HTTP 401 code that indicates the request is unauthorised. In response to authenticate the client MUST set a WWW-Authenticate header field and through this indicate the authentication mechanism. 
+OCCI does not require that an authentication mechanism be used nor does it require that client to service communications are secured. It does recommend that an authentication mechanism be used and that where appropriate, communications are encrypted using HTTP over TLS. The authentication mechanisms that can be used with OCCI are those that can be used with HTTP and TLS, for example Basic [REF], Digest [REF] and OAuth [REF]. If an OCCI service requires authentication the response to a request that MUST be authenticated must be a HTTP 401 code that indicates the request is authorized. In response to authenticate the client MUST set a WWW-Authenticate header field and through this indicate the authentication mechanism. 
 
 \subsection{Versioning}
 
@@ -119,7 +121,7 @@ Server: occi-server/1.1 (linux) OCCI/1.0
 [...]
 \end{verbatim}
 
-Complimenting the service-side behaviour of an OCCI implementation, a client MUST indicate to the OCCI service implementation the version it expects to interact with. For the clients, the information MUST be advertised in the request it issues. In the case of a HTTP Header Rendering, the client request should relay versioning information in the 'User-Agent' header. The 'User-Agent' field must include the same value (OCCI/X.Y) as specified for the Server HTTP header.
+Complimenting the service-side behavior of an OCCI implementation, a client MUST indicate to the OCCI service implementation the version it expects to interact with. For the clients, the information MUST be advertised in the request it issues. In the case of a HTTP Header Rendering, the client request should relay versioning information in the 'User-Agent' header. The 'User-Agent' field must include the same value (OCCI/X.Y) as specified for the Server HTTP header.
 
 \begin{verbatim}
 GET <UDN> HTTP/1.1
@@ -142,11 +144,11 @@ When performing an GET operation an server MUST reply with a listing of matching
 
 If the request was performed on the \textit{/-/} URL a list of Categories which the server can handle MUST be returned. Categories used for tagging are not exported via this mechanism.
 
-\subsection{Behaviour of HTTP operations}
+\subsection{Behavior of HTTP operations}
 
 More information on how OCCI compatible Service should handle the HTTP verbs is given in these sections. Possible results are demonstrated here. How to render the results is described later on.
 
-\subsubsection{The HTTP POST Operation behaviour}
+\subsubsection{The HTTP POST Operation behavior}
 
 The UML diagram \ref{fig:post_operation} shows what the Server can return, and what it will return when performing an POST operation.
 
@@ -154,13 +156,13 @@ The UML diagram \ref{fig:post_operation} shows what the Server can return, and w
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{POST_operation.png}
-	\caption{Behaviour for HTTP POST}
+	\caption{Behavior for HTTP POST}
 	\label{fig:post_operation}
 \end{figure}
 
-The OCCI service implemetation MUST create sub resource of and existing URN (which can be Root). Action must be exposed by adding \emph{;action=$<$action term$>$} to the URI.
+The OCCI service implementation MUST create sub resource of and existing URN (which can be Root). Action must be exposed by adding \emph{;action=$<$action term$>$} to the URI.
 
-\subsubsection{The HTTP PUT Operation behaviour}
+\subsubsection{The HTTP PUT Operation behavior}
 
 The UML diagram \ref{fig:put_operation} shows what the Server can return, and what it will return when performing an PUT operation. PUT is used to updated Resources or to create Resources at certain Paths.
 
@@ -168,11 +170,11 @@ The UML diagram \ref{fig:put_operation} shows what the Server can return, and wh
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{PUT_operation.png}
-	\caption{Behaviour for HTTP PUT}
+	\caption{Behavior for HTTP PUT}
 	\label{fig:put_operation}
 \end{figure}
 
-\subsubsection{The HTTP GET Operation behaviour}
+\subsubsection{The HTTP GET Operation behavior}
 
 The UML diagram \ref{fig:get_operation} shows what the Server can return, and what it will return when performing an GET operation. GET is used to return Renderings of Resource, Listings of Resource or for Listing of Categories (Discovery).
 
@@ -180,11 +182,11 @@ The UML diagram \ref{fig:get_operation} shows what the Server can return, and wh
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{GET_operation.png}
-	\caption{Behaviour for HTTP GET}
+	\caption{Behavior for HTTP GET}
 	\label{fig:get_operation}
 \end{figure}
 
-\subsubsection{The HTTP DELETE Operation behaviour}
+\subsubsection{The HTTP DELETE Operation behavior}
 
 The UML diagram \ref{fig:del_operation} shows what the Server can return, and what it will return when performing an DELETE operation.
 
@@ -192,7 +194,7 @@ The UML diagram \ref{fig:del_operation} shows what the Server can return, and wh
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{DELETE_operation.png}
-	\caption{Behaviour for HTTP DELETE}
+	\caption{Behavior for HTTP DELETE}
 	\label{fig:del_operation}
 \end{figure}
 
@@ -200,8 +202,6 @@ The UML diagram \ref{fig:del_operation} shows what the Server can return, and wh
 \label{sec:http_header}
 
 \textbf{This Rendering can handle the \textit{*/*} Accept Header. It will return an empty Content-type}
-
-\textbf{Note:} This is the default rendering mode for OCCI - It is the fallback. In some use cases (Collections, Query Interface) it needs to render stuff using specific Content-types like \textit{'text/uri-list'} or \textit{'text/plain'}
 
 The HTTP header fields MUST follow the specification in RFC 2616. A header field consists of a name followed by a colon (":") and the field value. The format of the field value is specified separately for each of the three header fields, see below.
 
@@ -240,23 +240,23 @@ Link:<<URL of the resource>> + ";action=" + <Term of the action>
 
 \paragraph{X-OCCI-Attribute Header}
 
-The Attribute header is used to render the attributes associated with a OCCI Resource. A simple key-value format is used. The field value consist of an attribute name followed by an equal sign ("=") and the attribute value. The attribute value must be quoted if it includes a separator character, see RFC 2616 (page 16).
+The X-OCCI-Attribute header is used to render the attributes associated with a OCCI Resource. A simple key-value format is used. The field value consist of an attribute name followed by an equal sign ("=") and the attribute value. The attribute value must be quoted if it includes a separator character, see RFC 2616 (page 16).
+
+\begin{verbatim}
+X-OCCI-Attribute:<list of comma separated <attribute name>=<attribute value> pairs>
+\end{verbatim}
+
+Valid attribute names for OCCI Resources are specified in appropriate Extension documents.
 
 \paragraph{X-OCCI-Location Header}
 
-\ldots
-
-\begin{verbatim}
-Attribute:<list of comma separated <attribute name>=<attribute value> pairs>
-\end{verbatim}
-
-Valid attribute names for OCCI Resources are specified in appropiate Extension documents.
+The X-OCCI-Location header is used to return URLs which point to Resources. It can contain simple listing of URLs separated by commas.
 
 \subsubsection{Rendering the OCCI model}
 
-The following setups show how the Core Model MUST be rendered. Shown are the HTTP Header fiels which MUST be available in a request from the Client or a response from the Server.
+The following setups show how the Core Model MUST be rendered. Shown are the HTTP Header fields which MUST be available in a request from the Client or a response from the Server.
 
-In some cases the framework does not support to have multiple accurencies of one HTTP Header field. If that is the case the server must join the values of the field with a \emph{,} and add this list to one HTTP Header field.
+In some cases the framework does not support to have multiple occurrences of one HTTP Header field. If that is the case the server must join the values of the field with a \emph{,} and add this list to one HTTP Header field.
 
 \paragraph{Rendering of a Category}
 \begin{verbatim}
@@ -303,20 +303,36 @@ Optional: X-OCCI-Attribute
 \end{verbatim}
 
 \subsection{Render OCCI model in the HTTP Body}
+\label{sec:http_body}
 
 \textbf{This Rendering can handle the \textit{text/plain} Accept Header. It will \textit{text/plain} an empty Content-type}
 
-%
-%When using this rendering the Server must indicate that it Accept's and uses the 'text/plain' Content-Type and Accept Header fields.
-%Note: In case that the Header Attributes become overfull, or collections are used the OCCI model MUST be rendered in the HTTP-Body. This MUST also be done when the Client requests 'text/plain'.
-%
-%See above just that Category, Link and Attribute are now in the body... And ':' becomes '='
-%
+Renderings for this Content-type use the syntax and semantics as those described in section \ref{sec:http_header}. Difference are the following:
+
+\begin{itemize}
+  \item The Header fields MUST be placed in the body of HTTP envelope.
+  \item On multiple occurrences of an field the field name and it's value MUST be rendered in new lines.
+\end{itemize}
+
+\subsubsection{Rendering the OCCI model}
+
+Same behavior MUST be implemented as in section \ref{sec:http_header}.
+
 \subsection{Render OCCI model via URL Listings}
 
 \textbf{This Rendering can handle the \textit{text/uri-list} Accept Header. It will \textit{text/uri-list} an empty Content-type}
 
-%Note: This rendering cannot render Kinds of Categories directly but just Links to them. For concrete rendering of Kinds and Categories the Content-types '*/*', 'text/plain' must be used.
+This rendering cannot render Kinds or Categories directly but just Links to them. For concrete rendering of Kinds and Categories the Content-types '*/*', 'text/plain' MUST be used. If a request is done with the \textit{text/uri-list} in the Accept header, while not requesting for a Listing a Bad Request MUST be returned.
+
+\subsubsection{Rendering the OCCI model}
+
+\paragraph{Rendering a list of Categories}
+
+MUST return a list of Category scheme URLs.
+
+\paragraph{Rendering a list of Kinds}
+
+MUST return a list of URLs pointing to the Resources.
 
 \section{Contributors}
 
@@ -328,6 +344,28 @@ Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 \section{Appendix}
 
 \subsection{Examples for rendering the OCCI model in the HTTP Header}
+
+\subsubsection{Creating a Kind}
+\begin{verbatim}
+> POST / HTTP/1.1
+> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+> Host: localhost:8080
+> Accept: */*
+> Category:keyvalue;scheme="http://schemas.ogf.org/occi/keyvalue#"
+> Attribute:occi.keyvalue.key=foo,occi.keyvalue.value=bar
+> Content-Length: 0
+> Content-Type: application/x-www-form-urlencoded
+
+< HTTP/1.1 200 OK
+< Location: /c815e27f-d0ff-4c59-a0a4-3491ace6d160
+< Transfer-Encoding: chunked
+< Date: Wed, 13 Oct 2010 10:19:47 GMT
+< Server: CherryPy/3.1.2 WSGI Server
+< 
+< 2
+< OK
+< 0
+\end{verbatim}
 
 \subsubsection{Triggering an Action}
 
@@ -347,6 +385,25 @@ Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 < OK
 < 0
 <
+\end{verbatim}
+
+\subsubsection{Listing Categories}
+
+\begin{verbatim}
+> GET /-/ HTTP/1.1
+> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+> Host: localhost:8080
+> Accept: */*
+
+< HTTP/1.1 200 OK
+< Category: keyvalue;scheme=http://schemas.ogf.org/occi/keyvalue#;title=A key-value Resource,job;scheme=http://schemas.ogf.org/occi/drmaa#;title=A Job Resource,terminate;scheme=http://schemas.ogf.org/occi/drmaa/action#;title=Terminate a Job
+< Transfer-Encoding: chunked
+< Date: Wed, 13 Oct 2010 10:15:22 GMT
+< Server: CherryPy/3.1.2 WSGI Server
+< 
+< 4
+< None
+< 0
 \end{verbatim}
 
 \subsubsection{Listing Resources}
@@ -406,7 +463,63 @@ Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 
 \subsection{Examples for rendering the OCCI model with uri-lists}
 
+\subsubsection{Listing Resources}
+
+\begin{verbatim}
+> GET / HTTP/1.1
+> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+> Host: localhost:8080
+> Accept:text/uri-list
+
+< HTTP/1.1 200 OK
+< Content-type: text/uri-list
+< Transfer-Encoding: chunked
+< Date: Wed, 13 Oct 2010 10:22:25 GMT
+< Server: CherryPy/3.1.2 WSGI Server
+< 
+< /c815e27f-d0ff-4c59-a0a4-3491ace6d160
+< /2503d840-fd14-4ba5-a486-16ffc2dc37e3%  
+\end{verbatim}
+
+\subsubsection{Listing Categories}
+
+\begin{verbatim}
+> GET /-/ HTTP/1.1
+> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+> Host: localhost:8080
+> Accept:text/uri-list
+
+< HTTP/1.1 200 OK
+< Content-type: text/uri-list
+< Transfer-Encoding: chunked
+< Date: Wed, 13 Oct 2010 10:17:38 GMT
+< Server: CherryPy/3.1.2 WSGI Server
+< 
+< http://schemas.ogf.org/occi/keyvalue#keyvalue
+< http://schemas.ogf.org/occi/drmaa#job
+< http://schemas.ogf.org/occi/drmaa/action#terminate%    
+\end{verbatim}
+
 \subsection{Examples for rendering the OCCI model in the HTTP Body}
+
+\subsubsection{Listing of Categories}
+
+\begin{verbatim}
+> GET /-/ HTTP/1.1
+> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+> Host: localhost:8080
+> Accept:text/plain
+
+< HTTP/1.1 200 OK
+< Content-type: text/plain
+< Transfer-Encoding: chunked
+< Date: Wed, 13 Oct 2010 10:16:25 GMT
+< Server: CherryPy/3.1.2 WSGI Server
+< 
+< Category:keyvalue;scheme=http://schemas.ogf.org/occi/keyvalue#;title=A key-value Resource
+< Category:job;scheme=http://schemas.ogf.org/occi/drmaa#;title=A Job Resource
+< Category:terminate;scheme=http://schemas.ogf.org/occi/drmaa/action#;title=Terminate a Job< 
+\end{verbatim}
 
 \section{Glossary}
 
