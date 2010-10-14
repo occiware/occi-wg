@@ -247,9 +247,11 @@ The NetworkLink Resource type is assigned the http://schemas.ogf.org/occi/infras
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Client Access&Description\\
 \hline
+occi.networklink.source & Resource & 1 & read-many/write-once & The owning Resource of the link.\\
 occi.networklink.ip & IPv4 or IPv6 Address & 0\ldots1 & read-many/write-many & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7) of the link\\
 occi.networklink.interface & String & 1 & read-only & Identifier that relates the link to the link's device interface\\
 occi.networklink.mac & String & 1 & read-many/write-many & MAC address associated with the link's device interface\\
+occi.networklink.state & String Enumeration\{ active, inactive \}& 1 & read-only & Current status of the instance.\\
 \end{tabular}
 \paragraph{Actions}
 \begin{tabular}{lll}
@@ -263,7 +265,7 @@ http://schemas.ogf.org/occi/infrastructure/compute/action\#down & inactive & Non
 	\centering
 	\includegraphics[scale=0.4]{dia/network-state.png}
 	\caption{Update: State diagram for NetworkLink}
-	\label{fig:network_state}
+	\label{fig:networklink_state}
 \end{figure}
 
 \subsubsection{Linking to Storage Resources}
@@ -274,12 +276,26 @@ TODO: Describe a StorageLink here
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Client Access&Description\\
 \hline
-occi.storagelink.size & Float, ${\mathbf 10}^9$ (giga) & 1 & read-many/write-many & Storage size in gigabytes of the instance.\\
-occi.storagelink.state & String Enumeration, \{online, offline, degraded\} & 1 & read-only & Current status of the instance.\\
-value & value & value & value & value\\
+occi.storagelink.source & Resource & 1 & read-many/write-once & The owning Resource of the link.\\
+occi.storagelink.device & String & 1 & read-many/write-many & Device identifier as presented to the guest OS.\\
+occi.storagelink.mountpoint & String & 1 & read-many/write-many & Point to where the storage is mounted in the guest OS.\\
+occi.storagelink.state & String Enumeration\{ active, inactive \}& 1 & read-only & Current status of the instance.\\
 \end{tabular}
 \paragraph{Actions}
+\begin{tabular}{lll}
+Action&Target State&Parameters\\
+\hline
+http://schemas.ogf.org/occi/infrastructure/compute/action\#up & active & None\\
+http://schemas.ogf.org/occi/infrastructure/compute/action\#down & inactive & None\\
+\end{tabular}
+
 \paragraph{States}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.4]{dia/network-state.png}
+	\caption{Update: State diagram for StorageLink}
+	\label{fig:storagelink_state}
+\end{figure}
 % end infrastructure content
 
 \section{Contributors}
