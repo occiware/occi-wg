@@ -3,9 +3,10 @@ SOURCE := $(shell egrep -l '^[^%]*\\begin\{document\}' *.tex)
 
 all:
 	dia -t png dia/*.dia
-	pdflatex ${SOURCE}
-	# bibtex
-	pdflatex ${SOURCE}
+	for number in ${SOURCE} ; do \
+	pdflatex $$number ; \
+	pdflatex $$number ; \
+	done
 
 show: all
 	evince *.pdf
