@@ -91,10 +91,19 @@ UML activity diagrams do not specify how OCCI should be rendered but what possib
 \section{HTTP Rendering}
 The HTTP Protocol is the underlying core fabric of OCCI and uses all the features of the HTTP and underlying protocols (like self-healing capabilities of TCP) offer. OCCI also builds upon the Resource Oriented Architecture (ROA). ROA's use Representation State Transfer (REST) to cater for client and service interactions. Interaction with the system is by inspection and modification of a set of related resources and their states, be it on the complete state or a sub-set. Resources must be uniquely identified. HTTP is an ideal protocol to use in ROA systems as it provides the means to uniquely identify individual resources through URLs as well as operating upon them with a set of general-purpose HTTP verbs. These HTTP verbs map loosely to the resource related operations of Create (POST), Retrieve (GET), Update (POST/PUT) and Delete (DELETE).
 
+The following notations are used when referring to parts or complete URIs:
+
+\begin{verbatim}
+http://www.example.com:8080/foo/bar;action=stop
+<   >  <     Authority    >< Path >< Fragment >
+  ^
+  Scheme
+\end{verbatim}
+
 The following section describe the general behavior for all HTTP based renderings. Later sections will describe the syntax and semantic of how to render the OCCI Core model with different Content-Types.
 
 \subsection{Identification of Resources}
-Each and every resource type instance within an OCCI system must be uniquely identified by URLs. The structure of these URLs is opaque and the system should not assume a static, pre-determined scheme for their structure.
+Each resource type instance within an OCCI system must be uniquely identified by an URI. The structure of these URIs is opaque and the system should not assume a static, pre-determined scheme for their structure.
 
 \subsection{Interaction with Resources}
 As OCCI adopts a ROA, REST-based architecture and uses HTTP as the foundation protocol the means of interaction with all resource instances is through the four main HTTP verbs. OCCI service implementations must, at a minimum, support these verbs:
@@ -103,16 +112,15 @@ As OCCI adopts a ROA, REST-based architecture and uses HTTP as the foundation pr
 Verb & RFC Definition & Usage in OCCI context \\
 \hline
 POST & The POST method is used to request that the origin server accept the resource enclosed in the request as a new subordinate of the resource identified by the Request-URI in the Request- Line & This is the verb will be used when creating Kinds. POST can also be used to create a sub-resource of an existing resource type. Action are also triggered using the POST verb. \\
-GET & The GET method means retrieve whatever information (in the form of an resource) is identified by the Request-URI & Retrieving one Kind or Category using GET will result in a representation of the resource. Lists of Kinds and Categories are also retrieved through GET. \\
+GET & The GET method means retrieve whatever information (in the form of an resource) is identified by the Request-URI & Retrieving one Kind or Category using GET will result in a representation of the resource. Lists of Kinds and Categories are also retrieved through GET (Discovery/Querying). \\
 PUT & The PUT method requests that the enclosed resource be stored under the supplied Request-URI & The PUT verb will be used when updating a Kind or when creating an Kind at a specific location\footnote{In difference to POST where sub-resources will be created}. \\
 DELETE & The DELETE method requests that the origin server delete the resource identified by the Request-URI & This verb is used to destroy instances of Kinds. \\ 
 \end{tabular}
 
 \subsection{Security and Authentication}
-OCCI does not require that an authentication mechanism be used nor does it require that client to service communications are secured. It does recommend that an authentication mechanism be used and that where appropriate, communications are encrypted using HTTP over TLS. The authentication mechanisms that can be used with OCCI are those that can be used with HTTP and TLS, for example Basic [REF], Digest [REF] and OAuth [REF]. If an OCCI service requires authentication the response to a request that MUST be authenticated must be a HTTP 401 code that indicates the request is authorized. In response to authenticate the client MUST set a WWW-Authenticate header field and through this indicate the authentication mechanism. 
+OCCI does not require that an authentication mechanism be used nor does it require that client to service communications are secured. It does recommend that an authentication mechanism be used and that where appropriate, communications are encrypted using HTTP over TLS. The authentication mechanisms that CAN be used with OCCI are those that can be used with HTTP and TLS, for example Basic [REF], Digest [REF] and OAuth [REF]. If an OCCI service requires authentication the response to a request that MUST be authenticated must be a HTTP 401 code that indicates the request is authorized. In response to authenticate the client MUST set a WWW-Authenticate header field and through this indicate the authentication mechanism. 
 
 \subsection{Versioning}
-
 Information about what version of OCCI is supported by a provider MUST be advertised to a client on each response to a client. The version field in the response MUST include the value OCCI/X.Y, where X is the major version number and Y is the minor version number of the implemented OCCI specification. In the case of a HTTP Header Rendering, the server response should relay versioning information using the HTTP header name 'Server'.
 
 \begin{verbatim}
@@ -133,16 +141,14 @@ User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.0
 If a server receives a request from a client that supplies a version number higher than the service supports, the service MUST respond back to the client with an exception indicating that the requested version is not implemented. Where a client implements OCCI using a HTTP transport, the HTTP code 501, not implemented should be used. 
 
 \subsection{Content-type and Accept headers}
-A server MUST react according to the Accept header the client provides. If non is given - or \textit{*/*} is used - the service MUST use the HTTP Header Rendering described in section \ref{sec:http_header}. This is the default rendering and MUST be implemented. Otherwise the according rendering MUST be used. Each Rendering SHOULD expose which Accept and Content-type header fields it can handle.
+A server MUST react according to the Accept header the client provides. If non is given - or \textit{*/*} is used - the service MUST use the HTTP Header Rendering described in section \ref{sec:http_header}. This is the fall-back rendering and MUST be implemented. Otherwise the according rendering MUST be used. Each Rendering SHOULD expose which Accept and Content-type header fields it can handle. Overall the server MUST support the \textit{*/*}, \textit{text/plain} and \textit{text/uri-list} Content-types.
 
-The server MUST also return the proper Content-type header. 
-
-If a client POSTs information with a Content-Type - the information MUST be parsed accordingly.
+The server MUST also return the proper Content-type header. If a client POSTs information with a Content-Type - the information MUST be parsed accordingly.
 
 \subsection{Discovery and Listing}
-When performing an GET operation an server MUST reply with a listing of matching Kinds. If an URL was used in the request only the sub-resource SHOULD be returned. If a Category was given in the request the server MUST only give back Kinds which have this Category assigned.
+When performing an GET operation an server MUST reply with a listing of matching Kinds. If the request was preformed on a Path of an URI only the sub-resource SHOULD be returned. If a Category was given in the request the server MUST only give back Kinds which have this Category assigned.
 
-If the request was performed on the \textit{/-/} URL a list of Categories which the server can handle MUST be returned. Categories used for tagging are not exported via this mechanism.
+If the request was performed on the \textit{/-/} Path a list of Categories which the server can handle MUST be returned. Categories used for tagging are not exported via this mechanism.
 
 \subsection{Behavior of HTTP operations}
 
@@ -160,7 +166,7 @@ The UML diagram \ref{fig:post_operation} shows what the Server can return, and w
 	\label{fig:post_operation}
 \end{figure}
 
-The OCCI service implementation MUST create sub resource of and existing URN (which can be Root). Action must be exposed by adding \emph{;action=$<$action term$>$} to the URI.
+The OCCI service implementation MUST create sub resource of and existing URN (which can be Root). Action must be exposed by adding the fragment \emph{;action=$<$action term$>$} to the URI.
 
 \subsubsection{The HTTP PUT Operation behavior}
 
@@ -322,7 +328,7 @@ Same behavior MUST be implemented as in section \ref{sec:http_header}.
 
 \textbf{This Rendering can handle the \textit{text/uri-list} Accept Header. It will \textit{text/uri-list} an empty Content-type}
 
-This rendering cannot render Kinds or Categories directly but just Links to them. For concrete rendering of Kinds and Categories the Content-types '*/*', 'text/plain' MUST be used. If a request is done with the \textit{text/uri-list} in the Accept header, while not requesting for a Listing a Bad Request MUST be returned.
+This rendering cannot render Kinds or Categories directly but just Links to them. For concrete rendering of Kinds and Categories the Content-types \textit{*/*}, \textit{text/plain} MUST be used. If a request is done with the \textit{text/uri-list} in the Accept header, while not requesting for a Listing a Bad Request MUST be returned.
 
 \subsubsection{Rendering the OCCI model}
 
@@ -527,9 +533,7 @@ Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 Term & Description \\
 \hline
 OCCI & Open Cloud Computing Interface \\
-URN & Unified Resource Name \\
-URL & TBD \\
-URI & TBD \\
+URI & Uniform Resource Identifier \\
 \end{tabular}
 
 \section{Intellectual Property Statement}

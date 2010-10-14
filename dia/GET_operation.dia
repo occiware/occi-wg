@@ -940,12 +940,12 @@ Authentication operations#</dia:string>
         <dia:point val="17.75,24.3375"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.75,23.7425;21.5675,24.49"/>
+        <dia:rectangle val="17.75,23.7238;21.5987,24.5274"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#[URN is '/-/']#</dia:string>
+            <dia:string>#[Path is '/-/']#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="sans" style="0" name="Helvetica"/>
@@ -1527,12 +1527,12 @@ Authentication operations#</dia:string>
         <dia:point val="17.7629,29.42"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.7629,28.825;23.0429,29.5725"/>
+        <dia:rectangle val="17.7629,28.8063;23.0741,29.6099"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#[URN has childs]#</dia:string>
+            <dia:string>#[Path has childs]#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="sans" style="0" name="Helvetica"/>
@@ -1771,12 +1771,12 @@ Authentication operations#</dia:string>
         <dia:point val="17.7129,35.82"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.7129,35.225;26.9979,35.9725"/>
+        <dia:rectangle val="17.7129,35.2063;27.0291,36.0099"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#[URN is KIND representation]#</dia:string>
+            <dia:string>#[Path is KIND representation]#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="sans" style="0" name="Helvetica"/>
