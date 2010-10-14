@@ -107,28 +107,44 @@ The following table describe the Category defined for each of the infrastructure
 \begin{tabular}{llllll}
 Term&Scheme&Title&Attribute&Actions&Related-Category\\
 \hline
-compute & http://schemas.ogf.org/occi/infrastructureHASH & Compute Resource & See Below & See Below & http://schemas.ogf.org/occi/coreHASHresource\\
-storage & http://schemas.ogf.org/occi/infrastructureHASH & Storage Resource & See Below & See Below & http://schemas.ogf.org/occi/coreHASHresource\\
-network & http://schemas.ogf.org/occi/infrastructureHASH & Network Resource & See Below & See Below & http://schemas.ogf.org/occi/coreHASHresource\\
+compute & http://schemas.ogf.org/occi/infrastructure\# & Compute Resource & See Below & See Below & http://schemas.ogf.org/occi/core\#resource\\
+storage & http://schemas.ogf.org/occi/infrastructure\# & Storage Resource & See Below & See Below & http://schemas.ogf.org/occi/core\#resource\\
+network & http://schemas.ogf.org/occi/infrastructure\# & Network Resource & See Below & See Below & http://schemas.ogf.org/occi/core\#resource\\
 \end{tabular}
 
 The following sections on Compute, Storage and Network detail the Attributes and Actions defined for each resource type.
 
 \subsection{Compute}
-The Compute Resource type is assigned the http://schemas.ogf.org/occi/infrastructureHASHcompute Category. A Compute Resource instance MUST at least expose this Category.
+The Compute Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#compute Category. A Compute Resource instance MUST at least expose this Category.
 
 \subsubsection{Attributes}
 The attributes that MUST be exposed by an instance of the Compute Resource type are as follows:
 
-TABLE
+\begin{tabular}{lllll}
+Attribute&Type&Multiplicity&Client Access&Description\\
+\hline
+occi.compute.architecture & String Enumeration, \{x86, x64\} & 1 & read-many/write-many & CPU Architecture of the instance.\\
+occi.compute.cores & Integer & 1 & read-many/write-many & Number of CPU cores assigned to the instance.\\
+occi.compute.hostname & String & 1 & read-many/write-many & Fully Qualified DNS hostname for the instance.\\
+occi.compute.speed & Float, ${\mathbf 10}^9$ (giga) & 1 & read-many/write-many & CPU Clock frequency (speed) in gigahertz.\\
+occi.compute.memory & Float, ${\mathbf 10}^9$ (giga) & 1 & read-many/write-many & Maximum RAM in gigabytes allocated to the instance.\\
+occi.compute.state & Enumeration, \{active, inactive, suspended\} & 1 & read-only & Current state of the instance.\\
+\end{tabular}
 
 \subsubsection{Actions}
 Actions can be performed upon instances of the Compute Resource type. The set that MUST be supported are as follows:
 
-TABLE
+\begin{tabular}{lll}
+Action&Target State&Parameters\\
+\hline
+http://schemas.ogf.org/occi/infrastructure/compute/action\#start & active & None\\
+http://schemas.ogf.org/occi/infrastructure/compute/action\#stop & inactive & String Enumeration \{graceful, acpioff, poweroff\}\\
+http://schemas.ogf.org/occi/infrastructure/compute/action\#restart & active (via stop and start chain) & String Enumeration {graceful, warm, cold}\\
+http://schemas.ogf.org/occi/infrastructure/compute/action\#suspend & suspended & String Enumeration {hibernate, suspend }\\
+\end{tabular}
 
 \subsubsection{States}
-Below illustrates the state diagram based on the actions defined above in 4.1.2.
+Below illustrates the state diagram based on the actions defined above in REF.
 
 %\clearpage
 \begin{figure}[!h]
@@ -144,15 +160,29 @@ The Network Resource type is assigned the http://schemas.ogf.org/occi/infrastruc
 \subsubsection{Attributes}
 The attributes that MUST be exposed by an instance of the Network Resource type are as follows:
 
-TABLE
+\begin{tabular}{lllll}
+Attribute&Type&Multiplicity&Client Access&Description\\
+\hline
+occi.network.vlan & Integer, 0-4095 & 0..1 & read-many/write-many & 802.1q VLAN Ientifier (e.g. 4095).\\
+occi.network.label & Token & 0..1 & read-many/write-many & Tag based VLANs (e.g. external-dmz).\\
+occi.network.address & IPv4 or IPv6 Address, CIDR notation & 1..* & read-many/write-many & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi.network.gateway & IPv4 or IPv6 Address & 0..1 & read-many/write-many & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi.network.allocation & String Enumeration, {auto, dhcp, manual} & 1 & read-many/write-many & Address mechanism: auto use the provider default policy dhcp use the dynamic host configuration protocol manual use user supplied static network configurations.\\
+occi.network.state & Enumeration, {active, inactive} & 1 & read-only & Current state of the instance.\\
+\end{tabular}
 
 \subsubsection{Actions}
 Actions can be performed upon instances of the Network Resource type. The set that must be supported are as follows:
 
-TABLE
+\begin{tabular}{lll}
+Action&Target State&Parameters\\
+\hline
+http://schemas.ogf.org/occi/infrastructure/compute/action\#up & active & None\\
+http://schemas.ogf.org/occi/infrastructure/compute/action\#down & inactive & None\\
+\end{tabular}
 
 \subsubsection{States}
-Below illustrates the state diagram based on the actions defined above in 4.2.2.
+Below illustrates the state diagram based on the actions defined above in REF.
 
 %\clearpage
 \begin{figure}[!h]
@@ -168,12 +198,26 @@ The Storage Resource type is assigned the http://schemas.ogf.org/occi/infrastruc
 \subsubsection{Attributes}
 The attributes that MUST be exposed by an instance of the Storage Resource type are as follows:
 
-TABLE
+\begin{tabular}{lllll}
+Attribute&Type&Multiplicity&Client Access&Description\\
+\hline
+occi.storage.size & Float, ${\mathbf 10}^9$ (giga) & 1 & read-many/write-many & Storage size in gigabytes of the instance.\\
+occi.storage.state & String Enumeration, \{online, offline, degraded\} & 1 & read-only & Current status of the instance.\\
+value & value & value & value & value\\
+\end{tabular}
 
 \subsubsection{Actions}
 Actions can be performed upon instances of the Storage Resource type. The set that MUST be supported are as follows:
 
-TABLE
+\begin{tabular}{lll}
+Action&Target State&Parameters\\
+\hline
+http://schemas.ogf.org/occi/infrastructure/storage/action\#online & online & None\\
+http://schemas.ogf.org/occi/infrastructure/storage/action\#offline & offline & None\\
+http://schemas.ogf.org/occi/infrastructure/storage/action\#backup & None & None\\
+http://schemas.ogf.org/occi/infrastructure/storage/action\#snapshot & None & None\\
+http://schemas.ogf.org/occi/infrastructure/storage/action\#resize & None & size Float  ${\mathbf 10}^9$\\
+\end{tabular}
 
 \subsubsection{States}
 Below illustrates the state diagram based on the actions defined above in 4.3.2.
@@ -191,7 +235,7 @@ Below illustrates the state diagram based on the actions defined above in 4.3.2.
 \section{Contributors}
 
 Editors: Andy Edmonds, Thijs Metsch \\
-Contributors: Alexander Papaspyrou, Ralf Nyr√©n, Sam Johnston
+Contributors: Alexander Papaspyrou, Ralf Nyren, Sam Johnston
 
 \textbf{TBD: Bunch op people missing here - create table\ldots}
 
