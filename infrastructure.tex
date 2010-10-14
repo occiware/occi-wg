@@ -77,9 +77,9 @@ This document, part of a document series, produced by the OCCI working group wit
 The Open Cloud Computing Interface (OCCI) is a RESTful Protocol (and API) for all kinds of Management tasks. Originally initiated to create a remote management API for IaaS model based Services, allowing for the development of interoperable tools for common tasks including deployment, autonomic scaling and monitoring, it now can be used to severe other models as well. To be modular and extensible the current specification itself is currently split into three complimentary documents:
 
 \begin{itemize}
-\item Core ‚Äì this defines the OCCI model
+\item Core - this defines the OCCI model
 \item HTTP Rendering - this defines how to manipulate the core model using the OCCI RESTful API. The document defines how the OCCI model can be communicated and thus serialized using HTTP.
-\item Infrastructure ‚Äì this defines the infrastructure domain resource types, the required attributes for each and the actions that can be taken on each.
+\item Infrastructure - this defines the infrastructure domain resource types, the required attributes for each and the actions that can be taken on each.
 \end{itemize}
 
 \section{Notational Conventions}
@@ -92,42 +92,99 @@ UML activity diagrams do not specify how OCCI should be rendered but what possib
 
 \section{Infrastructure}
 
-\subsection{ABC}
-Table:
-\begin{tabular}{l|p{3.2in}|p{2in}}
-Header & Header & Header \\
+The infrastructure domain resource types within OCCI, including their specification definitions, are:
+\begin{itemize}
+\item Compute: Information processing resources.
+\item Network: Interconnection resources.
+\item Storage: Information recording resources.
+\end{itemize}
+These infrastructure resource types inherit Resource base type and all its attributes. OCCI implementors MUST implement these. The HTTP Rendering document define how to interact with these resource types using RESTful communication. OCCI makes an ideal interoperable boundary interface between the web and the internal resource management system of infrastructure providers.
+
+As REQUIRED by the OCCI Core specification every resource type instantiated that is a subclass of Resource MUST be assigned a Category that identifies the instantiated resource type. Each such Category MUST be related to the Resource base type Category. These Categories, the core categories, MUST always remain immutable to any client.
+
+The following table describe the Category defined for each of the infrastructure Resource subtypes:
+
+\begin{tabular}{llllll}
+Term&Scheme&Title&Attribute&Actions&Related-Category\\
 \hline
-Value & Value & Value \\
-Value & Value & Value \\
-Value & Value & Value \\
+compute & http://schemas.ogf.org/occi/infrastructureHASH & Compute Resource & See Below & See Below & http://schemas.ogf.org/occi/coreHASHresource\\
+storage & http://schemas.ogf.org/occi/infrastructureHASH & Storage Resource & See Below & See Below & http://schemas.ogf.org/occi/coreHASHresource\\
+network & http://schemas.ogf.org/occi/infrastructureHASH & Network Resource & See Below & See Below & http://schemas.ogf.org/occi/coreHASHresource\\
 \end{tabular}
 
-\begin{verbatim}
-code
-\end{verbatim}
+The following sections on Compute, Storage and Network detail the Attributes and Actions defined for each resource type.
 
-\subsubsection{XYZ}
+\subsection{Compute}
+The Compute Resource type is assigned the http://schemas.ogf.org/occi/infrastructureHASHcompute Category. A Compute Resource instance MUST at least expose this Category.
 
-The UML diagram \ref{fig:post_operation} shows what the Server can return, and what it will return when performing an POST operation.
+\subsubsection{Attributes}
+The attributes that MUST be exposed by an instance of the Compute Resource type are as follows:
 
-\begin{figure}[h!]
+TABLE
+
+\subsubsection{Actions}
+Actions can be performed upon instances of the Compute Resource type. The set that MUST be supported are as follows:
+
+TABLE
+
+\subsubsection{States}
+Below illustrates the state diagram based on the actions defined above in 4.1.2.
+
+%\clearpage
+\begin{figure}[!h]
 	\centering
-	\includegraphics[scale=0.4]{dia/POST_operation.png}
-	\caption{Behaviour for HTTP Post}
-	\label{fig:post_operation}
+	\includegraphics[scale=0.4]{dia/compute-state.png}
+	\caption{State diagram for Compute}
+	\label{fig:compute_state}
 \end{figure}
 
-\paragraph{Paragraph}
-Oooo look at me - I"m a paragraph
+\subsection{Network}
+The Network Resource type is assigned the http://schemas.ogf.org/occi/infrastructureHASHnetwork Category. A Network Resource instance MUST at least expose this Category.
 
-\ldots
-\subsection{Render OCCI model in the HTTP Body}
+\subsubsection{Attributes}
+The attributes that MUST be exposed by an instance of the Network Resource type are as follows:
 
-\textbf{This Rendering can handle the \textit{text/plain} Accept Header. It will \textit{text/plain} an empty Content-type}
+TABLE
 
-\subsection{Render OCCI model via URL Listings}
+\subsubsection{Actions}
+Actions can be performed upon instances of the Network Resource type. The set that must be supported are as follows:
 
-\textbf{This Rendering can handle the \textit{text/uri-list} Accept Header. It will \textit{text/uri-list} an empty Content-type}
+TABLE
+
+\subsubsection{States}
+Below illustrates the state diagram based on the actions defined above in 4.2.2.
+
+%\clearpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.4]{dia/network-state.png}
+	\caption{State diagram for Network}
+	\label{fig:network_state}
+\end{figure}
+
+\subsection{Storage}
+The Storage Resource type is assigned the http://schemas.ogf.org/occi/infrastructureHASHstorage Category. A Storage Resource instance MUST at least expose this Category.
+
+\subsubsection{Attributes}
+The attributes that MUST be exposed by an instance of the Storage Resource type are as follows:
+
+TABLE
+
+\subsubsection{Actions}
+Actions can be performed upon instances of the Storage Resource type. The set that MUST be supported are as follows:
+
+TABLE
+
+\subsubsection{States}
+Below illustrates the state diagram based on the actions defined above in 4.3.2.
+
+%\clearpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.4]{dia/storage-state.png}
+	\caption{State diagram for Storage}
+	\label{fig:storage_state}
+\end{figure}
 
 % end infrastructure content
 
