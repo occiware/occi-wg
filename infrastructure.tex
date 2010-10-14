@@ -163,10 +163,10 @@ The attributes that MUST be exposed by an instance of the Network Resource type 
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Client Access&Description\\
 \hline
-occi.network.vlan & Integer, 0-4095 & 0..1 & read-many/write-many & 802.1q VLAN Ientifier (e.g. 4095).\\
-occi.network.label & Token & 0..1 & read-many/write-many & Tag based VLANs (e.g. external-dmz).\\
-occi.network.address & IPv4 or IPv6 Address, CIDR notation & 1..* & read-many/write-many & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi.network.gateway & IPv4 or IPv6 Address & 0..1 & read-many/write-many & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi.network.vlan & Integer, 0-4095 & 0\ldots1 & read-many/write-many & 802.1q VLAN Ientifier (e.g. 4095).\\
+occi.network.label & Token & 0\ldots1 & read-many/write-many & Tag based VLANs (e.g. external-dmz).\\
+occi.network.address & IPv4 or IPv6 Address, CIDR notation & 1\ldots* & read-many/write-many & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi.network.gateway & IPv4 or IPv6 Address & 0\ldots1 & read-many/write-many & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
 occi.network.allocation & String Enumeration, {auto, dhcp, manual} & 1 & read-many/write-many & Address mechanism: auto use the provider default policy dhcp use the dynamic host configuration protocol manual use user supplied static network configurations.\\
 occi.network.state & Enumeration, {active, inactive} & 1 & read-only & Current state of the instance.\\
 \end{tabular}
