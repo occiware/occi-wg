@@ -14,4 +14,4 @@ show-mac: all
 	open *.pdf
 
 clean:
-	rm -rf *.toc *.log *.pdf *.aux *.png
+	rm -rf *.toc *.log *.pdf *.aux *.png *.dvi

@@ -154,12 +154,12 @@ If the request was performed on the \textit{/-/} Path a list of Categories which
 
 More information on how OCCI compatible Service should handle the HTTP verbs is given in these sections. Possible results are demonstrated here. How to render the results is described later on.
 
+\newpage
 \subsubsection{The HTTP POST Operation behavior}
 
 The UML diagram \ref{fig:post_operation} shows what the Server can return, and what it will return when performing an POST operation.
 
-\clearpage
-\begin{figure}[!h]
+\begin{figure}[!hp]
 	\centering
 	\includegraphics[scale=0.4]{POST_operation.png}
 	\caption{Behavior for HTTP POST}
@@ -168,11 +168,11 @@ The UML diagram \ref{fig:post_operation} shows what the Server can return, and w
 
 The OCCI service implementation MUST create sub resource of and existing URN (which can be Root). Action must be exposed by adding the fragment \emph{;action=$<$action term$>$} to the URI.
 
+\newpage
 \subsubsection{The HTTP PUT Operation behavior}
 
 The UML diagram \ref{fig:put_operation} shows what the Server can return, and what it will return when performing an PUT operation. PUT is used to updated Resources or to create Resources at certain Paths.
 
-\clearpage
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{PUT_operation.png}
@@ -180,11 +180,11 @@ The UML diagram \ref{fig:put_operation} shows what the Server can return, and wh
 	\label{fig:put_operation}
 \end{figure}
 
+\newpage
 \subsubsection{The HTTP GET Operation behavior}
 
 The UML diagram \ref{fig:get_operation} shows what the Server can return, and what it will return when performing an GET operation. GET is used to return Renderings of Resource, Listings of Resource or for Listing of Categories (Discovery).
 
-\clearpage
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{GET_operation.png}
@@ -192,11 +192,11 @@ The UML diagram \ref{fig:get_operation} shows what the Server can return, and wh
 	\label{fig:get_operation}
 \end{figure}
 
+\newpage
 \subsubsection{The HTTP DELETE Operation behavior}
 
 The UML diagram \ref{fig:del_operation} shows what the Server can return, and what it will return when performing an DELETE operation.
 
-\clearpage
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{DELETE_operation.png}
