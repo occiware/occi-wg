@@ -124,8 +124,15 @@ categories & Category & 1..* & Immutable & Comprises the categories associated t
 The Category type represent the classification mechanism used by OCCI. It MUST be implemented. From a system point of view a Category is used for two different classification purposes. See also section \ref{sec:type_system} ``Type System'' and section \ref{sec:collection} ``Collections''.
 
 \begin{description}
-\item[Taxonomy]. A Category is used to assign static type information to each resource type inheriting Kind or a descendant of Kind. This use of Categories denotes the OCCI "static type system". A unique Category MUST be assigned to every descendant of Kind. See the section \ref{sec:hierarchy} "Hierarchy".
-\item[Folksonomy]. A Category can be used to assign tags to resource instances via a mix-in like model. A Category mix-in MUST NOT be related to an OCCI base type (or any descendant of Kind) and MUST NOT be the unique identifier thereof. Example use cases are collections, location information and templates for virtual machine provisioning.
+\item[Taxonomy] A Category is used to assign static type information to each
+resource type inheriting Kind or a descendant of Kind. This use of Categories
+denotes the OCCI "static type system". A unique Category MUST be assigned to
+every descendant of Kind. See the section \ref{sec:hierarchy} "Hierarchy".
+\item[Folksonomy] A Category can be used to assign tags to resource instances
+via a mix-in like model. A Category mix-in MUST NOT be related to an OCCI base
+type (or any descendant of Kind) and MUST NOT be the unique identifier thereof.
+Example use cases are collections, location information and templates for
+virtual machine provisioning.
 \end{description}
 
 The following table defines the attributes the Category type MUST implement to be compliant:
