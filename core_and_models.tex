@@ -213,11 +213,13 @@ A client MUST supply the concrete Kind type as a Category. All OCCI implementati
 \label{sec:collection}
 
 One or more Kind sub-type instances assigned to the same Category automatically
-form a collection.  Each Category identifies a collection of all Kind sub-type
-instances associated with the Category.
+form a collection. Each Category in the system identifies a collection
+consisting of all different Kind instances associated with the Category.
 
 A Kind sub-type instance is always a member of the Kind's identifying Category
 collection since a Kind instance MUST be assigned the Kind sub-type Category.
+Since a tag Category can be assigned to any Kind instance a collection can
+contain instances of different Kind sub-types.
 
 For example an instance of the Resource type will be assigned the
 \textit{http://scheme.ogf.org/occi/core\#resource} Category and thus part of the
