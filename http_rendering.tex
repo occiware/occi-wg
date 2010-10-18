@@ -215,13 +215,19 @@ HTTP header fields MAY appear multiple times in a HTTP request or response. In o
 
 HTTP header field values which contain separator characters MUST be properly quoted according to RFC 2616.
 
+\subsubsection{HTTP Header Rendering Caveats}
+
+Space in the HTTP header section of a HTTP request is a limited resource. By this, it is noted that many HTTP servers limit the number of bytes that can be placed in the HTTP Header area. Implementers MUST be aware of this limitation in their own implementation and take appropriate measures so that truncation of header data does NOT occur. 
+
+\emph{TODO: Is further description needed here? Should we show a possible counter-measure in the case where a HTTP header overflow is detected and how it's handled?}
+
 \subsubsection{HTTP Header Fields}
 
 Three different HTTP header fields are used to render the OCCI model. Each header field value has a different format.
 
 \paragraph{Category Header}
 
-The Category header is defined by the Web Categories specification, http://tools.ietf.org/html/draft-johnston-http-category-header-01. The semantics of the Category header in the OCCI context is described in the OCCI Core \& Models document.
+The Category header is defined by the Web Categories specification, http://tools.ietf.org/html/draft-johnston-http-category-header-01 and MUST be rendered accordingly. The semantics of the Category header in the OCCI context is described in the OCCI Core \& Models document.
 
 \begin{verbatim}
 Category:<term>;scheme="<scheme>"
@@ -230,11 +236,11 @@ Category:<term>;scheme="<scheme>"
     [;title=<Title of this Category>]    
 \end{verbatim}
 
-There is no order for the optional part.
+There is NO order for the optional part.
 
 \paragraph{Link Header}
 
-The Link header is defined by the Web Linking specification, http://tools.ietf.org/html/draft-nottingham-http-link-header-10. The semantics of the Link header in the OCCI context is described in the OCCI Core \& Models document.
+The Link header is defined by the Web Linking specification, http://tools.ietf.org/html/draft-nottingham-http-link-header-10 and MUST be rendered accordingly. The semantics of the Link header in the OCCI context is described in the OCCI Core \& Models document.
 
 \begin{verbatim}
 Link:???
@@ -246,7 +252,7 @@ Link:<<URL of the resource>> + ";action=" + <Term of the action>
 
 \paragraph{X-OCCI-Attribute Header}
 
-The X-OCCI-Attribute header is used to render the attributes associated with a OCCI Resource. A simple key-value format is used. The field value consist of an attribute name followed by an equal sign ("=") and the attribute value. The attribute value must be quoted if it includes a separator character, see RFC 2616 (page 16).
+The X-OCCI-Attribute header MUST be used to render the attributes associated with a OCCI Resource. A simple key-value format is used. The field value consist of an attribute name followed by an equal sign ("=") and the attribute value. The attribute value must be quoted if it includes a separator character, see RFC 2616 (page 16).
 
 \begin{verbatim}
 X-OCCI-Attribute:<list of comma separated <attribute name>=<attribute value> pairs>
@@ -256,7 +262,7 @@ Valid attribute names for OCCI Resources are specified in appropriate Extension 
 
 \paragraph{X-OCCI-Location Header}
 
-The X-OCCI-Location header is used to return URLs which point to Resources. It can contain simple listing of URLs separated by commas.
+To render an OCCI representation solely in the header, the X-OCCI-Location header MUST be used to return URLs which point to Resources. It can contain simple listing of URLs separated by commas.
 
 \subsubsection{Rendering the OCCI model}
 
