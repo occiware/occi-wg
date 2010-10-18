@@ -256,14 +256,18 @@ Link:<<URL of the resource>> + ";action=" + <Term of the action>
 The X-OCCI-Attribute header MUST be used to render the attributes associated with a OCCI Kind. A simple key-value format is used. The field value consist of an attribute name followed by an equal sign ("=") and the attribute value. The attribute value must be quoted if it includes a separator character, see RFC 2616 (page 16).
 
 \begin{verbatim}
-X-OCCI-Attribute:<list of comma separated <attribute name>=<attribute value> pairs>
+X-OCCI-Attribute: <attribute name>=<attribute value>
 \end{verbatim}
 
 Valid attribute names for OCCI Kinds are specified in appropriate Extension documents.
 
 \paragraph{X-OCCI-Location Header}
 
-To render an OCCI representation solely in the header, the X-OCCI-Location header MUST be used to return URLs which point to Kinds. It can contain simple listing of URLs separated by commas.
+To render an OCCI representation solely in the header, the X-OCCI-Location header MUST be used to return a list of Kind URLs. Each header field value correspond to a single URL. Multiple Kind URLs are returned using multiple X-OCCI-Location headers. See RFC 2616 for information on how to render multiple HTTP headers.
+
+\begin{verbatim}
+X-OCCI-Location: <URL>
+\end{verbatim}
 
 \subsubsection{Rendering the OCCI model}
 
