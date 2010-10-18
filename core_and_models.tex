@@ -109,8 +109,8 @@ The following sections of the specification define the foundations of the OCCI m
 \subsection{The base types}
 The following sections describe the base types of the OCCI core model. The base types are Kind, Category, Resource, Link and Action. All base types MUST be implemented.
 
-\subsubsection{Kinds}
-The Kind type is an abstract base type and common to all resources in the OCCI context. It MUST be implemented. Kind enforces for all subtypes a required id attribute and an (optional) title attribute. More importantly Kind introduces one or more type mix-ins, called Category (see below). The following table defines the attributes the Kind type MUST implement to be compliant:
+\subsubsection{Kind}
+The Kind type is an abstract base type and common to all resources in the OCCI context. It MUST be implemented. Kind enforces for all subtypes a required id attribute and an (optional) title attribute. More importantly Kind introduces one or more type mix-ins through the type Category (see below). The following table defines the attributes the Kind type MUST implement to be compliant:
 
 \begin{tabular}{l|l|l|l|p{2.7in}}
 Attribute & Type & Multiplicity & Client Mutability & Description \\
@@ -120,7 +120,7 @@ title & String & 0..1 & Mutable & Denotes the display name of an instance. \\
 categories & Category & 1..* & Immutable & Comprises the categories associated to this instance. Consumers can expect the attributes and actions of the associated categories to be exposed by the instance. \\
 \end{tabular}
 
-\subsubsection{Categories}
+\subsubsection{Category}
 The Category type represent the classification mechanism used by OCCI. It MUST be implemented. From a system point of view a Category is used for two different classification purposes. See also section \ref{sec:type_system} "Type System".
 
 \begin{enumerate}
@@ -158,7 +158,7 @@ Compute-Resource & \textit{http://schemas.ogf.org/occi/infrastructure\#compute} 
 Resource & \textit{http://schemas.ogf.org/occi/core\#resource} & none \\
 \end{tabular}
 
-\subsubsection{Resources}
+\subsubsection{Resource}
 The Resource type describes a concrete resource that can be inspected and manipulated. It represents a general object in the OCCI core model and MUST be implemented. Resource enforces the inheritance of a set of common attributes into subtypes (such as a unique identifier and an optional descriptive summary). Moreover, it introduces relationships to other Kind instances, denoted by Links. It also introduces operations that can be invoked on this instance, denoted by Actions.
 
 The Resource type is assigned the \textit{http://schemas.ogf.org/occi/core\#resource} Category.
@@ -179,7 +179,7 @@ actions & Action & 0..* & Immutable & Set of Actions associated with the Resourc
 
 The OCCI Extension documents define sets of specific subtypes of Resources, Links and Actions. They inherit Resource and is each assigned an unique Category.
 
-\subsubsection{Links}
+\subsubsection{Link}
 The Link type defines a base association between two Resources. It MUST be implemented. Link indicates that one resource is connected to another.
 
 The Link type is assigned the \textit{http://schemas.ogf.org/occi/core\#link Category}. A Link instance MUST at least expose this or a related Category together with any associated attributes. A Link instance MUST also implement the attributes in the following table:
@@ -192,7 +192,7 @@ target & Resource & 1 & Mutable & Denotes the resource this instance points to.\
 
 The Link base type MUST NOT refer to an external resource. A provider MAY however create a subtype of Link with different semantics that e.g. have a target attribute containing an URI and thus the ability of linking with external resources.
 
-\subsubsection{Actions}
+\subsubsection{Action}
 The Action type defines an invocable operation on an associated Resource. It MUST be implemented. In general, Actions modify state (by performing a complex operation such as rebooting a virtual machine).
 
 The Action type is assigned the \textit{http://schemas.ogf.org/occi/core\#action} Category. An Action instance MUST at least expose this or a related Category together with any associated attributes.
