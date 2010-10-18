@@ -163,6 +163,8 @@ Below illustrates the state diagram based on the actions defined above in REF.
 \subsection{Network}
 The Network Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#network Category. A Network Resource instance MUST at least expose this Category.
 
+\emph{TODO: The idea here is for Network to represent a L2 networking entity. It can then be extended using the mix-in mechanism to support L3/L4 capabilities such as TCP/IP etc. For the specification we will specify a L2 Network and then suitable mix-ins so that IP networking can be supported.}
+
 \subsubsection{Attributes}
 The attributes that MUST be exposed by an instance of the Network Resource type are as follows:
 
@@ -246,6 +248,8 @@ In order to create entities like virtual data centres or virtual clusters, it is
 
 The NetworkLink Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#networklink Category. A NetworkLink Resource instance MUST at least expose this Category.
 \paragraph{Attributes}
+
+%move ip specifics to a mixin
 
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Client Access&Description\\
