@@ -102,17 +102,17 @@ http://www.example.com:8080/foo/bar;action=stop
 
 The following section describe the general behavior for all HTTP based renderings. Later sections will describe the syntax and semantic of how to render the OCCI Core model with different Content-Types.
 
-\subsection{Identification of Resources}
-Each resource type instance within an OCCI system must be uniquely identified by an URI. The structure of these URIs is opaque and the system should not assume a static, pre-determined scheme for their structure.
+\subsection{Identification of Kinds}
+Each Kind sub-type instance within an OCCI system must be uniquely identified by an URI. The structure of these URIs is opaque and the system should not assume a static, pre-determined scheme for their structure.
 
-\subsection{Interaction with Resources}
-As OCCI adopts a ROA, REST-based architecture and uses HTTP as the foundation protocol the means of interaction with all resource instances is through the four main HTTP verbs. OCCI service implementations must, at a minimum, support these verbs:
+\subsection{Interaction with Kinds}
+As OCCI adopts a ROA, REST-based architecture and uses HTTP as the foundation protocol the means of interaction with all RESTful resource instances is through the four main HTTP verbs. OCCI service implementations must, at a minimum, support these verbs:
 
 \begin{tabular}{l|p{3.2in}|p{2in}}
 Verb & RFC Definition & Usage in OCCI context \\
 \hline
 POST & The POST method is used to request that the origin server accept the resource enclosed in the request as a new subordinate of the resource identified by the Request-URI in the Request- Line & This is the verb will be used when creating Kinds. POST can also be used to create a sub-resource of an existing resource type. Action are also triggered using the POST verb. \\
-GET & The GET method means retrieve whatever information (in the form of an resource) is identified by the Request-URI & Retrieving one Kind or Category using GET will result in a representation of the resource. Lists of Kinds and Categories are also retrieved through GET (Discovery/Querying). \\
+GET & The GET method means retrieve whatever information (in the form of a resource) is identified by the Request-URI & Retrieving one Kind or Category using GET will result in a representation of the resource. Lists of Kinds and Categories are also retrieved through GET (Discovery/Querying). \\
 PUT & The PUT method requests that the enclosed resource be stored under the supplied Request-URI & The PUT verb will be used when updating a Kind or when creating an Kind at a specific location\footnote{In difference to POST where sub-resources will be created}. \\
 DELETE & The DELETE method requests that the origin server delete the resource identified by the Request-URI & This verb is used to destroy instances of Kinds. \\ 
 \end{tabular}
@@ -171,7 +171,7 @@ The OCCI service implementation MUST create sub resource of and existing URN (wh
 \newpage
 \subsubsection{The HTTP PUT Operation behavior}
 
-The UML diagram \ref{fig:put_operation} shows what the Server can return, and what it will return when performing an PUT operation. PUT is used to updated Resources or to create Resources at certain Paths.
+The UML diagram \ref{fig:put_operation} shows what the Server can return, and what it will return when performing an PUT operation. PUT is used to updated Kinds or to create Kinds at certain Paths.
 
 \begin{figure}[!h]
 	\centering
@@ -183,7 +183,7 @@ The UML diagram \ref{fig:put_operation} shows what the Server can return, and wh
 \newpage
 \subsubsection{The HTTP GET Operation behavior}
 
-The UML diagram \ref{fig:get_operation} shows what the Server can return, and what it will return when performing an GET operation. GET is used to return Renderings of Resource, Listings of Resource or for Listing of Categories (Discovery).
+The UML diagram \ref{fig:get_operation} shows what the Server can return, and what it will return when performing an GET operation. GET is used to return Renderings of Kind, Listings of Kind or for Listing of Categories (Discovery).
 
 \begin{figure}[!h]
 	\centering
@@ -220,6 +220,7 @@ HTTP header field values which contain separator characters MUST be properly quo
 Space in the HTTP header section of a HTTP request is a limited resource. By this, it is noted that many HTTP servers limit the number of bytes that can be placed in the HTTP Header area. Implementers MUST be aware of this limitation in their own implementation and take appropriate measures so that truncation of header data does NOT occur. 
 
 \emph{TODO: Is further description needed here? Should we show a possible counter-measure in the case where a HTTP header overflow is detected and how it's handled?}
+\emph{TODO: Ralf thinks we at least should mention the fallback to text/plain rendering where the relevant headers are just dumped into the body of the response.}
 
 \subsubsection{HTTP Header Fields}
 
@@ -252,17 +253,17 @@ Link:<<URL of the resource>> + ";action=" + <Term of the action>
 
 \paragraph{X-OCCI-Attribute Header}
 
-The X-OCCI-Attribute header MUST be used to render the attributes associated with a OCCI Resource. A simple key-value format is used. The field value consist of an attribute name followed by an equal sign ("=") and the attribute value. The attribute value must be quoted if it includes a separator character, see RFC 2616 (page 16).
+The X-OCCI-Attribute header MUST be used to render the attributes associated with a OCCI Kind. A simple key-value format is used. The field value consist of an attribute name followed by an equal sign ("=") and the attribute value. The attribute value must be quoted if it includes a separator character, see RFC 2616 (page 16).
 
 \begin{verbatim}
 X-OCCI-Attribute:<list of comma separated <attribute name>=<attribute value> pairs>
 \end{verbatim}
 
-Valid attribute names for OCCI Resources are specified in appropriate Extension documents.
+Valid attribute names for OCCI Kinds are specified in appropriate Extension documents.
 
 \paragraph{X-OCCI-Location Header}
 
-To render an OCCI representation solely in the header, the X-OCCI-Location header MUST be used to return URLs which point to Resources. It can contain simple listing of URLs separated by commas.
+To render an OCCI representation solely in the header, the X-OCCI-Location header MUST be used to return URLs which point to Kinds. It can contain simple listing of URLs separated by commas.
 
 \subsubsection{Rendering the OCCI model}
 
@@ -344,7 +345,7 @@ MUST return a list of Category scheme URLs.
 
 \paragraph{Rendering a list of Kinds}
 
-MUST return a list of URLs pointing to the Resources.
+MUST return a list of URLs pointing to the Kinds.
 
 \section{Contributors}
 
