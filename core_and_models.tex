@@ -110,22 +110,23 @@ The following sections of the specification define the foundations of the OCCI m
 The following sections describe the base types of the OCCI core model. The base types are Kind, Category, Resource, Link and Action. All base types MUST be implemented.
 
 \subsubsection{Kind}
-The Kind type is an abstract base type and common to all resources in the OCCI context. It MUST be implemented. Kind enforces for all subtypes a required id attribute and an (optional) title attribute. More importantly Kind introduces one or more type mix-ins through the type Category (see below). The following table defines the attributes the Kind type MUST implement to be compliant:
+The Kind type is an abstract base type and common to all resources in the OCCI context. It MUST be implemented. Kind enforces for all subtypes a required id attribute and an (optional) title attribute. More importantly Kind introduces one or more type mix-ins through the type Category (see section \ref{sec:type_system}). The following table defines the attributes the Kind type MUST implement to be compliant:
 
 \begin{tabular}{l|l|l|l|p{2.7in}}
-Attribute & Type & Multiplicity & Client Mutability & Description \\
+Attribute & Type & Multiplicity & Client Access & Description \\
 \hline
-id & URI & 1 & Immutable & Denotes a unique (within the service provider's name-space) identifier of a Kind subtype instance. \\
-title & String & 0..1 & Mutable & Denotes the display name of an instance. \\
-categories & Category & 1..* & Immutable & Comprises the categories associated to this instance. Consumers can expect the attributes and actions of the associated categories to be exposed by the instance. \\
+id & URI & 1 & read-many & Denotes a unique (within the service provider's name-space) identifier of a Kind subtype instance. \\
+title & String & 0..1 & read-many/write-many & Denotes the display name of an instance. \\
+categories & Category & 1..* & read-many & Comprises the Category types associated to this instance. Consumers can expect the attributes and actions of the associated Category types to be exposed by the instance. \\ 
 \end{tabular}
+\marginpar{should categories not be read-many/write-many?} 
 
 \subsubsection{Category}
 The Category type represent the classification mechanism used by OCCI. It MUST be implemented. From a system point of view a Category is used for two different classification purposes. See also section \ref{sec:type_system} ``Type System'' and section \ref{sec:collection} ``Collections''.
 
 \begin{description}
 \item[Taxonomy] A Category is used to assign static type information to each
-resource type inheriting Kind or a descendant of Kind. This use of Categories
+resource type inheriting Kind or a descendant of Kind. This use of Category types
 denotes the OCCI "static type system". A unique Category MUST be assigned to
 every descendant of Kind. See the section \ref{sec:hierarchy} "Hierarchy".
 \item[Folksonomy] A Category can be used to assign tags to resource instances
@@ -138,22 +139,22 @@ virtual machine provisioning.
 The following table defines the attributes the Category type MUST implement to be compliant:
 
 \begin{tabular}{l|l|l|l|p{2.7in}}
-Attribute & Type & Multiplicity & Client Mutability & Description \\
+Attribute & Type & Multiplicity & Client Access & Description \\
 \hline
-term & String & 1 & Immutable & The category to which the resource belongs. \\
-scheme & URI & 1 & Immutable & The categorization scheme. \\
-title & String & 0..1 & Immutable & Denotes the display name of an instance. \\
-attributes & String & 0..* & Immutable & Comprise the resource attributes defined by the Category. \\
-related & Category & 0..* & Immutable & Set of related Categories. \\
+term & String & 1 & read-many & The category to which the resource belongs. \\
+scheme & URI & 1 & read-many & The categorization scheme. \\
+title & String & 0..1 & read-many & Denotes the display name of an instance. \\
+attributes & String & 0..* & read-many & Comprise the resource attributes defined by the Category. \\
+related & Category & 0..* & read-many & Set of related Category types. \\
 \end{tabular}
 
-A Category is uniquely identified by concatenating the categorization scheme with the category term, e.g. \textit{http://example.com/category/scheme\#term}. This is done to enable discovery of Category definitions per HTTP. All renderings MUST make use and understand concatenated unique identifiers of Categories.
+A Category is uniquely identified by concatenating the categorization scheme with the category term, e.g. \textit{http://example.com/category/scheme\#term}. This is done to enable discovery of Category definitions per HTTP. All renderings MUST make use and understand concatenated unique identifiers of Category types.
 
 \paragraph{Hierarchy}
 \label{sec:hierarchy}
-To be a part of the "static type system" a Category MUST be related, either directly or indirectly, to a base type Category. Extension of the OCCI base types through subtyping thus implies a hierarchy of related Categories.
+To be a part of the "static type system" a Category MUST be related, either directly or indirectly, to a base type Category. Extension of the OCCI base types through subtyping thus implies a hierarchy of related Category types.
 
-In an example where "Custom-Compute-Resource" is a subtype of "Compute-Resource", which in turn is a subtype of the Resource base type, three related Categories would be involved. The following table illustrates the exemplified hierarchy of Categories relating the custom Category to a base type Category.
+In an example where "Custom-Compute-Resource" is a subtype of "Compute-Resource", which in turn is a subtype of the Resource base type, three related Category types would be involved. The following table illustrates the exemplified hierarchy of Category types relating the custom Category to a base type Category.
 
 Example:
 
@@ -177,11 +178,11 @@ The Resource type is assigned the \textit{http://schemas.ogf.org/occi/core\#reso
 \end{itemize}
 
 \begin{tabular}{l|l|l|l|p{2.7in}}
-Attribute & Type & Multiplicity & Client Mutability & Description \\
+Attribute & Type & Multiplicity & Client Access & Description \\
 \hline
-summary & String & 0..1 & Mutable & Holds a summarizing description of the Resource instance.\\
-links & Link & 0..* & Mutable & Comprises a set of Link compositions. Being a composite relation the removal of a Link from the set MUST also remove the Link instance.\\
-actions & Action & 0..* & Immutable & Set of Actions associated with the Resource.\\
+summary & String & 0..1 & read-many/write-many & Holds a summarizing description of the Resource instance.\\
+links & Link & 0..* & read-many/write-many & Comprises a set of Link compositions. Being a composite relation the removal of a Link from the set MUST also remove the Link instance.\\
+actions & Action & 0..* & read-many & Set of Actions associated with the Resource.\\
 \end{tabular}
 
 The OCCI Extension documents define sets of specific subtypes of Resources, Links and Actions. They inherit Resource and is each assigned an unique Category.
@@ -192,26 +193,28 @@ The Link type defines a base association between two Resources. It MUST be imple
 The Link type is assigned the \textit{http://schemas.ogf.org/occi/core\#link Category}. A Link instance MUST at least expose this or a related Category together with any associated attributes. A Link instance MUST also implement the attributes in the following table:
 
 \begin{tabular}{l|l|l|l|p{2.7in}}
-Attribute & Type & Multiplicity & Client Mutability & Description \\
+Attribute & Type & Multiplicity & Client Access & Description \\
 \hline
-target & Resource & 1 & Mutable & Denotes the resource this instance points to.\\
+target & Resource & 1 & read-many/write-many & Denotes the resource this instance points to.\\
 \end{tabular}
+\marginpar{Open issue: should 'source' be here or in the http section. Semantic versus syntax issue.} 
 
 The Link base type MUST NOT refer to an external resource. A provider MAY however create a subtype of Link with different semantics that e.g. have a target attribute containing an URI and thus the ability of linking with external resources.
 
 \subsubsection{Action}
-The Action type defines an invocable operation on an associated Resource. It MUST be implemented. In general, Actions modify state (by performing a complex operation such as rebooting a virtual machine).
+The Action type defines an invocable operation on an associated Resource. It MUST be implemented. In general, Actions modify state (e.g. by performing a complex operation such as rebooting a virtual machine).
 
 The Action type is assigned the \textit{http://schemas.ogf.org/occi/core\#action} Category. An Action instance MUST at least expose this or a related Category together with any associated attributes.
 
 \subsection{Mutability}
+\marginpar{Does 'client access' need to be discussed here?} 
 Attributes of a OCCI base type instance, a resource instance, are either client mutable or client immutable. If an attribute is noted to be mutable this MUST be interpreted that a client can create a resource instance that is parametrized by the attribute. Likewise, if an attribute is mutable, a client can update that resource instance's mutable attribute value and the server side MUST support this. If an attribute is marked as immutable, it indicates that the server side implementation MUST manage these exclusively. Immutable attributes MUST NOT be modifiable by clients under any circumstance.
 
 \subsection{Type System}
 \label{sec:type_system}
-The Category type is the classification mechanism used by OCCI. This tells service providers what type of concrete OCCI Kind should be created. Each domain-specific section of the OCCI specification (e.g. infrastructure) defines its own concrete Resource, Action and optionally Link specializations. It should be noted that depending on the clients credentials, access to creating certain OCCI Kind instances may be restricted.
+The Category type is the classification mechanism used by OCCI. This tells service providers what type of concrete OCCI Kind should be created. Each domain-specific section of the OCCI specification (e.g. infrastructure) defines its own concrete Resource, Action and optionally Link specializations. It should be noted that depending on a client's credentials, access to creating certain OCCI Kind instances MAY be restricted.
 
-The type system is a flexible and extensible one allowing for the addition of "mix-in" Category types. Mix-in Category types are ones that add additional behavior to OCCI Kinds and are Categories not defined by the OCCI specifications. The mix-in Category types can be added to an OCCI Kind both at Kind creation time and run-time. The Kinds to which a particular mix-in Category type can be applied, is defined by the provider implementation. At which time, creation- or run-time, these mix-in types can be applied is also defined by the provider implementation. Discovery of mix-in types can be achieved by querying the OCCI Query interface. Mix-in Categories are those that are NOT related to an OCCI base type Category and MUST be implemented as such. When a client attempts to add a mix-in at a stage not supported by the provider, the provider MUST notify the client that it has issued a bad request.
+The type system is a flexible and extensible one allowing for the addition of "mix-in" Category types. Mix-in Category types are ones that add additional behavior to OCCI Kinds and are Category types not defined by the OCCI specifications. The mix-in Category types can be added to an OCCI Kind both at Kind creation-time and run-time. The Kinds to which a particular mix-in Category type can be applied, is defined by the provider implementation. At which time, creation- or run-time, these mix-in types can be applied is also defined by the provider implementation. Discovery of mix-in types can be achieved by querying the OCCI Query interface. Mix-in Category types are those that are NOT related to an OCCI base type Category and MUST be implemented as such. When a client attempts to add a mix-in at a stage not supported by the provider, the provider MUST notify the client that it has issued a bad request.
 
 \subsubsection{Creating Instances}
 A client MUST supply the concrete Kind type as a Category. All OCCI implementations MUST understand these requests containing concrete Kind types, i.e. Resource, Link, Action or a subtype thereof.
@@ -234,17 +237,17 @@ Resource Category collection.
 
 
 \subsection{Extensibility}
-The OCCI Core model has a flexible yet fairly simple extension mechanism through the use of subtyping and Categories. 
+The OCCI Core model has a flexible yet fairly simple extension mechanism through the use of sub-typing and Category types. 
 
-\subsubsection{Subtypes and Categories}
-The OCCI Core model has a flexible yet fairly simple extension mechanism through the use of subtyping and Categories.
+\subsubsection{Sub-types and Category Types}
+The OCCI Core model has a flexible yet fairly simple extension mechanism through the use of sub-typing and Category types.
 A provider MAY extend the OCCI core model by creating a subtype of either an OCCI Core base type or a provider defined subtype.
 
 A provider MUST assign a new unique Category to each new subtype defined. The new Category MUST be, either directly or indirectly, related to one of the Core base types, i.e. Resource, Link or Action. If a provider extends a subtype the new Category SHOULD be related to the subtype extended, provided the previous rule holds true.
 
-Providers MAY also define new Categories for tagging and templating purposes. Such a Category MUST NOT be the unique identifier of a resource type, i.e. must not be part of the "static type system".
+Providers MAY also define new Category types for tagging and templating purposes. Such a Category MUST NOT be the unique identifier of a resource type, i.e. must not be part of the "static type system".
 
-The scheme of provider-defined Categories MUST reside in a unique namespace different from those in the OCCI specification. Any attributes defined by a new Category MUST NOT have a name starting with occi. The occi namespace prefix is reserved for extensions which are standardized. A provider SHOULD use an attribute namespace comprising the reverse domain name as prefix to every attribute name.
+The scheme of provider-defined Category types MUST reside in a unique namespace different from those in the OCCI specification. Any attributes defined by a new Category MUST NOT have a name starting with occi. The occi namespace prefix is reserved for extensions which are standardized. A provider SHOULD use an attribute namespace comprising the reverse domain name as prefix to every attribute name.
 
 A provider-defined Category identifying a custom subtype of Resource could be exemplified as follows. The term and scheme is defined by the provider. The related set MUST include a, direct or indirect (through a hierarchy), reference to the Resource base type category.
 
@@ -261,7 +264,7 @@ A provider MAY define subtypes of the Core base types Resource, Link and Action 
 A provider MAY define subtypes of any existing subtype, either defined in OCCI or by someone else. A unique Category MUST be assigned to each new subtype. The assigned Category MUST be either directly or indirectly related to a base type Category. It is RECOMMENDED the Category is related to the Category of the subtype extended.
 
 \subsection{Discovery}
-An OCCI client MUST be able to discover all Categories a particular provider supports before interacting with the provider. Since the rendering of the Categories is depended of the protocol the rendering documents give more information on how information is send and can be parsed.
+An OCCI client MUST be able to discover all Category types a particular provider supports before interacting with the provider. Since the rendering of the Category types is depended of the protocol the rendering documents give more information on how information is send and can be parsed.
 
 \section{Contributors}
 Editors: Andy Edmonds, Thijs Metsch \\
