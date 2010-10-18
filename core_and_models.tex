@@ -73,19 +73,19 @@ This document, part of a document series, produced by the OCCI working group wit
 \newpage
 
 \section{Introduction}
-The Open Cloud Computing Interface (OCCI) is a RESTful Protocol (and API) for all kinds of Management tasks. Originally initiated to create a remote management API for IaaS model based Services, allowing for the development of interoperable tools for common tasks including deployment, autonomic scaling and monitoring, it now can be used to severe other models as well. To be modular and extensible the current specification itself is currently split into three complimentary documents:
+The Open Cloud Computing Interface (OCCI) is a RESTful Protocol (and API) \marginpar{Probably no need for the brackets} for all kinds of Management tasks. OCCI was originally initiated to create a remote management API for IaaS model based Services, allowing for the development of interoperable tools for common tasks including deployment, autonomic scaling and monitoring. It now can be used to severe other models as well. To be modular and extensible the current specification itself is currently split into three complimentary documents:
 
 \begin{itemize}
-\item Core – this defines the OCCI model
+\item Core - this defines the OCCI model
 \item HTTP Rendering - this defines how to manipulate the core model using the OCCI RESTful API. The document defines how the OCCI model can be communicated and thus serialized using HTTP.
-\item Infrastructure – this defines the infrastructure domain resource types, the required attributes for each and the actions that can be taken on each.
+\item Infrastructure - this defines the infrastructure domain resource types, the required attributes for each and the actions that can be taken on each.
 \end{itemize}
 
 \section{Notational Conventions}
 All these parts and the information within are mandatory for implementors (unless otherwise specified). The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119. 
 
 \section{OCCI model}
-OCCI is a boundary protocol/API that acts as a service front-end to a provider’s internal management framework. Diagram \ref{fig:placement} shows OCCI's place in a provider’s architecture:
+OCCI is a boundary protocol/API \marginpar{Better as protocol and API} that acts as a service front-end to a provider’s internal management framework. Diagram \ref{fig:placement} shows OCCI's place in a provider’s architecture:
 
 \begin{figure}[!hp]
 	\centering
@@ -94,7 +94,7 @@ OCCI is a boundary protocol/API that acts as a service front-end to a provider�
 	\label{fig:placement}
 \end{figure}
 
-The core of the OCCI model is a simple. The central resource type is Resource and contains a number of common attributes that domain-specific resource types inherit. These resource types are complemented by two additional types, Link and Action. Accompanying, Kind and Category provide the fabric for a safe extension model towards domain-specific usage. For compliance with OCCI Core, all types MUST be implemented. The UML class diagram \ref{fig:occi_core} gives an overview of the model.
+The core of the OCCI model is simple. The central resource type is Resource and contains a number of common attributes that domain-specific Resource types inherit. These Resource types are complemented by two additional types, Link and Action. Accompanying these, Kind and Category provide the fabric for a safe extension model towards domain-specific usage. For compliance with OCCI Core, all types MUST be implemented. The UML class diagram \ref{fig:occi_core} gives an overview of the model.
 
 \clearpage
 \begin{figure}[!h]
