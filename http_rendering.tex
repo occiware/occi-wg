@@ -231,7 +231,7 @@ Three different HTTP header fields are used to render the OCCI model. Each heade
 The Category header is defined by the Web Categories specification, http://tools.ietf.org/html/draft-johnston-http-category-header-01 and MUST be rendered accordingly. The semantics of the Category header in the OCCI context is described in the OCCI Core \& Models document.
 
 \begin{verbatim}
-Category:<term>;scheme="<scheme>"
+Category: <term>; scheme="<scheme>"
     [;rel=<Comma seperated list of <scheme> + '#' + <term> of related categories>]
     [;attributes=<comma seperated list of attribute names>]
     [;title=<Title of this Category>]    
@@ -244,11 +244,16 @@ There is NO order for the optional part.
 The Link header is defined by the Web Linking specification, http://tools.ietf.org/html/draft-nottingham-http-link-header-10 and MUST be rendered accordingly. The semantics of the Link header in the OCCI context is described in the OCCI Core \& Models document.
 
 \begin{verbatim}
-Link:???
+Link: <target-IRI>;
+    rel=<Category identifier of the target Kind>
+    [;self=<URL of the Link instance itself>]
+    [;category=<Category identifier of the Link type>
+        [;<attribute name>=<attribute value>]]
 
 or in case it is an Action:
 
-Link:<<URL of the resource>> + ";action=" + <Term of the action>
+Link: <URL of the Resource> + ";action=" + <Term of the action>;
+    rel=<Category identifier of the Action>
 \end{verbatim}
 
 \paragraph{X-OCCI-Attribute Header}
