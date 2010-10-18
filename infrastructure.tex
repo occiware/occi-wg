@@ -239,6 +239,9 @@ Below illustrates the state diagram based on the actions defined above in REF.
 \subsection{Linking Infrastructure Resources}
 In order to create entities like virtual data centres or virtual clusters, it is necessary to allow the linking of the various infrastructure Resource types. This can be accomplished using the Link entity as defined in the core specification. However, the Link entity does not include enough information about specific types of Links that are used within an infrastructure-type domain.
 \subsubsection{Linking to Network Resources}
+\textit{TODO: NetworkLink is supposed to be a sub-type of Link right? If so, say "NetworkLink Link" instead of "NetworkLink Resource".} \\
+\textit{TODO: A Link sub-type cannot have Actions. Actions are reserved for Resources.} \\
+\textit{TODO: The occi.networklink.source attribute is a work-around for HTTP rendering and must not be part of the infrastructure document. The infrastructure document is rendering {\bf independent}. A "source" attribute should be added to either Core or HTTP rendering to solve the issue.} \\
 \textit{TODO: Describe a NetworkLink here. What's shown is as is defined in the SLA@SOI project.}
 
 The NetworkLink Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#networklink Category. A NetworkLink Resource instance MUST at least expose this Category.
