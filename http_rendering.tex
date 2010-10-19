@@ -229,11 +229,12 @@ Three different HTTP header fields are used to render the OCCI model. Each heade
 \paragraph{Category Header}
 
 The Category header is defined by the Web Categories specification, http://tools.ietf.org/html/draft-johnston-http-category-header-01 and MUST be rendered accordingly. The semantics of the Category header in the OCCI context is described in the OCCI Core \& Models document.
+\marginpar{Define ``Categary identifier'' somewhere, i.e. concatenation of scheme + term.}
 
 \begin{verbatim}
 Category: <term>; scheme="<scheme>"
-    [;rel=<Comma seperated list of <scheme> + '#' + <term> of related categories>]
-    [;attributes=<comma seperated list of attribute names>]
+    [;rel=<space-separated list of related Category identifiers>]
+    [;attributes=<space-seperated list of attribute names>]
     [;title=<Title of this Category>]    
 \end{verbatim}
 
@@ -242,17 +243,19 @@ There is NO order for the optional part.
 \paragraph{Link Header}
 
 The Link header is defined by the Web Linking specification, http://tools.ietf.org/html/draft-nottingham-http-link-header-10 and MUST be rendered accordingly. The semantics of the Link header in the OCCI context is described in the OCCI Core \& Models document.
+\emph{TODO: Link header semantics are NOT described in Core. Link and Action type semantics are described however. How these base types relate to the Link header must be described in this document.}
+\marginpar{User proper ABNF grammar to describe the header formats.}
 
 \begin{verbatim}
-Link: <target-IRI>;
-    rel=<Category identifier of the target Kind>
-    [;self=<URL of the Link instance itself>]
-    [;category=<Category identifier of the Link type>
-        [;<attribute name>=<attribute value>]]
+Link: <Resource URL>;
+    rel=<space-separated list of Category identifiers of the target Resource type>
+    [;self=<Link instance URL>]
+    [;category=<space-separated list of Category identifiers of the Link type>
+        [;<attribute name>=<attribute value>] ... ]
 
 or in case it is an Action:
 
-Link: <URL of the Resource> + ";action=" + <Term of the action>;
+Link: <Resource URL> + ";action=" + <Term of the Action>;
     rel=<Category identifier of the Action>
 \end{verbatim}
 
