@@ -1,12 +1,16 @@
 
+TEX=pdflatex
+DIA=dia
+VIEW=evince
+
 SOURCE:=$(shell egrep -l '^[^%]*\\begin\{document\}' *.tex)
 PDFS=$(SOURCE:.tex=.pdf)
 
 dias:
-	dia -t png dia/*.dia
+	$(DIA) -t png dia/*.dia
 
 %.pdf:
-	while (pdflatex $* ; \
+	while ($(TEX) $* ; \
 	grep -q "Rerun to get cross" $*.log ) do true ; \
 	done
 
@@ -16,7 +20,7 @@ all: dias
 	done
 
 show: all
-	evince *.pdf
+	$(VIEW) *.pdf
 
 show-mac: all
 	open *.pdf
