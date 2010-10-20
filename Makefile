@@ -1,11 +1,18 @@
 
-SOURCE := $(shell egrep -l '^[^%]*\\begin\{document\}' *.tex)
+SOURCE:=$(shell egrep -l '^[^%]*\\begin\{document\}' *.tex)
+PDFS=$(SOURCE:.tex=.pdf)
 
-all:
+dias:
 	dia -t png dia/*.dia
-	for number in ${SOURCE} ; do \
-	pdflatex $$number ; \
-	pdflatex $$number ; \
+
+%.pdf:
+	while (pdflatex $* ; \
+	grep -q "Rerun to get cross" $*.log ) do true ; \
+	done
+
+all: dias
+	for item in $(PDFS) ; do \
+	make $$item ; \
 	done
 
 show: all
