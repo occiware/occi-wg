@@ -234,7 +234,7 @@ and manipulated. It represents a general object in the OCCI core model
 and MUST be implemented. Resource enforces the inheritance of a set of
 common attributes into subtypes (such as a unique identifier and an
 optional descriptive summary). Moreover, it introduces relationships
-to other Kind instances, denoted by Links. It also introduces
+to other Resource instances, denoted by Links. It also introduces
 operations that can be invoked on this instance, denoted by Actions.
 
 The Resource type is assigned the
@@ -314,7 +314,7 @@ tells service providers what type of concrete OCCI Kind should be
 created. Each domain-specific section of the OCCI specification
 (e.g. infrastructure) defines its own concrete Resource, Action and
 optionally Link specializations. It should be noted that depending on
-a client's credentials, access to creating certain OCCI Kind instances
+a client's credentials, access to creating certain OCCI Kind sub-type instances
 MAY be restricted.
 
 The type system is a flexible and extensible one allowing for the
@@ -341,12 +341,13 @@ Kind types, i.e. Resource, Link, Action or a subtype thereof.
 \label{sec:collection}
 One or more Kind sub-type instances assigned to the same Category
 automatically form a collection. Each Category in the system
-identifies a collection consisting of all different Kind instances
+identifies a collection consisting of all different Kind sub-type instances
 associated with the Category.
 
 A Kind sub-type instance is always a member of the Kind's identifying
-Category collection since a Kind instance MUST be assigned the Kind
-sub-type Category.  Since a tag Category can be assigned to any Kind
+Category collection since a Kind sub-type instance MUST be assigned the
+identifying Category of the Kind sub-type.
+Since a tag Category can be assigned to any Kind sub-type
 instance a collection can contain instances of different Kind
 sub-types.
 
