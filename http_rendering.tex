@@ -141,7 +141,7 @@ User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.0
 If a server receives a request from a client that supplies a version number higher than the service supports, the service MUST respond back to the client with an exception indicating that the requested version is not implemented. Where a client implements OCCI using a HTTP transport, the HTTP code 501, not implemented should be used. 
 
 \subsection{Content-type and Accept headers}
-A server MUST react according to the Accept header the client provides. If non is given - or \textit{*/*} is used - the service MUST use the HTTP Header Rendering described in section \ref{sec:http_header}. This is the fall-back rendering and MUST be implemented. Otherwise the according rendering MUST be used. Each Rendering SHOULD expose which Accept and Content-type header fields it can handle. Overall the server MUST support the \textit{*/*}, \textit{text/plain} and \textit{text/uri-list} Content-types.
+A server MUST react according to the Accept header the client provides. If non is given - or \textit{text/occi} is used - the service MUST use the HTTP Header Rendering described in section \ref{sec:http_header}. This is the fall-back rendering and MUST be implemented. Otherwise the according rendering MUST be used. Each Rendering SHOULD expose which Accept and Content-type header fields it can handle. Overall the server MUST support the \textit{text/occi}, \textit{text/plain} and \textit{text/uri-list} Content-types.
 
 The server MUST also return the proper Content-type header. If a client POSTs information with a Content-Type - the information MUST be parsed accordingly.
 
@@ -183,7 +183,7 @@ The UML diagram \ref{fig:put_operation} shows what the Server can return, and wh
 \newpage
 \subsubsection{The HTTP GET Operation behavior}
 
-The UML diagram \ref{fig:get_operation} shows what the Server can return, and what it will return when performing an GET operation. GET is used to return Renderings of Kind, Listings of Kind or for Listing of Categories (Discovery).
+The UML diagram \ref{fig:get_operation} shows what the Server can return, and what it will return when performing an GET operation. GET is used to return Renderings of Kind, Listings of Kind or for Listing of Categories (Discovery).\footnote{bla}
 
 \begin{figure}[!h]
 	\centering
@@ -207,7 +207,7 @@ The UML diagram \ref{fig:del_operation} shows what the Server can return, and wh
 \subsection{Render OCCI model in the HTTP Header}
 \label{sec:http_header}
 
-\textbf{This Rendering can handle the \textit{*/*} Accept Header. It will return an empty Content-type}
+\textbf{This Rendering can handle the \textit{text/occi} Accept Header. It will return the same for Content-type}
 
 The HTTP header fields MUST follow the specification in RFC 2616. A header field consists of a name followed by a colon (":") and the field value. The format of the field value is specified separately for each of the three header fields, see below.
 
@@ -296,12 +296,6 @@ Optional: N/A
 \end{verbatim}
 Should return a list of Category renderings.
 
-\paragraph{Rendering of a Kind}
-\begin{verbatim}
-Required: Category
-Optional: N/A
-\end{verbatim}
-
 \paragraph{Rendering a list of Kinds}
 \begin{verbatim}
 Required: X-OCCI-Location
@@ -347,7 +341,7 @@ Same behavior MUST be implemented as in section \ref{sec:http_header}.
 
 \textbf{This Rendering can handle the \textit{text/uri-list} Accept Header. It will \textit{text/uri-list} an empty Content-type}
 
-This rendering cannot render Kinds or Categories directly but just Links to them. For concrete rendering of Kinds and Categories the Content-types \textit{*/*}, \textit{text/plain} MUST be used. If a request is done with the \textit{text/uri-list} in the Accept header, while not requesting for a Listing a Bad Request MUST be returned.
+This rendering cannot render Kinds or Categories directly but just Links to them. For concrete rendering of Kinds and Categories the Content-types \textit{text/occi}, \textit{text/plain} MUST be used. If a request is done with the \textit{text/uri-list} in the Accept header, while not requesting for a Listing a Bad Request MUST be returned.
 
 \subsubsection{Rendering the OCCI model}
 
