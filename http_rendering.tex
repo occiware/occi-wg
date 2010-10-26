@@ -35,8 +35,8 @@
 % header on first page is different
 \thispagestyle{empty}
 
-GWD-R \hfill  Thijs Metsch, Platform Computing\\
-OCCI-WG \hfill  Andy Edmonds, Intel\\
+GWD-R \hfill Thijs Metsch, Platform Computing\\
+OCCI-WG \hfill Andy Edmonds, Intel\\
 \rightline {October 7, 2010}\\
 \rightline {Updated: \today}
 
@@ -283,43 +283,16 @@ The following setups show how the Core Model MUST be rendered. Shown are the HTT
 
 In some cases the framework does not support to have multiple occurrences of one HTTP Header field. If that is the case the server must join the values of the field with a \emph{,} and add this list to one HTTP Header field.
 
-\paragraph{Rendering of a Category}
-\begin{verbatim}
-Required: Category
-Optional: N/A
-\end{verbatim}
-
-\paragraph{Rendering a list of Categories}
-\begin{verbatim}
-Required: Category
-Optional: N/A
-\end{verbatim}
-Should return a list of Category renderings.
-
-\paragraph{Rendering a list of Kinds}
-\begin{verbatim}
-Required: X-OCCI-Location
-Optional: N/A
-\end{verbatim}
-SHOULD return a list of URLs.
-
-\paragraph{Rendering of a Resource}
-\begin{verbatim}
-Required: Category
-Optional: X-OCCI-Attribute, Link
-\end{verbatim}
-
-\paragraph{Rendering of a Action}
-\begin{verbatim}
-Required: Category, Link
-Optional: X-OCCI-Attribute
-\end{verbatim}
-
-\paragraph{Rendering of a Link}
-\begin{verbatim}
-Required: Category, Link
-Optional: X-OCCI-Attribute
-\end{verbatim}
+\begin{tabular}{l|l|l|l}
+Operation & Required HTTP-Header(s) & Optional HTTP-Header(s) & Notes \\
+\hline
+Rendering of a Category & Category & N/A & \\
+Rendering a list of Categories & Category & N/A & \\
+Rendering a list of Kinds & X-OCCI-Location & N/A & \\
+Rendering of a Resource & Category & X-OCCI-Attribute, Link & \\
+Rendering of an Action & Category, Link & X-OCCI-Attribute & \\
+Rendering of a Link & Category, Link & X-OCCI-Attribute & \\
+\end{tabular}
 
 \subsection{Render OCCI model in the HTTP Body}
 \label{sec:http_body}
