@@ -132,8 +132,8 @@ Attribute&Type&Multiplicity&Mutability&Description\\
 occi.compute.architecture & String Enumeration, \{x86, x64\} & 1 & Mutable & CPU Architecture of the instance.\\
 occi.compute.cores & Integer & 1 & Mutable & Number of CPU cores assigned to the instance.\\
 occi.compute.hostname & String & 0\ldots1 & Mutable & Fully Qualified DNS hostname for the instance.\\
-occi.compute.speed & Float, ${\mathbf 10}^9$ (giga) & 1 & Mutable & CPU Clock frequency (speed) in gigahertz.\\
-occi.compute.memory & Float, ${\mathbf 10}^9$ (giga) & 1 & Mutable & Maximum RAM in gigabytes allocated to the instance.\\
+occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 1 & Mutable & CPU Clock frequency (speed) in gigahertz.\\
+occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable & Maximum RAM in gigabytes allocated to the instance.\\
 occi.compute.state & Enumeration, \{active, inactive, suspended\} & 1 & Immutable & Current state of the instance.\\
 \end{tabular}
 
@@ -141,7 +141,7 @@ occi.compute.state & Enumeration, \{active, inactive, suspended\} & 1 & Immutabl
 Actions can be performed upon instances of the Compute Resource type. The set that MUST be supported are as follows:
 
 \begin{tabular}{lll}
-Action&Target State&Parameters\\
+Action&Target State&Parameter Attribute\\
 \hline
 http://schemas.ogf.org/occi/infrastructure/compute/action\#start & active & None\\
 http://schemas.ogf.org/occi/infrastructure/compute/action\#stop & inactive & String Enumeration \{graceful, acpioff, poweroff\}\\
