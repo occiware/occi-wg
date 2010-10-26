@@ -127,14 +127,14 @@ The Compute Resource type is assigned the http://schemas.ogf.org/occi/infrastruc
 The attributes that MUST be exposed by an instance of the Compute Resource type are as follows:
 
 \begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Client Access&Description\\
+Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
-occi.compute.architecture & String Enumeration, \{x86, x64\} & 1 & read-many/write-many & CPU Architecture of the instance.\\
-occi.compute.cores & Integer & 1 & read-many/write-many & Number of CPU cores assigned to the instance.\\
-occi.compute.hostname & String & 1 & read-many/write-many & Fully Qualified DNS hostname for the instance.\\
-occi.compute.speed & Float, ${\mathbf 10}^9$ (giga) & 1 & read-many/write-many & CPU Clock frequency (speed) in gigahertz.\\
-occi.compute.memory & Float, ${\mathbf 10}^9$ (giga) & 1 & read-many/write-many & Maximum RAM in gigabytes allocated to the instance.\\
-occi.compute.state & Enumeration, \{active, inactive, suspended\} & 1 & read-only & Current state of the instance.\\
+occi.compute.architecture & String Enumeration, \{x86, x64\} & 1 & Mutable & CPU Architecture of the instance.\\
+occi.compute.cores & Integer & 1 & Mutable & Number of CPU cores assigned to the instance.\\
+occi.compute.hostname & String & 1 & Mutable & Fully Qualified DNS hostname for the instance.\\
+occi.compute.speed & Float, ${\mathbf 10}^9$ (giga) & 1 & Mutable & CPU Clock frequency (speed) in gigahertz.\\
+occi.compute.memory & Float, ${\mathbf 10}^9$ (giga) & 1 & Mutable & Maximum RAM in gigabytes allocated to the instance.\\
+occi.compute.state & Enumeration, \{active, inactive, suspended\} & 1 & Immutable & Current state of the instance.\\
 \end{tabular}
 
 \subsubsection{Actions}
@@ -169,14 +169,14 @@ The Network Resource type is assigned the http://schemas.ogf.org/occi/infrastruc
 The attributes that MUST be exposed by an instance of the Network Resource type are as follows:
 
 \begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Client Access&Description\\
+Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
-occi.network.vlan & Integer, 0-4095 & 0\ldots1 & read-many/write-many & 802.1q VLAN Ientifier (e.g. 4095).\\
-occi.network.label & Token & 0\ldots1 & read-many/write-many & Tag based VLANs (e.g. external-dmz).\\
-occi.network.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots* & read-many/write-many & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi.network.gateway & IPv4 or IPv6 Address & 0\ldots1 & read-many/write-many & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi.network.allocation & String Enumeration, {auto, dhcp, manual} & 0\ldots1 & read-many/write-many & Address mechanism: auto use the provider default policy dhcp use the dynamic host configuration protocol manual use user supplied static network configurations.\\
-occi.network.state & Enumeration, {active, inactive} & 1 & read-only & Current state of the instance.\\
+occi.network.vlan & Integer, 0-4095 & 0\ldots1 & Mutable & 802.1q VLAN Ientifier (e.g. 4095).\\
+occi.network.label & Token & 0\ldots1 & Mutable & Tag based VLANs (e.g. external-dmz).\\
+occi.network.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots* & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi.network.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi.network.allocation & String Enumeration, {auto, dhcp, manual} & 0\ldots1 & Mutable & Address mechanism: auto use the provider default policy dhcp use the dynamic host configuration protocol manual use user supplied static network configurations.\\
+occi.network.state & Enumeration, {active, inactive} & 1 & Immutable & Current state of the instance.\\
 \end{tabular}
 
 \subsubsection{Actions}
@@ -211,10 +211,10 @@ The Storage Resource type is assigned the http://schemas.ogf.org/occi/infrastruc
 The attributes that MUST be exposed by an instance of the Storage Resource type are as follows:
 
 \begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Client Access&Description\\
+Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
-occi.storage.size & Float, ${\mathbf 10}^9$ (giga) & 1 & read-many/write-many & Storage size in gigabytes of the instance.\\
-occi.storage.state & String Enumeration, \{online, offline, degraded\} & 1 & read-only & Current status of the instance.\\
+occi.storage.size & Float, ${\mathbf 10}^9$ (giga) & 1 & Mutable & Storage size in gigabytes of the instance.\\
+occi.storage.state & String Enumeration, \{online, offline, degraded\} & 1 & Immutable & Current status of the instance.\\
 value & value & value & value & value\\
 \end{tabular}
 
@@ -247,7 +247,6 @@ In order to create entities like virtual data centres or virtual clusters, it is
 \subsubsection{Linking to Network Resources}
 \textit{TODO: NetworkLink is supposed to be a sub-type of Link right? If so, say "NetworkLink Link" instead of "NetworkLink Resource".} \\
 \textit{TODO: A Link sub-type cannot have Actions. Actions are reserved for Resources.} \\
-\textit{TODO: The occi.networklink.source attribute is a work-around for HTTP rendering and must not be part of the infrastructure document. The infrastructure document is rendering {\bf independent}. A "source" attribute should be added to either Core or HTTP rendering to solve the issue.} \\
 \textit{TODO: Describe a NetworkLink here. What's shown is as is defined in the SLA@SOI project.}
 
 The NetworkLink Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#networklink Category. A NetworkLink Resource instance MUST at least expose this Category.
@@ -256,13 +255,12 @@ The NetworkLink Resource type is assigned the http://schemas.ogf.org/occi/infras
 %move ip specifics to a mixin
 
 \begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Client Access&Description\\
+Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
-occi.networklink.source & Resource & 1 & read-many/write-once & The owning Resource of the link.\\
-occi.networklink.ip & IPv4 or IPv6 Address & 0\ldots1 & read-many/write-many & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7) of the link\\
-occi.networklink.interface & String & 1 & read-only & Identifier that relates the link to the link's device interface\\
-occi.networklink.mac & String & 1 & read-many/write-many & MAC address associated with the link's device interface\\
-occi.networklink.state & String Enumeration\{ active, inactive \}& 1 & read-only & Current status of the instance.\\
+occi.networklink.ip & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7) of the link\\
+occi.networklink.interface & String & 1 & Immutable & Identifier that relates the link to the link's device interface\\
+occi.networklink.mac & String & 1 & Mutable & MAC address associated with the link's device interface\\
+occi.networklink.state & String Enumeration\{ active, inactive \}& 1 & Immutable & Current status of the instance.\\
 \end{tabular}
 \paragraph{Actions}
 \begin{tabular}{lll}
@@ -285,12 +283,11 @@ TODO: Describe a StorageLink here
 \paragraph{Attributes}
 
 \begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Client Access&Description\\
+Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
-occi.storagelink.source & Resource & 1 & read-many/write-once & The owning Resource of the link.\\
-occi.storagelink.device & String & 1 & read-many/write-many & Device identifier as presented to the guest OS.\\
-occi.storagelink.mountpoint & String & 1 & read-many/write-many & Point to where the storage is mounted in the guest OS.\\
-occi.storagelink.state & String Enumeration\{ active, inactive \}& 1 & read-only & Current status of the instance.\\
+occi.storagelink.device & String & 1 & Mutable & Device identifier as presented to the guest OS.\\
+occi.storagelink.mountpoint & String & 1 & Mutable & Point to where the storage is mounted in the guest OS.\\
+occi.storagelink.state & String Enumeration\{ active, inactive \}& 1 & Immutable & Current status of the instance.\\
 \end{tabular}
 \paragraph{Actions}
 \begin{tabular}{lll}
