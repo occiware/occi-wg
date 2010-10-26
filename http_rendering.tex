@@ -141,9 +141,11 @@ User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.0
 If a server receives a request from a client that supplies a version number higher than the service supports, the service MUST respond back to the client with an exception indicating that the requested version is not implemented. Where a client implements OCCI using a HTTP transport, the HTTP code 501, not implemented should be used. 
 
 \subsection{Content-type and Accept headers}
-A server MUST react according to the Accept header the client provides. If non is given - or \textit{text/occi} is used - the service MUST use the HTTP Header Rendering described in section \ref{sec:http_header}. This is the fall-back rendering and MUST be implemented. Otherwise the according rendering MUST be used. Each Rendering SHOULD expose which Accept and Content-type header fields it can handle. Overall the server MUST support the \textit{text/occi}, \textit{text/plain} and \textit{text/uri-list} Content-types.
+A server MUST react according to the Accept header the client provides. If non is given - or \textit{*/*} is used - the service MUST use the HTTP Body Rendering described in section \ref{sec:http_body}. This is the fall-back rendering and MUST be implemented. Otherwise the according rendering MUST be used. Each Rendering SHOULD expose which Accept and Content-type header fields it can handle. Overall the server MUST support the \textit{text/occi}, \textit{text/plain} and \textit{text/uri-list} Content-types.
 
 The server MUST also return the proper Content-type header. If a client POSTs information with a Content-Type - the information MUST be parsed accordingly.
+
+When the Client request a Content-Type will will result in an incomplete or faulty rendering the Service MUST return the 406 Not Acceptable HTTP code.
 
 \subsection{Discovery and Listing}
 When performing an GET operation an server MUST reply with a listing of matching Kinds. If the request was preformed on a Path of an URI only the sub-resource SHOULD be returned. If a Category was given in the request the server MUST only give back Kinds which have this Category assigned.
@@ -205,7 +207,6 @@ The UML diagram \ref{fig:del_operation} shows what the Server can return, and wh
 \end{figure}
 
 \subsection{Render OCCI model in the HTTP Header}
-\label{sec:http_header}
 
 \textbf{This Rendering can handle the \textit{text/occi} Accept Header. It will return the same for Content-type}
 
