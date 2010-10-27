@@ -173,9 +173,9 @@ Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
 occi.network.vlan & Integer, 0-4095 & 0\ldots1 & Mutable & 802.1q VLAN Ientifier (e.g. 4095).\\
 occi.network.label & Token & 0\ldots1 & Mutable & Tag based VLANs (e.g. external-dmz).\\
-occi.network.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots* & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi.network.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi.network.allocation & String Enumeration, {auto, dhcp, manual} & 0\ldots1 & Mutable & Address mechanism: auto use the provider default policy dhcp use the dynamic host configuration protocol manual use user supplied static network configurations.\\
+% occi.network.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots* & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+% occi.network.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+% occi.network.allocation & String Enumeration, {auto, dhcp, manual} & 0\ldots1 & Mutable & Address mechanism: auto use the provider default policy dhcp use the dynamic host configuration protocol manual use user supplied static network configurations.\\
 occi.network.state & Enumeration, {active, inactive} & 1 & Immutable & Current state of the instance.\\
 \end{tabular}
 
@@ -185,8 +185,8 @@ Actions can be performed upon instances of the Network Resource type. The set th
 \begin{tabular}{lll}
 Action&Target State&Parameters\\
 \hline
-http://schemas.ogf.org/occi/infrastructure/compute/action\#up & active & None\\
-http://schemas.ogf.org/occi/infrastructure/compute/action\#down & inactive & None\\
+http://schemas.ogf.org/occi/infrastructure/network/action\#up & active & None\\
+http://schemas.ogf.org/occi/infrastructure/network/action\#down & inactive & None\\
 \end{tabular}
 
 \subsubsection{States}
@@ -202,7 +202,17 @@ Below illustrates the state diagram based on the actions defined above in REF.
 
 \subsubsection{IPNetworking Mixin}
 
-\emph{TODO}
+Define category
+term ipnetwork; scheme=''http://schemas.ogf.org/occi/infrastructure/network\#' title='what ever you want - IP network mixin, L3'
+Description
+
+\begin{tabular}{lllll}
+Attribute&Type&Multiplicity&Mutability&Description\\
+\hline
+occi. ipnetwork.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots* & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi. ipnetwork.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi. ipnetwork.allocation & String Enumeration, \{dynamic, static\} & 0\ldots1 & Mutable & Address mechanism: dynamic use the dynamic host configuration protocol, static uses user supplied static network configurations.\\
+\end{tabular}
 
 \subsection{Storage}
 The Storage Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#storage Category. A Storage Resource instance MUST at least expose this Category.
@@ -249,26 +259,23 @@ In order to create entities like virtual data centres or virtual clusters, it is
 \textit{TODO: A Link sub-type cannot have Actions. Actions are reserved for Resources.} \\
 \textit{TODO: Describe a NetworkLink here. What's shown is as is defined in the SLA@SOI project.}
 
-The NetworkLink Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#networklink Category. A NetworkLink Resource instance MUST at least expose this Category.
+The Networkinterface Link type is assigned the http://schemas.ogf.org/occi/infrastructure\#networkinterface Category. A Networkinterface Link instance MUST at least expose this Category.
 \paragraph{Attributes}
-
-%move ip specifics to a mixin
 
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
-occi.networklink.ip & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7) of the link\\
 occi.networklink.interface & String & 1 & Immutable & Identifier that relates the link to the link's device interface\\
 occi.networklink.mac & String & 1 & Mutable & MAC address associated with the link's device interface\\
 occi.networklink.state & String Enumeration\{ active, inactive \}& 1 & Immutable & Current status of the instance.\\
 \end{tabular}
-\paragraph{Actions}
-\begin{tabular}{lll}
-Action&Target State&Parameters\\
-\hline
-http://schemas.ogf.org/occi/infrastructure/compute/action\#up & active & None\\
-http://schemas.ogf.org/occi/infrastructure/compute/action\#down & inactive & None\\
-\end{tabular}
+% \paragraph{Actions}
+% \begin{tabular}{lll}
+% Action&Target State&Parameters\\
+% \hline
+% http://schemas.ogf.org/occi/infrastructure/compute/action\#up & active & None\\
+% http://schemas.ogf.org/occi/infrastructure/compute/action\#down & inactive & None\\
+% \end{tabular}
 \paragraph{States}
 \begin{figure}[!h]
 	\centering
@@ -276,6 +283,21 @@ http://schemas.ogf.org/occi/infrastructure/compute/action\#down & inactive & Non
 	\caption{Update: State diagram for NetworkLink}
 	\label{fig:networklink_state}
 \end{figure}
+
+\paragraph{IPNetworkInterface Mixin}
+
+Define category
+term ipnetworkinterface; scheme=''http://schemas.ogf.org/occi/infrastructure/networkinterface\#' title='what ever you want - IP network interface mixin, L3'
+Description
+
+\begin{tabular}{lllll}
+Attribute&Type&Multiplicity&Client Mutability&Description\\
+\hline
+occi.networkinterface.ip & IPv4 or IPv6 Address & 1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7) of the link\\
+occi.networkinterface.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi.networkinterface.allocation & String Enumeration, \{dynamic, static\} & 1 & Mutable & Address mechanism: dynamic use the dynamic host configuration protocol, static uses user supplied static network configurations.\\
+\end{tabular}
+
 
 \subsubsection{Linking to Storage Resources}
 The StorageLink Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#storagelink Category. A StorageLink Resource instance MUST at least expose this Category.
@@ -286,16 +308,16 @@ TODO: Describe a StorageLink here
 Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
 occi.storagelink.device & String & 1 & Mutable & Device identifier as presented to the guest OS.\\
-occi.storagelink.mountpoint & String & 1 & Mutable & Point to where the storage is mounted in the guest OS.\\
+occi.storagelink.mountpoint & String & 0\ldots1 & Mutable & Point to where the storage is mounted in the guest OS.\\
 occi.storagelink.state & String Enumeration\{ active, inactive \}& 1 & Immutable & Current status of the instance.\\
 \end{tabular}
-\paragraph{Actions}
-\begin{tabular}{lll}
-Action&Target State&Parameters\\
-\hline
-http://schemas.ogf.org/occi/infrastructure/compute/action\#up & active & None\\
-http://schemas.ogf.org/occi/infrastructure/compute/action\#down & inactive & None\\
-\end{tabular}
+% \paragraph{Actions}
+% \begin{tabular}{lll}
+% Action&Target State&Parameters\\
+% \hline
+% http://schemas.ogf.org/occi/infrastructure/compute/action\#up & active & None\\
+% http://schemas.ogf.org/occi/infrastructure/compute/action\#down & inactive & None\\
+% \end{tabular}
 
 \paragraph{States}
 \begin{figure}[!h]
