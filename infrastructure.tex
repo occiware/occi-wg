@@ -88,6 +88,8 @@ The Open Cloud Computing Interface (OCCI) is a RESTful Protocol (and API) for al
 \item Infrastructure - this defines the infrastructure domain resource types, the required attributes for each and the actions that can be taken on each.
 \end{itemize}
 
+OCCI makes an ideal interoperable boundary interface between the web and the internal resource management system of infrastructure providers.
+
 \section{Notational Conventions}
 
 All these parts and the information within are mandatory for implementors (unless otherwise specified). The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119. 
@@ -98,13 +100,13 @@ UML activity diagrams do not specify how OCCI should be rendered but what possib
 
 \section{Infrastructure}
 
-The infrastructure domain resource types within OCCI, including their specification definitions, are:
+The main infrastructure domain Resource types within OCCI, including their specification definitions, are:
 \begin{itemize}
 \item Compute: Information processing resources.
 \item Network: Interconnection resources.
 \item Storage: Information recording resources.
 \end{itemize}
-These infrastructure resource types inherit Resource base type and all its attributes. OCCI implementors MUST implement these. The HTTP Rendering document define how to interact with these resource types using RESTful communication. OCCI makes an ideal interoperable boundary interface between the web and the internal resource management system of infrastructure providers.
+These infrastructure Resource types inherit the core Resource base type and all its attributes. OCCI implementors MUST implement these types. The HTTP Rendering document defines how to interact with these resource types using RESTful communication.
 
 As REQUIRED by the OCCI Core specification every resource type instantiated that is a subclass of Resource MUST be assigned a Category that identifies the instantiated resource type. Each such Category MUST be related to the Resource base type Category. These Categories, the core categories, MUST always remain immutable to any client.
 
@@ -161,9 +163,9 @@ Below illustrates the state diagram based on the actions defined above in REF.
 \end{figure}
 
 \subsection{Network}
-The Network Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#network Category. A Network Resource instance MUST at least expose this Category.
+Network represents a L2 networking entity (e.g. a virtual switch). It can be extended using the mix-in mechanism or sub-classed to support L3/L4 capabilities such as TCP/IP etc. For the purposes of this specification we define a suitable OCCI mix-in so that IP networking can be supported. 
 
-\emph{TODO: The idea here is for Network to represent a L2 networking entity. It can then be extended using the mix-in mechanism to support L3/L4 capabilities such as TCP/IP etc. For the specification we will specify a L2 Network and then suitable mix-ins so that IP networking can be supported.}
+The Network Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#network Category. A Network Resource instance MUST use and expose this Category.
 
 \subsubsection{Attributes}
 The attributes that MUST be exposed by an instance of the Network Resource type are as follows:
@@ -190,7 +192,7 @@ http://schemas.ogf.org/occi/infrastructure/network/action\#down & inactive & Non
 \end{tabular}
 
 \subsubsection{States}
-Below illustrates the state diagram based on the actions defined above in REF.
+Below illustrates the state diagram based on the actions defined above.
 
 %\clearpage
 \begin{figure}[!h]
@@ -202,9 +204,9 @@ Below illustrates the state diagram based on the actions defined above in REF.
 
 \subsubsection{IPNetworking Mixin}
 
-Define category
-term ipnetwork; scheme=''http://schemas.ogf.org/occi/infrastructure/network\#' title='what ever you want - IP network mixin, L3'
-Description
+In order to support L3/L4 capabilities (e.g. IP, TCP etc) an OCCI mixin is herewith defined. 
+
+The IPNetworking mixin is assigned the http://schemas.ogf.org/occi/infrastructure/network\#ipnetwork Category. A IPNetworking mixin MUST use and expose this Category.
 
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Mutability&Description\\
@@ -215,7 +217,7 @@ occi. ipnetwork.allocation & String Enumeration, \{dynamic, static\} & 0\ldots1 
 \end{tabular}
 
 \subsection{Storage}
-The Storage Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#storage Category. A Storage Resource instance MUST at least expose this Category.
+The Storage Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#storage Category. A Storage Resource instance MUST use and expose this Category.
 
 \subsubsection{Attributes}
 The attributes that MUST be exposed by an instance of the Storage Resource type are as follows:
@@ -223,9 +225,8 @@ The attributes that MUST be exposed by an instance of the Storage Resource type 
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
-occi.storage.size & Float, ${\mathbf 10}^9$ (giga) & 1 & Mutable & Storage size in gigabytes of the instance.\\
+occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable & Storage size in gigabytes of the instance.\\
 occi.storage.state & String Enumeration, \{online, offline, degraded\} & 1 & Immutable & Current status of the instance.\\
-value & value & value & value & value\\
 \end{tabular}
 
 \subsubsection{Actions}
@@ -238,11 +239,11 @@ http://schemas.ogf.org/occi/infrastructure/storage/action\#online & online & Non
 http://schemas.ogf.org/occi/infrastructure/storage/action\#offline & offline & None\\
 http://schemas.ogf.org/occi/infrastructure/storage/action\#backup & None & None\\
 http://schemas.ogf.org/occi/infrastructure/storage/action\#snapshot & None & None\\
-http://schemas.ogf.org/occi/infrastructure/storage/action\#resize & None & size Float  ${\mathbf 10}^9$\\
+http://schemas.ogf.org/occi/infrastructure/storage/action\#resize & None & size (Float  ${\mathbf 10}^9$\\ (GiB))
 \end{tabular}
 
 \subsubsection{States}
-Below illustrates the state diagram based on the actions defined above in REF.
+Below illustrates the state diagram based on the actions defined above.
 
 %\clearpage
 \begin{figure}[!h]
@@ -253,14 +254,15 @@ Below illustrates the state diagram based on the actions defined above in REF.
 \end{figure}
 
 \subsection{Linking Infrastructure Resources}
-In order to create entities like virtual data centres or virtual clusters, it is necessary to allow the linking of the various infrastructure Resource types. This can be accomplished using the Link entity as defined in the core specification. However, the Link entity does not include enough information about specific types of Links that are used within an infrastructure-type domain.
-\subsubsection{Linking to Network Resources}
-\textit{TODO: NetworkLink is supposed to be a sub-type of Link right? If so, say "NetworkLink Link" instead of "NetworkLink Resource".} \\
-\textit{TODO: A Link sub-type cannot have Actions. Actions are reserved for Resources.} \\
-\textit{TODO: Describe a NetworkLink here. What's shown is as is defined in the SLA@SOI project.}
+In order to create entities like virtual data centres or virtual clusters, it is necessary to allow the linking of the various infrastructure Resource types. This can be accomplished extending the core specification Link entity as the Link entity does not include enough information about specific types of infrastructure links.
 
-The Networkinterface Link type is assigned the http://schemas.ogf.org/occi/infrastructure\#networkinterface Category. A Networkinterface Link instance MUST at least expose this Category.
+\subsubsection{Linking to Network Resources}
+NetworkInterface represents an L2 client device (e.g. network adapter). It can be extended using the mix-in mechanism or sub-classed to support L3/L4 capabilities such as TCP/IP etc. 
+
+The Networkinterface Link type is assigned the http://schemas.ogf.org/occi/infrastructure\#networkinterface Category. A Networkinterface Link instance MUST use and expose this Category.
+
 \paragraph{Attributes}
+The attributes that MUST be exposed by an instance of the NetworkInterface Link type are as follows:
 
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Mutability&Description\\
@@ -269,40 +271,35 @@ occi.networklink.interface & String & 1 & Immutable & Identifier that relates th
 occi.networklink.mac & String & 1 & Mutable & MAC address associated with the link's device interface\\
 occi.networklink.state & String Enumeration\{ active, inactive \}& 1 & Immutable & Current status of the instance.\\
 \end{tabular}
-% \paragraph{Actions}
-% \begin{tabular}{lll}
-% Action&Target State&Parameters\\
-% \hline
-% http://schemas.ogf.org/occi/infrastructure/compute/action\#up & active & None\\
-% http://schemas.ogf.org/occi/infrastructure/compute/action\#down & inactive & None\\
-% \end{tabular}
+
 \paragraph{States}
+Depicted below are the states that a NetworkInterface instance can hold.
+
 \begin{figure}[!h]
 	\centering
-	\includegraphics[scale=0.4]{figs/network-state.png}
-	\caption{Update: State diagram for NetworkLink}
+	\includegraphics[scale=0.4]{figs/infra-link-state.png}
+	\caption{State diagram for NetworkInterface}
 	\label{fig:networklink_state}
 \end{figure}
 
 \paragraph{IPNetworkInterface Mixin}
-
-Define category
-term ipnetworkinterface; scheme=''http://schemas.ogf.org/occi/infrastructure/networkinterface\#' title='what ever you want - IP network interface mixin, L3'
-Description
+In order to support L3/L4 capabilities (e.g. IP, TCP etc) with the NetworkInterface Link type an OCCI mixin is herewith defined.
+The IPNetworkInterface mixin is assigned the http://schemas.ogf.org/occi/infrastructure/networkinterface\#ipnetworkinterface Category. An IPNetworking mixin MUST use and expose this Category.
 
 \begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Client Mutability&Description\\
+Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
 occi.networkinterface.ip & IPv4 or IPv6 Address & 1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7) of the link\\
 occi.networkinterface.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
 occi.networkinterface.allocation & String Enumeration, \{dynamic, static\} & 1 & Mutable & Address mechanism: dynamic use the dynamic host configuration protocol, static uses user supplied static network configurations.\\
 \end{tabular}
 
-
 \subsubsection{Linking to Storage Resources}
-The StorageLink Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#storagelink Category. A StorageLink Resource instance MUST at least expose this Category.
-TODO: Describe a StorageLink here
+StorageLink Link type represents a link from a Resource to a target Storage Resource.
+The StorageLink Link type is assigned the  http://schemas.ogf.org/occi/infrastructure\#storagelink Category. A StorageLink Link instance MUST use and expose this Category.
+
 \paragraph{Attributes}
+The attributes that MUST be exposed by an instance of the StorageLink Link type are as follows:
 
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Mutability&Description\\
@@ -311,19 +308,14 @@ occi.storagelink.device & String & 1 & Mutable & Device identifier as presented 
 occi.storagelink.mountpoint & String & 0\ldots1 & Mutable & Point to where the storage is mounted in the guest OS.\\
 occi.storagelink.state & String Enumeration\{ active, inactive \}& 1 & Immutable & Current status of the instance.\\
 \end{tabular}
-% \paragraph{Actions}
-% \begin{tabular}{lll}
-% Action&Target State&Parameters\\
-% \hline
-% http://schemas.ogf.org/occi/infrastructure/compute/action\#up & active & None\\
-% http://schemas.ogf.org/occi/infrastructure/compute/action\#down & inactive & None\\
-% \end{tabular}
 
 \paragraph{States}
+Depicted below are the states that a StorageLink instance can hold.
+
 \begin{figure}[!h]
 	\centering
-	\includegraphics[scale=0.4]{figs/network-state.png}
-	\caption{Update: State diagram for StorageLink}
+	\includegraphics[scale=0.4]{figs/infra-link-state.png}
+	\caption{State diagram for StorageLink}
 	\label{fig:storagelink_state}
 \end{figure}
 % end infrastructure content
@@ -334,11 +326,6 @@ Editors: Andy Edmonds, Thijs Metsch \\
 Contributors: Alexander Papaspyrou, Ralf Nyr\'en, Sam Johnston
 
 \textbf{TBD: Bunch op people missing here - create table\ldots}
-
-\section{Appendix}
-
-\subsection{Examples for rendering the OCCI Infrastructure model using HTTP Headers}
-TODO: is this the relevant place?
 
 \begin{verbatim}
 
