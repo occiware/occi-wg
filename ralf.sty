@@ -1,0 +1,61 @@
+
+%% Double page
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty} ~ \cleardoublepage}}
+
+%%% Fonts %%%
+\def\figurecaptionfont{\footnotesize}
+\def\tablefont{\footnotesize}
+\def\tablecaptionfont{\footnotesize}
+
+
+%%% Floats %%%
+
+% Thick \hline (investigate this, the details are not clear to me yet)
+\newcommand{\Hline}{%
+	\noalign{\ifnum0=`}\fi\hrule \@height 2\arrayrulewidth \futurelet
+	\@tempa\@xhline
+}
+
+% Table rulers
+\newcommand{\toprule}{\Hline\\[-6.5pt]}
+\newcommand{\colrule}{\\[-7.5pt]\hline\\[-5.5pt]}
+\newcommand{\botrule}{\\[-8pt]\Hline}
+\newcommand{\crule}[1]{\\[-6pt]\cline{#1}\\[-6.5pt]}
+
+% My table float, arguments are caption text and tabular.
+\newcommand{\mytablefloat}[2]{%
+	\begin{table}[ht]
+	
+	\centering
+	\footnotesize
+	
+	\caption{#1}
+	\vspace{4pt}
+
+	#2
+
+	\end{table}
+	\vspace{2pt}
+}
+
+% Caption tweaks
+\renewcommand{\@makecaption}[2]{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{\footnotesize {\bf #1.} \hspace{2pt} #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    \footnotesize {\bf #1.} \hspace{2pt} #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+
+
+%%% Misc %%%
+
+% Cancel the effect of the \ragged commands
+\def\flushboth{%
+  \let\\\@normalcr
+  \@rightskip\z@skip \rightskip\@rightskip
+  \leftskip\z@skip
+  \parindent 1.5em\relax}
