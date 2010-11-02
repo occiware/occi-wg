@@ -151,7 +151,7 @@ capabilities in terms of \hl{Action} types.
 \begin{figure}[!h]
 {\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{270}
       {\includegraphics{figs/core_model.pdf}}} \par}
-\caption{UML class diagram of the OCCI model. The diagram provide an
+\caption{UML class diagram of the OCCI model. The diagram provides an
 overview of the OCCI model but is not a standalone definition thereof}
 \label{fig:occi_model}
 \end{figure}
@@ -287,10 +287,46 @@ concatenated unique identifiers of \hl{Category} types.
 %
 Sub-types of \hl{Category} such as \hl{Type} inherit this property.
 
+The categorization schemes defined in the OCCI specification all use the
+\textit{http://schemas.ogf.org/occi/} base URL. This base URL is reserved for
+OCCI an MUST NOT be used by domain-specific extensions.
+
+Attribute names defined by \hl{Category} instances%
+\footnote{Also applies to \hl{Type} instances.}
+use the \texttt{occi.}~prefix.  This prefix is reserved for OCCI and MUST NOT
+be used by domain-specific extensions.
 
 \subsubsection{Type relationship}
 \label{sec:type_relationship}
-blah
+As previously defined a structural \hl{Type} MUST be related, either
+either directly or indirectly, to the structural \hl{Type} of \hl{Kind},
+i.e.~\textit{http://schemas.ogf.org/occi/core\#kind}.
+%
+The OCCI base types \hl{Resource} and \hl{Link} extending \hl{Kind}, and any
+futher sub-typing, implies a hierarchy of related structural \hl{Type}
+instances. This \hl{Type} relationship thus mirror the type inheritance
+structure of the OCCI model and any extension thereof.
+
+In an example where a domain-specific ``Custom Compute Resource'' is a sub-type
+the OCCI infrastructure type Compute, which in turn is a sub-type of the
+\hl{Resource} type, four related structural \hl{Type}s would be involved.
+%
+Table~\ref{tbl:relationship} illustrates the exemplified hierarchy of \hl{Type}
+instances relating the domain-specific structural \hl{Type} to the structural
+\hl{Type} of \hl{Kind}.
+
+\mytablefloat{\label{tbl:relationship}Exempel of the \hl{Type} relationship involved
+for a domain-specific extension of the OCCI infrastructure type \hl{Compute}.}{
+\begin{tabular}{p{7cm}p{7cm}}
+\toprule
+Structural Type & Related Structural Type \\
+\colrule
+\textit{http://example.com/occi/custom\#compute} & \textit{http://schemas.ogf.org/occi/infrastructure\#compute} \\
+\textit{http://schemas.ogf.org/occi/infrastructure\#compute} & \textit{http://schemas.ogf.org/occi/core\#resource} \\
+\textit{http://schemas.ogf.org/occi/core\#resource} & \textit{http://schemas.ogf.org/occi/core\#kind} \\
+\botrule
+\end{tabular}
+}
 
 \subsubsection{Type assignment}
 blah
