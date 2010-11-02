@@ -1,4 +1,5 @@
-\documentclass[10pt,a4paper]{article}
+\documentclass[10pt,a4paper,british]{article}
+\usepackage[utf8]{inputenc}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -7,6 +8,13 @@
 
 % default sans-serif
 \renewcommand{\familydefault}{\sfdefault}
+
+% floats, caption, etc
+\usepackage{ralf}
+
+% Highlights
+\newcommand{\hl}{\texttt}
+%\usepackage{soul}
 
 % no lines for headers and footers
 \renewcommand{\headrulewidth}{0pt}
@@ -79,8 +87,8 @@ capabilities required to support modern service offerings.
 \newpage
 
 \section{Introduction}
-The Open Cloud Computing Interface (OCCI) is a RESTful Protocol (and
-API) \marginpar{Probably no need for the brackets} for all kinds of
+The Open Cloud Computing Interface (OCCI) is a RESTful Protocol and
+API for all kinds of
 Management tasks. OCCI was originally initiated to create a remote
 management API for IaaS model based Services, allowing for the
 development of interoperable tools for common tasks including
@@ -107,38 +115,59 @@ NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT",
 interpreted as described in RFC 2119.
 
 \section{OCCI model}
-OCCI is a boundary protocol/API \marginpar{Better as protocol and API}
-that acts as a service front-end to a provider’s internal management
-framework.  Diagram \ref{fig:placement} shows OCCI's place in a
-provider’s architecture:
+OCCI is a boundary protocol and API
+that acts as a service front-end to a provider's internal management
+framework. Figure~\ref{fig:placement} shows OCCI's place in a
+provider's architecture.
 
 \begin{figure}[!hp]
 	\centering
 	\includegraphics[scale=0.5]{figs/occi-intro.png}
-	\caption{OCCI Overview}
+	\caption{OCCI's place in a provider's architecture}
 	\label{fig:placement}
 \end{figure}
 
-The core of the OCCI model is simple. The central resource type is
-Resource and contains a number of common attributes that
-domain-specific Resource types inherit. These Resource types are
-complemented by two additional types, Link and Action. Accompanying
-these, Kind and Category provide the fabric for a safe extension model
-towards domain-specific usage. For compliance with OCCI Core, all
-types MUST be implemented. The UML class diagram \ref{fig:occi_core}
-gives an overview of the model.
+The heart of the OCCI model is the \hl{Resource} type. To expose a resource
+through the OCCI API a domain-specific sub-type of \hl{Resource} is used to
+represent the resource in the OCCI model.
+A resource can be basically anything, e.g. a virtual machine, a job in a job
+submission system, a user, etc.
+%
+The \hl{Resource} type contains a number of common attributes that
+domain-specific \hl{Resource} types inherit. The \hl{Resource} type is
+complemented by the \hl{Link} type which associates one \hl{Resource} instance
+with another.
+%
+The \hl{Link} type also contain a number of common attributes that
+domain-specific \hl{Link} types inherit.
 
-\clearpage
+\hl{Kind} is an abstract type which both \hl{Resource} and \hl{Link} inherit.
+Each type inheriting \hl{Kind} is identified by a unique \hl{Type} instance. A
+\hl{Type} define the capabilities of a \hl{Kind} in terms of additional
+attributes and \hl{Action} types.
+%
+The \hl{Type} type comprise the identification and classification system built
+into the OCCI model. \hl{Type} is a specialisation of \hl{Category} and
+introduce additional capabilities in terms of \hl{Action} types.
+
 \begin{figure}[!h]
-{\centering \resizebox*{1.0\columnwidth}{!}{\rotatebox{270}
+{\centering \resizebox*{0.8\columnwidth}{!}{\rotatebox{270}
       {\includegraphics{figs/core_model.pdf}}} \par}
-\caption{OCCI Overview}
-\label{fig:occi_core}
+\caption{UML class diagram of the OCCI model. The diagram provide an
+overview of the OCCI model but is not a standalone definition thereof}
+\label{fig:occi_model}
 \end{figure}
 
-The following sections of the specification define the foundations of
-the OCCI model, including common resource types, linkages and
-attributes.
+The UML class diagram shown in figure~\ref{fig:occi_model} is an overview of
+the OCCI model.  For compliance with OCCI Core, all of types defined in
+the OCCI model MUST be implemented.
+The following sections of the specification define the details of the OCCI
+model.
+
+\subsection{Classification and identification}
+
+blah blah
+
 
 \subsection{The base types}
 The following sections describe the base types of the OCCI core
@@ -421,12 +450,9 @@ Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 \textbf{TBD: Bunch op people missing here - create table\ldots}
 
 \section{Glossary}
+\label{sec:glossary}
+\input{include/glossary}
 
-\begin{tabular}{l|l}
-Term & Description \\
-\hline
-OCCI & Open Cloud Computing Interface \\
-\end{tabular}
 
 \section{Intellectual Property Statement}
 The OGF takes no position regarding the validity or scope of any
