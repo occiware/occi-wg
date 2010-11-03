@@ -143,9 +143,9 @@ model.
 
 \subsection{Classification and Identification}
 \label{sec:classification}
-The OCCI model provides a builtin classification system allowing for safe
-extension towards domin-specific usage. This system is like a ``type system''
-but with the possiblity of being easily exposed over a text based protocol.
+The OCCI model provides a built in classification system allowing for safe
+extension towards domain-specific usage. This system is like a ``type system''
+but with the possibility of being easily exposed over a text based protocol.
 %
 The classification system can be summarised with the following key features:
 \begin{itemize}
@@ -236,15 +236,15 @@ implement to be compliant.
 \toprule
 Attribute & Type & Multiplicity & Client Mutability & Description \\
 \colrule
-term & String & 1 & Immutable & Unique identifier of the \hl{Category} instance within the categorization scheme. \\
-scheme & URI & 1 & Immutable & The categorization scheme. \\
+term & String & 1 & Immutable & Unique identifier of the \hl{Category} instance within the categorisation scheme. \\
+scheme & URI & 1 & Immutable & The categorisation scheme. \\
 title & String & 0..1 & Immutable & Denotes the display name of an instance. \\
 attributes & String & 0..* & Immutable & Comprise the resource attribute names defined by the \hl{Category} instance. \\
 \botrule
 \end{tabular}
 }
 
-A \hl{Category} is uniquely identified by concatenating the categorization
+A \hl{Category} is uniquely identified by concatenating the categorisation
 scheme with the category term,
 e.g.~\textit{http://example.com/category/scheme\#term}.
 This is done to enable discovery of \hl{Category} definitions in text based
@@ -253,7 +253,7 @@ concatenated unique identifiers of \hl{Category} types.
 %
 Sub-types of \hl{Category} such as \hl{Type} inherit this property.
 
-The categorization schemes defined in the OCCI specification all use the
+The categorisation schemes defined in the OCCI specification all use the
 \textit{http://schemas.ogf.org/occi/} base URL. This base URL is reserved for
 OCCI an MUST NOT be used by domain-specific extensions.
 
@@ -269,7 +269,7 @@ either directly or indirectly, to the structural \hl{Type} of \hl{Kind},
 i.e.~\textit{http://schemas.ogf.org/occi/core\#kind}.
 %
 The OCCI base types \hl{Resource} and \hl{Link} extending \hl{Kind}, and any
-futher sub-typing, implies a hierarchy of related structural \hl{Type}
+further sub-typing, implies a hierarchy of related structural \hl{Type}
 instances. This \hl{Type} relationship thus mirror the type inheritance
 structure of the OCCI model and any extension thereof.
 
@@ -281,7 +281,7 @@ Table~\ref{tbl:relationship} illustrates the exemplified hierarchy of \hl{Type}
 instances relating the domain-specific structural \hl{Type} to the structural
 \hl{Type} of \hl{Kind}.
 
-\mytablefloat{\label{tbl:relationship}Exempel of the \hl{Type} relationship involved
+\mytablefloat{\label{tbl:relationship}Example of the \hl{Type} relationship involved
 for a domain-specific extension of the OCCI infrastructure type \hl{Compute}.}{
 \begin{tabular}{p{7cm}p{7cm}}
 \toprule
@@ -410,7 +410,7 @@ non-structural types & \hl{Type} & 0..* & Mutable & The non-structural \hl{Type}
 optional \texttt{title} attribute.
 %
 Every sub-type of \hl{Kind} MUST be assigned a structural \hl{Type}, see
-sectian~\ref{sec:type}. \hl{Kind} itself is assigned the structural \hl{Type}
+section~\ref{sec:type}. \hl{Kind} itself is assigned the structural \hl{Type}
 \textit{http://schemas.ogf.org/occi/core\#kind}.
 %
 A \hl{Kind} sub-type instance MAY be associated with one or more non-structural
@@ -438,7 +438,7 @@ The Resource type is assigned the structural \hl{Type}
 \toprule
 Attribute & Type & Multiplicity & Client Mutability & Description \\
 \colrule
-summary & String & 0..1 & Mutable & A summarizing description of the \hl{Resource} instance.\\
+summary & String & 0..1 & Mutable & A summarising description of the \hl{Resource} instance.\\
 links & \hl{Link} & 0..* & Mutable & A set of \hl{Link} compositions. Being a composite relation the removal of a \hl{Link} from the set MUST also remove the \hl{Link} instance.\\
 \botrule
 \end{tabular}
@@ -523,7 +523,7 @@ OCCI model, see section~\ref{sec:extensibility}.
 Attributes of a type instance from the OCCI model, a resource instance, are
 either client mutable or client immutable. If an attribute is noted to
 be mutable this MUST be interpreted that a client can create a
-resource instance that is parametrized by the attribute. Likewise, if
+resource instance that is parametrised by the attribute. Likewise, if
 an attribute is mutable, a client can update that resource instance's
 mutable attribute value and the server side MUST support this. If an
 attribute is marked as immutable, it indicates that the server side
@@ -549,7 +549,7 @@ Domain-specific \hl{Type} and \hl{Category} instances MAY be introduced by an
 OCCI implementation.
 %
 A \hl{Type} or \hl{Category} instance defined outside of the OCCI
-specification MUST use a categorization scheme unique to the provider,
+specification MUST use a categorisation scheme unique to the provider,
 e.g.~\textit{http://example.com/occi\#}.
 %
 An attribute introduced by a domain-specific \hl{Type} or \hl{Category} MUST
@@ -582,7 +582,7 @@ restrictions.
 In order to support user-defined tags an OCCI implementation MUST allow
 non-structural \hl{Type}s to be created and destroyed by request of a client.
 There is no limitation in the OCCI model from doing so but it is RECOMMENDED to
-assign a separate catogorization scheme for each user's non-structural
+assign a separate categorisation scheme for each user's non-structural
 \hl{Type}s.
 
 \section{Contributors}
