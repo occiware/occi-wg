@@ -306,7 +306,8 @@ The attributes that MUST be exposed by an instance of the StorageLink Link type 
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
-occi.storagelink.device & String & 1 & Mutable & Device identifier as presented to the guest OS.\\
+occi.storagelink.deviceid & String & 1 & Mutable & Device identifier as defined by the IEEE ??? standard.\\
+%occi.storagelink.osdevice & String & 0\ldots1 & Mutable & Device identifier as presented to the guest OS.\\
 occi.storagelink.mountpoint & String & 0\ldots1 & Mutable & Point to where the storage is mounted in the guest OS.\\
 occi.storagelink.state & String Enumeration\{ active, inactive \}& 1 & Immutable & Current status of the instance.\\
 \end{tabular}
