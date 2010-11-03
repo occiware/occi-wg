@@ -164,7 +164,7 @@ The classification system can be summarised with the following key features:
 \end{itemize}
 
 \subsubsection{Type}
-
+\label{sec:type}
 The \hl{Type} type comprise the classification system provided by OCCI
 model. It MUST be implemented. A \hl{Type} instance can be either structural or
 non-structural.
@@ -222,7 +222,7 @@ The following rules apply:
 \end{itemize}
 
 \subsubsection{Category}
-
+\label{sec:category}
 The \hl{Category} type comprise basis of identification used by the OCCI
 classification system. It MUST be implemented. Instances of the \hl{Category}
 type are only used to identify \hl{Action} types. All other uses of
@@ -381,159 +381,143 @@ request.
 
 \subsection{The OCCI base types}
 \label{sec:base_types}
-The following sections describe the base types of the OCCI core
-model. The base types are Kind, Category, Resource, Link and
-Action. All base types MUST be implemented.
+The following sections describe the OCCI base types defined by the OCCI model.
+The base types are \hl{Kind}, \hl{Resource}, \hl{Link} and \hl{Action}. All
+base types MUST be implemented.
 
 \subsubsection{Kind}
-The Kind type is an abstract base type and common to all resources in
-the OCCI context. It MUST be implemented. Kind enforces for all
-subtypes a required id attribute and an (optional) title
-attribute. More importantly Kind introduces one or more type mix-ins
-through the type Category (see section \ref{sec:type_system}). The
-following table defines the attributes the Kind type MUST implement to
-be compliant:
+\label{sec:kind}
+The \hl{Kind} type is the abstract base type for \hl{Resource} and \hl{Link}
+and any domain-specific sub-type thereof. It MUST be implemented.
+%
+Table~\ref{tbl:kind} defines the attributes the \hl{Kind} type MUST implement to
+be compliant.
 
-\begin{tabular}{l|l|l|l|p{2.7in}}
+\mytablefloat{\label{tbl:kind}Attributes defined for the \hl{Kind} type.}{
+\begin{tabular}{llllp{7cm}}
+\toprule
 Attribute & Type & Multiplicity & Client Mutability & Description \\
-\hline
-id & URI & 1 & Immutable & Denotes a unique (within the service provider's name-space) identifier of a Kind subtype instance. \\
-title & String & 0..1 & Mutable & Denotes the display name of an instance. \\
-categories & Category & 1..* & Mutable\footnotemark[1] & Comprises the Category types associated to this instance. Consumers can expect the attributes and actions of the associated Category types to be exposed by the instance. \\ 
+\colrule
+id & URI & 1 & Immutable & A unique identifier (within the service provider's name-space) of the \hl{Kind} sub-type instance. \\
+title & String & 0..1 & Mutable & The display name of the instance. \\
+structural type & \hl{Type} & 1 & Immutable & The structural \hl{Type} of the instance. \\
+non-structural types & \hl{Type} & 0..* & Mutable & The non-structural \hl{Type}s associated to this instance. Consumers can expect the attributes and \hl{Action}s of the associated non-structural \hl{Type}s to be exposed by the instance. \\ 
+\botrule
 \end{tabular}
-\footnotetext[1]{Only tag Category types are client mutable.}
-\addtocounter{footnote}{1}
+}
 
-\subsubsection{Category}
-The Category type represent the classification mechanism used by
-OCCI. It MUST be implemented. From a system point of view a Category
-is used for two different classification purposes. See also section
-\ref{sec:type_system} ``Type System'' and section \ref{sec:collection}
-``Collections''.
+\hl{Kind} enforces for all sub-types a required \texttt{id} attribute and an
+optional \texttt{title} attribute.
+%
+Every sub-type of \hl{Kind} MUST be assigned a structural \hl{Type}, see
+sectian~\ref{sec:type}. \hl{Kind} itself is assigned the structural \hl{Type}
+\textit{http://schemas.ogf.org/occi/core\#kind}.
+%
+A \hl{Kind} sub-type instance MAY be associated with one or more non-structural
+\hl{Type}s.
 
-\begin{description}
-\item[Taxonomy] A Category is used to assign static type information
-  to each resource type inheriting Kind or a descendant of Kind. This
-  use of Category types denotes the OCCI "static type system". A
-  unique Category MUST be assigned to every descendant of Kind. See
-  the section \ref{sec:hierarchy} "Hierarchy".
-\item[Folksonomy] A Category can be used to assign tags to resource
-  instances via a mix-in like model. A Category mix-in MUST NOT be
-  related to an OCCI base type (or any descendant of Kind) and MUST
-  NOT be the unique identifier thereof.  Example use cases are
-  collections, location information and templates for virtual machine
-  provisioning.
-\end{description}
-
-The following table defines the attributes the Category type MUST
-implement to be compliant:
-
-\begin{tabular}{l|l|l|l|p{2.7in}}
-Attribute & Type & Multiplicity & Client Mutability & Description \\
-\hline
-term & String & 1 & Immutable & The category to which the resource belongs. \\
-scheme & URI & 1 & Immutable & The categorization scheme. \\
-title & String & 0..1 & Immutable & Denotes the display name of an instance. \\
-attributes & String & 0..* & Immutable & Comprise the resource attributes defined by the Category. \\
-related & Category & 0..* & Immutable & Set of related Category types. \\
-\end{tabular}
-
-A Category is uniquely identified by concatenating the categorization
-scheme with the category term,
-e.g. \textit{http://example.com/category/scheme\#term}.  This is done
-to enable discovery of Category definitions per HTTP. All renderings
-MUST make use and understand concatenated unique identifiers of
-Category types.
-
-\paragraph{Hierarchy}
-\label{sec:hierarchy}
-To be a part of the "static type system" a Category MUST be related,
-either directly or indirectly, to a base type Category. Extension of
-the OCCI base types through subtyping thus implies a hierarchy of
-related Category types.
-
-In an example where "Custom-Compute-Resource" is a subtype of
-"Compute-Resource", which in turn is a subtype of the Resource base
-type, three related Category types would be involved. The following
-table illustrates the exemplified hierarchy of Category types relating
-the custom Category to a base type Category.
-
-Example:
-
-\begin{tabular}{p{0.6in}|p{3.1in}|p{2in}}
-Kind & Category & Related Category \\
-\hline
-Custom-Compute-Resource & \textit{http://example.com/occi/custom\#compute} & \textit{http://schemas.ogf.org/occi/infrastructure\#compute} \\
-Compute-Resource & \textit{http://schemas.ogf.org/occi/infrastructure\#compute} & \textit{http://schemas.ogf.org/occi/core\#resource} \\
-Resource & \textit{http://schemas.ogf.org/occi/core\#resource} & none \\
-\end{tabular}
+A \hl{Kind} sub-type instance MUST expose its structural \hl{Type} and any
+associated non-structural \hl{Type}s together with their associated attributes
+and \hl{Action}s.
 
 \subsubsection{Resource}
-The Resource type describes a concrete resource that can be inspected
-and manipulated. It represents a general object in the OCCI core model
-and MUST be implemented. Resource enforces the inheritance of a set of
-common attributes into subtypes (such as a unique identifier and an
-optional descriptive summary). Moreover, it introduces relationships
-to other Resource instances, denoted by Links. It also introduces
-operations that can be invoked on this instance, denoted by Actions.
+\label{sec:resource}
+The \hl{Resource} type inherit \hl{Kind} and describes a concrete resource that
+can be inspected and manipulated. It represents a general object in the OCCI
+model and MUST be implemented.
+%
+The \hl{Resource} type MUST implement all attributes inherited from the
+\hl{Kind} type together with the attributes defined in table~\ref{tbl:resource}
+in order to be compliant.
+%
+The Resource type is assigned the structural \hl{Type}
+\textit{http://schemas.ogf.org/occi/core\#resource}.
 
-The Resource type is assigned the
-\textit{http://schemas.ogf.org/occi/core\#resource} Category.
-
-\begin{itemize}
-  \item A Resource instance MUST at least expose this or a related
-    Category together with any associated attributes.
-  \item A Resource instance MUST advertise those of its Actions, if
-    any, which are currently applicable.
-  \item A Resource instance MUST implement the attributes in the
-    following table:
-\end{itemize}
-
-\begin{tabular}{l|l|l|l|p{2.7in}}
+\mytablefloat{\label{tbl:resource}Attributes defined for the \hl{Resource} type.}{
+\begin{tabular}{llllp{8cm}}
+\toprule
 Attribute & Type & Multiplicity & Client Mutability & Description \\
-\hline
-summary & String & 0..1 & Mutable & Holds a summarizing description of the Resource instance.\\
-links & Link & 0..* & Mutable & Comprises a set of Link compositions. Being a composite relation the removal of a Link from the set MUST also remove the Link instance.\\
-actions & Action & 0..* & Immutable & Set of Actions associated with the Resource.\\
+\colrule
+summary & String & 0..1 & Mutable & A summarizing description of the \hl{Resource} instance.\\
+links & \hl{Link} & 0..* & Mutable & A set of \hl{Link} compositions. Being a composite relation the removal of a \hl{Link} from the set MUST also remove the \hl{Link} instance.\\
+\botrule
 \end{tabular}
+}
 
-The OCCI Extension documents define sets of specific subtypes of
-Resources, Links and Actions. They inherit Resource and is each
-assigned an unique Category.
+\hl{Resource} enforces the inheritance of a set of common attributes into
+sub-types. Moreover, it introduces relationships to other \hl{Resource}
+instances through instances of the \hl{Link} type.
+%
+The \hl{Resource} type is the entry point for domain-specific extensions of the
+OCCI model, see section~\ref{sec:extension}.
 
 \subsubsection{Link}
-The Link type defines a base association between two Resources. It
-MUST be implemented. Link indicates that one resource is connected to
-another.
+\label{sec:link}
+An instance of the \hl{Link} type defines a base association between two
+\hl{Resource} instances. It MUST be implemented. A \hl{Link} instance indicates
+that one \hl{Resource} instance is connected to another.
+%
+The \hl{Link} type MUST implement all attributes inherited from the
+\hl{Kind} type together with the attributes defined in table~\ref{tbl:link}
+in order to be compliant.
+%
+The Link type is assigned the structural \hl{Type}
+\textit{http://schemas.ogf.org/occi/core\#link}.
 
-The Link type is assigned the
-\textit{http://schemas.ogf.org/occi/core\#link Category}. A Link
-instance MUST at least expose this or a related Category together with
-any associated attributes. A Link instance MUST also implement the
-attributes in the following table:
-
-\begin{tabular}{l|l|l|l|p{2.7in}}
+\mytablefloat{\label{tbl:link}Attributes defined for the \hl{Link} type.}{
+\begin{tabular}{llllp{7.5cm}}
+\toprule
 Attribute & Type & Multiplicity & Client Mutability & Description \\
-\hline
-source & Resource & 1 & Mutable & Denotes the resource the Link instance originates from.\\
-target & Resource & 1 & Mutable & Denotes the resource the Link instance points to.\\
+\colrule
+source & \hl{Resource} & 1 & Mutable & The \hl{Resource} instances the \hl{Link} instance originates from.\\
+target & \hl{Resource} & 1 & Mutable & The \hl{Resource} instances the \hl{Link} instance points to.\\
+\botrule
 \end{tabular}
+}
 
-The Link base type MUST NOT refer to an external resource. A provider
-MAY however create a subtype of Link with different semantics that
-e.g. have a target attribute containing an URI and thus the ability of
-linking with external resources.
+An instance of the \hl{Link} type MUST NOT refer to an external resource.  A
+provider MAY however create a sub-type of \hl{Link} with different semantics,
+e.g. have a target attribute containing an URI and thus the ability of linking
+with external resources.
+%
+The \hl{Link} type can be sub-typed for domain-specific extensions of the
+OCCI model, see section~\ref{sec:extension}.
 
 \subsubsection{Action}
-The Action type defines an invocable operation on an associated
-Resource. It MUST be implemented. In general, Actions modify state
-(e.g. by performing a complex operation such as rebooting a virtual
-machine).
+The \hl{Action} type defines an invocable operation applicable to a \hl{Kind}
+sub-type instance or a collection thereof. It MUST be implemented. In general,
+\hl{Action}s modify state by e.g. performing a complex operation such as
+rebooting a virtual machine.
+%
+Table~\ref{tbl:action} defines the attributes the \hl{Action} type MUST
+implement to be compliant.
 
-The Action type is assigned the
-\textit{http://schemas.ogf.org/occi/core\#action} Category. An Action
-instance MUST at least expose this or a related Category together with
-any associated attributes.
+\mytablefloat{\label{tbl:action}Attributes defined for the \hl{Action} type.}{
+\begin{tabular}{llllp{7.5cm}}
+\toprule
+Attribute & Type & Multiplicity & Client Mutability & Description \\
+\colrule
+category & \hl{Category} & 1 & Immutable & The identifying \hl{Category} of the \hl{Action}. \\
+parameters & String & 0..* & Immutable & Enumeration of valid parameters for the \hl{Action}. \\
+\botrule
+\end{tabular}
+}
+
+An \hl{Action} is always bound to a \hl{Type} instance through a composite
+association. An \hl{Action} is considered a capability of the \hl{Type}.  An
+\hl{Action} MAY be invoked on any \hl{Kind} sub-type instance associated with
+the \hl{Type} instance defining the \hl{Action}. An OCCI implementation MAY
+refuse an \hl{Action} from being invoked if currently not applicable.
+
+An \hl{Action} MAY be invoked on a collection of \hl{Kind} sub-type instances.
+The \hl{Action} is only considered valid if all instances of the collection are
+associated with the \hl{Type} defining the \hl{Action}.
+
+The Action type is assigned the \hl{Category} identifier
+\textit{http://schemas.ogf.org/occi/core\#action}.
+%
+The \hl{Action} type can be sub-typed for domain-specific extensions of the
+OCCI model, see section~\ref{sec:extension}.
 
 \subsection{Mutability}
 \marginpar{Does 'client access' need to be discussed here?}
@@ -596,6 +580,7 @@ For example an instance of the Resource type will be assigned the
 part of the Resource Category collection.
 
 \subsection{Extensibility}
+\label{sec:extension}
 The OCCI Core model has a flexible yet fairly simple extension
 mechanism through the use of sub-typing and Category types.
 
