@@ -1,23 +1,33 @@
 
 TEX=pdflatex
+BIBTEX=bibtex
 DIA=dia
 VIEW=evince
 
 SOURCE:=$(shell egrep -l '^[^%]*\\begin\{document\}' *.tex)
 PDFS=$(SOURCE:.tex=.pdf)
 
-all: dias
+all:
 	for item in $(PDFS) ; do \
 	make $$item ; \
 	done
 
-dias:
+dias: 
 	$(DIA) -t png dia/*.dia
 
-%.pdf: %.tex
-	while ($(TEX) $* ; \
-	grep -q "Rerun to get cross" $*.log ) do true ; \
-	done
+%.pdf: dias %.tex
+	$(TEX) $*
+	
+	@if(grep "There were undefined references" $*.log > /dev/null);\
+	then \
+		$(BIBTEX) $*; \
+		$(TEX) $*; \
+	fi
+	
+	@if(grep "Rerun" $*.log > /dev/null);\
+	then \
+		$(TEX) $*;\
+	fi
 
 show: all
 	$(VIEW) *.pdf
@@ -26,4 +36,5 @@ show-mac: all
 	open *.pdf
 
 clean:
-	rm -rf *.toc *.log *.pdf *.aux *.png *.dvi
+	@rm -f *.pdf *.aux *.bbl *.blg *.log *.dvi *.png \
+		*.idx *.ilg *.ind *.toc *.lot *.lof
