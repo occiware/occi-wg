@@ -46,6 +46,7 @@
 
 GWD-R \hfill  Thijs Metsch, Platform Computing\\
 OCCI-WG \hfill  Andy Edmonds, Intel\\
+\rightline Ralf Nyrén, Aurenav\\
 \rightline {October 14, 2010}\\
 \rightline {Updated: \today}
 
@@ -162,22 +163,9 @@ The classification system can be summarised with the following key features:
  associated with a particular \hl{Type} instance form a collection.
 \end{itemize}
 
-\begin{comment}
-The central component of the classification system is the \hl{Type} type which
-is a specialisation of the \hl{Category} type. The following sections describe
-the OCCI classification system in detail.
-
-Each OCCI base type, see section~\ref{sec:base_types}, is assigned a
-unique identifier.  This identifier is an instance of \hl{Type} and comprise
-the structural \hl{Type} of the associated base type%
-\footnote{The \hl{Action} type is an exception and is instead uniquely
-identified by a \hl{Category} instance. An \hl{Action} is a capability of \hl{Type}
-and can therefore not be identified by \hl{Type}.}.
-\end{comment}
-
 \subsubsection{Type}
 
-The \hl{Type} type comprise the classification mechanism provided by OCCI
+The \hl{Type} type comprise the classification system provided by OCCI
 model. It MUST be implemented. A \hl{Type} instance can be either structural or
 non-structural.
 
@@ -222,7 +210,7 @@ The following rules apply:
  \hl{Kind} sub-type instance it is associated with. A non-structural \hl{Type}
  add capabilities using a mix-in like model.
 \item A non-structural \hl{Type} MUST only be associated with \hl{Kind}
- sub-type {\em instances}, either at creation time or any time after.
+ sub-type {\em instances}, either at creation-time or run-time.
 \item A non-structural \hl{Type} MUST NOT be related, neither directly nor
  indirectly, to the structural \hl{Type} of \hl{Kind},
  i.e.~\textit{http://schemas.ogf.org/occi/core\#kind}.
@@ -307,21 +295,89 @@ Structural Type & Related Structural Type \\
 }
 
 \subsubsection{Type assignment}
-blah
+\label{sec:type_assignment}
+A structural \hl{Type} MUST be statically assigned to each sub-type of
+\hl{Kind} defined by an implementation. A \hl{Kind} sub-type instance MUST be
+automatically associated with its structural \hl{Type} at creation-time.  The
+structural \hl{Type} associated with an instance MUST remain associated with the
+instance during its lifetime.
+
+A non-structural \hl{Type}, also known as a mix-in, MAY be associated with a
+\hl{Kind} sub-type instance, either at creation-time or run-time. An OCCI
+implementation MAY restrict which instances can be associated with a particular
+non-structural \hl{Type}.
 
 \subsubsection{Collections}
-blah
+\label{sec:collection}
+One or more \hl{Kind} sub-type instances associated with the same \hl{Type},
+may it be structural or non-structural, automatically form a collection.
+Each \hl{Type} instance in the system identifies a collection consisting of all
+different \hl{Kind} sub-type instances associated with the \hl{Type}.
+
+A \hl{Kind} sub-type instance is always a member of the \hl{Kind}'s structural
+\hl{Type} collection since a \hl{Kind} sub-type instance MUST be associated
+with the structural \hl{Type} of the \hl{Kind} sub-type.
+Since a non-structural \hl{Type} can be assigned to any \hl{Kind} sub-type
+instance a collection can contain instances of different \hl{Kind} sub-types.
+
+For example an instance of the \hl{Resource} type will always be associated
+with the \textit{http://scheme.ogf.org/occi/core\#resource} \hl{Type} and thus
+part of the \hl{Resource} \hl{Type} collection.
 
 \subsubsection{Discovery}
 \label{sec:discovery}
-The classification system is used by the OCCI discovery mechanism, see
-section~\ref{sec:discovery}, which allows for an OCCI client to determine:
+An OCCI client MUST be able to discover all instances of \hl{Type} and
+\hl{Category} a particular service provider's OCCI implementation support. By
+examining these instances a client MUST be able to, at a minimum, deduce the
+following information:
 \begin{itemize}
-\item The resource types available from a particular service provider, including domain-specific extensions.
-\item The attributes associated with each resource type.
-\item The invocable operations (actions) defined for each resource type.
-\item Additional mix-in types applicable to resource instances.
+\item The \hl{Kind} sub-types available from a the service provider, including domain-specific extensions.
+\item The attributes associated with each \hl{Kind} sub-type.
+\item The invocable operations, i.e. \hl{Action}s, defined for each \hl{Kind} sub-type.
+\item Additional mix-ins or tags, i.e. non-structural \hl{Type}s, applicable to
+ \hl{Kind} sub-type instances.
 \end{itemize}
+The above requirements comprise the OCCI discovery mechanism. It MUST be
+implemented.
+%
+The details of exactly how the \hl{Category} and \hl{Type} instances are
+exposed to an OCCI client is specific to the particular rendering used.
+\marginpar{References?}
+The relevant details can be found in the OCCI rendering documents.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Bits and pieces %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Stuff which may or may not be useful to add somewhere in the spec...
+
+\begin{comment}
+The central component of the classification system is the \hl{Type} type which
+is a specialisation of the \hl{Category} type. The following sections describe
+the OCCI classification system in detail.
+
+Each OCCI base type, see section~\ref{sec:base_types}, is assigned a
+unique identifier.  This identifier is an instance of \hl{Type} and comprise
+the structural \hl{Type} of the associated base type%
+\footnote{The \hl{Action} type is an exception and is instead uniquely
+identified by a \hl{Category} instance. An \hl{Action} is a capability of \hl{Type}
+and can therefore not be identified by \hl{Type}.}.
+\end{comment}
+
+
+\begin{comment}
+%%% CLIENT Interaction, do we need to specify this explicitly?!
+\subsubsection{Creating Instances}
+A client MUST supply the concrete Kind type as a Category. All OCCI
+implementations MUST understand these requests containing concrete
+Kind types, i.e. Resource, Link, Action or a subtype thereof.
+
+When a client attempts to add a non-structural
+\hl{Type} at a stage not supported by a particular provider's OCCI
+implementation, the provider MUST notify the client it has issued a bad
+request.
+\end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \subsection{The OCCI base types}
 \label{sec:base_types}
