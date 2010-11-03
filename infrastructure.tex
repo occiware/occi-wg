@@ -284,7 +284,8 @@ Depicted below are the states that a NetworkInterface instance can hold.
 
 \paragraph{IPNetworkInterface Mixin}
 In order to support L3/L4 capabilities (e.g. IP, TCP etc) with the NetworkInterface Link type an OCCI mixin is herewith defined.
-The IPNetworkInterface mixin is assigned the http://schemas.ogf.org/occi/infrastructure/networkinterface\#ipnetworkinterface Category. An IPNetworking mixin MUST use and expose this Category.
+
+The IPNetworkInterface mixin is assigned the http://schemas.ogf.org/occi/infrastructure/networkinterface\#ipnetworkinterface Category. An IPNetworking mixin MUST use and expose this Category.
 
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Mutability&Description\\
@@ -296,7 +297,8 @@ occi.networkinterface.allocation & String Enumeration, \{dynamic, static\} & 1 &
 
 \subsubsection{Linking to Storage Resources}
 StorageLink Link type represents a link from a Resource to a target Storage Resource.
-The StorageLink Link type is assigned the  http://schemas.ogf.org/occi/infrastructure\#storagelink Category. A StorageLink Link instance MUST use and expose this Category.
+
+The StorageLink Link type is assigned the  http://schemas.ogf.org/occi/infrastructure\#storagelink Category. A StorageLink Link instance MUST use and expose this Category.
 
 \paragraph{Attributes}
 The attributes that MUST be exposed by an instance of the StorageLink Link type are as follows:
@@ -318,6 +320,37 @@ Depicted below are the states that a StorageLink instance can hold.
 	\caption{State diagram for StorageLink}
 	\label{fig:storagelink_state}
 \end{figure}
+
+\subsection{Infrastructure Templates}
+There are 2 supported infrastructural template types in OCCI.
+
+\subsubsection{OS Template}
+OCCI implementers SHOULD support this, otherwise what they provision will be merely Resources without any execution environment (e.g. operating system). Of the two supported template types, this is the most basic and necessary template category that a provider SHOULD offer. The construction of It consists of a provider specific 'scheme' and a descriptive 'title' detailing the OS. The 'term' value of the template category is a provider specific identifier that corresponds to a particular virtual machine image configuration. A provider-defined OS Template Category MUST be related to the OCCI OS Template Category defined below in order to give absolute type information. The specification of that OCCI OS Template Category is as follows:
+
+TODO:INSERT table
+
+A typical example of such a category is shown below. In the example a provider has defined an OS template which offers the ability to run Ubuntu Linux upon a client's provisioned compute resource.
+
+POST /compute
+Category: compute; scheme=''; title='', ubuntu-9.10; scheme=''; title=''
+Attribute: occi.compute.memory=0.5, occi.compute.cores=2
+
+How a provider manages their set of OS templates will be determined by themselves and so provider-specific.
+
+\subsubsection{Resource Template}
+The Resource Template Category builds upon the concept of OS Templates. A Resource Template is a provider-defined category that refers to a preset resource configuration. The provider will associate a pre-determined set of Resource Attributes with a particular term identifier. A provider-defined Resource Template Category MUST be related to both the OCCI Resource Tempate Category defined below. Relating the Resource Category defining the Resource type is something that the provider must handle within their own implementation.
+
+TODO:Insert table
+
+A typical example of such a Category's use is shown below. In this example, the provider offers Compute Resources based on different sizes (small, medium, large). Each 'size' of Compute Resource corresponds to a predetermined set of OCCI attributes. In the example below a "small" Compute Resource is provisioned. Specifying "small" corresponds to a Compute Resource Attribute set of:
+
+Attribute: occi.compute.cores='2', occi.compute.speed='2.4', occi.compute.memory='1.0', occi.compute.arch='x86'
+
+POST /compute
+Category: compute; scheme=''; title='', small; scheme="http://provider.com/templates/compute\#"; title="Small Compute Resource Instance", ubuntu-9.10; scheme=""; title=""
+
+How a provider manages from the administrative context their set of Resource Templates will be determined by themselves and so provider-specific.
+
 % end infrastructure content
 
 \section{Contributors}
