@@ -319,10 +319,26 @@ A \hl{Kind} sub-type instance is always a member of the \hl{Kind}'s structural
 with the structural \hl{Type} of the \hl{Kind} sub-type.
 Since a non-structural \hl{Type} can be assigned to any \hl{Kind} sub-type
 instance a collection can contain instances of different \hl{Kind} sub-types.
-
-For example an instance of the \hl{Resource} type will always be associated
-with the \textit{http://scheme.ogf.org/occi/core\#resource} \hl{Type} and thus
-part of the \hl{Resource} \hl{Type} collection.
+%
+For example, an instance of the \hl{Resource} type will always be associated
+to the structural \hl{Type}
+\textit{http://scheme.ogf.org/occi/core\#resource} and thus part of the
+\hl{Resource} \hl{Type} collection.
+\begin{description}
+\item[Adding an instance] to a collection is accomplished by associating the
+corresponding non-structural \hl{Type} to the \hl{Kind} sub-type instance.
+\item[Removing an instance] from a collection is accomplished by disassociating the
+corresponding non-structural \hl{Type} from the \hl{Kind} sub-type instance.
+\end{description}
+%
+An OCCI implementation MUST allow a client to navigate collections. The
+following basic navigation operations MUST be supported:
+\begin{itemize}
+\item Retrieve the whole collection.
+\item Retrieve a specific item in a collection.
+\item Retrieve a subset of a collection.
+\end{itemize}
+The details of collection navigation is rendering specific.
 
 \subsubsection{Discovery}
 \label{sec:discovery}
