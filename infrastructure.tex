@@ -326,29 +326,38 @@ Depicted below are the states that a StorageLink instance can hold.
 There are 2 supported infrastructural template types in OCCI.
 
 \subsubsection{OS Template}
-OCCI implementers SHOULD support this, otherwise what they provision will be merely Resources without any execution environment (e.g. operating system). Of the two supported template types, this is the most basic and necessary template category that a provider SHOULD offer. The construction of It consists of a provider specific 'scheme' and a descriptive 'title' detailing the OS. The 'term' value of the template category is a provider specific identifier that corresponds to a particular virtual machine image configuration. A provider-defined OS Template Category MUST be related to the OCCI OS Template Category defined below in order to give absolute type information. The specification of that OCCI OS Template Category is as follows:
+OCCI implementers SHOULD support this, otherwise what they provision will be merely Resources without any execution environment (e.g. operating system). Of the two supported template types, this is the most basic and necessary template category that a provider SHOULD offer. The construction of it consists of a provider specific 'scheme' and a descriptive 'title' detailing the OS. The 'term' value of the template category is a provider specific identifier that corresponds to a particular virtual machine image configuration. A provider-defined OS Template Category MUST be related to the OCCI OS Template Category in order to give absolute type information. The OS Template Category is defined by the http://schemas.ogf.org/occi/infrastructure\#os\_tpl Category.
 
-TODO:INSERT table
+A typical example of such a category is shown below using the HTTP rendering. 
 
-A typical example of such a category is shown below. In the example a provider has defined an OS template which offers the ability to run Ubuntu Linux upon a client's provisioned compute resource.
-
+\begin{verbatim}
 POST /compute
-Category: compute; scheme=''; title='', ubuntu-9.10; scheme=''; title=''
+Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; title='Compute Instance', 
+    ubuntu-9.10; scheme='http://provider.com/templates/os#'; title='Ubuntu 9.10'
 Attribute: occi.compute.memory=0.5, occi.compute.cores=2
+\end{verbatim}
+In the example a provider has defined an OS template which offers the ability to run Ubuntu Linux upon a client's provisioned compute resource.
 
 How a provider manages their set of OS templates will be determined by themselves and so provider-specific.
 
 \subsubsection{Resource Template}
-The Resource Template Category builds upon the concept of OS Templates. A Resource Template is a provider-defined category that refers to a preset resource configuration. The provider will associate a pre-determined set of Resource Attributes with a particular term identifier. A provider-defined Resource Template Category MUST be related to both the OCCI Resource Tempate Category defined below. Relating the Resource Category defining the Resource type is something that the provider must handle within their own implementation.
+The Resource Template Category builds upon the concept of OS Templates. A Resource Template is a provider-defined Category that refers to a preset Resource configuration. The provider will associate a pre-determined set of Resource attributes with a particular term identifier. A provider-defined Resource Template Category MUST be related to the OCCI Resource Template Category. The Resource Template Category is defined by the http://schemas.ogf.org/occi/infrastructure\#resource\_tpl Category.
 
-TODO:Insert table
+A typical example of such a Category's use is shown below using the HTTP rendering. 
 
-A typical example of such a Category's use is shown below. In this example, the provider offers Compute Resources based on different sizes (small, medium, large). Each 'size' of Compute Resource corresponds to a predetermined set of OCCI attributes. In the example below a "small" Compute Resource is provisioned. Specifying "small" corresponds to a Compute Resource Attribute set of:
-
-Attribute: occi.compute.cores='2', occi.compute.speed='2.4', occi.compute.memory='1.0', occi.compute.arch='x86'
-
+\begin{verbatim}
 POST /compute
-Category: compute; scheme=''; title='', small; scheme="http://provider.com/templates/compute\#"; title="Small Compute Resource Instance", ubuntu-9.10; scheme=""; title=""
+Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; title='Compute Instance', 
+    small; scheme="http://provider.com/templates/compute#"; title="Small Instance", 
+    ubuntu-9.10; scheme=""; title=""
+\end{verbatim}
+
+In this example, the provider offers Compute Resources based on different sizes (small, medium, large). Each 'size' of Compute Resource corresponds to a predetermined set of OCCI attributes. In the example below a "small" Compute Resource is provisioned. Specifying "small" corresponds to a Compute Resource Attribute set of:
+
+\begin{verbatim}
+Attribute: occi.compute.cores='2', occi.compute.speed='2.4', 
+    occi.compute.memory='1.0', occi.compute.arch='x86'
+\end{verbatim}
 
 How a provider manages from the administrative context their set of Resource Templates will be determined by themselves and so provider-specific.
 
