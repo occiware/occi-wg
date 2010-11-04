@@ -114,8 +114,8 @@ with another.
 The \hl{Link} type also contains a number of common attributes that
 domain-specific \hl{Link} types inherit.
 
-\hl{Kind} is an abstract type which both \hl{Resource} and \hl{Link} inherit.
-Each sub-type of \hl{Kind} is identified by a unique \hl{Type} instance.
+\hl{Entity} is an abstract type which both \hl{Resource} and \hl{Link} inherit.
+Each sub-type of \hl{Entity} is identified by a unique \hl{Type} instance.
 %
 The \hl{Type} type comprise the classification system built into the OCCI
 model. \hl{Type} is a specialisation of \hl{Category} and introduce additional
@@ -170,7 +170,7 @@ Attribute & Type & Multiplicity & Client Mutability & Description \\
 \colrule
 actions & \hl{Action} & 0..* & Immutable & Set of \hl{Action}s defined by the \hl{Type} instance. \\
 related & \hl{Type} & 0..* & Immutable & Set of related \hl{Type} instances. \\
-kind & \hl{Kind} & 0..1 & Immutable & \hl{Kind} type uniquely identified by the \hl{Type} instance. \\
+kind & \hl{Entity} & 0..1 & Immutable & \hl{Entity} type uniquely identified by the \hl{Type} instance. \\
 \botrule
 \end{tabular}
 }
@@ -180,33 +180,33 @@ additional attributes the \hl{Type} type MUST implement to be compliant.
 
 \paragraph*{Structural Type}
 A structural \hl{Type} is an instance of \hl{Type} assigned as the unique
-identifier of a \hl{Kind} sub-type. The following rules apply:
+identifier of a \hl{Entity} sub-type. The following rules apply:
 \begin{itemize}
-\item A structural \hl{Type} define the capabilities of a \hl{Kind} sub-type in terms of attributes and \hl{Action}s.
+\item A structural \hl{Type} define the capabilities of a \hl{Entity} sub-type in terms of attributes and \hl{Action}s.
 \item A unique structural \hl{Type} MUST be assigned to each and every sub-type
- of \hl{Kind}.
+ of \hl{Entity}.
 \item A structural \hl{Type} MUST be related, either directly or indirectly, to
- the structural \hl{Type} of \hl{Kind},
+ the structural \hl{Type} of \hl{Entity},
  i.e.~\textit{http://schemas.ogf.org/occi/core\#kind}.
  %
  See section~\ref{sec:type_relationship} for the definition of \hl{Type}
  relationship.
 \item If type {\bf B} inherit type {\bf A}, where {\bf A} is a sub-type of
- \hl{Kind}, the structural \hl{Type} of {\bf B} MUST be directly related to the
+ \hl{Entity}, the structural \hl{Type} of {\bf B} MUST be directly related to the
  structural \hl{Type} of {\bf A}.
 \end{itemize}
 
 \paragraph*{Non-structural Type} A non-structural \hl{Type} is an instance of
-\hl{Type} {\em not} assigned as the unique identifier of any \hl{Kind} sub-type.
+\hl{Type} {\em not} assigned as the unique identifier of any \hl{Entity} sub-type.
 The following rules apply:
 \begin{itemize}
 \item A non-structural \hl{Type} define additional capabilities for each
- \hl{Kind} sub-type instance it is associated with. A non-structural \hl{Type}
+ \hl{Entity} sub-type instance it is associated with. A non-structural \hl{Type}
  add capabilities using a mix-in like model.
-\item A non-structural \hl{Type} MUST only be associated with \hl{Kind}
+\item A non-structural \hl{Type} MUST only be associated with \hl{Entity}
  sub-type {\em instances}, either at creation-time or run-time.
 \item A non-structural \hl{Type} MUST NOT be related, neither directly nor
- indirectly, to the structural \hl{Type} of \hl{Kind},
+ indirectly, to the structural \hl{Type} of \hl{Entity},
  i.e.~\textit{http://schemas.ogf.org/occi/core\#kind}.
  %
  See section~\ref{sec:type_relationship} for the definition of \hl{Type}
@@ -259,10 +259,10 @@ be used by domain-specific extensions.
 \subsubsection{Type relationship}
 \label{sec:type_relationship}
 As previously defined a structural \hl{Type} MUST be related, either
-either directly or indirectly, to the structural \hl{Type} of \hl{Kind},
+either directly or indirectly, to the structural \hl{Type} of \hl{Entity},
 i.e.~\textit{http://schemas.ogf.org/occi/core\#kind}.
 %
-The OCCI base types \hl{Resource} and \hl{Link} extend \hl{Kind}.  This
+The OCCI base types \hl{Resource} and \hl{Link} extend \hl{Entity}.  This
 together with any further sub-typing implies a hierarchy of related structural
 \hl{Type} instances.  The \hl{Type} relationships thus mirror the type
 inheritance structure of the OCCI model and any extension thereof.
@@ -273,7 +273,7 @@ the OCCI infrastructure type Compute, which in turn is a sub-type of the
 %
 Table~\ref{tbl:relationship} illustrates the exemplified hierarchy of \hl{Type}
 instances relating the domain-specific structural \hl{Type} to the structural
-\hl{Type} of \hl{Kind}.
+\hl{Type} of \hl{Entity}.
 
 \mytablefloat{\label{tbl:relationship}Example of the \hl{Type} relationship involved
 for a domain-specific extension of the OCCI infrastructure type \hl{Compute}.}{
@@ -291,28 +291,28 @@ Structural Type & Related Structural Type \\
 \subsubsection{Type assignment}
 \label{sec:type_assignment}
 A structural \hl{Type} MUST be statically assigned to each sub-type of
-\hl{Kind} defined by an implementation. A \hl{Kind} sub-type instance MUST be
+\hl{Entity} defined by an implementation. A \hl{Entity} sub-type instance MUST be
 automatically associated with its structural \hl{Type} at creation-time.  The
 structural \hl{Type} associated with an instance MUST remain associated with the
 instance during its lifetime.
 
 A non-structural \hl{Type}, also known as a mix-in, MAY be associated with a
-\hl{Kind} sub-type instance, either at creation-time or run-time. An OCCI
+\hl{Entity} sub-type instance, either at creation-time or run-time. An OCCI
 implementation MAY restrict which instances can be associated with a particular
 non-structural \hl{Type}.
 
 \subsubsection{Collections}
 \label{sec:collection}
-One or more \hl{Kind} sub-type instances associated with the same \hl{Type},
+One or more \hl{Entity} sub-type instances associated with the same \hl{Type},
 may it be structural or non-structural, automatically form a collection.
 Each \hl{Type} instance in the system identifies a collection consisting of all
-different \hl{Kind} sub-type instances associated with the \hl{Type}.
+different \hl{Entity} sub-type instances associated with the \hl{Type}.
 
-A \hl{Kind} sub-type instance is always a member of the \hl{Kind}'s structural
-\hl{Type} collection since a \hl{Kind} sub-type instance MUST be associated
-with the structural \hl{Type} of the \hl{Kind} sub-type.
-Since a non-structural \hl{Type} can be assigned to any \hl{Kind} sub-type
-instance a collection can contain instances of different \hl{Kind} sub-types.
+A \hl{Entity} sub-type instance is always a member of the \hl{Entity}'s structural
+\hl{Type} collection since a \hl{Entity} sub-type instance MUST be associated
+with the structural \hl{Type} of the \hl{Entity} sub-type.
+Since a non-structural \hl{Type} can be assigned to any \hl{Entity} sub-type
+instance a collection can contain instances of different \hl{Entity} sub-types.
 %
 For example, an instance of the \hl{Resource} type will always be associated
 to the structural \hl{Type}
@@ -320,9 +320,9 @@ to the structural \hl{Type}
 \hl{Resource} \hl{Type} collection.
 \begin{description}
 \item[Adding an instance] to a collection is accomplished by associating the
-corresponding non-structural \hl{Type} to the \hl{Kind} sub-type instance.
+corresponding non-structural \hl{Type} to the \hl{Entity} sub-type instance.
 \item[Removing an instance] from a collection is accomplished by disassociating the
-corresponding non-structural \hl{Type} from the \hl{Kind} sub-type instance.
+corresponding non-structural \hl{Type} from the \hl{Entity} sub-type instance.
 \end{description}
 %
 An OCCI implementation MUST allow a client to navigate collections. The
@@ -341,11 +341,11 @@ An OCCI client MUST be able to discover all instances of \hl{Type} and
 examining these instances a client MUST be able to, at a minimum, deduce the
 following information:
 \begin{itemize}
-\item The \hl{Kind} sub-types available from a the service provider, including domain-specific extensions.
-\item The attributes associated with each \hl{Kind} sub-type.
-\item The invocable operations, i.e. \hl{Action}s, defined for each \hl{Kind} sub-type.
+\item The \hl{Entity} sub-types available from a the service provider, including domain-specific extensions.
+\item The attributes associated with each \hl{Entity} sub-type.
+\item The invocable operations, i.e. \hl{Action}s, defined for each \hl{Entity} sub-type.
 \item Additional mix-ins or tags, i.e. non-structural \hl{Type}s, applicable to
- \hl{Kind} sub-type instances.
+ \hl{Entity} sub-type instances.
 \end{itemize}
 The above requirements comprise the OCCI discovery mechanism. It MUST be
 implemented.
@@ -376,9 +376,9 @@ and can therefore not be identified by \hl{Type}.}.
 \begin{comment}
 %%% CLIENT Interaction, do we need to specify this explicitly?!
 \subsubsection{Creating Instances}
-A client MUST supply the concrete Kind type as a Category. All OCCI
+A client MUST supply the concrete Entity type as a Category. All OCCI
 implementations MUST understand these requests containing concrete
-Kind types, i.e. Resource, Link, Action or a subtype thereof.
+Entity types, i.e. Resource, Link, Action or a subtype thereof.
 
 When a client attempts to add a non-structural
 \hl{Type} at a stage not supported by a particular provider's OCCI
@@ -392,23 +392,23 @@ request.
 \subsection{The OCCI base types}
 \label{sec:base_types}
 The following sections describe the OCCI base types defined by the OCCI model.
-The base types are \hl{Kind}, \hl{Resource}, \hl{Link} and \hl{Action}. All
+The base types are \hl{Entity}, \hl{Resource}, \hl{Link} and \hl{Action}. All
 base types MUST be implemented.
 
-\subsubsection{Kind}
+\subsubsection{Entity}
 \label{sec:kind}
-The \hl{Kind} type is the abstract base type for \hl{Resource} and \hl{Link}
+The \hl{Entity} type is the abstract base type for \hl{Resource} and \hl{Link}
 and any domain-specific sub-types thereof. It MUST be implemented.
 %
-Table~\ref{tbl:kind} defines the attributes the \hl{Kind} type MUST implement to
+Table~\ref{tbl:kind} defines the attributes the \hl{Entity} type MUST implement to
 be compliant.
 
-\mytablefloat{\label{tbl:kind}Attributes defined for the \hl{Kind} type.}{
+\mytablefloat{\label{tbl:kind}Attributes defined for the \hl{Entity} type.}{
 \begin{tabular}{llllp{7cm}}
 \toprule
 Attribute & Type & Multiplicity & Client Mutability & Description \\
 \colrule
-id & URI & 1 & Immutable & A unique identifier (within the service provider's name-space) of the \hl{Kind} sub-type instance. \\
+id & URI & 1 & Immutable & A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
 title & String & 0..1 & Mutable & The display name of the instance. \\
 structural type & \hl{Type} & 1 & Immutable & The structural \hl{Type} of the instance. \\
 non-structural types & \hl{Type} & 0..* & Mutable & The non-structural \hl{Type}s associated to this instance. Consumers can expect the attributes and \hl{Action}s of the associated non-structural \hl{Type}s to be exposed by the instance. \\ 
@@ -416,28 +416,28 @@ non-structural types & \hl{Type} & 0..* & Mutable & The non-structural \hl{Type}
 \end{tabular}
 }
 
-\hl{Kind} enforces for all sub-types a required \texttt{id} attribute and an
+\hl{Entity} enforces for all sub-types a required \texttt{id} attribute and an
 optional \texttt{title} attribute.
 %
-Every sub-type of \hl{Kind} MUST be assigned a structural \hl{Type}, see
-section~\ref{sec:type}. \hl{Kind} itself is assigned the structural \hl{Type}
+Every sub-type of \hl{Entity} MUST be assigned a structural \hl{Type}, see
+section~\ref{sec:type}. \hl{Entity} itself is assigned the structural \hl{Type}
 \textit{http://schemas.ogf.org/occi/core\#kind}.
 %
-A \hl{Kind} sub-type instance MAY be associated with one or more non-structural
+A \hl{Entity} sub-type instance MAY be associated with one or more non-structural
 \hl{Type}s.
 
-A \hl{Kind} sub-type instance MUST expose its structural \hl{Type} and any
+A \hl{Entity} sub-type instance MUST expose its structural \hl{Type} and any
 associated non-structural \hl{Type}s together with their associated attributes
 and \hl{Action}s.
 
 \subsubsection{Resource}
 \label{sec:resource}
-The \hl{Resource} type inherit \hl{Kind} and describes a concrete resource that
+The \hl{Resource} type inherit \hl{Entity} and describes a concrete resource that
 can be inspected and manipulated. It represents a general object in the OCCI
 model and MUST be implemented.
 %
 The \hl{Resource} type MUST implement all attributes inherited from the
-\hl{Kind} type together with the attributes defined in table~\ref{tbl:resource}
+\hl{Entity} type together with the attributes defined in table~\ref{tbl:resource}
 in order to be compliant.
 %
 The Resource type is assigned the structural \hl{Type}
@@ -468,7 +468,7 @@ An instance of the \hl{Link} type defines a base association between two
 that one \hl{Resource} instance is connected to another.
 %
 The \hl{Link} type MUST implement all attributes inherited from the
-\hl{Kind} type together with the attributes defined in table~\ref{tbl:link}
+\hl{Entity} type together with the attributes defined in table~\ref{tbl:link}
 in order to be compliant.
 %
 The Link type is assigned the structural \hl{Type}
@@ -494,7 +494,7 @@ The \hl{Link} type can be sub-typed for domain-specific extensions of the
 OCCI model, see section~\ref{sec:extensibility}.
 
 \subsubsection{Action}
-The \hl{Action} type defines an invocable operation applicable to a \hl{Kind}
+The \hl{Action} type defines an invocable operation applicable to a \hl{Entity}
 sub-type instance or a collection thereof. It MUST be implemented. In general,
 \hl{Action}s modify state by e.g.~performing a complex operation such as
 rebooting a virtual machine.
@@ -515,11 +515,11 @@ parameters & String & 0..* & Immutable & Enumeration of valid parameters for the
 
 An \hl{Action} is always bound to a \hl{Type} instance through a composite
 association. An \hl{Action} is considered a capability of the \hl{Type}.  An
-\hl{Action} MAY be invoked on any \hl{Kind} sub-type instance associated with
+\hl{Action} MAY be invoked on any \hl{Entity} sub-type instance associated with
 the \hl{Type} instance defining the \hl{Action}. An OCCI implementation MAY
 refuse an \hl{Action} from being invoked if currently not applicable.
 
-An \hl{Action} MAY be invoked on a collection of \hl{Kind} sub-type instances.
+An \hl{Action} MAY be invoked on a collection of \hl{Entity} sub-type instances.
 The \hl{Action} is only considered valid if all instances of the collection are
 associated with the \hl{Type} defining the \hl{Action}.
 
@@ -586,7 +586,7 @@ domain-specific \hl{Type} instance.
 \subsubsection{Mix-ins}
 The OCCI model MAY be extended through domain-specific mix-ins,
 i.e.~non-structural \hl{Type}s.  A non-structural \hl{Type} MAY be associated
-with any \hl{Kind} sub-type instance although a provider MAY apply
+with any \hl{Entity} sub-type instance although a provider MAY apply
 restrictions.
 
 In order to support user-defined tags an OCCI implementation must allow
