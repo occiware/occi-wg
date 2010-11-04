@@ -170,7 +170,7 @@ Attribute & Type & Multiplicity & Client Mutability & Description \\
 \colrule
 actions & \hl{Action} & 0..* & Immutable & Set of \hl{Action}s defined by the \hl{Type} instance. \\
 related & \hl{Type} & 0..* & Immutable & Set of related \hl{Type} instances. \\
-kind & \hl{Entity} & 0..1 & Immutable & \hl{Entity} type uniquely identified by the \hl{Type} instance. \\
+entity & \hl{Entity} & 0..1 & Immutable & \hl{Entity} type uniquely identified by the \hl{Type} instance. \\
 \botrule
 \end{tabular}
 }
@@ -187,7 +187,7 @@ identifier of a \hl{Entity} sub-type. The following rules apply:
  of \hl{Entity}.
 \item A structural \hl{Type} MUST be related, either directly or indirectly, to
  the structural \hl{Type} of \hl{Entity},
- i.e.~\textit{http://schemas.ogf.org/occi/core\#kind}.
+ i.e.~\textit{http://schemas.ogf.org/occi/core\#entity}.
  %
  See section~\ref{sec:type_relationship} for the definition of \hl{Type}
  relationship.
@@ -207,7 +207,7 @@ The following rules apply:
  sub-type {\em instances}, either at creation-time or run-time.
 \item A non-structural \hl{Type} MUST NOT be related, neither directly nor
  indirectly, to the structural \hl{Type} of \hl{Entity},
- i.e.~\textit{http://schemas.ogf.org/occi/core\#kind}.
+ i.e.~\textit{http://schemas.ogf.org/occi/core\#entity}.
  %
  See section~\ref{sec:type_relationship} for the definition of \hl{Type}
  relationship.
@@ -260,7 +260,7 @@ be used by domain-specific extensions.
 \label{sec:type_relationship}
 As previously defined a structural \hl{Type} MUST be related, either
 either directly or indirectly, to the structural \hl{Type} of \hl{Entity},
-i.e.~\textit{http://schemas.ogf.org/occi/core\#kind}.
+i.e.~\textit{http://schemas.ogf.org/occi/core\#entity}.
 %
 The OCCI base types \hl{Resource} and \hl{Link} extend \hl{Entity}.  This
 together with any further sub-typing implies a hierarchy of related structural
@@ -283,7 +283,7 @@ Structural Type & Related Structural Type \\
 \colrule
 \textit{http://example.com/occi/custom\#compute} & \textit{http://schemas.ogf.org/occi/infrastructure\#compute} \\
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute} & \textit{http://schemas.ogf.org/occi/core\#resource} \\
-\textit{http://schemas.ogf.org/occi/core\#resource} & \textit{http://schemas.ogf.org/occi/core\#kind} \\
+\textit{http://schemas.ogf.org/occi/core\#resource} & \textit{http://schemas.ogf.org/occi/core\#entity} \\
 \botrule
 \end{tabular}
 }
@@ -396,14 +396,14 @@ The base types are \hl{Entity}, \hl{Resource}, \hl{Link} and \hl{Action}. All
 base types MUST be implemented.
 
 \subsubsection{Entity}
-\label{sec:kind}
+\label{sec:entity}
 The \hl{Entity} type is the abstract base type for \hl{Resource} and \hl{Link}
 and any domain-specific sub-types thereof. It MUST be implemented.
 %
-Table~\ref{tbl:kind} defines the attributes the \hl{Entity} type MUST implement to
+Table~\ref{tbl:entity} defines the attributes the \hl{Entity} type MUST implement to
 be compliant.
 
-\mytablefloat{\label{tbl:kind}Attributes defined for the \hl{Entity} type.}{
+\mytablefloat{\label{tbl:entity}Attributes defined for the \hl{Entity} type.}{
 \begin{tabular}{llllp{7cm}}
 \toprule
 Attribute & Type & Multiplicity & Client Mutability & Description \\
@@ -421,7 +421,7 @@ optional \texttt{title} attribute.
 %
 Every sub-type of \hl{Entity} MUST be assigned a structural \hl{Type}, see
 section~\ref{sec:type}. \hl{Entity} itself is assigned the structural \hl{Type}
-\textit{http://schemas.ogf.org/occi/core\#kind}.
+\textit{http://schemas.ogf.org/occi/core\#entity}.
 %
 A \hl{Entity} sub-type instance MAY be associated with one or more non-structural
 \hl{Type}s.
