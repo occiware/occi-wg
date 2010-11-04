@@ -174,9 +174,9 @@ additional attributes the \hl{Kind} type MUST implement to be compliant.
 
 \paragraph*{Structural Kind}
 A structural \hl{Kind} is an instance of \hl{Kind} assigned as the unique
-identifier of a \hl{Entity} sub-type. The following rules apply:
+identifier of an \hl{Entity} sub-type. The following rules apply:
 \begin{itemize}
-\item A structural \hl{Kind} define the capabilities of a \hl{Entity} sub-type in terms of attributes and \hl{Action}s.
+\item A structural \hl{Kind} define the capabilities of an \hl{Entity} sub-type in terms of attributes and \hl{Action}s.
 \item A unique structural \hl{Kind} MUST be assigned to each and every sub-type
  of \hl{Entity}.
 \item A structural \hl{Kind} MUST be related, either directly or indirectly, to
@@ -285,12 +285,12 @@ Structural Kind & Related Structural Kind \\
 \subsubsection{Kind assignment}
 \label{sec:type_assignment}
 A structural \hl{Kind} MUST be statically assigned to each sub-type of
-\hl{Entity} defined by an implementation. A \hl{Entity} sub-type instance MUST be
+\hl{Entity} defined by an implementation. An \hl{Entity} sub-type instance MUST be
 automatically associated with its structural \hl{Kind} at creation-time.  The
 structural \hl{Kind} associated with an instance MUST remain associated with the
 instance during its lifetime.
 
-A non-structural \hl{Kind}, also known as a mix-in, MAY be associated with a
+A non-structural \hl{Kind}, also known as a mix-in, MAY be associated with an
 \hl{Entity} sub-type instance, either at creation-time or run-time. An OCCI
 implementation MAY restrict which instances can be associated with a particular
 non-structural \hl{Kind}.
@@ -302,16 +302,17 @@ may it be structural or non-structural, automatically form a collection.
 Each \hl{Kind} instance in the system identifies a collection consisting of all
 different \hl{Entity} sub-type instances associated with the \hl{Kind}.
 
-A \hl{Entity} sub-type instance is always a member of the \hl{Entity}'s structural
-\hl{Kind} collection since a \hl{Entity} sub-type instance MUST be associated
-with the structural \hl{Kind} of the \hl{Entity} sub-type.
+An \hl{Entity} sub-type instance is always a member of the collection implied
+by the \hl{Entity}'s structural \hl{Kind}. This follows from the rule that an
+\hl{Entity} sub-type instance MUST be associated with the structural \hl{Kind}
+assigned to the sub-type.
 Since a non-structural \hl{Kind} can be assigned to any \hl{Entity} sub-type
 instance a collection can contain instances of different \hl{Entity} sub-types.
 %
 For example, an instance of the \hl{Resource} type will always be associated
 to the structural \hl{Kind}
 \textit{http://scheme.ogf.org/occi/core\#resource} and thus part of the
-\hl{Resource} \hl{Kind} collection.
+collection implied by the \hl{Kind}.
 \begin{description}
 \item[Adding an instance] to a collection is accomplished by associating the
 corresponding non-structural \hl{Kind} to the \hl{Entity} sub-type instance.
@@ -417,10 +418,10 @@ Every sub-type of \hl{Entity} MUST be assigned a structural \hl{Kind}, see
 section~\ref{sec:type}. \hl{Entity} itself is assigned the structural \hl{Kind}
 \textit{http://schemas.ogf.org/occi/core\#entity}.
 %
-A \hl{Entity} sub-type instance MAY be associated with one or more non-structural
+An \hl{Entity} sub-type instance MAY be associated with one or more non-structural
 \hl{Kind}s.
 
-A \hl{Entity} sub-type instance MUST expose its structural \hl{Kind} and any
+An \hl{Entity} sub-type instance MUST expose its structural \hl{Kind} and any
 associated non-structural \hl{Kind}s together with their associated attributes
 and \hl{Action}s.
 
@@ -488,7 +489,7 @@ The \hl{Link} type can be sub-typed for domain-specific extensions of the
 OCCI model, see section~\ref{sec:extensibility}.
 
 \subsubsection{Action}
-The \hl{Action} type defines an invocable operation applicable to a \hl{Entity}
+The \hl{Action} type defines an invocable operation applicable to an \hl{Entity}
 sub-type instance or a collection thereof. It MUST be implemented. In general,
 \hl{Action}s modify state by e.g.~performing a complex operation such as
 rebooting a virtual machine.
