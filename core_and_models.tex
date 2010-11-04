@@ -4,18 +4,12 @@
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{comment}
+\usepackage{occi}
 \setlength{\headheight}{13pt}
 \pagestyle{fancy}
 
 % default sans-serif
 \renewcommand{\familydefault}{\sfdefault}
-
-% floats, caption, etc
-\usepackage{occi}
-
-% Highlights
-\newcommand{\hl}{\texttt}
-%\usepackage{soul}
 
 % no lines for headers and footers
 \renewcommand{\headrulewidth}{0pt}
@@ -109,7 +103,7 @@ provider's architecture.
 
 The heart of the OCCI model is the \hl{Resource} type. Any resource exposed
 through OCCI is a \hl{Resource} or sub-type thereof.
-A resource can be e.g. a virtual machine, a job in a job submission system, a
+A resource can be e.g.~a virtual machine, a job in a job submission system, a
 user, etc.
 %
 The \hl{Resource} type contains a number of common attributes that
@@ -154,8 +148,8 @@ The classification system can be summarised with the following key features:
  types.
 \item The relationship of structural \hl{Type}s is part of the system and thus
  the inheritance model is also discoverable.
-\item The classification system allow non-structural \hl{Type}s to be assigned
- to resource instances adding new capabilities using a mix-in model.
+\item The classification system allows non-structural \hl{Type}s to be assigned
+ to resource instances adding new capabilities using a mix-in like model.
 \item Tagging of resource instances is supported through mix-in of
  non-structural \hl{Type}s which have no additional capabilities defined.
 \item A collection of associated resources is implicitly defined for each
@@ -165,7 +159,7 @@ The classification system can be summarised with the following key features:
 
 \subsubsection{Type}
 \label{sec:type}
-The \hl{Type} type comprise the classification system provided by OCCI
+The \hl{Type} type comprises the classification system provided by the OCCI
 model. It MUST be implemented. A \hl{Type} instance can be either structural or
 non-structural.
 
@@ -180,7 +174,7 @@ kind & \hl{Kind} & 0..1 & Immutable & \hl{Kind} type uniquely identified by the 
 \botrule
 \end{tabular}
 }
-The \hl{Type} type inherit the \hl{Category} type and all inherited
+The \hl{Type} type inherits the \hl{Category} type and all inherited
 attributes MUST be implemented. Table~\ref{tbl:type} defines the
 additional attributes the \hl{Type} type MUST implement to be compliant.
 
@@ -223,12 +217,12 @@ The following rules apply:
 
 \subsubsection{Category}
 \label{sec:category}
-The \hl{Category} type comprise basis of identification used by the OCCI
-classification system. It MUST be implemented. Instances of the \hl{Category}
-type are only used to identify \hl{Action} types. All other uses of
-\hl{Category} properties are managed through its sub-type \hl{Type}.
+The \hl{Category} type comprises the basis of the identification mechanism used
+by the OCCI classification system. It MUST be implemented. Instances of the
+\hl{Category} type are only used to identify \hl{Action} types. All other uses
+of \hl{Category} properties are managed through its sub-type \hl{Type}.
 %
-Table~\ref{tbl:type} defines the attributes the \hl{Category} type MUST
+Table~\ref{tbl:category} defines the attributes the \hl{Category} type MUST
 implement to be compliant.
 
 \mytablefloat{\label{tbl:category}Attributes defined for the \hl{Category} type}{
@@ -238,8 +232,8 @@ Attribute & Type & Multiplicity & Client Mutability & Description \\
 \colrule
 term & String & 1 & Immutable & Unique identifier of the \hl{Category} instance within the categorisation scheme. \\
 scheme & URI & 1 & Immutable & The categorisation scheme. \\
-title & String & 0..1 & Immutable & Denotes the display name of an instance. \\
-attributes & String & 0..* & Immutable & Comprise the resource attribute names defined by the \hl{Category} instance. \\
+title & String & 0..1 & Immutable & The display name of an instance. \\
+attributes & String & 0..* & Immutable & The set of resource attribute names defined by the \hl{Category} instance. \\
 \botrule
 \end{tabular}
 }
@@ -248,7 +242,7 @@ A \hl{Category} is uniquely identified by concatenating the categorisation
 scheme with the category term,
 e.g.~\textit{http://example.com/category/scheme\#term}.
 This is done to enable discovery of \hl{Category} definitions in text based
-renderings such as HTTP. All renderings MUST make use and understand
+renderings such as HTTP. All renderings MUST make use of and understand
 concatenated unique identifiers of \hl{Category} types.
 %
 Sub-types of \hl{Category} such as \hl{Type} inherit this property.
@@ -268,10 +262,10 @@ As previously defined a structural \hl{Type} MUST be related, either
 either directly or indirectly, to the structural \hl{Type} of \hl{Kind},
 i.e.~\textit{http://schemas.ogf.org/occi/core\#kind}.
 %
-The OCCI base types \hl{Resource} and \hl{Link} extending \hl{Kind}, and any
-further sub-typing, implies a hierarchy of related structural \hl{Type}
-instances. This \hl{Type} relationship thus mirror the type inheritance
-structure of the OCCI model and any extension thereof.
+The OCCI base types \hl{Resource} and \hl{Link} extend \hl{Kind}.  This
+together with any further sub-typing implies a hierarchy of related structural
+\hl{Type} instances.  The \hl{Type} relationships thus mirror the type
+inheritance structure of the OCCI model and any extension thereof.
 
 In an example where a domain-specific ``Custom Compute Resource'' is a sub-type
 the OCCI infrastructure type Compute, which in turn is a sub-type of the
@@ -404,7 +398,7 @@ base types MUST be implemented.
 \subsubsection{Kind}
 \label{sec:kind}
 The \hl{Kind} type is the abstract base type for \hl{Resource} and \hl{Link}
-and any domain-specific sub-type thereof. It MUST be implemented.
+and any domain-specific sub-types thereof. It MUST be implemented.
 %
 Table~\ref{tbl:kind} defines the attributes the \hl{Kind} type MUST implement to
 be compliant.
@@ -493,7 +487,7 @@ target & \hl{Resource} & 1 & Mutable & The \hl{Resource} instances the \hl{Link}
 
 An instance of the \hl{Link} type MUST NOT refer to an external resource.  A
 provider MAY however create a sub-type of \hl{Link} with different semantics,
-e.g. have a target attribute containing an URI and thus the ability of linking
+e.g.~have a target attribute containing an URI and thus the ability of linking
 with external resources.
 %
 The \hl{Link} type can be sub-typed for domain-specific extensions of the
@@ -502,7 +496,7 @@ OCCI model, see section~\ref{sec:extensibility}.
 \subsubsection{Action}
 The \hl{Action} type defines an invocable operation applicable to a \hl{Kind}
 sub-type instance or a collection thereof. It MUST be implemented. In general,
-\hl{Action}s modify state by e.g. performing a complex operation such as
+\hl{Action}s modify state by e.g.~performing a complex operation such as
 rebooting a virtual machine.
 %
 Table~\ref{tbl:action} defines the attributes the \hl{Action} type MUST
@@ -536,7 +530,7 @@ The \hl{Action} type can be sub-typed for domain-specific extensions of the
 OCCI model, see section~\ref{sec:extensibility}.
 
 \subsection{Mutability}
-Attributes of a type instance from the OCCI model, a resource instance, are
+Attributes of an OCCI model type instance, a resource instance, are
 either client mutable or client immutable. If an attribute is noted to
 be mutable this MUST be interpreted that a client can create a
 resource instance that is parametrised by the attribute. Likewise, if
@@ -552,8 +546,8 @@ The OCCI model has a flexible yet fairly simple extension mechanism based on
 the classification system described in section~\ref{sec:classification}.
 %
 The OCCI model can be extended using two different methods, sub-typing and
-mix-ins. Both methods involve the use of domain-specific \hl{Type} or
-\hl{Category} instances. The following sections define requirements for
+mix-in. Both methods involve the use of domain-specific \hl{Type} or
+\hl{Category} instances. The following sections define the requirements for
 extensions of the OCCI model.
 %
 The rules defined in section~\ref{sec:classification} and \ref{sec:base_types}
