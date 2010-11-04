@@ -82,12 +82,14 @@ OCCI is a trademark of the Open Grid Forum.
 \section{Introduction}
 \input{include/introduction}
 
-OCCI makes an ideal interoperable boundary interface between the web and the internal resource management system of infrastructure providers.
+OCCI makes an ideal interoperable boundary interface between the web and the
+internal resource management system of infrastructure providers.
 
 \section{Notational Conventions}
 \input{include/notational}
 
-UML activity diagrams do not specify how OCCI should be rendered but what possible request and outcomes can be.
+UML activity diagrams do not specify how OCCI should be rendered but what
+possible request and outcomes can be.
 
 % begin infrastructure content
 
@@ -105,53 +107,84 @@ As REQUIRED by the OCCI Core specification every resource type instantiated that
 
 The following table describe the Category defined for each of the infrastructure Resource subtypes:
 
-\begin{tabular}{llllll}
-Term&Scheme&Title&Attribute&Actions&Related-Category\\
+\mytablefloat{\label{tbl:kinds}The structural \hl{Kind} instances defined for
+the infrastructure sub-types of \hl{Resource} and \hl{Link}}{
+\begin{tabular}{llll}
+Term & Scheme & Title & Related structural \hl{Kind} \\
 \hline
-compute & http://schemas.ogf.org/occi/infrastructure\# & Compute Resource & See Below & See Below & http://schemas.ogf.org/occi/core\#resource\\
-storage & http://schemas.ogf.org/occi/infrastructure\# & Storage Resource & See Below & See Below & http://schemas.ogf.org/occi/core\#resource\\
-network & http://schemas.ogf.org/occi/infrastructure\# & Network Resource & See Below & See Below & http://schemas.ogf.org/occi/core\#resource\\
+compute & http://schemas.ogf.org/occi/infrastructure\# & Compute Resource & http://schemas.ogf.org/occi/core\#resource \\
+storage & http://schemas.ogf.org/occi/infrastructure\# & Storage Resource & http://schemas.ogf.org/occi/core\#resource \\
+network & http://schemas.ogf.org/occi/infrastructure\# & Network Resource & http://schemas.ogf.org/occi/core\#resource \\
 \end{tabular}
+}
 
 The following sections on Compute, Storage and Network detail the Attributes and Actions defined for each resource type.
 
 \subsection{Compute}
-The Compute Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#compute Category. A Compute Resource instance MUST at least expose this Category.
+The Compute \hl{Resource} type represent a generic information processing
+resource.
+The Compute \hl{Resource} type is assigned the structural \hl{Kind}
+\textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
+\marginpar{Only this section has been updated with the proper
+wording as introduced in Core. Please perfect this section before converting
+the other sections to the same style!}
 
-\subsubsection{Attributes}
-The attributes that MUST be exposed by an instance of the Compute Resource type are as follows:
-
-\begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Mutability&Description\\
-\hline
-occi.compute.architecture & String Enumeration, \{x86, x64\} & 1 & Mutable & CPU Architecture of the instance.\\
+\mytablefloat{\label{tbl:compute}Attributes defined for the Compute
+\hl{Resource} type. The attributes are defined by the Compute \hl{Resource}
+type's structural \hl{Kind}
+\textit{http://schemas.ogf.org/occi/infrastructure\#compute}}{
+\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+\toprule
+Attribute&Type&Multi\-plicity&Mutability&Description\\
+\colrule
+occi.compute.architecture & Enum \{x86, x64\} & 1 & Mutable & CPU Architecture of the instance.\\
 occi.compute.cores & Integer & 1 & Mutable & Number of CPU cores assigned to the instance.\\
 occi.compute.hostname & String & 0\ldots1 & Mutable & Fully Qualified DNS hostname for the instance.\\
 occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 1 & Mutable & CPU Clock frequency (speed) in gigahertz.\\
 occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable & Maximum RAM in gigabytes allocated to the instance.\\
-occi.compute.state & Enumeration, \{active, inactive, suspended\} & 1 & Immutable & Current state of the instance.\\
+occi.compute.state & Enum \{active, inactive, suspended\} & 1 & Immutable & Current state of the instance.\\
+\botrule
 \end{tabular}
+}
 
-\subsubsection{Actions}
-Actions can be performed upon instances of the Compute Resource type. The set that MUST be supported are as follows:
+Table~\ref{tbl:compute} describe the attributes defined for the Compute
+\hl{Resource} type through its structural \hl{Kind}. These attributes MUST be
+exposed by an instance of the Compute \hl{Resource} type.
 
+\mytablefloat{\label{tbl:compute_actions}%
+\hl{Action}s defined by the structural \hl{Kind}
+\textit{http://schemas.ogf.org/occi/infrastructure\#compute}. Every \hl{Action}
+in the table is identified by a \hl{Category} instance using the
+\textit{http://schemas.ogf.org/occi/infrastructure/compute/action\#}
+categorisation scheme. ``Action term'' below refer to the term of the \hl{Action}'s
+\hl{Category} identifier}{
 \begin{tabular}{lll}
-Action&Target State&Parameter Attribute\\
-\hline
-http://schemas.ogf.org/occi/infrastructure/compute/action\#start & active & None\\
-http://schemas.ogf.org/occi/infrastructure/compute/action\#stop & inactive & String Enumeration \{graceful, acpioff, poweroff\}\\
-http://schemas.ogf.org/occi/infrastructure/compute/action\#restart & active (via stop and start chain) & String Enumeration {graceful, warm, cold}\\
-http://schemas.ogf.org/occi/infrastructure/compute/action\#suspend & suspended & String Enumeration {hibernate, suspend }\\
+\toprule
+Action term & Target state & Parameters \\
+\colrule
+start & active & -- \\
+stop & inactive & Enum \{graceful, acpioff, poweroff\} \\
+restart & active (via stop and start chain) & Enum \{graceful, warm, cold\} \\
+suspend & suspended & Enum \{hibernate, suspend\} \\
+\botrule
 \end{tabular}
+}
 
-\subsubsection{States}
-Below illustrates the state diagram based on the actions defined above in REF.
+Table~\ref{tbl:compute_actions} describe the \hl{Action}s defined for the
+Compute \hl{Resource} type by its structural \hl{Kind}.
+% FIXME - The structural Kind is indeed REQUIRED to expose all Actions defined
+% but what is required from a Compute instance? Only applicable Actions?
+%
+% These \hl{Action}s MUST be exposed by an instance of the Compute \hl{Resource}
+% type.
+%
+Figure~\ref{fig:compute_state} illustrate the state diagram for a Compute
+\hl{Resource} instance.
 
-%\clearpage
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{figs/compute-state.png}
-	\caption{State diagram for Compute}
+	\caption{State diagram for the Compute \hl{Resource} type}
 	\label{fig:compute_state}
 \end{figure}
 
