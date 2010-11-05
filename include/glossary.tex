@@ -8,7 +8,10 @@ Collection & A set of \hl{Entity} sub-type instances all associated to a particu
 \hl{Entity} & An OCCI base type. The parent type of \hl{Resource} and \hl{Link}. \\
 \hl{Kind} & A type in the OCCI model. The central piece in the OCCI classification system. \\
 \hl{Link} & An OCCI base type. A \hl{Link} instance associate one \hl{Resource} instance with another. \\
-Mix-in & A non-structural \hl{Kind}. \\
+Mix-in & A non-structural \hl{Kind}. The ``mix-in like'' concept in OCCI only
+  support binding of new attributes and \hl{Action}s at run-time. A
+  non-structural \hl{Kind} can only be associated with an {\em instance} of an
+  \hl{Entity} sub-type. \\
 Non-structural \hl{Kind} & An instance of \hl{Kind} {\em not} used as an unique identifier of an OCCI base type. \\
 OCCI & Open Cloud Computing Interface \\
 OCCI base type & One of \hl{Entity}, \hl{Resource}, \hl{Link} or \hl{Action}. \\
