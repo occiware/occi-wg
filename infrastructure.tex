@@ -107,10 +107,10 @@ As REQUIRED by the OCCI Core specification every resource type instantiated that
 
 The following table describe the Category defined for each of the infrastructure Resource subtypes:
 
-\mytablefloat{\label{tbl:kinds}The structural-\hl{Kind} instances defined for
+\mytablefloat{\label{tbl:kinds}The \hl{structural-Kind} instances defined for
 the infrastructure sub-types of \hl{Resource} and \hl{Link}}{
 \begin{tabular}{llll}
-Term & Scheme & Title & Related structural-\hl{Kind} \\
+Term & Scheme & Title & Related \hl{structural-Kind} \\
 \hline
 compute & http://schemas.ogf.org/occi/infrastructure\# & Compute Resource & http://schemas.ogf.org/occi/core\#resource \\
 storage & http://schemas.ogf.org/occi/infrastructure\# & Storage Resource & http://schemas.ogf.org/occi/core\#resource \\
@@ -121,17 +121,18 @@ network & http://schemas.ogf.org/occi/infrastructure\# & Network Resource & http
 The following sections on Compute, Storage and Network detail the Attributes and Actions defined for each resource type.
 
 \subsection{Compute}
-The Compute-\hl{Resource} type represent a generic information processing
-resource.
-The Compute-\hl{Resource} type is assigned the structural-\hl{Kind}
+The Compute type represent a generic information processing resource, e.g.~a
+virtual machine. The Compute type inherit the \hl{Resource} type defined in
+OCCI Core \cite{occi:core}.
+The Compute type is assigned the \hl{structural-Kind}
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
 \marginpar{Only this section has been updated with the proper
 wording as introduced in Core. Please perfect this section before converting
 the other sections to the same style!}
 
 \mytablefloat{\label{tbl:compute}Attributes defined for the
-Compute-\hl{Resource} type. The attributes are defined by the
-Compute-\hl{Resource} type's structural-\hl{Kind}
+Compute type. The attributes are defined by the
+Compute type's \hl{structural-Kind}
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}}{
 \begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
 \toprule
@@ -148,11 +149,11 @@ occi.compute.state & Enum \{active, inactive, suspended\} & 1 & Immutable & Curr
 }
 
 Table~\ref{tbl:compute} describe the attributes defined for the
-Compute-\hl{Resource} type through its structural-\hl{Kind}. These attributes
-MUST be exposed by an instance of the Compute-\hl{Resource} type.
+Compute type through its \hl{structural-Kind}. These attributes
+MUST be exposed by an instance of the Compute type.
 
 \mytablefloat{\label{tbl:compute_actions}%
-\hl{Action}s defined by the structural-\hl{Kind}
+\hl{Action}s defined by the \hl{structural-Kind}
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}. Every \hl{Action}
 in the table is identified by a \hl{Category} instance using the
 \textit{http://schemas.ogf.org/occi/infrastructure/compute/action\#}
@@ -171,20 +172,20 @@ suspend & suspended & Enum \{hibernate, suspend\} \\
 }
 
 Table~\ref{tbl:compute_actions} describe the \hl{Action}s defined for the
-Compute-\hl{Resource} type by its structural-\hl{Kind}.
+Compute type by its \hl{structural-Kind}.
 % FIXME - The structural-Kind is indeed REQUIRED to expose all Actions defined
 % but what is required from a Compute instance? Only applicable Actions?
 %
-% These \hl{Action}s MUST be exposed by an instance of the Compute-\hl{Resource}
+% These \hl{Action}s MUST be exposed by an instance of the Compute
 % type.
 %
 Figure~\ref{fig:compute_state} illustrate the state diagram for a
-Compute-\hl{Resource} instance.
+Compute instance.
 
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{figs/compute-state.png}
-	\caption{State diagram for the Compute-\hl{Resource} type}
+	\caption{State diagram for the Compute type}
 	\label{fig:compute_state}
 \end{figure}
 
