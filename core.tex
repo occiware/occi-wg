@@ -176,7 +176,7 @@ an instance.
 \subsection{Overview}
 
 The heart of the OCCI model is the \hl{Resource} type. Any resource exposed
-through OCCI is a \hl{Resource} or sub-type thereof.
+through OCCI is a \hl{Resource} or a sub-type thereof.
 A resource can be e.g.~a virtual machine, a job in a job submission system, a
 user, etc.
 %
@@ -191,9 +191,17 @@ domain-specific \hl{Link} types inherit.
 \hl{Entity} is an abstract type which both \hl{Resource} and \hl{Link} inherit.
 Each sub-type of \hl{Entity} is identified by a unique \hl{Kind} instance.
 %
-The \hl{Kind} type comprise the classification system built into the OCCI
-model. \hl{Kind} is a specialisation of \hl{Category} and introduce additional
-capabilities in terms of \hl{Action} types.
+The \hl{Kind} type is the core of the classification and identification
+system built into the OCCI model. \hl{Kind} is a specialisation of
+\hl{Category} and introduce additional capabilities in terms of \hl{Action}
+types.
+
+The last type defined by the OCCI model is the \hl{Mixin} type. An instance of
+\hl{Mixin} can be associated with a resource instance, i.e. a sub-type
+\hl{Entity}, to ``mix-in'' additional capabilities at run-time.
+%
+For compliance with OCCI Core, all of the types defined in the OCCI model MUST
+be implemented.
 
 \begin{figure}[!h]
 {\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{270}
@@ -204,10 +212,32 @@ overview of the OCCI model but is not a standalone definition thereof}
 \end{figure}
 
 The UML class diagram shown in figure~\ref{fig:occi_model} gives an overview of
-the OCCI model.  For compliance with OCCI Core, all of the types defined in
-the OCCI model MUST be implemented.
-The following sections of the specification contains the formal definition of
-the OCCI model.
+the OCCI model. It must be noted that the UML diagram in itself is not a
+complete definition of the model. The diagram is merely provided as an overview
+to help understanding the model.  The following sections of the specification
+contains the formal definition of the OCCI model.
+
+\subsection{Terms and definitions}
+Section \ref{sec:glossary} provide a glossary of all terms and definitions with
+a specific meaning to the OCCI specification suite. However, for reader
+convenience, a sub-set of the glossary is provided here as well. The following
+terminology have specific meaning in the OCCI context:
+\begin{description}
+\item[instance] An {\bf instance} refer to the instantiated object of a type
+ defined in the OCCI model.
+\item[mix-in] An instance of the \hl{Mixin} type associated with a {\bf resource
+ instance}. The ``mix-in'' concept as used by OCCI {\em only} applies to
+ instances, never to \hl{Entity} types.
+\item[OCCI base type] The OCCI base types are \hl{Entity}, \hl{Resource},
+ \hl{Link} and \hl{Action}.
+\item[resource instance] An instance of a sub-type of \hl{Entity}. The OCCI
+ model define two sub-types of \hl{Entity}, the \hl{Resource} type and the
+ \hl{Link} type.  However, the term {\bf resource instance} is defined to
+ include any instance of a {\em sub-type} of \hl{Resource} or \hl{Link} as
+ well.
+\item[type] A {\bf type} refer to one of the types, i.e. classes, defined by
+ the OCCI model.
+\end{description}
 
 \subsection{Classification and Identification}
 \label{sec:classification}
@@ -218,23 +248,30 @@ but with the possibility of being easily exposed over a text based protocol.
 The classification system can be summarised with the following key features:
 \begin{itemize}
 \item Each OCCI base type and extension thereof is assigned a unique
- identifier, a structural \hl{Kind}, which allow for dynamic discovery of available
- types.
-\item The relationship of structural \hl{Kind}s is part of the system and thus
- the inheritance model is also discoverable.
-\item The classification system allows non-structural \hl{Kind}s to be assigned
- to resource instances adding new capabilities using a mix-in like model.
-\item Tagging of resource instances is supported through mix-in of
- non-structural \hl{Kind}s which have no additional capabilities defined.
+ identifier, a \hl{Kind} instance, which allow for dynamic discovery of
+ available types. All \hl{Entity} sub-types, including extensions, are assigned
+ a unique \hl{Kind} instance.
+\item The relationship of \hl{Kind} instances reflect the inheritance structure
+ starting at \hl{Entity} type, the parent of all extensions. This makes it
+ possible for an OCCI client to discover the inheritance structure of a
+ particular OCCI implementation.
+\item The classification system allows \hl{Mixin} instances to be associated
+ to resource instances in order to assign additional capabilities in terms of
+ attributes and \hl{Action}s.
+\item Tagging of resource instances is supported through the association
+ of \hl{Mixin} instances. A tag is simply a \hl{Mixin} instance which define no
+ additional capabilities
 \item A collection of associated resources is implicitly defined for each
- structural and non-structural \hl{Kind}. I.e.~all resource instances
- associated with a particular \hl{Kind} instance form a collection.
+ \hl{Kind} and \hl{Mixin} instance. I.e.~all resource instances associated with
+ a particular \hl{Kind} or \hl{Mixin} instance form a collection.
 \end{itemize}
 
 \subsubsection{Kind}
 \label{sec:type}
 The \hl{Kind} type comprises the classification system provided by the OCCI
-model. It MUST be implemented. A \hl{Kind} instance can be either structural or
+model. It MUST be implemented.
+\#\#FIXME
+A \hl{Kind} instance can be either structural or
 non-structural.
 
 \mytablefloat{\label{tbl:type}Attributes defined for the \hl{Kind} type}{
@@ -244,7 +281,8 @@ Attribute & Type & Multiplicity & Client Mutability & Description \\
 \colrule
 actions & \hl{Action} & 0..* & Immutable & Set of \hl{Action}s defined by the \hl{Kind} instance. \\
 related & \hl{Kind} & 0..* & Immutable & Set of related \hl{Kind} instances. \\
-entity & \hl{Entity} & 0..1 & Immutable & \hl{Entity} type uniquely identified by the \hl{Kind} instance. \\
+entity\_type & \hl{Entity} & 1 & Immutable & \hl{Entity} type uniquely identified by the \hl{Kind} instance. \\
+entities & \hl{Entity} & 0..* & Immutable & Set of resource instances, i.e.~\hl{Entity} sub-type instances, uniquely identified by the \hl{Kind} instance. \\
 \botrule
 \end{tabular}
 }
@@ -252,24 +290,26 @@ The \hl{Kind} type inherits the \hl{Category} type and all inherited
 attributes MUST be implemented. Table~\ref{tbl:type} defines the
 additional attributes the \hl{Kind} type MUST implement to be compliant.
 
-\paragraph*{Structural Kind}
-A structural \hl{Kind} is an instance of \hl{Kind} assigned as the unique
-identifier of an \hl{Entity} sub-type. The following rules apply:
+A unique \hl{Kind} instance is assigned as the unique identifier of every
+\hl{Entity} sub-type, including \hl{Entity} itself. The following rules apply
+to the \hl{Kind} type:
 \begin{itemize}
-\item A structural \hl{Kind} define the capabilities of an \hl{Entity} sub-type in terms of attributes and \hl{Action}s.
-\item A unique structural \hl{Kind} MUST be assigned to each and every sub-type
+\item A \hl{Kind} instance define the capabilities of an \hl{Entity} sub-type
+ in terms of attributes and \hl{Action}s.
+\item A unique \hl{Kind} instance MUST be assigned to each and every sub-type
  of \hl{Entity}.
-\item A structural \hl{Kind} MUST be related, either directly or indirectly, to
- the structural \hl{Kind} of \hl{Entity},
- i.e.~\textit{http://schemas.ogf.org/occi/core\#entity}.
+\item A \hl{Kind} instance MUST be related, either directly or indirectly, to
+ the \hl{Kind} instance of \hl{Entity},
+ i.e. \textit{http://schemas.ogf.org/occi/core\#entity}.
  %
  See section~\ref{sec:type_relationship} for the definition of \hl{Kind}
- relationship.
+ relationships.
 \item If type {\bf B} inherit type {\bf A}, where {\bf A} is a sub-type of
- \hl{Entity}, the structural \hl{Kind} of {\bf B} MUST be directly related to the
- structural \hl{Kind} of {\bf A}.
+ \hl{Entity}, the \hl{Kind} instance of {\bf B} MUST be directly related to the
+ \hl{Kind} instance of {\bf A}.
 \end{itemize}
 
+\subsubsection{Mixin}
 \paragraph*{Non-structural Kind} A non-structural \hl{Kind} is an instance of
 \hl{Kind} {\em not} assigned as the unique identifier of any \hl{Entity} sub-type.
 The following rules apply:
