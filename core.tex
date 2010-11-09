@@ -77,23 +77,103 @@ OCCI is a trademark of the Open Grid Forum.
 \newpage
 
 \section{Introduction}
-\input{include/introduction}
+The Open Cloud Computing Interface (OCCI) is a RESTful Protocol and
+API for all kinds of Management tasks. OCCI was originally initiated
+to create a remote management API for IaaS%
+\footnote{Infrastructure as a Service}
+model based Services, allowing for the development of interoperable tools for
+common tasks including deployment, autonomic scaling and monitoring.
+%
+It has since evolved into an flexible API with a strong focus on
+interoperability while still offering a high degree of extensibility. The
+current release of the Open Cloud Computing Interface is suitable to serve many
+other models in addition to IaaS, including PaaS and SaaS.
+
+In order to be modular and extensible the current OCCI specification is
+released as a suite of complimentary documents which together form the complete
+specification.
+%
+The documents are divided into three categories consisting of the OCCI Core,
+the OCCI Renderings and the OCCI Extensions.
+%
+\begin{itemize}
+\item The OCCI Core specification consist of a single document defining the
+OCCI model. The OCCI model is the central piece of OCCI and can be manipulated
+by {\em renderings} and expanded through {\em extensions}.
+\item The OCCI Rendering specifications consist of multiple documents each
+describing a particular rendering of the OCCI model. Multiple renderings can
+manipulate the same instance of the OCCI model and will support any additions
+to the model which follow the extension rules defined in OCCI Core.
+\item The OCCI Extension specifications also consist of multiple documents each
+describing a particular extension of the OCCI model. The extension documents
+describe additions to the OCCI model defined within the OCCI specifiction
+suite.
+\end{itemize}
+%
+The current specification consist of three documents, one in each catogery.
+Future releases of OCCI may include additional rendering and extension
+specifications. The documents of the current OCCI specification are:
+
+\begin{description}
+\item[OCCI Core] describe the formal definition of the the OCCI model
+\cite{occi:core}.
+\item[OCCI HTTP Rendering] defines how to manipulate the OCCI model using the
+RESTful OCCI API \cite{occi:http}. The document defines how the OCCI model can
+be communicated and thus serialized using the HTTP protocol.
+\item[OCCI Infrastructure] contains the definition of the OCCI Infrastructure
+extension for the IaaS domain \cite{occi:infrastructure}. The document defines
+additional resource types, their attributes and actions that can be taken on
+each resource type.
+\end{description}
+
 
 \section{Notational Conventions}
 \input{include/notational}
 
-\section{OCCI model}
-OCCI is a boundary protocol and API
+\section{OCCI Core}
+The Open Cloud Computing Interface is a boundary protocol and API
 that acts as a service front-end to a provider's internal management
 framework. Figure~\ref{fig:placement} shows OCCI's place in a
 provider's architecture.
-
-\begin{figure}[!hp]
+\begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.5]{figs/occi-intro.pdf}
 	\caption{OCCI's place in a provider's architecture}
 	\label{fig:placement}
 \end{figure}
+Service consumers can be both end-user and other system instances, OCCI is
+suitable for both cases. The key feature is that OCCI can be used as a
+management API for all kinds of resources while at the same time maintaining a
+high level of interoperability.
+
+This document, the OCCI Core specification, define the OCCI model. The OCCI
+model is the central piece of the specification suite can be manipulated by
+renderings and expanded through extensions. In itself, the model is only useful
+for a very limited set of use cases. However, it provides the basis for
+renderings and extensions to build upon.
+
+\section{OCCI model}
+The OCCI model defines a representation of instance types which can be
+manipulated through an OCCI Rendering implementation. It is not a
+``meta-model'' \cite{meta-model-ref-something}. It is merely a model of real
+world resources and the means to identify, classify, associate and extend those
+resources. 
+
+A fundamental feature of the OCCI model is that it can be extended in such a
+way that any extension will be discoverable and visible to an OCCI client at
+run-time. An OCCI client can connect to an OCCI implementation with
+domain-specific extensions, without knowing anything in advance, and still be
+able to provide a decent end-user experience. For example, a web-based OCCI
+client could easily be reused as the management tool for a wide variety of
+services.
+
+The OCCI model can be extended through a regular inheritance model but also
+using a ``mix-in'' like model. The mix-in model only applies at the instance
+level, i.e.~the ``object level'', and thereby differs from the more common uses
+of the mix-in concept. A mix-in in OCCI can never be applied to a type, only to
+an instance.
+
+\subsection{Overview}
 
 The heart of the OCCI model is the \hl{Resource} type. Any resource exposed
 through OCCI is a \hl{Resource} or sub-type thereof.
@@ -126,8 +206,8 @@ overview of the OCCI model but is not a standalone definition thereof}
 The UML class diagram shown in figure~\ref{fig:occi_model} gives an overview of
 the OCCI model.  For compliance with OCCI Core, all of the types defined in
 the OCCI model MUST be implemented.
-The following sections of the specification define the details of the OCCI
-model.
+The following sections of the specification contains the formal definition of
+the OCCI model.
 
 \subsection{Classification and Identification}
 \label{sec:classification}
