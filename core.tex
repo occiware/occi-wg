@@ -414,7 +414,7 @@ use the ``\texttt{occi.}''~prefix.  This prefix is reserved for OCCI and MUST NO
 be used by domain-specific extensions.
 
 \subsubsection{Kind relationship}
-\label{sec:type_relationship}
+\label{sec:kind_relationship}
 As previously defined a \hl{Kind} instance MUST be related, either directly or
 indirectly, to the \hl{Kind} instance assigned to the \hl{Entity} type,
 i.e.~\textit{http://schemas.ogf.org/occi/core\#entity}.
@@ -448,42 +448,76 @@ Kind instance & Related Kind instance \\
 \end{tabular}
 }
 
+\subsubsection{Mixin relationship}
+\label{sec:mixin_relationship}
+A \hl{Mixin} instance MAY be related to another \hl{Mixin} instance for
+structural purposes. For example a set of operating system templates,
+implemented as \hl{Mixin} instances, could be related to a ``OS-template''
+\hl{Mixin} in order to help identification.
+
+Attributes and \hl{Action}s defined by \hl{Mixin} instances are combined when
+\hl{Mixin} relationships are present. Therefore a resource instance associated
+with a particular \hl{Mixin} will receive the additional capabilities defined
+by any related \hl{Mixin} instances as well as those defined by the \hl{Mixin}
+associated.
+
 \subsubsection{Kind and Mixin assignment}
 \label{sec:assignment}
-A \hl{Kind} instance MUST be statically assigned to each sub-type of
-\hl{Entity} defined by an OCCI implementation. An \hl{Entity} sub-type instance
-MUST be automatically associated with its \hl{Kind} instance at resource
-instantiation time. The \hl{Kind} instance associated with a resource instance
-MUST remain associated during the resource instance's lifetime.
+A unique \hl{Kind} instance MUST be statically assigned to each sub-type of
+\hl{Entity} defined by an OCCI implementation. Every instance of \hl{Kind}
+represent a unique identifier for a particular sub-type of \hl{Entity}.
+Consequently, when an \hl{Entity} sub-type is instantiated the resource instance
+MUST be associated with its type identifier, i.e.~the \hl{Kind} instance.
+A resource instance MUST remain associated with its \hl{Kind} instance throughout
+its lifetime.
 
-A non-structural \hl{Kind}, also known as a mix-in, MAY be associated with an
-\hl{Entity} sub-type instance, either at creation-time or run-time. An OCCI
-implementation MAY restrict which instances can be associated with a particular
-non-structural \hl{Kind}.
+A \hl{Mixin} instance MAY be associated with an resource instance, either at
+instance creation-time or at run-time. Although the OCCI model have no such
+restrictions, an OCCI implementation MAY impose restrictions on which resource
+instances can be associated with a particular \hl{Mixin} instance.
+%
+When a client attempts to associate a \hl{Mixin} instance to a resource at a
+stage not supported by a particular provider's OCCI implementation, the
+provider MUST notify the client it has issued a bad request.
+
+\subsubsection{Resource instantiation}
+\label{sec:instantiation}
+To create a resource instance a client MUST supply the concrete \hl{Entity}
+sub-type by a submitting a reference to the identifying \hl{Kind}.
+All OCCI implementations MUST understand these requests.
+
+A client MAY also submit any number of \hl{Mixin} instances to be associated
+with the resource to be created. Associating a \hl{Mixin} at resource
+instantiation time MAY have additional provider defined side-effects.
+Side-effects not visible through the OCCI discovery mechanism. Templates that
+pre-populate certain attributes of a resource instance SHOULD be implemented
+using such \hl{Mixin} instances.
 
 \subsubsection{Collections}
 \label{sec:collection}
-One or more \hl{Entity} sub-type instances associated with the same \hl{Kind},
-may it be structural or non-structural, automatically form a collection.
-Each \hl{Kind} instance in the system identifies a collection consisting of all
-different \hl{Entity} sub-type instances associated with the \hl{Kind}.
+One or more resource instances associated with the same \hl{Kind} or \hl{Mixin}
+instance, automatically form a collection.
+Each \hl{Kind} and \hl{Mixin} instance in the system identifies a collection
+consisting of all different resource instances associated with the \hl{Kind} or
+\hl{Mixin}.
 
-An \hl{Entity} sub-type instance is always a member of the collection implied
-by the \hl{Entity}'s structural \hl{Kind}. This follows from the rule that an
-\hl{Entity} sub-type instance MUST be associated with the structural \hl{Kind}
-assigned to the sub-type.
-Since a non-structural \hl{Kind} can be assigned to any \hl{Entity} sub-type
-instance a collection can contain instances of different \hl{Entity} sub-types.
+An resource instance is always a member of the collection implied by the
+\hl{Entity} sub-type's unique \hl{Kind} instance. A \hl{Kind} instance maintain
+the collection of all resource instances of the type identified by the
+\hl{Kind}.
+%
+Since a \hl{Mixin} instance can be associated to any resource instance, a
+collection can contain resource instances of different \hl{Entity} sub-types.
 %
 For example, an instance of the \hl{Resource} type will always be associated
-to the structural \hl{Kind}
+to the \hl{Kind} instance
 \textit{http://scheme.ogf.org/occi/core\#resource} and thus part of the
-collection implied by the \hl{Kind}.
+collection implied by that \hl{Kind} instance.
 \begin{description}
 \item[Adding an instance] to a collection is accomplished by associating the
-corresponding non-structural \hl{Kind} to the \hl{Entity} sub-type instance.
-\item[Removing an instance] from a collection is accomplished by disassociating the
-corresponding non-structural \hl{Kind} from the \hl{Entity} sub-type instance.
+ resource instance to the corresponding \hl{Mixin} instance.
+\item[Removing an instance] from a collection is accomplished by disassociating
+ the resource instance from the corresponding \hl{Mixin} instance.
 \end{description}
 %
 An OCCI implementation MUST allow a client to navigate collections. The
@@ -497,22 +531,28 @@ The details of collection navigation is rendering specific.
 
 \subsubsection{Discovery}
 \label{sec:discovery}
-An OCCI client MUST be able to discover all instances of \hl{Kind} and
-\hl{Category} a particular service provider's OCCI implementation support. By
-examining these instances a client MUST be able to, at a minimum, deduce the
-following information:
+An OCCI client MUST be able to discover all instances of \hl{Kind}, \hl{Mixin}
+and \hl{Category} a particular service provider's OCCI implementation have
+defined. By examining these instances a client MUST be able to, at a minimum,
+deduce the following information:
 \begin{itemize}
-\item The \hl{Entity} sub-types available from a the service provider, including domain-specific extensions.
-\item The attributes associated with each \hl{Entity} sub-type.
-\item The invocable operations, i.e. \hl{Action}s, defined for each \hl{Entity} sub-type.
-\item Additional mix-ins or tags, i.e. non-structural \hl{Kind}s, applicable to
- \hl{Entity} sub-type instances.
+\item The \hl{Entity} sub-types available from a the service provider,
+ including domain-specific extensions. This information is provided through the
+ \hl{Kind} instances of an OCCI implementation.
+\item The attributes defined for each \hl{Entity} sub-type. The identifying
+ \hl{Kind} instance provide this information.
+\item The invocable operations, i.e.~\hl{Action}s, defined for each \hl{Entity}
+ sub-type. The identifying \hl{Kind} instance provide this information.
+\item Any \hl{Mixin} instances that can be associated to resource instances.
+\item Additional capabilities defined by a particular \hl{Mixin} instance,
+ i.e.~ attributes and \hl{Action}s.
 \end{itemize}
 The above requirements comprise the OCCI discovery mechanism. It MUST be
 implemented.
 %
-The details of exactly how the \hl{Category} and \hl{Kind} instances are
-exposed to an OCCI client is specific to the particular rendering used.
+The details of exactly how the \hl{Category}, \hl{Kind} and \hl{Mixin}
+instances are exposed to an OCCI client is specific to the particular rendering
+used.
 \marginpar{References?}
 The relevant details can be found in the OCCI rendering documents.
 
