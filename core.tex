@@ -287,7 +287,7 @@ Every resource instance MUST be associated with the \hl{Kind} instance of its
 associated with the \hl{Kind} instance which identify the \hl{Resource} {\em
 type}.
 
-\mytablefloat{\label{tbl:type}Attributes defined for the \hl{Kind} type}{
+\mytablefloat{\label{tbl:kind}Attributes defined for the \hl{Kind} type}{
 \begin{tabular}{llllp{2.7in}}
 \toprule
 Attribute & Type & Multiplicity & Client Mutability & Description \\
@@ -295,12 +295,12 @@ Attribute & Type & Multiplicity & Client Mutability & Description \\
 actions & \hl{Action} & 0..* & Immutable & Set of \hl{Action}s defined by the \hl{Kind} instance. \\
 related & \hl{Kind} & 0..* & Immutable & Set of related \hl{Kind} instances. \\
 entity\_type & \hl{Entity} & 1 & Immutable & \hl{Entity} type uniquely identified by the \hl{Kind} instance. \\
-entities & \hl{Entity} & 0..* & Immutable & Set of resource instances, i.e.~\hl{Entity} sub-type instances, uniquely identified by the \hl{Kind} instance. \\
+entities & \hl{Entity} & 0..* & Immutable & Set of resource instances, i.e.~\hl{Entity} sub-type instances, of the type uniquely identified by this \hl{Kind} instance. \\
 \botrule
 \end{tabular}
 }
 The \hl{Kind} type inherits the \hl{Category} type and all inherited
-attributes MUST be implemented. Table~\ref{tbl:type} defines the
+attributes MUST be implemented. Table~\ref{tbl:kind} defines the
 additional attributes the \hl{Kind} type MUST implement to be compliant.
 
 A unique \hl{Kind} instance is assigned as the unique identifier of every
@@ -556,39 +556,6 @@ used.
 \marginpar{References?}
 The relevant details can be found in the OCCI rendering documents.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Bits and pieces %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Stuff which may or may not be useful to add somewhere in the spec...
-
-\begin{comment}
-The central component of the classification system is the \hl{Kind} type which
-is a specialisation of the \hl{Category} type. The following sections describe
-the OCCI classification system in detail.
-
-Each OCCI base type, see section~\ref{sec:base_types}, is assigned a
-unique identifier.  This identifier is an instance of \hl{Kind} and comprise
-the structural \hl{Kind} of the associated base type%
-\footnote{The \hl{Action} type is an exception and is instead uniquely
-identified by a \hl{Category} instance. An \hl{Action} is a capability of \hl{Kind}
-and can therefore not be identified by \hl{Kind}.}.
-\end{comment}
-
-
-\begin{comment}
-%%% CLIENT Interaction, do we need to specify this explicitly?!
-\subsubsection{Creating Instances}
-A client MUST supply the concrete Entity type as a Category. All OCCI
-implementations MUST understand these requests containing concrete
-Entity types, i.e. Resource, Link, Action or a subtype thereof.
-
-When a client attempts to add a non-structural
-\hl{Kind} at a stage not supported by a particular provider's OCCI
-implementation, the provider MUST notify the client it has issued a bad
-request.
-\end{comment}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 \subsection{The OCCI base types}
 \label{sec:base_types}
@@ -598,8 +565,9 @@ base types MUST be implemented.
 
 \subsubsection{Entity}
 \label{sec:entity}
-The \hl{Entity} type is the abstract base type for \hl{Resource} and \hl{Link}
-and any domain-specific sub-types thereof. It MUST be implemented.
+The \hl{Entity} type is an abstract type acting as the base type for
+\hl{Resource} and \hl{Link} and any domain-specific sub-types thereof. It MUST
+be implemented.
 %
 Table~\ref{tbl:entity} defines the attributes the \hl{Entity} type MUST implement to
 be compliant.
@@ -611,8 +579,8 @@ Attribute & Type & Multiplicity & Client Mutability & Description \\
 \colrule
 id & URI & 1 & Immutable & A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
 title & String & 0..1 & Mutable & The display name of the instance. \\
-structural kind & \hl{Kind} & 1 & Immutable & The structural \hl{Kind} of the instance. \\
-non-structural kinds & \hl{Kind} & 0..* & Mutable & The non-structural \hl{Kind}s associated to this instance. Consumers can expect the attributes and \hl{Action}s of the associated non-structural \hl{Kind}s to be exposed by the instance. \\ 
+kind & \hl{Kind} & 1 & Immutable & The \hl{Kind} instance uniquely identifying the \hl{Entity} sub-type of the resource instance. \\
+mixins & \hl{Kind} & 0..* & Mutable & The \hl{Mixin} instances associated to this resource instance. Consumers can expect the attributes and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\ 
 \botrule
 \end{tabular}
 }
@@ -620,28 +588,30 @@ non-structural kinds & \hl{Kind} & 0..* & Mutable & The non-structural \hl{Kind}
 \hl{Entity} enforces for all sub-types a required \texttt{id} attribute and an
 optional \texttt{title} attribute.
 %
-Every sub-type of \hl{Entity} MUST be assigned a structural \hl{Kind}, see
-section~\ref{sec:type}. \hl{Entity} itself is assigned the structural \hl{Kind}
-\textit{http://schemas.ogf.org/occi/core\#entity}.
+Every sub-type of \hl{Entity} MUST be assigned a \hl{Kind} instance, see
+section~\ref{sec:kind}. \hl{Entity} itself is assigned the \hl{Kind} instance
+\textit{http://schemas.ogf.org/occi/core\#entity}. Being an abstract type \hl{Entity}
+itself can never be instantiated.
 %
-An \hl{Entity} sub-type instance MAY be associated with one or more non-structural
-\hl{Kind}s.
+An \hl{Entity} sub-type instance, a resource instance, MAY be associated with
+one or more \hl{Mixin} instances.
 
-An \hl{Entity} sub-type instance MUST expose its structural \hl{Kind} and any
-associated non-structural \hl{Kind}s together with their associated attributes
-and \hl{Action}s.
+An \hl{Entity} sub-type instance MUST expose its identifying \hl{Kind} instance
+and any associated \hl{Mixin} instances together with the attributes and
+\hl{Action}s defined by them.
 
 \subsubsection{Resource}
 \label{sec:resource}
 The \hl{Resource} type inherit \hl{Entity} and describes a concrete resource that
 can be inspected and manipulated. It represents a general object in the OCCI
-model and MUST be implemented.
+model and MUST be implemented. A \hl{Resource} is suitable to represent real
+world resources, e.g. virtual machines, networks, services, etc.
 %
-The \hl{Resource} type MUST implement all attributes inherited from the
-\hl{Entity} type together with the attributes defined in table~\ref{tbl:resource}
-in order to be compliant.
+The \hl{Resource} type MUST implement all attributes inherited from \hl{Entity}
+as well as the attributes defined in table~\ref{tbl:resource} in order
+to be compliant.
 %
-The Resource type is assigned the structural \hl{Kind}
+The \hl{Resource} type is assigned the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/core\#resource}.
 
 \mytablefloat{\label{tbl:resource}Attributes defined for the \hl{Resource} type.}{
@@ -672,7 +642,7 @@ The \hl{Link} type MUST implement all attributes inherited from the
 \hl{Entity} type together with the attributes defined in table~\ref{tbl:link}
 in order to be compliant.
 %
-The Link type is assigned the structural \hl{Kind}
+The \hl{Link} type is assigned the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/core\#link}.
 
 \mytablefloat{\label{tbl:link}Attributes defined for the \hl{Link} type.}{
@@ -688,7 +658,7 @@ target & \hl{Resource} & 1 & Mutable & The \hl{Resource} instances the \hl{Link}
 
 An instance of the \hl{Link} type MUST NOT refer to an external resource.  A
 provider MAY however create a sub-type of \hl{Link} with different semantics,
-e.g.~have a target attribute containing an URI and thus the ability of linking
+e.g.~having a target attribute containing an URI and thus the ability of linking
 with external resources.
 %
 The \hl{Link} type can be sub-typed for domain-specific extensions of the
@@ -709,20 +679,22 @@ implement to be compliant.
 Attribute & Type & Multiplicity & Client Mutability & Description \\
 \colrule
 category & \hl{Category} & 1 & Immutable & The identifying \hl{Category} of the \hl{Action}. \\
-parameters & String & 0..* & Immutable & Enumeration of valid parameters for the \hl{Action}. \\
 \botrule
 \end{tabular}
 }
 
-An \hl{Action} is always bound to a \hl{Kind} instance through a composite
-association. An \hl{Action} is considered a capability of the \hl{Kind}.  An
-\hl{Action} MAY be invoked on any \hl{Entity} sub-type instance associated with
-the \hl{Kind} instance defining the \hl{Action}. An OCCI implementation MAY
-refuse an \hl{Action} from being invoked if currently not applicable.
+An \hl{Action} MUST always bound to either a \hl{Kind} or a \hl{Mixin} instance
+through a composite association. An \hl{Action} is considered to be a
+capability of the \hl{Kind} or \hl{Mixin} instance it is associated with.  An
+\hl{Action} MAY be invoked on any resource instance associated with the
+\hl{Kind} or \hl{Mixin} instance defining the \hl{Action}. An OCCI
+implementation MAY however refuse an \hl{Action} from being invoked if
+currently not applicable.
 
-An \hl{Action} MAY be invoked on a collection of \hl{Entity} sub-type instances.
-The \hl{Action} is only considered valid if all instances of the collection are
-associated with the \hl{Kind} defining the \hl{Action}.
+An \hl{Action} MAY be invoked on a collection of \hl{Entity} sub-type
+instances. The \hl{Action} is only considered valid if all resource instances
+of the collection are associated with the \hl{Kind} or \hl{Mixin} defining the
+\hl{Action}.
 
 The Action type is assigned the \hl{Category} identifier
 \textit{http://schemas.ogf.org/occi/core\#action}.
