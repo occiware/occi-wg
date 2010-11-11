@@ -223,8 +223,6 @@ a specific meaning to the OCCI specification suite. However, for reader
 convenience, a sub-set of the glossary is provided here as well. The following
 terminology have specific meaning in the OCCI context:
 \begin{description}
-\item[instance] An {\bf instance} refer to the instantiated object of a type
- defined in the OCCI model.
 \item[mix-in] An instance of the \hl{Mixin} type associated with a {\bf resource
  instance}. The ``mix-in'' concept as used by OCCI {\em only} applies to
  instances, never to \hl{Entity} types.
@@ -235,8 +233,9 @@ terminology have specific meaning in the OCCI context:
  \hl{Link} type.  However, the term {\bf resource instance} is defined to
  include any instance of a {\em sub-type} of \hl{Resource} or \hl{Link} as
  well.
-\item[type] A {\bf type} refer to one of the types, i.e.~classes, defined by
- the OCCI model.
+\item[type] A {\bf type} refer to one of the types defined by the OCCI model.
+The OCCI model types are \hl{Category}, \hl{Kind}, \hl{Mixin}, \hl{Action},
+\hl{Entity}, \hl{Resource} and \hl{Link}.
 \end{description}
 
 \subsection{Classification and Identification}
@@ -728,7 +727,7 @@ define the rules for extensions of the OCCI model.
 The rules defined in section~\ref{sec:classification} and \ref{sec:base_types}
 are REQUIRED for all extensions of the OCCI model.
 
-\subsubsection{\hl{Category} instances}
+\subsubsection{Category instances}
 \label{sec:ext:category}
 Domain-specific instances of \hl{Category}, \hl{Kind} and \hl{Mixin} MAY be
 introduced by an OCCI implementation. Since \hl{Kind} and \hl{Mixin} both
