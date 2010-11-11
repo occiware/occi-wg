@@ -148,7 +148,7 @@ management API for all kinds of resources while at the same time maintaining a
 high level of interoperability.
 
 This document, the OCCI Core specification, define the OCCI model. The OCCI
-model is the core of the specification suite can be manipulated by
+model is the core of the specification suite and the model can be manipulated by
 renderings and expanded through extensions. In itself, the model is only useful
 for a very limited set of use cases. However, it provides the basis for
 renderings and extensions to build upon.
@@ -267,12 +267,25 @@ The classification system can be summarised with the following key features:
 \end{itemize}
 
 \subsubsection{Kind}
-\label{sec:type}
-The \hl{Kind} type comprises the classification system provided by the OCCI
-model. It MUST be implemented.
-\#\#FIXME
-A \hl{Kind} instance can be either structural or
-non-structural.
+\label{sec:kind}
+The \hl{Kind} type, together with the \hl{Mixin} type, define the
+classification system of the OCCI model. It MUST be implemented. The \hl{Kind}
+type represent the identification mechanism for all \hl{Entity} types present in
+the model.
+
+A \hl{Kind} {\em instance} is dedicated to each and every \hl{Entity} sub-type
+defined in an OCCI implementation. The capabilities, in terms of attributes and
+\hl{Action}s, represented by a \hl{Kind} instance describe the capabilities of
+its \hl{Entity} sub-type.
+%
+In a clean instantiation of the OCCI model, with no extensions, three instances
+of \hl{Kind} will be present: one for \hl{Entity}, another for \hl{Resource}
+and the last one for \hl{Link}. 
+
+Every resource instance MUST be associated with the \hl{Kind} instance of its
+\hl{Entity} sub-type. For example an instance of \hl{Resource} MUST be
+associated with the \hl{Kind} instance which identify the \hl{Resource} {\em
+type}.
 
 \mytablefloat{\label{tbl:type}Attributes defined for the \hl{Kind} type}{
 \begin{tabular}{llllp{2.7in}}
@@ -294,10 +307,12 @@ A unique \hl{Kind} instance is assigned as the unique identifier of every
 \hl{Entity} sub-type, including \hl{Entity} itself. The following rules apply
 to the \hl{Kind} type:
 \begin{itemize}
-\item A \hl{Kind} instance define the capabilities of an \hl{Entity} sub-type
- in terms of attributes and \hl{Action}s.
-\item A unique \hl{Kind} instance MUST be assigned to each and every sub-type
+\item A unique \hl{Kind} instance MUST be dedicated to each and every sub-type
  of \hl{Entity}.
+\item A \hl{Kind} instance MUST define all capabilities of its \hl{Entity}
+ sub-type in terms of attributes and \hl{Action}s. If an \hl{Entity} sub-type
+ has an attribute named {\bf X}, the corresponding \hl{Kind} instance MUST define
+ an attribute named {\bf X}.
 \item A \hl{Kind} instance MUST be related, either directly or indirectly, to
  the \hl{Kind} instance of \hl{Entity},
  i.e. \textit{http://schemas.ogf.org/occi/core\#entity}.
@@ -310,6 +325,14 @@ to the \hl{Kind} type:
 \end{itemize}
 
 \subsubsection{Mixin}
+The \hl{Mixin} type complement the \hl{Kind} type in defining the
+classification system of the OCCI model. It MUST be implemented. The \hl{Mixin}
+type represent a run-time extension mechanism which allow new capabilities to
+be added to existing resource instances.
+
+A \hl{Mixin} {\em instance} can be associated with a resource instance and thereby
+add the capabilities 
+
 \paragraph*{Non-structural Kind} A non-structural \hl{Kind} is an instance of
 \hl{Kind} {\em not} assigned as the unique identifier of any \hl{Entity} sub-type.
 The following rules apply:
