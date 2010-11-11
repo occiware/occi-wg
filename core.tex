@@ -273,7 +273,7 @@ classification system of the OCCI model. It MUST be implemented. The \hl{Kind}
 type represent the identification mechanism for all \hl{Entity} types present in
 the model.
 
-A \hl{Kind} {\em instance} is dedicated to each and every \hl{Entity} sub-type
+A \hl{Kind} {\em instance} is assigned to each and every \hl{Entity} sub-type
 defined in an OCCI implementation. The capabilities, in terms of attributes and
 \hl{Action}s, represented by a \hl{Kind} instance describe the capabilities of
 its \hl{Entity} sub-type.
@@ -307,7 +307,7 @@ A unique \hl{Kind} instance is assigned as the unique identifier of every
 \hl{Entity} sub-type, including \hl{Entity} itself. The following rules apply
 to the \hl{Kind} type:
 \begin{itemize}
-\item A unique \hl{Kind} instance MUST be dedicated to each and every sub-type
+\item A unique \hl{Kind} instance MUST be assigned to each and every sub-type
  of \hl{Entity}.
 \item A \hl{Kind} instance MUST define all capabilities of its \hl{Entity}
  sub-type in terms of attributes and \hl{Action}s. If an \hl{Entity} sub-type
@@ -332,6 +332,21 @@ be added to existing resource instances.
 
 A \hl{Mixin} {\em instance} can be associated with a resource instance and thereby
 add the capabilities 
+
+\mytablefloat{\label{tbl:type}Attributes defined for the \hl{Mixin} type}{
+\begin{tabular}{llllp{2.7in}}
+\toprule
+Attribute & Type & Multiplicity & Client Mutability & Description \\
+\colrule
+actions & \hl{Action} & 0..* & Immutable & Set of \hl{Action}s defined by the \hl{Mixin} instance. \\
+related & \hl{Mixin} & 0..* & Immutable & Set of related \hl{Mixin} instances. \\
+entities & \hl{Entity} & 0..* & Immutable & Set of resource instances, i.e.~\hl{Entity} sub-type instances, associated with the \hl{Mixin} instance. \\
+\botrule
+\end{tabular}
+}
+The \hl{Mixin} type inherits the \hl{Category} type and all inherited
+attributes MUST be implemented. Table~\ref{tbl:type} defines the
+additional attributes the \hl{Mixin} type MUST implement to be compliant.
 
 \paragraph*{Non-structural Kind} A non-structural \hl{Kind} is an instance of
 \hl{Kind} {\em not} assigned as the unique identifier of any \hl{Entity} sub-type.
@@ -684,23 +699,27 @@ The OCCI model has a flexible yet fairly simple extension mechanism based on
 the classification system described in section~\ref{sec:classification}.
 %
 The OCCI model can be extended using two different methods, sub-typing and
-mix-in. Both methods involve the use of domain-specific \hl{Kind} or
-\hl{Category} instances. The following sections define the requirements for
-extensions of the OCCI model.
+mix-in. Custom sub-typing require domain-specific \hl{Kind} instances and
+custom mix-ins require domain-specific \hl{Mixin} instances.  Both methods MAY
+involve the use of domain-specific \hl{Category} instance since those are
+REQUIRED for domain-specific \hl{Action} sub-types.  The following sections
+define the rules for extensions of the OCCI model.
 %
 The rules defined in section~\ref{sec:classification} and \ref{sec:base_types}
 are REQUIRED for all extensions of the OCCI model.
 
-\subsubsection{\hl{Kind} and \hl{Category} instances}
+\subsubsection{\hl{Category} instances}
 \label{sec:ext:category}
-Domain-specific \hl{Kind} and \hl{Category} instances MAY be introduced by an
-OCCI implementation.
-%
-A \hl{Kind} or \hl{Category} instance defined outside of the OCCI
-specification MUST use a categorisation scheme unique to the provider,
+Domain-specific instances of \hl{Category}, \hl{Kind} and \hl{Mixin} MAY be
+introduced by an OCCI implementation. Since \hl{Kind} and \hl{Mixin} both
+inherit \hl{Category} the extension rules for \hl{Category}, defined below,
+applies to them as well.
+
+A \hl{Category} instance defined outside of the OCCI specification MUST use a
+categorisation scheme unique to the provider,
 e.g.~\textit{http://example.com/occi\#}.
 %
-An attribute introduced by a domain-specific \hl{Kind} or \hl{Category} MUST
+An attribute introduced by a domain-specific \hl{Category} MUST
 use an attribute name prefix. This prefix MUST NOT be the ``\texttt{occi.}''~prefix
 which is reserved for the OCCI specification. Domain-specific attribute names
 SHOULD use a prefix consisting of the provider's reverse domain name,
@@ -712,28 +731,27 @@ Three OCCI model types MAY be sub-typed, those are \hl{Resource}, \hl{Link} and
 \hl{Action}.
 
 In order to define a sub-type of \hl{Resource} or \hl{Link} a domain-specific
-structural \hl{Kind} MUST be defined and assigned to the sub-type. This
-structural \hl{Kind} MUST be directly related to the structural \hl{Kind} of
-the type extended.
+\hl{Kind} instance MUST be defined and assigned to the sub-type. This
+\hl{Kind} instance MUST be directly related to the \hl{Kind} instance of the
+type extended.
 
 In order to define a sub-type of \hl{Action} a domain-specific \hl{Category}
 instance MUST be assigned to the \hl{Action} sub-type as its unique identifier.
 Furthermore the \hl{Action} sub-type MUST be associated as a capability of a
-domain-specific \hl{Kind} instance.
+domain-specific \hl{Kind} or \hl{Mixin} instance.
 
 \subsubsection{Mix-ins}
-The OCCI model MAY be extended through domain-specific mix-ins,
-i.e.~non-structural \hl{Kind}s.  A non-structural \hl{Kind} MAY be associated
-with any \hl{Entity} sub-type instance although a provider MAY apply
-restrictions.
+The OCCI model MAY be extended using a ``mix-in'' like model by defining
+domain-specific \hl{Mixin} instances.  A \hl{Mixin} instance can be associated
+with any resource instance although a provider MAY apply restrictions.
 
-In order to support user-defined tags an OCCI implementation must allow
-non-structural \hl{Kind}s to be created and destroyed by request of a client.
+In order to support user-defined tags an OCCI implementation must allow custom
+\hl{Mixin} instances to be created and destroyed by request of a client.
 There is no limitation in the OCCI model from doing so but it is RECOMMENDED to
-assign a separate categorisation scheme for each user's non-structural
-\hl{Kind}s%
-\footnote{A tag is a non-structural \hl{Kind} which do not introduce additional
-capabilities.}.
+assign a separate categorisation scheme for each user's \hl{Mixin}%
+\footnote{A tag is a \hl{Mixin} instance which does not introduce additional
+capabilities.}
+instances.
 
 \section{Contributors}
 Editors: Andy Edmonds, Thijs Metsch, Ralf Nyrén \\
