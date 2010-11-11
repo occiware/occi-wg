@@ -278,7 +278,7 @@ defined in an OCCI implementation. The capabilities, in terms of attributes and
 \hl{Action}s, represented by a \hl{Kind} instance describe the capabilities of
 its \hl{Entity} sub-type.
 %
-In a clean instantiation of the OCCI model, with no extensions, three instances
+In the initial instantiation of the OCCI model, with no extensions, three instances
 of \hl{Kind} will be present: one for \hl{Entity}, another for \hl{Resource}
 and the last one for \hl{Link}. 
 
@@ -317,7 +317,7 @@ to the \hl{Kind} type:
  the \hl{Kind} instance of \hl{Entity},
  i.e. \textit{http://schemas.ogf.org/occi/core\#entity}.
  %
- See section~\ref{sec:type_relationship} for the definition of \hl{Kind}
+ See section~\ref{sec:kind_relationship} for the definition of \hl{Kind}
  relationships.
 \item If type {\bf B} inherit type {\bf A}, where {\bf A} is a sub-type of
  \hl{Entity}, the \hl{Kind} instance of {\bf B} MUST be directly related to the
@@ -330,8 +330,14 @@ classification system of the OCCI model. It MUST be implemented. The \hl{Mixin}
 type represent a run-time extension mechanism which allow new capabilities to
 be added to existing resource instances.
 
-A \hl{Mixin} {\em instance} can be associated with a resource instance and thereby
-add the capabilities 
+A \hl{Mixin} {\em instance} can be associated with any existing resource
+instance and thereby add new capabilities, in terms of attributes and
+\hl{Action}s, to the resource instance. In the initial instantiation of the OCCI
+model, with no extensions, no \hl{Mixin} instances are present.
+
+Any resource instance MAY be associated with any number of \hl{Mixin}
+instances.  However, an OCCI implementation MAY apply restrictions to which
+resource instances a particular \hl{Mixin} instance can be associated to.
 
 \mytablefloat{\label{tbl:type}Attributes defined for the \hl{Mixin} type}{
 \begin{tabular}{llllp{2.7in}}
@@ -340,39 +346,38 @@ Attribute & Type & Multiplicity & Client Mutability & Description \\
 \colrule
 actions & \hl{Action} & 0..* & Immutable & Set of \hl{Action}s defined by the \hl{Mixin} instance. \\
 related & \hl{Mixin} & 0..* & Immutable & Set of related \hl{Mixin} instances. \\
-entities & \hl{Entity} & 0..* & Immutable & Set of resource instances, i.e.~\hl{Entity} sub-type instances, associated with the \hl{Mixin} instance. \\
+entities & \hl{Entity} & 0..* & Mutable & Set of resource instances, i.e.~\hl{Entity} sub-type instances, associated with the \hl{Mixin} instance. \\
 \botrule
 \end{tabular}
 }
 The \hl{Mixin} type inherits the \hl{Category} type and all inherited
 attributes MUST be implemented. Table~\ref{tbl:type} defines the
 additional attributes the \hl{Mixin} type MUST implement to be compliant.
-
-\paragraph*{Non-structural Kind} A non-structural \hl{Kind} is an instance of
-\hl{Kind} {\em not} assigned as the unique identifier of any \hl{Entity} sub-type.
-The following rules apply:
+The following rules apply to the \hl{Mixin} type:
 \begin{itemize}
-\item A non-structural \hl{Kind} define additional capabilities for each
- \hl{Entity} sub-type instance it is associated with. A non-structural \hl{Kind}
- add capabilities using a mix-in like model.
-\item A non-structural \hl{Kind} MUST only be associated with \hl{Entity}
- sub-type {\em instances}, either at creation-time or run-time.
-\item A non-structural \hl{Kind} MUST NOT be related, neither directly nor
- indirectly, to the structural \hl{Kind} of \hl{Entity},
- i.e.~\textit{http://schemas.ogf.org/occi/core\#entity}.
+\item A \hl{Mixin} instance define additional capabilities for each
+ resource instance it is associated to. A \hl{Mixin} instance
+ add capabilities in terms of attributes and \hl{Action}s.
+\item A \hl{Mixin} instance MUST only be associated with resource
+ {\em instances}, either at creation-time or run-time.
+\item A \hl{Mixin} instance MAY be related to another \hl{Mixin} instance.
+ If \hl{Mixin} {\bf B} is related to \hl{Mixin} {\bf A}, any resource instance
+ associated with \hl{Mixin} {\bf B} will receive the capabilities defined by
+ both \hl{Mixin} {\bf B} and \hl{Mixin} {\bf A}.
  %
- See section~\ref{sec:type_relationship} for the definition of \hl{Kind}
+ See section~\ref{sec:mixin_relationship} for the definition of \hl{Mixin}
  relationship.
-\item A non-structural \hl{Kind} defining no additional capabilities in terms
- of attributes or \hl{Action}s is considered to be a tag.
+\item A \hl{Mixin} instance defining no additional capabilities, in terms
+ of attributes or \hl{Action}s, is considered to be a tag.
 \end{itemize}
 
 \subsubsection{Category}
 \label{sec:category}
-The \hl{Category} type comprises the basis of the identification mechanism used
-by the OCCI classification system. It MUST be implemented. Instances of the
-\hl{Category} type are only used to identify \hl{Action} types. All other uses
-of \hl{Category} properties are managed through its sub-type \hl{Kind}.
+The \hl{Category} type is the basis of the identification mechanism used by the
+OCCI classification system. It MUST be implemented. Instances of the
+\hl{Category} type itself are only used to identify \hl{Action} types. All
+other uses of \hl{Category} properties are managed through its sub-types
+\hl{Kind} and \hl{Mixin}.
 %
 Table~\ref{tbl:category} defines the attributes the \hl{Category} type MUST
 implement to be compliant.
@@ -390,48 +395,51 @@ attributes & String & 0..* & Immutable & The set of resource attribute names def
 \end{tabular}
 }
 
-A \hl{Category} is uniquely identified by concatenating the categorisation
-scheme with the category term,
+A \hl{Category} instance is uniquely identified by concatenating the
+categorisation scheme with the category term,
 e.g.~\textit{http://example.com/category/scheme\#term}.
 This is done to enable discovery of \hl{Category} definitions in text based
 renderings such as HTTP. All renderings MUST make use of and understand
-concatenated unique identifiers of \hl{Category} types.
+concatenated unique identifiers of \hl{Category} instances.
 %
-Sub-types of \hl{Category} such as \hl{Kind} inherit this property.
+Sub-types of \hl{Category} such as \hl{Kind} and \hl{Mixin} inherit this property.
 
 The categorisation schemes defined in the OCCI specification all use the
 \textit{http://schemas.ogf.org/occi/} base URL. This base URL is reserved for
 OCCI an MUST NOT be used by domain-specific extensions.
 
 Attribute names defined by \hl{Category} instances%
-\footnote{Also applies to \hl{Kind} instances.}
-use the \texttt{occi.}~prefix.  This prefix is reserved for OCCI and MUST NOT
+\footnote{Also applies to \hl{Kind} and \hl{Mixin} instances.}
+use the ``\texttt{occi.}''~prefix.  This prefix is reserved for OCCI and MUST NOT
 be used by domain-specific extensions.
 
 \subsubsection{Kind relationship}
 \label{sec:type_relationship}
-As previously defined a structural \hl{Kind} MUST be related, either
-either directly or indirectly, to the structural \hl{Kind} of \hl{Entity},
+As previously defined a \hl{Kind} instance MUST be related, either directly or
+indirectly, to the \hl{Kind} instance assigned to the \hl{Entity} type,
 i.e.~\textit{http://schemas.ogf.org/occi/core\#entity}.
 %
-The OCCI base types \hl{Resource} and \hl{Link} extend \hl{Entity}.  This
-together with any further sub-typing implies a hierarchy of related structural
-\hl{Kind} instances.  The \hl{Kind} relationships thus mirror the type
+The OCCI base types \hl{Resource} and \hl{Link} both extend \hl{Entity} and
+therefore their identifying \hl{Kind} instances MUST be related to \hl{Entity}
+type's \hl{Kind} instance.
+%
+These rules, including further sub-typing by extensions, imply a hierarchy of
+related \hl{Kind} instances. The \hl{Kind} relationships thus mirror the type
 inheritance structure of the OCCI model and any extension thereof.
 
 In an example where a domain-specific ``Custom Compute Resource'' is a sub-type
-the OCCI infrastructure type Compute, which in turn is a sub-type of the
-\hl{Resource} type, four related structural \hl{Kind}s would be involved.
+the OCCI Infrastructure type Compute, which in turn is a sub-type of the
+\hl{Resource} type, four related \hl{Kind} instances would be involved.
 %
 Table~\ref{tbl:relationship} illustrates the exemplified hierarchy of \hl{Kind}
-instances relating the domain-specific structural \hl{Kind} to the structural
-\hl{Kind} of \hl{Entity}.
+instances relating the domain-specific \hl{Kind} instances to the \hl{Kind}
+instance of \hl{Entity}.
 
 \mytablefloat{\label{tbl:relationship}Example of the \hl{Kind} relationship involved
-for a domain-specific extension of the OCCI infrastructure type \hl{Compute}.}{
+for a domain-specific extension of the OCCI Infrastructure type \hl{Compute}.}{
 \begin{tabular}{p{7cm}p{7cm}}
 \toprule
-Structural Kind & Related Structural Kind \\
+Kind instance & Related Kind instance \\
 \colrule
 \textit{http://example.com/occi/custom\#compute} & \textit{http://schemas.ogf.org/occi/infrastructure\#compute} \\
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute} & \textit{http://schemas.ogf.org/occi/core\#resource} \\
@@ -440,13 +448,13 @@ Structural Kind & Related Structural Kind \\
 \end{tabular}
 }
 
-\subsubsection{Kind assignment}
-\label{sec:type_assignment}
-A structural \hl{Kind} MUST be statically assigned to each sub-type of
-\hl{Entity} defined by an implementation. An \hl{Entity} sub-type instance MUST be
-automatically associated with its structural \hl{Kind} at creation-time.  The
-structural \hl{Kind} associated with an instance MUST remain associated with the
-instance during its lifetime.
+\subsubsection{Kind and Mixin assignment}
+\label{sec:assignment}
+A \hl{Kind} instance MUST be statically assigned to each sub-type of
+\hl{Entity} defined by an OCCI implementation. An \hl{Entity} sub-type instance
+MUST be automatically associated with its \hl{Kind} instance at resource
+instantiation time. The \hl{Kind} instance associated with a resource instance
+MUST remain associated during the resource instance's lifetime.
 
 A non-structural \hl{Kind}, also known as a mix-in, MAY be associated with an
 \hl{Entity} sub-type instance, either at creation-time or run-time. An OCCI
