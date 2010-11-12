@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper,british]{article}
+\documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
 \usepackage{graphicx}
@@ -119,7 +119,7 @@ specifications. The documents of the current OCCI specification suite are:
 \item[OCCI Core] describes the formal definition of the the OCCI model
 \cite{occi:core}.
 \item[OCCI HTTP Rendering] defines how to manipulate the OCCI model using the
-RESTful OCCI API \cite{occi:http}. The document defines how the OCCI model can
+RESTful OCCI API \cite{occi:http_rendering}. The document defines how the OCCI model can
 be communicated and thus serialised using the HTTP protocol.
 \item[OCCI Infrastructure] contains the definition of the OCCI Infrastructure
 extension for the IaaS domain \cite{occi:infrastructure}. The document defines
@@ -156,7 +156,7 @@ renderings and extensions to build upon.
 \section{OCCI model}
 The OCCI model defines a representation of instance types which can be
 manipulated through an OCCI Rendering implementation. It is not a
-``meta-model'' \cite{meta-model-ref-something}. It is merely a first level
+``meta-model'' \cite{metamodelling}. It is merely a first level
 abstraction of real world resources, including the means to identify, classify,
 associate and extend those resources. 
 
@@ -802,15 +802,7 @@ Contributors: Alexander Papaspyrou, Sam Johnston
 \section{Full Copyright Notice}
 \input{include/copyright}
 
-\section{References}
-
-Note that only permanent documents should be cited as
-references. Other items, such as Web pages or working groups, should
-be cited inline (i.e., see the Open Grid Forum,
-http://www.ogf.org). References should conform to a standard such as
-used by IEEE/ACM, MLA, Chicago or similar. Include an author, year,
-title, publisher, place of publication. For online materials, also add
-a URL. It is acceptable to separate out ''normative references,'' as
-IETF documents typically do. Some sample citations:
+\bibliographystyle{IEEEtran}
+\bibliography{references}
 
 \end{document}
