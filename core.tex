@@ -111,7 +111,7 @@ the OCCI Renderings and the OCCI Extensions.
  suite.
 \end{itemize}
 %
-The current specification consist of three documents, one in each category.
+The current specification consist of three documents.
 Future releases of OCCI may include additional rendering and extension
 specifications. The documents of the current OCCI specification suite are:
 
@@ -130,8 +130,17 @@ on each resource type.
 
 \section{Notational Conventions}
 \input{include/notational}
+\textbf{Andy: we need to state that this document as part of the current document set,
+supersedes all previous documents.}
 
 \section{OCCI Core}
+\textbf{Andy: This preceding text reads as a general introduction. Move to Introduction section.}
+
+\textbf{Andy: to help the reader a broad outline/reading guide should be introduced here
+e.g. 'we start with describing Category, work through the definition of Action, Mixin and Kind,
+following which Entity is described. Lastly we discuss Resource and Link, the main extension
+points of the OCCI core model.'}
+
 The Open Cloud Computing Interface is a boundary protocol and API
 that acts as a service front-end to a provider's internal management
 framework. Figure~\ref{fig:placement} shows OCCI's place in a
@@ -142,39 +151,45 @@ provider's architecture.
 	\caption{OCCI's place in a provider's architecture}
 	\label{fig:placement}
 \end{figure}
-Service consumers can be both end-users and other system instances, OCCI is
+Service consumers can be both end-users and other system instances. OCCI is
 suitable for both cases. The key feature is that OCCI can be used as a
 management API for all kinds of resources while at the same time maintaining a
 high level of interoperability.
 
-This document, the OCCI Core specification, define the OCCI model. The OCCI
-model is the core of the specification suite and the model can be manipulated by
-renderings and expanded through extensions. In itself, the model is only useful
+This document, the OCCI Core specification, defines the OCCI model. This
+model is the core of the specification suite and it can be manipulated 
+\textbf{(Andy: 'manipulated' not quite right)} by renderings and expanded 
+through extensions. In itself, the core model is only useful
 for a very limited set of use cases. However, it provides the basis for
 renderings and extensions to build upon.
 
-\section{OCCI model}
+\section{OCCI Core Model}
 The OCCI model defines a representation of instance types which can be
-manipulated through an OCCI Rendering implementation. It is not a
-``meta-model'' \cite{metamodelling}. It is merely a first level
-abstraction of real world resources, including the means to identify, classify,
-associate and extend those resources. 
+manipulated through an OCCI Rendering implementation. 
+%It is not a ``meta-model'' \cite{metamodelling}. 
+\textbf{(Andy, Thijs: Remove 'metamodel')}It is an abstraction of real-world 
+resources, including the means to identify, classify, associate 
+and extend those resources. 
 
 A fundamental feature of the OCCI model is that it can be extended in such a
 way that any extension will be discoverable and visible to an OCCI client at
 run-time. An OCCI client can connect to an OCCI implementation with
 domain-specific extensions, without knowing anything in advance, and still be
-able to provide a decent end-user experience. For example, a web-based OCCI
+able to provide a decent end-user experience \textbf{(Andy: not clear what is meant here by phrase)}. 
+For example, a web-based OCCI
 client could easily be reused as the management tool for a wide variety of
 services.
 
 The OCCI model can be extended through inheritance but also
-using a ``mix-in'' like concept. The mix-in model only applies at the instance
+using a ``mix-in'' like concept \textbf{(Andy: Mixins are not new and can be referenced and explained
+by the likes of Lisp mixins etc. We must reference here.)}. The mix-in model only applies at the instance
 level, i.e.~the ``object level'', and thereby differs from the more common uses
 of the mix-in concept. A mix-in in OCCI can never be applied to a type, only to
 an instance.
 
 \subsection{Overview}
+
+\textbf{(Andy: I'd prefer the diagram shown 1st and then the explaining text)}
 
 The heart of the OCCI model is the \hl{Resource} type. Any resource exposed
 through OCCI is a \hl{Resource} or a sub-type thereof.
@@ -192,9 +207,11 @@ domain-specific \hl{Link} types inherit.
 \hl{Entity} is an abstract type which both \hl{Resource} and \hl{Link} inherit.
 Each sub-type of \hl{Entity} is identified by a unique \hl{Kind} instance.
 %
+
 The \hl{Kind} type is the core of the classification and identification
 system built into the OCCI model. \hl{Kind} is a specialisation of
 \hl{Category} and introduces additional capabilities in terms of \hl{Action}s.
+\textbf{(Andy, Thijs: Briefly explain what an Action is here)}
 
 The last type defined by the OCCI model is the \hl{Mixin} type. An instance of
 \hl{Mixin} can be associated with a resource instance, i.e.~a sub-type of
@@ -218,7 +235,7 @@ to help understanding the model.  The following sections of the specification
 contain the formal definition of the OCCI model.
 
 \subsection{Terms and definitions}
-Section \ref{sec:glossary} provide a glossary of all terms and definitions with
+Section \ref{sec:glossary} provides a glossary of all terms and definitions with
 a specific meaning to the OCCI specification suite. However, for reader
 convenience, a sub-set of the glossary is provided here as well. The following
 terminology have specific meaning in the OCCI context:
@@ -226,40 +243,41 @@ terminology have specific meaning in the OCCI context:
 \item[mix-in] An instance of the \hl{Mixin} type associated with a {\bf resource
  instance}. The ``mix-in'' concept as used by OCCI {\em only} applies to
  instances, never to \hl{Entity} types.
-\item[OCCI base type] The OCCI base types are \hl{Entity}, \hl{Resource},
+\item[OCCI base type(s)] The OCCI base types are \hl{Entity}, \hl{Resource},
  \hl{Link} and \hl{Action}.
 \item[resource instance] An instance of a sub-type of \hl{Entity}. The OCCI
  model defines two sub-types of \hl{Entity}, the \hl{Resource} type and the
  \hl{Link} type.  However, the term {\bf resource instance} is defined to
  include any instance of a {\em sub-type} of \hl{Resource} or \hl{Link} as
  well.
-\item[type] A {\bf type} refer to one of the types defined by the OCCI model.
+\item[type] A {\bf type} refer to one of those defined by the OCCI core model.
 The OCCI model types are \hl{Category}, \hl{Kind}, \hl{Mixin}, \hl{Action},
 \hl{Entity}, \hl{Resource} and \hl{Link}.
 \end{description}
 
 \subsection{Classification and Identification}
 \label{sec:classification}
-The OCCI model provides a built in classification system allowing for safe
-extension towards domain-specific usage. This system is like a ``type system''
-but with the possibility of being easily exposed over a text based protocol.
+The OCCI core model provides a built-in type classification system allowing for safe
+extension towards domain-specific usage (e.g. infrastructure). This system is the OCCI type system
+and offers the means to be easily exposed over a text-based 
+\textbf{(Andy: OCCI could be implemented over a binary-based one too (e.g. AMQP), why disregard that?)} protocol.
 %
 The classification system can be summarised with the following key features:
 \begin{itemize}
-\item Each OCCI base type and extension thereof is assigned a unique
- identifier, a \hl{Kind} instance, which allow for dynamic discovery of
- available types. All \hl{Entity} sub-types, including extensions, are assigned
+\item Each OCCI base type and extension thereof is assigned a unique type
+ identifier (a \hl{Kind} instance), which allow for dynamic discovery of
+ available types. All \hl{Entity} sub-types, including core model extensions, are assigned
  a unique \hl{Kind} instance.
 \item The relationship of \hl{Kind} instances reflect the inheritance structure
- starting at the \hl{Entity} type, the parent of all extensions. This makes it
- possible for an OCCI client to discover the inheritance structure of a
+ starting at the \hl{Entity} type, the parent of all extensions \textbf{(Andy:Unclear and confusing.)}. This allows
+ for an OCCI client to discover the inheritance structure of a
  particular OCCI implementation.
 \item The classification system allows \hl{Mixin} instances to be associated
  to resource instances in order to assign additional capabilities in terms of
  attributes and \hl{Action}s at run-time.
 \item Tagging of resource instances is supported through the association
  of \hl{Mixin} instances. A tag is simply a \hl{Mixin} instance which define no
- additional capabilities.
+ additional capabilities \textbf{(Andy:Need to define 'capabilities' up-front)}.
 \item A collection of associated resource instances is implicitly defined for
  each \hl{Kind} and \hl{Mixin} instance. I.e.~all resource instances associated
  with a particular \hl{Kind} or \hl{Mixin} instance form a collection.
@@ -267,9 +285,12 @@ The classification system can be summarised with the following key features:
 
 \subsubsection{Kind}
 \label{sec:kind}
-The \hl{Kind} type, together with the \hl{Mixin} type, define the
+\textbf{Andy, Thijs: This should not be the first model entity discussed.
+It should be Category then followed by Kind and Mixin.}
+
+The \hl{Kind} type, together with the \hl{Mixin} type, defines the
 classification system of the OCCI model. It MUST be implemented. The \hl{Kind}
-type represent the identification mechanism for all \hl{Entity} types present in
+type represents the type identification mechanism for all \hl{Entity} types present in
 the model.
 
 A \hl{Kind} {\em instance} is assigned to each and every \hl{Entity} sub-type
@@ -277,13 +298,14 @@ defined in an OCCI implementation. The capabilities, in terms of attributes and
 \hl{Action}s, represented by a \hl{Kind} instance describe the capabilities of
 its \hl{Entity} sub-type.
 %
-In the initial instantiation of the OCCI model, with no extensions, three instances
+In the initial instantiation of the OCCI model, with no core model extensions, three instances
 of \hl{Kind} will be present: one for \hl{Entity}, another for \hl{Resource}
 and the last one for \hl{Link}. 
 
 Every resource instance MUST be associated with the \hl{Kind} instance of its
-\hl{Entity} sub-type. For example an instance of \hl{Resource} MUST be
-associated with the \hl{Kind} instance which identify the \hl{Resource} {\em
+\hl{Entity} sub-type \textbf{(Andy: Unclear and confusing, the example does help however)}. 
+For example an instance of \hl{Resource} MUST be
+associated with the \hl{Kind} instance which identifies the \hl{Resource} {\em
 type}.
 
 \mytablefloat{\label{tbl:kind}Attributes defined for the \hl{Kind} type}{
@@ -299,10 +321,12 @@ entities & \hl{Entity} & 0..* & Immutable & Set of resource instances, i.e.~\hl{
 \end{tabular}
 }
 The \hl{Kind} type inherits the \hl{Category} type and all inherited
-attributes MUST be implemented. Table~\ref{tbl:kind} defines the
-additional attributes the \hl{Kind} type MUST implement to be compliant.
+attributes \textbf{(Andy: which 'attributes'? the attributes attribute of Category 
+or attributes of a model type - this is confusing)} MUST be implemented. Table~\ref{tbl:kind} defines the
+attributes the \hl{Kind} type MUST implement to be compliant 
+\textbf{(Andy: 'Client Mutability' needs to be explained first before these tables are shown.)}.
 
-A unique \hl{Kind} instance is assigned as the unique identifier of every
+A unique \hl{Kind} instance is assigned as the unique type identifier of every
 \hl{Entity} sub-type, including \hl{Entity} itself. The following rules apply
 to the \hl{Kind} type:
 \begin{itemize}
@@ -316,18 +340,22 @@ to the \hl{Kind} type:
  the \hl{Kind} instance of \hl{Entity},
  i.e. \textit{http://schemas.ogf.org/occi/core\#entity}.
  %
- See section~\ref{sec:kind_relationship} for the definition of \hl{Kind}
+\textbf{(Andy, Thijs: Category should be discussed first before Kind.)} 
+See section~\ref{sec:kind_relationship} for the definition of \hl{Kind}
  relationships.
-\item If type {\bf B} inherit type {\bf A}, where {\bf A} is a sub-type of
+\item If type {\bf B} inherits type {\bf A}, where {\bf A} is a sub-type of
  \hl{Entity}, the \hl{Kind} instance of {\bf B} MUST be directly related to the
- \hl{Kind} instance of {\bf A}.
+ \hl{Kind} instance of {\bf A}. \textbf{(Andy: Makes more sense if phrased 
+ the opposite way around i.e. if Kind has X then the Entity sub-type must implement X)}
 \end{itemize}
 
+\textbf{(Andy: It would be advisable to show these rules graphically to aid quick understanding.)}
+
 \subsubsection{Mixin}
-The \hl{Mixin} type complement the \hl{Kind} type in defining the
-classification system of the OCCI model. It MUST be implemented. The \hl{Mixin}
-type represent a run-time extension mechanism which allow new capabilities to
-be added to existing resource instances.
+The \hl{Mixin} type complements the \hl{Kind} type in defining the
+OCCI core model type classification system. It MUST be implemented. The \hl{Mixin}
+type represent an extension mechanism, which allow new capabilities to
+be added to resource instances both at creation-time and/or run-time.
 
 A \hl{Mixin} {\em instance} can be associated with any existing resource
 instance and thereby add new capabilities, in terms of attributes and
@@ -337,6 +365,8 @@ model, with no extensions, no \hl{Mixin} instances are present.
 Any resource instance MAY be associated with any number of \hl{Mixin}
 instances.  However, an OCCI implementation MAY apply restrictions to which
 resource instances a particular \hl{Mixin} instance can be associated to.
+
+\textbf{(Thijs: Unclear: A mix-in in OCCI can never be applied to a type, only to an instance.)}
 
 \mytablefloat{\label{tbl:type}Attributes defined for the \hl{Mixin} type}{
 \begin{tabular}{llllp{2.7in}}
@@ -354,7 +384,7 @@ attributes MUST be implemented. Table~\ref{tbl:type} defines the
 additional attributes the \hl{Mixin} type MUST implement to be compliant.
 The following rules apply to the \hl{Mixin} type:
 \begin{itemize}
-\item A \hl{Mixin} instance define additional capabilities for each
+\item A \hl{Mixin} instance defines additional capabilities for each
  resource instance it is associated to. A \hl{Mixin} instance
  add capabilities in terms of attributes and \hl{Action}s.
 \item A \hl{Mixin} instance MUST only be associated with resource
@@ -372,7 +402,7 @@ The following rules apply to the \hl{Mixin} type:
 
 \subsubsection{Category}
 \label{sec:category}
-The \hl{Category} type is the basis of the identification mechanism used by the
+The \hl{Category} type is the basis of the type identification mechanism used by the
 OCCI classification system. It MUST be implemented. Instances of the
 \hl{Category} type itself are only used to identify \hl{Action} types. All
 other uses of \hl{Category} properties are managed through its sub-types
@@ -399,7 +429,7 @@ categorisation scheme with the category term,
 e.g.~\textit{http://example.com/category/scheme\#term}.
 This is done to enable discovery of \hl{Category} definitions in text based
 renderings such as HTTP. All renderings MUST make use of and understand
-concatenated unique identifiers of \hl{Category} instances.
+concatenated unique type identifiers of \hl{Category} instances.
 %
 Sub-types of \hl{Category} such as \hl{Kind} and \hl{Mixin} inherit this property.
 
@@ -412,8 +442,13 @@ Attribute names defined by \hl{Category} instances%
 use the ``\texttt{occi.}''~prefix.  This prefix is reserved for OCCI and MUST NOT
 be used by domain-specific extensions.
 
-\subsubsection{Kind relationship}
+\subsubsection{Kind Relationship}
 \label{sec:kind_relationship}
+
+\textbf{(Andy: One of the most confusing section.)}
+
+\textbf{(Andy: Make this a subsection of Kind to capitalise on context.)}
+
 As previously defined a \hl{Kind} instance MUST be related, either directly or
 indirectly, to the \hl{Kind} instance assigned to the \hl{Entity} type,
 i.e.~\textit{http://schemas.ogf.org/occi/core\#entity}.
@@ -423,10 +458,11 @@ therefore their identifying \hl{Kind} instances MUST be related to \hl{Entity}
 type's \hl{Kind} instance.
 %
 These rules, including further sub-typing by extensions, imply a hierarchy of
-related \hl{Kind} instances. The \hl{Kind} relationships thus mirror the type
+related \hl{Kind} instances. The \hl{Kind} relationships thus mirrors the type
 inheritance structure of the OCCI model and any extension thereof.
 
-In an example where a domain-specific ``Custom Compute Resource'' is a sub-type
+In an example \textbf{(Andy: Will help hugely if shown graphically.)} where a 
+domain-specific ``Custom Compute Resource'' is a sub-type
 the OCCI Infrastructure type Compute, which in turn is a sub-type of the
 \hl{Resource} type, four related \hl{Kind} instances would be involved.
 %
@@ -447,10 +483,13 @@ Kind instance & Related Kind instance \\
 \end{tabular}
 }
 
-\subsubsection{Mixin relationship}
+\subsubsection{Mixin Relationship}
 \label{sec:mixin_relationship}
+
+\textbf{(Andy: Make this a subsection of Mixin to capitalise on context.)}
+
 A \hl{Mixin} instance MAY be related to another \hl{Mixin} instance for
-organisational purposes. For example a set of operating system templates,
+type classification purposes. For example a set of operating system templates,
 implemented as \hl{Mixin} instances, could be related to an ``OS-template''
 \hl{Mixin} in order to help identification.
 
@@ -460,18 +499,20 @@ with a particular \hl{Mixin} will receive the additional capabilities defined
 by any related \hl{Mixin} instances as well as those defined by the \hl{Mixin}
 associated.
 
-\subsubsection{Kind and Mixin assignment}
+\subsubsection{Kind and Mixin Assignment}
 \label{sec:assignment}
-A unique \hl{Kind} instance MUST be statically assigned to each sub-type of
+
+A unique \hl{Kind} instance MUST be statically assigned \textbf{(Andy: Explain the significance of 'statically'.)} 
+to each sub-type of
 \hl{Entity} defined by an OCCI implementation. Every instance of \hl{Kind}
-represent a unique identifier for a particular sub-type of \hl{Entity}.
+represents a unique type identifier for a particular sub-type of \hl{Entity}.
 Consequently, when an \hl{Entity} sub-type is instantiated the resource instance
 MUST be associated with its type identifier, i.e.~the \hl{Kind} instance.
 A resource instance MUST remain associated with its \hl{Kind} instance throughout
 its lifetime.
 
 A \hl{Mixin} instance MAY be associated with an resource instance, either at
-instance creation-time or at run-time. Although the OCCI model have no such
+instance creation-time or at run-time. Although the OCCI core model has no such
 restrictions, an OCCI implementation MAY impose restrictions on which resource
 instances can be associated with a particular \hl{Mixin} instance.
 %
@@ -479,17 +520,19 @@ When a client attempts to associate a \hl{Mixin} instance to a resource at a
 stage not supported by a particular provider's OCCI implementation, the
 provider MUST notify the client it has issued a bad request.
 
-\subsubsection{Resource instantiation}
+\subsubsection{Resource Instantiation}
 \label{sec:instantiation}
-To create a resource instance a client MUST supply the concrete \hl{Entity}
-sub-type by a submitting a reference to the identifying \hl{Kind}. The
-reference SHOULD consist of the term and categorisation scheme which
+To create a resource instance a client MUST supply the concrete \textbf{(Andy: domain-specific? extension?.)} 
+\hl{Entity} sub-type by a submitting a reference to the type-identifying \hl{Kind}. The
+reference SHOULD \textbf{(Andy: Why SHOULD? MUST may be more 
+appropriate even that this combination is core to the type system)} consist of the term 
+and categorisation scheme, which
 identify the \hl{Kind} instance, see section~\ref{sec:category}.
 All OCCI implementations MUST understand these requests.
 
 A client MAY also submit any number of references to \hl{Mixin} instances to be
 associated with the resource to be created. A \hl{Mixin} reference submitted by
-a client SHOULD consist of the term and categorisation scheme which identify
+a client SHOULD \textbf{(Andy: See above.)} consist of the term and categorisation scheme which identify
 the \hl{Mixin} instance. 
 Associating a \hl{Mixin} at resource
 instantiation time MAY have additional provider defined side-effects,
@@ -505,10 +548,10 @@ Each \hl{Kind} and \hl{Mixin} instance in the system identifies a collection
 consisting of all different resource instances associated with the \hl{Kind} or
 \hl{Mixin}.
 
-An resource instance is always a member of the collection implied by the
-\hl{Entity} sub-type's unique \hl{Kind} instance. A \hl{Kind} instance maintain
-the collection of all resource instances of the type identified by the
-\hl{Kind}.
+A resource instance is always a member of the collection indicated by the
+\hl{Entity} sub-type's unique \hl{Kind} instance. A \hl{Kind} instance maintains
+the collection of all resource instances (of the type identified by the
+\hl{Kind}).
 %
 Since a \hl{Mixin} instance can be associated to any resource instance, a
 collection can contain resource instances of different \hl{Entity} sub-types.
@@ -531,18 +574,21 @@ following basic navigation operations MUST be supported:
 \item Retrieve a specific item in a collection.
 \item Retrieve a subset of a collection.
 \end{itemize}
+
+\textbf{(Andy: Comment to Thijs - is this functionality supported in the HTTP rendering?)}
+
 The details of collection navigation is rendering specific.
 
 \subsubsection{Discovery}
 \label{sec:discovery}
 An OCCI client MUST be able to discover all instances of \hl{Kind}, \hl{Mixin}
-and \hl{Category} a particular service provider's OCCI implementation have
+and \hl{Category} a particular service provider's OCCI implementation has
 defined. By examining these instances a client MUST be able to, at a minimum,
 deduce the following information:
 \begin{itemize}
 \item The \hl{Entity} sub-types available from a the service provider,
  including domain-specific extensions. This information is provided through the
- \hl{Kind} instances of an OCCI implementation.
+ \hl{Kind} instances of the OCCI implementation.
 \item The attributes defined for each \hl{Entity} sub-type. The identifying
  \hl{Kind} instance provide this information.
 \item The invocable operations, i.e.~\hl{Action}s, defined for each \hl{Entity}
@@ -560,15 +606,15 @@ used.
 The relevant details can be found in the OCCI Rendering documents.
 
 
-\subsection{The OCCI base types}
+\subsection{The OCCI Core Base Types}
 \label{sec:base_types}
-The following sections describe the OCCI base types defined by the OCCI model.
+The following sections describe the OCCI base types defined by the OCCI core model.
 The base types are \hl{Entity}, \hl{Resource}, \hl{Link} and \hl{Action}. All
 base types MUST be implemented.
 
 \subsubsection{Entity}
 \label{sec:entity}
-The \hl{Entity} type is an abstract type acting as the base type for
+The \hl{Entity} type is an abstract type of
 \hl{Resource} and \hl{Link} and any domain-specific sub-types thereof. It MUST
 be implemented.
 %
@@ -593,8 +639,8 @@ optional \texttt{title} attribute.
 %
 Every sub-type of \hl{Entity} MUST be assigned a \hl{Kind} instance, see
 section~\ref{sec:kind}. \hl{Entity} itself is assigned the \hl{Kind} instance
-\textit{http://schemas.ogf.org/occi/core\#entity}. Being an abstract type \hl{Entity}
-itself can never be instantiated.
+\textit{http://schemas.ogf.org/occi/core\#entity} for type identification. Being 
+an abstract type \hl{Entity} itself can never be instantiated.
 %
 An \hl{Entity} sub-type instance, a resource instance, MAY be associated with
 one or more \hl{Mixin} instances.
@@ -605,10 +651,11 @@ and any associated \hl{Mixin} instances together with the attributes and
 
 \subsubsection{Resource}
 \label{sec:resource}
-The \hl{Resource} type inherit \hl{Entity} and describes a concrete resource that
+The \hl{Resource} type inherits \hl{Entity} and describes a concrete resource that
+\textbf{(Andy: define what a concrete resource is.)}
 can be inspected and manipulated. It represents a general object in the OCCI
 model and MUST be implemented. A \hl{Resource} is suitable to represent real
-world resources, e.g. virtual machines, networks, services, etc.
+world resources, e.g. virtual machines, networks, services, etc. through specialisation.
 %
 The \hl{Resource} type MUST implement all attributes inherited from \hl{Entity}
 as well as the attributes defined in table~\ref{tbl:resource} in order
@@ -633,7 +680,8 @@ sub-types. Moreover, it introduces relationships to other \hl{Resource}
 instances through instances of the \hl{Link} type.
 %
 The \hl{Resource} type is the entry point for domain-specific extensions of the
-OCCI model, see section~\ref{sec:extensibility}.
+OCCI core model, see section~\ref{sec:extensibility} 
+\textbf{(Andy: Somewhat contradicts what is said in 1st sentence of 4.4.1.)}.
 
 \subsubsection{Link}
 \label{sec:link}
@@ -659,18 +707,19 @@ target & \hl{Resource} & 1 & Mutable & The \hl{Resource} instances the \hl{Link}
 \end{tabular}
 }
 
-An instance of the \hl{Link} type MUST NOT refer to an external resource.  A
+An instance of the \hl{Link} type MUST NOT refer to an external resource
+\textbf{(Andy: what is this in the context of OCCI/provider?)}.  A
 provider MAY however create a sub-type of \hl{Link} with different semantics,
 e.g.~having a target attribute containing an URI and thus the ability of linking
 with external resources.
 %
 The \hl{Link} type can be sub-typed for domain-specific extensions of the
-OCCI model, see section~\ref{sec:extensibility}.
+OCCI core model, see section~\ref{sec:extensibility}.
 
 \subsubsection{Action}
 The \hl{Action} type defines an invocable operation applicable to an \hl{Entity}
 sub-type instance or a collection thereof. It MUST be implemented. In general,
-\hl{Action}s modify state by e.g.~performing a complex operation such as
+\hl{Action}s modify state by, for example,~performing a complex operation such as
 rebooting a virtual machine.
 %
 Table~\ref{tbl:action} defines the attributes the \hl{Action} type MUST
@@ -705,14 +754,17 @@ instance which identify the \hl{Action}. For example, a ``resize'' \hl{Action}
 defined for a storage resource can have a ``size'' attribute which represent the
 size argument of the resize operation.
 
-The \hl{Action} type is assigned the \hl{Category} identifier
+The \hl{Action} type is assigned the \hl{Category} type identifier
 \textit{http://schemas.ogf.org/occi/core\#action}.
 %
 The \hl{Action} type can be sub-typed for domain-specific extensions of the
 OCCI model, see section~\ref{sec:extensibility}.
 
 \subsection{Mutability}
-Attributes of an OCCI model type instance are
+
+\textbf{(Andy: Should be explained at the beginning of the document. It's a document convention.)}
+
+Attributes of an OCCI core model type instance are
 either client mutable or client immutable. If an attribute is noted to
 be mutable this MUST be interpreted that a client can create an
 instance that is parametrised by the attribute. Likewise, if
@@ -725,7 +777,7 @@ MUST NOT be modifiable by clients under any circumstance.
 \subsection{Extensibility}
 \label{sec:extensibility}
 The OCCI model has a flexible yet fairly simple extension mechanism based on
-the classification system described in section~\ref{sec:classification}.
+the type classification system described in section~\ref{sec:classification}.
 %
 The OCCI model can be extended using two different methods, sub-typing and
 mix-in. Custom sub-typing require domain-specific \hl{Kind} instances and
@@ -745,8 +797,8 @@ inherit \hl{Category} the extension rules for \hl{Category}, defined below,
 applies to them as well.
 
 A \hl{Category} instance defined outside of the OCCI specification MUST use a
-categorisation scheme unique to the provider,
-e.g.~\textit{http://example.com/occi\#}.
+\hl{Category} scheme unique to the provider,
+e.g.~\textit{http://example.com/occi\#} \textbf{(Andy: What about 'term' - mention for completeness.)}.
 %
 An attribute introduced by a domain-specific \hl{Category} MUST
 use an attribute name prefix. This prefix MUST NOT be the ``\texttt{occi.}''~prefix
@@ -757,7 +809,9 @@ e.g.~``\texttt{com.example.}''.
 \subsubsection{Sub-typing}
 The OCCI model MAY be extended through sub-typing for domain-specific purposes.
 Three OCCI model types MAY be sub-typed, those are \hl{Resource}, \hl{Link} and
-\hl{Action}.
+\hl{Action}. \textbf{(Andy: Inconsistent - previously (4.4.2, 4.4.3) we said that Entity 
+could be extended and no mention of Action.)} 
+\textbf{(Andy: what is the case for extending Action by subclassing?)}
 
 In order to define a sub-type of \hl{Resource} or \hl{Link} a domain-specific
 \hl{Kind} instance MUST be defined and assigned to the sub-type. This
@@ -765,22 +819,20 @@ In order to define a sub-type of \hl{Resource} or \hl{Link} a domain-specific
 type extended.
 
 In order to define a sub-type of \hl{Action} a domain-specific \hl{Category}
-instance MUST be assigned to the \hl{Action} sub-type as its unique identifier.
+instance MUST be assigned to the \hl{Action} sub-type as its unique type identifier.
 Furthermore the \hl{Action} sub-type MUST be associated as a capability of a
 domain-specific \hl{Kind} or \hl{Mixin} instance.
 
 \subsubsection{Mix-ins}
-The OCCI model MAY be extended using a ``mix-in'' like concept by defining
+The OCCI model MAY be extended using the mix-in concept \textbf{(Andy: See previous comment (section 4))} by defining
 domain-specific \hl{Mixin} instances.  A \hl{Mixin} instance can be associated
 with any resource instance although a provider MAY apply restrictions.
 
-In order to support user-defined tags an OCCI implementation must allow custom
+In order to support user-defined tags \footnote{A tag is a \hl{Mixin} instance, 
+which does not introduce additional capabilities.} an OCCI implementation must allow custom
 \hl{Mixin} instances to be created and destroyed by request of a client.
 There is no limitation in the OCCI model from doing so but it is RECOMMENDED to
-assign a separate categorisation scheme for each user's \hl{Mixin}%
-\footnote{A tag is a \hl{Mixin} instance which does not introduce additional
-capabilities.}
-instances.
+assign a separate \hl{Category} scheme for each user's \hl{Mixin} instances (e.g. per-user schemes).
 
 \section{Contributors}
 Editors: Andy Edmonds, Thijs Metsch, Ralf Nyrén \\
