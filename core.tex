@@ -168,8 +168,8 @@ able to provide a decent end-user experience. For example, a web-based OCCI
 client could easily be reused as the management tool for a wide variety of
 services.
 
-The OCCI model can be extended through a regular inheritance model but also
-using a ``mix-in'' like model. The mix-in model only applies at the instance
+The OCCI model can be extended through inheritance but also
+using a ``mix-in'' like concept. The mix-in model only applies at the instance
 level, i.e.~the ``object level'', and thereby differs from the more common uses
 of the mix-in concept. A mix-in in OCCI can never be applied to a type, only to
 an instance.
@@ -251,7 +251,7 @@ The classification system can be summarised with the following key features:
  available types. All \hl{Entity} sub-types, including extensions, are assigned
  a unique \hl{Kind} instance.
 \item The relationship of \hl{Kind} instances reflect the inheritance structure
- starting at \hl{Entity} type, the parent of all extensions. This makes it
+ starting at the \hl{Entity} type, the parent of all extensions. This makes it
  possible for an OCCI client to discover the inheritance structure of a
  particular OCCI implementation.
 \item The classification system allows \hl{Mixin} instances to be associated
@@ -294,7 +294,7 @@ Attribute & Type & Multiplicity & Client Mutability & Description \\
 actions & \hl{Action} & 0..* & Immutable & Set of \hl{Action}s defined by the \hl{Kind} instance. \\
 related & \hl{Kind} & 0..* & Immutable & Set of related \hl{Kind} instances. \\
 entity\_type & \hl{Entity} & 1 & Immutable & \hl{Entity} type uniquely identified by the \hl{Kind} instance. \\
-entities & \hl{Entity} & 0..* & Immutable & Set of resource instances, i.e.~\hl{Entity} sub-type instances, of the type uniquely identified by this \hl{Kind} instance. \\
+entities & \hl{Entity} & 0..* & Immutable & Set of resource instances, i.e.~\hl{Entity} sub-type instances. Resources instantiated from the \hl{Entity} sub-type which is uniquely identified by this \hl{Kind} instance. \\
 \botrule
 \end{tabular}
 }
@@ -365,7 +365,7 @@ The following rules apply to the \hl{Mixin} type:
  both \hl{Mixin} {\bf B} and \hl{Mixin} {\bf A}.
  %
  See section~\ref{sec:mixin_relationship} for the definition of \hl{Mixin}
- relationship.
+ relationships.
 \item A \hl{Mixin} instance defining no additional capabilities, in terms
  of attributes or \hl{Action}s, is considered to be a tag.
 \end{itemize}
@@ -434,7 +434,7 @@ Table~\ref{tbl:relationship} illustrates the exemplified hierarchy of \hl{Kind}
 instances relating the domain-specific \hl{Kind} instances to the \hl{Kind}
 instance of \hl{Entity}.
 
-\mytablefloat{\label{tbl:relationship}Example of the \hl{Kind} relationship involved
+\mytablefloat{\label{tbl:relationship}Example of the \hl{Kind} relationships involved
 for a domain-specific extension of the OCCI Infrastructure type \hl{Compute}.}{
 \begin{tabular}{p{7cm}p{7cm}}
 \toprule
@@ -450,8 +450,8 @@ Kind instance & Related Kind instance \\
 \subsubsection{Mixin relationship}
 \label{sec:mixin_relationship}
 A \hl{Mixin} instance MAY be related to another \hl{Mixin} instance for
-structural purposes. For example a set of operating system templates,
-implemented as \hl{Mixin} instances, could be related to a ``OS-template''
+organisational purposes. For example a set of operating system templates,
+implemented as \hl{Mixin} instances, could be related to an ``OS-template''
 \hl{Mixin} in order to help identification.
 
 Attributes and \hl{Action}s defined by \hl{Mixin} instances are combined when
@@ -482,13 +482,18 @@ provider MUST notify the client it has issued a bad request.
 \subsubsection{Resource instantiation}
 \label{sec:instantiation}
 To create a resource instance a client MUST supply the concrete \hl{Entity}
-sub-type by a submitting a reference to the identifying \hl{Kind}.
+sub-type by a submitting a reference to the identifying \hl{Kind}. The
+reference SHOULD consist of the term and categorisation scheme which
+identify the \hl{Kind} instance, see section~\ref{sec:category}.
 All OCCI implementations MUST understand these requests.
 
-A client MAY also submit any number of \hl{Mixin} instances to be associated
-with the resource to be created. Associating a \hl{Mixin} at resource
-instantiation time MAY have additional provider defined side-effects.
-Side-effects not visible through the OCCI discovery mechanism. Templates that
+A client MAY also submit any number of references to \hl{Mixin} instances to be
+associated with the resource to be created. A \hl{Mixin} reference submitted by
+a client SHOULD consist of the term and categorisation scheme which identify
+the \hl{Mixin} instance. 
+Associating a \hl{Mixin} at resource
+instantiation time MAY have additional provider defined side-effects,
+side-effects not visible through the OCCI discovery mechanism. Templates that
 pre-populate certain attributes of a resource instance SHOULD be implemented
 using such \hl{Mixin} instances.
 
@@ -513,9 +518,9 @@ to the \hl{Kind} instance
 \textit{http://scheme.ogf.org/occi/core\#resource} and thus part of the
 collection implied by that \hl{Kind} instance.
 \begin{description}
-\item[Adding an instance] to a collection is accomplished by associating the
+\item[Adding a resource instance] to a collection is accomplished by associating the
  resource instance to the corresponding \hl{Mixin} instance.
-\item[Removing an instance] from a collection is accomplished by disassociating
+\item[Removing a resource instance] from a collection is accomplished by disassociating
  the resource instance from the corresponding \hl{Mixin} instance.
 \end{description}
 %
@@ -544,7 +549,7 @@ deduce the following information:
  sub-type. The identifying \hl{Kind} instance provide this information.
 \item Any \hl{Mixin} instances that can be associated to resource instances.
 \item Additional capabilities defined by a particular \hl{Mixin} instance,
- i.e.~ attributes and \hl{Action}s.
+ i.e.~attributes and \hl{Action}s.
 \end{itemize}
 The above requirements comprise the OCCI discovery mechanism. It MUST be
 implemented.
@@ -552,8 +557,7 @@ implemented.
 The details of exactly how the \hl{Category}, \hl{Kind} and \hl{Mixin}
 instances are exposed to an OCCI client is specific to the particular rendering
 used.
-\marginpar{References?}
-The relevant details can be found in the OCCI rendering documents.
+The relevant details can be found in the OCCI Rendering documents.
 
 
 \subsection{The OCCI base types}
@@ -695,18 +699,24 @@ instances. The \hl{Action} is only considered valid if all resource instances
 of the collection are associated with the \hl{Kind} or \hl{Mixin} defining the
 \hl{Action}.
 
-The Action type is assigned the \hl{Category} identifier
+An \hl{Action} can expose attributes which correspond to arguments of the
+invocable operation.  Any attributes are defined through the \hl{Category}
+instance which identify the \hl{Action}. For example, a ``resize'' \hl{Action}
+defined for a storage resource can have a ``size'' attribute which represent the
+size argument of the resize operation.
+
+The \hl{Action} type is assigned the \hl{Category} identifier
 \textit{http://schemas.ogf.org/occi/core\#action}.
 %
 The \hl{Action} type can be sub-typed for domain-specific extensions of the
 OCCI model, see section~\ref{sec:extensibility}.
 
 \subsection{Mutability}
-Attributes of an OCCI model type instance, a resource instance, are
+Attributes of an OCCI model type instance are
 either client mutable or client immutable. If an attribute is noted to
-be mutable this MUST be interpreted that a client can create a
-resource instance that is parametrised by the attribute. Likewise, if
-an attribute is mutable, a client can update that resource instance's
+be mutable this MUST be interpreted that a client can create an
+instance that is parametrised by the attribute. Likewise, if
+an attribute is mutable, a client can update that instance's
 mutable attribute value and the server side MUST support this. If an
 attribute is marked as immutable, it indicates that the server side
 implementation MUST manage these exclusively. Immutable attributes
@@ -760,7 +770,7 @@ Furthermore the \hl{Action} sub-type MUST be associated as a capability of a
 domain-specific \hl{Kind} or \hl{Mixin} instance.
 
 \subsubsection{Mix-ins}
-The OCCI model MAY be extended using a ``mix-in'' like model by defining
+The OCCI model MAY be extended using a ``mix-in'' like concept by defining
 domain-specific \hl{Mixin} instances.  A \hl{Mixin} instance can be associated
 with any resource instance although a provider MAY apply restrictions.
 
