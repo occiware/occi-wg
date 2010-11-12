@@ -1,4 +1,5 @@
 \documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -124,7 +125,7 @@ The following sections on Compute, Storage and Network detail the Attributes and
 The Compute type represent a generic information processing resource, e.g.~a
 virtual machine. The Compute type inherit the \hl{Resource} type defined in
 OCCI Core \cite{occi:core}.
-The Compute type is assigned the \hl{structural-Kind}
+The Compute type is assigned the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
 \marginpar{Only this section has been updated with the proper
 wording as introduced in Core. Please perfect this section before converting
@@ -132,7 +133,7 @@ the other sections to the same style!}
 
 \mytablefloat{\label{tbl:compute}Attributes defined for the
 Compute type. The attributes are defined by the
-Compute type's \hl{structural-Kind}
+Compute type's \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}}{
 \begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
 \toprule
@@ -149,11 +150,11 @@ occi.compute.state & Enum \{active, inactive, suspended\} & 1 & Immutable & Curr
 }
 
 Table~\ref{tbl:compute} describe the attributes defined for the
-Compute type through its \hl{structural-Kind}. These attributes
+Compute type through its \hl{Kind} instance. These attributes
 MUST be exposed by an instance of the Compute type.
 
 \mytablefloat{\label{tbl:compute_actions}%
-\hl{Action}s defined by the \hl{structural-Kind}
+\hl{Action}s defined by the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}. Every \hl{Action}
 in the table is identified by a \hl{Category} instance using the
 \textit{http://schemas.ogf.org/occi/infrastructure/compute/action\#}
@@ -161,19 +162,19 @@ categorisation scheme. ``Action term'' below refer to the term of the \hl{Action
 \hl{Category} identifier}{
 \begin{tabular}{lll}
 \toprule
-Action term & Target state & Parameters \\
+Action term & Target state & Attributes \\
 \colrule
 start & active & -- \\
-stop & inactive & Enum \{graceful, acpioff, poweroff\} \\
-restart & active (via stop and start chain) & Enum \{graceful, warm, cold\} \\
-suspend & suspended & Enum \{hibernate, suspend\} \\
+stop & inactive & flag=\{graceful, acpioff, poweroff\} \\
+restart & active (via stop and start chain) & flag=\{graceful, warm, cold\} \\
+suspend & suspended & flag=\{hibernate, suspend\} \\
 \botrule
 \end{tabular}
 }
 
 Table~\ref{tbl:compute_actions} describe the \hl{Action}s defined for the
-Compute type by its \hl{structural-Kind}.
-% FIXME - The structural-Kind is indeed REQUIRED to expose all Actions defined
+Compute type by its \hl{Kind} instance.
+% FIXME - The Kind instance is indeed REQUIRED to expose all Actions defined
 % but what is required from a Compute instance? Only applicable Actions?
 %
 % These \hl{Action}s MUST be exposed by an instance of the Compute
@@ -413,8 +414,7 @@ Contributors: Alexander Papaspyrou, Ralf Nyr\'en, Sam Johnston
 \section{Full Copyright Notice}
 \input{include/copyright}
 
-\section{References}
-
-Note that only permanent documents should be cited as references. Other items, such as Web pages or working groups, should be cited inline (i.e., see the Open Grid Forum, http://www.ogf.org). References should conform to a standard such as used by IEEE/ACM, MLA, Chicago or similar. Include an author, year, title, publisher, place of publication. For online materials, also add a URL. It is acceptable to separate out ''normative references,'' as IETF documents typically do. Some sample citations: 
+\bibliographystyle{IEEEtran}
+\bibliography{references}
 
 \end{document}
