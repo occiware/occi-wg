@@ -150,97 +150,132 @@ wording as introduced in Core. Please perfect this section before converting
 the other sections to the same style!}}
 
 \mytablefloat{\label{tbl:compute}Attributes defined for
-\hl{Compute}. The attributes are defined by \hl{Compute}'s \hl{Kind} instance
-\textit{http://schemas.ogf.org/occi/infrastructure\#compute} 
-(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.}{
-\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
-\toprule
-Attribute&Type&Multi\-plicity&Mutability&Description\\
-\colrule
-occi.compute.architecture & Enum \{x86, x64\} & 0\ldots1 
-& Mutable & CPU Architecture of the instance.\\
-occi.compute.cores & Integer & 0\ldots1 & Mutable 
-& Number of CPU cores assigned to the instance.\\
-occi.compute.hostname & String & 0\ldots1 
-& Mutable & Fully Qualified DNS hostname for the instance.\\
-occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 0\ldots1 
-& Mutable & CPU Clock frequency (speed) in gigahertz.\\
-occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 0\ldots1 
-& Mutable & Maximum RAM in gigabytes allocated to the instance.\\
-occi.compute.state & Enum \{active, inactive, suspended\} & 1 
-& Immutable & Current state of the instance.\\
-\botrule
-\end{tabular}
-}
+	\hl{Compute}. The attributes are defined by \hl{Compute}'s \hl{Kind} instance
+	\textit{http://schemas.ogf.org/occi/infrastructure\#compute} 
+	(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.
+	}
+	{
+		\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+		\toprule
+		Attribute&Type&Multi\-plicity&Mutability&Description\\
+		\colrule
+		occi.compute.architecture & Enum \{x86, x64\} & 0\ldots1 
+		& Mutable & CPU Architecture of the instance.\\
+		occi.compute.cores & Integer & 0\ldots1 & Mutable 
+		& Number of CPU cores assigned to the instance.\\
+		occi.compute.hostname & String & 0\ldots1 
+		& Mutable & Fully Qualified DNS hostname for the instance.\\
+		occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 0\ldots1 
+		& Mutable & CPU Clock frequency (speed) in gigahertz.\\
+		occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 0\ldots1 
+		& Mutable & Maximum RAM in gigabytes allocated to the instance.\\
+		occi.compute.state & Enum \{active, inactive, suspended\} & 1 
+		& Immutable & Current state of the instance.\\
+		\botrule
+		\end{tabular}
+	}
 
-Table~\ref{tbl:compute} describes the attributes \footnote{See ’attributes’ in the inherited base type Category  \cite{occi:core}} 
+Table~\ref{tbl:compute} describes the attributes \footnote{See ’attributes’ in the inherited 
+base type \hl{Category}  \cite{occi:core}} 
 defined \hl{Compute} through its \hl{Kind} instance. These attributes
 MUST be exposed by an instance of the \hl{Compute} type of an OCCI implementation.
 
 \marginpar{\textbf{Andy:what is the 'flag' attribute? How does it work?}}
 
-\mytablefloat{\label{tbl:compute_actions}%
-\hl{Action}s applicable to \hl{Compute} and defined by the \hl{Kind} instance
-\textit{http://schemas.ogf.org/occi/infrastructure\#compute}. Every \hl{Action}
-in the table is identified by a \hl{Category} instance using the
-\textit{http://schemas.ogf.org/occi/infrastructure/compute/action\#}
-categorisation scheme. ``Action term'' below refers to the term of the \hl{Action}'s
-\hl{Category} identifier.}{
-\begin{tabular}{lll}
-\toprule
-Action term & Target state & Attributes \\
-\colrule
-start & active & -- \\
-stop & inactive & flag=\{graceful, acpioff, poweroff\} \\
-restart & active (via stop and start chain) & flag=\{graceful, warm, cold\} \\
-suspend & suspended & flag=\{hibernate, suspend\} \\
-\botrule
-\end{tabular}
+\mytablefloat{
+	\label{tbl:compute_actions}%
+	\hl{Action}s applicable to \hl{Compute} and defined by the \hl{Kind} instance
+	\textit{http://schemas.ogf.org/occi/infrastructure\#compute}. Every \hl{Action}
+	in the table is identified by a \hl{Category} instance using the
+	\textit{http://schemas.ogf.org/occi/infrastructure/compute/action\#}
+	categorisation scheme. ``Action term'' below refers to the term of the \hl{Action}'s
+	\hl{Category} identifier.
+}
+{
+	\begin{tabular}{lll}
+	\toprule
+	Action Term & Target state & Attributes \\
+	\colrule
+	start & active & -- \\
+	stop & inactive & flag=\{graceful, acpioff, poweroff\} \\
+	restart & active (via stop and start chain) & flag=\{graceful, warm, cold\} \\
+	suspend & suspended & flag=\{hibernate, suspend\} \\
+	\botrule
+	\end{tabular}
 }
 
 Table~\ref{tbl:compute_actions} describes the \hl{Action}s defined for
 \hl{Compute} by its \hl{Kind} instance. These \hl{Action}s MUST be exposed 
-by an instance of the Compute type of an OCCI implementation. 
+by an instance of the \hl{Compute} type of an OCCI implementation. 
 Figure~\ref{fig:compute_state} illustrates the state diagram for a \hl{Compute} instance.
 
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{figs/compute-state.png}
-	\caption{State diagram for the Compute type}
+	\caption{State diagram for the \hl{Compute} type}
 	\label{fig:compute_state}
 \end{figure}
 
 \subsection{Network}
-Network represents a L2 networking entity (e.g. a virtual switch). It can be extended using the mix-in mechanism or sub-classed to support L3/L4 capabilities such as TCP/IP etc. For the purposes of this specification we define a suitable OCCI mix-in so that IP networking can be supported. 
+\hl{Network} represents a L2 networking entity (e.g. a virtual switch). It can be extended using 
+the mixin mechanism (or sub-classed) to support L3/L4 capabilities such as TCP/IP etc. 
+For the purposes of this specification we define an OCCI mixin so that IP networking can be supported
+where required. 
 
-The Network Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#network Category. A Network Resource instance MUST use and expose this Category.
+The \hl{Network} type is assigned the \textit{http://schemas.ogf.org/occi/infrastructure\#network} \hl{Kind}. A \hl{Network} instance MUST use and expose this \hl{Kind}.
 
-\subsubsection{Attributes}
-The attributes that MUST be exposed by an instance of the Network Resource type are as follows:
+%\subsubsection{Attributes}
 
-\begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Mutability&Description\\
-\hline
-occi.network.vlan & Integer, 0-4095 & 0\ldots1 & Mutable & 802.1q VLAN Ientifier (e.g. 4095).\\
-occi.network.label & Token & 0\ldots1 & Mutable & Tag based VLANs (e.g. external-dmz).\\
-% occi.network.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots* & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-% occi.network.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-% occi.network.allocation & String Enumeration, {auto, dhcp, manual} & 0\ldots1 & Mutable & Address mechanism: auto use the provider default policy dhcp use the dynamic host configuration protocol manual use user supplied static network configurations.\\
-occi.network.state & Enumeration, {active, inactive} & 1 & Immutable & Current state of the instance.\\
-\end{tabular}
+\mytablefloat{
+	\label{tbl:network}Attributes defined for
+	\hl{Network}. The attributes are defined by \hl{Network}'s \hl{Kind} instance
+	\textit{http://schemas.ogf.org/occi/infrastructure\#network} 
+	(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.
+}
+{
+	%\begin{tabular}{lllll}
+	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+	\toprule
+	Attribute&Type&Multi\-plicity&Mutability&Description\\
+	\colrule
+	occi.network.vlan & Integer: 0-4095 & 0\ldots1 & Mutable 
+	& 802.1q VLAN Ientifier (e.g. 343).\\
+	occi.network.label & Token & 0\ldots1 & Mutable 
+	& Tag based VLANs (e.g. external-dmz).\\
+	occi.network.state & Enumeration: \{active, inactive\} & 1 & Immutable 
+	& Current state of the instance.\\
+	\botrule
+	\end{tabular}
+}
+Table~\ref{tbl:network} describes the attributes \footnote{See ’attributes’ in the inherited 
+base type \hl{Category}  \cite{occi:core}} 
+defined \hl{Network} through its \hl{Kind} instance. These attributes
+MUST be exposed by an instance of the \hl{Network} type of an OCCI implementation.
 
-\subsubsection{Actions}
-Actions can be performed upon instances of the Network Resource type. The set that must be supported are as follows:
+\mytablefloat{
+	\label{tbl:network_actions}%
+	\hl{Action}s applicable to \hl{Network} and defined by the \hl{Kind} instance
+	\textit{http://schemas.ogf.org/occi/infrastructure\#network}. Every \hl{Action}
+	in the table is identified by a \hl{Category} instance using the
+	\textit{http://schemas.ogf.org/occi/infrastructure/network/action\#}
+	categorisation scheme. ``Action term'' below refers to the term of the \hl{Action}'s
+	\hl{Category} identifier.
+}
+{
+	\begin{tabular}{lll}
+	\toprule
+	Action Term&Target State&Attributes\\
+	\colrule
+	up & active & --\\
+	down & inactive & --\\
+	\botrule
+	\end{tabular}
+}
 
-\begin{tabular}{lll}
-Action&Target State&Parameters\\
-\hline
-http://schemas.ogf.org/occi/infrastructure/network/action\#up & active & None\\
-http://schemas.ogf.org/occi/infrastructure/network/action\#down & inactive & None\\
-\end{tabular}
-
-\subsubsection{States}
-Below illustrates the state diagram based on the actions defined above.
+Table~\ref{tbl:network_actions} describes the \hl{Action}s defined for
+\hl{Network} by its \hl{Kind} instance. These \hl{Action}s MUST be exposed 
+by an instance of the \hl{Network} type of an OCCI implementation. 
+Figure~\ref{fig:network_state} illustrates the state diagram for a \hl{Network} instance.
 
 %\clearpage
 \begin{figure}[!h]
