@@ -96,30 +96,48 @@ possible request and outcomes can be.
 
 \section{Infrastructure}
 
-The main infrastructure domain Resource types within OCCI, including their specification definitions, are:
+The main infrastructure types defined within OCCI are:
 \begin{itemize}
-\item Compute: Information processing resources.
-\item Network: Interconnection resources.
-\item Storage: Information recording resources.
+\item \hl{Compute}: Information processing resources.
+\item \hl{Network}: Interconnection resources.
+\item \hl{Storage}: Information recording resources.
 \end{itemize}
-These infrastructure Resource types inherit the core Resource base type and all its attributes. OCCI implementors MUST implement these types. The HTTP Rendering document defines how to interact with these resource types using RESTful communication.
+These infrastructure types inherit the OCCI Core Model \hl{Resource} or \hl{Link} base type and all its 
+attributes. OCCI infrastructure implementors MUST implement these types. The HTTP 
+Rendering document defines how to serialise and interact with these types 
+using RESTful communication.
 
-As REQUIRED by the OCCI Core specification every resource type instantiated that is a subclass of Resource MUST be assigned a Category that identifies the instantiated resource type. Each such Category MUST be related to the Resource base type Category. These Categories, the core categories, MUST always remain immutable to any client.
+As REQUIRED by the OCCI Core Model specification, every type instantiated that is 
+a subclass of \hl{Resource} or \hl{Link} MUST be assigned a \hl{Kind} that identifies the instantiated 
+type. Each such \hl{Kind} MUST be related to the \hl{Resource} or \hl{Link} base type's \hl{Kind}. 
+That assigned \hl{Kind} MUST always remain immutable to any client.
 
-The following table describe the Category defined for each of the infrastructure Resource subtypes:
+The following table describe the \hl{Kind} defined for each of the infrastructure \hl{Resource} 
+or \hl{Link}subtypes:
 
-\mytablefloat{\label{tbl:kinds}The \hl{structural-Kind} instances defined for
+\mytablefloat{\label{tbl:kinds}The \hl{Kind} instances defined for
 the infrastructure sub-types of \hl{Resource} and \hl{Link}}{
 \begin{tabular}{llll}
-Term & Scheme & Title & Related \hl{structural-Kind} \\
+Term & Scheme & Title & Related \hl{Kind} \\
 \hline
-compute & http://schemas.ogf.org/occi/infrastructure\# & Compute Resource & http://schemas.ogf.org/occi/core\#resource \\
-storage & http://schemas.ogf.org/occi/infrastructure\# & Storage Resource & http://schemas.ogf.org/occi/core\#resource \\
-network & http://schemas.ogf.org/occi/infrastructure\# & Network Resource & http://schemas.ogf.org/occi/core\#resource \\
+compute & http://schemas.ogf.org/occi/infrastructure\# & Compute \hl{Resource}
+& http://schemas.ogf.org/occi/core\#resource \\
+storage & http://schemas.ogf.org/occi/infrastructure\# & Storage \hl{Resource}
+& http://schemas.ogf.org/occi/core\#resource \\
+storagelink & http://schemas.ogf.org/occi/infrastructure\# & StorageLink \hl{Link}
+& http://schemas.ogf.org/occi/core\#link \\
+network & http://schemas.ogf.org/occi/infrastructure\# & Network \hl{Resource}
+& http://schemas.ogf.org/occi/core\#resource \\
+networklink & http://schemas.ogf.org/occi/infrastructure\# & NetworkLink \hl{Link}
+& http://schemas.ogf.org/occi/core\#link \\
 \end{tabular}
 }
 
-The following sections on Compute, Storage and Network detail the Attributes and Actions defined for each resource type.
+For information on extending these types, please refer to the OCCI Core Model document.
+
+The following sections on Compute, Storage and Network types detail the attributes, 
+\hl{Actions} and states defined for each resource type, including type-specific mixins. 
+Following those the definition of infrastructure related \hl{Link} subtypes are given.
 
 \subsection{Compute}
 The Compute type represent a generic information processing resource, e.g.~a
