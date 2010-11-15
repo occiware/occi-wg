@@ -479,12 +479,12 @@ OCCI implementations SHOULD support this, otherwise what they provision will be 
 {Resource}s without any available execution environment (e.g. operating system). Of the two 
 supported template types, this is the most basic and necessary template that a provider SHOULD offer. 
 
-Its construction is a \hl{Mixin} consisting of a provider specific 'scheme' and a descriptive 'title' 
+Its construction is a \hl{Mixin} instance consisting of a provider specific 'scheme' and a descriptive 'title' 
 detailing the OS. The 'term' value of the template category is a provider-specific identifier that 
 corresponds to a particular virtual machine image configuration. Where an implementation requires 
 additional attributes associated with the OS Template, it can do so using \hl{Category}'s 'attributes'.
 
-A provider-defined OS Template \hl{Mixin} MUST be related to 
+A implementation-defined OS Template \hl{Mixin} MUST be related to 
 the OCCI OS Template \hl{Mixin} in order to give absolute type information. 
 
 The OS Template 
@@ -512,8 +512,10 @@ The Resource Template \hl{Mixin} builds upon the concept of OS Templates. A Reso
 a provider-defined \hl{Mixin} that refers to a preset \hl{Resource} configuration. 
 
 The OCCI implementation associates a set of Resource attributes (via \hl{Category}'s 'attributes') with 
-a particular term identifier. An implementation-defined Resource Template \hl{Mixin} MUST be related 
-to the OCCI Resource Template \hl{Mixin}. 
+a particular term identifier. 
+
+An implementation-defined Resource Template \hl{Mixin} MUST be related 
+to the OCCI Resource Template \hl{Mixin} in order to give absolute type information.. 
 
 The Resource Template is defined by the 
 \textit{http://schemas.ogf.org/occi/infrastructure\#resource\_tpl} \hl{Mixin} and MUST be supported SHOULD Resource Templates be offered by the OCCI implementation.
@@ -531,9 +533,9 @@ Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#';
 \end{verbatim}
 
 In this example, the provider offers \hl{Compute} \hl{Resource}s based on different sizes (i.e. small,
-medium, large). Each 'size' of \hl{Compute} corresponds to a predetermined set of OCCI 
+medium, large). Each 'size' of \hl{Compute} (i.e. the term) corresponds to a predetermined set of OCCI 
 \hl{Resource}-specific attributes. In the example below a 'small' \hl{Compute} instance is created. 
-Specifying "small" corresponds to a \hl{Compute} \hl{Resource}-specific attribute set of:
+Specifying "small" as the term corresponds to an implemenation-specific \hl{Compute} \hl{Resource}-specific attribute set of:
 
 \begin{verbatim}
 Attribute: occi.compute.cores='2', occi.compute.speed='2.4', 
