@@ -97,21 +97,30 @@ possible request and outcomes can be.
 % begin infrastructure content
 
 \section{Infrastructure}
+The OCCI Infrastructure document details how an OCCI implementation can model and implement an
+Infrastructure as a Service API offering by utilising the OCCI Core Model. This API allows for the creation and management of typical resources associated with an IaaS service, for example, creating a \hl{Compute} instance and \hl{Storage} instance and then linking them with \hl{StorageLink}. The main infrastructure types defined within OCCI Infrastructure are:
 
-{\bf Ralf: An introduction to the purpose of the Infra document needed here. IaaS blah blah, an example of how a Compute and Storage are associated using a Link etc.}
-
-The main infrastructure types defined within OCCI are:
 \begin{itemize}
-\item \hl{Compute}: Information processing resources.
-\item \hl{Network}: Interconnection resources.
-\item \hl{Storage}: Information recording resources.
+	\item \hl{Compute}: Information processing resources.
+	\item \hl{Network}: Interconnection resource and represents a L2 networking resource. 
+	This is complimented by the \hl{IPNetwork} \hl{Mixin}.
+	\item \hl{Storage}: Information recording resources.
 \end{itemize}
-{\bf Ralf: Perhaps mention the Link sub-types as well? At least that they exist.}
+
+Supporting these Resource types are the following \hl{Link} sub-types:
+
+\begin{itemize}
+	\item \hl{NetworkInterface}: connects a \hl{Compute} instance to a \hl{Network} instance. 
+	This complimented by an \hl{IPNetworkInterface} \hl{Mixin}.
+	\item \hl{StorageLink}: connects a \hl{Compute} instance to a \hl{Storage} instance.
+\end{itemize}
+
 These infrastructure types inherit the OCCI Core Model \hl{Resource} base type and all its 
 attributes. OCCI infrastructure implementors MUST implement these types. The HTTP 
 Rendering document defines how to serialise and interact with these types 
-using RESTful communication.
-{\bf Ralf: Somewhat unclear which types ``MUST'' be implememented here. Is it the infrastructure types? In that case, exactly which are the infrastructure types? Only Compute/Storage/Network or the Link subtypes as well? Is it really necessary to implement all of them to be compliant? }
+using RESTful communication. Implementers are free to choose what \hl{Resource} and 
+\hl{Link} sub-types to implement. Those that are supported by an implementation will be 
+discoverable through the OCCI Query Interface.
 
 As REQUIRED by the OCCI Core Model specification, every type instantiated that is 
 a sub-type of \hl{Resource} or \hl{Link} MUST be assigned a \hl{Kind} that identifies the instantiated 
@@ -121,32 +130,48 @@ That assigned \hl{Kind} instance MUST always remain immutable to any client.
 The following table describes the \hl{Kind} instances defined for each of the infrastructure \hl{Resource} 
 or \hl{Link} sub-types:
 
-\mytablefloat{\label{tbl:kinds}The \hl{Kind} instances defined for
-the infrastructure sub-types of \hl{Resource} and \hl{Link}}{
-\begin{tabular}{llll}
-Term & Scheme & Title & Related \hl{Kind} \\
-\hline
-compute & http://schemas.ogf.org/occi/infrastructure\# & Compute \hl{Resource}
-& http://schemas.ogf.org/occi/core\#resource \\
-storage & http://schemas.ogf.org/occi/infrastructure\# & Storage \hl{Resource}
-& http://schemas.ogf.org/occi/core\#resource \\
-storagelink & http://schemas.ogf.org/occi/infrastructure\# & StorageLink \hl{Link}
-& http://schemas.ogf.org/occi/core\#link \\
-network & http://schemas.ogf.org/occi/infrastructure\# & Network \hl{Resource}
-& http://schemas.ogf.org/occi/core\#resource \\
-networklink & http://schemas.ogf.org/occi/infrastructure\# & NetworkLink \hl{Link}
-& http://schemas.ogf.org/occi/core\#link \\
-\end{tabular}
+\mytablefloat{
+	\label{tbl:kinds}The \hl{Kind} instances defined for
+	the infrastructure sub-types of \hl{Resource}, \hl{Link} and related \hl{Mixin}s. 
+	\textbf{Andy: can someone work their Knuthian magic on this table?}
 }
-
-{\bf Ralf: I think Mixins should receive a more elaborate introduction here as well.}
+{
+	\begin{tabular}{llll}
+	%\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+	\toprule
+	Term & Scheme & Title & Related \hl{Kind} \\
+	\colrule
+	compute & http://schemas.ogf.org/occi/infrastructure\# & Compute \hl{Resource}
+	& http://schemas.ogf.org/occi/core\#resource \\
+	
+	storage & http://schemas.ogf.org/occi/infrastructure\# & Storage \hl{Resource}
+	& http://schemas.ogf.org/occi/core\#resource \\
+	
+	storagelink & http://schemas.ogf.org/occi/infrastructure\# & StorageLink \hl{Link}
+	& http://schemas.ogf.org/occi/core\#link \\
+	
+	network & http://schemas.ogf.org/occi/infrastructure\# & Network \hl{Resource}
+	& http://schemas.ogf.org/occi/core\#resource \\
+	
+	ipnetworking & http://schemas.ogf.org/occi/infrastructure/network\# & IP Networking \hl{Mixin}
+	& -- \\
+	
+	networkinterface & http://schemas.ogf.org/occi/infrastructure\# & NetworkInterface \hl{Link}
+	& http://schemas.ogf.org/occi/core\#link \\
+	
+	ipnetworkinterface & http://schemas.ogf.org/occi/infrastructure/networkinterface\# & IP NetworkInterface \hl{Mixin}
+	& -- \\
+	\botrule
+	\end{tabular}
+}
 
 For information on extending these types, please refer to the OCCI Core Model 
 document \cite{occi:core}.
 
-The following sections on Compute, Storage and Network types detail the attributes, 
-\hl{Actions} and states defined for each of them, including type-specific mixins where 
-appropriate. Following those, the definition of infrastructure related \hl{Link} sub-types 
+The following sections on \hl{Compute}, \hl{Storage} and \hl{Network} types detail the attributes, 
+\hl{Actions} and states defined for each of them, including type-specific mixins (\hl{IPNetwork} 
+and \hl{IPNetworkInterface}) where 
+appropriate. Following those, the definition of infrastructure-related \hl{Link} sub-types 
 are given and finally OS and Resource Templates are defined. Figure ~\ref{fig:infra_uml} gives an overview
 of the various types involved in this infrastructure specification.
 
@@ -235,7 +260,6 @@ Figure~\ref{fig:compute_state} illustrates the state diagram for a \hl{Compute} 
 \end{figure}
 
 \subsection{Network}
-{\bf Ralf: The definition of the Network type found here should be in the intro as well. Intro now only says ``Interconnection resources''.}
 \hl{Network} represents a L2 networking entity (e.g. a virtual switch). It can be extended using 
 the mixin mechanism (or sub-typed) to support L3/L4 capabilities such as TCP/IP etc. 
 For the purposes of this specification we define an OCCI mixin so that IP networking can be supported
@@ -332,8 +356,9 @@ occi.ipnetwork.allocation & String Enumeration: \{dynamic, static\} & 0\ldots1 &
 }
 
 \subsection{Storage}
-{\bf Ralf: A definition of Storage needed here.}
-The \hl{Storage} type is assigned the \textit{http://schemas.ogf.org/occi/infrastructure\#storage} \hl{Kind}. A \hl{Storage} instance MUST use and expose this \hl{Kind}.
+Storage resources are defined to be those that record information to a data storage device. 
+The \hl{Storage} type is assigned the \textit{http://schemas.ogf.org/occi/infrastructure\#storage} 
+\hl{Kind}. A \hl{Storage} instance MUST use and expose this \hl{Kind}.
 
 \mytablefloat{
 	\label{tbl:storage}Attributes defined for
@@ -397,8 +422,11 @@ Figure~\ref{fig:storage_state} illustrates the state diagram for a \hl{Storage} 
 \end{figure}
 
 \subsection{Linking Infrastructure Resources}
-In order to create entities like virtual data centres or virtual clusters, it is necessary to allow the linkage of the previously defined infrastructure \hl{Resource} sub-types. This is accomplished by extending (sub-typing) the OCCI Core Model \hl{Link} base type. This is done as the \hl{Link} base type cannot fully represent specific types of infrastructure links (e.g. links to storage or networks).
-{\bf Ralf: Explain why Link cannot do so, i.e.~the need for Link attributes.}
+In order to create entities like virtual data centres or virtual clusters, it is necessary to allow the linkage
+of the previously defined infrastructure \hl{Resource} sub-types. This is accomplished by extending 
+(sub-typing) the OCCI Core Model \hl{Link} base type. This is done as the \hl{Link} base type cannot 
+fully represent specific types of infrastructure links (e.g. links to storage or networks) as they do not 
+have the required attributes (e.g. network interface name).
 
 \subsubsection{Linking to Network}
 \hl{NetworkInterface} represents an L2 client device (e.g. network adapter). It can be extended using the mix-in mechanism or sub-typed to support L3/L4 capabilities such as TCP/IP etc. 
@@ -474,8 +502,9 @@ occi.networkinterface.allocation & String Enumeration, \{dynamic, static\} & 1 &
 }
 
 \subsubsection{Linking to Storage}
-{\bf Ralf: A short motivation why the StorageLink is necessary would be nice.}
-\hl{StorageLink} type represents a link from a \hl{Resource} to a target \hl{Storage} instance.
+\hl{StorageLink} type represents a link from a \hl{Resource} to a target \hl{Storage} instance. This 
+enables a \hl{Storage} instance be attached to a \hl{Compute} instance, with all the prerequisite low-
+level operations handled by the OCCI implementation.
 
 The \hl{StorageLink} type is assigned the  
 \textit{http://schemas.ogf.org/occi/infrastructure\#storagelink} \hl{Kind}. A \hl{StorageLink}
@@ -518,15 +547,16 @@ Figure~\ref{fig:storagelink_state} illustrates the state diagram for a \hl{Stora
 \end{figure}
 
 \subsection{Infrastructure Templates}
-{\bf Ralf: Explain what a template is. I.e.~a \hl{Mixin} instance for which the
-service provider have defined specific side-effects.}
-There are 2 supported infrastructure template types in OCCI.
+Infrastructure Templates allow clients of an OCCI implementation quickly and conveniently apply 
+pre-defined configurations to OCCI Infrastructure defined types. They are implemented using the 
+\hl{Mixin} instances. There are 2 supported infrastructure template types in OCCI Infrastructure.
 
 \subsubsection{OS Template}
-{\bf Perhaps a definition before the SHOULD, i.e.~what is an OS Template?}
-OCCI implementations SHOULD support this, otherwise what they provision will be merely offer
-\hl{Resource}s without any available execution environment (e.g. operating system). Of the two 
-supported template types, this is the most basic and necessary template that a provider SHOULD offer. 
+OS (Operating System) Templates allow clients specific what operating system must be installed on a
+requested \hl{Compute} resource. OCCI implementations SHOULD support this, otherwise what they 
+provision will be merely offer \hl{Resource}s without any available execution environment 
+(e.g. operating system). Of the two supported template types, this is the most basic 
+and necessary template that a provider SHOULD offer. 
 
 Its construction is a \hl{Mixin} instance consisting of a provider specific 'scheme' and a descriptive 'title' 
 detailing the OS. The 'term' value of the template category is a provider-specific identifier that 
