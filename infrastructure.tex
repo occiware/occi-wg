@@ -145,9 +145,6 @@ virtual machine. \hl{Compute} inherits the \hl{Resource} base type defined in
 OCCI Core Model \cite{occi:core}.
 \hl{Compute} is assigned the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
-\marginpar{\textbf{Ralf: Only this section has been updated with the proper
-wording as introduced in Core. Please perfect this section before converting
-the other sections to the same style!}}
 
 \mytablefloat{\label{tbl:compute}Attributes defined for
 	\hl{Compute}. The attributes are defined by \hl{Compute}'s \hl{Kind} instance
@@ -285,9 +282,11 @@ Figure~\ref{fig:network_state} illustrates the state diagram for a \hl{Network} 
 
 In order to support L3/L4 capabilities (e.g. IP, TCP etc.) an OCCI mixin is herewith defined. 
 
-The \hl{IPNetworking} mixin is assigned the \textit{http://schemas.ogf.org/occi/infrastructure/network
-\#ipnetwork} \hl{Kind}. An \hl{IPNetworking} mixin MUST use and expose this \hl{Kind}.
-\marginpar{\textbf{Andy: Mixins are not assigned Kinds, they set their corresponding super-class attributes, right?}}
+The \hl{IPNetworking} mixin is assigned 
+\footnote{Both assignments use data members from the inherited \hl{Category} 
+base type.} the 'scheme' of
+\textit{http://schemas.ogf.org/occi/infrastructure/network\#} and the 'term' value 
+\textit{ipnetwork}. An \hl{IPNetworking} mixin MUST expose these values.
 
 \begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
 \toprule
@@ -411,10 +410,11 @@ Figure~\ref{fig:networklink_state} illustrates the state diagram for a \hl{Netwo
 In order to support L3/L4 capabilities (e.g. IP, TCP etc.) with the \hl{NetworkInterface} type, an 
 OCCI mixin is herewith defined.
 
-The \hl{IPNetworkInterface} mixin is assigned the 
-\textit{http://schemas.ogf.org/occi/infrastructure/networkinterface\#ipnetworkinterface} 
-\hl{Kind}. An \hl{IPNetworking} mixin MUST use and expose this \hl{Kind}.
-\marginpar{\textbf{Andy: Need to fix this - mixins can't be associated with Kind}}
+The \hl{IPNetworkInterface} mixin is assigned 
+\footnote{Both assignments use data members from the inherited \hl{Category} 
+base type.} the 'scheme' of
+\textit{http://schemas.ogf.org/occi/infrastructure/networkinterface\#} and the 'term' value 
+\textit{ipnetworkinterface}. An \hl{IPNetworking} mixin MUST expose these values.
 
 \begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
 \toprule
@@ -477,22 +477,26 @@ OCCI implementations SHOULD support this, otherwise what they provision will be 
 {Resource}s without any available execution environment (e.g. operating system). Of the two 
 supported template types, this is the most basic and necessary template that a provider SHOULD offer. 
 
-The construction of it is a \hl{Mixin} consisting of a provider specific 'scheme' and a descriptive 'title' 
+Its construction is a \hl{Mixin} consisting of a provider specific 'scheme' and a descriptive 'title' 
 detailing the OS. The 'term' value of the template category is a provider-specific identifier that 
 corresponds to a particular virtual machine image configuration. Where an implementation requires 
 additional attributes associated with the OS Template, it can do so using \hl{Category}'s 'attributes'.
 
 A provider-defined OS Template \hl{Mixin} MUST be related to 
-the OCCI OS Template \hl{Mixin} in order to give absolute type information. The OS Template 
-Category is defined by the \hl{http://schemas.ogf.org/occi/infrastructure\#os\_tpl} \hl{Mixin} and
+the OCCI OS Template \hl{Mixin} in order to give absolute type information. 
+
+The OS Template 
+is defined by the \hl{http://schemas.ogf.org/occi/infrastructure\#os\_tpl} \hl{Mixin} and
 MUST be supported SHOULD OS Templates be offered by the OCCI implementation.
 
 A typical example of such a category is shown below using the HTTP rendering. 
 
 \begin{verbatim}
 POST /compute
-Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; title='Compute Instance', 
-    ubuntu-9.10; scheme='http://provider.com/templates/os#'; title='Ubuntu 9.10'
+Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; 
+    title='Compute Instance', 
+    ubuntu-9.10; scheme='http://provider.com/templates/os#'; 
+    title='Ubuntu 9.10'
 Attribute: occi.compute.memory=0.5, occi.compute.cores=2
 \end{verbatim}
 In the example a provider has defined an OS template which offers the ability to run Ubuntu Linux,
@@ -509,16 +513,19 @@ The OCCI implementation associates a set of Resource attributes (via \hl{Categor
 a particular term identifier. An implementation-defined Resource Template \hl{Mixin} MUST be related 
 to the OCCI Resource Template \hl{Mixin}. 
 
-The Resource Template \hl{Mixin} is defined by the 
+The Resource Template is defined by the 
 \textit{http://schemas.ogf.org/occi/infrastructure\#resource\_tpl} \hl{Mixin}.
 
 A typical example of such a \hl{Mixin}'s use is shown below using the HTTP rendering. 
 
 \begin{verbatim}
 POST /compute
-Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; title='Compute Instance', 
-    small; scheme="http://provider.com/templates/compute#"; title="Small Instance", 
-    ubuntu-9.10; scheme=""; title=""
+Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; 
+    title='Compute Instance', 
+    small; scheme="http://provider.com/templates/compute#"; 
+    title="Small Instance", 
+    ubuntu-9.10; scheme="http://provider.com/templates/os#"; 
+    title="Ubuntu 9.10"
 \end{verbatim}
 
 In this example, the provider offers \hl{Compute} \hl{Resource}s based on different sizes (i.e. small,
