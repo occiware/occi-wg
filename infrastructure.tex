@@ -363,48 +363,66 @@ Figure~\ref{fig:storage_state} illustrates the state diagram for a \hl{Storage} 
 \end{figure}
 
 \subsection{Linking Infrastructure Resources}
-In order to create entities like virtual data centres or virtual clusters, it is necessary to allow the linking of the various infrastructure Resource types. This can be accomplished extending the core specification Link entity as the Link entity does not include enough information about specific types of infrastructure links.
+In order to create entities like virtual data centres or virtual clusters, it is necessary to allow the linkage of the previously defined infrastructure \hl{Resource} sub-types. This is accomplished by extending (sub-classing) the OCCI Core Model \hl{Link} base type. This is done as the \hl{Link} base type cannot fully represent specific types of infrastructure links (e.g. links to storage or networks).
 
-\subsubsection{Linking to Network Resources}
-NetworkInterface represents an L2 client device (e.g. network adapter). It can be extended using the mix-in mechanism or sub-classed to support L3/L4 capabilities such as TCP/IP etc. 
+\subsubsection{Linking to Network}
+\hl{NetworkInterface} represents an L2 client device (e.g. network adapter). It can be extended using the mix-in mechanism or sub-classed to support L3/L4 capabilities such as TCP/IP etc. 
 
-The Networkinterface Link type is assigned the http://schemas.ogf.org/occi/infrastructure\#networkinterface Category. A Networkinterface Link instance MUST use and expose this Category.
+The \hl{NetworkInterface} type is assigned the \textit{http://schemas.ogf.org/occi/infrastructure\#networkinterface} \hl{Kind}. A \hl{NetworkInterface} instance MUST use and expose this \hl{Kind}. A \hl{NetworkInterface} MUST be related to the \textit{http://schemas.ogf.org/occi/core\#link} \hl{Kind}.
 
-\paragraph{Attributes}
-The attributes that MUST be exposed by an instance of the NetworkInterface Link type are as follows:
-
-\begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Mutability&Description\\
-\hline
-occi.networklink.interface & String & 1 & Immutable & Identifier that relates the link to the link's device interface\\
-occi.networklink.mac & String & 1 & Mutable & MAC address associated with the link's device interface\\
-occi.networklink.state & String Enumeration\{ active, inactive \}& 1 & Immutable & Current status of the instance.\\
-\end{tabular}
-
-\paragraph{States}
-Depicted below are the states that a NetworkInterface instance can hold.
+\mytablefloat{
+	\label{tbl:networklink}Attributes defined for
+	\hl{NetworkInterface}. The attributes are defined by \hl{NetworkInterface}'s \hl{Kind} instance
+	\textit{http://schemas.ogf.org/occi/infrastructure\#networkinterface} 
+	(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.
+}
+{
+	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+	\toprule
+	Attribute&Type&Multi\-plicity&Mutability&Description\\
+	\colrule
+	occi.networkinterface.interface & String & 1 & Immutable 
+	& Identifier that relates the link to the link's device interface\\
+	occi.networkinterface.mac & String & 1 & Mutable 
+	& MAC address associated with the link's device interface\\
+	occi.networkinterface.state & String Enumeration: \{active, inactive\}& 1 
+	& Immutable & Current status of the instance.\\
+	\botrule
+	\end{tabular}
+}
+Table~\ref{tbl:networklink} describes the attributes \footnote{See ’attributes’ in the inherited 
+base type \hl{Category}  \cite{occi:core}} 
+defined \hl{NetworkInterface} through its \hl{Kind} instance. These attributes
+MUST be exposed by an instance of the \hl{NetworkInterface} type of an OCCI implementation. 
+Figure~\ref{fig:networklink_state} illustrates the state diagram for a \hl{NetworkInterface} instance.
 
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{figs/infra-link-state.png}
-	\caption{State diagram for NetworkInterface}
+	\caption{State Diagram for \hl{NetworkInterface}.}
 	\label{fig:networklink_state}
 \end{figure}
 
 \paragraph{IPNetworkInterface Mixin}
-In order to support L3/L4 capabilities (e.g. IP, TCP etc) with the NetworkInterface Link type an OCCI mixin is herewith defined.
+In order to support L3/L4 capabilities (e.g. IP, TCP etc) with the \hl{NetworkInterface} type, an 
+OCCI mixin is herewith defined.
 
-The IPNetworkInterface mixin is assigned the http://schemas.ogf.org/occi/infrastructure/networkinterface\#ipnetworkinterface Category. An IPNetworking mixin MUST use and expose this Category.
+The \hl{IPNetworkInterface} mixin is assigned the 
+\textit{http://schemas.ogf.org/occi/infrastructure/networkinterface\#ipnetworkinterface} 
+\hl{Kind}. An \hl{IPNetworking} mixin MUST use and expose this \hl{Kind}.
+\marginpar{\textbf{Andy: Need to fix this - mixins can't be associated with Kind}}
 
-\begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Mutability&Description\\
-\hline
+\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+\toprule
+Attribute&Type&Multi\-plicity&Mutability&Description\\
+\colrule
 occi.networkinterface.ip & IPv4 or IPv6 Address & 1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7) of the link\\
 occi.networkinterface.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi.networkinterface.allocation & String Enumeration, \{dynamic, static\} & 1 & Mutable & Address mechanism: dynamic use the dynamic host configuration protocol, static uses user supplied static network configurations.\\
+occi.networkinterface.allocation & String Enumeration, \{dynamic, static\} & 1 & Mutable & Address mechanism: \textit{dynamic} e.g. uses the dynamic host configuration protocol, \textit{static} e.g. uses user supplied static network configurations.\\
+\botrule
 \end{tabular}
 
-\subsubsection{Linking to Storage Resources}
+\subsubsection{Linking to Storage}
 StorageLink Link type represents a link from a Resource to a target Storage Resource.
 
 The StorageLink Link type is assigned the  http://schemas.ogf.org/occi/infrastructure\#storagelink Category. A StorageLink Link instance MUST use and expose this Category.
