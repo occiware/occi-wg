@@ -140,44 +140,52 @@ The following sections on Compute, Storage and Network types detail the attribut
 Following those the definition of infrastructure related \hl{Link} subtypes are given.
 
 \subsection{Compute}
-The Compute type represent a generic information processing resource, e.g.~a
-virtual machine. The Compute type inherit the \hl{Resource} type defined in
-OCCI Core \cite{occi:core}.
-The Compute type is assigned the \hl{Kind} instance
+The \hl{Compute} type represents a generic information processing resource, e.g.~a
+virtual machine. \hl{Compute} inherits the \hl{Resource} base type defined in
+OCCI Core Model \cite{occi:core}.
+\hl{Compute} is assigned the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
-\marginpar{Only this section has been updated with the proper
+\marginpar{\textbf{Ralf: Only this section has been updated with the proper
 wording as introduced in Core. Please perfect this section before converting
-the other sections to the same style!}
+the other sections to the same style!}}
 
-\mytablefloat{\label{tbl:compute}Attributes defined for the
-Compute type. The attributes are defined by the
-Compute type's \hl{Kind} instance
-\textit{http://schemas.ogf.org/occi/infrastructure\#compute}}{
+\mytablefloat{\label{tbl:compute}Attributes defined for
+\hl{Compute}. The attributes are defined by \hl{Compute}'s \hl{Kind} instance
+\textit{http://schemas.ogf.org/occi/infrastructure\#compute} 
+(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.}{
 \begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
 \toprule
 Attribute&Type&Multi\-plicity&Mutability&Description\\
 \colrule
-occi.compute.architecture & Enum \{x86, x64\} & 1 & Mutable & CPU Architecture of the instance.\\
-occi.compute.cores & Integer & 1 & Mutable & Number of CPU cores assigned to the instance.\\
-occi.compute.hostname & String & 0\ldots1 & Mutable & Fully Qualified DNS hostname for the instance.\\
-occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 1 & Mutable & CPU Clock frequency (speed) in gigahertz.\\
-occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable & Maximum RAM in gigabytes allocated to the instance.\\
-occi.compute.state & Enum \{active, inactive, suspended\} & 1 & Immutable & Current state of the instance.\\
+occi.compute.architecture & Enum \{x86, x64\} & 0\ldots1 
+& Mutable & CPU Architecture of the instance.\\
+occi.compute.cores & Integer & 0\ldots1 & Mutable 
+& Number of CPU cores assigned to the instance.\\
+occi.compute.hostname & String & 0\ldots1 
+& Mutable & Fully Qualified DNS hostname for the instance.\\
+occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 0\ldots1 
+& Mutable & CPU Clock frequency (speed) in gigahertz.\\
+occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 0\ldots1 
+& Mutable & Maximum RAM in gigabytes allocated to the instance.\\
+occi.compute.state & Enum \{active, inactive, suspended\} & 1 
+& Immutable & Current state of the instance.\\
 \botrule
 \end{tabular}
 }
 
-Table~\ref{tbl:compute} describe the attributes defined for the
-Compute type through its \hl{Kind} instance. These attributes
-MUST be exposed by an instance of the Compute type.
+Table~\ref{tbl:compute} describes the attributes \footnote{See ’attributes’ in the inherited base type Category  \cite{occi:core}} 
+defined \hl{Compute} through its \hl{Kind} instance. These attributes
+MUST be exposed by an instance of the \hl{Compute} type of an OCCI implementation.
+
+\marginpar{\textbf{Andy:what is the 'flag' attribute? How does it work?}}
 
 \mytablefloat{\label{tbl:compute_actions}%
-\hl{Action}s defined by the \hl{Kind} instance
+\hl{Action}s applicable to \hl{Compute} and defined by the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}. Every \hl{Action}
 in the table is identified by a \hl{Category} instance using the
 \textit{http://schemas.ogf.org/occi/infrastructure/compute/action\#}
-categorisation scheme. ``Action term'' below refer to the term of the \hl{Action}'s
-\hl{Category} identifier}{
+categorisation scheme. ``Action term'' below refers to the term of the \hl{Action}'s
+\hl{Category} identifier.}{
 \begin{tabular}{lll}
 \toprule
 Action term & Target state & Attributes \\
@@ -190,16 +198,10 @@ suspend & suspended & flag=\{hibernate, suspend\} \\
 \end{tabular}
 }
 
-Table~\ref{tbl:compute_actions} describe the \hl{Action}s defined for the
-Compute type by its \hl{Kind} instance.
-% FIXME - The Kind instance is indeed REQUIRED to expose all Actions defined
-% but what is required from a Compute instance? Only applicable Actions?
-%
-% These \hl{Action}s MUST be exposed by an instance of the Compute
-% type.
-%
-Figure~\ref{fig:compute_state} illustrate the state diagram for a
-Compute instance.
+Table~\ref{tbl:compute_actions} describes the \hl{Action}s defined for
+\hl{Compute} by its \hl{Kind} instance. These \hl{Action}s MUST be exposed 
+by an instance of the Compute type of an OCCI implementation. 
+Figure~\ref{fig:compute_state} illustrates the state diagram for a \hl{Compute} instance.
 
 \begin{figure}[!h]
 	\centering
@@ -257,7 +259,7 @@ The IPNetworking mixin is assigned the http://schemas.ogf.org/occi/infrastructur
 \begin{tabular}{lllll}
 Attribute&Type&Multiplicity&Mutability&Description\\
 \hline
-occi. ipnetwork.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots* & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi. ipnetwork.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
 occi. ipnetwork.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
 occi. ipnetwork.allocation & String Enumeration, \{dynamic, static\} & 0\ldots1 & Mutable & Address mechanism: dynamic use the dynamic host configuration protocol, static uses user supplied static network configurations.\\
 \end{tabular}
