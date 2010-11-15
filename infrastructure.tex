@@ -188,7 +188,7 @@ MUST be exposed by an instance of the \hl{Compute} type of an OCCI implementatio
 	\textit{http://schemas.ogf.org/occi/infrastructure\#compute}. Every \hl{Action}
 	in the table is identified by a \hl{Category} instance using the
 	\textit{http://schemas.ogf.org/occi/infrastructure/compute/action\#}
-	categorisation scheme. ``Action term'' below refers to the term of the \hl{Action}'s
+	categorisation scheme. ``Action Term'' below refers to the term of the \hl{Action}'s
 	\hl{Category} identifier.
 }
 {
@@ -224,8 +224,6 @@ where required.
 
 The \hl{Network} type is assigned the \textit{http://schemas.ogf.org/occi/infrastructure\#network} \hl{Kind}. A \hl{Network} instance MUST use and expose this \hl{Kind}.
 
-%\subsubsection{Attributes}
-
 \mytablefloat{
 	\label{tbl:network}Attributes defined for
 	\hl{Network}. The attributes are defined by \hl{Network}'s \hl{Kind} instance
@@ -257,7 +255,7 @@ MUST be exposed by an instance of the \hl{Network} type of an OCCI implementatio
 	\textit{http://schemas.ogf.org/occi/infrastructure\#network}. Every \hl{Action}
 	in the table is identified by a \hl{Category} instance using the
 	\textit{http://schemas.ogf.org/occi/infrastructure/network/action\#}
-	categorisation scheme. ``Action term'' below refers to the term of the \hl{Action}'s
+	categorisation scheme. ``Action Term'' below refers to the term of the \hl{Action}'s
 	\hl{Category} identifier.
 }
 {
@@ -287,50 +285,76 @@ Figure~\ref{fig:network_state} illustrates the state diagram for a \hl{Network} 
 
 In order to support L3/L4 capabilities (e.g. IP, TCP etc.) an OCCI mixin is herewith defined. 
 
-The IPNetworking mixin is assigned the \textit{http://schemas.ogf.org/occi/infrastructure/network
-\#ipnetwork} \hl{Kind}. An IPNetworking mixin MUST use and expose this \hl{Kind}.
+The \hl{IPNetworking} mixin is assigned the \textit{http://schemas.ogf.org/occi/infrastructure/network
+\#ipnetwork} \hl{Kind}. An \hl{IPNetworking} mixin MUST use and expose this \hl{Kind}.
 \marginpar{\textbf{Andy: Mixins are not assigned Kinds, they set their corresponding super-class attributes, right?}}
 
 \begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
 \toprule
 Attribute&Type&Multi\-plicity&Mutability&Description\\
 \colrule
-occi. ipnetwork.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi. ipnetwork.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi. ipnetwork.allocation & String Enumeration: \{dynamic, static\} & 0\ldots1 & Mutable & Address allocation mechanism: \textit{dynamic} e.g. uses the dynamic host configuration protocol, \textit{static} e.g. uses user supplied static network configurations.\\
+occi.ipnetwork.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi.ipnetwork.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi.ipnetwork.allocation & String Enumeration: \{dynamic, static\} & 0\ldots1 & Mutable & Address allocation mechanism: \textit{dynamic} e.g. uses the dynamic host configuration protocol, \textit{static} e.g. uses user supplied static network configurations.\\
 \botrule
 \end{tabular}
 
 \subsection{Storage}
-The Storage Resource type is assigned the http://schemas.ogf.org/occi/infrastructure\#storage Category. A Storage Resource instance MUST use and expose this Category.
+The \hl{Storage} type is assigned the \textit{http://schemas.ogf.org/occi/infrastructure\#storage} \hl{Kind}. A \hl{Storage} instance MUST use and expose this \hl{Kind}.
 
-\subsubsection{Attributes}
-The attributes that MUST be exposed by an instance of the Storage Resource type are as follows:
+\mytablefloat{
+	\label{tbl:storage}Attributes defined for
+	\hl{Storage}. The attributes are defined by \hl{Storage}'s \hl{Kind} instance
+	\textit{http://schemas.ogf.org/occi/infrastructure\#storage} 
+	(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.
+}
+{
+	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+	\toprule
+	Attribute&Type&Multi\-plicity&Mutability&Description\\
+	\colrule
+	\hline
+	occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable 
+	& Storage size in gigabytes of the 	instance.\\
+	occi.storage.state & String Enumeration: \{online, offline, degraded\} & 1 & Immutable 
+	& Current status of the instance.\\
+	\botrule
+	\end{tabular}
+}
+Table~\ref{tbl:storage} describes the attributes \footnote{See ’attributes’ in the inherited 
+base type \hl{Category}  \cite{occi:core}} 
+defined \hl{Storage} through its \hl{Kind} instance. These attributes
+MUST be exposed by an instance of the \hl{Storage} type of an OCCI implementation.
 
-\begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Mutability&Description\\
-\hline
-occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable & Storage size in gigabytes of the instance.\\
-occi.storage.state & String Enumeration, \{online, offline, degraded\} & 1 & Immutable & Current status of the instance.\\
-\end{tabular}
+\mytablefloat{
+	\label{tbl:storage_actions}%
+	\hl{Action}s applicable to \hl{Storage} and defined by the \hl{Kind} instance
+	\textit{http://schemas.ogf.org/occi/infrastructure\#storage}. Every \hl{Action}
+	in the table is identified by a \hl{Category} instance using the
+	\textit{http://schemas.ogf.org/occi/infrastructure/storage/action\#}
+	categorisation scheme. ``Action Term'' below refers to the term of the \hl{Action}'s
+	\hl{Category} identifier.
+}
+{
+	\begin{tabular}{lll}
+	\toprule
+	Action Term&Target State&Attributes\\
+	\colrule
+	online & online & --\\
+	offline & offline & --\\
+	backup & None & --\\
+	snapshot & None & --\\
+	resize & None & size (Float  ${\mathbf 10}^9$ (GiB))
+%	\botrule
+	\end{tabular}
+}
+\marginpar{\textbf{Andy: Again 'flags'? See previous comment above}}
 
-\subsubsection{Actions}
-Actions can be performed upon instances of the Storage Resource type. The set that MUST be supported are as follows:
+Table~\ref{tbl:storage_actions} describes the \hl{Action}s defined for
+\hl{Storage} by its \hl{Kind} instance. These \hl{Action}s MUST be exposed 
+by an instance of the \hl{Storage} type of an OCCI implementation. 
+Figure~\ref{fig:storage_state} illustrates the state diagram for a \hl{Storage} instance.
 
-\begin{tabular}{lll}
-Action&Target State&Parameters\\
-\hline
-http://schemas.ogf.org/occi/infrastructure/storage/action\#online & online & None\\
-http://schemas.ogf.org/occi/infrastructure/storage/action\#offline & offline & None\\
-http://schemas.ogf.org/occi/infrastructure/storage/action\#backup & None & None\\
-http://schemas.ogf.org/occi/infrastructure/storage/action\#snapshot & None & None\\
-http://schemas.ogf.org/occi/infrastructure/storage/action\#resize & None & size (Float  ${\mathbf 10}^9$\\ (GiB))
-\end{tabular}
-
-\subsubsection{States}
-Below illustrates the state diagram based on the actions defined above.
-
-%\clearpage
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{figs/storage-state.png}
