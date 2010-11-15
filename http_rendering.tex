@@ -44,7 +44,7 @@ OCCI-WG \hfill Andy Edmonds, Intel\\
 \vspace*{0.5in}
 
 \begin{Large}
-\textbf{Open Cloud Computing Interface - HTTP Rendering}
+\textbf{Open Cloud Computing Interface - RESTful HTTP Rendering}
 \end{Large}
 
 \vspace*{0.5in}
@@ -81,306 +81,415 @@ capabilities required to support modern service offerings.
 \section{Notational Conventions}
 \input{include/notational}
 
-UML activity diagrams do not specify how OCCI should be rendered but
-what possible request and outcomes can be.
+\textbf{TODO described the category of the examples...}
 
-\section{HTTP Rendering}
-The HTTP Protocol is the underlying core fabric of OCCI and uses all
-the features of the HTTP and underlying protocols (like self-healing
-capabilities of TCP) offer. OCCI also builds upon the Resource
-Oriented Architecture (ROA). ROA's use Representation State Transfer
-(REST) to cater for client and service interactions. Interaction with
-the system is by inspection and modification of a set of related
-resources and their states, be it on the complete state or a
-sub-set. Resources must be uniquely identified. HTTP is an ideal
-protocol to use in ROA systems as it provides the means to uniquely
-identify individual resources through URLs as well as operating upon
-them with a set of general-purpose HTTP verbs. These HTTP verbs map
-loosely to the resource related operations of Create (POST), Retrieve
-(GET), Update (POST/PUT) and Delete (DELETE).
+\section{A RESTful HTTP rendering for OCCI compliant Interfaces}
 
-The following notations are used when referring to parts or complete
-URIs:
+Intro bla bla
+
+\subsection{Behaviour of the HTTP Verbs}
+
+see table
+
+\subsection{A RESTful rendering of OCCI}
+
+\subsubsection{Namespace and locations}
+
+Example:
+
+Location outside of the namespace:
 
 \begin{verbatim}
-http://www.example.com:8080/foo/bar;action=stop
-<   >  <     Authority    >< Path >< Fragment >
-  ^
-  Scheme
+/-/
+/vms/user1/vm1
+/vms/user1/vm2
+/vms/user2/vm1
+/disks/user1/disk1
+/disks/user2/disk1
+/compute/
+/storage/
+/my_stuff/
 \end{verbatim}
 
-The following section describe the general behavior for all HTTP based
-renderings. Later sections will describe the syntax and semantic of
-how to render the OCCI Core model with different Content-Types.
-
-\subsection{Identification of Kinds}
-Each Kind sub-type instance within an OCCI system must be uniquely
-identified by an URI. The structure of these URIs is opaque and the
-system should not assume a static, pre-determined scheme for their
-structure.
-
-\subsection{Interaction with Kinds}
-As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
-foundation protocol the means of interaction with all RESTful resource
-instances is through the four main HTTP verbs. OCCI service
-implementations must, at a minimum, support these verbs:
-
-\begin{tabular}{l|p{3.2in}|p{2in}}
-Verb & RFC Definition & Usage in OCCI context \\
-\hline
-POST & The POST method is used to request that the origin server accept the resource enclosed in the request as a new subordinate of the resource identified by the Request-URI in the Request- Line & This is the verb will be used when creating Kinds. POST can also be used to create a sub-resource of an existing resource type. Action are also triggered using the POST verb. \\
-GET & The GET method means retrieve whatever information (in the form of a resource) is identified by the Request-URI & Retrieving one Kind or Category using GET will result in a representation of the resource. Lists of Kinds and Categories are also retrieved through GET (Discovery/Querying). \\
-PUT & The PUT method requests that the enclosed resource be stored under the supplied Request-URI & The PUT verb will be used when updating a Kind or when creating an Kind at a specific location\footnote{In difference to POST where sub-resources will be created}. \\
-DELETE & The DELETE method requests that the origin server delete the resource identified by the Request-URI & This verb is used to destroy instances of Kinds. \\ 
-\end{tabular}
-
-\subsection{Security and Authentication}
-OCCI does not require that an authentication mechanism be used nor
-does it require that client to service communications are secured. It
-does recommend that an authentication mechanism be used and that where
-appropriate, communications are encrypted using HTTP over TLS. The
-authentication mechanisms that CAN be used with OCCI are those that
-can be used with HTTP and TLS, for example Basic [REF], Digest [REF]
-and OAuth [REF]. If an OCCI service requires authentication the
-response to a request that MUST be authenticated must be a HTTP 401
-code that indicates the request is authorized. In response to
-authenticate the client MUST set a WWW-Authenticate header field and
-through this indicate the authentication mechanism.
-
-\subsection{Versioning}
-Information about what version of OCCI is supported by a provider MUST
-be advertised to a client on each response to a client. The version
-field in the response MUST include the value OCCI/X.Y, where X is the
-major version number and Y is the minor version number of the
-implemented OCCI specification. In the case of a HTTP Header
-Rendering, the server response should relay versioning information
-using the HTTP header name 'Server'.
+Location inbound of the namespace:
 
 \begin{verbatim}
-HTTP/1.1 202 Accepted
-Server: occi-server/1.1 (linux) OCCI/1.0
-[...]
+/-/
+/vms/user1/vm1
+/vms/user1/vm2
+/vms/user2/vm1
+/disks/user1/disk1
+/disks/user2/disk1
+/my_stuff/
 \end{verbatim}
 
-Complimenting the service-side behavior of an OCCI implementation, a
-client MUST indicate to the OCCI service implementation the version it
-expects to interact with. For the clients, the information MUST be
-advertised in the request it issues. In the case of a HTTP Header
-Rendering, the client request should relay versioning information in
-the 'User-Agent' header. The 'User-Agent' field must include the same
-value (OCCI/X.Y) as specified for the Server HTTP header.
+Note: /vms/user1/vm1 (= OCCI base type ID) is a resource instance below the namespace path /vms/user1/
 
-\begin{verbatim}
-GET <UDN> HTTP/1.1
-Host: example.com
-User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.0
-[...]
-\end{verbatim}
+\subsubsection{Various behaviours}
 
-If a server receives a request from a client that supplies a version
-number higher than the service supports, the service MUST respond back
-to the client with an exception indicating that the requested version
-is not implemented. Where a client implements OCCI using a HTTP
-transport, the HTTP code 501, not implemented should be used.
+\paragraph{Operations on resource instances}
 
-\subsection{Content-type and Accept headers}
-A server MUST react according to the Accept header the client
-provides. If non is given - or \textit{*/*} is used - the service MUST
-use the HTTP Body Rendering described in section
-\ref{sec:http_body}. This is the fall-back rendering and MUST be
-implemented. Otherwise the according rendering MUST be used. Each
-Rendering SHOULD expose which Accept and Content-type header fields it
-can handle. Overall the server MUST support the \textit{text/occi},
-\textit{text/plain} and \textit{text/uri-list} Content-types.
+- creating a resource instance
 
-The server MUST also return the proper Content-type header. If a
-client POSTs information with a Content-Type - the information MUST be
-parsed accordingly.
+- retrieving a resoruce instance
 
-When the Client request a Content-Type will will result in an
-incomplete or faulty rendering the Service MUST return the 406 Not
-Acceptable HTTP code.
+- updateing a resource instance
 
-\subsection{Discovery and Listing}
-When performing an GET operation an server MUST reply with a listing
-of matching Kinds. If the request was preformed on a Path of an URI
-only the sub-resource SHOULD be returned. If a Category was given in
-the request the server MUST only give back Kinds which have this
-Category assigned.
+- deleting a resource instance
 
-If the request was performed on the \textit{/-/} Path a list of
-Categories which the server can handle MUST be returned. Categories
-used for tagging are not exported via this mechanism.
+- triggering an action on an resource instance
 
-Each category MUST have an unique location assigned which COULD be the
-term of the category. This path MUST NOT be empty. At a minimum it
-could be \textit{'/'} It reflects the path under which REST-resources
-which relate to this category can be found. Adding and removing
-REST-Resources from a category is done by operating on this
-path\footnote{The path MUST end with /}.
+\paragraph{Hanlding the Query interface}
 
-\subsection{Behavior of HTTP operations}
+- retireinvg all registered catgories
 
-More information on how OCCI compatible Service should handle the HTTP
-verbs is given in these sections. Possible results are demonstrated
-here. How to render the results is described later on.
 
-\subsubsection{Return Codes}
-The following return codes CAN be returned by an Service implementing
-OCCI.
+Filtering through cat def!
 
-\subsection{Rendering the OCCI model}
-\label{sec:model_rendering}
-The following subsection demonstrate how the OCCI base types can be
-syntactically rendered.
 
-\marginpar{User proper ABNF grammar to describe the header formats.}
+- removing a mixin definition
 
-\subsubsection{Rendering of an OCCI-Category}
+- adding a mixin definition
 
-The semantics of the Category in the OCCI context is described in the
-OCCI Core \& Models document.\footnote{This rendering follows the
-  Category header defined by the Web Categories specification,
-  http://tools.ietf.org/html/draft-johnston-http-category-header-01
-  and MUST be rendered accordingly.}
+\paragraph{Operations on \hl{Mixin}s or \hl{Kind}s}
 
-\marginpar{Define ``Categary identifier'' somewhere,
-  i.e. concatenation of scheme + term.}
+- Retrieving all instances of a mixin or kind
 
-\begin{verbatim}
-Category: <term>; scheme="<scheme>"
-    [;rel=<space-separated list of related Category identifiers>]
-    [;attributes=<space-seperated list of attribute names>]
-    [;title=<Title of this Category>]    
-    ;location=<Parent location>
-\end{verbatim}
 
-There is NO order for the optional part.
+Filtering through cat def!
 
-\subsubsection{Rendering of OCCI-Links and OCCI-Actions}
-The semantics of the Link header in the OCCI context is described in
-the OCCI Core \& Models document.\footnote{This rendering follows the
-  Link header defined by the Web Linking specification,
-  http://tools.ietf.org/html/draft-nottingham-http-link-header-10 and
-  MUST be rendered accordingly.}
 
-\begin{verbatim}
-Link: <Resource URL>;
-    rel=<space-separated list of Category identifiers of the target Resource type>
-    [;self=<Link instance URL>]
-    [;category=<space-separated list of Category identifiers of the Link type>
-    [;<attribute name>=<attribute value>] ... ]
+- triggering actions on all instaces of an mixin or kind (action must be defined by mixin!)
 
-or in case it is an Action:
+- adding a resource to a mixin
 
-Link: <Resource URL> + ";action=" + <Term of the Action>;
-    rel=<Category identifier of the Action>
-\end{verbatim}
+- removing a resource instance from a mixin
 
-\subsubsection{Rendering of OCCI-Attributes}
-The X-OCCI-Attribute MUST be used to render the attributes associated
-with a OCCI Kind. A simple key-value format is used. The field value
-consist of an attribute name followed by an equal sign ("=") and the
-attribute value. The attribute value must be quoted if it includes a
-separator character, see RFC 2616 (page 16).
+\paragraph{Operation on paths in the namespace}
 
-\begin{verbatim}
-X-OCCI-Attribute: <attribute name>=<attribute value>
-\end{verbatim}
+- Retrieval
 
-Valid attribute names for OCCI Kinds are specified in appropriate
-Extension documents.
+Filtering through cat def!
 
-\subsubsection{Rendering of Location-URLs}
-To render an OCCI representation solely in the header, the
-X-OCCI-Location header MUST be used to return a list of Kind
-URLs. Each header field value correspond to a single URL. Multiple
-Kind URLs are returned using multiple X-OCCI-Location headers. See RFC
-2616 for information on how to render multiple HTTP headers.
+- Deleteing all resource instance below this namespace
 
-\begin{verbatim}
-X-OCCI-Location: <URL>
-\end{verbatim}
+\subsection{Syntax and semantics of the rendering}
 
-\subsubsection{Fields}
-The following setups show how the Core Model MUST be rendered. Shown
-are the fields which MUST be available in a request from the Client or
-a response from the Server.
+ Category
+ Link
+ X-OCCI-Attribute
+ X-OCCI-Location
 
-\begin{tabular}{l|l|l|l}
-Operation & Required HTTP-Header(s) & Optional HTTP-Header(s) & Notes \\
-\hline
-Rendering of a Category & Category & N/A & \\
-Rendering a list of Categories & Category & N/A & \\
-Rendering a list of Kinds & X-OCCI-Location & N/A & \\
-Rendering of a Resource & Category & X-OCCI-Attribute, Link & \\
-Rendering of an Action & Category, Link & X-OCCI-Attribute & \\
-Rendering of a Link & Category, Link & X-OCCI-Attribute & \\
-\end{tabular}
+\subsection{General HTTP behaviour which is adopted by OCCI}
 
-\subsubsection{Rendering the OCCI model in the HTTP Body}
-\label{sec:http_body}
-While using this rendering with the Content-Type \textit{text/plain}
-the information described in section \ref{sec:model_rendering} MUST be
-placed in the HTTP Body.
+- Content types
 
-Each Rendering of an OCCI base type will be placed in the body. Each
-entry consists of a name followed by a colon (":") and the field
-value. The format of the field value is specified separately for each
-of the three header fields, see section \ref{sec:model_rendering}.
+- Versioning
 
-\subsubsection{Rendering the OCCI model in the HTTP Header}
-While using this rendering with the Content-Type \textit{text/occi}
-the information described in section \ref{sec:model_rendering} MUST be
-placed in the HTTP Header. The body MUST contain the string 'OK' on
-successfull operations.
+- Auth.
 
-The HTTP header fields MUST follow the specification in RFC 2616
-\cite{rfc2616}. A header field consists of a name followed by a colon
-(":") and the field value. The format of the field value is specified
-separately for each of the three header fields, see section
-\ref{sec:model_rendering}.
+- Autho.
 
-\paragraph{Limitations}
-HTTP header fields MAY appear multiple times in a HTTP request or
-response. In order to be OCCI compliant the specification of multiple
-message-header fields according to RFC 2616 MUST be fully
-supported. In essence there are two valid representation of multiple
-HTTP header field values. A header field might either appear several
-times or as a single header field with a comma-separated list of field
-values. Due to implementation issues in many web frameworks and client
-libraries it is RECOMMENDED to use the comma-separated list format for
-best interoperability.
+- Return codes
 
-HTTP header field values which contain separator characters MUST be
-properly quoted according to RFC 2616.
-
-Space in the HTTP header section of a HTTP request is a limited
-resource. By this, it is noted that many HTTP servers limit the number
-of bytes that can be placed in the HTTP Header area. Implementers MUST
-be aware of this limitation in their own implementation and take
-appropriate measures so that truncation of header data does NOT
-occure.
-
-\subsubsection{Rendering the OCCI model via URL Listings}
-
-\textbf{This Rendering can handle the \textit{text/uri-list} Accept
-  Header. It will \textit{text/uri-list} an empty Content-type}
-
-This rendering cannot render Kinds or Categories directly but just
-Links to them. For concrete rendering of Kinds and Categories the
-Content-types \textit{text/occi}, \textit{text/plain} MUST be used. If
-a request is done with the \textit{text/uri-list} in the Accept
-header, while not requesting for a Listing a Bad Request MUST be
-returned.
-
-\paragraph{Rendering a list of Categories}
-
-MUST return a list of Category scheme URLs.
-
-\paragraph{Rendering a list of Kinds}
-
-MUST return a list of URLs pointing to the Kinds.
+%
+%\section{HTTP Rendering}
+%The HTTP Protocol is the underlying core fabric of OCCI and uses all
+%the features of the HTTP and underlying protocols (like self-healing
+%capabilities of TCP) offer. OCCI also builds upon the Resource
+%Oriented Architecture (ROA). ROA's use Representation State Transfer
+%(REST) to cater for client and service interactions. Interaction with
+%the system is by inspection and modification of a set of related
+%resources and their states, be it on the complete state or a
+%sub-set. Resources must be uniquely identified. HTTP is an ideal
+%protocol to use in ROA systems as it provides the means to uniquely
+%identify individual resources through URLs as well as operating upon
+%them with a set of general-purpose HTTP verbs. These HTTP verbs map
+%loosely to the resource related operations of Create (POST), Retrieve
+%(GET), Update (POST/PUT) and Delete (DELETE).
+%
+%The following notations are used when referring to parts or complete
+%URIs:
+%
+%\begin{verbatim}
+%http://www.example.com:8080/foo/bar;action=stop
+%<   >  <     Authority    >< Path >< Fragment >
+%  ^
+%  Scheme
+%\end{verbatim}
+%
+%The following section describe the general behavior for all HTTP based
+%renderings. Later sections will describe the syntax and semantic of
+%how to render the OCCI Core model with different Content-Types.
+%
+%\subsection{Identification of Kinds}
+%Each Kind sub-type instance within an OCCI system must be uniquely
+%identified by an URI. The structure of these URIs is opaque and the
+%system should not assume a static, pre-determined scheme for their
+%structure.
+%
+%\subsection{Interaction with Kinds}
+%As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
+%foundation protocol the means of interaction with all RESTful resource
+%instances is through the four main HTTP verbs. OCCI service
+%implementations must, at a minimum, support these verbs:
+%
+%\begin{tabular}{l|p{3.2in}|p{2in}}
+%Verb & RFC Definition & Usage in OCCI context \\
+%\hline
+%POST & The POST method is used to request that the origin server accept the resource enclosed in the request as a new subordinate of the resource identified by the Request-URI in the Request- Line & This is the verb will be used when creating Kinds. POST can also be used to create a sub-resource of an existing resource type. Action are also triggered using the POST verb. \\
+%GET & The GET method means retrieve whatever information (in the form of a resource) is identified by the Request-URI & Retrieving one Kind or Category using GET will result in a representation of the resource. Lists of Kinds and Categories are also retrieved through GET (Discovery/Querying). \\
+%PUT & The PUT method requests that the enclosed resource be stored under the supplied Request-URI & The PUT verb will be used when updating a Kind or when creating an Kind at a specific location\footnote{In difference to POST where sub-resources will be created}. \\
+%DELETE & The DELETE method requests that the origin server delete the resource identified by the Request-URI & This verb is used to destroy instances of Kinds. \\ 
+%\end{tabular}
+%
+%\subsection{Security and Authentication}
+%OCCI does not require that an authentication mechanism be used nor
+%does it require that client to service communications are secured. It
+%does recommend that an authentication mechanism be used and that where
+%appropriate, communications are encrypted using HTTP over TLS. The
+%authentication mechanisms that CAN be used with OCCI are those that
+%can be used with HTTP and TLS, for example Basic [REF], Digest [REF]
+%and OAuth [REF]. If an OCCI service requires authentication the
+%response to a request that MUST be authenticated must be a HTTP 401
+%code that indicates the request is authorized. In response to
+%authenticate the client MUST set a WWW-Authenticate header field and
+%through this indicate the authentication mechanism.
+%
+%\subsection{Versioning}
+%Information about what version of OCCI is supported by a provider MUST
+%be advertised to a client on each response to a client. The version
+%field in the response MUST include the value OCCI/X.Y, where X is the
+%major version number and Y is the minor version number of the
+%implemented OCCI specification. In the case of a HTTP Header
+%Rendering, the server response should relay versioning information
+%using the HTTP header name 'Server'.
+%
+%\begin{verbatim}
+%HTTP/1.1 202 Accepted
+%Server: occi-server/1.1 (linux) OCCI/1.0
+%[...]
+%\end{verbatim}
+%
+%Complimenting the service-side behavior of an OCCI implementation, a
+%client MUST indicate to the OCCI service implementation the version it
+%expects to interact with. For the clients, the information MUST be
+%advertised in the request it issues. In the case of a HTTP Header
+%Rendering, the client request should relay versioning information in
+%the 'User-Agent' header. The 'User-Agent' field must include the same
+%value (OCCI/X.Y) as specified for the Server HTTP header.
+%
+%\begin{verbatim}
+%GET <UDN> HTTP/1.1
+%Host: example.com
+%User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.0
+%[...]
+%\end{verbatim}
+%
+%If a server receives a request from a client that supplies a version
+%number higher than the service supports, the service MUST respond back
+%to the client with an exception indicating that the requested version
+%is not implemented. Where a client implements OCCI using a HTTP
+%transport, the HTTP code 501, not implemented should be used.
+%
+%\subsection{Content-type and Accept headers}
+%A server MUST react according to the Accept header the client
+%provides. If non is given - or \textit{*/*} is used - the service MUST
+%use the HTTP Body Rendering described in section
+%\ref{sec:http_body}. This is the fall-back rendering and MUST be
+%implemented. Otherwise the according rendering MUST be used. Each
+%Rendering SHOULD expose which Accept and Content-type header fields it
+%can handle. Overall the server MUST support the \textit{text/occi},
+%\textit{text/plain} and \textit{text/uri-list} Content-types.
+%
+%The server MUST also return the proper Content-type header. If a
+%client POSTs information with a Content-Type - the information MUST be
+%parsed accordingly.
+%
+%When the Client request a Content-Type will will result in an
+%incomplete or faulty rendering the Service MUST return the 406 Not
+%Acceptable HTTP code.
+%
+%\subsection{Discovery and Listing}
+%When performing an GET operation an server MUST reply with a listing
+%of matching Kinds. If the request was preformed on a Path of an URI
+%only the sub-resource SHOULD be returned. If a Category was given in
+%the request the server MUST only give back Kinds which have this
+%Category assigned.
+%
+%If the request was performed on the \textit{/-/} Path a list of
+%Categories which the server can handle MUST be returned. Categories
+%used for tagging are not exported via this mechanism.
+%
+%Each category MUST have an unique location assigned which COULD be the
+%term of the category. This path MUST NOT be empty. At a minimum it
+%could be \textit{'/'} It reflects the path under which REST-resources
+%which relate to this category can be found. Adding and removing
+%REST-Resources from a category is done by operating on this
+%path\footnote{The path MUST end with /}.
+%
+%\subsection{Behavior of HTTP operations}
+%
+%More information on how OCCI compatible Service should handle the HTTP
+%verbs is given in these sections. Possible results are demonstrated
+%here. How to render the results is described later on.
+%
+%\subsubsection{Return Codes}
+%The following return codes CAN be returned by an Service implementing
+%OCCI.
+%
+%\subsection{Rendering the OCCI model}
+%\label{sec:model_rendering}
+%The following subsection demonstrate how the OCCI base types can be
+%syntactically rendered.
+%
+%\marginpar{User proper ABNF grammar to describe the header formats.}
+%
+%\subsubsection{Rendering of an OCCI-Category}
+%
+%The semantics of the Category in the OCCI context is described in the
+%OCCI Core \& Models document.\footnote{This rendering follows the
+%  Category header defined by the Web Categories specification,
+%  http://tools.ietf.org/html/draft-johnston-http-category-header-01
+%  and MUST be rendered accordingly.}
+%
+%\marginpar{Define ``Categary identifier'' somewhere,
+%  i.e. concatenation of scheme + term.}
+%
+%\begin{verbatim}
+%Category: <term>; scheme="<scheme>"
+%    [;rel=<space-separated list of related Category identifiers>]
+%    [;attributes=<space-seperated list of attribute names>]
+%    [;title=<Title of this Category>]    
+%    ;location=<Parent location>
+%\end{verbatim}
+%
+%There is NO order for the optional part.
+%
+%\subsubsection{Rendering of OCCI-Links and OCCI-Actions}
+%The semantics of the Link header in the OCCI context is described in
+%the OCCI Core \& Models document.\footnote{This rendering follows the
+%  Link header defined by the Web Linking specification,
+%  http://tools.ietf.org/html/draft-nottingham-http-link-header-10 and
+%  MUST be rendered accordingly.}
+%
+%\begin{verbatim}
+%Link: <Resource URL>;
+%    rel=<space-separated list of Category identifiers of the target Resource type>
+%    [;self=<Link instance URL>]
+%    [;category=<space-separated list of Category identifiers of the Link type>
+%    [;<attribute name>=<attribute value>] ... ]
+%
+%or in case it is an Action:
+%
+%Link: <Resource URL> + ";action=" + <Term of the Action>;
+%    rel=<Category identifier of the Action>
+%\end{verbatim}
+%
+%\subsubsection{Rendering of OCCI-Attributes}
+%The X-OCCI-Attribute MUST be used to render the attributes associated
+%with a OCCI Kind. A simple key-value format is used. The field value
+%consist of an attribute name followed by an equal sign ("=") and the
+%attribute value. The attribute value must be quoted if it includes a
+%separator character, see RFC 2616 (page 16).
+%
+%\begin{verbatim}
+%X-OCCI-Attribute: <attribute name>=<attribute value>
+%\end{verbatim}
+%
+%Valid attribute names for OCCI Kinds are specified in appropriate
+%Extension documents.
+%
+%\subsubsection{Rendering of Location-URLs}
+%To render an OCCI representation solely in the header, the
+%X-OCCI-Location header MUST be used to return a list of Kind
+%URLs. Each header field value correspond to a single URL. Multiple
+%Kind URLs are returned using multiple X-OCCI-Location headers. See RFC
+%2616 for information on how to render multiple HTTP headers.
+%
+%\begin{verbatim}
+%X-OCCI-Location: <URL>
+%\end{verbatim}
+%
+%\subsubsection{Fields}
+%The following setups show how the Core Model MUST be rendered. Shown
+%are the fields which MUST be available in a request from the Client or
+%a response from the Server.
+%
+%\begin{tabular}{l|l|l|l}
+%Operation & Required HTTP-Header(s) & Optional HTTP-Header(s) & Notes \\
+%\hline
+%Rendering of a Category & Category & N/A & \\
+%Rendering a list of Categories & Category & N/A & \\
+%Rendering a list of Kinds & X-OCCI-Location & N/A & \\
+%Rendering of a Resource & Category & X-OCCI-Attribute, Link & \\
+%Rendering of an Action & Category, Link & X-OCCI-Attribute & \\
+%Rendering of a Link & Category, Link & X-OCCI-Attribute & \\
+%\end{tabular}
+%
+%\subsubsection{Rendering the OCCI model in the HTTP Body}
+%\label{sec:http_body}
+%While using this rendering with the Content-Type \textit{text/plain}
+%the information described in section \ref{sec:model_rendering} MUST be
+%placed in the HTTP Body.
+%
+%Each Rendering of an OCCI base type will be placed in the body. Each
+%entry consists of a name followed by a colon (":") and the field
+%value. The format of the field value is specified separately for each
+%of the three header fields, see section \ref{sec:model_rendering}.
+%
+%\subsubsection{Rendering the OCCI model in the HTTP Header}
+%While using this rendering with the Content-Type \textit{text/occi}
+%the information described in section \ref{sec:model_rendering} MUST be
+%placed in the HTTP Header. The body MUST contain the string 'OK' on
+%successfull operations.
+%
+%The HTTP header fields MUST follow the specification in RFC 2616
+%\cite{rfc2616}. A header field consists of a name followed by a colon
+%(":") and the field value. The format of the field value is specified
+%separately for each of the three header fields, see section
+%\ref{sec:model_rendering}.
+%
+%\paragraph{Limitations}
+%HTTP header fields MAY appear multiple times in a HTTP request or
+%response. In order to be OCCI compliant the specification of multiple
+%message-header fields according to RFC 2616 MUST be fully
+%supported. In essence there are two valid representation of multiple
+%HTTP header field values. A header field might either appear several
+%times or as a single header field with a comma-separated list of field
+%values. Due to implementation issues in many web frameworks and client
+%libraries it is RECOMMENDED to use the comma-separated list format for
+%best interoperability.
+%
+%HTTP header field values which contain separator characters MUST be
+%properly quoted according to RFC 2616.
+%
+%Space in the HTTP header section of a HTTP request is a limited
+%resource. By this, it is noted that many HTTP servers limit the number
+%of bytes that can be placed in the HTTP Header area. Implementers MUST
+%be aware of this limitation in their own implementation and take
+%appropriate measures so that truncation of header data does NOT
+%occure.
+%
+%\subsubsection{Rendering the OCCI model via URL Listings}
+%
+%\textbf{This Rendering can handle the \textit{text/uri-list} Accept
+%  Header. It will \textit{text/uri-list} an empty Content-type}
+%
+%This rendering cannot render Kinds or Categories directly but just
+%Links to them. For concrete rendering of Kinds and Categories the
+%Content-types \textit{text/occi}, \textit{text/plain} MUST be used. If
+%a request is done with the \textit{text/uri-list} in the Accept
+%header, while not requesting for a Listing a Bad Request MUST be
+%returned.
+%
+%\paragraph{Rendering a list of Categories}
+%
+%MUST return a list of Category scheme URLs.
+%
+%\paragraph{Rendering a list of Kinds}
+%
+%MUST return a list of URLs pointing to the Kinds.
 
 \section{Contributors}
 
@@ -388,67 +497,67 @@ Editors: Andy Edmonds, Thijs Metsch \\
 Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 
 \textbf{TBD: Bunch op people missing here - create table\ldots}
-
-\section{Appendix}
-
-\subsection{Examples for rendering the OCCI model in the HTTP Header}
-
-\subsubsection{Creating a Kind}
-\begin{verbatim}
-
-\end{verbatim}
-
-\subsubsection{Triggering an Action}
-
-\begin{verbatim}
-
-\end{verbatim}
-
-\subsubsection{Listing Categories}
-
-\begin{verbatim}
-
-\end{verbatim}
-
-\subsubsection{Listing Resources}
-
-\begin{verbatim}
-
-\end{verbatim}
-
-\subsubsection{Request with missing Category rendering}
-
-\begin{verbatim}
-
-\end{verbatim}
-
-\subsubsection{Retrieving a Kind}
-
-\begin{verbatim}
-
-\end{verbatim}
-
-\subsection{Examples for rendering the OCCI model with uri-lists}
-
-\subsubsection{Listing Resources}
-
-\begin{verbatim}
-
-\end{verbatim}
-
-\subsubsection{Listing Categories}
-
-\begin{verbatim}
- 
-\end{verbatim}
-
-\subsection{Examples for rendering the OCCI model in the HTTP Body}
-
-\subsubsection{Listing of Categories}
-
-\begin{verbatim}
-
-\end{verbatim}
+%
+%\section{Appendix}
+%
+%\subsection{Examples for rendering the OCCI model in the HTTP Header}
+%
+%\subsubsection{Creating a Kind}
+%\begin{verbatim}
+%
+%\end{verbatim}
+%
+%\subsubsection{Triggering an Action}
+%
+%\begin{verbatim}
+%
+%\end{verbatim}
+%
+%\subsubsection{Listing Categories}
+%
+%\begin{verbatim}
+%
+%\end{verbatim}
+%
+%\subsubsection{Listing Resources}
+%
+%\begin{verbatim}
+%
+%\end{verbatim}
+%
+%\subsubsection{Request with missing Category rendering}
+%
+%\begin{verbatim}
+%
+%\end{verbatim}
+%
+%\subsubsection{Retrieving a Kind}
+%
+%\begin{verbatim}
+%
+%\end{verbatim}
+%
+%\subsection{Examples for rendering the OCCI model with uri-lists}
+%
+%\subsubsection{Listing Resources}
+%
+%\begin{verbatim}
+%
+%\end{verbatim}
+%
+%\subsubsection{Listing Categories}
+%
+%\begin{verbatim}
+% 
+%\end{verbatim}
+%
+%\subsection{Examples for rendering the OCCI model in the HTTP Body}
+%
+%\subsubsection{Listing of Categories}
+%
+%\begin{verbatim}
+%
+%\end{verbatim}
 
 \section{Glossary}
 \label{sec:glossary}
