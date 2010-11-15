@@ -233,7 +233,6 @@ The \hl{Network} type is assigned the \textit{http://schemas.ogf.org/occi/infras
 	(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.
 }
 {
-	%\begin{tabular}{lllll}
 	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
@@ -277,7 +276,6 @@ Table~\ref{tbl:network_actions} describes the \hl{Action}s defined for
 by an instance of the \hl{Network} type of an OCCI implementation. 
 Figure~\ref{fig:network_state} illustrates the state diagram for a \hl{Network} instance.
 
-%\clearpage
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{figs/network-state.png}
@@ -287,16 +285,20 @@ Figure~\ref{fig:network_state} illustrates the state diagram for a \hl{Network} 
 
 \subsubsection{IPNetworking Mixin}
 
-In order to support L3/L4 capabilities (e.g. IP, TCP etc) an OCCI mixin is herewith defined. 
+In order to support L3/L4 capabilities (e.g. IP, TCP etc.) an OCCI mixin is herewith defined. 
 
-The IPNetworking mixin is assigned the http://schemas.ogf.org/occi/infrastructure/network\#ipnetwork Category. A IPNetworking mixin MUST use and expose this Category.
+The IPNetworking mixin is assigned the \textit{http://schemas.ogf.org/occi/infrastructure/network
+\#ipnetwork} \hl{Kind}. An IPNetworking mixin MUST use and expose this \hl{Kind}.
+\marginpar{\textbf{Andy: Mixins are not assigned Kinds, they set their corresponding super-class attributes, right?}}
 
-\begin{tabular}{lllll}
-Attribute&Type&Multiplicity&Mutability&Description\\
-\hline
+\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+\toprule
+Attribute&Type&Multi\-plicity&Mutability&Description\\
+\colrule
 occi. ipnetwork.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
 occi. ipnetwork.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi. ipnetwork.allocation & String Enumeration, \{dynamic, static\} & 0\ldots1 & Mutable & Address mechanism: dynamic use the dynamic host configuration protocol, static uses user supplied static network configurations.\\
+occi. ipnetwork.allocation & String Enumeration: \{dynamic, static\} & 0\ldots1 & Mutable & Address allocation mechanism: \textit{dynamic} e.g. uses the dynamic host configuration protocol, \textit{static} e.g. uses user supplied static network configurations.\\
+\botrule
 \end{tabular}
 
 \subsection{Storage}
