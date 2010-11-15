@@ -102,18 +102,18 @@ The main infrastructure types defined within OCCI are:
 \item \hl{Network}: Interconnection resources.
 \item \hl{Storage}: Information recording resources.
 \end{itemize}
-These infrastructure types inherit the OCCI Core Model \hl{Resource} or \hl{Link} base type and all its 
+These infrastructure types inherit the OCCI Core Model \hl{Resource} base type and all its 
 attributes. OCCI infrastructure implementors MUST implement these types. The HTTP 
 Rendering document defines how to serialise and interact with these types 
 using RESTful communication.
 
 As REQUIRED by the OCCI Core Model specification, every type instantiated that is 
-a subclass of \hl{Resource} or \hl{Link} MUST be assigned a \hl{Kind} that identifies the instantiated 
+a sub-type of \hl{Resource} or \hl{Link} MUST be assigned a \hl{Kind} that identifies the instantiated 
 type. Each such \hl{Kind} MUST be related to the \hl{Resource} or \hl{Link} base type's \hl{Kind}. 
 That assigned \hl{Kind} MUST always remain immutable to any client.
 
-The following table describe the \hl{Kind} defined for each of the infrastructure \hl{Resource} 
-or \hl{Link}subtypes:
+The following table describes the \hl{Kind} defined for each of the infrastructure \hl{Resource} 
+or \hl{Link} sub-types:
 
 \mytablefloat{\label{tbl:kinds}The \hl{Kind} instances defined for
 the infrastructure sub-types of \hl{Resource} and \hl{Link}}{
@@ -133,11 +133,13 @@ networklink & http://schemas.ogf.org/occi/infrastructure\# & NetworkLink \hl{Lin
 \end{tabular}
 }
 
-For information on extending these types, please refer to the OCCI Core Model document.
+For information on extending these types, please refer to the OCCI Core Model 
+document \cite{occi:core}.
 
 The following sections on Compute, Storage and Network types detail the attributes, 
-\hl{Actions} and states defined for each resource type, including type-specific mixins. 
-Following those the definition of infrastructure related \hl{Link} subtypes are given.
+\hl{Actions} and states defined for each of them, including type-specific mixins where 
+appropriate. Following those, the definition of infrastructure related \hl{Link} sub-types 
+are given and finally OS and Resource Templates are defined.
 
 \subsection{Compute}
 The \hl{Compute} type represents a generic information processing resource, e.g.~a
@@ -174,8 +176,8 @@ OCCI Core Model \cite{occi:core}.
 
 Table~\ref{tbl:compute} describes the attributes \footnote{See ’attributes’ in the inherited 
 base type \hl{Category}  \cite{occi:core}} 
-defined \hl{Compute} through its \hl{Kind} instance. These attributes
-MUST be exposed by an instance of the \hl{Compute} type of an OCCI implementation.
+defined by \hl{Compute} through its \hl{Kind} instance. These attributes
+MUST be exposed by an instance of the \hl{Compute} type.
 
 \marginpar{\textbf{Andy:what is the 'flag' attribute? How does it work?}}
 
@@ -215,7 +217,7 @@ Figure~\ref{fig:compute_state} illustrates the state diagram for a \hl{Compute} 
 
 \subsection{Network}
 \hl{Network} represents a L2 networking entity (e.g. a virtual switch). It can be extended using 
-the mixin mechanism (or sub-classed) to support L3/L4 capabilities such as TCP/IP etc. 
+the mixin mechanism (or sub-typed) to support L3/L4 capabilities such as TCP/IP etc. 
 For the purposes of this specification we define an OCCI mixin so that IP networking can be supported
 where required. 
 
@@ -243,8 +245,8 @@ The \hl{Network} type is assigned the \textit{http://schemas.ogf.org/occi/infras
 }
 Table~\ref{tbl:network} describes the attributes \footnote{See ’attributes’ in the inherited 
 base type \hl{Category}  \cite{occi:core}} 
-defined \hl{Network} through its \hl{Kind} instance. These attributes
-MUST be exposed by an instance of the \hl{Network} type of an OCCI implementation.
+defined by \hl{Network} through its \hl{Kind} instance. These attributes
+MUST be exposed by an instance of the \hl{Network} type.
 
 \mytablefloat{
 	\label{tbl:network_actions}%
@@ -322,8 +324,8 @@ The \hl{Storage} type is assigned the \textit{http://schemas.ogf.org/occi/infras
 }
 Table~\ref{tbl:storage} describes the attributes \footnote{See ’attributes’ in the inherited 
 base type \hl{Category}  \cite{occi:core}} 
-defined \hl{Storage} through its \hl{Kind} instance. These attributes
-MUST be exposed by an instance of the \hl{Storage} type of an OCCI implementation.
+defined by \hl{Storage} through its \hl{Kind} instance. These attributes
+MUST be exposed by an instance of the \hl{Storage} type.
 
 \mytablefloat{
 	\label{tbl:storage_actions}%
@@ -362,10 +364,10 @@ Figure~\ref{fig:storage_state} illustrates the state diagram for a \hl{Storage} 
 \end{figure}
 
 \subsection{Linking Infrastructure Resources}
-In order to create entities like virtual data centres or virtual clusters, it is necessary to allow the linkage of the previously defined infrastructure \hl{Resource} sub-types. This is accomplished by extending (sub-classing) the OCCI Core Model \hl{Link} base type. This is done as the \hl{Link} base type cannot fully represent specific types of infrastructure links (e.g. links to storage or networks).
+In order to create entities like virtual data centres or virtual clusters, it is necessary to allow the linkage of the previously defined infrastructure \hl{Resource} sub-types. This is accomplished by extending (sub-typing) the OCCI Core Model \hl{Link} base type. This is done as the \hl{Link} base type cannot fully represent specific types of infrastructure links (e.g. links to storage or networks).
 
 \subsubsection{Linking to Network}
-\hl{NetworkInterface} represents an L2 client device (e.g. network adapter). It can be extended using the mix-in mechanism or sub-classed to support L3/L4 capabilities such as TCP/IP etc. 
+\hl{NetworkInterface} represents an L2 client device (e.g. network adapter). It can be extended using the mix-in mechanism or sub-typed to support L3/L4 capabilities such as TCP/IP etc. 
 
 The \hl{NetworkInterface} type is assigned the \textit{http://schemas.ogf.org/occi/infrastructure
 \#networkinterface} \hl{Kind}. A \hl{NetworkInterface} instance MUST use and expose this \hl{Kind}. 
@@ -395,8 +397,8 @@ A \hl{NetworkInterface} type MUST be related to the \textit{http://schemas.ogf.o
 }
 Table~\ref{tbl:networklink} describes the attributes \footnote{See ’attributes’ in the inherited 
 base type \hl{Category}  \cite{occi:core}} 
-defined \hl{NetworkInterface} through its \hl{Kind} instance. These attributes
-MUST be exposed by an instance of the \hl{NetworkInterface} type of an OCCI implementation. 
+defined by \hl{NetworkInterface} through its \hl{Kind} instance. These attributes
+MUST be exposed by an instance of the \hl{NetworkInterface} type. 
 Figure~\ref{fig:networklink_state} illustrates the state diagram for a \hl{NetworkInterface} instance.
 
 \begin{figure}[!h]
@@ -458,8 +460,8 @@ A \hl{StorageLink} type MUST be related to the \textit{http://schemas.ogf.org/oc
 
 Table~\ref{tbl:storagelink} describes the attributes \footnote{See ’attributes’ in the inherited 
 base type \hl{Category}  \cite{occi:core}} 
-defined \hl{StorageLink} through its \hl{Kind} instance. These attributes
-MUST be exposed by an instance of the \hl{StorageLink} type of an OCCI implementation. 
+defined by \hl{StorageLink} through its \hl{Kind} instance. These attributes
+MUST be exposed by an instance of the \hl{StorageLink} type. 
 Figure~\ref{fig:storagelink_state} illustrates the state diagram for a \hl{StorageLink} instance.
 
 \begin{figure}[!h]
@@ -486,10 +488,10 @@ A provider-defined OS Template \hl{Mixin} MUST be related to
 the OCCI OS Template \hl{Mixin} in order to give absolute type information. 
 
 The OS Template 
-is defined by the \hl{http://schemas.ogf.org/occi/infrastructure\#os\_tpl} \hl{Mixin} and
+is defined by the \textit{http://schemas.ogf.org/occi/infrastructure\#os\_tpl} \hl{Mixin} and
 MUST be supported SHOULD OS Templates be offered by the OCCI implementation.
 
-A typical example of such a category is shown below using the HTTP rendering. 
+A typical example of using such a \hl{Mixin} is shown below using the HTTP rendering.
 
 \begin{verbatim}
 POST /compute
@@ -514,7 +516,7 @@ a particular term identifier. An implementation-defined Resource Template \hl{Mi
 to the OCCI Resource Template \hl{Mixin}. 
 
 The Resource Template is defined by the 
-\textit{http://schemas.ogf.org/occi/infrastructure\#resource\_tpl} \hl{Mixin}.
+\textit{http://schemas.ogf.org/occi/infrastructure\#resource\_tpl} \hl{Mixin} and MUST be supported SHOULD Resource Templates be offered by the OCCI implementation.
 
 A typical example of such a \hl{Mixin}'s use is shown below using the HTTP rendering. 
 
