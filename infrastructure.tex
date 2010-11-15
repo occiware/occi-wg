@@ -470,10 +470,22 @@ Figure~\ref{fig:storagelink_state} illustrates the state diagram for a \hl{Stora
 \end{figure}
 
 \subsection{Infrastructure Templates}
-There are 2 supported infrastructural template types in OCCI.
+There are 2 supported infrastructure template types in OCCI.
 
 \subsubsection{OS Template}
-OCCI implementers SHOULD support this, otherwise what they provision will be merely Resources without any execution environment (e.g. operating system). Of the two supported template types, this is the most basic and necessary template category that a provider SHOULD offer. The construction of it consists of a provider specific 'scheme' and a descriptive 'title' detailing the OS. The 'term' value of the template category is a provider specific identifier that corresponds to a particular virtual machine image configuration. A provider-defined OS Template Category MUST be related to the OCCI OS Template Category in order to give absolute type information. The OS Template Category is defined by the http://schemas.ogf.org/occi/infrastructure\#os\_tpl Category.
+OCCI implementations SHOULD support this, otherwise what they provision will be merely offer \hl
+{Resource}s without any available execution environment (e.g. operating system). Of the two 
+supported template types, this is the most basic and necessary template that a provider SHOULD offer. 
+
+The construction of it is a \hl{Mixin} consisting of a provider specific 'scheme' and a descriptive 'title' 
+detailing the OS. The 'term' value of the template category is a provider-specific identifier that 
+corresponds to a particular virtual machine image configuration. Where an implementation requires 
+additional attributes associated with the OS Template, it can do so using \hl{Category}'s 'attributes'.
+
+A provider-defined OS Template \hl{Mixin} MUST be related to 
+the OCCI OS Template \hl{Mixin} in order to give absolute type information. The OS Template 
+Category is defined by the \hl{http://schemas.ogf.org/occi/infrastructure\#os\_tpl} \hl{Mixin} and
+MUST be supported SHOULD OS Templates be offered by the OCCI implementation.
 
 A typical example of such a category is shown below using the HTTP rendering. 
 
@@ -483,14 +495,24 @@ Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; title='
     ubuntu-9.10; scheme='http://provider.com/templates/os#'; title='Ubuntu 9.10'
 Attribute: occi.compute.memory=0.5, occi.compute.cores=2
 \end{verbatim}
-In the example a provider has defined an OS template which offers the ability to run Ubuntu Linux upon a client's provisioned compute resource.
+In the example a provider has defined an OS template which offers the ability to run Ubuntu Linux,
+verson 9.10, upon a client's provisioned compute resource.
 
-How a provider manages their set of OS templates will be determined by themselves and so provider-specific.
+How a provider manages their set of OS templates will be determined by themselves and so 
+implementation-specific.
 
 \subsubsection{Resource Template}
-The Resource Template Category builds upon the concept of OS Templates. A Resource Template is a provider-defined Category that refers to a preset Resource configuration. The provider will associate a pre-determined set of Resource attributes with a particular term identifier. A provider-defined Resource Template Category MUST be related to the OCCI Resource Template Category. The Resource Template Category is defined by the http://schemas.ogf.org/occi/infrastructure\#resource\_tpl Category.
+The Resource Template \hl{Mixin} builds upon the concept of OS Templates. A Resource Template is
+a provider-defined \hl{Mixin} that refers to a preset \hl{Resource} configuration. 
 
-A typical example of such a Category's use is shown below using the HTTP rendering. 
+The OCCI implementation associates a set of Resource attributes (via \hl{Category}'s 'attributes') with 
+a particular term identifier. An implementation-defined Resource Template \hl{Mixin} MUST be related 
+to the OCCI Resource Template \hl{Mixin}. 
+
+The Resource Template \hl{Mixin} is defined by the 
+\textit{http://schemas.ogf.org/occi/infrastructure\#resource\_tpl} \hl{Mixin}.
+
+A typical example of such a \hl{Mixin}'s use is shown below using the HTTP rendering. 
 
 \begin{verbatim}
 POST /compute
@@ -499,14 +521,18 @@ Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; title='
     ubuntu-9.10; scheme=""; title=""
 \end{verbatim}
 
-In this example, the provider offers Compute Resources based on different sizes (small, medium, large). Each 'size' of Compute Resource corresponds to a predetermined set of OCCI attributes. In the example below a "small" Compute Resource is provisioned. Specifying "small" corresponds to a Compute Resource Attribute set of:
+In this example, the provider offers \hl{Compute} \hl{Resource}s based on different sizes (i.e. small,
+medium, large). Each 'size' of \hl{Compute} corresponds to a predetermined set of OCCI 
+\hl{Resource}-specific attributes. In the example below a 'small' \hl{Compute} instance is created. 
+Specifying "small" corresponds to a \hl{Compute} \hl{Resource}-specific attribute set of:
 
 \begin{verbatim}
 Attribute: occi.compute.cores='2', occi.compute.speed='2.4', 
     occi.compute.memory='1.0', occi.compute.arch='x86'
 \end{verbatim}
 
-How a provider manages from the administrative context their set of Resource Templates will be determined by themselves and so provider-specific.
+From the administrative point of view, how an OCCI service provider manages their set of 
+\hl{Resource} Templates will be determined by themselves and so is implementation-specific.
 
 % end infrastructure content
 
