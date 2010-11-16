@@ -322,7 +322,7 @@ base type.} the 'scheme' of
 
 Table~\ref{tbl:ipnetworking} define the attributes introduced by the
 \hl{IPNetworking} mixin.  A \hl{Network} instance associated with the
-\hl{IPNetworking} mixin \hl{Mixin} instance MUST expose these attributes.
+\hl{IPNetworking} mixin \hl{Mixin} instance MUST implement these attributes.
 
 \mytablefloat{
 	\label{tbl:ipnetworking}%
@@ -460,7 +460,8 @@ The \hl{IPNetworkInterface} mixin is assigned%
 \footnote{Both assignments use data members from the inherited \hl{Category} 
 base type.} the 'scheme' of
 \textit{http://schemas.ogf.org/occi/infrastructure/networkinterface\#} and the 'term' value 
-\textit{ipnetworkinterface}. An \hl{IPNetworking} mixin MUST expose these values.
+\textit{ipnetworkinterface}. 
+A \hl{NetworkInterface} instance associated with this \hl{Mixin} instance MUST expose these attributes
 
 Table~\ref{tbl:ipnetworkinterface} define the attributes introduced by the
 \hl{IPNetworkInterface} mixin.  A \hl{NetworkInterface} instance associated with the
