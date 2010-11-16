@@ -81,71 +81,263 @@ capabilities required to support modern service offerings.
 \section{Notational Conventions}
 \input{include/notational}
 
-\textbf{TODO described the category of the examples...}
+All examples in this document use one of the following three
+Categories. An example name-space is also given. Syntax and Semantics
+is explained in the remaining sections of the document. These examples
+do not strive to be complete but to show the functionalities OCCI has:
+
+\begin{verbatim}
+
+Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure;location=/compute 
+                                                           (This is an compute kind)
+Category:storage;scheme=http://schemas.ogf.org/occi/infrastructure;location=/storage 
+                                                           (This is an storage kind)
+Category:my_stuff;scheme=http://example.com/occi/my_stuff;location=/my_stuff 
+                                                           (This is a mixin of user1)
+
+The following namespace hierarchy is used in the examples:
+
+http://example.com/-/
+http://example.com/vms/user1/vm1
+http://example.com/vms/user1/vm2
+http://example.com/vms/user2/vm1
+http://example.com/disks/user1/disk1
+http://example.com/disks/user2/disk1
+http://example.com/compute/
+http://example.com/storage/
+http://example.com/my_stuff/
+\end{verbatim}
 
 \section{A RESTful HTTP rendering for OCCI compliant Interfaces}
+The HTTP Protocol is the underlying core fabric of OCCI and uses all
+the features of the HTTP and underlying protocols (like self-healing
+capabilities of TCP) offer. OCCI also builds upon the Resource
+Oriented Architecture (ROA). ROA's use Representation State Transfer
+(REST) to cater for client and service interactions. Interaction with
+the system is by inspection and modification of a set of related
+resources and their states, be it on the complete state or a
+sub-set. Resources must be uniquely identified. HTTP is an ideal
+protocol to use in ROA systems as it provides the means to uniquely
+identify individual resources through URLs as well as operating upon
+them with a set of general-purpose HTTP verbs. These HTTP verbs map
+loosely to the resource related operations of Create (POST), Retrieve
+(GET), Update (POST/PUT) and Delete (DELETE).
 
-Intro bla bla
+The following notations are used when referring to parts or complete
+URIs:
 
-\subsection{Behaviour of the HTTP Verbs}
+\begin{verbatim}
+http://www.example.com:8080/foo/bar;action=stop
+<   >  <     Authority    >< Path >< Fragment >
+  ^
+  Scheme
+\end{verbatim}
 
-see table
+The following section describe the general behavior for all HTTP based
+renderings. Later sections will describe the syntax and semantic of
+how to render the OCCI Core model with different Content-Types.
+
+Each Kind sub-type instance within an OCCI system must be uniquely
+identified by an URI. The structure of these URIs is opaque and the
+system should not assume a static, pre-determined scheme for their
+structure (Example: \emph{http://example.com/vms/user1/vm1}).
+
+\subsection{Behavior of the HTTP Verbs}
+As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
+foundation protocol the means of interaction with all RESTful resource
+instances is through the four main HTTP verbs. OCCI service
+implementations must, at a minimum, support these verbs:
+
+\textbf{TODO: add table}
 
 \subsection{A RESTful rendering of OCCI}
+The following sections and paragraphs described how the OCCI model
+MUST be implemented by service providers. Operations which are not
+defined are out of scope for this specification and MAY be implemented
+by the service provider. This is just a minimal set to ensure
+interoperability.
 
-\subsubsection{Namespace and locations}
+\subsubsection{Name-space Hierarchy and locations}
+The name-space and the hierarchy are free definable by the Service
+Provider. Although the Service Provider MUST implement the location
+path feature which is required by OCCI for discovery capabilities and
+operations on \hl{Mixin}s and \hl{Kind}s. Location paths tell the
+client where all resource instance of one \hl{Kind} or \hl{Mixin} can
+be found regardless of the hierarchy the service provider
+defines. These paths are discoverable by the client through the Query
+interface.
 
-Example:
-
-Location outside of the namespace:
+These location paths can be part of the name-space or rendered
+alongside. The following example shows how the locations paths are
+rendered alongside the name-space hierarchy:
 
 \begin{verbatim}
-/-/
-/vms/user1/vm1
-/vms/user1/vm2
-/vms/user2/vm1
-/disks/user1/disk1
-/disks/user2/disk1
-/compute/
-/storage/
-/my_stuff/
+Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure;location=/compute 
+                                                           (This is an compute kind)
+Category:storage;scheme=http://schemas.ogf.org/occi/infrastructure;location=/storage 
+                                                           (This is an storage kind)
+Category:my_stuff;scheme=http://example.com/occi/my_stuff;location=/my_stuff 
+                                                           (This is a mixin of user1)
+
+The following namespace hierarchy is used in the examples:
+
+http://example.com/-/
+http://example.com/vms/user1/vm1
+http://example.com/vms/user1/vm2
+http://example.com/vms/user2/vm1
+http://example.com/disks/user1/disk1
+http://example.com/disks/user2/disk1
+http://example.com/compute/
+http://example.com/storage/
+http://example.com/my_stuff/
 \end{verbatim}
 
-Location inbound of the namespace:
+Location paths can also be part of the name-space
+hierarchy:\footnote{/vms/user1/vm1 (= OCCI base type ID) is a resource
+  instance below the name-space path /vms/user1/.}
 
 \begin{verbatim}
-/-/
-/vms/user1/vm1
-/vms/user1/vm2
-/vms/user2/vm1
-/disks/user1/disk1
-/disks/user2/disk1
-/my_stuff/
+Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure;location=/vms 
+                                                           (This is an compute kind)
+Category:storage;scheme=http://schemas.ogf.org/occi/infrastructure;location=/disks 
+                                                           (This is an storage kind)
+Category:my_stuff;scheme=http://example.com/occi/my_stuff;location=/my_stuff 
+                                                           (This is a mixin of user1)
+
+The following namespace hierarchy is used in the examples:
+
+http://example.com/-/
+http://example.com/vms/user1/vm1
+http://example.com/vms/user1/vm2
+http://example.com/vms/user2/vm1
+http://example.com/disks/user1/disk1
+http://example.com/disks/user2/disk1
+http://example.com/my_stuff/
 \end{verbatim}
 
-Note: /vms/user1/vm1 (= OCCI base type ID) is a resource instance below the namespace path /vms/user1/
-
-\subsubsection{Various behaviours}
+\subsubsection{Various Operations and their prerequisites and behaviors}
 
 \paragraph{Operations on resource instances}
+The following operations MUST be implemented by the service provider
+for operations of resource instances. The resource instance is
+uniquily identified by an URI (For example:
+\emph{http://example.com/vms/user1/vm1} - Note: the path MUST not end
+with an '/').
 
-- creating a resource instance
+\begin{description}
+\item[Creating a resource instance] A request to create a resource
+  instance MUST contain at least one Category definition which is (or
+  relates to) a \hl{Kind} definition. If multiple Categories are
+  defined the first one which is (or relates to) to a \hl{Kind} MUST
+  be used for defining the type of the resource instance. Optional
+  information which might be provided by the client and if available
+  MUST be used are Links and Attributes. Two ways can be used to
+  create a new resource instance - HTTP POST or PUT:
+\begin{verbatim}
+> POST / HTTP/1.1
+> [...]
+> 
+> Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure
+> X-OCCI-Attribute:occi.compute.cores=2 occi.compute.hostname=foobar
+> [...]
+ 
+< HTTP/1.1 200 OK
+< [...]
+< Location:http://example.com/vms/user1/vm1
+\end{verbatim}
+  The path on which this POST verb is executed can be any existing
+  path in the hierachy of the service providers name-space. The
+  service must return the Location of the newly created resource
+  instance.
 
-- retrieving a resoruce instance
+  Or HTTP PUT can be used. In this case the client ask the service
+  provider to create a resource instance at a certain path in the
+  namespace hierarchy.\footnote{If a Service Provider does not want the
+    user to define the path of a resource instance it can return a Bad
+    Request return code - See section \ref{sec:return_codes}.}
+\begin{verbatim}
+> PUT /vms/user1/my_first_virtual_machine HTTP/1.1
+> [...]
+> 
+> Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure
+> X-OCCI-Attribute:occi.compute.cores=2 occi.compute.hostname=foobar
+> [...]
+ 
+< HTTP/1.1 200 OK
+< [...]
+\end{verbatim}
+  The service will return an OK code.
 
-- updateing a resource instance
+\item[Retrieving a resource instance] For retrieval the HTTP GET verb
+  is used. It MUST return at least the Category which defines the
+  \hl{Kind} of the resource instance. Links pointing to references
+  resource instances, other URI or Actions (This SHOULD only be the
+  \hl{Actions} which are currently applicable) MUST be included if
+  present. The Attributes of the resource instance MUST be exposed to
+  the client if available.
+\begin{verbatim}
+> GET /vms/user1/vm1 HTTP/1.1
+> [...]
+ 
+< HTTP/1.1 200 OK
+< [...]
+< Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure
+< Category:my_stuff;scheme=http://example.com/occi/my_stuff
+< X-OCCI-Attribute:occi.compute.cores=2 occi.compute.hostname=foobar
+< Link: [...]
+\end{verbatim}
 
-- deleting a resource instance
+\item[Updating a resource instance] Before updating a resource
+  instance it is RECOMMENDED that the client first retrieves the
+  resource instance. Updating is done using the HTTP PUT verb. Only
+  the information (Links, Attributes or \hl{Mixin} Categories) which
+  is updated MUST be provided along with the
+  request.\footnote{Changing the type of the resource instance MUST
+    not be possible.}
+\begin{verbatim}
+> PUT /vms/user1/vm1 HTTP/1.1
+> [...]
+> 
+> X-OCCI-Attribute:occi.compute.memory=4G
+> [...]
+ 
+< HTTP/1.1 200 OK
+< [...]
+\end{verbatim}
 
-- triggering an action on an resource instance
+\item[Deleting a resource instance] A resource instance can be deleted
+  using the HTTP DELETE verb. No other information SHOULD be added to
+  the request
+\begin{verbatim}
+> DELETE /vms/user1/vm1 HTTP/1.1
+> [...]
 
-\paragraph{Hanlding the Query interface}
+< HTTP/1.1 200 OK
+< [...]
+\end{verbatim}
+
+\item[Triggering an action on a resource instance] To trigger an
+  action on a resource instance the request MUST containg the Category
+  defining the \hl{Action}. It MAY include attributes which are the
+  parameters of the action. Actions are triggered using the HTTP POST
+  verb and by adding a fragment to the url. This fragment exposes the
+  term of the \hl{Action}. If an action is not available or a proper
+  return code should be returned.
+\begin{verbatim}
+> POST /vms/user1/vm1;action=stop HTTP/1.1
+> [...]
+> X-OCCI-Attribute:flag=poweroff
+
+< HTTP/1.1 200 OK
+< [...]
+\end{verbatim}
+\end{description}
+
+\paragraph{Handling the Query interface}
 
 - retireinvg all registered catgories
 
-
 Filtering through cat def!
-
 
 - removing a mixin definition
 
@@ -153,11 +345,11 @@ Filtering through cat def!
 
 \paragraph{Operations on \hl{Mixin}s or \hl{Kind}s}
 
+Defined by location path....
+
 - Retrieving all instances of a mixin or kind
 
-
 Filtering through cat def!
-
 
 - triggering actions on all instaces of an mixin or kind (action must be defined by mixin!)
 
@@ -166,6 +358,8 @@ Filtering through cat def!
 - removing a resource instance from a mixin
 
 \paragraph{Operation on paths in the namespace}
+
+Must end with /
 
 - Retrieval
 
@@ -190,59 +384,11 @@ Filtering through cat def!
 
 - Autho.
 
-- Return codes
+\subsubsection{Return codes}
+\label{sec:return_codes}
 
-%
-%\section{HTTP Rendering}
-%The HTTP Protocol is the underlying core fabric of OCCI and uses all
-%the features of the HTTP and underlying protocols (like self-healing
-%capabilities of TCP) offer. OCCI also builds upon the Resource
-%Oriented Architecture (ROA). ROA's use Representation State Transfer
-%(REST) to cater for client and service interactions. Interaction with
-%the system is by inspection and modification of a set of related
-%resources and their states, be it on the complete state or a
-%sub-set. Resources must be uniquely identified. HTTP is an ideal
-%protocol to use in ROA systems as it provides the means to uniquely
-%identify individual resources through URLs as well as operating upon
-%them with a set of general-purpose HTTP verbs. These HTTP verbs map
-%loosely to the resource related operations of Create (POST), Retrieve
-%(GET), Update (POST/PUT) and Delete (DELETE).
-%
-%The following notations are used when referring to parts or complete
-%URIs:
-%
-%\begin{verbatim}
-%http://www.example.com:8080/foo/bar;action=stop
-%<   >  <     Authority    >< Path >< Fragment >
-%  ^
-%  Scheme
-%\end{verbatim}
-%
-%The following section describe the general behavior for all HTTP based
-%renderings. Later sections will describe the syntax and semantic of
-%how to render the OCCI Core model with different Content-Types.
-%
-%\subsection{Identification of Kinds}
-%Each Kind sub-type instance within an OCCI system must be uniquely
-%identified by an URI. The structure of these URIs is opaque and the
-%system should not assume a static, pre-determined scheme for their
-%structure.
-%
-%\subsection{Interaction with Kinds}
-%As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
-%foundation protocol the means of interaction with all RESTful resource
-%instances is through the four main HTTP verbs. OCCI service
-%implementations must, at a minimum, support these verbs:
-%
-%\begin{tabular}{l|p{3.2in}|p{2in}}
-%Verb & RFC Definition & Usage in OCCI context \\
-%\hline
-%POST & The POST method is used to request that the origin server accept the resource enclosed in the request as a new subordinate of the resource identified by the Request-URI in the Request- Line & This is the verb will be used when creating Kinds. POST can also be used to create a sub-resource of an existing resource type. Action are also triggered using the POST verb. \\
-%GET & The GET method means retrieve whatever information (in the form of a resource) is identified by the Request-URI & Retrieving one Kind or Category using GET will result in a representation of the resource. Lists of Kinds and Categories are also retrieved through GET (Discovery/Querying). \\
-%PUT & The PUT method requests that the enclosed resource be stored under the supplied Request-URI & The PUT verb will be used when updating a Kind or when creating an Kind at a specific location\footnote{In difference to POST where sub-resources will be created}. \\
-%DELETE & The DELETE method requests that the origin server delete the resource identified by the Request-URI & This verb is used to destroy instances of Kinds. \\ 
-%\end{tabular}
-%
+Bad Request...
+
 %\subsection{Security and Authentication}
 %OCCI does not require that an authentication mechanism be used nor
 %does it require that client to service communications are secured. It
@@ -497,67 +643,6 @@ Editors: Andy Edmonds, Thijs Metsch \\
 Contributors: Alexander Papaspyrou, Ralf Nyrén, Sam Johnston
 
 \textbf{TBD: Bunch op people missing here - create table\ldots}
-%
-%\section{Appendix}
-%
-%\subsection{Examples for rendering the OCCI model in the HTTP Header}
-%
-%\subsubsection{Creating a Kind}
-%\begin{verbatim}
-%
-%\end{verbatim}
-%
-%\subsubsection{Triggering an Action}
-%
-%\begin{verbatim}
-%
-%\end{verbatim}
-%
-%\subsubsection{Listing Categories}
-%
-%\begin{verbatim}
-%
-%\end{verbatim}
-%
-%\subsubsection{Listing Resources}
-%
-%\begin{verbatim}
-%
-%\end{verbatim}
-%
-%\subsubsection{Request with missing Category rendering}
-%
-%\begin{verbatim}
-%
-%\end{verbatim}
-%
-%\subsubsection{Retrieving a Kind}
-%
-%\begin{verbatim}
-%
-%\end{verbatim}
-%
-%\subsection{Examples for rendering the OCCI model with uri-lists}
-%
-%\subsubsection{Listing Resources}
-%
-%\begin{verbatim}
-%
-%\end{verbatim}
-%
-%\subsubsection{Listing Categories}
-%
-%\begin{verbatim}
-% 
-%\end{verbatim}
-%
-%\subsection{Examples for rendering the OCCI model in the HTTP Body}
-%
-%\subsubsection{Listing of Categories}
-%
-%\begin{verbatim}
-%
-%\end{verbatim}
 
 \section{Glossary}
 \label{sec:glossary}

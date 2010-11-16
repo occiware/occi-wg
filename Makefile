@@ -26,7 +26,7 @@ all:
 		$(TEX) $*;\
 	fi
 
-show: all
+show: 
 	$(VIEW) *.pdf
 
 show-mac: all
