@@ -148,7 +148,18 @@ foundation protocol the means of interaction with all RESTful resource
 instances is through the four main HTTP verbs. OCCI service
 implementations must, at a minimum, support these verbs:
 
-\textbf{TODO: add table}
+\mytablefloat{\label{tbl:http_verbs}HTTP Verb behaviour}{
+\begin{tabular}{p{1in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} }
+\toprule
+Type & GET & POST (create) & POST (action) & PUT (create) & PUT (update) & DELETE \\
+\colrule
+resource instance & Rendering of this instance &Create a new instance & Trigger action & Create an instance at the given path & Update an instance at an given path & Delete this resource instance \\
+Path in the namespace hierarchy ending with / &	Listing of all instances below this namespace & Create a new instance & N/A & N/A & N/A & Delete all the entries below this namespace hierarchy \\
+Location of an \hl{Mixin} or \hl{Kind} & URI-Listing containing Paths to all entities belonging to this \hl{Mixin} or \hl{Kind}	& N/A & Trigger action (defined for this kind or mixin) on all resource entities belonging to this \hl{Mixin} or \hl{Kind} & Add an resource instance to a mixin & N/A & Delete an instance given in the request from a mixin \\
+Query Interface	& Listing of all registered categories & N/A & N/A & Add a user defined mixin & N/A & remove a user-defined mixin (defined in the request) \\
+\botrule
+\end{tabular}
+}
 
 \subsection{A RESTful rendering of OCCI}
 The following sections and paragraphs described how the OCCI model
@@ -220,7 +231,7 @@ http://example.com/my_stuff/
 \paragraph{Operations on resource instances}
 The following operations MUST be implemented by the service provider
 for operations of resource instances. The resource instance is
-uniquily identified by an URI (For example:
+uniquely identified by an URI (For example:
 \emph{http://example.com/vms/user1/vm1} - Note: the path MUST not end
 with an '/').
 
@@ -246,13 +257,13 @@ with an '/').
 < Location:http://example.com/vms/user1/vm1
 \end{verbatim}
   The path on which this POST verb is executed can be any existing
-  path in the hierachy of the service providers name-space. The
+  path in the hierarchy of the service providers name-space. The
   service must return the Location of the newly created resource
   instance.
 
   Or HTTP PUT can be used. In this case the client ask the service
   provider to create a resource instance at a certain path in the
-  namespace hierarchy.\footnote{If a Service Provider does not want the
+  name-space hierarchy.\footnote{If a Service Provider does not want the
     user to define the path of a resource instance it can return a Bad
     Request return code - See section \ref{sec:return_codes}.}
 \begin{verbatim}
@@ -317,10 +328,10 @@ with an '/').
 \end{verbatim}
 
 \item[Triggering an action on a resource instance] To trigger an
-  action on a resource instance the request MUST containg the Category
+  action on a resource instance the request MUST containing the Category
   defining the \hl{Action}. It MAY include attributes which are the
   parameters of the action. Actions are triggered using the HTTP POST
-  verb and by adding a fragment to the url. This fragment exposes the
+  verb and by adding a fragment to the URI. This fragment exposes the
   term of the \hl{Action}. If an action is not available or a proper
   return code should be returned.
 \begin{verbatim}
@@ -341,7 +352,7 @@ operations MUST be implemented by the service:
 \begin{description}
 \item[Retrieving all registered Categories] The HTTP verb GET must be
   used to retrieve all categories the service can handle. This allows
-  the client to discover the capabilites of the Service provider. The
+  the client to discover the capabilities of the Service provider. The
   result MUST contain all information about the Category (including
   Attributes and Actions assigned to this Category).
 \begin{verbatim}
@@ -368,7 +379,7 @@ operations MUST be implemented by the service:
 mechanism. If a Category is provided in the request the server SHOULD
 only return the complete rendering of the provided Category.
 
-\item[Adding a \hl{Mixin} category defintion] To add a \hl{Mixin} to
+\item[Adding a \hl{Mixin} category definition] To add a \hl{Mixin} to
   the service the HTTP PUT verb MUST be used. All possible information
   for the \hl{Mixin} category must be defined. At least the Category
   term, scheme and location MUST be defined. Actions and Attributes
@@ -386,13 +397,13 @@ only return the complete rendering of the provided Category.
 < [...]
 \end{verbatim}
 The service might reject this request if it does not allow
-user-defined Categories to be created. Also on name collesions of the
+user-defined Categories to be created. Also on name collisions of the
 defined location path the service provider might reject this
 operation.
 
 \item[Removing a \hl{Mixin} category definition] A user defined
   \hl{Mixin} CAN be removed (if allowed) by using the HTTP DELETE
-  verb. The information about wich \hl{Mixin} should be deleted MUST
+  verb. The information about which \hl{Mixin} should be deleted MUST
   be provided in the request:
 \begin{verbatim}
 > DELETE /-/ HTTP/1.1
@@ -478,9 +489,9 @@ the request.
 \end{verbatim}
 \end{description}
 
-\paragraph{Operation on paths in the namespace}
+\paragraph{Operation on paths in the name-space}
 The following operations are defined when operating on paths in the
-name-space hirachy which are not location paths nor resource
+name-space hierarchy which are not location paths nor resource
 instances. They MUST end with \emph{/} (For example
 \emph{http://example.com/vms/user1}).
 
@@ -488,7 +499,7 @@ instances. They MUST end with \emph{/} (For example
 \item[Retrieving all resource instances below a path] The HTTP verb
   GET must be used to retrieve all resource instances. The service
   provider MUST return a URI-list containing all resource instances
-  which are childs of the provided URI in the name-space hierarchy:
+  which are childes of the provided URI in the name-space hierarchy:
 \begin{verbatim}
 > GET /vms/user1/ HTTP/1.1
 > [...]
@@ -505,7 +516,7 @@ mechanism. If a category is provided in the request the server SHOULD
 only return the resource instances belonging to the provided
 Category.
 
-\item[Deletetion all resource instances below a path] The HTTP verb
+\item[Deletion all resource instances below a path] The HTTP verb
   DELETE must be used to delete all resource instances under a
   hierarchy:
 \begin{verbatim}
@@ -604,8 +615,8 @@ Rendering of an Action & Category, Link & X-OCCI-Attribute & \\
 Rendering of a Link & Category, Link & X-OCCI-Attribute & \\
 \end{tabular}
 
-\subsection{General HTTP behaviour which is adopted by OCCI}
-The following sections deal with some general HTTP feaures which are
+\subsection{General HTTP behavior which is adopted by OCCI}
+The following sections deal with some general HTTP features which are
 adopted by OCCI.
 
 \subsubsection{Security and Authentication}
@@ -639,7 +650,7 @@ Server: occi-server/1.1 (linux) OCCI/1.0
 Complimenting the service-side behavior of an OCCI implementation, a
 client MUST indicate to the OCCI service implementation the version it
 expects to interact with. For the clients, the information MUST be
-dvertised in the request it issues. In the case of a HTTP Header
+advertised in the request it issues. In the case of a HTTP Header
 Rendering, the client request should relay versioning information in
 the 'User-Agent' header. The 'User-Agent' field must include the same
 value (OCCI/X.Y) as specified for the Server HTTP header.
@@ -672,8 +683,8 @@ client provides information with a Content-Type - the information MUST
 be parsed accordingly.
 
 When the Client request a Content-Type will will result in an
-incomplete or faulty rendering the Service MUST return the 406 Not
-Acceptable HTTP code.
+incomplete or faulty rendering the Service MUST return the 415 HTTP
+code.
 
 \paragraph{The Content-type text/plain}
 While using this rendering with the Content-Type \textit{text/plain}
@@ -689,7 +700,7 @@ of the three header fields, see section \ref{sec:syntax}.
 While using this rendering with the Content-Type \textit{text/occi}
 the information described in section \ref{sec:model_rendering} MUST be
 placed in the HTTP Header. The body MUST contain the string 'OK' on
-successfull operations.
+successful operations.
 
 The HTTP header fields MUST follow the specification in RFC 2616
 \cite{rfc2616}. A header field consists of a name followed by a colon
@@ -715,7 +726,7 @@ resource. By this, it is noted that many HTTP servers limit the number
 of bytes that can be placed in the HTTP Header area. Implementers MUST
 be aware of this limitation in their own implementation and take
 appropriate measures so that truncation of header data does NOT
-occure.
+occur.
 
 \paragraph{The Content-type text/uri-list}
 This Rendering can handle the \textit{text/uri-list} Accept Header. It
@@ -730,12 +741,30 @@ a Listing a Bad Request MUST be returned.
 
 \subsubsection{Return codes}
 \label{sec:return_codes}
+At any point CAN the service provider return any of the following HTTP
+Return Codes:
 
-Not Authorized
-Bad Request... on not allow ops, parsing erros
-Server Error
-Not Found
-501 not implemente...on fault version, non support categories
+\mytablefloat{\label{tbl:http_codes}HTTP Return Codes}{
+\begin{tabular}{l|l|p{3in}}
+\toprule
+Code & Description & Notes \\
+\colrule
+200 & OK & \\
+202 & Accepted & For example when creating a Virtual machine the operation can take a while. \\
+400 & Bad Request & For example on parsing errors or missing information \\
+401 & Unauthorized & \\
+403 & Forbidden & \\
+405 & Method Not Allowed & \\
+409 & Conflict & \\
+410 & Gone & \\
+415 & Unsupported Media Type & \\
+500 & Internal Server Error & \\
+501 & Not Implemented & \\
+503 & Service Unavailable & \\
+\botrule
+\end{tabular}}
+
+\textbf{Note:} Other return codes can also be used if properly used.
 
 \section{Contributors}
 
