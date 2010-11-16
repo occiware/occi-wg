@@ -101,16 +101,16 @@ the OCCI Renderings and the OCCI Extensions.
 %
 \begin{itemize}
 \item The OCCI Core specification consist of a single document defining the
- OCCI model. The OCCI model is the core of OCCI and can be manipulated by {\em
+ OCCI Core Model. The OCCI Core Model can be manipulated by {\em
  renderings} and expanded through {\em extensions}.
 \item The OCCI Rendering specifications consist of multiple documents each
- describing a particular rendering of the OCCI model. Multiple renderings can
- manipulate the same instance of the OCCI model and will automatically support
+ describing a particular rendering of the OCCI Core Model. Multiple renderings can
+ manipulate the same instance of the OCCI Core Model and will automatically support
  any additions to the model which follow the extension rules defined in OCCI
  Core.
 \item The OCCI Extension specifications consist of multiple documents each
- describing a particular extension of the OCCI model. The extension documents
- describe additions to the OCCI model defined within the OCCI specification
+ describing a particular extension of the OCCI Core Model. The extension documents
+ describe additions to the OCCI Core Model defined within the OCCI specification
  suite.
 \end{itemize}
 %
@@ -119,10 +119,10 @@ Future releases of OCCI may include additional rendering and extension
 specifications. The documents of the current OCCI specification suite are:
 
 \begin{description}
-\item[OCCI Core] describes the formal definition of the the OCCI model
+\item[OCCI Core] describes the formal definition of the the OCCI Core Model
 \cite{occi:core}.
-\item[OCCI HTTP Rendering] defines how to manipulate the OCCI model using the
-RESTful OCCI API \cite{occi:http_rendering}. The document defines how the OCCI model can
+\item[OCCI HTTP Rendering] defines how to manipulate the OCCI Core Model using the
+RESTful OCCI API \cite{occi:http_rendering}. The document defines how the OCCI Core Model can
 be communicated and thus serialised using the HTTP protocol.
 \item[OCCI Infrastructure] contains the definition of the OCCI Infrastructure
 extension for the IaaS domain \cite{occi:infrastructure}. The document defines
@@ -142,7 +142,7 @@ on each resource type.
 \textbf{Andy: to help the reader a broad outline/reading guide should be introduced here
 e.g. 'we start with describing Category, work through the definition of Action, Mixin and Kind,
 following which Entity is described. Lastly we discuss Resource and Link, the main extension
-points of the OCCI core model.'}
+points of the OCCI Core Model.'}
 
 The Open Cloud Computing Interface is a boundary protocol and API
 that acts as a service front-end to a provider's internal management
@@ -159,7 +159,7 @@ suitable for both cases. The key feature is that OCCI can be used as a
 management API for all kinds of resources while at the same time maintaining a
 high level of interoperability.
 
-This document, the OCCI Core specification, defines the OCCI model. This
+This document, the OCCI Core specification, defines the OCCI Core Model. This
 model is the core of the specification suite and it can be manipulated 
 \textbf{(Andy: 'manipulated' not quite right)}
 \ralf{(This is used in intro as well, what should we write instead?)}
@@ -169,13 +169,13 @@ for a very limited set of use cases. However, it provides the basis for
 renderings and extensions to build upon.
 
 \section{OCCI Core Model}
-The OCCI model defines a representation of instance types which can be
+The OCCI Core Model defines a representation of instance types which can be
 manipulated through an OCCI Rendering implementation. 
 It is an abstraction of real-world 
 resources, including the means to identify, classify, associate 
 and extend those resources. 
 
-A fundamental feature of the OCCI model is that it can be extended in such a
+A fundamental feature of the OCCI Core Model is that it can be extended in such a
 way that any extension will be discoverable and visible to an OCCI client at
 run-time. An OCCI client can connect to an OCCI implementation with
 domain-specific extensions, without knowing anything in advance, and still be
@@ -185,7 +185,7 @@ For example, a web-based OCCI
 client could easily be reused as the management tool for a wide variety of
 services.
 
-The OCCI model can be extended through inheritance but also
+The OCCI Core Model can be extended through inheritance but also
 using a ``mix-in'' like concept \textbf{(Andy: Mixins are not new and can be referenced and explained
 by the likes of Lisp mixins etc. We must reference here.)}
 \ralf{Any suggestion on a proper reference to use?}.
@@ -197,19 +197,19 @@ an instance.
 \subsection{Overview}
 
 The UML class diagram shown in figure~\ref{fig:occi_model} gives an overview of
-the OCCI model. It must be noted that the UML diagram in itself is not a
+the OCCI Core Model. It must be noted that the UML diagram in itself is not a
 complete definition of the model. The diagram is merely provided as an overview
 to help understanding the model. 
 
 \begin{figure}[!h]
 {\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{270}
       {\includegraphics{figs/core_model.pdf}}} \par}
-\caption{UML class diagram of the OCCI model. The diagram provides an
-overview of the OCCI model but is not a standalone definition thereof}
+\caption{UML class diagram of the OCCI Core Model. The diagram provides an
+overview of the OCCI Core Model but is not a standalone definition thereof}
 \label{fig:occi_model}
 \end{figure}
 
-The heart of the OCCI model is the \hl{Resource} type. Any resource exposed
+The heart of the OCCI Core Model is the \hl{Resource} type. Any resource exposed
 through OCCI is a \hl{Resource} or a sub-type thereof.
 A resource can be e.g.~a virtual machine, a job in a job submission system, a
 user, etc.
@@ -227,18 +227,18 @@ Each sub-type of \hl{Entity} is identified by a unique \hl{Kind} instance.
 %
 
 The \hl{Kind} type is the core of the classification and identification
-system built into the OCCI model. \hl{Kind} is a specialisation of
+system built into the OCCI Core Model. \hl{Kind} is a specialisation of
 \hl{Category} and introduces additional capabilities in terms of \hl{Action}s.
 An \hl{Action} represent an invocable operation applicable to a resource
 instance.
 
-The last type defined by the OCCI model is the \hl{Mixin} type. An instance of
+The last type defined by the OCCI Core Model is the \hl{Mixin} type. An instance of
 \hl{Mixin} can be associated with a resource instance, i.e.~a sub-type of
 \hl{Entity}, to ``mix-in'' additional capabilities at run-time.
 %
-For compliance with OCCI Core, all of the types defined in the OCCI model MUST
+For compliance with OCCI Core, all of the types defined in the OCCI Core Model MUST
 be implemented.  The following sections of the specification contain the formal
-definition of the OCCI model.
+definition of the OCCI Core Model.
 
 \subsection{Terms and definitions}
 Section \ref{sec:glossary} provides a glossary of all terms and definitions with
@@ -259,14 +259,14 @@ terminology have specific meaning in the OCCI context:
  \hl{Link} type.  However, the term {\bf resource instance} is defined to
  include any instance of a {\em sub-type} of \hl{Resource} or \hl{Link} as
  well.
-\item[type] A {\bf type} refer to one of those defined by the OCCI core model.
-The OCCI model types are \hl{Category}, \hl{Kind}, \hl{Mixin}, \hl{Action},
+\item[type] A {\bf type} refer to one of those defined by the OCCI Core Model.
+The OCCI Core Model types are \hl{Category}, \hl{Kind}, \hl{Mixin}, \hl{Action},
 \hl{Entity}, \hl{Resource} and \hl{Link}.
 \end{description}
 
 \subsection{Mutability}
 
-Attributes of an OCCI core model type instance are
+Attributes of an OCCI Core Model type instance are
 either client mutable or client immutable. If an attribute is noted to
 be mutable this MUST be interpreted that a client can create an
 instance that is parametrised by the attribute. Likewise, if
@@ -278,11 +278,11 @@ MUST NOT be modifiable by clients under any circumstance.
 
 \subsection{Classification and Identification}
 \label{sec:classification}
-The OCCI core model provides a built-in type classification system allowing for safe
+The OCCI Core Model provides a built-in type classification system allowing for safe
 extension towards domain-specific usage (e.g. infrastructure). This system is the OCCI type system
 and offers the means to be easily exposed over a text-based 
 \textbf{(Andy: OCCI could be implemented over a binary-based one too (e.g. AMQP), why disregard that?)} protocol.
-\ralf{True. The point is that we can identify an OCCI model type using a text-string (i.e. the scheme+term). In other words, we do not rely on some binary type format to transfer the type information. So, how to say this properly then?}
+\ralf{True. The point is that we can identify an OCCI Core Model type using a text-string (i.e. the scheme+term). In other words, we do not rely on some binary type format to transfer the type information. So, how to say this properly then?}
 %
 The classification system can be summarised with the following key features:
 \begin{itemize}
@@ -356,7 +356,7 @@ be used by domain-specific extensions.
 \label{sec:kind}
 
 The \hl{Kind} type, together with the \hl{Mixin} type, defines the
-classification system of the OCCI model. It MUST be implemented. The \hl{Kind}
+classification system of the OCCI Core Model. It MUST be implemented. The \hl{Kind}
 type represents the type identification mechanism for all \hl{Entity} types present in
 the model.
 
@@ -365,7 +365,7 @@ defined in an OCCI implementation. The capabilities, in terms of attributes and
 \hl{Action}s, represented by a \hl{Kind} instance describe the capabilities of
 its \hl{Entity} sub-type.
 %
-In the initial instantiation of the OCCI model, with no core model extensions, three instances
+In the initial instantiation of the OCCI Core Model, with no core model extensions, three instances
 of \hl{Kind} will be present: one for \hl{Entity}, another for \hl{Resource}
 and the last one for \hl{Link}. 
 
@@ -437,7 +437,7 @@ assigned to the \hl{Entity} type.
 %
 These rules, including further sub-typing by extensions, imply a hierarchy of
 related \hl{Kind} instances. The \hl{Kind} relationships thus mirrors the type
-inheritance structure of the OCCI model and any extension thereof.
+inheritance structure of the OCCI Core Model and any extension thereof.
 
 
 \begin{figure}[!h]
@@ -445,7 +445,7 @@ inheritance structure of the OCCI model and any extension thereof.
       {\includegraphics{figs/kind_relationships.pdf}}} \par}
   \caption{Example object diagram illustrating the \hl{Kind} instances involved
   for the \hl{Entity}, \hl{Resource} and \hl{Compute} types. The \hl{Compute}
-  type is an example of an extension of the OCCI model and extends the
+  type is an example of an extension of the OCCI Core Model and extends the
   \hl{Resource} type.}
   \label{fig:kind_relationships}
 \end{figure}
@@ -480,7 +480,7 @@ Kind instance & Related Kind instance \\
 
 \subsubsection{Mixin}
 The \hl{Mixin} type complements the \hl{Kind} type in defining the
-OCCI core model type classification system. It MUST be implemented. The \hl{Mixin}
+OCCI Core Model type classification system. It MUST be implemented. The \hl{Mixin}
 type represent an extension mechanism, which allow new capabilities to
 be added to resource instances both at creation-time and/or run-time.
 
@@ -556,7 +556,7 @@ A resource instance MUST remain associated with its \hl{Kind} instance throughou
 its lifetime.
 
 A \hl{Mixin} instance MAY be associated with an resource instance, either at
-instance creation-time or at run-time. Although the OCCI core model has no such
+instance creation-time or at run-time. Although the OCCI Core Model has no such
 restrictions, an OCCI implementation MAY impose restrictions on which resource
 instances can be associated with a particular \hl{Mixin} instance.
 %
@@ -652,7 +652,7 @@ The relevant details can be found in the OCCI Rendering documents.
 
 \subsection{The OCCI Core Base Types}
 \label{sec:base_types}
-The following sections describe the OCCI base types defined by the OCCI core model.
+The following sections describe the OCCI base types defined by the OCCI Core Model.
 The base types are \hl{Entity}, \hl{Resource}, \hl{Link} and \hl{Action}. All
 base types MUST be implemented.
 
@@ -726,7 +726,7 @@ instances through instances of the \hl{Link} type.
 The \hl{Resource} type is one of two entry points to extend the OCCI Core Model.
 See the OCCI Infrastructure document\cite{occi:infrastructure}
 - FIXME
-OCCI core model, see section~\ref{sec:extensibility} 
+OCCI Core Model, see section~\ref{sec:extensibility} 
 \textbf{(Andy: Somewhat contradicts what is said in 1st sentence of 4.4.1.)}.
 
 \subsubsection{Link}
@@ -760,7 +760,7 @@ e.g.~having a target attribute containing an URI and thus the ability of linking
 with external resources.
 %
 The \hl{Link} type can be sub-typed for domain-specific extensions of the
-OCCI core model, see section~\ref{sec:extensibility}.
+OCCI Core Model, see section~\ref{sec:extensibility}.
 
 \subsubsection{Action}
 The \hl{Action} type defines an invocable operation applicable to an \hl{Entity}
@@ -804,22 +804,22 @@ The \hl{Action} type is assigned the \hl{Category} type identifier
 \textit{http://schemas.ogf.org/occi/core\#action}.
 %
 The \hl{Action} type can be sub-typed for domain-specific extensions of the
-OCCI model, see section~\ref{sec:extensibility}.
+OCCI Core Model, see section~\ref{sec:extensibility}.
 
 \subsection{Extensibility}
 \label{sec:extensibility}
-The OCCI model has a flexible yet fairly simple extension mechanism based on
+The OCCI Core Model has a flexible yet fairly simple extension mechanism based on
 the type classification system described in section~\ref{sec:classification}.
 %
-The OCCI model can be extended using two different methods, sub-typing and
+The OCCI Core Model can be extended using two different methods, sub-typing and
 mix-in. Custom sub-typing require domain-specific \hl{Kind} instances and
 custom mix-ins require domain-specific \hl{Mixin} instances.  Both methods MAY
 involve the use of domain-specific \hl{Category} instance since those are
 REQUIRED for domain-specific \hl{Action} sub-types.  The following sections
-define the rules for extensions of the OCCI model.
+define the rules for extensions of the OCCI Core Model.
 %
 The rules defined in section~\ref{sec:classification} and \ref{sec:base_types}
-are REQUIRED for all extensions of the OCCI model.
+are REQUIRED for all extensions of the OCCI Core Model.
 
 \subsubsection{Category instances}
 \label{sec:ext:category}
@@ -839,8 +839,8 @@ SHOULD use a prefix consisting of the provider's reverse domain name,
 e.g.~``\texttt{com.example.}''.
 
 \subsubsection{Sub-typing}
-The OCCI model MAY be extended through sub-typing for domain-specific purposes.
-Three OCCI model types MAY be sub-typed, those are \hl{Resource}, \hl{Link} and
+The OCCI Core Model MAY be extended through sub-typing for domain-specific purposes.
+Three OCCI Core Model types MAY be sub-typed, those are \hl{Resource}, \hl{Link} and
 \hl{Action}. \textbf{(Andy: Inconsistent - previously (4.4.2, 4.4.3) we said that Entity 
 could be extended and no mention of Action.)} 
 \textbf{(Andy: what is the case for extending Action by subclassing?)}
@@ -856,14 +856,14 @@ Furthermore the \hl{Action} sub-type MUST be associated as a capability of a
 domain-specific \hl{Kind} or \hl{Mixin} instance.
 
 \subsubsection{Mix-ins}
-The OCCI model MAY be extended using the mix-in concept \textbf{(Andy: See previous comment (section 4))} by defining
+The OCCI Core Model MAY be extended using the mix-in concept \textbf{(Andy: See previous comment (section 4))} by defining
 domain-specific \hl{Mixin} instances.  A \hl{Mixin} instance can be associated
 with any resource instance although a provider MAY apply restrictions.
 
 In order to support user-defined tags \footnote{A tag is a \hl{Mixin} instance, 
 which does not introduce additional capabilities.} an OCCI implementation must allow custom
 \hl{Mixin} instances to be created and destroyed by request of a client.
-There is no limitation in the OCCI model from doing so but it is RECOMMENDED to
+There is no limitation in the OCCI Core Model from doing so but it is RECOMMENDED to
 assign a separate \hl{Category} scheme for each user's \hl{Mixin} instances (e.g. per-user schemes).
 
 \section{Contributors}
