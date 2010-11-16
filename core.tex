@@ -311,7 +311,6 @@ The classification system can be summarised with the following key features:
 \subsubsection{Category}
 \label{sec:category}
 The \hl{Category} type is the basis of the type
-\ralf{Is \hl{Mixin} a type? Category identifies both!}
 identification mechanism used by the
 OCCI classification system. It MUST be implemented. Instances of the
 \hl{Category} type itself are only used to identify \hl{Action} types. All
@@ -428,17 +427,34 @@ in every \hl{Kind} instance. The {\tt related} attribute define which other
 
 \textbf{(Andy: One of the most confusing section.)}
 
-As previously defined a \hl{Kind} instance MUST be related, either directly or
-indirectly, to the \hl{Kind} instance assigned to the \hl{Entity} type,
-i.e.~\textit{http://schemas.ogf.org/occi/core\#entity}.
+A \hl{Kind} instance identify a unique sub-type of the \hl{Entity} type,
+e.g.~\hl{Resource}, \hl{Link} or any sub-type thereof.  Each \hl{Kind} instance
+MUST be related to the \hl{Kind} of the parent type.
 %
 The OCCI base types \hl{Resource} and \hl{Link} both extend \hl{Entity} and
-therefore their identifying \hl{Kind} instances MUST be related to \hl{Entity}
-type's \hl{Kind} instance.
+therefore their identifying \hl{Kind} instances MUST be related to \hl{Kind}
+assigned to the \hl{Entity} type.
 %
 These rules, including further sub-typing by extensions, imply a hierarchy of
 related \hl{Kind} instances. The \hl{Kind} relationships thus mirrors the type
 inheritance structure of the OCCI model and any extension thereof.
+
+
+\begin{figure}[!h]
+{\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{0}
+      {\includegraphics{figs/kind_relationships.pdf}}} \par}
+  \caption{Example object diagram illustrating the \hl{Kind} instances involved
+  for the \hl{Entity}, \hl{Resource} and \hl{Compute} types. The \hl{Compute}
+  type is an example of an extension of the OCCI model and extends the
+  \hl{Resource} type.}
+  \label{fig:kind_relationships}
+\end{figure}
+
+F
+
+As previously defined a \hl{Kind} instance MUST be related, either directly or
+indirectly, to the \hl{Kind} instance assigned to the \hl{Entity} type,
+i.e.~\textit{http://schemas.ogf.org/occi/core\#entity}.
 
 In an example \textbf{(Andy: Will help hugely if shown graphically.)} where a 
 domain-specific ``Custom Compute Resource'' is a sub-type
@@ -650,14 +666,14 @@ Table~\ref{tbl:entity} defines the attributes the \hl{Entity} type MUST implemen
 be compliant.
 
 \mytablefloat{\label{tbl:entity}Attributes defined for the \hl{Entity} type.}{
-\begin{tabular}{llllp{7cm}}
+\begin{tabular}{lllp{1.3cm}p{1.0cm}p{7cm}}
 \toprule
-Attribute & Type & Multiplicity & Client Mutability & Description \\
+Attribute & Type & Multiplicity & Client Mutability & Discover\-able & Description \\
 \colrule
-id & URI & 1 & Immutable & A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
-title & String & 0..1 & Mutable & The display name of the instance. \\
-kind & \hl{Kind} & 1 & Immutable & The \hl{Kind} instance uniquely identifying the \hl{Entity} sub-type of the resource instance. \\
-mixins & \hl{Kind} & 0..* & Mutable & The \hl{Mixin} instances associated to this resource instance. Consumers can expect the attributes and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\ 
+id & URI & 1 & Immutable & Yes & A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
+title & String & 0..1 & Mutable & Yes & The display name of the instance. \\
+kind & \hl{Kind} & 1 & Immutable & No & The \hl{Kind} instance uniquely identifying the \hl{Entity} sub-type of the resource instance. \\
+mixins & \hl{Kind} & 0..* & Mutable & No & The \hl{Mixin} instances associated to this resource instance. Consumers can expect the attributes and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\ 
 \botrule
 \end{tabular}
 }
@@ -707,7 +723,9 @@ links & \hl{Link} & 0..* & Mutable & A set of \hl{Link} compositions. Being a co
 sub-types. Moreover, it introduces relationships to other \hl{Resource}
 instances through instances of the \hl{Link} type.
 %
-The \hl{Resource} type is the entry point for domain-specific extensions of the
+The \hl{Resource} type is one of two entry points to extend the OCCI Core Model.
+See the OCCI Infrastructure document\cite{occi:infrastructure}
+- FIXME
 OCCI core model, see section~\ref{sec:extensibility} 
 \textbf{(Andy: Somewhat contradicts what is said in 1st sentence of 4.4.1.)}.
 
