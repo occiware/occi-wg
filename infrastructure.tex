@@ -334,12 +334,23 @@ Table~\ref{tbl:ipnetworking} define the attributes introduced by the
 \toprule
 Attribute&Type&Multi\-plicity&Mutability&Description\\
 \colrule
-occi.ipnetwork.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi.ipnetwork.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi.ipnetwork.allocation & String Enumeration: \{dynamic, static\} & 0\ldots1 & Mutable & Address allocation mechanism: \textit{dynamic} e.g. uses the dynamic host configuration protocol, \textit{static} e.g. uses user supplied static network configurations.\\
+occi.network.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
+occi.network.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1, fc00::)\\
+occi.network.allocation & String Enumeration: \{dynamic, static\} & 0\ldots1 & Mutable & Address allocation mechanism: \textit{dynamic} e.g. uses the dynamic host configuration protocol, \textit{static} e.g. uses user supplied static network configurations.\\
 \botrule
 \end{tabular}
 }
+
+In Figure \ref{fig:network_mixin} a UML object diagram depicts how \hl{Network} would be associated with an 
+IPNetwork \hl{Mixin} when both are instantiated.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.5]{figs/infrastructure_mixins_obj_dia1_network}
+	\caption{Object Diagram of a \hl{Network} Instance and its 
+	Associated \hl{IPNetwork} \hl{Mixin}.}
+	\label{fig:network_mixin}
+\end{figure}
 
 \subsection{Storage}
 Storage resources are defined to be those that record information to a data storage device. 
@@ -483,6 +494,17 @@ occi.networkinterface.allocation & String Enumeration, \{dynamic, static\} & 1 &
 \botrule
 \end{tabular}
 }
+
+In Figure \ref{fig:networkinterface_mixin} a UML object diagram depicts how \hl{NetworkInterface} 
+would be associated with an \hl{IPNetworkInterface} \hl{Mixin} when both are instantiated.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.5]{figs/infrastructure_mixins_obj_dia2_networkinterface}
+	\caption{Object Diagram of a NetworkInterface Instance and its Associated 
+	IPNetworkInterface Mixin.}
+	\label{fig:networkinterface_mixin}
+\end{figure}
 
 \subsubsection{Linking to Storage}
 \hl{StorageLink} type represents a link from a \hl{Resource} to a target \hl{Storage} instance. This 
