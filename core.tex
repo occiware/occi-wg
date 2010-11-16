@@ -228,13 +228,13 @@ Each sub-type of \hl{Entity} is identified by a unique \hl{Kind} instance.
 
 The \hl{Kind} type is the core of the classification and identification
 system built into the OCCI Core Model. \hl{Kind} is a specialisation of
-\hl{Category} and introduces additional capabilities in terms of \hl{Action}s.
+\hl{Category} and introduces additional resource capabilities in terms of \hl{Action}s.
 An \hl{Action} represent an invocable operation applicable to a resource
 instance.
 
 The last type defined by the OCCI Core Model is the \hl{Mixin} type. An instance of
 \hl{Mixin} can be associated with a resource instance, i.e.~a sub-type of
-\hl{Entity}, to ``mix-in'' additional capabilities at run-time.
+\hl{Entity}, to ``mix-in'' additional resource capabilities at run-time.
 %
 For compliance with OCCI Core, all of the types defined in the OCCI Core Model MUST
 be implemented.  The following sections of the specification contain the formal
@@ -246,7 +246,7 @@ a specific meaning to the OCCI specification suite. However, for reader
 convenience, a sub-set of the glossary is provided here as well. The following
 terminology have specific meaning in the OCCI context:
 \begin{description}
-\item[capabilities] In the OCCI context capabilities refer to attributes and
+\item[resource capabilities] Resource capabilities refer to attributes and
  \hl{Action}s exposed by a resource instance.
 \ralf{Ok definition of capabilities?}
 \item[mix-in] An instance of the \hl{Mixin} type associated with a {\bf resource
@@ -298,11 +298,11 @@ The classification system can be summarised with the following key features:
 \textbf{(Andy:Unclear and confusing.)}.
 \ralf{Better now?}
 \item The classification system allows \hl{Mixin} instances to be associated
- to resource instances in order to assign additional capabilities in terms of
+ to resource instances in order to assign additional resource capabilities in terms of
  attributes and \hl{Action}s at run-time.
 \item Tagging of resource instances is supported through the association
  of \hl{Mixin} instances. A tag is simply a \hl{Mixin} instance which define no
- additional capabilities \ralf{Is the def of ``capabilities'' ok?}
+ additional resource capabilities \ralf{Is the def of ``resource capabilities'' ok?}
 \item A collection of associated resource instances is implicitly defined for
  each \hl{Kind} and \hl{Mixin} instance. I.e.~all resource instances associated
  with a particular \hl{Kind} or \hl{Mixin} instance form a collection.
@@ -360,14 +360,12 @@ classification system of the OCCI Core Model. It MUST be implemented. The \hl{Ki
 type represents the type identification mechanism for all \hl{Entity} types present in
 the model.
 
-A \hl{Kind} {\em instance} is assigned to each and every \hl{Entity} sub-type
-defined in an OCCI implementation. The capabilities, in terms of attributes and
-\hl{Action}s, represented by a \hl{Kind} instance describe the capabilities of
-its \hl{Entity} sub-type.
+A \hl{Kind} {\em instance} is assigned as the unique identifier of each and
+every \hl{Entity} sub-type defined in an OCCI implementation.
 %
-In the initial instantiation of the OCCI Core Model, with no core model extensions, three instances
-of \hl{Kind} will be present: one for \hl{Entity}, another for \hl{Resource}
-and the last one for \hl{Link}. 
+In the initial instantiation of the OCCI Core Model, with no core model
+extensions, three instances of \hl{Kind} will be present: one for \hl{Entity},
+another for \hl{Resource} and the last one for \hl{Link}. 
 
 Every resource instance MUST be associated with one and only one \hl{Kind}
 instance. This \hl{Kind} instance MUST be the one assigned to the \hl{Entity}
@@ -392,91 +390,76 @@ entities & \hl{Entity} & 0..* & Immutable & Set of resource instances, i.e.~\hl{
 }
 The \hl{Kind} type inherits the \hl{Category} type. To be compliant the \hl{Kind}
 type MUST implement the attributes defined in table~\ref{tbl:kind} and the inherited
-attributes defined in table~\ref{tbl:category}.
-\textbf{(Andy: which 'attributes'? the attributes attribute of Category 
-or attributes of a model type - this is confusing)}
-\ralf{Ok now?}
-
-A unique \hl{Kind} instance is assigned as the unique type identifier of every
-\hl{Entity} sub-type, including \hl{Entity} itself. The following rules apply
-to the \hl{Kind} type:
+attributes defined in table~\ref{tbl:category}. The following rules apply to all
+instances of \hl{Kind}:
 \begin{itemize}
 \item A unique \hl{Kind} instance MUST be assigned to each and every sub-type
- of \hl{Entity}.
-\item A \hl{Kind} instance MUST define all capabilities of its \hl{Entity}
- sub-type in terms of attributes and \hl{Action}s. If an \hl{Entity} sub-type
- has an attribute named {\bf X}, the corresponding \hl{Kind} instance MUST define
- an attribute named {\bf X}.
+ of \hl{Entity}, including \hl{Entity} itself.
+\item A \hl{Kind} instance MUST expose the attribute names of the \hl{Entity}
+ sub-type it identifies. The attribute names are exposed through the ``{\tt
+ attributes}'' attribute inherited from \hl{Category}. E.g.~the \hl{Kind}
+ instance identifying the \hl{Link} type has \hl{Kind}.{\tt attributes =
+ [source, target]}.
+\item A \hl{Kind} instance MUST expose the \hl{Action}s defined for its
+ \hl{Entity} sub-type. \hl{Action}s are exposed through the \hl{Kind}.{\tt
+ actions} attribute which represent the association between a \hl{Kind}
+ instance and the \hl{Action}s it defines.
 \item A \hl{Kind} instance MUST be related, either directly or indirectly, to
  the \hl{Kind} instance of \hl{Entity},
  i.e. \textit{http://schemas.ogf.org/occi/core\#entity}.
+ The \hl{Kind}.{\tt related} attribute represent the relationship to another
+ \hl{Kind} instance.
 \item If type {\bf B} inherits type {\bf A}, where {\bf A} is a sub-type of
  \hl{Entity}, the \hl{Kind} instance of {\bf B} MUST be directly related to the
- \hl{Kind} instance of {\bf A}. \textbf{(Andy: Makes more sense if phrased 
+ \hl{Kind} instance of {\bf A}. See Kind Relationships below.
+
+ \textbf{(Andy: Makes more sense if phrased 
  the opposite way around i.e. if Kind has X then the Entity sub-type must implement X)}
- \ralf{how to re-phrase, exact sentence would be?}
+ \ralf{how to re-phrase? What would the exact sentence look like?}
 \end{itemize}
 
-\textbf{(Andy: It would be advisable to show these rules graphically to aid quick understanding.)}
-
 \paragraph*{Kind Relationships}
-\label{sec:kind_relationship}
 \hl{Kind} relationships are defined through the {\tt related} attribute present
 in every \hl{Kind} instance. The {\tt related} attribute define which other
 \hl{Kind} instances a particular \hl{Kind} is related to.
 
 \textbf{(Andy: One of the most confusing section.)}
+\ralf{Better now?}
 
-A \hl{Kind} instance identify a unique sub-type of the \hl{Entity} type,
-e.g.~\hl{Resource}, \hl{Link} or any sub-type thereof.  Each \hl{Kind} instance
-MUST be related to the \hl{Kind} of the parent type.
+A \hl{Kind} instance identify a unique type, either the \hl{Entity} type itself
+or a sub-type thereof.  Each \hl{Kind} instance MUST be related to the
+\hl{Kind} of the parent type.
 %
 The OCCI base types \hl{Resource} and \hl{Link} both extend \hl{Entity} and
 therefore their identifying \hl{Kind} instances MUST be related to \hl{Kind}
 assigned to the \hl{Entity} type.
 %
-These rules, including further sub-typing by extensions, imply a hierarchy of
-related \hl{Kind} instances. The \hl{Kind} relationships thus mirrors the type
-inheritance structure of the OCCI Core Model and any extension thereof.
-
+These rules imply a hierarchy of related \hl{Kind} instances. The \hl{Kind}
+relationships thus mirror the type inheritance structure of the OCCI Core
+Model and any extension thereof.
 
 \begin{figure}[!h]
 {\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{0}
       {\includegraphics{figs/kind_relationships.pdf}}} \par}
-  \caption{Example object diagram illustrating the \hl{Kind} instances involved
-  for the \hl{Entity}, \hl{Resource} and \hl{Compute} types. The \hl{Compute}
-  type is an example of an extension of the OCCI Core Model and extends the
-  \hl{Resource} type.}
+  \caption{Object diagram illustrating the \hl{Kind} instances involved for the
+  \hl{Entity}, \hl{Resource} and \hl{Compute} types. The \hl{Compute} type is an
+  extension to the OCCI Core Model defined in the OCCI Infrastructure
+  document~\cite{occi:infrastructure}.}
   \label{fig:kind_relationships}
 \end{figure}
 
-F
-
-As previously defined a \hl{Kind} instance MUST be related, either directly or
-indirectly, to the \hl{Kind} instance assigned to the \hl{Entity} type,
-i.e.~\textit{http://schemas.ogf.org/occi/core\#entity}.
-
-In an example \textbf{(Andy: Will help hugely if shown graphically.)} where a 
-domain-specific ``Custom Compute Resource'' is a sub-type
-the OCCI Infrastructure type Compute, which in turn is a sub-type of the
-\hl{Resource} type, four related \hl{Kind} instances would be involved.
+Figure~\ref{fig:kind_relationships} illustrates the relationship of the \hl{Kind}
+instances assigned to the \hl{Entity}, \hl{Resource} and \hl{Compute}%
+\footnote{The \hl{Compute} type is defined in the OCCI Infrastructure
+ document~\cite{occi:infrastructure}.}
+types.
 %
-Table~\ref{tbl:relationship} illustrates the exemplified hierarchy of \hl{Kind}
-instances relating the domain-specific \hl{Kind} instances to the \hl{Kind}
-instance of \hl{Entity}.
-
-\mytablefloat{\label{tbl:relationship}Example of the \hl{Kind} relationships involved
-for a domain-specific extension of the OCCI Infrastructure type \hl{Compute}.}{
-\begin{tabular}{p{7cm}p{7cm}}
-\toprule
-Kind instance & Related Kind instance \\
-\colrule
-\textit{http://example.com/occi/custom\#compute} & \textit{http://schemas.ogf.org/occi/infrastructure\#compute} \\
-\textit{http://schemas.ogf.org/occi/infrastructure\#compute} & \textit{http://schemas.ogf.org/occi/core\#resource} \\
-\textit{http://schemas.ogf.org/occi/core\#resource} & \textit{http://schemas.ogf.org/occi/core\#entity} \\
-\botrule
-\end{tabular}
-}
+\hl{Compute} inherits \hl{Resource} and therefore the \hl{Kind} instance
+assigned to \hl{Compute} is related to the \hl{Kind} instance of \hl{Resource}.
+The same applies to the \hl{Resource} type which inherit \hl{Entity}.
+%
+As can be seen in figure~\ref{fig:kind_relationships} the \hl{Kind} instance
+relationships mirror the inheritance structure of the types.
 
 \subsubsection{Mixin}
 The \hl{Mixin} type complements the \hl{Kind} type in defining the
