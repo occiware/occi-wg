@@ -12,10 +12,7 @@ all:
 	make $$item ; \
 	done
 
-dias: 
-	$(DIA) -t png dia/*.dia
-
-%.pdf: dias %.tex
+%.pdf: %.tex
 	$(TEX) $*
 	
 	@if(grep "There were undefined references" $*.log > /dev/null);\
