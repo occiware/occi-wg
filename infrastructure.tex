@@ -89,12 +89,6 @@ internal resource management system of infrastructure providers.
 \section{Notational Conventions}
 \input{include/notational}
 
-%UML activity diagrams do not specify how OCCI should be rendered but what
-%possible request and outcomes can be.
-
-%{\bf Ralf: Need a reference between the above statement and the diagrams in question. 
-%One option is to have the Figure captions starts with ``UML activity diagram for ...''.}
-
 % begin infrastructure content
 
 \section{Infrastructure}
@@ -138,7 +132,6 @@ or \hl{Link} sub-types:
 }
 {
 	\begin{tabular}{llll}
-	%\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
 	\toprule
 	Term & Scheme & Title & Related \hl{Kind} \\
 	\colrule
@@ -179,7 +172,7 @@ of the various types involved in this infrastructure specification.
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.3]{figs/infrastructure}
-	\caption{Overview Diagram of Infrastructure Types.}
+	\caption{Overview Diagram of Infrastructure Types. FIXME: remove Mixins}
 	\label{fig:infra_uml}
 \end{figure}
 
@@ -190,41 +183,35 @@ OCCI Core Model \cite{occi:core}.
 \hl{Compute} is assigned the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
 
-\mytablefloat{\label{tbl:compute}Attributes defined for
-	\hl{Compute}. The attributes are defined by \hl{Compute}'s \hl{Kind} instance
-	\textit{http://schemas.ogf.org/occi/infrastructure\#compute} 
-	(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.
-	{\bf Ralf: It is a bit confusing that \hl{Category} has an attribute called ``attributes'' which define the attribute names. Possible to make this distinction a bit more clear?}
-	}
-	{
-		\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
-		\toprule
-		Attribute&Type&Multi\-plicity&Mutability&Description\\
-		\colrule
-		occi.compute.architecture & Enum \{x86, x64\} & 0\ldots1 
-		& Mutable & CPU Architecture of the instance.\\
-		occi.compute.cores & Integer & 0\ldots1 & Mutable 
-		& Number of CPU cores assigned to the instance.\\
-		occi.compute.hostname & String & 0\ldots1 
-		& Mutable & Fully Qualified DNS hostname for the instance.\\
-		occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 0\ldots1 
-		& Mutable & CPU Clock frequency (speed) in gigahertz.\\
-		occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 0\ldots1 
-		& Mutable & Maximum RAM in gigabytes allocated to the instance.\\
-		occi.compute.state & Enum \{active, inactive, suspended\} & 1 
-		& Immutable & Current state of the instance.\\
-		\botrule
-		\end{tabular}
-	}
+\mytablefloat{
+	\label{tbl:compute}Attributes defined for \hl{Compute}. 
+}
+{
+	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+	\toprule
+	Attribute&Type&Multi\-plicity&Mutability&Description\\
+	\colrule
+	occi.compute.architecture & Enum \{x86, x64\} & 0\ldots1 
+	& Mutable & CPU Architecture of the instance.\\
+	occi.compute.cores & Integer & 0\ldots1 & Mutable 
+	& Number of CPU cores assigned to the instance.\\
+	occi.compute.hostname & String & 0\ldots1 
+	& Mutable & Fully Qualified DNS hostname for the instance.\\
+	occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 0\ldots1 
+	& Mutable & CPU Clock frequency (speed) in gigahertz.\\
+	occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 0\ldots1 
+	& Mutable & Maximum RAM in gigabytes allocated to the instance.\\
+	occi.compute.state & Enum \{active, inactive, suspended\} & 1 
+	& Immutable & Current state of the instance.\\
+	\botrule
+	\end{tabular}
+}
 
 Table~\ref{tbl:compute} describes the attributes%
 \footnote{See ’attributes’ in the inherited 
 base type \hl{Category}  \cite{occi:core}} 
 defined by \hl{Compute} through its \hl{Kind} instance. These attributes
 MUST be exposed by an instance of the \hl{Compute} type.
-
-\marginpar{\textbf{Andy:what is the 'flag' attribute? How does it work?}}
-{\bf Ralf: I added the {\tt flag=} thing since an Action attribute must have both a {\em name} and a \hl{value} specification. Please feel free to find a better name though ;)}
 
 \mytablefloat{
 	\label{tbl:compute_actions}%
@@ -270,9 +257,7 @@ The \hl{Network} type is assigned the \textit{http://schemas.ogf.org/occi/infras
 
 \mytablefloat{
 	\label{tbl:network}Attributes defined for
-	\hl{Network}. The attributes are defined by \hl{Network}'s \hl{Kind} instance
-	\textit{http://schemas.ogf.org/occi/infrastructure\#network} 
-	(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.
+	\hl{Network}. 
 }
 {
 	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
@@ -363,9 +348,7 @@ The \hl{Storage} type is assigned the \textit{http://schemas.ogf.org/occi/infras
 
 \mytablefloat{
 	\label{tbl:storage}Attributes defined for
-	\hl{Storage}. The attributes are defined by \hl{Storage}'s \hl{Kind} instance
-	\textit{http://schemas.ogf.org/occi/infrastructure\#storage} 
-	(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.
+	\hl{Storage}. 
 }
 {
 	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
@@ -407,8 +390,6 @@ MUST be exposed by an instance of the \hl{Storage} type.
 %	\botrule
 	\end{tabular}
 }
-\marginpar{\textbf{Andy: Again 'flags'? See previous comment above}}
-{\bf Ralf: In this case {\tt flag=} is not needed since the attribute name here is {\tt name} and value is a Float}
 
 Table~\ref{tbl:storage_actions} describes the \hl{Action}s defined for
 \hl{Storage} by its \hl{Kind} instance. These \hl{Action}s MUST be exposed 
@@ -515,9 +496,7 @@ A \hl{StorageLink} type MUST be related to the \textit{http://schemas.ogf.org/oc
 
 \mytablefloat{
 	\label{tbl:storagelink}Attributes defined for
-	\hl{StorageLink}. The attributes are defined by \hl{StorageLink}'s \hl{Kind} instance
-	\textit{http://schemas.ogf.org/occi/infrastructure\#storagelink} 
-	(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.
+	\hl{StorageLink}. 
 }
 {
 	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
@@ -563,10 +542,6 @@ Its construction is a \hl{Mixin} instance consisting of a provider specific 'sch
 detailing the OS. The 'term' value of the template category is a provider-specific identifier that 
 corresponds to a particular virtual machine image configuration. Where an implementation requires 
 additional attributes associated with the OS Template, it can do so using \hl{Category}'s 'attributes'.
-
-{\bf Ralf: Need to properly describe the ``Category's attributes'' thing. By definition a \hl{Mixin} has an
-attribute called ``attributes'' which is inherited from \hl{Category}. Need a way to say that in a short
-sentence and still keep it clear.}
 
 A implementation-defined OS Template \hl{Mixin} MUST be related to 
 the OCCI OS Template \hl{Mixin} in order to give absolute type information. 
