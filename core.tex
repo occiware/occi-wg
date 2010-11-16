@@ -652,7 +652,7 @@ be implemented.
 %
 Table~\ref{tbl:entity} defines the attributes the \hl{Entity} type MUST implement to
 be compliant.
-
+%
 \mytablefloat{\label{tbl:entity}Attributes defined for the \hl{Entity} type.}{
 \begin{tabular}{lllp{1.3cm}p{1.0cm}p{7cm}}
 \toprule
@@ -663,16 +663,32 @@ title & String & 0..1 & Mutable & Yes & The display name of the instance. \\
 kind & \hl{Kind} & 1 & Immutable & No & The \hl{Kind} instance uniquely identifying the \hl{Entity} sub-type of the resource instance. \\
 mixins & \hl{Kind} & 0..* & Mutable & No & The \hl{Mixin} instances associated to this resource instance. Consumers can expect the attributes and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\ 
 \botrule
-\end{tabular}
-}
+\end{tabular}}
 
 \hl{Entity} enforces for all sub-types a required \texttt{id} attribute and an
 optional \texttt{title} attribute.
 %
 Every sub-type of \hl{Entity} MUST be assigned a \hl{Kind} instance, see
-section~\ref{sec:kind}. \hl{Entity} itself is assigned the \hl{Kind} instance
-\textit{http://schemas.ogf.org/occi/core\#entity} for type identification. Being 
-an abstract type \hl{Entity} itself can never be instantiated.
+section~\ref{sec:kind}.
+%
+\mytablefloat{\label{tbl:entity_kind}The \hl{Kind} instance assigned to the \hl{Entity} type.}{
+\begin{tabular}{ll}
+\toprule
+Attribute & Value \\
+\colrule
+term & entity \\
+scheme & {\tt http://schemas.ogf.org/occi/core\#} \\
+title & Entity type \\
+attributes & id, title \\
+actions & -- \\
+\botrule
+\end{tabular}}
+%
+\hl{Entity} itself is assigned the \hl{Kind} instance
+\textit{http://schemas.ogf.org/occi/core\#entity} for type identification, see
+table~\ref{tbl:entity_kind}.
+%
+Being an abstract type \hl{Entity} itself can never be instantiated.
 %
 An \hl{Entity} sub-type instance, a resource instance, MAY be associated with
 one or more \hl{Mixin} instances.
@@ -685,16 +701,14 @@ and any associated \hl{Mixin} instances together with the attributes and
 \label{sec:resource}
 The \hl{Resource} type inherits \hl{Entity} and describes a concrete resource that
 \textbf{(Andy: define what a concrete resource is.)}
+\ralf{Isn't the definition below good enough? Or do you mean Resource still is somewhat abstract since you most likely have to sub-type it anyway?}
 can be inspected and manipulated. It represents a general object in the OCCI
 model and MUST be implemented. A \hl{Resource} is suitable to represent real
-world resources, e.g. virtual machines, networks, services, etc. through specialisation.
+world resources, e.g. virtual machines, networks, services, etc.~through specialisation.
 %
 The \hl{Resource} type MUST implement all attributes inherited from \hl{Entity}
 as well as the attributes defined in table~\ref{tbl:resource} in order
 to be compliant.
-%
-The \hl{Resource} type is assigned the \hl{Kind} instance
-\textit{http://schemas.ogf.org/occi/core\#resource}.
 
 \mytablefloat{\label{tbl:resource}Attributes defined for the \hl{Resource} type.}{
 \begin{tabular}{llllp{8cm}}
@@ -707,15 +721,29 @@ links & \hl{Link} & 0..* & Mutable & A set of \hl{Link} compositions. Being a co
 \end{tabular}
 }
 
+The \hl{Resource} type is assigned the \hl{Kind} instance
+\textit{http://schemas.ogf.org/occi/core\#resource}, see
+table~\ref{tbl:resource_kind}.
+%
+\mytablefloat{\label{tbl:resource_kind}The \hl{Kind} instance assigned to the \hl{Resource} type.}{
+\begin{tabular}{ll}
+\toprule
+Attribute & Value \\
+\colrule
+term & resource \\
+scheme & {\tt http://schemas.ogf.org/occi/core\#} \\
+title & Resource \\
+attributes & summary \\
+actions & -- \\
+\botrule
+\end{tabular}}
+
 \hl{Resource} enforces the inheritance of a set of common attributes into
 sub-types. Moreover, it introduces relationships to other \hl{Resource}
 instances through instances of the \hl{Link} type.
 %
-The \hl{Resource} type is one of two entry points to extend the OCCI Core Model.
-See the OCCI Infrastructure document\cite{occi:infrastructure}
-- FIXME
-OCCI Core Model, see section~\ref{sec:extensibility} 
-\textbf{(Andy: Somewhat contradicts what is said in 1st sentence of 4.4.1.)}.
+The \hl{Resource} type is the first of three entry points to extend the OCCI Core
+Model, see section~\ref{sec:extensibility}.
 
 \subsubsection{Link}
 \label{sec:link}
@@ -727,9 +755,6 @@ The \hl{Link} type MUST implement all attributes inherited from the
 \hl{Entity} type together with the attributes defined in table~\ref{tbl:link}
 in order to be compliant.
 %
-The \hl{Link} type is assigned the \hl{Kind} instance
-\textit{http://schemas.ogf.org/occi/core\#link}.
-
 \mytablefloat{\label{tbl:link}Attributes defined for the \hl{Link} type.}{
 \begin{tabular}{llllp{7.5cm}}
 \toprule
@@ -738,17 +763,36 @@ Attribute & Type & Multiplicity & Client Mutability & Description \\
 source & \hl{Resource} & 1 & Mutable & The \hl{Resource} instances the \hl{Link} instance originates from.\\
 target & \hl{Resource} & 1 & Mutable & The \hl{Resource} instances the \hl{Link} instance points to.\\
 \botrule
-\end{tabular}
-}
+\end{tabular}}
 
-An instance of the \hl{Link} type MUST NOT refer to an external resource
-\textbf{(Andy: what is this in the context of OCCI/provider?)}.  A
-provider MAY however create a sub-type of \hl{Link} with different semantics,
-e.g.~having a target attribute containing an URI and thus the ability of linking
-with external resources.
+The \hl{Link} type is assigned the \hl{Kind} instance
+\textit{http://schemas.ogf.org/occi/core\#link}.
 %
-The \hl{Link} type can be sub-typed for domain-specific extensions of the
-OCCI Core Model, see section~\ref{sec:extensibility}.
+\mytablefloat{\label{tbl:link_kind}The \hl{Kind} instance assigned to the \hl{Link} type.}{
+\begin{tabular}{ll}
+\toprule
+Attribute & Value \\
+\colrule
+term & link \\
+scheme & {\tt http://schemas.ogf.org/occi/core\#} \\
+title & Link \\
+attributes & source, target \\
+actions & -- \\
+\botrule
+\end{tabular}}
+
+The {\tt source} and {\tt target} attribute of a \hl{Link} instance MUST refer
+to resource {\em instances} within the service provider's namespace. A
+\hl{Link} MAY refer to an external resource, i.e.~a resource of which the
+service provider has no direct control, if and only if that external resource
+is mapped into a \hl{Entity} sub-type instance.
+%
+A provider MAY however introduce a sub-type of \hl{Link} with different
+semantics, e.g.~having a target attribute containing an URI and thus the
+ability of linking with external resources.
+
+The \hl{Link} type is the second of three entry points to extend the OCCI Core
+Model, see section~\ref{sec:extensibility}.
 
 \subsubsection{Action}
 The \hl{Action} type defines an invocable operation applicable to an \hl{Entity}
@@ -782,16 +826,29 @@ instances. The \hl{Action} is only considered valid if all resource instances
 of the collection are associated with the \hl{Kind} or \hl{Mixin} defining the
 \hl{Action}.
 
+\mytablefloat{\label{tbl:action_kind}The \hl{Category} instance assigned to the \hl{Action} type.}{
+\begin{tabular}{ll}
+\toprule
+Attribute & Value \\
+\colrule
+term & action \\
+scheme & {\tt http://schemas.ogf.org/occi/core\#} \\
+title & Action \\
+attributes & -- \\
+\botrule
+\end{tabular}}
+%
+The \hl{Action} type is assigned the \hl{Category} type identifier
+\textit{http://schemas.ogf.org/occi/core\#action}, see
+table~\ref{tbl:action_kind}.
+%
 An \hl{Action} can expose attributes which correspond to arguments of the
 invocable operation.  Any attributes are defined through the \hl{Category}
-instance which identify the \hl{Action}. For example, a ``resize'' \hl{Action}
+instance which identify the \hl{Action} sub-type. For example, a ``resize'' \hl{Action}
 defined for a storage resource can have a ``size'' attribute which represent the
 size argument of the resize operation.
 
-The \hl{Action} type is assigned the \hl{Category} type identifier
-\textit{http://schemas.ogf.org/occi/core\#action}.
-%
-The \hl{Action} type can be sub-typed for domain-specific extensions of the
+The \hl{Action} type is the third and last of the entry points to extend the
 OCCI Core Model, see section~\ref{sec:extensibility}.
 
 \subsection{Extensibility}
