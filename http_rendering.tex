@@ -334,308 +334,408 @@ with an '/').
 \end{description}
 
 \paragraph{Handling the Query interface}
+The query interface MUST be implemented by all services supporting
+OCCI. It MUST be found at the path \emph{/-/}. The following
+operations MUST be implemented by the service:
 
-- retireinvg all registered catgories
+\begin{description}
+\item[Retrieving all registered Categories] The HTTP verb GET must be
+  used to retrieve all categories the service can handle. This allows
+  the client to discover the capabilites of the Service provider. The
+  result MUST contain all information about the Category (including
+  Attributes and Actions assigned to this Category).
+\begin{verbatim}
+> GET /-/ HTTP/1.1
+> [...]
+ 
+< HTTP/1.1 200 OK
+< [...]
+< Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure; \
+                   attributes=occi.compute.cores,occi...; \
+                   rel=http://schemas.ogf.org/occi/core\#entity; \
+                   actions=http://schemas.ogf.org/occi/infrastructure/compute/action#stop,...; \
+                   location=/compute
+< Category:my_stuff;scheme=http://example.com/occi/my_stuff; \
+                    location=/my_stuff
+< Category:storage;scheme=http://schemas.ogf.org/occi/infrastructure; \
+                   attributes=...; \
+                   actions=...; \
+                   rel=http://schemas.ogf.org/occi/core\#entity; \
+                   location=/storage
+< 
+\end{verbatim}
+\textbf{Note:} A Service provider SHOULD support a filtering
+mechanism. If a Category is provided in the request the server SHOULD
+only return the complete rendering of the provided Category.
 
-Filtering through cat def!
+\item[Adding a \hl{Mixin} category defintion] To add a \hl{Mixin} to
+  the service the HTTP PUT verb MUST be used. All possible information
+  for the \hl{Mixin} category must be defined. At least the Category
+  term, scheme and location MUST be defined. Actions and Attributes
+  are optional:
+\begin{verbatim}
+> GET /-/ HTTP/1.1
+> [...]
+> Category:my_stuff;scheme=http://example.com/occi/my_stuff; \
+                    rel=http:/example.com/occi/something_else#mixin; \
+                    attributes=...; \
+                    actions=...; \
+                    location=/my_stuff
 
-- removing a mixin definition
+< HTTP/1.1 200 OK
+< [...]
+\end{verbatim}
+The service might reject this request if it does not allow
+user-defined Categories to be created. Also on name collesions of the
+defined location path the service provider might reject this
+operation.
 
-- adding a mixin definition
+\item[Removing a \hl{Mixin} category definition] A user defined
+  \hl{Mixin} CAN be removed (if allowed) by using the HTTP DELETE
+  verb. The information about wich \hl{Mixin} should be deleted MUST
+  be provided in the request:
+\begin{verbatim}
+> DELETE /-/ HTTP/1.1
+> [...]
+> Category:my_stuff;scheme=http://example.com/occi/my_stuff;
+
+< HTTP/1.1 200 OK
+< [...]
+\end{verbatim}
+\end{description}
 
 \paragraph{Operations on \hl{Mixin}s or \hl{Kind}s}
+All the following operations CAN only be be done on a location path
+provided by category definition. It MUST end with an \emph{/}.
 
-Defined by location path....
+\begin{description}
+\item[Retrieving all resource instances belonging to \hl{Mixin} or
+  \hl{Kind}] The HTTP verb GET must be used to retrieve all resource
+  instances. The service provider MUST return a URI-list containing
+  all resource instances which belong to the requested \hl{Mixin} or
+  \hl{Kind}:
+\begin{verbatim}
+> GET /compute/ HTTP/1.1
+> [...]
+ 
+< HTTP/1.1 200 OK
+< Content-type: text/uri-list
+< [...]
+< 
+< http://example.com/vms/user1/vm1
+< http://example.com/vms/user1/vm2
+< http://example.com/vms/user2/vm1
+\end{verbatim}
+\textbf{Note:} A Service provider SHOULD support a filtering
+mechanism. If a category is provided in the request the server SHOULD
+only return the resource instances belonging to the provided
+Category. The provided category definition SHOULD be different from
+the one Category definition which defined the location path used in
+the request.
 
-- Retrieving all instances of a mixin or kind
+\item[Triggering actions on all instances of a \hl{Mixin} or
+  \hl{Kind}] Actions can be triggered on all resource instances of the
+  same \hl{Mixin} or \hl{Kind}. The HTTP POST verb MUST be used. Also
+  the action MUST be defined by the category which defines the
+  location path which is used in the request:
+\begin{verbatim}
+> POST /compute/;action=stop HTTP/1.1
+> [...]
+> X-OCCI-Attribute:flag=poweroff
 
-Filtering through cat def!
+< HTTP/1.1 200 OK
+< [...]
+\end{verbatim}
 
-- triggering actions on all instaces of an mixin or kind (action must be defined by mixin!)
+\item[Adding a resource instance to a \hl{Mixin}] One or multiple
+  resource instances can be added to a \hl{Mixin} using the HTTP PUT
+  verb. The URIs which uniquely defined the resource instance MUST be
+  provided in the request:
+\begin{verbatim}
+> PUT /my_stuff/ HTTP/1.1
+> [...]
+> X-OCCI-Location:http://example.com/vms/user1/vm1, \
+                  http://example.com/vms/user1/vm2, \
+                  http://example.com/disks/user1/disk1
 
-- adding a resource to a mixin
+< HTTP/1.1 200 OK
+< [...]
+\end{verbatim}
 
-- removing a resource instance from a mixin
+\item[Removing a resource instance from a \hl{Mixin}] One or multiple
+  resource instances can be removed from a \hl{Mixin} using the HTTP
+  DELETE verb. The URIs which uniquely defined the resource instance
+  MUST be provided in the request:
+\begin{verbatim}
+> DELETE /my_stuff/ HTTP/1.1
+> [...]
+> X-OCCI-Location:http://example.com/vms/user1/vm1, \
+                  http://example.com/vms/user1/vm2, \
+                  http://example.com/disks/user1/disk1
+
+< HTTP/1.1 200 OK
+< [...]
+\end{verbatim}
+\end{description}
 
 \paragraph{Operation on paths in the namespace}
+The following operations are defined when operating on paths in the
+name-space hirachy which are not location paths nor resource
+instances. They MUST end with \emph{/} (For example
+\emph{http://example.com/vms/user1}).
 
-Must end with /
+\begin{description}
+\item[Retrieving all resource instances below a path] The HTTP verb
+  GET must be used to retrieve all resource instances. The service
+  provider MUST return a URI-list containing all resource instances
+  which are childs of the provided URI in the name-space hierarchy:
+\begin{verbatim}
+> GET /vms/user1/ HTTP/1.1
+> [...]
+ 
+< HTTP/1.1 200 OK
+< Content-type: text/uri-list
+< [...]
+< 
+< http://example.com/vms/user1/vm1
+< http://example.com/vms/user1/vm2
+\end{verbatim}
+\textbf{Note:} A Service provider SHOULD support a filtering
+mechanism. If a category is provided in the request the server SHOULD
+only return the resource instances belonging to the provided
+Category.
 
-- Retrieval
-
-Filtering through cat def!
-
-- Deleteing all resource instance below this namespace
+\item[Deletetion all resource instances below a path] The HTTP verb
+  DELETE must be used to delete all resource instances under a
+  hierarchy:
+\begin{verbatim}
+> DELETE /vms/user1/ HTTP/1.1
+> [...]
+ 
+< HTTP/1.1 200 OK
+< [...]
+\end{verbatim}
+\textbf{Note:} A Service provider SHOULD support a filtering
+mechanism. If a category is provided in the request the server SHOULD
+only return the resource instances belonging to the provided
+Category.
+\end{description}
 
 \subsection{Syntax and semantics of the rendering}
+\label{sec:syntax}
+The following subsections demonstrate how the OCCI base types can be
+syntactically rendered.
 
- Category
- Link
- X-OCCI-Attribute
- X-OCCI-Location
+\subsubsection{Rendering of an OCCI-Category}
+
+The semantics of the Category in the OCCI context is described in the
+OCCI Core \& Models document.\footnote{This rendering follows the
+  Category header defined by the Web Categories specification,
+  http://tools.ietf.org/html/draft-johnston-http-category-header-01
+  and MUST be rendered accordingly.}
+
+\begin{verbatim}
+Category: <term>; scheme="<scheme>"
+    [;rel=<space-separated list of related Category identifiers>]
+    [;attributes=<space-seperated list of attribute names>]
+    [;title=<Title of this Category>]    
+    [;location=<Parent location>]
+\end{verbatim}
+There is NO order for the optional part.
+
+\subsubsection{Rendering of OCCI-Links and OCCI-Actions}
+The semantics of the Link header in the OCCI context is described in
+the OCCI Core \& Models document.\footnote{This rendering follows the
+  Link header defined by the Web Linking specification,
+  http://tools.ietf.org/html/draft-nottingham-http-link-header-10 and
+  MUST be rendered accordingly.}
+
+\begin{verbatim}
+Link: <Resource URL>;
+    rel=<space-separated list of Category identifiers of the target Resource type>
+    [;self=<Link instance URL>]
+    [;category=<space-separated list of Category identifiers of the Link type>
+    [;<attribute name>=<attribute value>] ... ]
+
+or in case it is an Action:
+
+Link: <Resource URL> + ";action=" + <Term of the Action>;
+    rel=<Category identifier of the Action>
+\end{verbatim}
+
+\subsubsection{Rendering of OCCI-Attributes}
+The X-OCCI-Attribute MUST be used to render the attributes associated
+with a OCCI Kind. A simple key-value format is used. The field value
+consist of an attribute name followed by an equal sign ("=") and the
+attribute value. The attribute value must be quoted if it includes a
+separator character, see RFC 2616 (page 16).
+
+\begin{verbatim}
+X-OCCI-Attribute: <attribute name>=<attribute value>
+\end{verbatim}
+
+Valid attribute names for OCCI Kinds are specified in appropriate
+Extension documents.
+
+\subsubsection{Rendering of Location-URLs}
+To render an OCCI representation solely in the header, the
+X-OCCI-Location header MUST be used to return a list of Kind
+URLs. Each header field value correspond to a single URL. Multiple
+Kind URLs are returned using multiple X-OCCI-Location headers. See RFC
+2616 for information on how to render multiple HTTP headers.
+
+\begin{verbatim}
+X-OCCI-Location: <URL>
+\end{verbatim}
+
+\subsubsection{Fields}
+The following setups show how the Core Model MUST be rendered. Shown
+are the fields which MUST be available in a request from the Client or
+a response from the Server.
+
+\begin{tabular}{l|l|l|l}
+Operation & Required HTTP-Header(s) & Optional HTTP-Header(s) & Notes \\
+\hline
+Rendering of a Category & Category & N/A & \\
+Rendering a list of Categories & Category & N/A & \\
+Rendering a list of Kinds & X-OCCI-Location & N/A & \\
+Rendering of a Resource & Category & X-OCCI-Attribute, Link & \\
+Rendering of an Action & Category, Link & X-OCCI-Attribute & \\
+Rendering of a Link & Category, Link & X-OCCI-Attribute & \\
+\end{tabular}
 
 \subsection{General HTTP behaviour which is adopted by OCCI}
+The following sections deal with some general HTTP feaures which are
+adopted by OCCI.
 
-- Content types
+\subsubsection{Security and Authentication}
+OCCI does not require that an authentication mechanism be used nor
+does it require that client to service communications are secured. It
+does recommend that an authentication mechanism be used and that where
+appropriate, communications are encrypted using HTTP over TLS. The
+authentication mechanisms that CAN be used with OCCI are those that
+can be used with HTTP and TLS, for example Basic [REF], Digest [REF]
+and OAuth [REF]. If an OCCI service requires authentication the
+response to a request that MUST be authenticated must be a HTTP 401
+code that indicates the request is authorized. In response to
+authenticate the client MUST set a WWW-Authenticate header field and
+through this indicate the authentication mechanism.
 
-- Versioning
+\subsubsection{Versioning}
+Information about what version of OCCI is supported by a provider MUST
+be advertised to a client on each response to a client. The version
+field in the response MUST include the value OCCI/X.Y, where X is the
+major version number and Y is the minor version number of the
+implemented OCCI specification. In the case of a HTTP Header
+Rendering, the server response should relay versioning information
+using the HTTP header name 'Server'.
 
-- Auth.
+\begin{verbatim}
+HTTP/1.1 202 Accepted
+Server: occi-server/1.1 (linux) OCCI/1.0
+[...]
+\end{verbatim}
 
-- Autho.
+Complimenting the service-side behavior of an OCCI implementation, a
+client MUST indicate to the OCCI service implementation the version it
+expects to interact with. For the clients, the information MUST be
+dvertised in the request it issues. In the case of a HTTP Header
+Rendering, the client request should relay versioning information in
+the 'User-Agent' header. The 'User-Agent' field must include the same
+value (OCCI/X.Y) as specified for the Server HTTP header.
+
+\begin{verbatim}
+GET <UDN> HTTP/1.1
+Host: example.com
+User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.0
+[...]
+\end{verbatim}
+
+If a server receives a request from a client that supplies a version
+number higher than the service supports, the service MUST respond back
+to the client with an exception indicating that the requested version
+is not implemented. Where a client implements OCCI using a HTTP
+transport, the HTTP code 501, not implemented should be used.
+
+\subsubsection{Content-type and Accept headers}
+A server MUST react according to the Accept header the client
+provides. If non is given - or \textit{*/*} is used - the service MUST
+use the Content-type \emph{text/plain}. This is the fall-back
+rendering and MUST be implemented. Otherwise the according rendering
+MUST be used. Each Rendering SHOULD expose which Accept and
+Content-type header fields it can handle. Overall the server MUST
+support the \textit{text/occi}, \textit{text/plain} and
+\textit{text/uri-list} Content-types.
+
+The server MUST also return the proper Content-type header. If a
+client provides information with a Content-Type - the information MUST
+be parsed accordingly.
+
+When the Client request a Content-Type will will result in an
+incomplete or faulty rendering the Service MUST return the 406 Not
+Acceptable HTTP code.
+
+\paragraph{The Content-type text/plain}
+While using this rendering with the Content-Type \textit{text/plain}
+the information described in section \ref{sec:syntax} MUST be placed
+in the HTTP Body.
+
+Each Rendering of an OCCI base type will be placed in the body. Each
+entry consists of a name followed by a colon (":") and the field
+value. The format of the field value is specified separately for each
+of the three header fields, see section \ref{sec:syntax}.
+
+\paragraph{The Content-type text/occi}
+While using this rendering with the Content-Type \textit{text/occi}
+the information described in section \ref{sec:model_rendering} MUST be
+placed in the HTTP Header. The body MUST contain the string 'OK' on
+successfull operations.
+
+The HTTP header fields MUST follow the specification in RFC 2616
+\cite{rfc2616}. A header field consists of a name followed by a colon
+(":") and the field value. The format of the field value is specified
+separately for each of the header fields, see section
+\ref{sec:syntax}.
+
+\textbf{Limitations: } HTTP header fields MAY appear multiple times in
+a HTTP request or response. In order to be OCCI compliant the
+specification of multiple message-header fields according to RFC 2616
+MUST be fully supported. In essence there are two valid representation
+of multiple HTTP header field values. A header field might either
+appear several times or as a single header field with a
+comma-separated list of field values. Due to implementation issues in
+many web frameworks and client libraries it is RECOMMENDED to use the
+comma-separated list format for best interoperability.
+
+HTTP header field values which contain separator characters MUST be
+properly quoted according to RFC 2616.
+
+Space in the HTTP header section of a HTTP request is a limited
+resource. By this, it is noted that many HTTP servers limit the number
+of bytes that can be placed in the HTTP Header area. Implementers MUST
+be aware of this limitation in their own implementation and take
+appropriate measures so that truncation of header data does NOT
+occure.
+
+\paragraph{The Content-type text/uri-list}
+This Rendering can handle the \textit{text/uri-list} Accept Header. It
+will use the Content-type \textit{text/uri-list}.
+
+This rendering cannot render resource instances or \hl{Kind}s or
+\hl{Mixin}s directly but just links to them. For concrete rendering of
+Kinds and Categories the Content-types \textit{text/occi},
+\textit{text/plain} MUST be used. If a request is done with the
+\textit{text/uri-list} in the Accept header, while not requesting for
+a Listing a Bad Request MUST be returned.
 
 \subsubsection{Return codes}
 \label{sec:return_codes}
 
-Bad Request...
-
-%\subsection{Security and Authentication}
-%OCCI does not require that an authentication mechanism be used nor
-%does it require that client to service communications are secured. It
-%does recommend that an authentication mechanism be used and that where
-%appropriate, communications are encrypted using HTTP over TLS. The
-%authentication mechanisms that CAN be used with OCCI are those that
-%can be used with HTTP and TLS, for example Basic [REF], Digest [REF]
-%and OAuth [REF]. If an OCCI service requires authentication the
-%response to a request that MUST be authenticated must be a HTTP 401
-%code that indicates the request is authorized. In response to
-%authenticate the client MUST set a WWW-Authenticate header field and
-%through this indicate the authentication mechanism.
-%
-%\subsection{Versioning}
-%Information about what version of OCCI is supported by a provider MUST
-%be advertised to a client on each response to a client. The version
-%field in the response MUST include the value OCCI/X.Y, where X is the
-%major version number and Y is the minor version number of the
-%implemented OCCI specification. In the case of a HTTP Header
-%Rendering, the server response should relay versioning information
-%using the HTTP header name 'Server'.
-%
-%\begin{verbatim}
-%HTTP/1.1 202 Accepted
-%Server: occi-server/1.1 (linux) OCCI/1.0
-%[...]
-%\end{verbatim}
-%
-%Complimenting the service-side behavior of an OCCI implementation, a
-%client MUST indicate to the OCCI service implementation the version it
-%expects to interact with. For the clients, the information MUST be
-%advertised in the request it issues. In the case of a HTTP Header
-%Rendering, the client request should relay versioning information in
-%the 'User-Agent' header. The 'User-Agent' field must include the same
-%value (OCCI/X.Y) as specified for the Server HTTP header.
-%
-%\begin{verbatim}
-%GET <UDN> HTTP/1.1
-%Host: example.com
-%User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.0
-%[...]
-%\end{verbatim}
-%
-%If a server receives a request from a client that supplies a version
-%number higher than the service supports, the service MUST respond back
-%to the client with an exception indicating that the requested version
-%is not implemented. Where a client implements OCCI using a HTTP
-%transport, the HTTP code 501, not implemented should be used.
-%
-%\subsection{Content-type and Accept headers}
-%A server MUST react according to the Accept header the client
-%provides. If non is given - or \textit{*/*} is used - the service MUST
-%use the HTTP Body Rendering described in section
-%\ref{sec:http_body}. This is the fall-back rendering and MUST be
-%implemented. Otherwise the according rendering MUST be used. Each
-%Rendering SHOULD expose which Accept and Content-type header fields it
-%can handle. Overall the server MUST support the \textit{text/occi},
-%\textit{text/plain} and \textit{text/uri-list} Content-types.
-%
-%The server MUST also return the proper Content-type header. If a
-%client POSTs information with a Content-Type - the information MUST be
-%parsed accordingly.
-%
-%When the Client request a Content-Type will will result in an
-%incomplete or faulty rendering the Service MUST return the 406 Not
-%Acceptable HTTP code.
-%
-%\subsection{Discovery and Listing}
-%When performing an GET operation an server MUST reply with a listing
-%of matching Kinds. If the request was preformed on a Path of an URI
-%only the sub-resource SHOULD be returned. If a Category was given in
-%the request the server MUST only give back Kinds which have this
-%Category assigned.
-%
-%If the request was performed on the \textit{/-/} Path a list of
-%Categories which the server can handle MUST be returned. Categories
-%used for tagging are not exported via this mechanism.
-%
-%Each category MUST have an unique location assigned which COULD be the
-%term of the category. This path MUST NOT be empty. At a minimum it
-%could be \textit{'/'} It reflects the path under which REST-resources
-%which relate to this category can be found. Adding and removing
-%REST-Resources from a category is done by operating on this
-%path\footnote{The path MUST end with /}.
-%
-%\subsection{Behavior of HTTP operations}
-%
-%More information on how OCCI compatible Service should handle the HTTP
-%verbs is given in these sections. Possible results are demonstrated
-%here. How to render the results is described later on.
-%
-%\subsubsection{Return Codes}
-%The following return codes CAN be returned by an Service implementing
-%OCCI.
-%
-%\subsection{Rendering the OCCI model}
-%\label{sec:model_rendering}
-%The following subsection demonstrate how the OCCI base types can be
-%syntactically rendered.
-%
-%\marginpar{User proper ABNF grammar to describe the header formats.}
-%
-%\subsubsection{Rendering of an OCCI-Category}
-%
-%The semantics of the Category in the OCCI context is described in the
-%OCCI Core \& Models document.\footnote{This rendering follows the
-%  Category header defined by the Web Categories specification,
-%  http://tools.ietf.org/html/draft-johnston-http-category-header-01
-%  and MUST be rendered accordingly.}
-%
-%\marginpar{Define ``Categary identifier'' somewhere,
-%  i.e. concatenation of scheme + term.}
-%
-%\begin{verbatim}
-%Category: <term>; scheme="<scheme>"
-%    [;rel=<space-separated list of related Category identifiers>]
-%    [;attributes=<space-seperated list of attribute names>]
-%    [;title=<Title of this Category>]    
-%    ;location=<Parent location>
-%\end{verbatim}
-%
-%There is NO order for the optional part.
-%
-%\subsubsection{Rendering of OCCI-Links and OCCI-Actions}
-%The semantics of the Link header in the OCCI context is described in
-%the OCCI Core \& Models document.\footnote{This rendering follows the
-%  Link header defined by the Web Linking specification,
-%  http://tools.ietf.org/html/draft-nottingham-http-link-header-10 and
-%  MUST be rendered accordingly.}
-%
-%\begin{verbatim}
-%Link: <Resource URL>;
-%    rel=<space-separated list of Category identifiers of the target Resource type>
-%    [;self=<Link instance URL>]
-%    [;category=<space-separated list of Category identifiers of the Link type>
-%    [;<attribute name>=<attribute value>] ... ]
-%
-%or in case it is an Action:
-%
-%Link: <Resource URL> + ";action=" + <Term of the Action>;
-%    rel=<Category identifier of the Action>
-%\end{verbatim}
-%
-%\subsubsection{Rendering of OCCI-Attributes}
-%The X-OCCI-Attribute MUST be used to render the attributes associated
-%with a OCCI Kind. A simple key-value format is used. The field value
-%consist of an attribute name followed by an equal sign ("=") and the
-%attribute value. The attribute value must be quoted if it includes a
-%separator character, see RFC 2616 (page 16).
-%
-%\begin{verbatim}
-%X-OCCI-Attribute: <attribute name>=<attribute value>
-%\end{verbatim}
-%
-%Valid attribute names for OCCI Kinds are specified in appropriate
-%Extension documents.
-%
-%\subsubsection{Rendering of Location-URLs}
-%To render an OCCI representation solely in the header, the
-%X-OCCI-Location header MUST be used to return a list of Kind
-%URLs. Each header field value correspond to a single URL. Multiple
-%Kind URLs are returned using multiple X-OCCI-Location headers. See RFC
-%2616 for information on how to render multiple HTTP headers.
-%
-%\begin{verbatim}
-%X-OCCI-Location: <URL>
-%\end{verbatim}
-%
-%\subsubsection{Fields}
-%The following setups show how the Core Model MUST be rendered. Shown
-%are the fields which MUST be available in a request from the Client or
-%a response from the Server.
-%
-%\begin{tabular}{l|l|l|l}
-%Operation & Required HTTP-Header(s) & Optional HTTP-Header(s) & Notes \\
-%\hline
-%Rendering of a Category & Category & N/A & \\
-%Rendering a list of Categories & Category & N/A & \\
-%Rendering a list of Kinds & X-OCCI-Location & N/A & \\
-%Rendering of a Resource & Category & X-OCCI-Attribute, Link & \\
-%Rendering of an Action & Category, Link & X-OCCI-Attribute & \\
-%Rendering of a Link & Category, Link & X-OCCI-Attribute & \\
-%\end{tabular}
-%
-%\subsubsection{Rendering the OCCI model in the HTTP Body}
-%\label{sec:http_body}
-%While using this rendering with the Content-Type \textit{text/plain}
-%the information described in section \ref{sec:model_rendering} MUST be
-%placed in the HTTP Body.
-%
-%Each Rendering of an OCCI base type will be placed in the body. Each
-%entry consists of a name followed by a colon (":") and the field
-%value. The format of the field value is specified separately for each
-%of the three header fields, see section \ref{sec:model_rendering}.
-%
-%\subsubsection{Rendering the OCCI model in the HTTP Header}
-%While using this rendering with the Content-Type \textit{text/occi}
-%the information described in section \ref{sec:model_rendering} MUST be
-%placed in the HTTP Header. The body MUST contain the string 'OK' on
-%successfull operations.
-%
-%The HTTP header fields MUST follow the specification in RFC 2616
-%\cite{rfc2616}. A header field consists of a name followed by a colon
-%(":") and the field value. The format of the field value is specified
-%separately for each of the three header fields, see section
-%\ref{sec:model_rendering}.
-%
-%\paragraph{Limitations}
-%HTTP header fields MAY appear multiple times in a HTTP request or
-%response. In order to be OCCI compliant the specification of multiple
-%message-header fields according to RFC 2616 MUST be fully
-%supported. In essence there are two valid representation of multiple
-%HTTP header field values. A header field might either appear several
-%times or as a single header field with a comma-separated list of field
-%values. Due to implementation issues in many web frameworks and client
-%libraries it is RECOMMENDED to use the comma-separated list format for
-%best interoperability.
-%
-%HTTP header field values which contain separator characters MUST be
-%properly quoted according to RFC 2616.
-%
-%Space in the HTTP header section of a HTTP request is a limited
-%resource. By this, it is noted that many HTTP servers limit the number
-%of bytes that can be placed in the HTTP Header area. Implementers MUST
-%be aware of this limitation in their own implementation and take
-%appropriate measures so that truncation of header data does NOT
-%occure.
-%
-%\subsubsection{Rendering the OCCI model via URL Listings}
-%
-%\textbf{This Rendering can handle the \textit{text/uri-list} Accept
-%  Header. It will \textit{text/uri-list} an empty Content-type}
-%
-%This rendering cannot render Kinds or Categories directly but just
-%Links to them. For concrete rendering of Kinds and Categories the
-%Content-types \textit{text/occi}, \textit{text/plain} MUST be used. If
-%a request is done with the \textit{text/uri-list} in the Accept
-%header, while not requesting for a Listing a Bad Request MUST be
-%returned.
-%
-%\paragraph{Rendering a list of Categories}
-%
-%MUST return a list of Category scheme URLs.
-%
-%\paragraph{Rendering a list of Kinds}
-%
-%MUST return a list of URLs pointing to the Kinds.
+Not Authorized
+Bad Request... on not allow ops, parsing erros
+Server Error
+Not Found
+501 not implemente...on fault version, non support categories
 
 \section{Contributors}
 
