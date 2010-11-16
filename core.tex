@@ -177,10 +177,10 @@ and extend those resources.
 
 A fundamental feature of the OCCI Core Model is that it can be extended in such a
 way that any extension will be discoverable and visible to an OCCI client at
-run-time. An OCCI client can connect to an OCCI implementation with
-domain-specific extensions, without knowing anything in advance, and still be
+run-time. An OCCI client can connect to an OCCI implementation using an
+extended OCCI Core Model, without knowing anything in advance, and still be
 able to provide a decent end-user experience \textbf{(Andy: not clear what is meant here by phrase)}. 
-\ralf{(tried to describe what the discovery interface will provide...)}
+\ralf{(tried to describe what the discovery interface will provide. Do you have a better wording?)}
 For example, a web-based OCCI
 client could easily be reused as the management tool for a wide variety of
 services.
@@ -215,12 +215,12 @@ A resource can be e.g.~a virtual machine, a job in a job submission system, a
 user, etc.
 %
 The \hl{Resource} type contains a number of common attributes that
-domain-specific \hl{Resource} types inherit. The \hl{Resource} type is
+\hl{Resource} sub-types inherit. The \hl{Resource} type is
 complemented by the \hl{Link} type which associates one \hl{Resource} instance
 with another.
 %
-The \hl{Link} type also contains a number of common attributes that
-domain-specific \hl{Link} types inherit.
+The \hl{Link} type contains a number of common attributes that
+\hl{Link} sub-types inherit.
 
 \hl{Entity} is an abstract type which both \hl{Resource} and \hl{Link} inherit.
 Each sub-type of \hl{Entity} is identified by a unique \hl{Kind} instance.
@@ -344,7 +344,7 @@ Sub-types of \hl{Category} such as \hl{Kind} and \hl{Mixin} inherit this propert
 
 The categorisation schemes defined in the OCCI specification all use the
 \textit{http://schemas.ogf.org/occi/} base URL. This base URL is reserved for
-OCCI an MUST NOT be used by domain-specific extensions.
+OCCI an MUST NOT be used by service provider extensions.
 
 A \hl{Category} instance%
 \footnote{Also applies to \hl{Kind} and \hl{Mixin} instances.}
@@ -618,8 +618,8 @@ and \hl{Category} a particular service provider's OCCI implementation has
 defined. By examining these instances a client MUST be able to, at a minimum,
 deduce the following information:
 \begin{itemize}
-\item The \hl{Entity} sub-types available from a the service provider,
- including domain-specific extensions. This information is provided through the
+\item The \hl{Entity} sub-types available from the service provider,
+ including core model extensions. This information is provided through the
  \hl{Kind} instances of the OCCI implementation.
 \item The attributes defined for each \hl{Entity} sub-type. The identifying
  \hl{Kind} instance provide this information.
@@ -646,9 +646,8 @@ base types MUST be implemented.
 
 \subsubsection{Entity}
 \label{sec:entity}
-The \hl{Entity} type is an abstract type of
-\hl{Resource} and \hl{Link} and any domain-specific sub-types thereof. It MUST
-be implemented.
+The \hl{Entity} type is an abstract type of the \hl{Resource} type and the
+\hl{Link} type. It MUST be implemented.
 %
 Table~\ref{tbl:entity} defines the attributes the \hl{Entity} type MUST implement to
 be compliant.
@@ -857,52 +856,59 @@ The OCCI Core Model has a flexible yet fairly simple extension mechanism based o
 the type classification system described in section~\ref{sec:classification}.
 %
 The OCCI Core Model can be extended using two different methods, sub-typing and
-mix-in. Custom sub-typing require domain-specific \hl{Kind} instances and
-custom mix-ins require domain-specific \hl{Mixin} instances.  Both methods MAY
-involve the use of domain-specific \hl{Category} instance since those are
-REQUIRED for domain-specific \hl{Action} sub-types.  The following sections
-define the rules for extensions of the OCCI Core Model.
+mix-in. Custom sub-typing require provider-specific \hl{Kind} instances and
+custom mix-ins require provider-specific \hl{Mixin} instances.  Both methods MAY
+involve the use of provider-specific \hl{Category} instance since those are
+REQUIRED for provider-specific \hl{Action} sub-types.  The following sections
+define the rules for extending the OCCI Core Model.
 %
 The rules defined in section~\ref{sec:classification} and \ref{sec:base_types}
 are REQUIRED for all extensions of the OCCI Core Model.
 
 \subsubsection{Category instances}
 \label{sec:ext:category}
-Domain-specific instances of \hl{Category}, \hl{Kind} and \hl{Mixin} MAY be
+Provider-specific instances of \hl{Category}, \hl{Kind} and \hl{Mixin} MAY be
 introduced by an OCCI implementation. Since \hl{Kind} and \hl{Mixin} both
 inherit \hl{Category} the extension rules for \hl{Category}, defined below,
 applies to them as well.
 
 A \hl{Category} instance defined outside of the OCCI specification MUST use a
 \hl{Category} scheme unique to the provider,
-e.g.~\textit{http://example.com/occi\#} \textbf{(Andy: What about 'term' - mention for completeness.)}.
+e.g.~\textit{http://example.com/occi\#}. The {\tt term} of a provider-specific
+\hl{Category} instance can be any string corresponding to a ``token'' as defined
+in RFC2616~\cite{rfc2616}.
 %
-An attribute introduced by a domain-specific \hl{Category} MUST
+An attribute introduced by a provider-specific \hl{Category} MUST
 use an attribute name prefix. This prefix MUST NOT be the ``\texttt{occi.}''~prefix
 which is reserved for the OCCI specification. Domain-specific attribute names
 SHOULD use a prefix consisting of the provider's reverse domain name,
 e.g.~``\texttt{com.example.}''.
 
 \subsubsection{Sub-typing}
-The OCCI Core Model MAY be extended through sub-typing for domain-specific purposes.
+The OCCI Core Model MAY be extended through sub-typing.
 Three OCCI Core Model types MAY be sub-typed, those are \hl{Resource}, \hl{Link} and
-\hl{Action}. \textbf{(Andy: Inconsistent - previously (4.4.2, 4.4.3) we said that Entity 
-could be extended and no mention of Action.)} 
-\textbf{(Andy: what is the case for extending Action by subclassing?)}
+\hl{Action}.
 
-In order to define a sub-type of \hl{Resource} or \hl{Link} a domain-specific
+In order to define a sub-type of \hl{Resource} or \hl{Link} a provider-specific
 \hl{Kind} instance MUST be defined and assigned to the sub-type. This
 \hl{Kind} instance MUST be directly related to the \hl{Kind} instance of the
 type extended.
 
-In order to define a sub-type of \hl{Action} a domain-specific \hl{Category}
+In order to define a sub-type of \hl{Action} a provider-specific \hl{Category}
 instance MUST be assigned to the \hl{Action} sub-type as its unique type identifier.
 Furthermore the \hl{Action} sub-type MUST be associated as a capability of a
-domain-specific \hl{Kind} or \hl{Mixin} instance.
+provider-specific \hl{Kind} or \hl{Mixin} instance.
+
+\textbf{(Andy: what is the case for extending Action by subclassing?)}
+\ralf{Do you mean what they are used for? All Actions defined in Infrastructure
+are sub-types of \hl{Action}s. Is that perhaps unclear in the definition of the
+\hl{Action} type?}
 
 \subsubsection{Mix-ins}
-The OCCI Core Model MAY be extended using the mix-in concept \textbf{(Andy: See previous comment (section 4))} by defining
-domain-specific \hl{Mixin} instances.  A \hl{Mixin} instance can be associated
+The OCCI Core Model MAY be extended using the mix-in concept
+\ralf{Add reference to mix-in concept}
+by defining
+provider-specific \hl{Mixin} instances.  A \hl{Mixin} instance can be associated
 with any resource instance although a provider MAY apply restrictions.
 
 In order to support user-defined tags \footnote{A tag is a \hl{Mixin} instance, 
