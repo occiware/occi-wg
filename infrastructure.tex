@@ -574,17 +574,24 @@ The OS Template
 is defined by the \textit{http://schemas.ogf.org/occi/infrastructure\#os\_tpl} \hl{Mixin} and
 MUST be supported SHOULD OS Templates be offered by the OCCI implementation.
 
-{\bf Ralf: No HTTP examples in Infrastructure. Better to use a UML object instance diagram.}
-A typical example of using such a \hl{Mixin} is shown below using the HTTP rendering.
+A typical example of using such a \hl{Mixin} is shown below (Figure 
+\ref{fig:infra_template_obj_diag1}) using a UML object diagram.
 
-\begin{verbatim}
-POST /compute
-Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; 
-    title='Compute Instance', 
-    ubuntu-9.10; scheme='http://provider.com/templates/os#'; 
-    title='Ubuntu 9.10'
-Attribute: occi.compute.memory=0.5, occi.compute.cores=2
-\end{verbatim}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.5]{figs/infra_template_obj_diag1}
+	\caption{Object Diagram of a \hl{Compute} Instance and its Associated OS Template \hl{Mixin}.}
+	\label{fig:infra_template_obj_diag1}
+\end{figure}
+
+%\begin{verbatim}
+%POST /compute
+%Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; 
+%    title='Compute Instance', 
+%    ubuntu-9.10; scheme='http://provider.com/templates/os#'; 
+%    title='Ubuntu 9.10'
+%Attribute: occi.compute.memory=0.5, occi.compute.cores=2
+%\end{verbatim}
 In the example a provider has defined an OS template which offers the ability to run Ubuntu Linux,
 verson 9.10, upon a client's provisioned compute resource.
 
@@ -602,30 +609,40 @@ An implementation-defined Resource Template \hl{Mixin} MUST be related
 to the OCCI Resource Template \hl{Mixin} in order to give absolute type information.. 
 
 The Resource Template is defined by the 
-\textit{http://schemas.ogf.org/occi/infrastructure\#resource\_tpl} \hl{Mixin} and MUST be supported SHOULD Resource Templates be offered by the OCCI implementation.
+\textit{http://schemas.ogf.org/occi/infrastructure\#resource\_tpl} \hl{Mixin} and MUST be 
+supported SHOULD Resource Templates be offered by the OCCI implementation.
 
-{\bf Ralf: No HTTP examples in Infrastructure. Better to use a UML object instance diagram.}
-A typical example of such a \hl{Mixin}'s use is shown below using the HTTP rendering. 
+A typical example of such a \hl{Mixin}'s use is shown below (Figure 
+\ref{fig:infra_template_obj_diag2}) using a UML object diagram. 
 
-\begin{verbatim}
-POST /compute
-Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; 
-    title='Compute Instance', 
-    small; scheme="http://provider.com/templates/compute#"; 
-    title="Small Instance", 
-    ubuntu-9.10; scheme="http://provider.com/templates/os#"; 
-    title="Ubuntu 9.10"
-\end{verbatim}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.5]{figs/infra_template_obj_diag2}
+	\caption{Object Diagram of a \hl{Compute} Instance and its Associated OS Template 
+	\hl{Mixin} and Resource Template \hl{Mixin}.}
+	\label{fig:infra_template_obj_diag2}
+\end{figure}
+%\begin{verbatim}
+%POST /compute
+%Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; 
+%    title='Compute Instance', 
+%    small; scheme="http://provider.com/templates/compute#"; 
+%    title="Small Instance", 
+%    ubuntu-9.10; scheme="http://provider.com/templates/os#"; 
+%    title="Ubuntu 9.10"
+%\end{verbatim}
 
 In this example, the provider offers \hl{Compute} \hl{Resource}s based on different sizes (i.e. small,
 medium, large). Each 'size' of \hl{Compute} (i.e. the term) corresponds to a predetermined set of OCCI 
 \hl{Resource}-specific attributes. In the example below a 'small' \hl{Compute} instance is created. 
-Specifying "small" as the term corresponds to an implemenation-specific \hl{Compute} \hl{Resource}-specific attribute set of:
+Specifying "small" as the term corresponds to an implementation-specific \hl{Compute} 
+\hl{Resource}-specific attribute set that is shown by the object instance named 'attributes' in Figure 
+\ref{fig:infra_template_obj_diag2}.
 
-\begin{verbatim}
-Attribute: occi.compute.cores='2', occi.compute.speed='2.4', 
-    occi.compute.memory='1.0', occi.compute.arch='x86'
-\end{verbatim}
+%\begin{verbatim}
+%Attribute: occi.compute.cores='2', occi.compute.speed='2.4', 
+%    occi.compute.memory='1.0', occi.compute.arch='x86'
+%\end{verbatim}
 
 From the administrative point of view, how an OCCI service provider manages their set of 
 \hl{Resource} Templates will be determined by themselves and so is implementation-specific.
