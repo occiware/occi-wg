@@ -718,7 +718,8 @@ The \hl{Link} type is the second of three entry points to extend the OCCI Core
 Model, see section~\ref{sec:extensibility}.
 
 \subsubsection{Action}
-The \hl{Action} type defines an invocable operation applicable to an \hl{Entity}
+The \hl{Action} type is an abstract type. Each sub-type of \hl{Action} defines
+an invocable operation applicable to an \hl{Entity}
 sub-type instance or a collection thereof. It MUST be implemented. In general,
 \hl{Action}s modify state by, for example,~performing a complex operation such as
 rebooting a virtual machine.
@@ -766,13 +767,19 @@ The \hl{Action} type is assigned the \hl{Category} type identifier
 table~\ref{tbl:action_kind}.
 %
 An \hl{Action} can expose attributes which correspond to arguments of the
-invocable operation.  Any attributes are defined through the \hl{Category}
-instance which identify the \hl{Action} sub-type. For example, a ``resize'' \hl{Action}
-defined for a storage resource can have a ``size'' attribute which represent the
-size argument of the resize operation.
+invocable operation.  A sub-type of \hl{Action} define the attributes available
+for the invocable operation represented. The names of any such attributes MUST
+be exposed through \hl{Category}.{\tt attributes} of the \hl{Action} sub-type's
+identifying \hl{Category} instance.
+%
+For example, a ``resize'' \hl{Action} sub-type defined for a storage resource
+could have a ``size'' attribute which represent the size argument of the resize
+operation. In that example the identifying \hl{Category} instance would have
+\hl{Category}.{\tt attributes = [ size ]}.
 
 The \hl{Action} type is the third and last of the entry points to extend the
-OCCI Core Model, see section~\ref{sec:extensibility}.
+OCCI Core Model, see section~\ref{sec:extensibility}. Since \hl{Action} is an
+abstract type a sub-type is always necessary to define a specific \hl{Action}.
 
 \subsection{Extensibility}
 \label{sec:extensibility}
@@ -823,16 +830,8 @@ instance MUST be assigned to the \hl{Action} sub-type as its unique type identif
 Furthermore the \hl{Action} sub-type MUST be associated as a capability of a
 provider-specific \hl{Kind} or \hl{Mixin} instance.
 
-\textbf{(Andy: what is the case for extending Action by subclassing?)}
-\ralf{Do you mean what they are used for? All Actions defined in Infrastructure
-are sub-types of \hl{Action}s. Is that perhaps unclear in the definition of the
-\hl{Action} type?}
-\textbf{(Andy: Yep - that's unclear, hence there is no Action sub-types in infrastructure UML)}
-
 \subsubsection{Mix-ins}
-The OCCI Core Model MAY be extended using the mix-in concept
-\ralf{Add reference to mix-in concept} 
-\textbf{(Andy: references at the top of the doc should be enough now.)}
+The OCCI Core Model MAY be extended using a ``mix-in'' like concept
 by defining
 provider-specific \hl{Mixin} instances.  A \hl{Mixin} instance can be associated
 with any resource instance although a provider MAY apply restrictions.
