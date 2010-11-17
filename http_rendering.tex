@@ -31,6 +31,9 @@
 
 \setcounter{secnumdepth}{4}
 
+% comments, temp stuff
+\newcommand{\ralf}[1]{\textcolor{red}{Ralf: #1}}
+
 \begin{document}
 
 % header on first page is different
@@ -443,6 +446,9 @@ only return the resource instances belonging to the provided
 Category. The provided category definition SHOULD be different from
 the one Category definition which defined the location path used in
 the request.
+
+\ralf{Core currently requires an OCCI client to be able to retrieve a subset of
+a collection.  Maybe change the above to a MUST or introduce paging?}
 
 \item[Triggering actions on all instances of a \hl{Mixin} or
   \hl{Kind}] Actions can be triggered on all resource instances of the
