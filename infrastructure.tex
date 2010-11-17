@@ -110,9 +110,9 @@ Supporting these Resource types are the following \hl{Link} sub-types:
 	\item \hl{StorageLink}: connects a \hl{Compute} instance to a \hl{Storage} instance.
 \end{itemize}
 
+%OCCI infrastructure implementors MUST implement these types. 
 These infrastructure types inherit the OCCI Core Model \hl{Resource} base type and all its 
-attributes. OCCI infrastructure implementors MUST implement these types. The HTTP 
-Rendering document defines how to serialise and interact with these types 
+attributes. The HTTP Rendering document defines how to serialise and interact with these types 
 using RESTful communication. Implementers are free to choose what \hl{Resource} and 
 \hl{Link} sub-types to implement. Those that are supported by an implementation will be 
 discoverable through the OCCI Query Interface.
@@ -318,7 +318,7 @@ The \hl{IPNetworking} mixin is assigned
 \footnote{Both assignments use data members from the inherited \hl{Category} 
 base type.} the 'scheme' of
 \textit{http://schemas.ogf.org/occi/infrastructure/network\#} and the 'term' value 
-\textit{ipnetwork}. An \hl{IPNetworking} mixin MUST expose these values.
+\textit{ipnetwork}. An \hl{IPNetworking} mixin MUST support these values.
 
 Table~\ref{tbl:ipnetworking} define the attributes introduced by the
 \hl{IPNetworking} mixin.  A \hl{Network} instance associated with the
@@ -472,7 +472,7 @@ The \hl{IPNetworkInterface} mixin is assigned%
 base type.} the 'scheme' of
 \textit{http://schemas.ogf.org/occi/infrastructure/networkinterface\#} and the 'term' value 
 \textit{ipnetworkinterface}. 
-A \hl{NetworkInterface} instance associated with this \hl{Mixin} instance MUST expose these attributes
+A \hl{NetworkInterface} instance associated with this \hl{Mixin} instance MUST support these attributes
 
 Table~\ref{tbl:ipnetworkinterface} define the attributes introduced by the
 \hl{IPNetworkInterface} mixin.  A \hl{NetworkInterface} instance associated with the
