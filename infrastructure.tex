@@ -95,24 +95,24 @@ internal resource management system of infrastructure providers.
 The OCCI Infrastructure document details how an OCCI implementation can model and implement an
 Infrastructure as a Service API offering by utilising the OCCI Core Model. This API allows for the creation and management of typical resources associated with an IaaS service, for example, creating a \hl{Compute} instance and \hl{Storage} instance and then linking them with \hl{StorageLink}. The main infrastructure types defined within OCCI Infrastructure are:
 
-\begin{itemize}
-	\item \hl{Compute}: Information processing resources.
-	\item \hl{Network}: Interconnection resource and represents a L2 networking resource. 
+\begin{description}
+	\item[\hl{Compute}] Information processing resources.
+	\item[\hl{Network}] Interconnection resource and represents a L2 networking resource. 
 	This is complimented by the \hl{IPNetwork} \hl{Mixin}.
-	\item \hl{Storage}: Information recording resources.
-\end{itemize}
+	\item[\hl{Storage}] Information recording resources.
+\end{description}
 
 Supporting these Resource types are the following \hl{Link} sub-types:
 
-\begin{itemize}
-	\item \hl{NetworkInterface}: connects a \hl{Compute} instance to a \hl{Network} instance. 
+\begin{description}
+	\item[\hl{NetworkInterface}] connects a \hl{Compute} instance to a \hl{Network} instance. 
 	This complimented by an \hl{IPNetworkInterface} \hl{Mixin}.
-	\item \hl{StorageLink}: connects a \hl{Compute} instance to a \hl{Storage} instance.
-\end{itemize}
+	\item[\hl{StorageLink}] connects a \hl{Compute} instance to a \hl{Storage} instance.
+\end{description}
 
 %OCCI infrastructure implementors MUST implement these types. 
 These infrastructure types inherit the OCCI Core Model \hl{Resource} base type and all its 
-attributes. The HTTP Rendering document defines how to serialise and interact with these types 
+attributes. The HTTP Rendering document \cite{occi:http_rendering} defines how to serialise and interact with these types 
 using RESTful communication. Implementers are free to choose what \hl{Resource} and 
 \hl{Link} sub-types to implement. Those that are supported by an implementation will be 
 discoverable through the OCCI Query Interface.
@@ -122,8 +122,8 @@ a sub-type of \hl{Resource} or \hl{Link} MUST be assigned a \hl{Kind} that ident
 type. Each such \hl{Kind} instance MUST be related to the \hl{Resource} or \hl{Link} base type's \hl{Kind}. 
 That assigned \hl{Kind} instance MUST always remain immutable to any client.
 
-The following table describes the \hl{Kind} instances defined for each of the infrastructure \hl{Resource} 
-or \hl{Link} sub-types:
+Table~\ref{tbl:kinds} describes the \hl{Kind} instances defined for each of the infrastructure \hl{Resource} 
+or \hl{Link} sub-types.
 
 \mytablefloat{
 	\label{tbl:kinds}The \hl{Kind} instances defined for
@@ -166,13 +166,13 @@ The following sections on \hl{Compute}, \hl{Storage} and \hl{Network} types deta
 \hl{Actions} and states defined for each of them, including type-specific mixins (\hl{IPNetwork} 
 and \hl{IPNetworkInterface}) where 
 appropriate. Following those, the definition of infrastructure-related \hl{Link} sub-types 
-are given and finally OS and Resource Templates are defined. Figure ~\ref{fig:infra_uml} gives an overview
+are given and finally OS and Resource Templates are defined. Figure~\ref{fig:infra_uml} gives an overview
 of the various types involved in this infrastructure specification.
 
 \begin{figure}[!h]
-	\centering
-	\includegraphics[scale=0.5]{figs/infrastructure}
-	\caption{Overview Diagram of Infrastructure Types. FIXME: remove Mixins}
+	{\centering \resizebox*{0.9\columnwidth}{!}
+	    {\includegraphics{figs/infrastructure.pdf}} \par}
+	\caption{Overview Diagram of OCCI Infrastructure Types.}
 	\label{fig:infra_uml}
 \end{figure}
 
@@ -182,9 +182,11 @@ virtual machine. \hl{Compute} inherits the \hl{Resource} base type defined in
 OCCI Core Model \cite{occi:core}.
 \hl{Compute} is assigned the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
+A \hl{Compute} instance MUST use and expose this \hl{Kind}.
+
 
 \mytablefloat{
-	\label{tbl:compute}Attributes defined for \hl{Compute}. 
+	\label{tbl:compute}Attributes defined for the \hl{Compute} type. 
 }
 {
 	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
@@ -208,14 +210,15 @@ OCCI Core Model \cite{occi:core}.
 }
 
 Table~\ref{tbl:compute} describes the attributes%
-\footnote{See ’attributes’ in the inherited 
-base type \hl{Category}  \cite{occi:core}} 
+\footnote{See the ``{\tt attributes}'' attribute defined by the \hl{Category}
+type and inherited by \hl{Kind} \cite{occi:core}.} 
 defined by \hl{Compute} through its \hl{Kind} instance. These attributes
 MUST be exposed by an instance of the \hl{Compute} type.
 
 \mytablefloat{
 	\label{tbl:compute_actions}%
-	\hl{Action}s applicable to \hl{Compute} and defined by the \hl{Kind} instance
+	\hl{Action}s applicable to instances of the \hl{Compute} type. The
+	\hl{Action}s are defined by the \hl{Kind} instance
 	\textit{http://schemas.ogf.org/occi/infrastructure\#compute}. Every \hl{Action}
 	in the table is identified by a \hl{Category} instance using the
 	\textit{http://schemas.ogf.org/occi/infrastructure/compute/action\#}
@@ -228,9 +231,9 @@ MUST be exposed by an instance of the \hl{Compute} type.
 	Action Term & Target state & Attributes \\
 	\colrule
 	start & active & -- \\
-	stop & inactive & flag=\{graceful, acpioff, poweroff\} \\
-	restart & active (via stop and start chain) & flag=\{graceful, warm, cold\} \\
-	suspend & suspended & flag=\{hibernate, suspend\} \\
+	stop & inactive & method=\{graceful, acpioff, poweroff\} \\
+	restart & active (via stop and start chain) & method=\{graceful, warm, cold\} \\
+	suspend & suspended & method=\{hibernate, suspend\} \\
 	\botrule
 	\end{tabular}
 }
@@ -243,24 +246,29 @@ Figure~\ref{fig:compute_state} illustrates the state diagram for a \hl{Compute} 
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{figs/compute-state.png}
-	\caption{State Diagram for \hl{Compute}.}
+	\caption{State Diagram for a \hl{Compute} instance.}
 	\label{fig:compute_state}
 \end{figure}
 
 \subsection{Network}
-\hl{Network} represents a L2 networking entity (e.g. a virtual switch). It can be extended using 
+The \hl{Network} type represents a L2 networking entity (e.g.~a virtual switch).
+%
+It can be extended using 
 the mixin mechanism (or sub-typed) to support L3/L4 capabilities such as TCP/IP etc. 
 For the purposes of this specification we define an OCCI mixin so that IP networking can be supported
 where required. 
+%
+\hl{Network} inherits the \hl{Resource} base type defined in OCCI Core Model \cite{occi:core}.
 
-The \hl{Network} type is assigned the \textit{http://schemas.ogf.org/occi/infrastructure\#network} \hl{Kind}. A \hl{Network} instance MUST use and expose this \hl{Kind}.
+The \hl{Network} type is assigned the
+\textit{http://schemas.ogf.org/occi/infrastructure\#network} \hl{Kind}. A
+\hl{Network} instance MUST use and expose this \hl{Kind}.
 
 \mytablefloat{
-	\label{tbl:network}Attributes defined for
-	\hl{Network}. 
+	\label{tbl:network}Attributes defined for the \hl{Network} type. 
 }
 {
-	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+	\begin{tabular}{lllll}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
@@ -268,19 +276,21 @@ The \hl{Network} type is assigned the \textit{http://schemas.ogf.org/occi/infras
 	& 802.1q VLAN Ientifier (e.g. 343).\\
 	occi.network.label & Token & 0\ldots1 & Mutable 
 	& Tag based VLANs (e.g. external-dmz).\\
-	occi.network.state & Enumeration: \{active, inactive\} & 1 & Immutable 
+	occi.network.state & Enum \{active, inactive\} & 1 & Immutable 
 	& Current state of the instance.\\
 	\botrule
 	\end{tabular}
 }
-Table~\ref{tbl:network} describes the attributes \footnote{See ’attributes’ in the inherited 
-base type \hl{Category}  \cite{occi:core}} 
+Table~\ref{tbl:network} describes the attributes%
+\footnote{See the ``{\tt attributes}'' attribute defined by the \hl{Category}
+type and inherited by \hl{Kind} \cite{occi:core}.} 
 defined by \hl{Network} through its \hl{Kind} instance. These attributes
 MUST be exposed by an instance of the \hl{Network} type.
 
 \mytablefloat{
 	\label{tbl:network_actions}%
-	\hl{Action}s applicable to \hl{Network} and defined by the \hl{Kind} instance
+	\hl{Action}s applicable to instances of the \hl{Network} type. The
+	\hl{Action}s are defined by the \hl{Kind} instance
 	\textit{http://schemas.ogf.org/occi/infrastructure\#network}. Every \hl{Action}
 	in the table is identified by a \hl{Category} instance using the
 	\textit{http://schemas.ogf.org/occi/infrastructure/network/action\#}
@@ -306,7 +316,7 @@ Figure~\ref{fig:network_state} illustrates the state diagram for a \hl{Network} 
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{figs/network-state.png}
-	\caption{State Diagram for \hl{Network}.}
+	\caption{State Diagram for a \hl{Network} instance.}
 	\label{fig:network_state}
 \end{figure}
 
@@ -314,29 +324,30 @@ Figure~\ref{fig:network_state} illustrates the state diagram for a \hl{Network} 
 
 In order to support L3/L4 capabilities (e.g. IP, TCP etc.) an OCCI mixin is herewith defined. 
 
-The \hl{IPNetworking} mixin is assigned 
-\footnote{Both assignments use data members from the inherited \hl{Category} 
-base type.} the 'scheme' of
-\textit{http://schemas.ogf.org/occi/infrastructure/network\#} and the 'term' value 
+The \hl{IPNetworking} mixin is assigned%
+\footnote{Both assignments use data members from the inherited \hl{Category}
+type \cite{occi:core}.}
+the ``{\tt scheme}'' of
+\textit{http://schemas.ogf.org/occi/infrastructure/network\#} and the ``{\tt term}'' value 
 \textit{ipnetwork}. An \hl{IPNetworking} mixin MUST support these values.
 
 Table~\ref{tbl:ipnetworking} define the attributes introduced by the
 \hl{IPNetworking} mixin.  A \hl{Network} instance associated with the
-\hl{IPNetworking} mixin \hl{Mixin} instance MUST implement these attributes.
+\hl{IPNetworking} \hl{Mixin} instance MUST implement these attributes.
 
 \mytablefloat{
 	\label{tbl:ipnetworking}%
-	Attributes defined by the \hl{IPNetworking} mixin. A \hl{Network}
+	Attributes defined by the \hl{IPNetworking} \hl{Mixin}. A \hl{Network}
 	instance associated with this \hl{Mixin} instance MUST expose these
 	attributes.
 }{
-\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+\begin{tabular}{lp{3.4cm}p{1cm}lp{5.0cm}}
 \toprule
 Attribute&Type&Multi\-plicity&Mutability&Description\\
 \colrule
 occi.network.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
 occi.network.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1, fc00::)\\
-occi.network.allocation & String Enumeration: \{dynamic, static\} & 0\ldots1 & Mutable & Address allocation mechanism: \textit{dynamic} e.g. uses the dynamic host configuration protocol, \textit{static} e.g. uses user supplied static network configurations.\\
+occi.network.allocation & Enum \{dynamic, static\} & 0\ldots1 & Mutable & Address allocation mechanism: \textit{dynamic} e.g.~uses the dynamic host configuration protocol, \textit{static} e.g.~uses user supplied static network configurations.\\
 \botrule
 \end{tabular}
 }
@@ -353,35 +364,36 @@ IPNetwork \hl{Mixin} when both are instantiated.
 \end{figure}
 
 \subsection{Storage}
-Storage resources are defined to be those that record information to a data storage device. 
-The \hl{Storage} type is assigned the \textit{http://schemas.ogf.org/occi/infrastructure\#storage} 
-\hl{Kind}. A \hl{Storage} instance MUST use and expose this \hl{Kind}.
+The \hl{Storage} type represent resources that record information to a data storage device. 
+\hl{Storage} inherits the \hl{Resource} base type defined in the OCCI Core Model \cite{occi:core}.
+The \hl{Storage} type is assigned the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/infrastructure\#storage}.
+A \hl{Storage} instance MUST use and expose this \hl{Kind}.
 
 \mytablefloat{
-	\label{tbl:storage}Attributes defined for
-	\hl{Storage}. 
+	\label{tbl:storage}Attributes defined for the \hl{Storage} type. 
 }
 {
-	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+	\begin{tabular}{lp{2.8cm}clp{5cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
-	\hline
 	occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable 
 	& Storage size in gigabytes of the 	instance.\\
-	occi.storage.state & String Enumeration: \{online, offline, degraded\} & 1 & Immutable 
+	occi.storage.state & Enum \{online, offline, degraded\} & 1 & Immutable 
 	& Current status of the instance.\\
 	\botrule
 	\end{tabular}
 }
-Table~\ref{tbl:storage} describes the attributes \footnote{See ’attributes’ in the inherited 
-base type \hl{Category}  \cite{occi:core}} 
+Table~\ref{tbl:storage} describes the attributes%
+\footnote{See the ``{\tt attributes}'' attribute defined by the \hl{Category}
+type and inherited by \hl{Kind} \cite{occi:core}.} 
 defined by \hl{Storage} through its \hl{Kind} instance. These attributes
 MUST be exposed by an instance of the \hl{Storage} type.
 
 \mytablefloat{
 	\label{tbl:storage_actions}%
-	\hl{Action}s applicable to \hl{Storage} and defined by the \hl{Kind} instance
+	\hl{Action}s applicable to instances of the \hl{Storage} type. The
+	\hl{Action}s are defined by the \hl{Kind} instance
 	\textit{http://schemas.ogf.org/occi/infrastructure\#storage}. Every \hl{Action}
 	in the table is identified by a \hl{Category} instance using the
 	\textit{http://schemas.ogf.org/occi/infrastructure/storage/action\#}
@@ -397,7 +409,7 @@ MUST be exposed by an instance of the \hl{Storage} type.
 	offline & offline & --\\
 	backup & None & --\\
 	snapshot & None & --\\
-	resize & None & size (Float  ${\mathbf 10}^9$ (GiB))
+	resize & None & size = Float  ${\mathbf 10}^9$ (GiB)
 %	\botrule
 	\end{tabular}
 }
@@ -450,8 +462,9 @@ A \hl{NetworkInterface} type MUST be related to the \textit{http://schemas.ogf.o
 	\botrule
 	\end{tabular}
 }
-Table~\ref{tbl:networklink} describes the attributes \footnote{See ’attributes’ in the inherited 
-base type \hl{Category}  \cite{occi:core}} 
+Table~\ref{tbl:networklink} describes the attributes%
+\footnote{See the ``{\tt attributes}'' attribute defined by the \hl{Category}
+type and inherited by \hl{Kind} \cite{occi:core}.} 
 defined by \hl{NetworkInterface} through its \hl{Kind} instance. These attributes
 MUST be exposed by an instance of the \hl{NetworkInterface} type. 
 Figure~\ref{fig:networklink_state} illustrates the state diagram for a \hl{NetworkInterface} instance.
@@ -536,8 +549,9 @@ A \hl{StorageLink} type MUST be related to the \textit{http://schemas.ogf.org/oc
 	\end{tabular}
 }
 
-Table~\ref{tbl:storagelink} describes the attributes \footnote{See ’attributes’ in the inherited 
-base type \hl{Category}  \cite{occi:core}} 
+Table~\ref{tbl:storagelink} describes the attributes%
+\footnote{See the ``{\tt attributes}'' attribute defined by the \hl{Category}
+type and inherited by \hl{Kind} \cite{occi:core}.} 
 defined by \hl{StorageLink} through its \hl{Kind} instance. These attributes
 MUST be exposed by an instance of the \hl{StorageLink} type. 
 Figure~\ref{fig:storagelink_state} illustrates the state diagram for a \hl{StorageLink} instance.
