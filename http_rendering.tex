@@ -337,7 +337,7 @@ with an '/').
 \begin{verbatim}
 > POST /vms/user1/vm1;action=stop HTTP/1.1
 > [...]
-> X-OCCI-Attribute:flag=poweroff
+> X-OCCI-Attribute:method=poweroff
 
 < HTTP/1.1 200 OK
 < [...]
@@ -452,7 +452,7 @@ the request.
 \begin{verbatim}
 > POST /compute/;action=stop HTTP/1.1
 > [...]
-> X-OCCI-Attribute:flag=poweroff
+ X-OCCI-Attribute:method=poweroff
 
 < HTTP/1.1 200 OK
 < [...]
