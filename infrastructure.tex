@@ -110,6 +110,13 @@ Supporting these Resource types are the following \hl{Link} sub-types:
 	\item[\hl{StorageLink}] connects a \hl{Compute} instance to a \hl{Storage} instance.
 \end{description}
 
+\begin{figure}[!h]
+	{\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{270}
+	    {\includegraphics{figs/infrastructure_model.pdf}}} \par}
+	\caption{Overview Diagram of OCCI Infrastructure Types.}
+	\label{fig:infra_uml}
+\end{figure}
+
 %OCCI infrastructure implementors MUST implement these types. 
 These infrastructure types inherit the OCCI Core Model \hl{Resource} base type and all its 
 attributes. The HTTP Rendering document \cite{occi:http_rendering} defines how to serialise and interact with these types 
@@ -168,13 +175,6 @@ and \hl{IPNetworkInterface}) where
 appropriate. Following those, the definition of infrastructure-related \hl{Link} sub-types 
 are given and finally OS and Resource Templates are defined. Figure~\ref{fig:infra_uml} gives an overview
 of the various types involved in this infrastructure specification.
-
-\begin{figure}[!h]
-	{\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{270}
-	    {\includegraphics{figs/infrastructure_model.pdf}}} \par}
-	\caption{Overview Diagram of OCCI Infrastructure Types.}
-	\label{fig:infra_uml}
-\end{figure}
 
 \subsection{Compute}
 The \hl{Compute} type represents a generic information processing resource, e.g.~a
