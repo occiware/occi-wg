@@ -125,13 +125,15 @@ same fashion. For example, a web-based OCCI client could easily be reused as the
 management tool for a wide variety of services.
 
 The OCCI Core Model can be extended through inheritance but also
-using a ``mix-in'' like concept ``Mixins first appeared in the Symbolics' 
-object-oriented Flavors\footnote{``Object-oriented programming with flavors'', David A. Moon. Conference on Object Oriented Programming Systems Languages and Applications, 1986} \ref{flavors} system (developed by Howard Cannon), which was an 
-approach to object-orientation used in Lisp Machine Lisp.''
+using a ``mix-in'' like concept.
+\begin{quote}
+Mixins first appeared in the Symbolics' 
+object-oriented Flavors~\cite{Moon:1986:flavors}
+system (developed by Howard Cannon), which was an 
+approach to object-orientation used in Lisp Machine Lisp.%
 \footnote{http://en.wikipedia.org/wiki/Mixin.}
-
-\textbf{(Andy: place references into .bib file)}
-
+\end{quote}
+%
 The mix-in model only applies at the instance
 level, i.e.~the ``object level'', and thereby differs from the more common uses
 of the mix-in concept. A mix-in in OCCI can never be applied to a type, only to
@@ -532,13 +534,7 @@ following basic navigation operations MUST be supported:
 \item Retrieve a specific item in a collection.
 \item Retrieve a subset of a collection.
 \end{itemize}
-
-\textbf{(Andy: Comment to Thijs - is this functionality supported in the HTTP rendering?)}
-\ralf{At least it should be. The whole collection is retrieved by querying the
-corresponding location. Filtering is supported through additional Category
-Headers which covers the subsets rule. Have not verified whether this is
-present in the latest doc though.}
-
+%
 The details of collection navigation is rendering specific.
 
 \subsubsection{Discovery}
@@ -841,8 +837,10 @@ by defining
 provider-specific \hl{Mixin} instances.  A \hl{Mixin} instance can be associated
 with any resource instance although a provider MAY apply restrictions.
 
-In order to support user-defined tags \footnote{A tag is a \hl{Mixin} instance, 
-which does not introduce additional capabilities.} an OCCI implementation must allow custom
+In order to support user-defined tags%
+\footnote{A tag is a \hl{Mixin} instance, which does not introduce additional
+resource capabilities.}
+an OCCI implementation must allow custom
 \hl{Mixin} instances to be created and destroyed by request of a client.
 There is no limitation in the OCCI Core Model from doing so but it is RECOMMENDED to
 assign a separate \hl{Category} scheme for each user's \hl{Mixin} instances (e.g. per-user schemes).
