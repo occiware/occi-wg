@@ -86,15 +86,6 @@ OCCI is a trademark of the Open Grid Forum.
 \input{include/notational}
 
 \section{OCCI Core}
-\textbf{Andy: This preceding text reads as a general introduction. Move to Introduction section.}
-
-\ralf{Which part of intro should be present in {\em all} documents and which part in Core?}
-
-\textbf{Andy: to help the reader a broad outline/reading guide should be introduced here
-e.g. 'we start with describing Category, work through the definition of Action, Mixin and Kind,
-following which Entity is described. Lastly we discuss Resource and Link, the main extension
-points of the OCCI Core Model.'}
-
 The Open Cloud Computing Interface is a boundary protocol and API
 that acts as a service front-end to a provider's internal management
 framework. Figure~\ref{fig:placement} shows OCCI's place in a
@@ -111,10 +102,8 @@ management API for all kinds of resources while at the same time maintaining a
 high level of interoperability.
 
 This document, the OCCI Core specification, defines the OCCI Core Model. This
-model is the core of the specification suite and it can be manipulated 
-\textbf{(Andy: 'manipulated' not quite right)}
-\ralf{(This is used in intro as well, what should we write instead?)}
-by renderings and expanded 
+model is the core of the specification suite and it can be interacted with 
+by renderings (including associated behaviours) and expanded 
 through extensions. In itself, the core model is only useful
 for a very limited set of use cases. However, it provides the basis for
 renderings and extensions to build upon.
@@ -130,16 +119,19 @@ A fundamental feature of the OCCI Core Model is that it can be extended in such 
 way that any extension will be discoverable and visible to an OCCI client at
 run-time. An OCCI client can connect to an OCCI implementation using an
 extended OCCI Core Model, without knowing anything in advance, and still be
-able to provide a decent end-user experience \textbf{(Andy: not clear what is meant here by phrase)}. 
-\ralf{(tried to describe what the discovery interface will provide. Do you have a better wording?)}
-For example, a web-based OCCI
-client could easily be reused as the management tool for a wide variety of
-services.
+able to discover and understand, at run-time, the various \hl{Resource} and \hl{Link} sub-types
+supported by that implementation. What \hl{Mixin}s are supported is also discoverable in the 
+same fashion. For example, a web-based OCCI client could easily be reused as the 
+management tool for a wide variety of services.
 
 The OCCI Core Model can be extended through inheritance but also
-using a ``mix-in'' like concept \textbf{(Andy: Mixins are not new and can be referenced and explained
-by the likes of Lisp mixins etc. We must reference here.)}
-\ralf{Any suggestion on a proper reference to use?}.
+using a ``mix-in'' like concept ``Mixins first appeared in the Symbolics' 
+object-oriented Flavors\footnote{``Object-oriented programming with flavors'', David A. Moon. Conference on Object Oriented Programming Systems Languages and Applications, 1986} \ref{flavors} system (developed by Howard Cannon), which was an 
+approach to object-orientation used in Lisp Machine Lisp.''
+\footnote{http://en.wikipedia.org/wiki/Mixin.}
+
+\textbf{(Andy: place references into .bib file)}
+
 The mix-in model only applies at the instance
 level, i.e.~the ``object level'', and thereby differs from the more common uses
 of the mix-in concept. A mix-in in OCCI can never be applied to a type, only to
@@ -199,7 +191,6 @@ terminology have specific meaning in the OCCI context:
 \begin{description}
 \item[resource capabilities] Resource capabilities refer to attributes and
  \hl{Action}s exposed by a resource instance.
-\ralf{Ok definition of capabilities?}
 \item[mix-in] An instance of the \hl{Mixin} type associated with a {\bf resource
  instance}. The ``mix-in'' concept as used by OCCI {\em only} applies to
  instances, never to \hl{Entity} types.
@@ -213,6 +204,7 @@ terminology have specific meaning in the OCCI context:
 \item[type] A {\bf type} refer to one of those defined by the OCCI Core Model.
 The OCCI Core Model types are \hl{Category}, \hl{Kind}, \hl{Mixin}, \hl{Action},
 \hl{Entity}, \hl{Resource} and \hl{Link}.
+\item[concrete type/sub-type] A concrete sub-type is a type that can be instantiated.
 \end{description}
 
 \subsection{Mutability}
@@ -231,9 +223,7 @@ MUST NOT be modifiable by clients under any circumstance.
 \label{sec:classification}
 The OCCI Core Model provides a built-in type classification system allowing for safe
 extension towards domain-specific usage (e.g. infrastructure). This system is the OCCI type system
-and offers the means to be easily exposed over a text-based 
-\textbf{(Andy: OCCI could be implemented over a binary-based one too (e.g. AMQP), why disregard that?)} protocol.
-\ralf{True. The point is that we can identify an OCCI Core Model type using a text-string (i.e. the scheme+term). In other words, we do not rely on some binary type format to transfer the type information. So, how to say this properly then?}
+and offers the means to be easily and transparently (i.e. no format translation required) exposed over either a text or binary based protocol.
 %
 The classification system can be summarised with the following key features:
 \begin{itemize}
@@ -246,14 +236,12 @@ The classification system can be summarised with the following key features:
  \hl{Link} and therefore an OCCI client can discover the type inheritance structure
  used by a particular OCCI implementation. The discovery of the inheritance
  structure is made possible through the relationship of \hl{Kind} instances.
-\textbf{(Andy:Unclear and confusing.)}.
-\ralf{Better now?}
 \item The classification system allows \hl{Mixin} instances to be associated
  to resource instances in order to assign additional resource capabilities in terms of
  attributes and \hl{Action}s at run-time.
 \item Tagging of resource instances is supported through the association
  of \hl{Mixin} instances. A tag is simply a \hl{Mixin} instance which define no
- additional resource capabilities \ralf{Is the def of ``resource capabilities'' ok?}
+ additional resource capabilities.
 \item A collection of associated resource instances is implicitly defined for
  each \hl{Kind} and \hl{Mixin} instance. I.e.~all resource instances associated
  with a particular \hl{Kind} or \hl{Mixin} instance form a collection.
@@ -364,19 +352,12 @@ instances of the \hl{Kind} type:
 \item If type {\bf B} inherits type {\bf A}, where {\bf A} is a sub-type of
  \hl{Entity}, the \hl{Kind} instance of {\bf B} MUST be directly related to the
  \hl{Kind} instance of {\bf A}. See Kind Relationships below.
-
- \textbf{(Andy: Makes more sense if phrased 
- the opposite way around i.e. if Kind has X then the Entity sub-type must implement X)}
- \ralf{how to re-phrase? What would the exact sentence look like?}
 \end{itemize}
 
 \paragraph*{Kind Relationships}
 \hl{Kind} relationships are defined through the {\tt related} attribute present
 in every \hl{Kind} instance. The {\tt related} attribute define which other
 \hl{Kind} instances a particular \hl{Kind} is related to.
-
-\textbf{(Andy: One of the most confusing section.)}
-\ralf{Better now?}
 
 A \hl{Kind} instance identify a unique type, either the \hl{Entity} type itself
 or a sub-type thereof.  Each \hl{Kind} instance MUST be related to the
@@ -501,8 +482,6 @@ defined by the \hl{Mixin} associated.
 \subsubsection{Resource Instantiation}
 \label{sec:instantiation}
 To create a resource instance a client MUST supply the concrete
-\textbf{(Andy: domain-specific? extension?.)} 
-\ralf{What do you mean?}
 \hl{Entity} sub-type by a submitting a reference to the type-identifying \hl{Kind}.
 The reference MUST consist of the term and categorisation scheme which
 uniquely identify the \hl{Kind} instance, see section~\ref{sec:category}.
@@ -650,8 +629,6 @@ and any associated \hl{Mixin} instances together with the attributes and
 \subsubsection{Resource}
 \label{sec:resource}
 The \hl{Resource} type inherits \hl{Entity} and describes a concrete resource that
-\textbf{(Andy: define what a concrete resource is.)}
-\ralf{Isn't the definition below good enough? Or do you mean Resource still is somewhat abstract since you most likely have to sub-type it anyway?}
 can be inspected and manipulated. It represents a general object in the OCCI
 model and MUST be implemented. A \hl{Resource} is suitable to represent real
 world resources, e.g. virtual machines, networks, services, etc.~through specialisation.
@@ -854,10 +831,12 @@ provider-specific \hl{Kind} or \hl{Mixin} instance.
 \ralf{Do you mean what they are used for? All Actions defined in Infrastructure
 are sub-types of \hl{Action}s. Is that perhaps unclear in the definition of the
 \hl{Action} type?}
+\textbf{(Andy: Yep - that's unclear, hence there is no Action sub-types in infrastructure UML)}
 
 \subsubsection{Mix-ins}
 The OCCI Core Model MAY be extended using the mix-in concept
-\ralf{Add reference to mix-in concept}
+\ralf{Add reference to mix-in concept} 
+\textbf{(Andy: references at the top of the doc should be enough now.)}
 by defining
 provider-specific \hl{Mixin} instances.  A \hl{Mixin} instance can be associated
 with any resource instance although a provider MAY apply restrictions.
