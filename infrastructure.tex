@@ -333,11 +333,11 @@ the ``{\tt scheme}'' of
 
 Table~\ref{tbl:ipnetworking} define the attributes introduced by the
 \hl{IPNetworking} mixin.  A \hl{Network} instance associated with the
-\hl{IPNetworking} \hl{Mixin} instance MUST implement these attributes.
+\hl{IPNetworking} mixin \hl{Mixin} instance MUST implement these attributes.
 
 \mytablefloat{
 	\label{tbl:ipnetworking}%
-	Attributes defined by the \hl{IPNetworking} \hl{Mixin}. A \hl{Network}
+	Attributes defined by the \hl{IPNetworking} mixin. A \hl{Network}
 	instance associated with this \hl{Mixin} instance MUST expose these
 	attributes.
 }{
@@ -422,7 +422,7 @@ Figure~\ref{fig:storage_state} illustrates the state diagram for a \hl{Storage} 
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{figs/storage-state.png}
-	\caption{State Diagram for \hl{Storage}.}
+	\caption{State Diagram for a \hl{Storage} instance.}
 	\label{fig:storage_state}
 \end{figure}
 
@@ -430,26 +430,30 @@ Figure~\ref{fig:storage_state} illustrates the state diagram for a \hl{Storage} 
 In order to create entities like virtual data centres or virtual clusters, it is necessary to allow the linkage
 of the previously defined infrastructure \hl{Resource} sub-types. This is accomplished by extending 
 (sub-typing) the OCCI Core Model \hl{Link} base type. This is done as the \hl{Link} base type cannot 
-fully represent specific types of infrastructure links (e.g. links to storage or networks) as they do not 
-have the required attributes (e.g. network interface name).
+fully represent specific types of infrastructure links (e.g.~links to storage or networks).
+These infrastructure links require additional attributes (e.g.  network
+interface name) which can only be supported by sub-typing the \hl{Link} base
+type.
 
 \subsubsection{Linking to Network}
-\hl{NetworkInterface} represents an L2 client device (e.g. network adapter). It can be extended using the mix-in mechanism or sub-typed to support L3/L4 capabilities such as TCP/IP etc. 
+The \hl{NetworkInterface} type  represents an L2 client device (e.g. network
+adapter). It can be extended using the mix-in mechanism or sub-typed to support
+L3/L4 capabilities such as TCP/IP etc. 
+%
+\hl{NetworkInterface} inherits the \hl{Link} base type defined in the OCCI Core Model \cite{occi:core}.
 
-The \hl{NetworkInterface} type is assigned the \textit{http://schemas.ogf.org/occi/infrastructure
-\#networkinterface} \hl{Kind}. A \hl{NetworkInterface} instance MUST use and expose this \hl{Kind}. 
-
-A \hl{NetworkInterface} type MUST be related to the \textit{http://schemas.ogf.org/occi/core\#link} 
-\hl{Kind}.
+The \hl{NetworkInterface} type is assigned the \hl{Kind} instance
+\textit{http://schemas.ogf.org/occi/infrastructure\#networkinterface}.
+A \hl{NetworkInterface} instance MUST use and expose this \hl{Kind}. 
+%
+The \hl{Kind} instance assigned to the \hl{NetworkInterface} type MUST be
+related to the \textit{http://schemas.ogf.org/occi/core\#link} \hl{Kind}.
 
 \mytablefloat{
-	\label{tbl:networklink}Attributes defined for
-	\hl{NetworkInterface}. The attributes are defined by \hl{NetworkInterface}'s \hl{Kind} instance
-	\textit{http://schemas.ogf.org/occi/infrastructure\#networkinterface} 
-	(See 'attributes' in the inherited base type \hl{Category})  \cite{occi:core}.
+	\label{tbl:networklink}Attributes defined for the \hl{NetworkInterface} type.
 }
 {
-	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+	\begin{tabular}{lp{1.8cm}clp{5cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
@@ -457,7 +461,7 @@ A \hl{NetworkInterface} type MUST be related to the \textit{http://schemas.ogf.o
 	& Identifier that relates the link to the link's device interface\\
 	occi.networkinterface.mac & String & 1 & Mutable 
 	& MAC address associated with the link's device interface\\
-	occi.networkinterface.state & String Enumeration: \{active, inactive\}& 1 
+	occi.networkinterface.state & Enum \{active, inactive\}& 1 
 	& Immutable & Current status of the instance.\\
 	\botrule
 	\end{tabular}
@@ -472,20 +476,21 @@ Figure~\ref{fig:networklink_state} illustrates the state diagram for a \hl{Netwo
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{figs/infra-link-state.png}
-	\caption{State Diagram for \hl{NetworkInterface}.}
+	\caption{State Diagram for a \hl{NetworkInterface} instance.}
 	\label{fig:networklink_state}
 \end{figure}
 
 \paragraph{IPNetworkInterface Mixin}
-In order to support L3/L4 capabilities (e.g. IP, TCP etc.) with the \hl{NetworkInterface} type, an 
-OCCI mixin is herewith defined.
+In order to support L3/L4 capabilities (e.g. IP, TCP etc.) with the
+\hl{NetworkInterface} type, an OCCI \hl{Mixin} instance is herewith defined.
 
 The \hl{IPNetworkInterface} mixin is assigned%
-\footnote{Both assignments use data members from the inherited \hl{Category} 
-base type.} the 'scheme' of
-\textit{http://schemas.ogf.org/occi/infrastructure/networkinterface\#} and the 'term' value 
+\footnote{Both assignments use data members from the inherited \hl{Category}
+type \cite{occi:core}.}
+the ``{\tt scheme}'' of
+\textit{http://schemas.ogf.org/occi/infrastructure/networkinterface\#} and the ``{\tt term}'' value 
 \textit{ipnetworkinterface}. 
-A \hl{NetworkInterface} instance associated with this \hl{Mixin} instance MUST support these attributes
+An \hl{IPNetworkInterface} mixin MUST support these attributes.
 
 Table~\ref{tbl:ipnetworkinterface} define the attributes introduced by the
 \hl{IPNetworkInterface} mixin.  A \hl{NetworkInterface} instance associated with the
@@ -497,13 +502,13 @@ Table~\ref{tbl:ipnetworkinterface} define the attributes introduced by the
 	instance associated with this \hl{Mixin} instance MUST expose these
 	attributes.
 }{
-\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+\begin{tabular}{llp{1cm}lp{5cm}}
 \toprule
 Attribute&Type&Multi\-plicity&Mutability&Description\\
 \colrule
 occi.networkinterface.ip & IPv4 or IPv6 Address & 1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7) of the link\\
 occi.networkinterface.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g. 192.168.0.1/24, fc00::/7)\\
-occi.networkinterface.allocation & String Enumeration, \{dynamic, static\} & 1 & Mutable & Address mechanism: \textit{dynamic} e.g. uses the dynamic host configuration protocol, \textit{static} e.g. uses user supplied static network configurations.\\
+occi.networkinterface.allocation & Enum \{dynamic, static\} & 1 & Mutable & Address mechanism: \textit{dynamic} e.g. uses the dynamic host configuration protocol, \textit{static} e.g. uses user supplied static network configurations.\\
 \botrule
 \end{tabular}
 }
@@ -514,28 +519,31 @@ would be associated with an \hl{IPNetworkInterface} \hl{Mixin} when both are ins
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.5]{figs/infrastructure_mixins_obj_dia2_networkinterface}
-	\caption{Object Diagram of a NetworkInterface Instance and its Associated 
-	IPNetworkInterface Mixin.}
+	\caption{Object Diagram of a \hl{NetworkInterface} Instance and its Associated 
+	IPNetworkInterface \hl{Mixin}.}
 	\label{fig:networkinterface_mixin}
 \end{figure}
 
 \subsubsection{Linking to Storage}
-\hl{StorageLink} type represents a link from a \hl{Resource} to a target \hl{Storage} instance. This 
+The \hl{StorageLink} type represents a link from a \hl{Resource} to a target \hl{Storage} instance. This 
 enables a \hl{Storage} instance be attached to a \hl{Compute} instance, with all the prerequisite low-
 level operations handled by the OCCI implementation.
+%
+\hl{Storage} inherits the \hl{Link} base type defined in the OCCI Core Model
+\cite{occi:core}.
 
-The \hl{StorageLink} type is assigned the  
-\textit{http://schemas.ogf.org/occi/infrastructure\#storagelink} \hl{Kind}. A \hl{StorageLink}
-instance MUST use and expose this \hl{Kind}. 
-
-A \hl{StorageLink} type MUST be related to the \textit{http://schemas.ogf.org/occi/core\#link} \hl{Kind}.
+The \hl{StorageLink} type is assigned the \hl{Kind} instance 
+\textit{http://schemas.ogf.org/occi/infrastructure\#storagelink}.
+A \hl{StorageLink} instance MUST use and expose this \hl{Kind}. 
+%
+The \hl{Kind} instance assigned to the \hl{StorageLink} type MUST be related to
+the \textit{http://schemas.ogf.org/occi/core\#link} \hl{Kind}.
 
 \mytablefloat{
-	\label{tbl:storagelink}Attributes defined for
-	\hl{StorageLink}. 
+	\label{tbl:storagelink}Attributes defined for the \hl{StorageLink} type. 
 }
 {
-	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+	\begin{tabular}{lp{1.8cm}p{1cm}lp{5cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
@@ -543,7 +551,7 @@ A \hl{StorageLink} type MUST be related to the \textit{http://schemas.ogf.org/oc
 	& Device identifier as defined by the OCCI service provider.\\
 	occi.storagelink.mountpoint & String & 0\ldots1 & Mutable 
 	& Point to where the storage is mounted in the guest OS.\\
-	occi.storagelink.state & String Enumeration: \{active, inactive\}& 1 
+	occi.storagelink.state & Enum \{active, inactive\}& 1 
 	& Immutable & Current status of the instance.\\
 	\botrule
 	\end{tabular}
@@ -559,13 +567,13 @@ Figure~\ref{fig:storagelink_state} illustrates the state diagram for a \hl{Stora
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.4]{figs/infra-link-state.png}
-	\caption{State Diagram for \hl{StorageLink}.}
+	\caption{State Diagram for a \hl{StorageLink} instance.}
 	\label{fig:storagelink_state}
 \end{figure}
 
 \subsection{Infrastructure Templates}
-Infrastructure Templates allow clients of an OCCI implementation quickly and conveniently apply 
-pre-defined configurations to OCCI Infrastructure defined types. They are implemented using the 
+Infrastructure Templates allow clients of an OCCI implementation to quickly and conveniently apply 
+pre-defined configurations to OCCI Infrastructure defined types. They are implemented using
 \hl{Mixin} instances. There are 2 supported infrastructure template types in OCCI Infrastructure.
 
 \subsubsection{OS Template}
@@ -575,20 +583,18 @@ provision will be merely offer \hl{Resource}s without any available execution en
 (e.g. operating system). Of the two supported template types, this is the most basic 
 and necessary template that a provider SHOULD offer. 
 
-Its construction is a \hl{Mixin} instance consisting of a provider specific 'scheme' and a descriptive 'title' 
-detailing the OS. The 'term' value of the template category is a provider-specific identifier that 
+Its construction is a \hl{Mixin} instance consisting of a provider specific ``scheme'' and a descriptive ``title'' 
+detailing the OS. The ``term'' value of the template \hl{Mixin} is a provider-specific identifier that 
 corresponds to a particular virtual machine image configuration. Where an implementation requires 
-additional attributes associated with the OS Template, it can do so using \hl{Category}'s 'attributes'.
+additional attributes associated with the OS Template, it can do so using ``{\tt attributes}'' value
+inherited from the \hl{Category} type.
 
 A implementation-defined OS Template \hl{Mixin} MUST be related to 
 the OCCI OS Template \hl{Mixin} in order to give absolute type information. 
 
-The OS Template 
+The OCCI OS Template 
 is defined by the \textit{http://schemas.ogf.org/occi/infrastructure\#os\_tpl} \hl{Mixin} and
 MUST be supported SHOULD OS Templates be offered by the OCCI implementation.
-
-A typical example of using such a \hl{Mixin} is shown below (Figure 
-\ref{fig:infra_template_obj_diag1}) using a UML object diagram.
 
 \begin{figure}[!h]
 	\centering
@@ -605,7 +611,12 @@ A typical example of using such a \hl{Mixin} is shown below (Figure
 %    title='Ubuntu 9.10'
 %Attribute: occi.compute.memory=0.5, occi.compute.cores=2
 %\end{verbatim}
-In the example a provider has defined an OS template which offers the ability to run Ubuntu Linux,
+A typical example of using such a \hl{Mixin} is shown in
+figure~\ref{fig:infra_template_obj_diag1} using a UML object diagram.
+%
+In the example
+%illustrated in figure~\ref{fig:infra_template_obj_diag1}
+a provider has defined an OS template which offers the ability to run Ubuntu Linux,
 verson 9.10, upon a client's provisioned compute resource.
 
 How a provider manages their set of OS templates will be determined by themselves and so 
@@ -613,20 +624,23 @@ implementation-specific.
 
 \subsubsection{Resource Template}
 The Resource Template \hl{Mixin} builds upon the concept of OS Templates. A Resource Template is
-a provider-defined \hl{Mixin} that refers to a preset \hl{Resource} configuration. 
+a provider-defined \hl{Mixin} instance that refers to a preset \hl{Resource} configuration. 
+
+The preset \hl{Resource} configuration is not visable through the OCCI
+Discovery mechanism. The \hl{Mixin}.{\tt attributes} (inherited from
+\hl{Category}) is empty for a Resource Template \hl{Mixin}.
+The side-effect of initialising \hl{Resource} attributes with pre-defined
+values is handled by the implementation.
 
 The OCCI implementation associates a set of Resource attributes (via \hl{Category}'s 'attributes') with 
 a particular term identifier. 
 
 An implementation-defined Resource Template \hl{Mixin} MUST be related 
-to the OCCI Resource Template \hl{Mixin} in order to give absolute type information.. 
-
-The Resource Template is defined by the 
-\textit{http://schemas.ogf.org/occi/infrastructure\#resource\_tpl} \hl{Mixin} and MUST be 
+to the OCCI Resource Template \hl{Mixin} in order to give absolute type information.
+%
+The OCCI Resource Template is defined by the \hl{Mixin} instance
+\textit{http://schemas.ogf.org/occi/infrastructure\#resource\_tpl} and MUST be 
 supported SHOULD Resource Templates be offered by the OCCI implementation.
-
-A typical example of such a \hl{Mixin}'s use is shown below (Figure 
-\ref{fig:infra_template_obj_diag2}) using a UML object diagram. 
 
 \begin{figure}[!h]
 	\centering
@@ -645,12 +659,18 @@ A typical example of such a \hl{Mixin}'s use is shown below (Figure
 %    title="Ubuntu 9.10"
 %\end{verbatim}
 
+A typical example of such a \hl{Mixin}'s use is shown in
+figure~\ref{fig:infra_template_obj_diag2}) using a UML object diagram. 
+%
 In this example, the provider offers \hl{Compute} \hl{Resource}s based on different sizes (i.e. small,
-medium, large). Each 'size' of \hl{Compute} (i.e. the term) corresponds to a predetermined set of OCCI 
+medium, large). Each ``size'' of \hl{Compute} (i.e. the term) corresponds to a predetermined set of OCCI 
 \hl{Resource}-specific attributes. In the example below a 'small' \hl{Compute} instance is created. 
 Specifying "small" as the term corresponds to an implementation-specific \hl{Compute} 
-\hl{Resource}-specific attribute set that is shown by the object instance named 'attributes' in Figure 
-\ref{fig:infra_template_obj_diag2}.
+\hl{Resource}-specific attribute set%
+\footnote{This attribute set is implementation-specific and is {\em not} related to
+\hl{Mixin}.{\tt attributes} inherited from the \hl{Category} type \cite{occi:core}.}
+that is shown by the object instance named ``attributes'' in
+figure~\ref{fig:infra_template_obj_diag2}.
 
 %\begin{verbatim}
 %Attribute: occi.compute.cores='2', occi.compute.speed='2.4', 

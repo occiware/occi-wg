@@ -12,7 +12,7 @@ all:
 	make $$item ; \
 	done
 
-%.pdf: %.tex
+%.pdf: %.tex *.sty
 	$(TEX) $*
 	
 	@if(grep "There were undefined references" $*.log > /dev/null);\

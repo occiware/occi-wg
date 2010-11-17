@@ -27,18 +27,14 @@
 
 % My table float, arguments are caption text and tabular.
 \newcommand{\mytablefloat}[2]{%
-	\begin{table}[ht]
-	
+	\begin{table}[!h]
 	\centering
 	\footnotesize
-	
 	\caption{#1}
 	\vspace{4pt}
-
 	#2
-
 	\end{table}
-	\vspace{2pt}
+	\vspace{2pt}%
 }
 
 % Caption tweaks
