@@ -78,6 +78,8 @@ capabilities required to support modern service offerings.
 
 \textbf{(Andy: Kind sub-types are mentioned in the doc as are resource instances. Need to align this terminology with the core and infrastructure documents e.g. a REST resource is the equivalent of an 'entity sub-type' instance. Could be dealt with by glossary.)}
 
+\ralf{Yes, Kind need be replaced with Entity in serveral places. ``resource instance'' is ok to use (when referring to Entity sub-type instance), it is in the glossary already}
+
 \textbf{(Andy: Filtering mechanism should be MUST)}
 
 \textbf{(Andy: little reference to collections)}
@@ -100,6 +102,9 @@ All examples in this document use one of the following three
 Categories. An example namespace is also given. Syntax and Semantics
 is explained in the remaining sections of the document. These examples
 do not strive to be complete but to show the functionalities OCCI has:
+
+\ralf{Instead of "Categories" say "HTTP Category Headers representing two Kind
+instances and one Mixin instance" or similar.}
 
 \begin{verbatim}
 
@@ -128,6 +133,13 @@ throughout the spec. At a minimum we should make it clear that the
 renderings are in the header or body)}
 
 \section{A RESTful HTTP Rendering for OCCI}
+
+\ralf{The intro text in below gives a nice description of OCCI and REST.
+However I am missing the relation to OCCI Core here. I.e. that OCCI HTTP
+Rendering in fact is just {\em one} rendering of possibly many etc. Adding an some
+text describing OCCI Core vs OCCI renderings first and then jumping in to the
+HTTP REST specifics should solve it nicely though.}
+	 
 The HTTP Protocol is the underlying core fabric of OCCI and OCCI uses all
 the features of the HTTP and underlying protocols offer. 
 OCCI also builds upon the Resource Oriented Architecture (ROA). 
@@ -146,12 +158,18 @@ loosely to the resource related operations of Create (POST), Retrieve
 The following notations are used when referring to parts or complete
 URIs:
 
+\ralf{Maybe move to "Notational Conventions" ?}
+
 \begin{verbatim}
 http://www.example.com:8080/foo/bar;action=stop
 <   >  <     Authority    >< Path >< Fragment >
   ^
   Scheme
 \end{verbatim}
+
+\ralf{Reference RFC3986 (section 3) here. Maybe just copy-paste the example
+from there. I.e. you would change the query separator to '?' and talk about
+"query" instead of "fragment".}
 
 The following section describe the general behaviour for all HTTP based
 renderings. Later sections will describe the syntax and semantic of
@@ -171,7 +189,7 @@ mention the existence of other verbs too (HEAD, OPTIONS))}. OCCI service
 implementations MUST, at a minimum, support these verbs as shown in Table \ref{tbl:http_verbs}:
 
 \mytablefloat{\label{tbl:http_verbs}HTTP Verb Behaviour \textbf{(Andy: Can this table be completely 
-ruled? Is hard to read left to right)}}{
+ruled? Is hard to read left to right)} \ralf{Done. Still a bit hard to read though.}}{
 \begin{tabular}{p{1in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} }
 \toprule
 Type & GET & POST (create) & POST (action) & PUT (create) & PUT (update) & DELETE \\
@@ -180,13 +198,16 @@ resource instance \textbf{(Andy: this needs to be aligned to core and infrastruc
 Rendering of this instance &Create a new instance & Trigger action \textbf{(Andy: attributes/
 parameters?)} & Create an instance at the given path & Update an instance at an given path & Delete 
 this resource instance \\
+\colrule
 Path in the namespace hierarchy ending with / &	Listing of all instances below this namespace & 
 Create a new instance & N/A & N/A & N/A & Delete all the entries below this namespace hierarchy \\
+\colrule
 Location of an \hl{Mixin} or \hl{Kind} & URI-Listing containing Paths to all entities belonging to this \hl
 {Mixin} or \hl{Kind}	& N/A & Trigger action (defined for this kind or mixin) on all resource entities 
 belonging to this \hl{Mixin} or \hl{Kind} \textbf{(Andy: attributes/parameters?)} & Add an resource 
 instance to a mixin & N/A & Delete an 
 instance given in the request from a mixin \\
+\colrule
 Query Interface	\textbf{(Andy: new reader 'what's this?' perhaps introduce or reference section)}& 
 Listing of all registered categories & N/A & N/A & Add a user defined mixin & N/A & 
 remove a user-defined mixin (defined in the request) \\
@@ -202,6 +223,21 @@ by the service provider. This is the minimal set to ensure
 interoperability.
 
 \subsubsection{Namespace Hierarchy and Location}
+
+\ralf{I think we need a section explicitly describing the mapping of OCCI Core
+to OCCI HTTP rendering.  After all, an OCCI rendering describes "how to
+interact with the OCCI Core model". This section should describe:
+\begin{itemize}
+\item The flat names-pace used in Core, i.e. just a bunch of IDs (Entity.id).
+\item The hierarchical names-pace of RESTful HTTP (very brief).
+\item How the hierarchical HTTP names-pace is mapped into the OCCI Core
+names-pace.  (This is the important stuff.)
+\end{itemize}
+}
+
+\ralf{Names-pace and "names-pace hierarchy" need to be defined, but the above
+described section should handle that.}
+
 The namespace and the hierarchy are free definable by the Service
 Provider. Although the Service Provider MUST implement the location
 path feature\textbf{(Andy: reference to this section needed)}, 
@@ -237,6 +273,19 @@ http://example.com/storage/
 http://example.com/my_stuff/
 \end{verbatim}
 
+\ralf{When using examples of HTTP headers, separate parameters by space and
+newlines as recommended/allowed by RFC2616. This improves readability.
+\newline
+E.g.:}
+\begin{verbatim}
+Category: compute; scheme="..."
+
+Category: compute; scheme="...";
+    location="/compute/";
+    attributes="occi.compute.memory ...";
+\end{verbatim}
+\ralf{------------------------}
+
 Location paths can also be part of the namespace
 hierarchy:\footnote{/vms/user1/vm1 (= OCCI base type ID) is a resource
   instance below the namespace path /vms/user1/.}
@@ -264,6 +313,19 @@ http://example.com/my_stuff/
 
 \subsubsection{Various Operations and their Prerequisites and Behaviours}
 
+\ralf{I like the general structure. If it would be possible to reduce the
+sub-section depth somehow that would improve readability even more.  It is like
+with if-statements, when the nesting becomes to deep it gets a bit hard to
+follow.
+\newline
+An example (don't know if it is ok) would be to change subsection: ``A RESTful
+rendering of OCCI'' into its own section.
+\newline
+Another example is to remove the subsubsection: ``Various Operations and their
+...'' and go directly to "Operations on resource instance" without the extra
+nesting step.
+}
+
 \paragraph{Operations on Resource Instances}
 The following operations MUST be implemented by the service provider
 for operations on resource instances. The resource instance is
@@ -274,11 +336,25 @@ with an '/' \textbf{(Andy: say why, what does it mean if '/' is appended)}.
 
 \begin{description}
 \item[Creating a Resource Instance] A request to create a resource
-  instance MUST contain at least one Category definition which is (or
+  instance MUST contain at least one Category definition
+  %
+  \ralf{Say "Category Header" instead of "Category definition". Otherwise it is
+  easy to mix-up this with the OCCI Core model Category type.  Even when using
+  text/plain rendering it is "Category Headers" that we put into the body. It
+  least from a syntax point of view.}
+  %
+  which is (or
   relates to) a \hl{Kind} definition. If multiple Categories are
   defined the first one which is (or relates to) to a \hl{Kind} MUST
   be used for defining the type of the resource instance \textbf{(Andy: Is this defined in core? 
-  If not should it in some way? This mechanism seems somewhat arbitrary.)}. Optional
+  If not should it in some way? This mechanism seems somewhat arbitrary.)}.
+  %
+  \ralf{I would rather say something like: ``If multiple Category Headers are
+  supplied in a request and they refer to more than one unique \hl{Kind}
+  instance, ...''. That would be OK with Core. However, I would argue this
+  particular case MUST return Bad Request.}
+  %
+  Optional
   information which might be provided by the client and if available
   MUST be used are Links and Attributes. Two ways can be used to
   create a new resource instance - HTTP POST or PUT \textbf{(Andy: HTTP 200 is mentioned 
@@ -323,6 +399,10 @@ with an '/' \textbf{(Andy: say why, what does it mean if '/' is appended)}.
 \item[Retrieving a Resource Instance] For retrieval the HTTP GET verb
   is used. It MUST return at least the Category which defines the
   \hl{Kind} of the resource instance. Links pointing to related
+  %
+  \ralf{When referring to the "Link Header" say "Link Header" instead of just
+  Link/Links.}
+  %
   resource instances, other URI or Actions MUST be included if
   present. Those \hl{Link}s SHOULD only be the
   \hl{Actions} which are currently applicable \textbf{(Andy: remember we should be able to use the 
@@ -349,11 +429,14 @@ with an '/' \textbf{(Andy: say why, what does it mean if '/' is appended)}.
   request.\footnote{Changing the type of the resource instance MUST
     not be possible.} \textbf{(Andy: Is this advocating partial-updates? If so recommend 
     that this is removed in favour of full updates. Partial-PUTs are not clear in REST systems.)}
+  \ralf{I think it is. I argue we keep it that way, i.e.~do support partial
+  updates. You can always supply the whole attribute-set if you want a full
+  update. We are not fully REST compliant in any case.}
 \begin{verbatim}
 > PUT /vms/user1/vm1 HTTP/1.1
 > [...]
 > 
-> X-OCCI-Attribute:occi.compute.memory=4G
+> X-OCCI-Attribute: occi.compute.memory=4.0
 > [...]
  
 < HTTP/1.1 200 OK
@@ -388,13 +471,28 @@ with an '/' \textbf{(Andy: say why, what does it mean if '/' is appended)}.
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
+
+\ralf{I like the Action implementation. I.e. action=$<$term$>$ in the URI and
+attributes as X-OCCI-Attribute headers. Only thing I want to change is to use
+{\tt ?action=...} instead of {\tt ;action=...} The '?' query separator is recommended by
+RFC3986.}
 \end{description}
 
 \paragraph{Handling the Query Interface}
 The query interface MUST be implemented by all services supporting
 OCCI. It MUST be found at the path \emph{/-/} \textbf{(Andy: should be 
-noted that /-/ is off the root of the implementation's domain e.g. http://foo.bar/-/)}. The following
+noted that /-/ is off the root of the implementation's domain e.g. http://foo.bar/-/)}
+\ralf{Yes, and {\tt http://example.com/api/-/} should also be allowed}
+. The following
 operations, listed below, MUST be implemented by the service.
+
+\ralf{In the query interface section it gets a bit tricky talking about
+"Category Headers", "Kind instances", "Mixin instances" and "Category instances
+(used to identify Actions)". These are all different things. The "Category
+Header" is used to render Kind, Mixin and Category instances.  Saying "Adding a
+Mixin category definition" need "Mixin category" to be defined somewhere.
+Saying "Adding a Mixin {\em instance}" would be more correct.  Either way is
+probably ok as long as the terminology used is defined somewhere.}
 
 \begin{description}
 \item[Retrieving All Registered Categories] The HTTP verb GET must be
@@ -415,15 +513,18 @@ operations, listed below, MUST be implemented by the service.
                    location=/compute
 < Category:my_stuff;scheme=http://example.com/occi/my_stuff; \
                     location=/my_stuff
-< Category:storage;scheme=http://schemas.ogf.org/occi/infrastructure; \
-                   attributes=...; \
-                   actions=...; \
-                   rel=http://schemas.ogf.org/occi/core\#entity; \
-                   location=/storage
+< Category: storage; scheme=http://schemas.ogf.org/occi/infrastructure;
+<     attributes="...";
+<     actions="...";
+<     rel=http://schemas.ogf.org/occi/core\#entity;
+<     location=/storage
 < 
 \end{verbatim}
 \textbf{(Andy: Useful if the backslash character in the verbatim sections 
 is explained in the conventions section)}
+\ralf{I would rather remove the backslashes altogether. They are not necessary.
+RFC2616 allow line-breaking HTTP Headers.  I have changed the last Category
+Header above to show what it would look like.}
 
 \textbf{Note:} A Service provider SHOULD support a filtering
 mechanism. If a Category is provided in the request \textbf{(Andy: body or header?)} the 
@@ -432,6 +533,7 @@ only return the complete rendering of the provided Category.
 
 \item[Adding a \hl{Mixin} category definition] \textbf{(Andy: this feature is new - 
 I presume it's related to adding tags? Doesn't make sense for a client to add new 'functional' mixins)}
+\ralf{It is for user-defined tags. Agreed that attributes/actions probably do not make much sense here.}
 To add a \hl{Mixin} to
   the service the HTTP PUT verb MUST be used. All possible information
   for the \hl{Mixin} category must be defined. At least the Category
@@ -589,7 +691,13 @@ only return the resource instances belonging to the provided
 Category.
 
 \item[Deletion all resource instances below a path] 
-\textbf{(Andy: this is a potentially dangerous operation!)}The HTTP verb
+\textbf{(Andy: this is a potentially dangerous operation!)}
+\ralf{+10 on that! The DELETE operation is very dangerous.  DELETE used on a
+Mixin location only disassociates a resource instance from the Mixin.  The same
+operation on a non-Mixin-location would remove everything there.  This is
+especially dangerous with user-defined Mixins since the effect of the DELETE
+operation on different paths can change at run-time.}
+The HTTP verb
   DELETE must be used to delete all resource instances under a
   hierarchy:
 \begin{verbatim}
@@ -611,6 +719,11 @@ Category.
 \textbf{(Andy: Perhaps should be before previous section?)}
 The following subsections demonstrate how the OCCI base types can be
 syntactically rendered.
+
+\ralf{I would suggest talking about "HTTP Category Header" instead of
+"OCCI-Category", "HTTP Link Header" instead of "OCCI-Links", etc. Then each
+section can describe how the particular HTTP header is used by the OCCI HTTP
+rendering.}
 
 \subsubsection{Rendering of an OCCI-Category}
 \textbf{(Andy: Should we deal with/reference multiple header concatenation here? 
@@ -678,6 +791,9 @@ X-OCCI-Location: <URL>
 \subsubsection{Fields}
 \textbf{(Andy: a little unclear - maybe add 'the required HTTP headers are
  those needed at a minimum to represent the particular OCCI core model entity')}
+\ralf{I like this table, having a clear overview of which HTTP Header is used
+to render a particular OCCI type/instance is very good in my opinion. Table need
+to be updated though.}
 The following setups show how the Core Model MUST be rendered. Shown
 are the fields which MUST be available in a request from the Client or
 a response from the Server.
@@ -685,9 +801,11 @@ a response from the Server.
 \begin{tabular}{l|l|l|l}
 Operation & Required HTTP-Header(s) & Optional HTTP-Header(s) & Notes \\
 \hline
-Rendering of a Category & Category & N/A & \\
-Rendering a list of Categories & Category & N/A & \\
-Rendering a list of Kinds & X-OCCI-Location & N/A & \\
+Rendering of a Category instance & Category & N/A & \\
+Rendering of a Kind instance & Category & N/A & \\
+Rendering of a Mixin instance & Category & N/A & \\
+Rendering a list of Category, Kind and Mixin instances & Category & N/A & \\
+Rendering a list of Entity sub-type instances & X-OCCI-Location & N/A & \\
 Rendering of a Resource & Category & X-OCCI-Attribute, Link & \\
 Rendering of an Action & Category, Link & X-OCCI-Attribute & \\
 Rendering of a Link & Category, Link & X-OCCI-Attribute & \\
@@ -753,6 +871,9 @@ is not implemented. Where a client implements OCCI using a HTTP
 transport, the HTTP code 501, not implemented, MUST be used.
 
 \subsubsection{Content-type and Accept headers}
+\ralf{Add some HTTP examples for the different Content-types. Just use the same
+style as in the other sections.}
+
 A server MUST react according to the Accept header the client
 provides. If none is given - or \textit{*/*} is used - the service MUST
 use the Content-type \emph{text/plain}. This is the fall-back
