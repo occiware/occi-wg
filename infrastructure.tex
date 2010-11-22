@@ -129,12 +129,12 @@ a sub-type of \hl{Resource} or \hl{Link} MUST be assigned a \hl{Kind} that ident
 type. Each such \hl{Kind} instance MUST be related to the \hl{Resource} or \hl{Link} base type's \hl{Kind}. 
 That assigned \hl{Kind} instance MUST always remain immutable to any client.
 
-Table~\ref{tbl:kinds} describes the \hl{Kind} instances defined for each of the infrastructure \hl{Resource} 
-or \hl{Link} sub-types.
-
 \mytablefloat{
 	\label{tbl:kinds}The \hl{Kind} instances defined for
-	the infrastructure sub-types of \hl{Resource}, \hl{Link} and related \hl{Mixin}s.} {
+	the infrastructure sub-types of \hl{Resource}, \hl{Link} and related \hl{Mixin}s.
+	The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
+	{\bf $<$schema$>$} in this table for a better readability experience 
+	} {
 	\begin{tabular}{llll}
 	\toprule
 	Term & Scheme & Title & Related \hl{Kind} \\
@@ -161,9 +161,11 @@ or \hl{Link} sub-types.
 	& -- \\
 	\botrule
 	\end{tabular}
-\textbf{Note: http://schemas.ogf.org/occi has been replaces with
-  $<$schema$>$ in this table for a better readability experience} }
+}
 
+Table~\ref{tbl:kinds} describes the \hl{Kind} instances defined for each of the infrastructure \hl{Resource} 
+or \hl{Link} sub-types.
+%
 For information on extending these types, please refer to the OCCI Core Model 
 document \cite{occi:core}.
 
