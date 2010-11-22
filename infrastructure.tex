@@ -134,37 +134,35 @@ or \hl{Link} sub-types.
 
 \mytablefloat{
 	\label{tbl:kinds}The \hl{Kind} instances defined for
-	the infrastructure sub-types of \hl{Resource}, \hl{Link} and related \hl{Mixin}s. 
-	\textbf{Andy: can someone work their Knuthian magic on this table?}
-}
-{
+	the infrastructure sub-types of \hl{Resource}, \hl{Link} and related \hl{Mixin}s.} {
 	\begin{tabular}{llll}
 	\toprule
 	Term & Scheme & Title & Related \hl{Kind} \\
 	\colrule
-	compute & http://schemas.ogf.org/occi/infrastructure\# & Compute \hl{Resource}
-	& http://schemas.ogf.org/occi/core\#resource \\
+	compute &  $<$schema$>$/infrastructure\# & Compute \hl{Resource}
+	& $<$schema$>$/core\#resource \\
 	
-	storage & http://schemas.ogf.org/occi/infrastructure\# & Storage \hl{Resource}
-	& http://schemas.ogf.org/occi/core\#resource \\
+	storage & $<$schema$>$/infrastructure\# & Storage \hl{Resource}
+	& $<$schema$>$/core\#resource \\
 	
-	storagelink & http://schemas.ogf.org/occi/infrastructure\# & StorageLink \hl{Link}
-	& http://schemas.ogf.org/occi/core\#link \\
+	storagelink & $<$schema$>$/infrastructure\# & StorageLink \hl{Link}
+	& $<$schema$>$/core\#link \\
 	
-	network & http://schemas.ogf.org/occi/infrastructure\# & Network \hl{Resource}
-	& http://schemas.ogf.org/occi/core\#resource \\
+	network & $<$schema$>$/infrastructure\# & Network \hl{Resource}
+	& $<$schema$>$/core\#resource \\
 	
-	ipnetworking & http://schemas.ogf.org/occi/infrastructure/network\# & IP Networking \hl{Mixin}
+	ipnetworking & $<$schema$>$/infrastructure/network\# & IP Networking \hl{Mixin}
 	& -- \\
 	
-	networkinterface & http://schemas.ogf.org/occi/infrastructure\# & NetworkInterface \hl{Link}
-	& http://schemas.ogf.org/occi/core\#link \\
+	networkinterface & $<$schema$>$/infrastructure\# & NetworkInterface \hl{Link}
+	& $<$schema$>$/core\#link \\
 	
-	ipnetworkinterface & http://schemas.ogf.org/occi/infrastructure/networkinterface\# & IP NetworkInterface \hl{Mixin}
+	ipnetworkinterface & $<$schema$>$/networkinterface\# & IP NetworkInterface \hl{Mixin}
 	& -- \\
 	\botrule
 	\end{tabular}
-}
+\textbf{Note: http://schemas.ogf.org/occi has been replaces with
+  $<$schema$>$ in this table for a better readability experience} }
 
 For information on extending these types, please refer to the OCCI Core Model 
 document \cite{occi:core}.
@@ -683,15 +681,7 @@ From the administrative point of view, how an OCCI service provider manages thei
 % end infrastructure content
 
 \section{Contributors}
-
-Editors: Andy Edmonds, Thijs Metsch \\
-Contributors: Alexander Papaspyrou, Ralf Nyr\'en, Sam Johnston
-
-\textbf{TBD: Bunch op people missing here - create table\ldots}
-
-\begin{verbatim}
-
-\end{verbatim}
+\input{include/contributors}
 
 \section{Glossary}
 \input{include/glossary}
