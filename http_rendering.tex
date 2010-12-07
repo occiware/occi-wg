@@ -900,48 +900,47 @@ section will give some more complete examples.
 
 \subsubsection{Creating a resource instance}
 \begin{verbatim}
-* About to connect() to localhost port 8080 (#0)
-*   Trying ::1... Connection refused
-*   Trying 127.0.0.1... connected
-* Connected to localhost (127.0.0.1) port 8080 (#0)
 > POST / HTTP/1.1
 > User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
 > Host: localhost:8080
 > Accept: */*
+> Cookie: pyocci_user=Zm9v|1291753962|7011a4821179ff98ea96d4b44fade0512b1ffc52
 > Content-Type: text/occi
 > Category: compute;scheme=http://schemas.ogf.org/occi/infrastructure
 > 
 < HTTP/1.1 200 OK
 < Content-Length: 2
 < Content-Type: text/html; charset=UTF-8
-< Location: /users/default/compute/940feba9-1fdf-4079-aab4-8e83f18c73e4
+< Location: /users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096
 < Server: pyocci OCCI/1.1
 < 
 * Connection #0 to host localhost left intact
 * Closing connection #0
-OK%   
+OK% 
 \end{verbatim}
 
 \subsubsection{Retrieving a resource instance}
 \begin{verbatim}
-* About to connect() to localhost port 8080 (#0)
-*   Trying ::1... Connection refused
-*   Trying 127.0.0.1... connected
-* Connected to localhost (127.0.0.1) port 8080 (#0)
-> GET /users/default/compute/940feba9-1fdf-4079-aab4-8e83f18c73e4 HTTP/1.1
+> GET /users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096 HTTP/1.1
 > User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
 > Host: localhost:8080
 > Accept: */*
+> Cookie: pyocci_user=Zm9v|1291753962|7011a4821179ff98ea96d4b44fade0512b1ffc52
 > 
 < HTTP/1.1 200 OK
-< Content-Length: 68
-< Etag: "7f8e453f1e002a66375a411a6b0ffa5e97877d8d"
+< Content-Length: 403
+< Etag: "ef485dc7066745cb0fe1e31ecdd4895c356b5bd5"
 < Content-Type: text/plain
 < Server: pyocci OCCI/1.1
 < 
 Category: compute;scheme=http://schemas.ogf.org/occi/infrastructure
-* Connection #0 to host localhost left intact
-* Closing connection #0
+Link: </users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096?action=start>
+X-OCCI-Attribute: occi.compute.architecture=x86
+X-OCCI-Attribute: occi.compute.state=inactive
+X-OCCI-Attribute: occi.compute.speed=1
+X-OCCI-Attribute: occi.compute.memory=2
+X-OCCI-Attribute: occi.compute.cores=2
+X-OCCI-Attribute: occi.compute.hostname=dummy
 \end{verbatim}
 
 \section{Contributors}
