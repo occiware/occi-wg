@@ -74,155 +74,7 @@ definition of a Protocol and API. The document is based upon
 previously gathered requirements and focuses on the scope of important
 capabilities required to support modern service offerings.
 
-\textbf{(Andy: need to set the official version of OCCI - is it 1.1, 0.2, 1.0??)}
-
-\textbf{(Andy: Kind sub-types are mentioned in the doc as are resource instances. Need to align this terminology with the core and infrastructure documents e.g. a REST resource is the equivalent of an 'entity sub-type' instance. Could be dealt with by glossary.)}
-
-\ralf{Yes, Kind need be replaced with Entity in serveral places. ``resource instance'' is ok to use (when referring to Entity sub-type instance), it is in the glossary already}
-
-\textbf{(Andy: Filtering mechanism should be MUST)}
-
-\textbf{(Andy: little reference to collections)}
-
-\textbf{(Andy: there are references to service provider, service etc. This should be aligned to core and infrastructure. There is is known as an 'OCCI implementation')}
-
-\textbf{(Andy: header should be referred to as 'HTTP header' throughout)}
-
-\newpage
-\tableofcontents
-\newpage
-
-\section{Introduction}
-\input{include/introduction}
-
-\section{Notational Conventions}
-\input{include/notational}
-
-All examples in this document use one of the following three
-Categories. An example namespace is also given. Syntax and Semantics
-is explained in the remaining sections of the document. These examples
-do not strive to be complete but to show the functionalities OCCI has:
-
-\ralf{Instead of "Categories" say "HTTP Category Headers representing two Kind
-instances and one Mixin instance" or similar.}
-
-\begin{verbatim}
-
-Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure;location=/compute 
-                                                           (This is an compute kind)
-Category:storage;scheme=http://schemas.ogf.org/occi/infrastructure;location=/storage 
-                                                           (This is an storage kind)
-Category:my_stuff;scheme=http://example.com/occi/my_stuff;location=/my_stuff 
-                                                           (This is a mixin of user1)
-
-The following namespace hierarchy is used in the examples:
-
-http://example.com/-/
-http://example.com/vms/user1/vm1
-http://example.com/vms/user1/vm2
-http://example.com/vms/user2/vm1
-http://example.com/disks/user1/disk1
-http://example.com/disks/user2/disk1
-http://example.com/compute/
-http://example.com/storage/
-http://example.com/my_stuff/
-\end{verbatim}
-
-\textbf{(Andy: we need to set reader expectation of the content-type used 
-throughout the spec. At a minimum we should make it clear that the 
-renderings are in the header or body)}
-
-\section{A RESTful HTTP Rendering for OCCI}
-
-\ralf{The intro text in below gives a nice description of OCCI and REST.
-However I am missing the relation to OCCI Core here. I.e. that OCCI HTTP
-Rendering in fact is just {\em one} rendering of possibly many etc. Adding an some
-text describing OCCI Core vs OCCI renderings first and then jumping in to the
-HTTP REST specifics should solve it nicely though.}
-	 
-The HTTP Protocol is the underlying core fabric of OCCI and OCCI uses all
-the features of the HTTP and underlying protocols offer. 
-OCCI also builds upon the Resource Oriented Architecture (ROA). 
-ROA's use Representation State Transfer
-(REST) \textbf{(Andy: use references of Feldings thesis and the O'Reilly book on REST)} 
-to cater for client and service interactions. Interaction with
-the system is by inspection and modification of a set of related
-resources and their states, be it on the complete state or a
-sub-set. Resources MUST be uniquely identified. HTTP is an ideal
-protocol to use in ROA systems as it provides the means to uniquely
-identify individual resources through URLs as well as operating upon
-them with a set of general-purpose methods known as HTTP verbs. These HTTP verbs map
-loosely to the resource related operations of Create (POST), Retrieve
-(GET), Update (POST/PUT) and Delete (DELETE).
-
-The following notations are used when referring to parts or complete
-URIs:
-
-\ralf{Maybe move to "Notational Conventions" ?}
-
-\begin{verbatim}
-http://www.example.com:8080/foo/bar;action=stop
-<   >  <     Authority    >< Path >< Fragment >
-  ^
-  Scheme
-\end{verbatim}
-
-\ralf{Reference RFC3986 (section 3) here. Maybe just copy-paste the example
-from there. I.e. you would change the query separator to '?' and talk about
-"query" instead of "fragment".}
-
-The following section describe the general behaviour for all HTTP based
-renderings. Later sections will describe the syntax and semantic of
-how to render the OCCI Core model with different Content-Types.
-
-Each Kind sub-type instance \textbf{(Andy: This now should be Entity sub-type)} 
-within an OCCI system must be uniquely
-identified by an URI. The structure of these URIs is opaque and the
-system should not assume a static, pre-determined scheme for their
-structure (Example: \emph{http://example.com/vms/user1/vm1}).
-
-\subsection{Behaviour of the HTTP Verbs}
-As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
-foundation protocol the means of interaction with all RESTful resource
-instances is through the four main HTTP verbs \textbf{(Andy: We should 
-mention the existence of other verbs too (HEAD, OPTIONS))}. OCCI service
-implementations MUST, at a minimum, support these verbs as shown in Table \ref{tbl:http_verbs}:
-
-\mytablefloat{\label{tbl:http_verbs}HTTP Verb Behaviour \textbf{(Andy: Can this table be completely 
-ruled? Is hard to read left to right)} \ralf{Done. Still a bit hard to read though.}}{
-\begin{tabular}{p{1in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} }
-\toprule
-Type & GET & POST (create) & POST (action) & PUT (create) & PUT (update) & DELETE \\
-\colrule
-resource instance \textbf{(Andy: this needs to be aligned to core and infrastructure terminology)} & 
-Rendering of this instance &Create a new instance & Trigger action \textbf{(Andy: attributes/
-parameters?)} & Create an instance at the given path & Update an instance at an given path & Delete 
-this resource instance \\
-\colrule
-Path in the namespace hierarchy ending with / &	Listing of all instances below this namespace & 
-Create a new instance & N/A & N/A & N/A & Delete all the entries below this namespace hierarchy \\
-\colrule
-Location of an \hl{Mixin} or \hl{Kind} & URI-Listing containing Paths to all entities belonging to this \hl
-{Mixin} or \hl{Kind}	& N/A & Trigger action (defined for this kind or mixin) on all resource entities 
-belonging to this \hl{Mixin} or \hl{Kind} \textbf{(Andy: attributes/parameters?)} & Add an resource 
-instance to a mixin & N/A & Delete an 
-instance given in the request from a mixin \\
-\colrule
-Query Interface	\textbf{(Andy: new reader 'what's this?' perhaps introduce or reference section)}& 
-Listing of all registered categories & N/A & N/A & Add a user defined mixin & N/A & 
-remove a user-defined mixin (defined in the request) \\
-\botrule
-\end{tabular}
-}
-
-\subsection{A RESTful Rendering of OCCI}
-The following sections and paragraphs describe how the OCCI model
-MUST be implemented by service providers. Operations which are not
-defined are out of scope for this specification and MAY be implemented
-by the service provider. This is the minimal set to ensure
-interoperability.
-
-\subsubsection{Namespace Hierarchy and Location}
+\underline{Open comments}
 
 \ralf{I think we need a section explicitly describing the mapping of OCCI Core
 to OCCI HTTP rendering.  After all, an OCCI rendering describes "how to
@@ -238,27 +90,38 @@ names-pace.  (This is the important stuff.)
 \ralf{Names-pace and "names-pace hierarchy" need to be defined, but the above
 described section should handle that.}
 
-The namespace and the hierarchy are free definable by the Service
-Provider. Although the Service Provider MUST implement the location
-path feature\textbf{(Andy: reference to this section needed)}, 
-which is required by OCCI for discovery capabilities and
-operations on \hl{Mixin}s and \hl{Kind}s. Location paths tell the
-client where all resource instance of one \hl{Kind} or \hl{Mixin} can
-be found regardless of the hierarchy the service provider
-defines. These paths are discoverable by the client through the Query
-interface \textbf{(Andy: section ref needed)}.
+\newpage
+\tableofcontents
+\newpage
 
-These location paths can be part of the namespace or rendered
-alongside. The following example shows how the locations paths are
-rendered alongside the namespace hierarchy:
+\section{Introduction}
+\input{include/introduction}
+
+\section{Notational Conventions}
+\input{include/notational}
+
+All examples in this document use one of the following three HTTP
+category definitions. An example namespace is also given. Syntax and
+Semantics is explained in the remaining sections of the
+document. These examples do not strive to be complete but to show the
+functionalities OCCI has:
 
 \begin{verbatim}
-Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure;location=/compute 
-                                                           (This is an compute kind)
-Category:storage;scheme=http://schemas.ogf.org/occi/infrastructure;location=/storage 
-                                                           (This is an storage kind)
-Category:my_stuff;scheme=http://example.com/occi/my_stuff;location=/my_stuff 
-                                                           (This is a mixin of user1)
+
+Category: compute;
+          scheme=http://schemas.ogf.org/occi/infrastructure;
+          location=/compute 
+    (This is an compute kind)
+
+Category: storage;
+          scheme=http://schemas.ogf.org/occi/infrastructure;
+          location=/storage 
+    (This is an storage kind)
+
+Category: my_stuff;
+          scheme=http://example.com/occi/my_stuff;
+          location=/my_stuff 
+    (This is a mixin of user1)
 
 The following namespace hierarchy is used in the examples:
 
@@ -273,32 +136,166 @@ http://example.com/storage/
 http://example.com/my_stuff/
 \end{verbatim}
 
-\ralf{When using examples of HTTP headers, separate parameters by space and
-newlines as recommended/allowed by RFC2616. This improves readability.
-\newline
-E.g.:}
-\begin{verbatim}
-Category: compute; scheme="..."
+The following notations are used when referring to parts or complete
+URIs:
 
-Category: compute; scheme="...";
-    location="/compute/";
-    attributes="occi.compute.memory ...";
+\begin{verbatim}
+http://www.example.com:8080/foo/bar?action=stop
+<   >  <     Authority    >< Path >< Fragment >
+  ^
+  Scheme
 \end{verbatim}
-\ralf{------------------------}
+
+All examples in this document use the \emph{text/plain} HTTP
+Content-Type for posting information. To retrieve information the HTTP
+Accept header \emph{text/plain} is used.
+
+This specification is aligned with RFC 2986 \cite{rfc3986}.
+
+\section{A RESTful HTTP Rendering for OCCI}
+The HTTP Protocol is the underlying core fabric of OCCI and OCCI uses
+all the features of the HTTP and underlying protocols offer.  OCCI
+also builds upon the Resource Oriented Architecture (ROA).  ROA's use
+Representation State Transfer (REST) \cite{REST_Fielding} to cater for
+client and service interactions. Interaction with the system is by
+inspection and modification of a set of related resources and their
+states, be it on the complete state or a sub-set. Resources MUST be
+uniquely identified. HTTP is an ideal protocol to use in ROA systems
+as it provides the means to uniquely identify individual resources
+through URLs as well as operating upon them with a set of
+general-purpose methods known as HTTP verbs. These HTTP verbs map
+loosely to the resource related operations of Create (POST), Retrieve
+(GET), Update (POST/PUT) and Delete (DELETE).
+
+The following section describe the general behaviour for all HTTP
+based renderings. Later sections will describe the syntax and semantic
+of how to render the OCCI Core model with different Content-Types.
+
+Each Kind resource instance within an OCCI system must be uniquely
+identified by an URI \cite{occi:core}. The structure of these URIs is
+opaque and the system should not assume a static, pre-determined
+scheme for their structure (Example:
+\emph{http://example.com/vms/user1/vm1}).
+
+\subsection{Behaviour of the HTTP Verbs}
+As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
+foundation protocol the means of interaction with all RESTful resource
+instances is through the four main HTTP verbs. OCCI service
+implementations MUST, at a minimum, support these verbs as shown in
+Table \ref{tbl:http_verbs}:
+
+\mytablefloat{\label{tbl:http_verbs}HTTP Verb Behaviour}{
+\begin{tabular}{p{1in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in}}
+\toprule
+Type & GET & POST (create) & POST (action) & PUT (create) & PUT (update) & DELETE \\
+\colrule
+resource instance & 
+Rendering of this instance & 
+Create a new instance & 
+Trigger action & 
+Create an instance at the given path & 
+Update an instance at an given path & 
+Delete this resource instance \\
+\colrule
+Path in the namespace hierarchy ending with / &	
+Listing of all instances below this namespace & 
+Create a new instance & 
+N/A & 
+N/A & 
+N/A & 
+Delete all the entries below this namespace hierarchy \\
+\colrule
+Location of an \hl{Mixin} or \hl{Kind} & 
+Listing containing Locations to all entities belonging to this \hl{Mixin} or \hl{Kind} & 
+N/A & 
+Trigger action (defined for this kind or mixin) on all resource entities belonging to this \hl{Mixin} or \hl{Kind} & 
+Add an resource instance to a mixin & 
+N/A & 
+Delete an instance given in the request from a mixin \\
+\colrule
+Query Interface	& 
+Listing of all registered categories & 
+N/A & 
+N/A & 
+Add a user defined mixin & 
+N/A & 
+remove a user-defined mixin (defined in the request) \\
+\botrule
+\end{tabular}
+}
+
+\subsection{A RESTful Rendering of OCCI}
+The following sections and paragraphs describe how the OCCI model MUST
+be implemented by service providers. Operations which are not defined
+are out of scope for this specification and MAY be implemented by the
+service provider. This is the minimal set to ensure interoperability.
+
+\subsubsection{Namespace Hierarchy and Location}
+The namespace and the hierarchy are free definable by the Service
+Provider. The OCCI implementation implement the location path feature,
+which is required by OCCI for discovery capabilities and operations on
+\hl{Mixin}s and \hl{Kind}s. Location paths tell the client where all
+resource instance of one \hl{Kind} or \hl{Mixin} can be found
+regardless of the hierarchy the service provider defines. These paths
+are discoverable by the client through the Query interface
+\ref{sec:query}.
+
+These location paths can be part of the namespace or rendered
+alongside. The following example shows how the locations paths are
+rendered alongside the namespace hierarchy. This means that the
+locations paths defined by the \hl{Categories} are not part of the
+hierarchy of the REST Resources.
+
+\begin{verbatim}
+Category: compute;
+          scheme=http://schemas.ogf.org/occi/infrastructure;
+          location=/compute 
+    (This is an compute kind)
+
+Category: storage;
+          scheme=http://schemas.ogf.org/occi/infrastructure;
+          location=/storage 
+    (This is an storage kind)
+
+Category: my_stuff;
+          scheme=http://example.com/occi/my_stuff;
+          location=/my_stuff 
+    (This is a mixin of user1)
+
+The following namespace hierarchy is used in the examples:
+
+http://example.com/-/
+http://example.com/vms/user1/vm1
+http://example.com/vms/user1/vm2
+http://example.com/vms/user2/vm1
+http://example.com/disks/user1/disk1
+http://example.com/disks/user2/disk1
+http://example.com/compute/
+http://example.com/storage/
+http://example.com/my_stuff/
+\end{verbatim}
 
 Location paths can also be part of the namespace
-hierarchy:\footnote{/vms/user1/vm1 (= OCCI base type ID) is a resource
-  instance below the namespace path /vms/user1/.}
-
-\textbf{(Andy: what's the difference with the two examples? It's not obvious)}
+hierarchy.\footnote{/vms/user1/vm1 (= OCCI base type ID) is a resource
+  instance below the namespace path /vms/user1/.} In this case the
+location is embedded in the hierarchy of resources (location of the
+compute \hl{Category} is part of http://example.com/vms/user1/vm1).
 
 \begin{verbatim}
-Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure;location=/vms 
-                                                           (This is an compute kind)
-Category:storage;scheme=http://schemas.ogf.org/occi/infrastructure;location=/disks 
-                                                           (This is an storage kind)
-Category:my_stuff;scheme=http://example.com/occi/my_stuff;location=/my_stuff 
-                                                           (This is a mixin of user1)
+Category: compute;
+          scheme=http://schemas.ogf.org/occi/infrastructure;
+          location=/vms 
+    (This is an compute kind)
+
+Category: storage;
+          scheme=http://schemas.ogf.org/occi/infrastructure;
+          location=/disks 
+    (This is an storage kind)
+
+Category: my_stuff;
+          scheme=http://example.com/occi/my_stuff;
+          location=/my_stuff 
+    (This is a mixin of user1)
 
 The following namespace hierarchy is used in the examples:
 
@@ -313,19 +310,6 @@ http://example.com/my_stuff/
 
 \subsubsection{Various Operations and their Prerequisites and Behaviours}
 
-\ralf{I like the general structure. If it would be possible to reduce the
-sub-section depth somehow that would improve readability even more.  It is like
-with if-statements, when the nesting becomes to deep it gets a bit hard to
-follow.
-\newline
-An example (don't know if it is ok) would be to change subsection: ``A RESTful
-rendering of OCCI'' into its own section.
-\newline
-Another example is to remove the subsubsection: ``Various Operations and their
-...'' and go directly to "Operations on resource instance" without the extra
-nesting step.
-}
-
 \paragraph{Operations on Resource Instances}
 The following operations MUST be implemented by the service provider
 for operations on resource instances. The resource instance is
@@ -336,29 +320,19 @@ with an '/' \textbf{(Andy: say why, what does it mean if '/' is appended)}.
 
 \begin{description}
 \item[Creating a Resource Instance] A request to create a resource
-  instance MUST contain at least one Category definition
-  %
-  \ralf{Say "Category Header" instead of "Category definition". Otherwise it is
-  easy to mix-up this with the OCCI Core model Category type.  Even when using
-  text/plain rendering it is "Category Headers" that we put into the body. It
-  least from a syntax point of view.}
-  %
-  which is (or
-  relates to) a \hl{Kind} definition. If multiple Categories are
-  defined the first one which is (or relates to) to a \hl{Kind} MUST
-  be used for defining the type of the resource instance \textbf{(Andy: Is this defined in core? 
-  If not should it in some way? This mechanism seems somewhat arbitrary.)}.
-  %
-  \ralf{I would rather say something like: ``If multiple Category Headers are
-  supplied in a request and they refer to more than one unique \hl{Kind}
-  instance, ...''. That would be OK with Core. However, I would argue this
-  particular case MUST return Bad Request.}
-  %
-  Optional
-  information which might be provided by the client and if available
-  MUST be used are Links and Attributes. Two ways can be used to
-  create a new resource instance - HTTP POST or PUT \textbf{(Andy: HTTP 200 is mentioned 
-  here and makes no reference to 202 until much later in doc. Should mention/reference it here)}:
+  instance MUST contain at least one Category rendering
+
+  which is (or relates to) a \hl{Kind} definition. If multiple
+  Categories renderings are defined the first one which is (or relates
+  to) to a \hl{Kind} MUST be used for defining the type of the
+  resource instance \textbf{(Andy: Is this defined in core?  If not
+    should it in some way? This mechanism seems somewhat
+    arbitrary.)}. Optional information which might be provided by the
+  client and if available MUST be used are Links and Attributes. Two
+  ways can be used to create a new resource instance - HTTP POST or
+  PUT \textbf{(Andy: HTTP 200 is mentioned here and makes no reference
+    to 202 until much later in doc. Should mention/reference it
+    here)}:
 \begin{verbatim}
 > POST / HTTP/1.1
 > [...]
@@ -479,6 +453,7 @@ RFC3986.}
 \end{description}
 
 \paragraph{Handling the Query Interface}
+\label{sec:query}
 The query interface MUST be implemented by all services supporting
 OCCI. It MUST be found at the path \emph{/-/} \textbf{(Andy: should be 
 noted that /-/ is off the root of the implementation's domain e.g. http://foo.bar/-/)}
@@ -842,7 +817,7 @@ using the HTTP header name 'Server'.
 
 \begin{verbatim}
 HTTP/1.1 202 Accepted
-Server: occi-server/1.1 (linux) OCCI/1.0
+Server: occi-server/1.1 (linux) OCCI/1.1
 [...]
 \end{verbatim}
 
@@ -860,7 +835,7 @@ value (OCCI/X.Y) as supported by the Server HTTP header.
 
 GET <UDN> HTTP/1.1
 Host: example.com
-User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.0
+User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.1
 [...]
 \end{verbatim}
 
@@ -869,6 +844,9 @@ number higher than the service supports, the service MUST respond back
 to the client with an exception indicating that the requested version
 is not implemented. Where a client implements OCCI using a HTTP
 transport, the HTTP code 501, not implemented, MUST be used.
+
+OCCI implementations which implement this version of the Document MUST
+use the version String \emph{OCCI/1.1}.
 
 \subsubsection{Content-type and Accept headers}
 \ralf{Add some HTTP examples for the different Content-types. Just use the same
@@ -968,9 +946,6 @@ Code & Description & Notes \\
 503 & Service Unavailable & \\
 \botrule
 \end{tabular}}
-
-\textbf{Note:} Other return codes can also be used if properly used.
-\textbf{(Andy: possibly not useful - might encourage behaviour not helpful to interop)}
 
 \section{Contributors}
 \input{include/contributors}
