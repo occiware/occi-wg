@@ -90,9 +90,13 @@ names-pace.  (This is the important stuff.)
 \ralf{Names-pace and "names-pace hierarchy" need to be defined, but the above
 described section should handle that.}
 
-\textbf{Naming service impl etc to OCCI impl.}
+\textbf{Naming: service impl etc shoult be OCCI impl.}
 
 \textbf{Whenever refering to an HTTP feature (header, category, link) write HTTP header, HTTP category, HTTP link}
+
+\textbf{Mention dives between HTTP 200 / 202 return types...}
+
+\textbf{Mention the following: A kind, cate and mixin is rendered through HTTP category...}
 
 \newpage
 \tableofcontents
@@ -175,10 +179,10 @@ The following section describe the general behaviour for all HTTP
 based renderings. Later sections will describe the syntax and semantic
 of how to render the OCCI Core model with different Content-Types.
 
-Each Kind resource instance within an OCCI system must be uniquely
+Each resource instance within an OCCI system must be uniquely
 identified by an URI \cite{occi:core}. The structure of these URIs is
 opaque and the system should not assume a static, pre-determined
-scheme for their structure (Example:
+scheme for their structure (Example \emph{Entity::id} can be:
 \emph{http://example.com/vms/user1/vm1}).
 
 \subsection{Behaviour of the HTTP Verbs}
@@ -317,26 +321,20 @@ http://example.com/my_stuff/
 \paragraph{Operations on Resource Instances}
 The following operations MUST be implemented by the service provider
 for operations on resource instances. The resource instance is
-uniquely identified \textbf{(Andy: say how it maps to in core Entity::id)} 
-by an URI (For example:
-\emph{http://example.com/vms/user1/vm1}).The path MUST not end
-with an '/' \textbf{(Andy: say why, what does it mean if '/' is appended)}.
+uniquely identified by an URI (For example:
+\emph{http://example.com/vms/user1/vm1}).\footnote{The path MUST not
+  end with an '/' - that would mean that a client operates on a path
+  in the namespace hierarchy}
 
 \begin{description}
 \item[Creating a Resource Instance] A request to create a resource
-  instance MUST contain at least one Category rendering
-
-  which is (or relates to) a \hl{Kind} definition. If multiple
-  Categories renderings are defined the first one which is (or relates
-  to) to a \hl{Kind} MUST be used for defining the type of the
-  resource instance \textbf{(Andy: Is this defined in core?  If not
-    should it in some way? This mechanism seems somewhat
-    arbitrary.)}. Optional information which might be provided by the
-  client and if available MUST be used are Links and Attributes. Two
-  ways can be used to create a new resource instance - HTTP POST or
-  PUT \textbf{(Andy: HTTP 200 is mentioned here and makes no reference
-    to 202 until much later in doc. Should mention/reference it
-    here)}:
+  instance MUST contain at least one Category rendering which is (or
+  relates to) a \hl{Kind} definition. If multiple HTTP categories are
+  defined the first one which is (or relates to) to a \hl{Kind} MUST
+  be used for defining the type of the resource instance. Optional
+  information which might be provided by the client and if available
+  MUST be used are Links and Attributes. Two ways can be used to
+  create a new resource instance - HTTP POST or PUT:
 \begin{verbatim}
 > POST / HTTP/1.1
 > [...]
@@ -356,11 +354,11 @@ with an '/' \textbf{(Andy: say why, what does it mean if '/' is appended)}.
 
   Or HTTP PUT can be used. In this case the client ask the service
   provider to create a resource instance at a certain path in the
-  namespace hierarchy.\footnote{If a Service Provider does not want the
-    user to define the path of a resource instance it can return a Bad
-    Request return code - See section \ref{sec:return_codes}.} \textbf{(Andy: PUT will fail if the 
-    identifier supplied as the last fragment already exists. Implementations must ensure unique 
-    identities for resources.)}
+  namespace hierarchy.\footnote{If a Service Provider does not want
+    the user to define the path of a resource instance it can return a
+    Bad Request return code - See section
+    \ref{sec:return_codes}. Service Providers MUST ensure that the
+    path stay unique in their namespace.}
 \begin{verbatim}
 > PUT /vms/user1/my_first_virtual_machine HTTP/1.1
 > [...]
@@ -377,16 +375,10 @@ with an '/' \textbf{(Andy: say why, what does it mean if '/' is appended)}.
 \item[Retrieving a Resource Instance] For retrieval the HTTP GET verb
   is used. It MUST return at least the Category which defines the
   \hl{Kind} of the resource instance. Links pointing to related
-  %
-  \ralf{When referring to the "Link Header" say "Link Header" instead of just
-  Link/Links.}
-  %
   resource instances, other URI or Actions MUST be included if
-  present. Those \hl{Link}s SHOULD only be the
-  \hl{Actions} which are currently applicable \textbf{(Andy: remember we should be able to use the 
-  general Link specification too, e.g. link to documentation.)}. The Attributes of the 
-  resource instance MUST be exposed to
-  the client if available.
+  present. Those \hl{Link}s SHOULD only be the \hl{Actions} which are
+  currently applicable. The Attributes of the resource instance MUST
+  be exposed to the client if available.
 \begin{verbatim}
 > GET /vms/user1/vm1 HTTP/1.1
 > [...]
@@ -405,11 +397,7 @@ with an '/' \textbf{(Andy: say why, what does it mean if '/' is appended)}.
   the information (Links, Attributes or \hl{Mixin} Categories), which
   are updated MUST be provided along with the
   request.\footnote{Changing the type of the resource instance MUST
-    not be possible.} \textbf{(Andy: Is this advocating partial-updates? If so recommend 
-    that this is removed in favour of full updates. Partial-PUTs are not clear in REST systems.)}
-  \ralf{I think it is. I argue we keep it that way, i.e.~do support partial
-  updates. You can always supply the whole attribute-set if you want a full
-  update. We are not fully REST compliant in any case.}
+    not be possible.}
 \begin{verbatim}
 > PUT /vms/user1/vm1 HTTP/1.1
 > [...]
@@ -423,8 +411,8 @@ with an '/' \textbf{(Andy: say why, what does it mean if '/' is appended)}.
 
 \item[Deleting a Resource Instance] A resource instance can be deleted
   using the HTTP DELETE verb. No other information SHOULD be added to
-  the request. \textbf{(Andy: What are the effects on possibly linked resources 
-  or resources that have Links to the resource to be deleted?)}
+  the request.\footnote{If the resource instances is a \hl{Link} the
+    source and target must be updated accordingly}
 \begin{verbatim}
 > DELETE /vms/user1/vm1 HTTP/1.1
 > [...]
@@ -434,98 +422,79 @@ with an '/' \textbf{(Andy: say why, what does it mean if '/' is appended)}.
 \end{verbatim}
 
 \item[Triggering an Action on a Resource Instance] To trigger an
-  action on a resource instance the request MUST containing the Category 
-  \textbf{(Andy: The example does not show this.)}
-  defining the \hl{Action}. It MAY include attributes which are the
-  parameters of the action. Actions are triggered using the HTTP POST
-  verb and by adding a fragment to the URI. This fragment exposes the
-  term of the \hl{Action}. If an action is not available or a proper 
-  return code \textbf{(Andy: what code precisely?)} should be returned.
+  action on a resource instance the request MUST containing the HTTP
+  Category defining the \hl{Action}. It MAY include attributes which
+  are the parameters of the action. Actions are triggered using the
+  HTTP POST verb and by adding a fragment to the URI. This fragment
+  exposes the term of the \hl{Action}. If an action is not available a
+  Bad Request should be returned.
 \begin{verbatim}
-> POST /vms/user1/vm1;action=stop HTTP/1.1
+> POST /vms/user1/vm1?action=stop HTTP/1.1
 > [...]
+> Category: TBD...
 > X-OCCI-Attribute:method=poweroff
 
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
 
-\ralf{I like the Action implementation. I.e. action=$<$term$>$ in the URI and
-attributes as X-OCCI-Attribute headers. Only thing I want to change is to use
-{\tt ?action=...} instead of {\tt ;action=...} The '?' query separator is recommended by
-RFC3986.}
 \end{description}
 
 \paragraph{Handling the Query Interface}
 \label{sec:query}
 The query interface MUST be implemented by all services supporting
-OCCI. It MUST be found at the path \emph{/-/} \textbf{(Andy: should be 
-noted that /-/ is off the root of the implementation's domain e.g. http://foo.bar/-/)}
-\ralf{Yes, and {\tt http://example.com/api/-/} should also be allowed}
-. The following
-operations, listed below, MUST be implemented by the service.
-
-\ralf{In the query interface section it gets a bit tricky talking about
-"Category Headers", "Kind instances", "Mixin instances" and "Category instances
-(used to identify Actions)". These are all different things. The "Category
-Header" is used to render Kind, Mixin and Category instances.  Saying "Adding a
-Mixin category definition" need "Mixin category" to be defined somewhere.
-Saying "Adding a Mixin {\em instance}" would be more correct.  Either way is
-probably ok as long as the terminology used is defined somewhere.}
+OCCI. It MUST be found at the path \emph{/-/} off the root of the
+service implementation. The following operations, listed below, MUST
+be implemented by the service.
 
 \begin{description}
 \item[Retrieving All Registered Categories] The HTTP verb GET must be
   used to retrieve all categories the service can handle. This allows
   the client to discover the capabilities of the Service provider. The
   result MUST contain all information about the Category (including
-  Attributes and Actions assigned to this Category). \textbf{(Andy: content type? appears inline and not URI-List is the default - not clear.)}
+  Attributes and Actions assigned to this Category).
 \begin{verbatim}
 > GET /-/ HTTP/1.1
 > [...]
  
 < HTTP/1.1 200 OK
 < [...]
-< Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure; \
-                   attributes=occi.compute.cores,occi...; \
-                   rel=http://schemas.ogf.org/occi/core\#entity; \
-                   actions=http://schemas.ogf.org/occi/infrastructure/compute/action#stop,...; \
-                   location=/compute
-< Category:my_stuff;scheme=http://example.com/occi/my_stuff; \
-                    location=/my_stuff
-< Category: storage; scheme=http://schemas.ogf.org/occi/infrastructure;
-<     attributes="...";
-<     actions="...";
-<     rel=http://schemas.ogf.org/occi/core\#entity;
-<     location=/storage
-< 
+< Category: compute;
+            scheme=http://schemas.ogf.org/occi/infrastructure;
+            attributes=occi.compute.cores,occi...;
+            rel=http://schemas.ogf.org/occi/core\#entity;
+            actions=http://schemas.ogf.org/occi/infrastructure/compute/action#stop,...;
+            location=/compute;
+< Category: my_stuff;
+            scheme=http://example.com/occi/my_stuff;
+            location=/my_stuff;
+< Category: storage; 
+            scheme=http://schemas.ogf.org/occi/infrastructure;
+            attributes="...";
+            actions="...";
+            rel=http://schemas.ogf.org/occi/core\#entity;
+            location=/storage;
+ 
 \end{verbatim}
-\textbf{(Andy: Useful if the backslash character in the verbatim sections 
-is explained in the conventions section)}
-\ralf{I would rather remove the backslashes altogether. They are not necessary.
-RFC2616 allow line-breaking HTTP Headers.  I have changed the last Category
-Header above to show what it would look like.}
 
-\textbf{Note:} A Service provider SHOULD support a filtering
-mechanism. If a Category is provided in the request \textbf{(Andy: body or header?)} the 
-server SHOULD
-only return the complete rendering of the provided Category.
+A Service provider MUST support a filtering mechanism. If a Category
+is provided in the request the server MUST only return the complete
+rendering of the provided Category.
 
-\item[Adding a \hl{Mixin} category definition] \textbf{(Andy: this feature is new - 
-I presume it's related to adding tags? Doesn't make sense for a client to add new 'functional' mixins)}
-\ralf{It is for user-defined tags. Agreed that attributes/actions probably do not make much sense here.}
-To add a \hl{Mixin} to
+\item[Adding a \hl{Mixin} category definition] To add a \hl{Mixin} to
   the service the HTTP PUT verb MUST be used. All possible information
   for the \hl{Mixin} category must be defined. At least the Category
   term, scheme and location MUST be defined. Actions and Attributes
-  are optional:
+  are not supported:
 \begin{verbatim}
 > GET /-/ HTTP/1.1
 > [...]
-> Category:my_stuff;scheme=http://example.com/occi/my_stuff; \
-                    rel=http:/example.com/occi/something_else#mixin; \
-                    attributes=...; \
-                    actions=...; \
-                    location=/my_stuff
+> Category: my_stuff;
+            scheme=http://example.com/occi/my_stuff;
+            rel=http:/example.com/occi/something_else#mixin;
+            attributes=...;
+            actions=...;
+            location=/my_stuff;
 
 < HTTP/1.1 200 OK
 < [...]
@@ -535,11 +504,8 @@ user-defined Categories to be created. Also on name collisions of the
 defined location path the service provider might reject this
 operation.
 
-\item[Removing a \hl{Mixin} category definition] 
-\textbf{(Andy: again, this is new but we need to state its purpose. Is it for user management of tags?)}
-A user defined
-  \hl{Mixin} CAN be removed (if allowed) \textbf{(Andy: removed from what?)} by 
-  using the HTTP DELETE
+\item[Removing a \hl{Mixin} category definition] A user defined
+  \hl{Mixin} CAN be removed (if allowed) by using the HTTP DELETE
   verb. The information about which \hl{Mixin} should be deleted MUST
   be provided in the request:
 \begin{verbatim}
@@ -558,11 +524,7 @@ provided by category definition. It MUST end with an \emph{/}.
 
 \begin{description}
 \item[Retrieving All Resource Instances Belonging to \hl{Mixin} or
-  \hl{Kind}] 
-  
-  \textbf{(Andy: Should refer to collections in core here)}
-  
-  The HTTP verb GET must be used to retrieve all resource
+  \hl{Kind}] The HTTP verb GET must be used to retrieve all resource
   instances. The service provider MUST return a URI-list containing
   all resource instances which belong to the requested \hl{Mixin} or
   \hl{Kind}:
@@ -578,16 +540,12 @@ provided by category definition. It MUST end with an \emph{/}.
 < http://example.com/vms/user1/vm2
 < http://example.com/vms/user2/vm1
 \end{verbatim}
-\textbf{Note:} A Service provider SHOULD support a filtering
-mechanism. If a Category \textbf{(Andy: Should use Kind and Mixin here.)} is provided in the request the server SHOULD
+\textbf{Note:} A Service provider MUST support a filtering
+mechanism. If a Category is provided in the request the server MUST
 only return the resource instances belonging to the provided
 Category. The provided category definition SHOULD be different from
 the one Category definition which defined the location path used in
 the request.
-
-\ralf{Core currently requires an OCCI client to be able to retrieve a subset of
-a collection.  Maybe change the above to a MUST or introduce paging?}
-\textbf{(Andy: +1 to Ralf's comment)}
 
 \item[Triggering Actions on All Instances of a \hl{Mixin} or
   \hl{Kind}] Actions can be triggered on all resource instances of the
@@ -603,35 +561,30 @@ a collection.  Maybe change the above to a MUST or introduce paging?}
 < [...]
 \end{verbatim}
 
-\item[Adding a Resource Instance to a \hl{Mixin}] 
-\textbf{(Andy: Might be better phrased as 'adding a mixin to a resource instance' )} 
-One or multiple
-  resource instances can be associated with a \hl{Mixin} using the HTTP PUT
-  verb. The URIs which uniquely defined the resource instance MUST be
-  provided in the request:
+\item[Adding \hl{Mixin} to a Resource Instance to a \hl{Mixin}] One or
+  multiple resource instances can be associated with a \hl{Mixin}
+  using the HTTP PUT verb. The URIs which uniquely defined the
+  resource instance MUST be provided in the request:
 \begin{verbatim}
 > PUT /my_stuff/ HTTP/1.1
 > [...]
-> X-OCCI-Location:http://example.com/vms/user1/vm1, \
-                  http://example.com/vms/user1/vm2, \
+> X-OCCI-Location:http://example.com/vms/user1/vm1,
+                  http://example.com/vms/user1/vm2,
                   http://example.com/disks/user1/disk1
 
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
 
-\item[Removing a Resource Instance from a \hl{Mixin}] 
-\textbf{(Andy: See previous comment)}One or multiple
+\item[Removing a Resource Instance from a \hl{Mixin}] One or multiple
   resource instances can be removed from a \hl{Mixin} using the HTTP
-  DELETE verb 
-  \textbf{(Andy: This 'feels' unRESTful - operations on either one or all resources at a URL)}
-  . The URIs which uniquely defined the resource instance
+  DELETE verb. The URIs which uniquely defined the resource instance
   MUST be provided in the request:
 \begin{verbatim}
 > DELETE /my_stuff/ HTTP/1.1
 > [...]
-> X-OCCI-Location:http://example.com/vms/user1/vm1, \
-                  http://example.com/vms/user1/vm2, \
+> X-OCCI-Location:http://example.com/vms/user1/vm1,
+                  http://example.com/vms/user1/vm2,
                   http://example.com/disks/user1/disk1
 
 < HTTP/1.1 200 OK
@@ -640,18 +593,15 @@ One or multiple
 \end{description}
 
 \paragraph{Operation on Paths in the Namespace}
-\textbf{(Andy: Isn't the namespace just a URL pointing to resource(s)?}
 The following operations are defined when operating on paths in the
 namespace hierarchy which are not location paths nor resource
-instances \textbf{(Andy: unclear sentence - what's the intent?)}. 
-They MUST end with \emph{/} (For example
+instances. They MUST end with \emph{/} (For example
 \emph{http://example.com/vms/user1}).
 
 \begin{description}
 \item[Retrieving All Resource Instances Below a Path] The HTTP verb
   GET must be used to retrieve all resource instances. The service
-  provider MUST return a URI-list \textbf{(Andy: noob comment 'what's that?!')} 
-  containing all resource instances
+  provider MUST return a URI-list containing all resource instances
   which are children of the provided URI in the namespace hierarchy:
 \begin{verbatim}
 > GET /vms/user1/ HTTP/1.1
@@ -664,21 +614,14 @@ They MUST end with \emph{/} (For example
 < http://example.com/vms/user1/vm1
 < http://example.com/vms/user1/vm2
 \end{verbatim}
-\textbf{Note:} A Service provider SHOULD support a filtering
-mechanism. If a category is provided in the request the server SHOULD
+A Service provider MUST support a filtering
+mechanism. If a category is provided in the request the server MUST
 only return the resource instances belonging to the provided
 Category.
 
-\item[Deletion all resource instances below a path] 
-\textbf{(Andy: this is a potentially dangerous operation!)}
-\ralf{+10 on that! The DELETE operation is very dangerous.  DELETE used on a
-Mixin location only disassociates a resource instance from the Mixin.  The same
-operation on a non-Mixin-location would remove everything there.  This is
-especially dangerous with user-defined Mixins since the effect of the DELETE
-operation on different paths can change at run-time.}
-The HTTP verb
-  DELETE must be used to delete all resource instances under a
-  hierarchy:
+\item[Deletion of all resource instances below a path] \textbf{(Note:
+  this is a potentially dangerous operation!)} The HTTP verb DELETE
+  must be used to delete all resource instances under a hierarchy:
 \begin{verbatim}
 > DELETE /vms/user1/ HTTP/1.1
 > [...]
@@ -695,18 +638,7 @@ Category.
 \subsection{Syntax and Semantics of the Rendering}
 \label{sec:syntax}
 
-\textbf{(Andy: Perhaps should be before previous section?)}
-The following subsections demonstrate how the OCCI base types can be
-syntactically rendered.
-
-\ralf{I would suggest talking about "HTTP Category Header" instead of
-"OCCI-Category", "HTTP Link Header" instead of "OCCI-Links", etc. Then each
-section can describe how the particular HTTP header is used by the OCCI HTTP
-rendering.}
-
 \subsubsection{Rendering of an OCCI-Category}
-\textbf{(Andy: Should we deal with/reference multiple header concatenation here? 
-It's pretty important not to be hidden out of context.)}
 The semantics of the Category in the OCCI context is described in the
 OCCI Core \& Models document. This rendering follows the
   Category header defined by the Web Categories specification
@@ -746,15 +678,15 @@ Link: <Resource URL> + ";action=" + <Term of the Action>;
 The X-OCCI-Attribute MUST be used to render the attributes associated
 with a OCCI Kind. A simple key-value format is used. The field value
 consist of an attribute name followed by an equal sign ("=") and the
-attribute value. The attribute value must be quoted \textbf{(Andy: double or single?)} if it includes a
-separator character, see RFC 2616 (page 16).
+attribute value. The attribute value must be double quoted if it
+includes a separator character, see RFC 2616 (page 16).
 
 \begin{verbatim}
 X-OCCI-Attribute: <attribute name>=<attribute value>
 \end{verbatim}
 
 Valid attribute names for OCCI Kinds are specified in appropriate
-Extension documents \textbf{(Andy: ref infrastructure)}.
+Extension documents \ref{occi:infrasctucture}.
 
 \subsubsection{Rendering of Location-URLs}
 To render an OCCI representation solely in the header, the
@@ -767,33 +699,33 @@ Kind URLs are returned using multiple X-OCCI-Location headers. See RFC
 X-OCCI-Location: <URL>
 \end{verbatim}
 
-\subsubsection{Fields}
-\textbf{(Andy: a little unclear - maybe add 'the required HTTP headers are
- those needed at a minimum to represent the particular OCCI core model entity')}
-\ralf{I like this table, having a clear overview of which HTTP Header is used
-to render a particular OCCI type/instance is very good in my opinion. Table need
-to be updated though.}
-The following setups show how the Core Model MUST be rendered. Shown
-are the fields which MUST be available in a request from the Client or
-a response from the Server.
-
-\begin{tabular}{l|l|l|l}
-Operation & Required HTTP-Header(s) & Optional HTTP-Header(s) & Notes \\
-\hline
-Rendering of a Category instance & Category & N/A & \\
-Rendering of a Kind instance & Category & N/A & \\
-Rendering of a Mixin instance & Category & N/A & \\
-Rendering a list of Category, Kind and Mixin instances & Category & N/A & \\
-Rendering a list of Entity sub-type instances & X-OCCI-Location & N/A & \\
-Rendering of a Resource & Category & X-OCCI-Attribute, Link & \\
-Rendering of an Action & Category, Link & X-OCCI-Attribute & \\
-Rendering of a Link & Category, Link & X-OCCI-Attribute & \\
-\end{tabular}
+%\subsubsection{Fields}
+%\textbf{(Andy: a little unclear - maybe add 'the required HTTP headers are
+% those needed at a minimum to represent the particular OCCI core model entity')}
+%\ralf{I like this table, having a clear overview of which HTTP Header is used
+%to render a particular OCCI type/instance is very good in my opinion. Table need
+%to be updated though.}
+%The following setups show how the Core Model MUST be rendered. Shown
+%are the fields which MUST be available in a request from the Client or
+%a response from the Server.
+%\begin{tabular}{l|l|l|l}
+%Operation & Required HTTP-Header(s) & Optional HTTP-Header(s) & Notes \\
+%\hline
+%Rendering of a Category instance & Category & N/A & \\
+%Rendering of a Kind instance & Category & N/A & \\
+%Rendering of a Mixin instance & Category & N/A & \\
+%Rendering a list of Category, Kind and Mixin instances & Category & N/A & \\
+%Rendering a list of Entity sub-type instances & X-OCCI-Location & N/A & \\
+%Rendering of a Resource & Category & X-OCCI-Attribute, Link & \\
+%Rendering of an Action & Category, Link & X-OCCI-Attribute & \\
+%Rendering of a Link & Category, Link & X-OCCI-Attribute & \\
+%\end{tabular}
 
 \subsection{General HTTP Behaviour Adopted by OCCI}
 The following sections deal with some general HTTP features which are
 adopted by OCCI.
 
+\subsubsection{Caching}
 \textbf{(Andy: If this is general in respect to OCCI and in the context of HTTP then
 we should include the use of caching-related headers)}
 
@@ -881,13 +813,13 @@ in the HTTP Body.
 Each rendering of an OCCI base type will be placed in the body. Each
 entry consists of a name followed by a colon (":") and the field
 value. The format of the field value is specified separately for each
-of the three header fields, see section \ref{sec:syntax} \textbf{(Andy: is it not section 3.2?)}.
+of the three header fields, see section \ref{sec:syntax}.
 
 \paragraph{The Content-type text/occi}
 While using this rendering with the Content-Type \textit{text/occi}
 the information described in section \ref{sec:model_rendering} MUST be
 placed in the HTTP Header. The body MUST contain the string 'OK' on
-successful operations. \textbf{(Andy: and on failures?)}.
+successful operations.
 
 The HTTP header fields MUST follow the specification in RFC 2616
 \cite{rfc2616}. A header field consists of a name followed by a colon
