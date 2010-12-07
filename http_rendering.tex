@@ -76,7 +76,7 @@ capabilities required to support modern service offerings.
 
 \underline{Open comments}
 
-\ralf{I think we need a section explicitly describing the mapping of OCCI Core
+\textbf{I think we need a section explicitly describing the mapping of OCCI Core
 to OCCI HTTP rendering.  After all, an OCCI rendering describes "how to
 interact with the OCCI Core model". This section should describe:
 \begin{itemize}
@@ -86,14 +86,6 @@ interact with the OCCI Core model". This section should describe:
 names-pace.  (This is the important stuff.)
 \end{itemize}
 }
-
-\ralf{Names-pace and "names-pace hierarchy" need to be defined, but the above
-described section should handle that.}
-
-\textbf{Naming: service impl etc shoult be OCCI impl.}
-
-\textbf{Whenever refering to an HTTP feature (header, category, link) write HTTP header, HTTP category, HTTP link}
-
 \textbf{Mention dives between HTTP 200 / 202 return types...}
 
 \textbf{Mention the following: A kind, cate and mixin is rendered through HTTP category...}
@@ -109,10 +101,10 @@ described section should handle that.}
 \input{include/notational}
 
 All examples in this document use one of the following three HTTP
-category definitions. An example namespace is also given. Syntax and
-Semantics is explained in the remaining sections of the
-document. These examples do not strive to be complete but to show the
-functionalities OCCI has:
+category definitions. An example namespace hierarchy is also
+given. Syntax and Semantics is explained in the remaining sections of
+the document. These examples do not strive to be complete but to show
+the functionalities OCCI has:
 
 \begin{verbatim}
 
@@ -162,8 +154,8 @@ This specification is aligned with RFC 2986 \cite{rfc3986}.
 
 \section{A RESTful HTTP Rendering for OCCI}
 The HTTP Protocol is the underlying core fabric of OCCI and OCCI uses
-all the features of the HTTP and underlying protocols offer.  OCCI
-also builds upon the Resource Oriented Architecture (ROA).  ROA's use
+all the features of the HTTP and underlying protocols offer. OCCI also
+builds upon the Resource Oriented Architecture (ROA). ROA's use
 Representation State Transfer (REST) \cite{REST_Fielding} to cater for
 client and service interactions. Interaction with the system is by
 inspection and modification of a set of related resources and their
@@ -177,7 +169,7 @@ loosely to the resource related operations of Create (POST), Retrieve
 
 The following section describe the general behaviour for all HTTP
 based renderings. Later sections will describe the syntax and semantic
-of how to render the OCCI Core model with different Content-Types.
+of how to render the OCCI Core model.
 
 Each resource instance within an OCCI system must be uniquely
 identified by an URI \cite{occi:core}. The structure of these URIs is
@@ -198,61 +190,61 @@ Table \ref{tbl:http_verbs}:
 Type & GET & POST (create) & POST (action) & PUT (create) & PUT (update) & DELETE \\
 \colrule
 resource instance & 
-Rendering of this instance & 
-Create a new instance & 
+Rendering of this resource instance & 
+Create a new resource instance & 
 Trigger action & 
-Create an instance at the given path & 
-Update an instance at an given path & 
+Create an resource instance at the given path & 
+Update an resource instance at an given path & 
 Delete this resource instance \\
 \colrule
 Path in the namespace hierarchy ending with / &	
-Listing of all instances below this namespace & 
-Create a new instance & 
+Listing of all resource instances below this namespace & 
+Create a new resource instance & 
 N/A & 
 N/A & 
 N/A & 
-Delete all the entries below this namespace hierarchy \\
+Delete all the resource instances below this namespace hierarchy \\
 \colrule
 Location of an \hl{Mixin} or \hl{Kind} & 
-Listing containing Locations to all entities belonging to this \hl{Mixin} or \hl{Kind} & 
+Listing containing locations to all resource instances belonging to this \hl{Mixin} or \hl{Kind} & 
 N/A & 
-Trigger action (defined for this kind or mixin) on all resource entities belonging to this \hl{Mixin} or \hl{Kind} & 
-Add an resource instance to a mixin & 
+Trigger action (defined for this kind or mixin) on all resource instances belonging to this \hl{Mixin} or \hl{Kind} & 
+Add an resource instance to a \hl{Mixin} & 
 N/A & 
-Delete an instance given in the request from a mixin \\
+Remove an resource instance given in the request from a \hl{Mixin} \\
 \colrule
 Query Interface	& 
-Listing of all registered categories & 
+Listing of all registered \hl{Kind}s and \hl{Mixin}s & 
 N/A & 
 N/A & 
-Add a user defined mixin & 
+Add a user defined \hl{Mixin} & 
 N/A & 
-remove a user-defined mixin (defined in the request) \\
+Remove a user-defined \hl{Mixin} (defined in the request) \\
 \botrule
 \end{tabular}
 }
 
 \subsection{A RESTful Rendering of OCCI}
 The following sections and paragraphs describe how the OCCI model MUST
-be implemented by service providers. Operations which are not defined
-are out of scope for this specification and MAY be implemented by the
-service provider. This is the minimal set to ensure interoperability.
+be implemented by OCCI implementations. Operations which are not
+defined are out of scope for this specification and MAY be implemented
+. This is the minimal set to ensure interoperability.
 
 \subsubsection{Namespace Hierarchy and Location}
 The namespace and the hierarchy are free definable by the Service
-Provider. The OCCI implementation implement the location path feature,
-which is required by OCCI for discovery capabilities and operations on
-\hl{Mixin}s and \hl{Kind}s. Location paths tell the client where all
-resource instance of one \hl{Kind} or \hl{Mixin} can be found
-regardless of the hierarchy the service provider defines. These paths
-are discoverable by the client through the Query interface
-\ref{sec:query}.
+Provider. The OCCI implementation needs to implement the location path
+feature, which is required by OCCI for discovering capabilities and
+operations on \hl{Mixin}s and \hl{Kind}s. Location paths tell the
+client where all resource instance of one \hl{Kind} or \hl{Mixin} can
+be found regardless of the hierarchy the service provider
+defines. These paths are discoverable by the client through the Query
+interface \ref{sec:query}.
 
 These location paths can be part of the namespace or rendered
 alongside. The following example shows how the locations paths are
 rendered alongside the namespace hierarchy. This means that the
-locations paths defined by the \hl{Categories} are not part of the
-hierarchy of the REST Resources.
+locations paths defined by \hl{Kind}s or \hl{Mixin}s are not part of
+the hierarchy of the REST Resources.
 
 \begin{verbatim}
 Category: compute;
@@ -283,11 +275,10 @@ http://example.com/storage/
 http://example.com/my_stuff/
 \end{verbatim}
 
-Location paths can also be part of the namespace
-hierarchy.\footnote{/vms/user1/vm1 (= OCCI base type ID) is a resource
-  instance below the namespace path /vms/user1/.} In this case the
-location is embedded in the hierarchy of resources (location of the
-compute \hl{Category} is part of http://example.com/vms/user1/vm1).
+Location paths can also be part of the namespace hierarchy. In this
+case the location is embedded in the hierarchy of resources (e.g. the location
+of the compute \hl{Kind} is part of
+http://example.com/vms/user1/vm1).
 
 \begin{verbatim}
 Category: compute;
@@ -319,22 +310,24 @@ http://example.com/my_stuff/
 \subsubsection{Various Operations and their Prerequisites and Behaviours}
 
 \paragraph{Operations on Resource Instances}
-The following operations MUST be implemented by the service provider
-for operations on resource instances. The resource instance is
-uniquely identified by an URI (For example:
+The following operations MUST be implemented by the OCCI
+implementation for operations on resource instances. The resource
+instance is uniquely identified by an URI (For example:
 \emph{http://example.com/vms/user1/vm1}).\footnote{The path MUST not
   end with an '/' - that would mean that a client operates on a path
   in the namespace hierarchy}
 
 \begin{description}
-\item[Creating a Resource Instance] A request to create a resource
-  instance MUST contain at least one Category rendering which is (or
-  relates to) a \hl{Kind} definition. If multiple HTTP categories are
-  defined the first one which is (or relates to) to a \hl{Kind} MUST
-  be used for defining the type of the resource instance. Optional
-  information which might be provided by the client and if available
-  MUST be used are Links and Attributes. Two ways can be used to
-  create a new resource instance - HTTP POST or PUT:
+\item[Creating a resource instance] A request to create a resource
+  instance MUST contain at least one HTTP category rendering which is
+  (or relates to) a \hl{Kind} definition. If multiple HTTP categories
+  are defined the first one which is (or relates to) to a \hl{Kind}
+  MUST be used for defining the type of the resource
+  instance. Optional information which might be provided by the client
+  and if available MUST be used are HTTP Links and HTTP
+  X-OCCI-Attributes (mapping to \hl{Link} and the attribtues of an
+  resource instance). Two ways can be used to create a new resource
+  instance - HTTP POST or PUT:
 \begin{verbatim}
 > POST / HTTP/1.1
 > [...]
@@ -348,17 +341,17 @@ uniquely identified by an URI (For example:
 < Location:http://example.com/vms/user1/vm1
 \end{verbatim}
   The path on which this POST verb is executed can be any existing
-  path in the hierarchy of the service providers namespace. The
-  service must return the Location of the newly created resource
-  instance.
+  path in the hierarchy of the Service provider's namespace. The OCCI
+  implementation MUST return the Location of the newly created
+  resource instance.
 
-  Or HTTP PUT can be used. In this case the client ask the service
-  provider to create a resource instance at a certain path in the
-  namespace hierarchy.\footnote{If a Service Provider does not want
-    the user to define the path of a resource instance it can return a
-    Bad Request return code - See section
-    \ref{sec:return_codes}. Service Providers MUST ensure that the
-    path stay unique in their namespace.}
+  HTTP PUT can also be used to create a resource instance. In this
+  case the client ask the service provider to create a resource
+  instance at a certain path in the namespace hierarchy.\footnote{If a
+    Service Provider does not want the user to define the path of a
+    resource instance it can return a Bad Request return code - See
+    section \ref{sec:return_codes}. Service Providers MUST ensure that
+    the paths of REST resources stays unique in their namespace.}
 \begin{verbatim}
 > PUT /vms/user1/my_first_virtual_machine HTTP/1.1
 > [...]
@@ -370,15 +363,15 @@ uniquely identified by an URI (For example:
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
-  The service will return an OK code.
+  The OCCI implementation will return an OK code.
 
-\item[Retrieving a Resource Instance] For retrieval the HTTP GET verb
-  is used. It MUST return at least the Category which defines the
-  \hl{Kind} of the resource instance. Links pointing to related
+\item[Retrieving a resource instance] For retrieval the HTTP GET verb
+  is used. It MUST return at least the HTTP category which defines the
+  \hl{Kind} of the resource instance. HTTP Links pointing to related
   resource instances, other URI or Actions MUST be included if
-  present. Those \hl{Link}s SHOULD only be the \hl{Actions} which are
-  currently applicable. The Attributes of the resource instance MUST
-  be exposed to the client if available.
+  present. Only Actions currently applicatble SHOULD be rendered using
+  HTTP Links. The Attributes of the resource instance MUST be exposed
+  to the client if available.
 \begin{verbatim}
 > GET /vms/user1/vm1 HTTP/1.1
 > [...]
@@ -391,11 +384,11 @@ uniquely identified by an URI (For example:
 < Link: [...]
 \end{verbatim}
 
-\item[Updating a Resource Instance] Before updating a resource
+\item[Updating a resource instance] Before updating a resource
   instance it is RECOMMENDED that the client first retrieves the
   resource instance. Updating is done using the HTTP PUT verb. Only
-  the information (Links, Attributes or \hl{Mixin} Categories), which
-  are updated MUST be provided along with the
+  the information (HTTP Links, HTTP X-OCCI-Attributes or HTTP
+  categories), which are updated MUST be provided along with the
   request.\footnote{Changing the type of the resource instance MUST
     not be possible.}
 \begin{verbatim}
@@ -409,10 +402,10 @@ uniquely identified by an URI (For example:
 < [...]
 \end{verbatim}
 
-\item[Deleting a Resource Instance] A resource instance can be deleted
+\item[Deleting a resource instance] A resource instance can be deleted
   using the HTTP DELETE verb. No other information SHOULD be added to
-  the request.\footnote{If the resource instances is a \hl{Link} the
-    source and target must be updated accordingly}
+  the request.\footnote{If the resource instances is a \hl{Link} type
+    the source and target must be updated accordingly}
 \begin{verbatim}
 > DELETE /vms/user1/vm1 HTTP/1.1
 > [...]
@@ -421,13 +414,13 @@ uniquely identified by an URI (For example:
 < [...]
 \end{verbatim}
 
-\item[Triggering an Action on a Resource Instance] To trigger an
+\item[Triggering an Action on a resource instance] To trigger an
   action on a resource instance the request MUST containing the HTTP
-  Category defining the \hl{Action}. It MAY include attributes which
-  are the parameters of the action. Actions are triggered using the
-  HTTP POST verb and by adding a fragment to the URI. This fragment
-  exposes the term of the \hl{Action}. If an action is not available a
-  Bad Request should be returned.
+  Category defining the \hl{Action}. It MAY include HTTP
+  X-OCCI-Attributes which are the parameters of the action. Actions
+  are triggered using the HTTP POST verb and by adding a fragment to
+  the URI. This fragment exposes the term of the \hl{Action}. If an
+  action is not available a Bad Request should be returned.
 \begin{verbatim}
 > POST /vms/user1/vm1?action=stop HTTP/1.1
 > [...]
@@ -437,22 +430,22 @@ uniquely identified by an URI (For example:
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
-
 \end{description}
 
 \paragraph{Handling the Query Interface}
 \label{sec:query}
-The query interface MUST be implemented by all services supporting
-OCCI. It MUST be found at the path \emph{/-/} off the root of the
-service implementation. The following operations, listed below, MUST
-be implemented by the service.
+The query interface MUST be implemented by all OCCI
+implementations. It MUST be found at the path \emph{/-/} off the root
+of the OCCI implementation. The following operations, listed below,
+MUST be implemented by the service.
 
 \begin{description}
-\item[Retrieving All Registered Categories] The HTTP verb GET must be
-  used to retrieve all categories the service can handle. This allows
-  the client to discover the capabilities of the Service provider. The
-  result MUST contain all information about the Category (including
-  Attributes and Actions assigned to this Category).
+\item[Retrieval of all registered \hl{Kind}s and \hl{Mixin}s] The HTTP
+  verb GET must be used to retrieve al l\hl{Kind}s and \hl{Mixin}s the
+  service can handle. This allows the client to discover the
+  capabilities of the OCCI implementation. The result MUST contain all
+  information about the \hl{Kind}s and \hl{Mixin}s (including
+  Attributes and \hl{Actions} assigned).
 \begin{verbatim}
 > GET /-/ HTTP/1.1
 > [...]
@@ -476,42 +469,39 @@ be implemented by the service.
             location=/storage;
  
 \end{verbatim}
+An OCCI implementation MUST support a filtering mechanism. If a HTTP
+Category is provided in the request the server MUST only return the
+complete rendering of the requested \hl{Kind} or \hl{Mixin}.
 
-A Service provider MUST support a filtering mechanism. If a Category
-is provided in the request the server MUST only return the complete
-rendering of the provided Category.
-
-\item[Adding a \hl{Mixin} category definition] To add a \hl{Mixin} to
+\item[Adding a \hl{Mixin} definition] To add a \hl{Mixin} to
   the service the HTTP PUT verb MUST be used. All possible information
-  for the \hl{Mixin} category must be defined. At least the Category
-  term, scheme and location MUST be defined. Actions and Attributes
-  are not supported:
+  for the \hl{Mixin} must be defined. At least the HTTP Category term,
+  scheme and location MUST be defined. Actions and Attributes are not
+  supported:
 \begin{verbatim}
 > GET /-/ HTTP/1.1
 > [...]
 > Category: my_stuff;
             scheme=http://example.com/occi/my_stuff;
             rel=http:/example.com/occi/something_else#mixin;
-            attributes=...;
-            actions=...;
             location=/my_stuff;
 
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
 The service might reject this request if it does not allow
-user-defined Categories to be created. Also on name collisions of the
+user-defined \hl{Mixin}s to be created. Also on name collisions of the
 defined location path the service provider might reject this
 operation.
 
-\item[Removing a \hl{Mixin} category definition] A user defined
+\item[Removing a \hl{Mixin} definition] A user defined
   \hl{Mixin} CAN be removed (if allowed) by using the HTTP DELETE
   verb. The information about which \hl{Mixin} should be deleted MUST
   be provided in the request:
 \begin{verbatim}
 > DELETE /-/ HTTP/1.1
 > [...]
-> Category:my_stuff;scheme=http://example.com/occi/my_stuff;
+> Category: my_stuff;scheme=http://example.com/occi/my_stuff;
 
 < HTTP/1.1 200 OK
 < [...]
@@ -519,13 +509,14 @@ operation.
 \end{description}
 
 \paragraph{Operations on \hl{Mixin}s or \hl{Kind}s}
-All the following operations CAN only be be done on a location path
-provided by category definition. It MUST end with an \emph{/}.
+All the following operations CAN only be be done on a location paths
+provided by \hl{Kind}s and \hl{Mixin}s. It MUST end with an
+\emph{/}.
 
 \begin{description}
 \item[Retrieving All Resource Instances Belonging to \hl{Mixin} or
   \hl{Kind}] The HTTP verb GET must be used to retrieve all resource
-  instances. The service provider MUST return a URI-list containing
+  instances. The service provider MUST return a listing containing
   all resource instances which belong to the requested \hl{Mixin} or
   \hl{Kind}:
 \begin{verbatim}
@@ -533,25 +524,24 @@ provided by category definition. It MUST end with an \emph{/}.
 > [...]
  
 < HTTP/1.1 200 OK
-< Content-type: text/uri-list
 < [...]
 < 
-< http://example.com/vms/user1/vm1
-< http://example.com/vms/user1/vm2
-< http://example.com/vms/user2/vm1
+< X-OCCI-Location: http://example.com/vms/user1/vm1
+< X-OCCI-Location: http://example.com/vms/user1/vm2
+< X-OCCI-Location: http://example.com/vms/user2/vm1
 \end{verbatim}
-\textbf{Note:} A Service provider MUST support a filtering
-mechanism. If a Category is provided in the request the server MUST
-only return the resource instances belonging to the provided
-Category. The provided category definition SHOULD be different from
-the one Category definition which defined the location path used in
-the request.
+\textbf{Note:} A OCCI implementation MUST support a filtering
+mechanism. If a HTTP Category is provided in the request the server
+MUST only return the resource instances belonging to the provided
+\hl{Kind} or \hl{Mixin}. The provided HTTP category definition SHOULD
+be different from the \hl{Kind} or \hl{Mixin} definition which defined
+the location path used in the request.
 
 \item[Triggering Actions on All Instances of a \hl{Mixin} or
   \hl{Kind}] Actions can be triggered on all resource instances of the
   same \hl{Mixin} or \hl{Kind}. The HTTP POST verb MUST be used. Also
-  the Action MUST be defined by the category which defines the
-  location path which is used in the request:
+  the Action MUST be defined by the \hl{Kind} or \hl{Mixin} which
+  defines the location path which is used in the request:
 \begin{verbatim}
 > POST /compute/;action=stop HTTP/1.1
 > [...]
@@ -561,8 +551,8 @@ the request.
 < [...]
 \end{verbatim}
 
-\item[Adding \hl{Mixin} to a Resource Instance to a \hl{Mixin}] One or
-  multiple resource instances can be associated with a \hl{Mixin}
+\item[Associate resource instances with \hl{Mixin}s] One
+  or multiple resource instances can be associated with a \hl{Mixin}
   using the HTTP PUT verb. The URIs which uniquely defined the
   resource instance MUST be provided in the request:
 \begin{verbatim}
@@ -576,7 +566,7 @@ the request.
 < [...]
 \end{verbatim}
 
-\item[Removing a Resource Instance from a \hl{Mixin}] One or multiple
+\item[Unassociate resource instance(s) from a \hl{Mixin}] One or multiple
   resource instances can be removed from a \hl{Mixin} using the HTTP
   DELETE verb. The URIs which uniquely defined the resource instance
   MUST be provided in the request:
@@ -599,25 +589,23 @@ instances. They MUST end with \emph{/} (For example
 \emph{http://example.com/vms/user1}).
 
 \begin{description}
-\item[Retrieving All Resource Instances Below a Path] The HTTP verb
+\item[Retrieving All resource instances Below a Path] The HTTP verb
   GET must be used to retrieve all resource instances. The service
-  provider MUST return a URI-list containing all resource instances
+  provider MUST return a Listing containing all resource instances
   which are children of the provided URI in the namespace hierarchy:
 \begin{verbatim}
 > GET /vms/user1/ HTTP/1.1
 > [...]
  
 < HTTP/1.1 200 OK
-< Content-type: text/uri-list
 < [...]
 < 
-< http://example.com/vms/user1/vm1
-< http://example.com/vms/user1/vm2
+< X-OCCI-Location: http://example.com/vms/user1/vm1
+< X-OCCI-Location: http://example.com/vms/user1/vm2
 \end{verbatim}
-A Service provider MUST support a filtering
-mechanism. If a category is provided in the request the server MUST
-only return the resource instances belonging to the provided
-Category.
+An OCCI implementationx MUST support a filtering mechanism. If a
+category is provided in the request the server MUST only return the
+resource instances belonging to the provided \hl{Mixin} or \hl{Kind}.
 
 \item[Deletion of all resource instances below a path] \textbf{(Note:
   this is a potentially dangerous operation!)} The HTTP verb DELETE
@@ -629,17 +617,13 @@ Category.
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
-\textbf{Note:} A Service provider SHOULD support a filtering
-mechanism. If a category is provided in the request the server SHOULD
-only return the resource instances belonging to the provided
-Category.
 \end{description}
 
 \subsection{Syntax and Semantics of the Rendering}
 \label{sec:syntax}
 
 \subsubsection{Rendering of an OCCI-Category}
-The semantics of the Category in the OCCI context is described in the
+The semantics of the HTTP category in the OCCI context is described in the
 OCCI Core \& Models document. This rendering follows the
   Category header defined by the Web Categories specification
   \footnote{http://tools.ietf.org/html/draft-johnston-http-category-header-01} 
@@ -655,7 +639,7 @@ Category: <term>; scheme="<scheme>"
 There is NO order for the optional part \textbf{(Andy: What 'optional' part?)}.
 
 \subsubsection{Rendering of OCCI-Links and OCCI-Actions}
-The semantics of the Link header in the OCCI context is described in
+The semantics of the HTTP Link header in the OCCI context is described in
 the OCCI Core \& Models document. This rendering follows the
   Link header defined by the Web Linking specification
   \footnote{http://tools.ietf.org/html/draft-nottingham-http-link-header-10} and
@@ -735,21 +719,16 @@ does it require that client to service communications are secured. It
 does recommend that an authentication mechanism be used and that where
 appropriate, communications are encrypted using HTTP over TLS. The
 authentication mechanisms that CAN be used with OCCI are those that
-can be used with HTTP and TLS, for example Basic \ref{YYY}, Digest \ref{YYY}
-and OAuth \ref{YYY}. If an OCCI service requires authentication the
-response to a request that MUST be authenticated must be a HTTP 401
-code that indicates the request is authorised. In response to
-authenticate the client MUST set a WWW-Authenticate header field and
-through this indicate the authentication mechanism.
+can be used with HTTP and TLS.
 
 \subsubsection{Versioning}
-Information about what version of OCCI is supported by a provider MUST
-be advertised to a client on each response to a client. The version
-field in the response MUST include the value OCCI/X.Y, where X is the
-major version number and Y is the minor version number of the
-implemented OCCI specification. In the case of a HTTP Header
-Rendering, the server response MUST relay versioning information
-using the HTTP header name 'Server'.
+Information about what version of OCCI is supported by a OCCI
+implementation MUST be advertised to a client on each response to a
+client. The version field in the response MUST include the value
+OCCI/X.Y, where X is the major version number and Y is the minor
+version number of the implemented OCCI specification. In the case of a
+HTTP Header Rendering, the server response MUST relay versioning
+information using the HTTP header name 'Server'.
 
 \begin{verbatim}
 HTTP/1.1 202 Accepted
@@ -758,52 +737,79 @@ Server: occi-server/1.1 (linux) OCCI/1.1
 \end{verbatim}
 
 Complimenting the service-side behaviour of an OCCI implementation, a
-client MUST indicate to the OCCI service implementation the version it
-expects to interact with. For the clients, the information MUST be
-advertised in all requests it issues. In the case of a HTTP Header
-Rendering, the client request MUST relay versioning information in
-the 'User-Agent' header. The 'User-Agent' field MUST include the same
-value (OCCI/X.Y) as supported by the Server HTTP header.
+client SHOULD indicate to the OCCI service implementation the version
+it expects to interact with. For the clients, the information SHOULD
+be advertised in all requests it issues. A client request SHOULD
+relay versioning information in the 'User-Agent' header. The
+'User-Agent' field MUST include the same value (OCCI/X.Y) as supported
+by the Server HTTP header.
 
 \begin{verbatim}
-
-(Andy: what's <UDN>?)
-
-GET <UDN> HTTP/1.1
+GET <Path> HTTP/1.1
 Host: example.com
 User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.1
 [...]
 \end{verbatim}
 
-If a service receives a request from a client that supplies a version
-number higher than the service supports, the service MUST respond back
-to the client with an exception indicating that the requested version
-is not implemented. Where a client implements OCCI using a HTTP
-transport, the HTTP code 501, not implemented, MUST be used.
+If a OCCI implementation receives a request from a client that
+supplies a version number higher than the service supports, the
+service MUST respond back to the client with an exception indicating
+that the requested version is not implemented. Where a client
+implements OCCI using a HTTP transport, the HTTP code 501, not
+implemented, MUST be used.
 
 OCCI implementations which implement this version of the Document MUST
 use the version String \emph{OCCI/1.1}.
 
 \subsubsection{Content-type and Accept headers}
-\ralf{Add some HTTP examples for the different Content-types. Just use the same
-style as in the other sections.}
-
 A server MUST react according to the Accept header the client
 provides. If none is given - or \textit{*/*} is used - the service MUST
 use the Content-type \emph{text/plain}. This is the fall-back
 rendering and MUST be implemented. Otherwise the according rendering
 MUST be used. Each Rendering SHOULD expose which Accept and
 Content-type header fields it can handle. Overall the service MUST
-support the \textit{text/occi}, \textit{text/plain} and
-\textit{text/uri-list} Content-types.
+support the \textit{text/occi} and \textit{text/plain} Content-types.
 
 The server MUST also return the proper Content-type header. If a
 client provides information with a Content-Type - the information MUST
 be parsed accordingly.
 
 When the Client request a Content-Type that will result in an
-incomplete or faulty rendering the Service MUST return the unsupported media type
-, 415, HTTP code.
+incomplete or faulty rendering the Service MUST return the unsupported
+media type , 415, HTTP code.
+
+The following examples demonstrate the behaviour of an HTTP GET
+operations on the resource instance \emph{} using two different HTTP
+Accept headers:
+
+\begin{verbatim}
+> GET /vms/user1/vm1 HTTP/1.1
+> Accept: text/plain
+> [...]
+ 
+< HTTP/1.1 200 OK
+< [...]
+< Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure
+< Category:my_stuff;scheme=http://example.com/occi/my_stuff
+< X-OCCI-Attribute:occi.compute.cores=2 occi.compute.hostname=foobar
+< Link: [...]
+\end{verbatim}
+
+And with \emph{text/occi} as HTTP Accept header:
+
+\begin{verbatim}
+> GET /vms/user1/vm1 HTTP/1.1
+> Accept: text/occi
+> [...]
+ 
+< HTTP/1.1 200 OK
+< Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure
+< Category:my_stuff;scheme=http://example.com/occi/my_stuff
+< X-OCCI-Attribute:occi.compute.cores=2 occi.compute.hostname=foobar
+< Link: [...]
+< [...]
+OK
+\end{verbatim}
 
 \paragraph{The Content-type text/plain}
 While using this rendering with the Content-Type \textit{text/plain}
@@ -882,6 +888,56 @@ Code & Description & Notes \\
 503 & Service Unavailable & \\
 \botrule
 \end{tabular}}
+
+\subsection{More complete examples}
+Since most examples are not complete due to space limitations this
+section will give some more complete examples.
+
+\subsubsection{Creating a resource instance}
+\begin{verbatim}
+* About to connect() to localhost port 8080 (#0)
+*   Trying ::1... Connection refused
+*   Trying 127.0.0.1... connected
+* Connected to localhost (127.0.0.1) port 8080 (#0)
+> POST / HTTP/1.1
+> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+> Host: localhost:8080
+> Accept: */*
+> Content-Type: text/occi
+> Category: compute;scheme=http://schemas.ogf.org/occi/infrastructure
+> 
+< HTTP/1.1 200 OK
+< Content-Length: 2
+< Content-Type: text/html; charset=UTF-8
+< Location: /users/default/compute/940feba9-1fdf-4079-aab4-8e83f18c73e4
+< Server: pyocci OCCI/1.1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+OK%   
+\end{verbatim}
+
+\subsubsection{Retrieving a resource instance}
+\begin{verbatim}
+* About to connect() to localhost port 8080 (#0)
+*   Trying ::1... Connection refused
+*   Trying 127.0.0.1... connected
+* Connected to localhost (127.0.0.1) port 8080 (#0)
+> GET /users/default/compute/940feba9-1fdf-4079-aab4-8e83f18c73e4 HTTP/1.1
+> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+> Host: localhost:8080
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Content-Length: 68
+< Etag: "7f8e453f1e002a66375a411a6b0ffa5e97877d8d"
+< Content-Type: text/plain
+< Server: pyocci OCCI/1.1
+< 
+Category: compute;scheme=http://schemas.ogf.org/occi/infrastructure
+* Connection #0 to host localhost left intact
+* Closing connection #0
+\end{verbatim}
 
 \section{Contributors}
 \input{include/contributors}
