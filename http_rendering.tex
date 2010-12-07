@@ -86,6 +86,8 @@ interact with the OCCI Core model". This section should describe:
 names-pace.  (This is the important stuff.)
 \end{itemize}
 }
+\textbf{ABNF form for syntax of HTTP X-OCCI-Loc, X-OCCI-Attr, HTTP Link and HTTP Category}
+
 \textbf{Mention dives between HTTP 200 / 202 return types...}
 
 \textbf{Mention the following: A kind, cate and mixin is rendered through HTTP category...}
@@ -670,7 +672,7 @@ X-OCCI-Attribute: <attribute name>=<attribute value>
 \end{verbatim}
 
 Valid attribute names for OCCI Kinds are specified in appropriate
-Extension documents \ref{occi:infrasctucture}.
+Extension documents \ref{occi:infrastructure}.
 
 \subsubsection{Rendering of Location-URLs}
 To render an OCCI representation solely in the header, the
@@ -823,8 +825,8 @@ of the three header fields, see section \ref{sec:syntax}.
 
 \paragraph{The Content-type text/occi}
 While using this rendering with the Content-Type \textit{text/occi}
-the information described in section \ref{sec:model_rendering} MUST be
-placed in the HTTP Header. The body MUST contain the string 'OK' on
+the information described in section \ref{sec:syntax} MUST be placed
+in the HTTP Header. The body MUST contain the string 'OK' on
 successful operations.
 
 The HTTP header fields MUST follow the specification in RFC 2616
