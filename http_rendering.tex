@@ -114,17 +114,17 @@ the functionalities OCCI has:
 \begin{verbatim}
 
 Category: compute;
-          scheme=http://schemas.ogf.org/occi/infrastructure;
+          scheme=http://schemas.ogf.org/occi/infrastructure#;
           location=/compute 
     (This is an compute kind)
 
 Category: storage;
-          scheme=http://schemas.ogf.org/occi/infrastructure;
+          scheme=http://schemas.ogf.org/occi/infrastructure#;
           location=/storage 
     (This is an storage kind)
 
 Category: my_stuff;
-          scheme=http://example.com/occi/my_stuff;
+          scheme=http://example.com/occi/my_stuff#;
           location=/my_stuff 
     (This is a mixin of user1)
 
@@ -141,21 +141,20 @@ http://example.com/storage/
 http://example.com/my_stuff/
 \end{verbatim}
 
-The following notations are used when referring to parts or complete
-URIs:
+The following terms \cite{rfc3986} are used when referring to URI components:
 
 \begin{verbatim}
-http://www.example.com:8080/foo/bar?action=stop
-<   >  <     Authority    >< Path >< Fragment >
-  ^
-  Scheme
+ http://example.com:8080/over/there?action=stop#xyz
+ \__/   \______________/\_________/ \_________/ \_/
+  |           |            |            |        |
+scheme     authority       path        query   fragment
 \end{verbatim}
 
 All examples in this document use the \emph{text/plain} HTTP
 Content-Type for posting information. To retrieve information the HTTP
 Accept header \emph{text/plain} is used.
 
-This specification is aligned with RFC 2986 \cite{rfc3986}.
+This specification is aligned with RFC 3986 \cite{rfc3986}.
 
 \section{A RESTful HTTP Rendering for OCCI}
 The HTTP Protocol is the underlying core fabric of OCCI and OCCI uses
@@ -423,8 +422,8 @@ instance is uniquely identified by an URI (For example:
   action on a resource instance the request MUST containing the HTTP
   Category defining the \hl{Action}. It MAY include HTTP
   X-OCCI-Attributes which are the parameters of the action. Actions
-  are triggered using the HTTP POST verb and by adding a fragment to
-  the URI. This fragment exposes the term of the \hl{Action}. If an
+  are triggered using the HTTP POST verb and by adding a query to
+  the URI. This query exposes the term of the \hl{Action}. If an
   action is not available a Bad Request should be returned.
 \begin{verbatim}
 > POST /vms/user1/vm1?action=stop HTTP/1.1
