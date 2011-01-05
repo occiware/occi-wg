@@ -139,9 +139,21 @@ Accept header \emph{text/plain} is used.
 
 This specification is aligned with RFC 3986 \cite{rfc3986}.
 
-\section{A RESTful HTTP Rendering for OCCI}
-The HTTP Protocol is the underlying core fabric of OCCI and OCCI uses
-all the features of the HTTP and underlying protocols offer. OCCI also
+\section{OCCI HTTP Rendering}
+
+The OCCI HTTP Rendering document specifies how the OCCI Core Model
+\cite{occi:core}, including extensions thereof, is rendered over the HTTP
+protocol \cite{rfc2616}. The document describes the general behavior for all
+interaction with an OCCI implementation over HTTP together with three content
+types to represent the data being transferred. The content types specified are
+\textit{text/plain}, \textit{text/occi} and \textit{text/uri-list}. Other
+data formats such as e.g.~OVF and JSON will be specified in complimentary
+documents.
+
+\subsection{A RESTful HTTP Rendering for OCCI}
+
+The OCCI HTTP Rendering uses
+all the features the HTTP and underlying protocols offer but also
 builds upon the Resource Oriented Architecture (ROA). ROA's use
 Representation State Transfer (REST) \cite{REST_Fielding} to cater for
 client and service interactions. Interaction with the system is by
@@ -154,22 +166,20 @@ general-purpose methods known as HTTP verbs. These HTTP verbs map
 loosely to the resource related operations of Create (POST), Retrieve
 (GET), Update (POST/PUT) and Delete (DELETE).
 
-The following section describe the general behavior for all HTTP
-based renderings. Later sections will describe the syntax and semantic
-of how to render the OCCI Core model.
-
-Each resource instance within an OCCI system must be uniquely
-identified by an URI \cite{occi:core}. The structure of these URIs is
-opaque and the system should not assume a static, pre-determined
-scheme for their structure (Example \emph{Entity::id} can be:
-\emph{http://example.com/vms/user1/vm1}).
+Each resource instance within an OCCI system MUST be uniquely identified by an
+URI stored in the {\em id} attribute of the \hl{Entity} type
+\cite{occi:core}.
+%
+The structure of these URIs is opaque and the system should not assume a
+static, pre-determined scheme for their structure. For example
+\emph{Entity::id} can be \emph{http://example.com/vms/user1/vm1}.
 
 \subsection{Behaviour of the HTTP Verbs}
 As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
 foundation protocol the means of interaction with all RESTful resource
 instances is through the four main HTTP verbs. OCCI service
 implementations MUST, at a minimum, support these verbs as shown in
-Table \ref{tbl:http_verbs}:
+table \ref{tbl:http_verbs}.
 
 \mytablefloat{\label{tbl:http_verbs}HTTP Verb Behavior}{
 \begin{tabular}{p{1in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in}}
