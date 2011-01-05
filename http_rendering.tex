@@ -85,6 +85,10 @@ capabilities required to support modern service offerings.
 \section{Notational Conventions}
 \input{include/notational}
 
+This document uses the Augmented Backus-Naur Form (ABNF) notation of RFC 2616
+\cite{rfc2616}, and explicitly includes the following rules from it:
+quoted-string, token, SP (space), LOALPHA, DIGIT.
+
 All examples in this document use one of the following three HTTP
 category definitions. An example name-space hierarchy is also
 given. Syntax and Semantics is explained in the remaining sections of
@@ -636,22 +640,34 @@ resource instances belonging to the provided \hl{Mixin} or \hl{Kind}.
 \subsection{Syntax and Semantics of the Rendering}
 \label{sec:syntax}
 
-\subsubsection{Rendering of an OCCI-Category}
-The semantics of the HTTP category in the OCCI context is described in the
-OCCI Core \& Models document. This rendering follows the
-  Category header defined by the Web Categories specification
-  \footnote{http://tools.ietf.org/html/draft-johnston-http-category-header-01} 
-  and MUST be rendered accordingly.
+\subsubsection{Rendering of the OCCI Category, Kind and Mixin types}
+Instances of the \hl{Category}, \hl{Kind} and \hl{Mixin} types \cite{occi:core}
+MUST be rendered using the Category header as defined by the Web Categories
+specification%
+\footnote{http://tools.ietf.org/html/draft-johnston-http-category-header-01}.
+%
+The following syntax applies:
 
 \begin{verbatim}
 Category           = "Category" ":" category-value
-   category-value     = term ";" "class" "=" class-value *( ";" category-param )
-   class-value        = "action" | "mixin" | "kind"
-   category-param     = ( ( "scheme" "=" <"> scheme "#" <"> )
-                      | ( category-extension ) )
-   category-extension = token [ "=" ( token | quoted-string ) ]
+   category-value     = term ";"
+                        "scheme" "=" <"> scheme "#" <">
+                        "class" "=" ( class | <"> class <"> )
+                        *( ";" category-param )
+   category-param     = ( ( "title" "=" quoted-string )
+                      | ( "attributes" "=" <"> attribute-list <"> )
+                      | ( "actions" "=" <"> action-list <"> )
    term               = token
    scheme             = URI
+   class              = "action" | "mixin" | "kind"
+   attribute-list     = attribute-name
+                      | attribute-name *( 1*SP attribute-name)
+   attribute-name     = attr-component *( "." attr-component )
+   attr-component     = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+   action-list        = action 
+                      | action *( 1*SP action)
+   action             = scheme "#" term
+   
 \end{verbatim}
 
 \subsubsection{Rendering of OCCI-Links and OCCI-Actions}
