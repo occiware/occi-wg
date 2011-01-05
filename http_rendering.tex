@@ -339,8 +339,9 @@ instance is uniquely identified by an URI (For example:
 > POST / HTTP/1.1
 > [...]
 > 
-> Category:compute;class=kind;scheme=http://schemas.ogf.org/occi/infrastructure#
-> X-OCCI-Attribute:occi.compute.cores=2 occi.compute.hostname=foobar
+> Category: compute; class=kind; scheme=http://schemas.ogf.org/occi/infrastructure#
+> X-OCCI-Attribute: occi.compute.cores=2
+> X-OCCI-Attribute: occi.compute.hostname=foobar
 > [...]
  
 < HTTP/1.1 200 OK
@@ -363,8 +364,9 @@ instance is uniquely identified by an URI (For example:
 > PUT /vms/user1/my_first_virtual_machine HTTP/1.1
 > [...]
 > 
-> Category:compute;class=kind;scheme=http://schemas.ogf.org/occi/infrastructure#
-> X-OCCI-Attribute:occi.compute.cores=2 occi.compute.hostname=foobar
+> Category: compute; class=kind; scheme=http://schemas.ogf.org/occi/infrastructure#
+> X-OCCI-Attribute: occi.compute.cores=2
+> X-OCCI-Attribute: occi.compute.hostname=foobar
 > [...]
  
 < HTTP/1.1 200 OK
@@ -385,9 +387,10 @@ instance is uniquely identified by an URI (For example:
  
 < HTTP/1.1 200 OK
 < [...]
-< Category:compute;class=kind;scheme=http://schemas.ogf.org/occi/infrastructure#
-< Category:my_stuff;class=mixin;scheme=http://example.com/occi/my_stuff#
-< X-OCCI-Attribute:occi.compute.cores=2 occi.compute.hostname=foobar
+< Category: compute; class=kind; scheme=http://schemas.ogf.org/occi/infrastructure#
+< Category: my_stuff; class=mixin; scheme=http://example.com/occi/my_stuff#
+< X-OCCI-Attribute: occi.compute.cores=2
+< X-OCCI-Attribute: occi.compute.hostname=foobar
 < Link: [...]
 \end{verbatim}
 
@@ -431,8 +434,8 @@ instance is uniquely identified by an URI (For example:
 \begin{verbatim}
 > POST /vms/user1/vm1?action=stop HTTP/1.1
 > [...]
-> Category: Category:compute;class=action;scheme=...
-> X-OCCI-Attribute:method=poweroff
+> Category: compute; class=action; scheme=...
+> X-OCCI-Attribute: method=poweroff
 
 < HTTP/1.1 200 OK
 < [...]
@@ -460,23 +463,23 @@ MUST be implemented by the service.
 < HTTP/1.1 200 OK
 < [...]
 < Category: compute;
-            class=kind;
-            scheme=http://schemas.ogf.org/occi/infrastructure#;
-            attributes=occi.compute.cores,occi...;
-            rel=http://schemas.ogf.org/occi/core\#entity;
-            actions=http://schemas.ogf.org/occi/infrastructure/compute/action#stop,...;
-            location=/compute;
+<           class=kind;
+<           scheme=http://schemas.ogf.org/occi/infrastructure#;
+<           rel=http://schemas.ogf.org/occi/core\#resource;
+<           attributes="occi.compute.cores occi...";
+<           actions="http://schemas.ogf.org/occi/infrastructure/compute/action#stop ...";
+<           location=/compute;
 < Category: my_stuff;
-            class=mixin;
-            scheme=http://example.com/occi/my_stuff#;
-            location=/my_stuff;
+<           class=mixin;
+<           scheme=http://example.com/occi/my_stuff#;
+<           location=/my_stuff;
 < Category: storage; 
-            class=kind;
-            scheme=http://schemas.ogf.org/occi/infrastructure#;
-            attributes="...";
-            actions="...";
-            rel=http://schemas.ogf.org/occi/core\#entity;
-            location=/storage;
+<           class=kind;
+<           scheme=http://schemas.ogf.org/occi/infrastructure#;
+<           rel=http://schemas.ogf.org/occi/core\#resource;
+<           attributes="...";
+<           actions="...";
+<           location=/storage;
  
 \end{verbatim}
 An OCCI implementation MUST support a filtering mechanism. If a HTTP
@@ -489,13 +492,13 @@ complete rendering of the requested \hl{Kind} or \hl{Mixin}.
   scheme and location MUST be defined. Actions and Attributes are not
   supported:
 \begin{verbatim}
-> GET /-/ HTTP/1.1
+> PUT /-/ HTTP/1.1
 > [...]
 > Category: my_stuff;
-            class=mixin
-            scheme=http://example.com/occi/my_stuff#;
-            rel=http:/example.com/occi/something_else#mixin;
-            location=/my_stuff;
+>           class=mixin;
+>           scheme=http://example.com/occi/my_stuff#;
+>           rel=http:/example.com/occi/something_else#mixin;
+>           location=/my_stuff;
 
 < HTTP/1.1 200 OK
 < [...]
@@ -512,7 +515,7 @@ operation.
 \begin{verbatim}
 > DELETE /-/ HTTP/1.1
 > [...]
-> Category: my_stuff;class=mixin;scheme=http://example.com/occi/my_stuff#;
+> Category: my_stuff; class=mixin; scheme=http://example.com/occi/my_stuff#;
 
 < HTTP/1.1 200 OK
 < [...]
@@ -554,9 +557,9 @@ the location path used in the request.
   the Action MUST be defined by the \hl{Kind} or \hl{Mixin} which
   defines the location path which is used in the request:
 \begin{verbatim}
-> POST /compute/;action=stop HTTP/1.1
+> POST /compute/?action=stop HTTP/1.1
 > [...]
- X-OCCI-Attribute:method=poweroff
+> X-OCCI-Attribute: method=poweroff
 
 < HTTP/1.1 200 OK
 < [...]
@@ -569,9 +572,9 @@ the location path used in the request.
 \begin{verbatim}
 > PUT /my_stuff/ HTTP/1.1
 > [...]
-> X-OCCI-Location:http://example.com/vms/user1/vm1,
-                  http://example.com/vms/user1/vm2,
-                  http://example.com/disks/user1/disk1
+> X-OCCI-Location: http://example.com/vms/user1/vm1
+> X-OCCI-Location: http://example.com/vms/user1/vm2
+> X-OCCI-Location: http://example.com/disks/user1/disk1
 
 < HTTP/1.1 200 OK
 < [...]
@@ -584,9 +587,9 @@ the location path used in the request.
 \begin{verbatim}
 > DELETE /my_stuff/ HTTP/1.1
 > [...]
-> X-OCCI-Location:http://example.com/vms/user1/vm1,
-                  http://example.com/vms/user1/vm2,
-                  http://example.com/disks/user1/disk1
+> X-OCCI-Location: http://example.com/vms/user1/vm1
+> X-OCCI-Location: http://example.com/vms/user1/vm2
+> X-OCCI-Location: http://example.com/disks/user1/disk1
 
 < HTTP/1.1 200 OK
 < [...]
@@ -782,9 +785,10 @@ Accept headers:
  
 < HTTP/1.1 200 OK
 < [...]
-< Category:compute;class=kind;scheme=http://schemas.ogf.org/occi/infrastructure#
-< Category:my_stuff;class=mixin;scheme=http://example.com/occi/my_stuff#
-< X-OCCI-Attribute:occi.compute.cores=2 occi.compute.hostname=foobar
+< Category: compute; class=kind; scheme=http://schemas.ogf.org/occi/infrastructure#
+< Category: my_stuff; class=mixin; scheme=http://example.com/occi/my_stuff#
+< X-OCCI-Attribute: occi.compute.cores=2
+< X-OCCI-Attribute: occi.compute.hostname=foobar
 < Link: [...]
 \end{verbatim}
 
@@ -796,9 +800,9 @@ And with \emph{text/occi} as HTTP Accept header:
 > [...]
  
 < HTTP/1.1 200 OK
-< Category:compute;scheme=http://schemas.ogf.org/occi/infrastructure#
-< Category:my_stuff;scheme=http://example.com/occi/my_stuff#
-< X-OCCI-Attribute:occi.compute.cores=2 occi.compute.hostname=foobar
+< Category: compute; class=kind; scheme=http://schemas.ogf.org/occi/infrastructure#,
+            my_stuff; class=mixin; scheme=http://example.com/occi/my_stuff#
+< X-OCCI-Attribute: occi.compute.cores=2, occi.compute.hostname=foobar
 < Link: [...]
 < [...]
 OK
