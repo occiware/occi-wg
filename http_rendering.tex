@@ -649,16 +649,19 @@ specification%
 The following syntax applies:
 
 \begin{verbatim}
-Category           = "Category" ":" category-value
-   category-value     = term ";"
-                        "scheme" "=" <"> scheme "#" <">
-                        "class" "=" ( class | <"> class <"> )
-                        *( ";" category-param )
+Category           = "Category" ":" #category-value
+   category-value     = term
+                       ";" "scheme" "=" <"> scheme "#" <">
+                       ";" "class" "=" ( class | <"> class <"> )
+                       *( ";" category-param )
    category-param     = ( ( "title" "=" quoted-string )
+                      | ( "rel" "=" type-identifier )
+                      | ( "location" "=" URI )
                       | ( "attributes" "=" <"> attribute-list <"> )
-                      | ( "actions" "=" <"> action-list <"> )
+                      | ( "actions" "=" <"> action-list <"> ) )
    term               = token
    scheme             = URI
+   type-identifier    = scheme "#" term
    class              = "action" | "mixin" | "kind"
    attribute-list     = attribute-name
                       | attribute-name *( 1*SP attribute-name)
@@ -666,29 +669,39 @@ Category           = "Category" ":" category-value
    attr-component     = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
    action-list        = action 
                       | action *( 1*SP action)
-   action             = scheme "#" term
+   action             = type-identifier
    
 \end{verbatim}
 
-\subsubsection{Rendering of OCCI-Links and OCCI-Actions}
-The semantics of the HTTP Link header in the OCCI context is described in
-the OCCI Core \& Models document. This rendering follows the
-  Link header defined by the Web Linking specification
-  \footnote{http://tools.ietf.org/html/draft-nottingham-http-link-header-10} and
-  MUST be rendered accordingly.
+\subsubsection{Rendering of OCCI Link instance references}
+
+The rendering of a \hl{Resource} sub-type instance \cite{occi:core} MUST
+represent any associated \hl{Link} instances using the Link
+header specified in the Web Linking RFC 5988 \cite{rfc5988}.
+%
+For example, rendering of a \hl{Compute} instance linked to a \hl{Storage} instance 
+MUST include a Link header displaying the \hl{Link} instance of the relation.
+%
+The following syntax MUST be used to represent OCCI \hl{Link} type instance
+references:
 
 \begin{verbatim}
 Link           = "Link" ":" #link-value
-  link-value     = "<" URI-Reference ">" *( ";" link-param )
-  link-param     = ( ( "rel" "=" relation-types )
-                 | ( link-extension ) )
-  link-extension = token [ "=" ( token | quoted-string ) ]
-  relation-types = relation-type
-                 | <"> relation-type *( 1*SP relation-type ) <">
-  relation-type  = reg-rel-type | ext-rel-type
-  reg-rel-type   = LOALPHA *( LOALPHA | DIGIT | "." | "-" )
-  ext-rel-type   = URI
+  link-value     = "<" URI-Reference ">"
+                  ";" "rel" "=" <"> resource-type <">
+                  ";" "self" "=" <"> link-instance <">
+                  *( ";" link-param )
+  link-param     = ( ( "category" "=" link-type )
+                 | ( link-attribute ) )
+  resource-type  = type-identifier *( 1*SP type-identifier )
+  link-type      = type-identifier *( 1*SP type-identifier )
+  link-instance  = URI-reference
+  link-attribute = attribute-name "=" ( token | quoted-string )
+
 \end{verbatim}
+
+\subsubsection{Rendering of references Action instances}
+{\bf TODO}
 
 \subsubsection{Rendering of OCCI-Attributes}
 The X-OCCI-Attribute MUST be used to render the attributes associated
