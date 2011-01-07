@@ -521,7 +521,7 @@ def test_syntax(url, heads):
     '''
     # TODO add checks for syntac of links, locations, attributes...
 
-    regex = '\w+;scheme="[a-zA-Z0-9:/.]*";class=[kind,mixin,action]'
+    regex = '\w+;scheme="[a-zA-Z0-9:/.]*";class=(kind|mixin|action)$'
 
     heads['Accept'] = 'text/plain'
     url = url + '/-/'
