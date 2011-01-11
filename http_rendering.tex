@@ -675,16 +675,15 @@ Category           = "Category" ":" #category-value
 \end{verbatim}
 
 \subsubsection{Rendering of OCCI Link instance references}
+The rendering of a \hl{Resource} sub-type instance \cite{occi:core}
+MUST represent any associated \hl{Link} instances using the Link
+header specified in the Web Linking RFC 5988 \cite{rfc5988}.  For
+example, rendering of a \hl{Compute} instance linked to a \hl{Storage}
+instance MUST include a Link header displaying the \hl{Link} instance
+of the relation.
 
-The rendering of a \hl{Resource} sub-type instance \cite{occi:core} MUST
-represent any associated \hl{Link} instances using the Link
-header specified in the Web Linking RFC 5988 \cite{rfc5988}.
-%
-For example, rendering of a \hl{Compute} instance linked to a \hl{Storage} instance 
-MUST include a Link header displaying the \hl{Link} instance of the relation.
-%
-The following syntax MUST be used to represent OCCI \hl{Link} type instance
-references:
+The following syntax MUST be used to represent OCCI \hl{Link} type
+instance references:
 
 \begin{verbatim}
 Link             = "Link" ":" #link-value
@@ -703,7 +702,12 @@ Link             = "Link" ":" #link-value
 \end{verbatim}
 
 \subsubsection{Rendering of references Action instances}
-{\bf TODO}
+
+\begin{verbatim}
+Link             = "Link" ":" #link-value
+  link-value       = URI-Reference
+                    ";" "action" "?" token
+\end{verbatim}
 
 \subsubsection{Rendering of OCCI-Attributes}
 The X-OCCI-Attribute MUST be used to render the attributes associated
