@@ -655,13 +655,14 @@ Category           = "Category" ":" #category-value
                        ";" "class" "=" ( class | <"> class <"> )
                        *( ";" category-param )
    category-param     = ( ( "title" "=" quoted-string )
-                      | ( "rel" "=" type-identifier )
+                      | ( "rel" "=" <"> resource-type <"> )
                       | ( "location" "=" URI )
                       | ( "attributes" "=" <"> attribute-list <"> )
                       | ( "actions" "=" <"> action-list <"> ) )
    term               = token
    scheme             = URI
    type-identifier    = scheme "#" term
+   resource-type      = type-identifier *( 1*SP type-identifier )
    class              = "action" | "mixin" | "kind"
    attribute-list     = attribute-name
                       | attribute-name *( 1*SP attribute-name)
@@ -686,17 +687,18 @@ The following syntax MUST be used to represent OCCI \hl{Link} type instance
 references:
 
 \begin{verbatim}
-Link           = "Link" ":" #link-value
-  link-value     = "<" URI-Reference ">"
-                  ";" "rel" "=" <"> resource-type <">
-                  ";" "self" "=" <"> link-instance <">
-                  *( ";" link-param )
-  link-param     = ( ( "category" "=" link-type )
-                 | ( link-attribute ) )
-  resource-type  = type-identifier *( 1*SP type-identifier )
-  link-type      = type-identifier *( 1*SP type-identifier )
-  link-instance  = URI-reference
-  link-attribute = attribute-name "=" ( token | quoted-string )
+Link             = "Link" ":" #link-value
+  link-value       = "<" URI-Reference ">"
+                    ";" "self" "=" <"> link-instance <">
+                    ";" "rel" "=" <"> resource-type <">
+                    *( ";" link-param )
+  link-param       = ( ( "category" "=" link-type )
+                   | ( link-attribute ) )
+  type-identifier  = scheme "#" term
+  resource-type    = type-identifier *( 1*SP type-identifier )
+  link-type        = type-identifier *( 1*SP type-identifier )
+  link-instance    = URI-reference
+  link-attribute   = attribute-name "=" ( token | quoted-string )
 
 \end{verbatim}
 
