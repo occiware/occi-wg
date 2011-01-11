@@ -121,106 +121,106 @@ def test_infrastructure_model_for_completness(url, heads):
         cur = line.lstrip('Category:').split(';')
         # check if compute has all attributes & actions & rels
         #----------------------------------------------------------------- Kinds
-        if cur[0].strip() == 'compute' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure"':
+        if cur[0].strip() == 'compute' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure#"':
             rel = 'http://schemas.ogf.org/occi/core#resource'
             attr = ['occi.compute.architecture', 'occi.compute.cores', 'occi.compute.hostname', 'occi.compute.speed', 'occi.compute.memory', 'occi.compute.state']
             actions = ['start', 'stop', 'suspend', 'restart']
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('compute')
-        elif cur[0].strip() == 'network' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure"':
+        elif cur[0].strip() == 'network' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure#"':
             rel = 'http://schemas.ogf.org/occi/core#resource'
             attr = ['occi.network.vlan', 'occi.network.label', 'occi.network.state']
             actions = ['up', 'down']
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('network')
-        elif cur[0].strip() == 'storage' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure"':
+        elif cur[0].strip() == 'storage' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure#"':
             rel = 'http://schemas.ogf.org/occi/core#resource'
             attr = ['occi.storage.size', 'occi.storage.state']
             actions = ['online', 'offline', 'backup', 'snapshot', 'resize']
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('storage')
         #----------------------------------------------------------------- Links
-        elif cur[0].strip() == 'storagelink' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure"':
+        elif cur[0].strip() == 'storagelink' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure#"':
             rel = 'http://schemas.ogf.org/occi/core#link'
             attr = ['occi.storagelink.deviceid', 'occi.storagelink.mountpoint', 'occi.storagelink.state']
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('storagelink')
-        elif cur[0].strip() == 'networkinterface' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure"':
+        elif cur[0].strip() == 'networkinterface' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure#"':
             rel = 'http://schemas.ogf.org/occi/core#link'
             attr = ['occi.networkinterface.state', 'occi.networkinterface.mac', 'occi.networkinterface.interface']
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('networkinterface')
         #---------------------------------------------------------------- mixins
-        elif cur[0].strip() == 'ipnetwork' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/network"':
+        elif cur[0].strip() == 'ipnetwork' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/network#"':
             rel = 'http://schemas.ogf.org/occi/core#link'
             attr = ['occi.network.address', 'occi.network.gateway', 'occi.network.allocation']
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('ipnetwork')
         #--------------------------------------------------------------- actions
-        elif cur[0].strip() == 'start' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action"':
+        elif cur[0].strip() == 'start' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#"':
             rel = ''
             attr = ['graceful', 'acpioff', 'poweroff']
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('start')
-        elif cur[0].strip() == 'stop' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action"':
+        elif cur[0].strip() == 'stop' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#"':
             rel = ''
             attr = []
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('stop')
-        elif cur[0].strip() == 'restart' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action"':
+        elif cur[0].strip() == 'restart' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#"':
             rel = ''
             attr = ['graceful', 'warm', 'cold']
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('restart')
-        elif cur[0].strip() == 'suspend' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action"':
+        elif cur[0].strip() == 'suspend' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#"':
             rel = ''
             attr = ['hibernate', 'suspend']
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('suspend')
-        elif cur[0].strip() == 'up' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/network/action"':
+        elif cur[0].strip() == 'up' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/network/action#"':
             rel = ''
             attr = []
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('up')
-        elif cur[0].strip() == 'down' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/network/action"':
+        elif cur[0].strip() == 'down' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/network/action#"':
             rel = ''
             attr = []
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('down')
-        elif cur[0].strip() == 'online' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/storage/action"':
+        elif cur[0].strip() == 'online' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/storage/action#"':
             rel = ''
             attr = []
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('online')
-        elif cur[0].strip() == 'offline' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/storage/action"':
+        elif cur[0].strip() == 'offline' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/storage/action#"':
             rel = ''
             attr = []
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('offline')
-        elif cur[0].strip() == 'resize' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/storage/action"':
+        elif cur[0].strip() == 'resize' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/storage/action#"':
             rel = ''
             attr = ['size']
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('resize')
-        elif cur[0].strip() == 'backup' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/storage/action"':
+        elif cur[0].strip() == 'backup' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/storage/action#"':
             rel = ''
             attr = []
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('backup')
-        elif cur[0].strip() == 'snapshot' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/storage/action"':
+        elif cur[0].strip() == 'snapshot' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/storage/action#"':
             rel = ''
             attr = []
             actions = []
@@ -293,7 +293,7 @@ def test_create_kinds(url, heads):
 
     # POST
     post_heads = heads.copy()
-    post_heads['Category'] = 'compute;scheme="http://schemas.ogf.org/occi/infrastructure"'
+    post_heads['Category'] = 'compute;scheme="http://schemas.ogf.org/occi/infrastructure#"'
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = post_heads)
     if not response['status'] == '200' or response['status'] == '202':
@@ -331,7 +331,7 @@ def test_mixins(url, heads):
     heads['Content-Type'] = 'text/occi'
 
     put_heads = heads.copy()
-    put_heads['Category'] = 'my_stuff;scheme="http://example.com/occi";location=/my_stuff/'
+    put_heads['Category'] = 'my_stuff;scheme="http://example.com/occi#";location=/my_stuff/'
     http = httplib2.Http()
     response, content = http.request(url + '/-/', 'PUT', headers = put_heads)
     if not response['status'] == '200' or response['status'] == '202':
@@ -343,7 +343,7 @@ def test_mixins(url, heads):
         raise AttributeError('Unable to find the previously defined mixin in the query interface!')
 
     put_heads = heads.copy()
-    put_heads['Category'] = 'my_stuff;scheme="http://example.com/occi"'
+    put_heads['Category'] = 'my_stuff;scheme="http://example.com/occi#"'
     http = httplib2.Http()
     response, content = http.request(url + '/-/', 'DELETE', headers = put_heads)
     if not response['status'] == '200' or response['status'] == '202':
@@ -357,7 +357,7 @@ def test_links(url, heads):
 
     # POST
     compute_heads = heads.copy()
-    compute_heads['Category'] = 'compute;scheme="http://schemas.ogf.org/occi/infrastructure"'
+    compute_heads['Category'] = 'compute;scheme="http://schemas.ogf.org/occi/infrastructure#"'
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = compute_heads)
     if not response['status'] == '200' or response['status'] == '202':
@@ -366,7 +366,7 @@ def test_links(url, heads):
     compute_loc = response['location']
 
     network = heads.copy()
-    network['Category'] = 'network;scheme="http://schemas.ogf.org/occi/infrastructure"'
+    network['Category'] = 'network;scheme="http://schemas.ogf.org/occi/infrastructure#"'
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = network)
     if not response['status'] == '200' or response['status'] == '202':
@@ -376,7 +376,7 @@ def test_links(url, heads):
 
     # now create a link...
     link = heads.copy()
-    link['Category'] = 'networkinterface;scheme="http://schemas.ogf.org/occi/infrastructure"'
+    link['Category'] = 'networkinterface;scheme="http://schemas.ogf.org/occi/infrastructure#"'
     link['X-OCCI-Attribute'] = 'source=' + compute_loc + ',target=' + network_loc
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = link)
@@ -401,7 +401,7 @@ def test_actions(url, heads):
 
     # POST
     compute_heads = heads.copy()
-    compute_heads['Category'] = 'compute;scheme="http://schemas.ogf.org/occi/infrastructure"'
+    compute_heads['Category'] = 'compute;scheme="http://schemas.ogf.org/occi/infrastructure#"'
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = compute_heads)
     if not response['status'] == '200' or response['status'] == '202':
@@ -417,7 +417,7 @@ def test_actions(url, heads):
             action_url = link.lstrip('<').rstrip('>')
             http = httplib2.Http()
             action_heads = heads.copy()
-            action_heads['Category'] = 'start;scheme="http://schemas.ogf.org/occi/infrastructure/compute/action"'
+            action_heads['Category'] = 'start;scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#"'
             response, content = http.request(action_url, 'POST', headers = action_heads)
             if not response['status'] == '200':
                 raise AttributeError('could not triggered action: ' + repr(response) + content)
@@ -434,7 +434,7 @@ def test_filter(url, heads):
 
     # POST
     compute_heads = heads.copy()
-    compute_heads['Category'] = 'compute;scheme="http://schemas.ogf.org/occi/infrastructure"'
+    compute_heads['Category'] = 'compute;scheme="http://schemas.ogf.org/occi/infrastructure#"'
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = compute_heads)
     if not response['status'] == '200' or response['status'] == '202':
@@ -443,7 +443,7 @@ def test_filter(url, heads):
     compute_loc = response['location']
 
     network = heads.copy()
-    network['Category'] = 'network;scheme="http://schemas.ogf.org/occi/infrastructure"'
+    network['Category'] = 'network;scheme="http://schemas.ogf.org/occi/infrastructure#"'
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = network)
     if not response['status'] == '200' or response['status'] == '202':
@@ -453,7 +453,7 @@ def test_filter(url, heads):
 
     # test if filtering works...
     filter_heads = heads.copy()
-    filter_heads['Category'] = 'network;scheme="http://schemas.ogf.org/occi/infrastructure"'
+    filter_heads['Category'] = 'network;scheme="http://schemas.ogf.org/occi/infrastructure#"'
     http = httplib2.Http()
     response, content = http.request(url, 'GET', headers = filter_heads)
     if not response['x-occi-location'].find(compute_loc) is - 1:
@@ -476,7 +476,7 @@ def test_location(url, heads):
     heads['Content-Type'] = 'text/occi'
 
     compute_heads = heads.copy()
-    compute_heads['Category'] = 'compute;scheme="http://schemas.ogf.org/occi/infrastructure"'
+    compute_heads['Category'] = 'compute;scheme="http://schemas.ogf.org/occi/infrastructure#"'
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = compute_heads)
     if not response['status'] == '200' or response['status'] == '202':
@@ -485,7 +485,7 @@ def test_location(url, heads):
     compute_loc = response['location']
 
     put_heads = heads.copy()
-    put_heads['Category'] = 'my_stuff;scheme="http://example.com/occi";location=/my_stuff/'
+    put_heads['Category'] = 'my_stuff;scheme="http://example.com/occi#";location=/my_stuff/'
     http = httplib2.Http()
     response, content = http.request(url + '/-/', 'PUT', headers = put_heads)
     if not response['status'] == '200' or response['status'] == '202':
@@ -509,7 +509,7 @@ def test_location(url, heads):
         raise AttributeError('could not delete resource: ' + repr(response) + content)
 
     put_heads = heads.copy()
-    put_heads['Category'] = 'my_stuff;scheme="http://example.com/occi"'
+    put_heads['Category'] = 'my_stuff;scheme="http://example.com/occi#"'
     http = httplib2.Http()
     response, content = http.request(url + '/-/', 'DELETE', headers = put_heads)
     if not response['status'] == '200' or response['status'] == '202':
@@ -521,7 +521,7 @@ def test_syntax(url, heads):
     '''
     # TODO add checks for syntac of links, locations, attributes...
 
-    regex = '\w+;scheme="[a-zA-Z0-9:/.]*";class=(kind|mixin|action)$'
+    regex = r'\w+;\bscheme=[a-z:./#"]*;\bclass=(?:action|kind|mixin)'
 
     heads['Accept'] = 'text/plain'
     url = url + '/-/'
