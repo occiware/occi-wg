@@ -685,27 +685,27 @@ The following syntax applies:
 
 \begin{verbatim}
 Category           = "Category" ":" #category-value
-  category-value     = term
-                      ";" "scheme" "=" <"> scheme <">
-                      ";" "class" "=" ( class | <"> class <"> )
-                      *( ";" category-param )
-  category-param     = ( ( "title" "=" quoted-string )
-                     | ( "rel" "=" <"> resource-type <"> )
-                     | ( "location" "=" URI )
-                     | ( "attributes" "=" <"> attribute-list <"> )
-                     | ( "actions" "=" <"> action-list <"> ) )
-  term               = token
-  scheme             = URI
-  type-identifier    = scheme term
-  resource-type      = type-identifier *( 1*SP type-identifier )
-  class              = "action" | "mixin" | "kind"
-  attribute-list     = attribute-name
-                     | attribute-name *( 1*SP attribute-name)
-  attribute-name     = attr-component *( "." attr-component )
-  attr-component     = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
-  action-list        = action 
-                     | action *( 1*SP action)
-  action             = type-identifier
+  category-value   = term
+                    ";" "scheme" "=" <"> scheme <">
+                    ";" "class" "=" ( class | <"> class <"> )
+                    *( ";" category-param )
+  category-param   = ( ( "title" "=" quoted-string )
+                   | ( "rel" "=" <"> resource-type <"> )
+                   | ( "location" "=" URI )
+                   | ( "attributes" "=" <"> attribute-list <"> )
+                   | ( "actions" "=" <"> action-list <"> ) )
+  term             = token
+  scheme           = URI
+  type-identifier  = scheme term
+  resource-type    = type-identifier *( 1*SP type-identifier )
+  class            = "action" | "mixin" | "kind"
+  attribute-list   = attribute-name
+                   | attribute-name *( 1*SP attribute-name)
+  attribute-name   = attr-component *( "." attr-component )
+  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  action-list      = action 
+                   | action *( 1*SP action)
+  action           = type-identifier
 \end{verbatim}
 
 The following example illustrates the rendering of the \hl{Kind} instance
@@ -732,7 +732,7 @@ The following syntax MUST be used to represent OCCI \hl{Link} type
 instance references:
 
 \begin{verbatim}
-Link             = "Link" ":" #link-value
+Link               = "Link" ":" #link-value
   link-value       = "<" URI-Reference ">"
                     ";" "rel" "=" <"> resource-type <">
                     ";" "self" "=" <"> link-instance <">
@@ -763,7 +763,7 @@ Link: </network/123>;
     occi.networkinterface.state="active";
 \end{verbatim}
 
-\subsubsection{Rendering of references Action instances}
+\subsubsection{Rendering of references to OCCI Action instances}
 
 \begin{verbatim}
 Link             = "Link" ":" #link-value
