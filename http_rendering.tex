@@ -721,8 +721,8 @@ Category: storage;
 \end{verbatim}
 
 \subsubsection{Rendering of OCCI Link instance references}
-The rendering of a \hl{Resource} sub-type instance \cite{occi:core}
-MUST represent any associated \hl{Link} instances using the Link
+The rendering of a \hl{Resource} instance \cite{occi:core}
+MUST represent any associated \hl{Link} instances using the HTTP Link
 header specified in the Web Linking RFC 5988 \cite{rfc5988}.  For
 example, rendering of a \hl{Compute} instance linked to a \hl{Storage}
 instance MUST include a Link header displaying the \hl{Link} instance
@@ -764,11 +764,32 @@ Link: </network/123>;
 \end{verbatim}
 
 \subsubsection{Rendering of references to OCCI Action instances}
+The rendering of a \hl{Resource} instance \cite{occi:core}
+MUST represent any associated \hl{Action} instances using the HTTP Link
+header specified in the Web Linking RFC 5988 \cite{rfc5988}.  For
+example, rendering of a \hl{Compute} instance MUST include a Link header
+displaying any \hl{Action}s currently applicable to the resource instance.
+
+The following syntax MUST be used to represent OCCI \hl{Action} instance
+references:
 
 \begin{verbatim}
-Link             = "Link" ":" #link-value
-  link-value       = URI-Reference
-                    ";" "action" "?" token
+Link               = "Link" ":" #link-value
+  link-value       = "<" action-uri ">"
+                    ";" "rel" "=" <"> action-type <">
+  term             = token
+  scheme           = URI
+  type-identifier  = scheme term
+  action-type      = type-identifier
+  action-uri       = URL "?" "action=" term
+\end{verbatim}
+
+The following example illustrates the rendering of a reference to the ``start''
+\hl{Action} defined for the \hl{Compute} type \cite{occi:infrastructure}. Such
+a reference would be present in the rendering of a \hl{Compute} instance.
+\begin{verbatim}
+Link: </compute/123?action=start>;
+    rel="http://schemas.ogf.org/occi/infrastructure/compute/action#start"
 \end{verbatim}
 
 \subsubsection{Rendering of OCCI-Attributes}
