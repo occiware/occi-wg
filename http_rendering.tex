@@ -712,12 +712,12 @@ The following example illustrates the rendering of the \hl{Kind} instance
 assigned to the \hl{Storage} type \cite{occi:infrastructure}:
 \begin{verbatim}
 Category: storage;
-    scheme="http://schemas.ogf.org/occi/infrastructure\#";
+    scheme="http://schemas.ogf.org/occi/infrastructure#";
     class=kind;
     title="Storage Resource";
-    rel="http://schemas.ogf.org/occi/core\#resource";
+    rel="http://schemas.ogf.org/occi/core#resource";
     attributes="occi.storage.size occi.storage.state";
-    actions="http://schemas.ogf.org/occi/infrastructure/storage/action\#resize ...";
+    actions="http://schemas.ogf.org/occi/infrastructure/storage/action#resize ...";
 \end{verbatim}
 
 \subsubsection{Rendering of OCCI Link instance references}
@@ -755,9 +755,9 @@ The following example illustrates the rendering of a \hl{NetworkInterface}
 instance:
 \begin{verbatim}
 Link: </network/123>;
-    rel="http://schemas.ogf.org/occi/infrastructure\#network";
+    rel="http://schemas.ogf.org/occi/infrastructure#network";
     self="/link/networkinterface/456";
-    category="http://schemas.ogf.org/occi/infrastructure\#networkinterface";
+    category="http://schemas.ogf.org/occi/infrastructure#networkinterface";
     occi.networkinterface.interface="eth0";
     occi.networkinterface.mac="00:11:22:33:44:55";
     occi.networkinterface.state="active";
@@ -826,10 +826,10 @@ X-OCCI-Attribute: occi.compute.state=active
 \end{verbatim}
 
 \subsubsection{Rendering of Location-URIs}
-In order to render an OCCI representation solely in the header, i.e.~using the
-\textit{text/occi} content type, the X-OCCI-Location HTTP header MUST be used
-to return a list of \hl{Entity} URIs. Each header field value correspond to a
-single URI. Multiple \hl{Entity} URIs are returned using multiple
+In order to render an OCCI representation solely in the HTTP header, i.e.~using
+the \textit{text/occi} content type, the X-OCCI-Location HTTP header MUST be
+used to return a list of \hl{Entity} URIs. Each header field value correspond
+to a single URI. Multiple \hl{Entity} URIs are returned using multiple
 X-OCCI-Location headers.
 
 \begin{verbatim}
