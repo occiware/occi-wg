@@ -792,31 +792,57 @@ Link: </compute/123?action=start>;
     rel="http://schemas.ogf.org/occi/infrastructure/compute/action#start"
 \end{verbatim}
 
-\subsubsection{Rendering of OCCI-Attributes}
-The X-OCCI-Attribute MUST be used to render the attributes associated
-with a OCCI Kind. A simple key-value format is used. The field value
-consist of an attribute name followed by an equal sign ("=") and the
-attribute value. The attribute value must be double quoted if it
-includes a separator character, see RFC 2616 (page 16).
+\subsubsection{Rendering of OCCI Resource and Link attributes}
+Attributes defined for \hl{Resource} and \hl{Link} types/sub-types
+\cite{occi:core} MUST be rendered using the X-OCCI-Attribute HTTP header.  For
+example the rendering of a \hl{Compute} instance MUST render the associated
+attributes, such as e.g. \texttt{occi.compute.memory}, using X-OCCI-Attribute
+headers.
 
+The X-OCCI-Attribute header uses a simple key-value format where each HTTP
+header field value represent a single attribute. The field value consist of an
+attribute name followed by the equal sign (``='') and an attribute value. The
+attribute value MUST be quoted if it contains a separator character as
+specified in RFC 2616 (page 16) \cite{rfc2616}.
+
+The following syntax MUST be used to represent OCCI \hl{Resource} and \hl{Link}
+attributes:
 \begin{verbatim}
-Attribute     = "X-OCCI-Attribute" ":" attribute-value
-  attribute-value = token [ "=" ( token | quoted-string ) ]
+Attribute          = "X-OCCI-Attribute" ":" #attribute-repr
+  attribute-repr   = attribute-name "=" ( token | quoted-string )
+  attribute-name   = attr-component *( "." attr-component )
+  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
 \end{verbatim}
 
-Valid attribute names for OCCI Kinds are specified in appropriate
-Extension documents \ref{occi:infrastructure}.
+The following example illustrates a rendering of the attributes defined by
+\hl{Compute} type \cite{occi:infrastructure}:
+\begin{verbatim}
+X-OCCI-Attribute: occi.compute.architechture="x86_64"
+X-OCCI-Attribute: occi.compute.cores=2
+X-OCCI-Attribute: occi.compute.hostname="testserver"
+X-OCCI-Attribute: occi.compute.speed=2.66
+X-OCCI-Attribute: occi.compute.memory=3.0
+X-OCCI-Attribute: occi.compute.state=active
+\end{verbatim}
 
-\subsubsection{Rendering of Location-URLs}
-To render an OCCI representation solely in the header, the
-X-OCCI-Location HTTP header MUST be used to return a list of Kind
-URLs. Each header field value correspond to a single URL. Multiple
-Kind URLs are returned using multiple X-OCCI-Location headers. See RFC
-2616 for information on how to render multiple HTTP headers.
+\subsubsection{Rendering of Location-URIs}
+In order to render an OCCI representation solely in the header, i.e.~using the
+\textit{text/occi} content type, the X-OCCI-Location HTTP header MUST be used
+to return a list of \hl{Entity} URIs. Each header field value correspond to a
+single URI. Multiple \hl{Entity} URIs are returned using multiple
+X-OCCI-Location headers.
 
 \begin{verbatim}
 Location      = "X-OCCI-Location" ":" location-value
-  location-value  = "<" URI ">" *("," URI)
+  location-value  = URI-reference
+\end{verbatim}
+
+The following example illustrates the rendering of a list of \hl{Compute}
+resource instances:
+\begin{verbatim}
+X-OCCI-Location: http://example.com/compute/123
+X-OCCI-Location: http://example.com/compute/456
+X-OCCI-Location: http://example.com/compute/789
 \end{verbatim}
 
 \subsection{General HTTP Behaviors Adopted by OCCI}
