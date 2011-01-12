@@ -685,28 +685,39 @@ The following syntax applies:
 
 \begin{verbatim}
 Category           = "Category" ":" #category-value
-   category-value     = term
-                       ";" "scheme" "=" <"> scheme "#" <">
-                       ";" "class" "=" ( class | <"> class <"> )
-                       *( ";" category-param )
-   category-param     = ( ( "title" "=" quoted-string )
-                      | ( "rel" "=" <"> resource-type <"> )
-                      | ( "location" "=" URI )
-                      | ( "attributes" "=" <"> attribute-list <"> )
-                      | ( "actions" "=" <"> action-list <"> ) )
-   term               = token
-   scheme             = URI
-   type-identifier    = scheme "#" term
-   resource-type      = type-identifier *( 1*SP type-identifier )
-   class              = "action" | "mixin" | "kind"
-   attribute-list     = attribute-name
-                      | attribute-name *( 1*SP attribute-name)
-   attribute-name     = attr-component *( "." attr-component )
-   attr-component     = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
-   action-list        = action 
-                      | action *( 1*SP action)
-   action             = type-identifier
-   
+  category-value     = term
+                      ";" "scheme" "=" <"> scheme <">
+                      ";" "class" "=" ( class | <"> class <"> )
+                      *( ";" category-param )
+  category-param     = ( ( "title" "=" quoted-string )
+                     | ( "rel" "=" <"> resource-type <"> )
+                     | ( "location" "=" URI )
+                     | ( "attributes" "=" <"> attribute-list <"> )
+                     | ( "actions" "=" <"> action-list <"> ) )
+  term               = token
+  scheme             = URI
+  type-identifier    = scheme term
+  resource-type      = type-identifier *( 1*SP type-identifier )
+  class              = "action" | "mixin" | "kind"
+  attribute-list     = attribute-name
+                     | attribute-name *( 1*SP attribute-name)
+  attribute-name     = attr-component *( "." attr-component )
+  attr-component     = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  action-list        = action 
+                     | action *( 1*SP action)
+  action             = type-identifier
+\end{verbatim}
+
+The following example illustrates the rendering of the \hl{Kind} instance
+assigned to the \hl{Storage} type \cite{occi:infrastructure}:
+\begin{verbatim}
+Category: storage;
+    scheme="http://schemas.ogf.org/occi/infrastructure\#";
+    class=kind;
+    title="Storage Resource";
+    rel="http://schemas.ogf.org/occi/core\#resource";
+    attributes="occi.storage.size occi.storage.state";
+    actions="http://schemas.ogf.org/occi/infrastructure/storage/action\#resize ...";
 \end{verbatim}
 
 \subsubsection{Rendering of OCCI Link instance references}
@@ -723,17 +734,33 @@ instance references:
 \begin{verbatim}
 Link             = "Link" ":" #link-value
   link-value       = "<" URI-Reference ">"
-                    ";" "self" "=" <"> link-instance <">
                     ";" "rel" "=" <"> resource-type <">
+                    ";" "self" "=" <"> link-instance <">
                     *( ";" link-param )
   link-param       = ( ( "category" "=" link-type )
                    | ( link-attribute ) )
-  type-identifier  = scheme "#" term
+  term             = token
+  scheme           = URI
+  type-identifier  = scheme term
   resource-type    = type-identifier *( 1*SP type-identifier )
   link-type        = type-identifier *( 1*SP type-identifier )
   link-instance    = URI-reference
   link-attribute   = attribute-name "=" ( token | quoted-string )
+  attribute-name   = attr-component *( "." attr-component )
+  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+\end{verbatim}
 
+The following example illustrates the rendering of a \hl{NetworkInterface}
+\cite{occi:infrastructure} instance linking to a \hl{Network} resource
+instance:
+\begin{verbatim}
+Link: </network/123>;
+    rel="http://schemas.ogf.org/occi/infrastructure\#network";
+    self="/link/networkinterface/456";
+    category="http://schemas.ogf.org/occi/infrastructure\#networkinterface";
+    occi.networkinterface.interface="eth0";
+    occi.networkinterface.mac="00:11:22:33:44:55";
+    occi.networkinterface.state="active";
 \end{verbatim}
 
 \subsubsection{Rendering of references Action instances}
