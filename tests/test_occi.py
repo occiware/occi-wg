@@ -27,8 +27,8 @@ import getopt
 import re
 
 try:
-    from Tkinter import Frame, Label, StringVar, IntVar, Button, Entry, Checkbutton, \
-    N, E, W, S, Tk, LEFT
+    from Tkinter import Toplevel, Frame, LabelFrame, Label, StringVar, IntVar, Button, Entry, Checkbutton, \
+    N, E, W, S, Tk, LEFT, FALSE
 except ImportError:
     logging.warn("TK GUI will not be available...")
 
@@ -315,6 +315,7 @@ def test_create_kinds(url, heads):
     # GET
     http = httplib2.Http()
     response, content = http.request(loc, 'GET', headers = heads)
+    print response, content
     if not response['status'] == '200' or response['status'] == '202':
         raise AttributeError('Unable to do retrieve the resource: ' + loc)
 
@@ -595,24 +596,31 @@ class TextRunner(object):
         else:
             print label + '\t\t\tOK'
 
-class GUIRunner(object):
+class GUIRunner(Toplevel):
 
     #===========================================================================
     # fields to set in the GUI
     #===========================================================================
 
     info_text = None
+    paddingArgs = {'padx':3, 'pady':3}
 
     def __init__(self, parent):
         '''
         Constructor.
         '''
+        Toplevel.__init__(self, parent)
+        self.wm_withdraw()
+        self.resizable(height=FALSE,width=FALSE)
+        #self.wm_deiconify()
+        
         self.url = StringVar()
         self.login = IntVar()
         self.user = StringVar()
         self.password = StringVar()
 
         self.master = parent
+        self.configure(borderwidth=5)
         self.init_gui()
 
     def init_gui(self):
@@ -620,25 +628,25 @@ class GUIRunner(object):
         Initialize a simple gui.
         '''
         top = Frame(self.master)
-        top.grid(padx = 5, pady = 5)
+        top.grid(**self.paddingArgs)
 
         frame = Frame(top)
         frame.grid(column = 0, row = 0, columnspan = 2)
 
         text = Label(frame, text = 'OCCI service URL:')
-        text.grid(column = 0, row = 0)
+        text.grid(column = 0, row = 0, **self.paddingArgs)
 
         self.url.set('http://localhost:8888')
         entry = Entry(frame, width = 25, textvariable = self.url)
-        entry.grid(column = 1, row = 0)
+        entry.grid(column = 1, row = 0, **self.paddingArgs)
 
         go = Button(frame, text = 'Go', command = self.run_tests)
-        go.grid(column = 2, row = 0)
+        go.grid(column = 2, row = 0, **self.paddingArgs)
 
         reset = Button(frame, text = 'Reset', command = self.reset)
-        reset.grid(column = 3, row = 0)
+        reset.grid(column = 3, row = 0, **self.paddingArgs)
 
-        login_frame = Frame(top, borderwidth = 2, relief = 'groove')
+        login_frame = LabelFrame(top, borderwidth = 2, relief = 'groove', text='Session information')
         login_frame.grid(column = 0, row = 1, sticky = W + E + N + S,
                          padx = 2, pady = 2)
 
@@ -646,98 +654,96 @@ class GUIRunner(object):
 
         login_switch = Checkbutton(login_frame, text = 'Login required?',
                                    variable = self.login)
-        login_switch.grid(column = 0, row = 0, columnspan = 2)
+        login_switch.grid(column = 0, row = 0, columnspan = 2, **self.paddingArgs)
 
         self.user.set('foo')
         self.password.set('bar')
 
         user_text = Label(login_frame, text = 'Username:')
-        user_text.grid(column = 0, row = 1, sticky = W)
+        user_text.grid(column = 0, row = 1, sticky = W, **self.paddingArgs)
         user_entry = Entry(login_frame, textvariable = self.user, width = 15)
-        user_entry.grid(column = 1, row = 1)
+        user_entry.grid(column = 1, row = 1, **self.paddingArgs)
 
         text = Label(login_frame, text = 'Password:')
-        text.grid(column = 0, row = 2, sticky = W)
+        text.grid(column = 0, row = 2, sticky = W, **self.paddingArgs)
         entry = Entry(login_frame, textvariable = self.password, width = 15,
                       show = "*")
-        entry.grid(column = 1, row = 2)
+        entry.grid(column = 1, row = 2, **self.paddingArgs)
 
-        info_frame = Frame(top, borderwidth = 2, relief = 'groove')
-        info_frame.grid(column = 1, row = 1, sticky = W + E + N + S, padx = 2,
-                        pady = 2)
+        info_frame = LabelFrame(top, borderwidth = 2, relief = 'groove', text='Service information')
+        info_frame.grid(column = 1, row = 1, sticky = W + E + N + S, **self.paddingArgs)
 
         self.info_text = Label(info_frame, text = 'Please press "GO"')
         self.info_text.pack(side = 'top')
 
-        test_frame = Frame(top, borderwidth = 2, relief = 'groove')
-        test_frame.grid(column = 0, row = 2, columnspan = 2, padx = 2,
-                        pady = 2)
+        test_frame = LabelFrame(top, borderwidth = 2, relief = 'groove', text='Tests')
+        test_frame.grid(column = 0, row = 2, columnspan = 2, **self.paddingArgs)
 
         label = Label(test_frame, text = 'Checking for correct version information:')
-        label.grid(column = 0, row = 0, sticky = W)
+        label.grid(column = 0, row = 0, sticky = W, **self.paddingArgs)
 
         self.version_test_label = Label(test_frame, text = '...')
-        self.version_test_label.grid(column = 1, row = 0, sticky = W, padx = 3, pady = 3)
+        self.version_test_label.grid(column = 1, row = 0, sticky = W, **self.paddingArgs)
 
         label = Label(test_frame, text = 'Checking completeness of infrastructure model:')
-        label.grid(column = 0, row = 1, sticky = W)
+        label.grid(column = 0, row = 1, sticky = W, **self.paddingArgs)
 
         self.infra_model_test_label = Label(test_frame, text = '...')
-        self.infra_model_test_label.grid(column = 1, row = 1, sticky = W, padx = 3, pady = 3)
+        self.infra_model_test_label.grid(column = 1, row = 1, sticky = W, **self.paddingArgs)
 
         label = Label(test_frame, text = 'Checking correct handling of Content-type/Accept headers:')
-        label.grid(column = 0, row = 2, sticky = W)
+        label.grid(column = 0, row = 2, sticky = W, **self.paddingArgs)
 
         self.accept_header_test_label = Label(test_frame, text = '...')
-        self.accept_header_test_label.grid(column = 1, row = 2, sticky = W, padx = 3, pady = 3)
+        self.accept_header_test_label.grid(column = 1, row = 2, sticky = W, **self.paddingArgs)
 
         label = Label(test_frame, text = 'Testing instanciation of compute/storage/network kinds:')
-        label.grid(column = 0, row = 3, sticky = W)
+        label.grid(column = 0, row = 3, sticky = W, **self.paddingArgs)
 
         self.creational_test_label = Label(test_frame, text = '...')
-        self.creational_test_label.grid(column = 1, row = 3, sticky = W, padx = 3, pady = 3)
+        self.creational_test_label.grid(column = 1, row = 3, sticky = W, **self.paddingArgs)
 
         label = Label(test_frame, text = 'Testing correct handling of user-defined mixins (tagging/grouping):')
-        label.grid(column = 0, row = 4, sticky = W)
+        label.grid(column = 0, row = 4, sticky = W, **self.paddingArgs)
 
         self.mixin_test_label = Label(test_frame, text = '...')
-        self.mixin_test_label.grid(column = 1, row = 4, sticky = W, padx = 3, pady = 3)
+        self.mixin_test_label.grid(column = 1, row = 4, sticky = W, **self.paddingArgs)
 
         label = Label(test_frame, text = 'Testing links between compute/storage compute/network:')
-        label.grid(column = 0, row = 5, sticky = W)
+        label.grid(column = 0, row = 5, sticky = W, **self.paddingArgs)
 
         self.link_test_label = Label(test_frame, text = '...')
-        self.link_test_label.grid(column = 1, row = 5, sticky = W, padx = 3, pady = 3)
+        self.link_test_label.grid(column = 1, row = 5, sticky = W, **self.paddingArgs)
 
         label = Label(test_frame, text = 'Triggering actions on compute/network/storage kinds:')
-        label.grid(column = 0, row = 6, sticky = W)
+        label.grid(column = 0, row = 6, sticky = W, **self.paddingArgs)
 
         self.action_test_label = Label(test_frame, text = '...')
-        self.action_test_label.grid(column = 1, row = 6, sticky = W, padx = 3, pady = 3)
+        self.action_test_label.grid(column = 1, row = 6, sticky = W, **self.paddingArgs)
 
         label = Label(test_frame, text = 'Testing filter mechanisms using Categories:')
-        label.grid(column = 0, row = 7, sticky = W)
+        label.grid(column = 0, row = 7, sticky = W, **self.paddingArgs)
 
         self.filter_test_label = Label(test_frame, text = '...')
-        self.filter_test_label.grid(column = 1, row = 7, sticky = W, padx = 3, pady = 3)
+        self.filter_test_label.grid(column = 1, row = 7, sticky = W, **self.paddingArgs)
 
         label = Label(test_frame, text = 'Testing correct behaviour on location and "normal" paths:')
-        label.grid(column = 0, row = 8, sticky = W)
+        label.grid(column = 0, row = 8, sticky = W, **self.paddingArgs)
 
         self.location_path_label = Label(test_frame, text = '...')
-        self.location_path_label.grid(column = 1, row = 8, sticky = W, padx = 3, pady = 3)
+        self.location_path_label.grid(column = 1, row = 8, sticky = W, **self.paddingArgs)
 
         label = Label(test_frame, text = 'Simple syntax checks:')
-        label.grid(column = 0, row = 9, sticky = W)
+        label.grid(column = 0, row = 9, sticky = W, **self.paddingArgs)
 
         self.syntax_test_label = Label(test_frame, text = '...')
-        self.syntax_test_label.grid(column = 1, row = 9, sticky = W, padx = 3, pady = 3)
+        self.syntax_test_label.grid(column = 1, row = 9, sticky = W, **self.paddingArgs)
 
         label = Label(top, text = 'NOTE: Passing all tests only indicates that the service\nyou are testing is OCCI compliant - IT DOES NOT GUARANTE IT!')
-        label.grid(column = 0, row = 4, columnspan = 2, padx = 5, pady = 5)
+        label.grid(column = 0, row = 4, columnspan = 2, **self.paddingArgs)
 
         quit_button = Button(top, text = 'Quit', command = self.quit)
-        quit_button.grid(column = 1, row = 5, sticky = E, padx = 2)
+        quit_button.grid(column = 1, row = 5, sticky = E, **self.paddingArgs)
 
     def run_tests(self):
         '''
