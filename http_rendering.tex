@@ -654,20 +654,20 @@ content type renders the same headers, with identical syntax, in the body of
 the HTTP request/response. See section \ref{sec:content_type} for more
 information on the use of different content types.
 
-Multiple HTTP header values MUST be supported as defined by RFC~2616
+Multiple HTTP header field values MUST be supported as defined by RFC~2616
 \cite{rfc2616}. This applies to both the \textit{text/occi} and
 \textit{text/plain} content types. RFC 2616 defines two different methods
-to render multiple header values, either a comma-separated list or multiple
+to render multiple header field values, either a comma-separated list or multiple
 header lines. The following two rendering examples are identical and both formats
 MUST be supported by both OCCI client and server to be compliant.
 
-Comma-separated rendering of multiple HTTP header values:
+Comma-separated rendering of multiple HTTP header field values:
 \begin{verbatim}
 X-OCCI-Attribute: occi.compute.memory=2.0, occi.compute.speed=2.33
 X-OCCI-Location: /compute/123, /compute/456
 \end{verbatim}
 %
-Separate header lines for each HTTP header value:
+Separate header lines for each HTTP header field value:
 \begin{verbatim}
 X-OCCI-Attribute: occi.compute.memory=2.0
 X-OCCI-Attribute: occi.compute.speed=2.33
@@ -708,7 +708,7 @@ Category           = "Category" ":" #category-value
   action           = type-identifier
 \end{verbatim}
 
-The following example illustrates the rendering of the \hl{Kind} instance
+The following example illustrates a rendering of the \hl{Kind} instance
 assigned to the \hl{Storage} type \cite{occi:infrastructure}:
 \begin{verbatim}
 Category: storage;
@@ -726,7 +726,7 @@ The rendering of a \hl{Resource} instance \cite{occi:core}
 MUST represent any associated \hl{Link} instances using the HTTP Link
 header specified in the Web Linking RFC 5988 \cite{rfc5988}.  For
 example, rendering of a \hl{Compute} instance linked to a \hl{Storage}
-instance MUST include a Link header displaying the \hl{Link} instance
+instance MUST include a Link header displaying the OCCI \hl{Link} instance
 of the relation.
 
 The following syntax MUST be used to represent OCCI \hl{Link} type
@@ -793,9 +793,10 @@ Link: </compute/123?action=start>;
     rel="http://schemas.ogf.org/occi/infrastructure/compute/action#start"
 \end{verbatim}
 
-\subsubsection{Rendering of OCCI Resource and Link attributes}
-Attributes defined for \hl{Resource} and \hl{Link} types/sub-types
-\cite{occi:core} MUST be rendered using the X-OCCI-Attribute HTTP header.  For
+\subsubsection{Rendering of OCCI Entity attributes}
+Attributes defined for OCCI \hl{Entity} sub-types \cite{occi:core},
+i.e.~\hl{Resource} and \hl{Link}, MUST be rendered using the X-OCCI-Attribute
+HTTP header. For
 example the rendering of a \hl{Compute} instance MUST render the associated
 attributes, such as e.g. \texttt{occi.compute.memory}, using X-OCCI-Attribute
 headers.
@@ -806,14 +807,18 @@ attribute name followed by the equal sign (``='') and an attribute value. The
 attribute value MUST be quoted if it contains a separator character as
 specified in RFC 2616 (page 16) \cite{rfc2616}.
 
-The following syntax MUST be used to represent OCCI \hl{Resource} and \hl{Link}
-attributes:
+The following syntax MUST be used to represent OCCI \hl{Entitiy} attributes:
 \begin{verbatim}
 Attribute          = "X-OCCI-Attribute" ":" #attribute-repr
   attribute-repr   = attribute-name "=" ( token | quoted-string )
   attribute-name   = attr-component *( "." attr-component )
   attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
 \end{verbatim}
+
+Attribute names for the infrastructure types are defined in the OCCI
+Infrastructure document \cite{occi:infrastructure}.  The rules for defining new
+attribute names can be found in the ``Extensibility'' section of the OCCI Core
+document \cite{occi:core}.
 
 The following example illustrates a rendering of the attributes defined by
 \hl{Compute} type \cite{occi:infrastructure}:
@@ -829,8 +834,8 @@ X-OCCI-Attribute: occi.compute.state=active
 \subsubsection{Rendering of Location-URIs}
 In order to render an OCCI representation solely in the HTTP header, i.e.~using
 the \textit{text/occi} content type, the X-OCCI-Location HTTP header MUST be
-used to return a list of \hl{Entity} URIs. Each header field value correspond
-to a single URI. Multiple \hl{Entity} URIs are returned using multiple
+used to return a list of resource instance URIs. Each header field value correspond
+to a single URI. Multiple resource instance URIs are returned using multiple
 X-OCCI-Location headers.
 
 \begin{verbatim}
