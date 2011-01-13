@@ -513,7 +513,7 @@ defined location path the service provider might reject this
 operation.
 
 \item[Removing a \hl{Mixin} definition] A user defined
-  \hl{Mixin} CAN be removed (if allowed) by using the HTTP DELETE
+  \hl{Mixin} MAY be removed (if allowed) by using the HTTP DELETE
   verb. The information about which \hl{Mixin} should be deleted MUST
   be provided in the request:
 \begin{verbatim}
@@ -527,8 +527,8 @@ operation.
 \end{description}
 
 \paragraph{Operations on \hl{Mixin}s or \hl{Kind}s}
-All the following operations CAN only be be done on a location paths
-provided by \hl{Kind}s and \hl{Mixin}s. It MUST end with an
+All of the following operations MUST only be be performed on location paths
+provided by \hl{Kind}s and \hl{Mixin}s. The path MUST end with an
 \emph{/}.
 
 \begin{description}
@@ -860,11 +860,11 @@ OCCI does not require that an authentication mechanism be used nor
 does it require that client to service communications are secured. It
 does recommend that an authentication mechanism be used and that where
 appropriate, communications are encrypted using HTTP over TLS. The
-authentication mechanisms that CAN be used with OCCI are those that
+authentication mechanisms that MAY be used with OCCI are those that
 can be used with HTTP and TLS.
 
 \subsubsection{Caching Headers}
-The responses from an OCCI implementation CAN include headers with
+The responses from an OCCI implementation MAY include headers with
 strict Caching purposes like E-Tags.
 
 \subsubsection{Versioning}
@@ -1014,7 +1014,7 @@ a Listing a Bad Request MUST be returned.
 
 \subsubsection{Return codes}
 \label{sec:return_codes}
-At any point the service provider CAN return any of the following HTTP
+At any point the service provider MAY return any of the following HTTP
 Return Codes:
 
 \mytablefloat{\label{tbl:http_codes}HTTP Return Codes}{
