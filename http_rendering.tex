@@ -90,7 +90,7 @@ All examples in this document use one of the following three HTTP
 category definitions. An example name-space hierarchy is also
 given. Syntax and Semantics is explained in the remaining sections of
 the document. These examples do not strive to be complete but to show
-the functionalities OCCI has:
+the features OCCI has:
 
 \begin{verbatim}
 
@@ -174,7 +174,7 @@ The structure of these URIs is opaque and the system should not assume
 a static, pre-determined scheme for their structure. For example
 \emph{Entity::id} can be \emph{http://example.com/vms/user1/vm1}.
 
-\subsection{Behaviour of the HTTP Verbs}
+\subsection{Behavior of the HTTP Verbs}
 As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
 foundation protocol the means of interaction with all RESTful resource
 instances is through the four main HTTP verbs. OCCI service
@@ -236,7 +236,7 @@ client where all resource instance of one \hl{Kind} or \hl{Mixin} (in
 case the \hl{Mixin} is used as a tag) can be found regardless of the
 hierarchy the service provider defines. Location paths are defined
 through a HTTP Category rendering and MUST be present for all HTTP
-Categories for which resource instance can be reated. The location
+Categories for which resource instance can be created. The location
 paths MUST end with a \emph{'/'}. These paths are discoverable by the
 client through the Query interface \ref{sec:query}.
 
@@ -576,7 +576,7 @@ this section. They MUST be implemented by an OCCI implementation.
   instance] When creating a resource instance of the type
   \hl{Resource}, and \hl{Link}s are defined those \hl{Link}s MUST be
   created implicitly (Resulting in the creation of multiple REST
-  resources. Still only the Locaction of the REST resource which
+  resources. Still only the Location of the REST resource which
   represent the requested \hl{Kind} MUST be returned - The URIs of the
   \hl{Link}s can be discovered by retrieving a rendering of the
   resource instance). To render all the \hl{Entity} attributes of the
@@ -607,7 +607,7 @@ this section. They MUST be implemented by an OCCI implementation.
   defined \hl{Link}s] When an resource instance of the type
   \hl{Resource} is rendered it MUST expose all the \hl{Link}s which
   are associated with the resource instance. Since \hl{Link}s are
-  directed only those orgininating SHOULD be listed.
+  directed only those originating SHOULD be listed.
 \begin{verbatim}
 > GET /vms/user1/vm1 HTTP/1.1
 > [...]
@@ -844,7 +844,7 @@ consist of an attribute name followed by the equal sign (``='') and an
 attribute value. The attribute value MUST be quoted if it contains a
 separator character as specified in RFC 2616 (page 16) \cite{rfc2616}.
 
-The following syntax MUST be used to represent OCCI \hl{Entitiy}
+The following syntax MUST be used to represent OCCI \hl{Entity}
 attributes:
 
 \begin{verbatim}

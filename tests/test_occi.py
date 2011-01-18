@@ -315,7 +315,6 @@ def test_create_kinds(url, heads):
     # GET
     http = httplib2.Http()
     response, content = http.request(loc, 'GET', headers = heads)
-    print response, content
     if not response['status'] == '200' or response['status'] == '202':
         raise AttributeError('Unable to do retrieve the resource: ' + loc)
 
@@ -522,7 +521,7 @@ def test_syntax(url, heads):
     '''
     # TODO add checks for syntac of links, locations, attributes...
 
-    regex = r'\w+;\bscheme=[a-z:./#"]*;\bclass="(?:action|kind|mixin)"'
+    regex = r'\w+; \bscheme=[a-z:./#"]*; \bclass="(?:action|kind|mixin)"'
 
     heads['Accept'] = 'text/plain'
     url = url + '/-/'
