@@ -251,7 +251,7 @@ MUST be implemented by the service.
 
 \begin{description}
 \item[Retrieval of all registered \hl{Kind}s and \hl{Mixin}s] The HTTP
-  verb GET must be used to retrieve all l\hl{Kind}s and \hl{Mixin}s
+  verb GET must be used to retrieve all \hl{Kind}s and \hl{Mixin}s
   the service can handle. This allows the client to discover the
   capabilities of the OCCI implementation. The result MUST contain all
   information about the \hl{Kind}s and \hl{Mixin}s (including
@@ -305,7 +305,7 @@ complete rendering of the requested \hl{Kind} or \hl{Mixin}.
 \end{verbatim}
 The service might reject this request if it does not allow
 user-defined \hl{Mixin}s to be created. Also on name collisions of the
-defined location path the service provider might reject this
+defined location path the service provider MAY reject this
 operation.
 
 \item[Removing a \hl{Mixin} definition] A user defined \hl{Mixin} MAY
@@ -439,17 +439,19 @@ path used in the request.
 The following operations MUST be implemented by the OCCI
 implementation for operations on resource instances. The resource
 instance is uniquely identified by an URI (For example:
-\emph{http://example.com/vms/user1/vm1}).\footnote{The path MUST not
+\emph{http://example.com/vms/user1/vm1}).\footnote{The path MUST NOT
   end with an '/' - that would mean that a client operates on a path
   in the name-space hierarchy}
 
 \begin{description}
 \item[Creating a resource instance] A request to create a resource
-  instance MUST contain at least one HTTP category rendering which is
-  (or relates to) a \hl{Kind} definition. If multiple HTTP categories
-  are defined the first one which is (or relates to) to a \hl{Kind}
-  MUST be used for defining the type of the resource
-  instance. Optional information which might be provided by the client
+  instance MUST contain one and only one HTTP category rendering which
+  refers to a specific \hl{Kind} instance. This \hl{Kind}
+  instance MUST be used for defining the type of the resource instance.
+  A request MAY also contain one or more HTTP category renderings which refer
+  to different \hl{Mixin} instances. Any such \hl{Mixin} instances MUST
+  be associated (if allowed) to the resource instance.
+  Optional information which might be provided by the client
   and if available MUST be used are HTTP Links and HTTP
   X-OCCI-Attributes (mapping to \hl{Link} and the attributes of an
   resource instance). Two ways can be used to create a new resource
@@ -770,10 +772,9 @@ instance references:
 Link               = "Link" ":" #link-value
   link-value       = "<" URI-Reference ">"
                     ";" "rel" "=" <"> resource-type <">
-                    (";" "self" "=" <"> link-instance <">)
-                    *( ";" link-param )
-  link-param       = ( ( "category" "=" link-type )
-                   | ( link-attribute ) )
+                    [ ";" "self" "=" <"> link-instance <"> ]
+                    [ ";" "category" "=" link-type ]
+                    *( ";" link-attribute )
   term             = token
   scheme           = URI
   type-identifier  = scheme term
