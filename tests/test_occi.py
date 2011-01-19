@@ -50,7 +50,7 @@ def get_session_cookie(url, user, password):
     if not response['status'] == '302':
 
         print response, content
-        raise AttributeError('Something went wrong during login...')
+        raise AttributeError('Something went wrong during lo-gin...')
 
     return response['set-cookie']
 
@@ -696,7 +696,7 @@ class GUIRunner(Toplevel):
         self.accept_header_test_label = Label(test_frame, text = '...')
         self.accept_header_test_label.grid(column = 1, row = 2, sticky = W, **self.paddingArgs)
 
-        label = Label(test_frame, text = 'Testing instanciation of compute/storage/network kinds:')
+        label = Label(test_frame, text = 'Testing instantiation of compute/storage/network kinds:')
         label.grid(column = 0, row = 3, sticky = W, **self.paddingArgs)
 
         self.creational_test_label = Label(test_frame, text = '...')
