@@ -390,13 +390,15 @@ path used in the request.
 
 \item[Triggering Actions on All Instances of a \hl{Mixin} or
   \hl{Kind}] Actions can be triggered on all resource instances of the
-  same \hl{Mixin} or \hl{Kind}. The HTTP POST verb MUST be used. Also
-  the Action MUST be defined by the \hl{Kind} or \hl{Mixin} which
+  same \hl{Mixin} or \hl{Kind}. The HTTP POST verb MUST be used and
+  the request MUST contain the \hl{Category} defining the \hl{Action}.
+  Additionally
+  the \hl{Action} MUST be defined by the \hl{Kind} or \hl{Mixin} which
   defines the location path which is used in the request:
 \begin{verbatim}
 > POST /compute/?action=stop HTTP/1.1
 > [...]
-> Category: Category: compute; scheme="[...]"; class="action";
+> Category: compute; scheme="[...]"; class="action";
 > X-OCCI-Attribute: method=poweroff
 
 < HTTP/1.1 200 OK
