@@ -405,7 +405,7 @@ path used in the request.
 < [...]
 \end{verbatim}
 
-\item[Associate resource instances with \hl{Mixin}s] One or multiple
+\item[Associate resource instances with a \hl{Mixin}] One or multiple
   resource instances can be associated with a \hl{Mixin} using the
   HTTP PUT verb. The URIs which uniquely defined the resource instance
   MUST be provided in the request:
@@ -725,22 +725,20 @@ Category           = "Category" ":" #category-value
   category-value   = term
                     ";" "scheme" "=" <"> scheme <">
                     ";" "class" "=" ( class | <"> class <"> )
-                    *( ";" category-param )
-  category-param   = ( ( "title" "=" quoted-string )
-                   | ( "rel" "=" <"> resource-type <"> )
-                   | ( "location" "=" URI )
-                   | ( "attributes" "=" <"> attribute-list <"> )
-                   | ( "actions" "=" <"> action-list <"> ) )
+                    [ ";" "title" "=" quoted-string ]
+                    [ ";" "rel" "=" <"> type-identifier <"> ]
+                    [ ";" "location" "=" URI ]
+                    [ ";" "attributes" "=" <"> attribute-list <"> ]
+                    [ ";" "actions" "=" <"> action-list <"> ]
   term             = token
   scheme           = URI
   type-identifier  = scheme term
-  resource-type    = type-identifier *( 1*SP type-identifier )
   class            = "action" | "mixin" | "kind"
   attribute-list   = attribute-name
                    | attribute-name *( 1*SP attribute-name)
   attribute-name   = attr-component *( "." attr-component )
   attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
-  action-list      = action 
+  action-list      = action
                    | action *( 1*SP action)
   action           = type-identifier
 \end{verbatim}
