@@ -398,7 +398,7 @@ path used in the request.
 \begin{verbatim}
 > POST /compute/?action=stop HTTP/1.1
 > [...]
-> Category: compute; scheme="[...]"; class="action";
+> Category: stop; scheme="[...]"; class="action";
 > X-OCCI-Attribute: method=poweroff
 
 < HTTP/1.1 200 OK
@@ -561,7 +561,7 @@ instance is uniquely identified by an URI (For example:
 \begin{verbatim}
 > POST /vms/user1/vm1?action=stop HTTP/1.1
 > [...]
-> Category: compute; scheme="[...]"; class="action"; 
+> Category: stop; scheme="[...]"; class="action";
 > X-OCCI-Attribute: method=poweroff
 
 < HTTP/1.1 200 OK
