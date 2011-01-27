@@ -227,7 +227,7 @@ be implemented by OCCI implementations. Operations which are not
 defined are out of scope for this specification and MAY be implemented
 . This is the minimal set to ensure interoperability.
 
-\subsubsection{Name-space Hierarchy and Location}
+\subsubsection{Resource Instance Name-space Hierarchy and Location}
 The name-space and the hierarchy are free definable by the Service
 Provider. The OCCI implementation needs to implement the location path
 feature, which is required by OCCI for discovering capabilities and
@@ -246,7 +246,9 @@ client through the Query interface \ref{sec:query}.
 \label{sec:query}
 The query interface MUST be implemented by all OCCI
 implementations. It MUST be found at the path \emph{/-/} off the root
-of the OCCI implementation. The following operations, listed below,
+of the OCCI implementation. With the help of the query interface it is
+possible for the client to determine the capabilites of the OCCI
+implmentation he refers to. The following operations, listed below,
 MUST be implemented by the service.
 
 \begin{description}
@@ -472,8 +474,8 @@ instance is uniquely identified by an URI (For example:
 < Location: http://example.com/vms/user1/vm1
 \end{verbatim}
   The path on which this POST verb is executed MUST be any existing
-  path in the hierarchy of the Service provider's name-space. It
-  SHOULD be the location path of the corresponding \hl{Kind}. The OCCI
+  path in the hierarchy of the Service provider's name-space. It MUST
+  be the location path of the corresponding \hl{Kind}. The OCCI
   implementation MUST return the Location of the newly created
   resource instance.
 
@@ -911,11 +913,13 @@ headers like those for Caching purposes like E-Tags.
 
 \subsubsection{Asynchronous operations}
 OCCI implementations MAY implement a way to deal with asynchronous
-calls. Upon long-running operations the OCCI implementation might
-return an temporary result and the HTTP 202 return code. Client can
-pull upon this resource till the operation finishes. Upon completion
-of the operation this temporary result will redirect to the resulting
-REST resource using the HTTP 203 return code and a Location header.
+calls. Upon long-running operations the OCCI implementation MAY return
+a temporary resource (e.g. a task resource) using the HTTP 'Location'
+header and a corresponding HTTP 202 return code. Clients can query
+that resource until the operation finishes. Upon completion of the
+operation this temporary result will redirect to the resulting REST
+resource using the HTTP 'Location' header and return the HTTP 301
+return code signalling the completion.
 
 \subsubsection{Versioning}
 Information about what version of OCCI is supported by a OCCI
