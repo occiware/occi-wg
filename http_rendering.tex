@@ -775,8 +775,8 @@ Link               = "Link" ":" #link-value
   link-value       = "<" URI-Reference ">"
                     ";" "rel" "=" <"> resource-type <">
                     [ ";" "self" "=" <"> link-instance <"> ]
-                    [ ";" "category" "=" link-type ]
-                    *( ";" link-attribute )
+                    [ ";" "category" "=" link-type
+                      *( ";" link-attribute ) ]
   term             = token
   scheme           = URI
   type-identifier  = scheme term
