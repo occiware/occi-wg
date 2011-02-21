@@ -732,7 +732,7 @@ Category           = "Category" ":" #category-value
                     [ ";" "location" "=" URI ]
                     [ ";" "attributes" "=" <"> attribute-list <"> ]
                     [ ";" "actions" "=" <"> action-list <"> ]
-  term             = token
+  term             = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
   scheme           = URI
   type-identifier  = scheme term
   class            = "action" | "mixin" | "kind"
@@ -777,7 +777,7 @@ Link               = "Link" ":" #link-value
                     [ ";" "self" "=" <"> link-instance <"> ]
                     [ ";" "category" "=" link-type
                       *( ";" link-attribute ) ]
-  term             = token
+  term             = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
   scheme           = URI
   type-identifier  = scheme term
   resource-type    = type-identifier *( 1*SP type-identifier )
@@ -817,8 +817,8 @@ instance references:
 Link               = "Link" ":" #link-value
   link-value       = "<" action-uri ">"
                     ";" "rel" "=" <"> action-type <">
-  term             = token
-  scheme           = URI
+  term             =  LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  scheme           = relativeURI
   type-identifier  = scheme term
   action-type      = type-identifier
   action-uri       = URI "?" "action=" term
@@ -852,9 +852,15 @@ attributes:
 
 \begin{verbatim}
 Attribute          = "X-OCCI-Attribute" ":" #attribute-repr
-  attribute-repr   = attribute-name "=" ( token | quoted-string )
+  attribute-repr   = attribute-name "=" ( string | number | bool | enum_val )
   attribute-name   = attr-component *( "." attr-component )
-  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )	
+  string           = quoted-string
+  number           = (int | float)
+  int              = *DIGIT
+  float            = *DIGIT "." *DIGIT
+  bool             = ("true" | "false")
+  enum_val         = string
 \end{verbatim}
 
 Attribute names for the infrastructure types are defined in the OCCI
