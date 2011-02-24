@@ -162,13 +162,13 @@ def test_infrastructure_model_for_completness(url, heads):
         #--------------------------------------------------------------- actions
         elif cur[0].strip() == 'start' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#"':
             rel = ''
-            attr = ['graceful', 'acpioff', 'poweroff']
+            attr = []
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('start')
         elif cur[0].strip() == 'stop' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#"':
             rel = ''
-            attr = []
+            attr = ['graceful', 'acpioff', 'poweroff']
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('stop')
