@@ -379,7 +379,7 @@ A \hl{Storage} instance MUST use and expose this \hl{Kind}.
 	\colrule
 	occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable 
 	& Storage size in gigabytes of the 	instance.\\
-	occi.storage.state & Enum \{online, offline, degraded\} & 1 & Immutable 
+	occi.storage.state & Enum \{online, offline, backup, snapshot, resize, degraded\} & 1 & Immutable 
 	& Current status of the instance.\\
 	\botrule
 	\end{tabular}
