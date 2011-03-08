@@ -426,6 +426,11 @@ Figure~\ref{fig:storage_state} illustrates the state diagram for a \hl{Storage} 
 	\label{fig:storage_state}
 \end{figure}
 
+OCCI can be used in conjunction with the SNIA cloud storage standard, Cloud Data 
+Management Interface (CDMI)
+\cite{cdmi} to provide enhanced management of the cloud computing storage and data. For 
+storage managed through CDMI, see the section on \hl{StorageLink}
+
 \subsection{Linking Infrastructure Resources}
 In order to create entities like virtual data centres or virtual clusters, it is necessary to allow the linkage
 of the previously defined infrastructure \hl{Resource} sub-types. This is accomplished by extending 
@@ -570,6 +575,14 @@ Figure~\ref{fig:storagelink_state} illustrates the state diagram for a \hl{Stora
 	\caption{State Diagram for a \hl{StorageLink} instance.}
 	\label{fig:storagelink_state}
 \end{figure}
+
+\subsubsection{Linking to CDMI Managed Storage}
+As previously stated, OCCI can be used in conjunction with the SNIA cloud storage standard, 
+Cloud Data Management Interface (CDMI) \cite{cdmi} to provide enhanced management 
+of the cloud computing storage and data. In order to integrate the two, the use of \hl{StorageLink}
+should be used. This will link OCCI managed Resources to CDMI resources. The 
+'occi.storagelink.deviceid' attribute of \hl{StorageLink}, defined above, should be set to the CDMI 
+Object ID of an exported CDMI Container.
 
 \subsection{Infrastructure Templates}
 Infrastructure Templates allow clients of an OCCI implementation to quickly and conveniently apply 
