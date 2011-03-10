@@ -91,7 +91,7 @@ provider's architecture.
 \begin{figure}[h]
   \centering
   \includegraphics[scale=0.5]{figs/occi-intro.pdf}
-  \caption{OCCI's place in a provider's architecture}
+  \caption{OCCI's place in a provider's architecture.}
   \label{fig:placement}
 \end{figure}
 
@@ -109,7 +109,7 @@ for renderings and extensions to build upon.
 
 \section{OCCI Core Model}
 The OCCI Core Model defines a representation of instance types which
-can be manipulated through an OCCI Rendering implementation.  It is an
+can be manipulated through an OCCI rendering implementation.  It is an
 abstraction of real-world resources, including the means to identify,
 classify, associate and extend those resources.
 
@@ -151,7 +151,7 @@ merely provided as an overview to help understanding the model.
       {\includegraphics{figs/core_model.pdf}}} \par}
   \caption{UML class diagram of the OCCI Core Model. The diagram
     provides an overview of the OCCI Core Model but is not a
-    standalone definition thereof}
+    standalone definition thereof.}
   \label{fig:occi_model}
 \end{figure}
 
@@ -168,14 +168,14 @@ instance with another.
 The \hl{Link} type contains a number of common attributes that
 \hl{Link} sub-types inherit.
 
-\hl{Entity} is an abstract type which both \hl{Resource} and \hl{Link}
+\hl{Entity} is an abstract type, which both \hl{Resource} and \hl{Link}
 inherit.  Each sub-type of \hl{Entity} is identified by a unique
 \hl{Kind} instance.
 
 The \hl{Kind} type is the core of the type classification system built
 into the OCCI Core Model. \hl{Kind} is a specialisation of
 \hl{Category} and introduces additional resource capabilities in terms
-of \hl{Action}s.  An \hl{Action} represent an invocable operation
+of \hl{Action}s.  An \hl{Action} represents an invocable operation
 applicable to a resource instance.
 
 The last type defined by the OCCI Core Model is the \hl{Mixin}
@@ -191,7 +191,7 @@ specification contain the formal definition of the OCCI Core Model.
 Section \ref{sec:glossary} provides a glossary of all terms and
 definitions with a specific meaning to the OCCI specification
 suite. However, for reader convenience, a sub-set of the glossary is
-provided here as well. The following terminology have specific meaning
+provided here as well. The following terminology has specific meaning
 in the OCCI context:
 
 \begin{description}
@@ -232,7 +232,7 @@ The OCCI Core Model provides a built-in type classification system
 allowing for safe extension towards domain-specific usage
 (e.g. infrastructure). This system is the OCCI type system and offers
 the means to be easily and transparently (i.e. no format translation
-required) exposed over either a text or binary based protocol.
+required) exposed over either a text- or binary-based protocol.
 
 The classification system can be summarised with the following key
 features:
@@ -255,9 +255,9 @@ features:
     run-time.
   \item Tagging of resource instances is supported through the
     association of \hl{Mixin} instances. A tag is simply a \hl{Mixin}
-    instance which define no additional resource capabilities.
+    instance, which defines no additional resource capabilities.
   \item A collection of associated resource instances is implicitly
-    defined for each \hl{Kind} and \hl{Mixin} instance. I.e.~all
+    defined for each \hl{Kind} and \hl{Mixin} instance. That is, all
     resource instances associated with a particular \hl{Kind} or
     \hl{Mixin} instance form a collection.
 \end{itemize}
@@ -274,7 +274,7 @@ Table~\ref{tbl:category} defines the attributes the \hl{Category} type
 MUST implement to be compliant.
 
 \mytablefloat{
-  \label{tbl:category}Attributes defined for the \hl{Category} type}{
+  \label{tbl:category}Attributes defined for the \hl{Category} type.}{
   \begin{tabular}{llllp{2.7in}}
     \toprule
 	Attribute 	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
@@ -290,7 +290,7 @@ MUST implement to be compliant.
 A \hl{Category} instance is uniquely identified by concatenating the
 categorisation scheme with the category term,
 e.g.~\textit{http://example.com/category/scheme\#term}.  This is done
-to enable discovery of \hl{Category} definitions in text based
+to enable discovery of \hl{Category} definitions in text-based
 renderings such as HTTP. All renderings MUST make use of and
 understand concatenated unique type identifiers of \hl{Category}
 instances.
@@ -304,7 +304,7 @@ reserved for OCCI an MUST NOT be used by service provider extensions.
 
 A \hl{Category} instance
 \footnote{Also applies to \hl{Kind} and \hl{Mixin} instances.}
-define the {\em names} of the attributes exposed by any instance associated
+defines the {\em names} of the attributes exposed by any instance associated
 with the \hl{Category}.  For example a ``resize'' \hl{Action} having a {\tt
 size} attribute would have an identifying \hl{Category} with \hl{Category}.{\tt
 attributes = [ size ]}.
@@ -337,7 +337,7 @@ for \hl{Entity}, another for \hl{Resource} and the last one for
 \hl{Link}.
 
 \mytablefloat{
-  \label{tbl:kind}Attributes defined for the \hl{Kind} type}{
+  \label{tbl:kind}Attributes defined for the \hl{Kind} type.}{
   \begin{tabular}{llllp{2.7in}}
     \toprule
     Attribute 		& Type 			& Multiplicity 	& Client Mutability 	& Description \\
