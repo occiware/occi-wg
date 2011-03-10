@@ -386,7 +386,7 @@ attribute present in every \hl{Kind} instance. The {\tt related}
 attribute define which other \hl{Kind} instances a particular
 \hl{Kind} is related to.
 
-A \hl{Kind} instance identify a unique type, either the \hl{Entity}
+A \hl{Kind} instance identifies a unique type, either the \hl{Entity}
 type itself or a sub-type thereof.  Each \hl{Kind} instance MUST be
 related to the \hl{Kind} of the parent type.
 
@@ -428,7 +428,7 @@ instance relationships mirror the inheritance structure of the types.
 The \hl{Mixin} type complements the \hl{Kind} type in defining the
 OCCI Core Model type classification system. It MUST be
 implemented. The \hl{Mixin} type represent an extension mechanism,
-which allow new resource capabilities to be added to resource
+which allows new resource capabilities to be added to resource
 instances both at creation-time and/or run-time.
 
 A \hl{Mixin} {\em instance} can be associated with any existing
@@ -458,7 +458,7 @@ restrictions, if not otherwise stated, are up to the provider to
 implement.
 
 \mytablefloat{
-  \label{tbl:mixin}Attributes defined for the \hl{Mixin} type}{
+  \label{tbl:mixin}Attributes defined for the \hl{Mixin} type.}{
   \begin{tabular}{llllp{2.7in}}
     \toprule
     Attribute 	& Type 			& Multiplicity 	& Client Mutability 	& Description \\
@@ -485,10 +485,10 @@ of the \hl{Mixin} type:
     attribute inherited from \hl{Category}.  E.g.~a Location
     \hl{Mixin} defining the ``com.example.location'' attribute MUST
     have Location.{\tt attributes = [ com.example.location ]}.
-  \item A \hl{Mixin} instance MAY define \hl{Action}s which will be
+  \item A \hl{Mixin} instance MAY define \hl{Action}s that will be
     made applicable to any resource instance associated with the
     \hl{Mixin}.  \hl{Action}s defined by a \hl{Mixin} are exposed
-    through the \hl{Mixin}.{\tt actions} attribute which represent the
+    through the \hl{Mixin}.{\tt actions} attribute that represent the
     association between a \hl{Mixin} instance and the \hl{Action}s it
     defines.
   \item A \hl{Mixin} instance MAY be related to another \hl{Mixin}
@@ -546,7 +546,7 @@ such \hl{Mixin} instances.
 One or more resource instances associated with the same \hl{Kind} or
 \hl{Mixin} instance, automatically form a collection.  Each \hl{Kind}
 and \hl{Mixin} instance in the system identifies a collection
-consisting of all different resource instances associated with the
+consisting of all different resource instances associated with the same
 \hl{Kind} or \hl{Mixin}.
 
 A resource instance is always a member of the collection indicated by
