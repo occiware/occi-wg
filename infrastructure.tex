@@ -118,7 +118,7 @@ Supporting these Resource types are the following \hl{Link} sub-types:
 \end{figure}
 
 %OCCI infrastructure implementors MUST implement these types. 
-These infrastructure types inherit the OCCI Core Model \hl{Resource} base type and all its 
+These infrastructure types inherit the OCCI Core Model \hl{Resource} base type and all their 
 attributes. The HTTP Rendering document \cite{occi:http_rendering} defines how to serialise and interact with these types 
 using RESTful communication. Implementers are free to choose what \hl{Resource} and 
 \hl{Link} sub-types to implement. Those that are supported by an implementation will be 
@@ -133,7 +133,7 @@ That assigned \hl{Kind} instance MUST always remain immutable to any client.
 	\label{tbl:kinds}The \hl{Kind} instances defined for
 	the infrastructure sub-types of \hl{Resource}, \hl{Link} and related \hl{Mixin}s.
 	The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
-	{\bf $<$schema$>$} in this table for a better readability experience 
+	{\bf $<$schema$>$} in this table for a better readability experience. 
 	} {
 	\begin{tabular}{llll}
 	\toprule
@@ -157,7 +157,7 @@ That assigned \hl{Kind} instance MUST always remain immutable to any client.
 	networkinterface & $<$schema$>$/infrastructure\# & NetworkInterface \hl{Link}
 	& $<$schema$>$/core\#link \\
 	
-	ipnetworkinterface & $<$schema$>$/networkinterface\# & IP NetworkInterface \hl{Mixin}
+	ipnetworkinterface & $<$schema$>$/infrastucture/networkinterface\# & IP NetworkInterface \hl{Mixin}
 	& -- \\
 	\botrule
 	\end{tabular}
