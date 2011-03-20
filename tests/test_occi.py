@@ -31,6 +31,8 @@ try:
     N, E, W, S, Tk, LEFT, FALSE
 except ImportError:
     logging.warn("TK GUI will not be available...")
+    class Toplevel(object):
+        pass
 
 #===============================================================================
 # Convenience routines
@@ -297,7 +299,7 @@ def test_create_kinds(url, heads):
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = post_heads)
     if not response['status'] == '200' or response['status'] == '202':
-        logging.warn('Creation failed - this might be okay - please examine output!' + repr(response) + content)
+        logging.warn('Creation failed - this might be okay - please examine output! ' + repr(response) + ' ' + content)
         raise AttributeError("Test did no run completly!")
     try:
         loc = response['location']
@@ -361,7 +363,7 @@ def test_links(url, heads):
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = compute_heads)
     if not response['status'] == '200' or response['status'] == '202':
-        logging.warn('Creation failed - this might be okay - please examine output!' + repr(response) + content)
+        logging.warn('Creation failed - this might be okay - please examine output! ' + repr(response) + content)
         raise AttributeError("Test did no run completly!")
     compute_loc = response['location']
 
@@ -370,7 +372,7 @@ def test_links(url, heads):
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = network)
     if not response['status'] == '200' or response['status'] == '202':
-        logging.warn('Creation failed - this might be okay - please examine output!' + repr(response) + content)
+        logging.warn('Creation failed - this might be okay - please examine output! ' + repr(response) + content)
         raise AttributeError("Test did no run completly!")
     network_loc = response['location']
 
@@ -381,7 +383,7 @@ def test_links(url, heads):
     http = httplib2.Http()
     response, content = http.request(url, 'POST', headers = link)
     if not response['status'] == '200' or response['status'] == '202':
-        logging.warn('Creation failed - this might be okay - please examine output!' + repr(response) + content)
+        logging.warn('Creation failed - this might be okay - please examine output! ' + repr(response) + content)
         raise AttributeError("Test did no run completly!")
     link_loc = response['location']
 
@@ -555,7 +557,7 @@ class TextRunner(object):
             heads = cookie = get_session_cookie(url, username, password)
             heads = {'Cookie': cookie}
         else:
-            heads = []
+            heads = {}
 
         print('Examining OCCI service at URL: ' + url)
         print('\n')
