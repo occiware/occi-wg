@@ -170,19 +170,22 @@ def test_infrastructure_model_for_completness(url, heads):
             infra_model.append('start')
         elif cur[0].strip() == 'stop' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#"':
             rel = ''
-            attr = ['graceful', 'acpioff', 'poweroff']
+            #attr = ['graceful', 'acpioff', 'poweroff']
+            attr = ['method']
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('stop')
         elif cur[0].strip() == 'restart' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#"':
             rel = ''
-            attr = ['graceful', 'warm', 'cold']
+            #attr = ['graceful', 'warm', 'cold']
+            attr = ['method']
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('restart')
         elif cur[0].strip() == 'suspend' and cur[1].strip() == 'scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#"':
             rel = ''
-            attr = ['hibernate', 'suspend']
+            #attr = ['hibernate', 'suspend']
+            attr = ['method']
             actions = []
             check_if_complete(cur, rel, attr, actions)
             infra_model.append('suspend')
