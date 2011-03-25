@@ -51,7 +51,7 @@ def get_session_cookie(url, user, password):
 
     if not response['status'] == '302':
 
-        print response, content
+        print(response, content)
         raise AttributeError('Something went wrong during lo-gin...')
 
     return response['set-cookie']
@@ -596,9 +596,9 @@ class TextRunner(object):
             test(url, heads)
         except Exception as e:
             logging.warning(str(e))
-            print label + '\t\t\tFailed'
+            print(label + '\t\t\tFailed')
         else:
-            print label + '\t\t\tOK'
+            print(label + '\t\t\tOK')
 
 class GUIRunner(Toplevel):
 
@@ -817,8 +817,8 @@ class GUIRunner(Toplevel):
 if __name__ == '__main__':
     try:
         opts, args = getopt.getopt(sys.argv[1:], "ho:v", ["help", "url=", "username=", "password=", "gui"])
-    except getopt.GetoptError, err:
-        print str(err)
+    except getopt.GetoptError as err:
+        print(str(err))
         sys.exit(2)
     username = None
     password = None
