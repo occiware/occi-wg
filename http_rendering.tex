@@ -248,7 +248,7 @@ The query interface MUST be implemented by all OCCI
 implementations. It MUST be found at the path \emph{/-/} off the root
 of the OCCI implementation. With the help of the query interface it is
 possible for the client to determine the capabilites of the OCCI
-implmentation he refers to. The following operations, listed below,
+implementation he refers to. The following operations, listed below,
 MUST be implemented by the service.
 
 \begin{description}
@@ -257,7 +257,8 @@ MUST be implemented by the service.
   the service can handle. This allows the client to discover the
   capabilities of the OCCI implementation. The result MUST contain all
   information about the \hl{Kind}s and \hl{Mixin}s (including
-  Attributes and \hl{Actions} assigned).
+  mutable Attributes and \hl{Actions} assigned). Immutable Attributes
+  MUST NOT be included in {\tt attributes} list.
 \begin{verbatim}
 > GET /-/ HTTP/1.1
 > [...]
