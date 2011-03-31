@@ -757,6 +757,24 @@ Category             = "Category" ":" #category-value
   action             = type-identifier
 \end{verbatim}
 
+The {\tt attributes} parameter is used in the OCCI Query Interface,
+see section~\ref{sec:query}, to inform a client which attributes a particular
+\hl{Entity} sub-type supports. This information is used by the client to
+determine which attributes to include in an initial POST request to create a
+resource.
+
+In addition to the existence of an attribute the Query Interface also informs a
+client whether an attribute is required or immutable, see the
+``attribute-property'' in the syntax description above. The logic of attribute
+properties is as follows:
+\begin{itemize} 
+\item If no attribute properties are defined the attribute is mutable and
+non-required, i.e. multiplicity is 0..x.
+\item If the ``{\tt immutable}'' property is set the attribute is immutable.
+\item If the ``{\tt required}'' property is set the attribute has a multiplicity of
+ 1..x, i.e.~it MUST be specified by the client.
+\end{itemize}
+
 The following example illustrates a rendering of the \hl{Kind}
 instance assigned to the \hl{Storage} type \cite{occi:infrastructure}:
 
