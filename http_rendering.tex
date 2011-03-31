@@ -346,8 +346,12 @@ instances. They MUST end with \emph{/} (For example
 < X-OCCI-Location: http://example.com/vms/user1/vm2
 \end{verbatim}
 An OCCI implementations MUST support a filtering mechanism. If a
-category is provided in the request the server MUST only return the
+Category is provided in the request the server MUST only return the
 resource instances belonging to the provided \hl{Mixin} or \hl{Kind}.
+
+If an OCCI Entity attribute (X-OCCI-Attribute) is provided in the request the
+server MUST only return the resource instances which have a matching attribute
+value.
 
 \item[Deletion of all resource instances below a path] \textbf{(Note:
   this is a potentially dangerous operation!)} The HTTP verb DELETE
@@ -389,6 +393,10 @@ resource instances belonging to the provided \hl{Kind} or
 \hl{Mixin}. The provided HTTP category definition SHOULD be different
 from the \hl{Kind} or \hl{Mixin} definition which defined the location
 path used in the request.
+
+If an OCCI Entity attribute (X-OCCI-Attribute) is provided in the request the
+server MUST only return the resource instances which have a matching attribute
+value.
 
 \item[Triggering Actions on All Instances of a \hl{Mixin} or
   \hl{Kind}] Actions can be triggered on all resource instances of the
