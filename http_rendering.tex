@@ -257,8 +257,7 @@ MUST be implemented by the service.
   the service can handle. This allows the client to discover the
   capabilities of the OCCI implementation. The result MUST contain all
   information about the \hl{Kind}s and \hl{Mixin}s (including
-  mutable Attributes and \hl{Actions} assigned). Immutable Attributes
-  MUST NOT be included in {\tt attributes} list.
+  Attributes and \hl{Actions} assigned).
 \begin{verbatim}
 > GET /-/ HTTP/1.1
 > [...]
@@ -269,14 +268,14 @@ MUST be implemented by the service.
 <           scheme="http://schemas.ogf.org/occi/infrastructure#";
 <           class="kind";
 <           rel=http://schemas.ogf.org/occi/core#resource;
-<           attributes="occi.compute.cores occi...";
+<           attributes="occi.compute.cores occi.compute.state{immutable} ..."
 <           actions="http://schemas.ogf.org/occi/infrastructure/compute/action#stop ...";
 <           location=/compute/;
 < Category: my_stuff;
 <           scheme="http://example.com/occi/my_stuff#";
 <           class="mixin";
 <           location=/my_stuff/;
-< Category: storage; 
+< Category: storage;
 <           scheme="http://schemas.ogf.org/occi/infrastructure#";
 <           class="kind";
 <           rel=http://schemas.ogf.org/occi/core#resource;
@@ -718,32 +717,36 @@ X-OCCI-Location: /compute/456
 \subsubsection{Rendering of the OCCI Category, Kind and Mixin types}
 Instances of the \hl{Category}, \hl{Kind} and \hl{Mixin} types
 \cite{occi:core} MUST be rendered using the Category header as defined
-by the Web Categories specification
+by the Web Categories specification%
 \footnote{http://tools.ietf.org/html/draft-johnston-http-category-header-01}.
 
 The following syntax applies:
 
 \begin{verbatim}
-Category           = "Category" ":" #category-value
-  category-value   = term
-                    ";" "scheme" "=" <"> scheme <">
-                    ";" "class" "=" ( class | <"> class <"> )
-                    [ ";" "title" "=" quoted-string ]
-                    [ ";" "rel" "=" <"> type-identifier <"> ]
-                    [ ";" "location" "=" URI ]
-                    [ ";" "attributes" "=" <"> attribute-list <"> ]
-                    [ ";" "actions" "=" <"> action-list <"> ]
-  term             = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
-  scheme           = URI
-  type-identifier  = scheme term
-  class            = "action" | "mixin" | "kind"
-  attribute-list   = attribute-name
-                   | attribute-name *( 1*SP attribute-name)
-  attribute-name   = attr-component *( "." attr-component )
-  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
-  action-list      = action
-                   | action *( 1*SP action)
-  action           = type-identifier
+Category             = "Category" ":" #category-value
+  category-value     = term
+                      ";" "scheme" "=" <"> scheme <">
+                      ";" "class" "=" ( class | <"> class <"> )
+                      [ ";" "title" "=" quoted-string ]
+                      [ ";" "rel" "=" <"> type-identifier <"> ]
+                      [ ";" "location" "=" URI ]
+                      [ ";" "attributes" "=" <"> attribute-list <"> ]
+                      [ ";" "actions" "=" <"> action-list <"> ]
+  term               = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  scheme             = URI
+  type-identifier    = scheme term
+  class              = "action" | "mixin" | "kind"
+  attribute-list     = attribute-def
+                     | attribute-def *( 1*SP attribute-def)
+  attribute-def      = attribute-name
+                     | attribute-name
+                       "{" attribute-property *( 1*SP attribute-property ) "}"
+  attribute-property = "immutable" | "required"
+  attribute-name     = attr-component *( "." attr-component )
+  attr-component     = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  action-list        = action
+                     | action *( 1*SP action )
+  action             = type-identifier
 \end{verbatim}
 
 The following example illustrates a rendering of the \hl{Kind}
@@ -756,7 +759,7 @@ Category: storage;
     title="Storage Resource";
     rel="http://schemas.ogf.org/occi/core#resource";
     location=/storage/;
-    attributes="occi.storage.size occi.storage.state";
+    attributes="occi.storage.size occi.storage.state{immutable}";
     actions="http://schemas.ogf.org/occi/infrastructure/storage/action#resize ...";
 \end{verbatim}
 
