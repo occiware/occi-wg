@@ -922,9 +922,24 @@ RECOMMENDED to assign a separate \hl{Category} scheme for each user's
 \hl{Mixin} instances (e.g. per-user schemes).
 
 \section{Security Considerations}
-In the scope of this OCCI specification document the security features
-are implemented in the Protocol and Renderings. Therefore please see
-the \emph{RESTful HTTP Rendering} Document \cite{occi:http_rendering}.
+Since the OCCI Core and Model specification describes a model, not an
+interface or protocol, no specific security mechanisms are described
+as part of this document. However, the elements described by this
+specification, namely type instance attribute mutability, Category,
+Kind, and Mixin instantiations; Entity, Resource, Link, and Action
+subtypes, whether direct or indirect; resource or collection
+manipulation; and the discovery mechanism need to implement a proper
+authorization scheme, which MUST be part of a concrete OCCI rendering
+specification, part of an OCCI specification profile, or part of the
+specific OCCI implementation.
+
+Concrete security mechanisms and protection against attacks SHOULD be
+specified by OCCI rendering specification. In any case, OCCI rendering
+specifications MUST address transport level security and
+authentication on the protocol level.
+
+All security considerations listed above apply to all (existing and
+future) extensions of the OCCI Core and Model specification.
 
 \section{Glossary}
 \label{sec:glossary}
