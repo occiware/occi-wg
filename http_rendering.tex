@@ -1193,6 +1193,24 @@ X-OCCI-Attribute: occi.compute.cores=2
 X-OCCI-Attribute: occi.compute.hostname=dummy
 \end{verbatim}
 
+\section{OCCI Compliance Tools}
+For the ease of generating compliant parsers an ANTLR \footnote{http://www.antlr.org} 
+grammar is available from \footnote{http://github.com/dizz/occi-grammar} 
+where it is updated and maintained. It is based on 
+the ABNF grammars quoted through out the document. It can parse the 
+OCCI text renderings of Category, Link, X-OCCI-Attribute and 
+X-OCCI-Location. It is recommended that implementers use this grammar 
+as a means to generate OCCI compliant parsers.
+
+To verify an implementations runtime behaviour, the OCCI Compliance 
+Testing Tool is provided 
+\footnote{http://forge.ogf.org/sf/scm/do/listRepositories/projects.occi-wg/scm}. 
+This tool uses the OCCI ANTLR generated parser 
+along with various HTTP libraries to ensure that a OCCI implementation 
+reacts and responds correctly to valid OCCI client requests. It is 
+recommended that implementers use this tool to aid them in validating 
+compliance with OCCI.
+
 \section{Contributors}
 \input{include/contributors}
 
