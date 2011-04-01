@@ -1104,6 +1104,18 @@ resources must be rendered in \emph{text/uri-list} format, which can
 be used for listing resource in collections or the namespace of the
 OCCI implementation.
 
+\subsubsection{RFC5785 Compliance}
+\label{sec:rfc5785_compliance}
+Should implementations wish to advertise the Query Interface using 
+the .well-known mechanism defined by "Defining Well-Known Uniform 
+Resource Identifiers" [RFC5785] then they MUST use the following 
+path served from the authority:
+
+/.well-known/org/ogf/occi/-/
+
+The functionality accessible at this location MUST exactly mirror that 
+as defined in section XXX on the Query Interface.
+
 \subsubsection{Return codes}
 \label{sec:return_codes}
 At any point the service provider MAY return any of the following HTTP
