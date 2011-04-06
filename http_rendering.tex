@@ -181,45 +181,27 @@ instances is through the four main HTTP verbs. OCCI service
 implementations MUST, at a minimum, support these verbs as shown in
 table \ref{tbl:http_verbs}.
 
-\mytablefloat{\label{tbl:http_verbs}HTTP Verb Behavior}{
-\begin{tabular}{p{1in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in} p{0.7in}}
+\mytablefloat{\label{tbl:http_verbs}HTTP Verb Behavior (* = Supports filtering mechanisms)}{
+\begin{tabular}{p{0.8in} p{0.8in} p{0.8in} p{0.8in} p{0.8in} p{0.8in}}
 \toprule
-Type & GET & POST (create) & POST (action) & PUT (create) & PUT (update) & DELETE \\
+Path 								& GET 										& POST 																									& POST (action - Query = ?action=\ldots) 			& PUT 									& DELETE \\
 \colrule
-resource instance & 
-Rendering of this resource instance & 
-Create a new resource instance & 
-Trigger action & 
-Create an resource instance at the given path & 
-Update an resource instance at an given path & 
-Delete this resource instance \\
+resource instance (/vms/user1/vm1) 	& Retrieval of the resource instance 		& Partial update of the resource instance 																& Perform an action 								& Update (using the full representation) of the resource instance/Creation of an resource instance	& Deletion of the resource instance \\
 \colrule
-Path in the name-space hierarchy ending with / &	
-Listing of all resource instances below this name-space & 
-Create a new resource instance & 
-N/A & 
-N/A & 
-N/A & 
-Delete all the resource instances below this name-space hierarchy \\
+\hl{Kind} collection (/compute/) 	& Retrieve a set of resource instances* 	& Create a new resource instance of this \hl{Kind} / Partial update a set of resource instances*	  	& Performs actions on a set of resource instances* 	& Update (using the full representation) of the collection 		& Removal of a (set of) resource instance from collection \\
 \colrule
-Location of an \hl{Mixin} or \hl{Kind} & 
-Listing containing locations to all resource instances belonging to this \hl{Mixin} or \hl{Kind} & 
-N/A & 
-Trigger action (defined for this kind or mixin) on all resource instances belonging to this \hl{Mixin} or \hl{Kind} & 
-Add an resource instance to a \hl{Mixin} & 
-N/A & 
-Remove an resource instance given in the request from a \hl{Mixin} \\
+\hl{Mixin} collection (/my\_stuff) 	& Retrieve a set of resource instances* 	& Adds a resource instance to this collection 															& Performs actions on a set of resource instances* 	& Update (using the full representation) of the collection 		& Removal of a (set of) resource instance from collection \\
 \colrule
-Query Interface	& 
-Listing of all registered \hl{Kind}s and \hl{Mixin}s & 
-N/A & 
-N/A & 
-Add a user defined \hl{Mixin} & 
-N/A & 
-Remove a user-defined \hl{Mixin} (defined in the request) \\
+query interface (/-/) 				& Retrieve capabilites* 					& Add a user-defined \hl{Mixin} 																		& Not Defined 										& Not Defined 							& Removal of a user-defined \hl{Mixin} \\
 \botrule
 \end{tabular}
 }
+
+%%
+%
+% TM: I'm here...all on top should be fine...Text following needs another pass after public comment...
+%
+%%
 
 \subsection{A RESTful Rendering of OCCI}
 The following sections and paragraphs describe how the OCCI model MUST
