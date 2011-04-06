@@ -1179,16 +1179,17 @@ X-OCCI-Attribute: occi.compute.hostname=dummy
 \end{verbatim}
 
 \section{OCCI Compliance Tools}
-For the ease of generating compliant parsers an ANTLR \footnote{http://www.antlr.org} 
-grammar is available from \footnote{http://github.com/dizz/occi-grammar} 
-where it is updated and maintained. It is based on 
-the ABNF grammars quoted through out the document. It can parse the 
-OCCI text renderings of Category, Link, X-OCCI-Attribute and 
-X-OCCI-Location. It is recommended that implementers use this grammar 
-as a means to generate OCCI compliant parsers.
+For the ease of generating compliant parsers an
+ANTLR \footnote{http://www.antlr.org} grammar is available
+from \footnote{http://github.com/dizz/occi-grammar} where it is
+updated and maintained. It is based on the ABNF grammars quoted
+through out the document. It can parse the OCCI text renderings of
+Category, Link, X-OCCI-Attribute and X-OCCI-Location. It is
+recommended that implementers use this grammar as a means to generate
+OCCI compliant parsers.
 
-To verify an implementations runtime behaviour, the OCCI Compliance 
-Testing Tool is provided 
+To verify an implementations runtime behaviour, the OCCI Compliance
+Testing Tool is provided
 \footnote{http://forge.ogf.org/sf/scm/do/listRepositories/projects.occi-wg/scm}. 
 This tool uses the OCCI ANTLR generated parser 
 along with various HTTP libraries to ensure that a OCCI implementation 
@@ -1196,12 +1197,46 @@ reacts and responds correctly to valid OCCI client requests. It is
 recommended that implementers use this tool to aid them in validating 
 compliance with OCCI.
 
-\section{Contributors}
-\input{include/contributors}
+\section{Security Considerations}
+The OCCI HTTP rendering assumes HTTP or HTTP-related mechanisms for
+security. As such, implementations SHOULD support
+TLS \footnote{http://datatracker.ietf.org/wg/tls/} for transport layer
+security.
+
+Authentication SHOULD be realized by HTTP authentication mechanisms,
+namely HTTP Basic or Digest Auth \cite{rfc2617}, with the former as
+default. Additional profiles MAY specify other methods and should
+ensure that the selected authentication scheme can be renderable over
+the HTTP or HTTP-related protocols.
+
+Authorization is not enforced on the protocol level, but SHOULD be
+performed by the implementation. For the authorization decision, the
+authentication information as provided by the mechanisms described
+above MUST be used.
+
+Protection against potential Denial-of-Service scenarios are out of
+scope of this document; the OCCI HTTP Rendering specifications assumes
+cooperative clients that SHOULD use selection and filtering as
+provided by the Category mechanism whereever possible. Additional
+profiles to this document, however, MAY specifically address such
+scenarios; in that case, best practices from the HTTP ecosystem and
+appropriate mechanisms as part of the HTTP protocol specification
+SHOULD be prefered.
+
+As long as specific extensions of the OCCI Core and Model
+specification do not impose additional security requirements than the
+OCCI Core and Model specification itself, the security considerations
+documented above apply to all (existing and future)
+extensions. Otherwise, an additional profile to this specification
+MUST be provided; this profile MUST express all additional security
+considerations using HTTP mechanisms.
 
 \section{Glossary}
 \label{sec:glossary}
 \input{include/glossary}
+ 
+\section{Contributors}
+\input{include/contributors}
 
 \section{Intellectual Property Statement}
 \input{include/ip}
