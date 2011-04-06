@@ -93,23 +93,25 @@ the document. These examples do not strive to be complete but to show
 the features OCCI has:
 
 \begin{verbatim}
-
 Category: compute;
           scheme="http://schemas.ogf.org/occi/infrastructure#";
           class="kind";
-          location=/compute/
+          location=http://example.com/compute/
+          [...]
     (This is an compute kind)
 
 Category: storage;
           scheme="http://schemas.ogf.org/occi/infrastructure#";
           class="kind";
-          location=/storage/
+          location=http://example.com/storage/
+          [...]
     (This is an storage kind)
 
 Category: my_stuff;
           scheme="http://example.com/occi/my_stuff#";
           class="mixin";
-          location=/my_stuff/ 
+          location=http://example.com/my_stuff/
+          [...]
     (This is a mixin of user1)
 
 The following namespace hierarchy is used in the examples:
@@ -197,12 +199,6 @@ query interface (/-/) 				& Retrieve capabilites* 					& Add a user-defined \hl{
 \end{tabular}
 }
 
-%%
-%
-% TM: I'm here...all on top should be fine...Text following needs another pass after public comment...
-%
-%%
-
 \subsection{A RESTful Rendering of OCCI}
 The following sections and paragraphs describe how the OCCI model MUST
 be implemented by OCCI implementations. Operations which are not
@@ -249,21 +245,21 @@ MUST be implemented by the service.
 < Category: compute;
 <           scheme="http://schemas.ogf.org/occi/infrastructure#";
 <           class="kind";
-<           rel=http://schemas.ogf.org/occi/core#resource;
+<           rel="http://schemas.ogf.org/occi/core#resource";
 <           attributes="occi.compute.cores occi.compute.state{immutable} ..."
 <           actions="http://schemas.ogf.org/occi/infrastructure/compute/action#stop ...";
-<           location=/compute/;
+<           location=http://example.com/compute/;
 < Category: my_stuff;
 <           scheme="http://example.com/occi/my_stuff#";
 <           class="mixin";
-<           location=/my_stuff/;
+<           location=http://example.com/my_stuff/;
 < Category: storage;
 <           scheme="http://schemas.ogf.org/occi/infrastructure#";
 <           class="kind";
-<           rel=http://schemas.ogf.org/occi/core#resource;
+<           rel="http://schemas.ogf.org/occi/core#resource";
 <           attributes="...";
 <           actions="...";
-<           location=/storage/;
+<           location=http://example.com/storage/;
  
 \end{verbatim}
 An OCCI implementation MUST support a filtering mechanism. If a HTTP
@@ -271,17 +267,17 @@ Category is provided in the request the server MUST only return the
 complete rendering of the requested \hl{Kind} or \hl{Mixin}.
 
 \item[Adding a \hl{Mixin} definition] To add a \hl{Mixin} to the
-  service the HTTP PUT verb MUST be used. All possible information for
-  the \hl{Mixin} must be defined. At least the HTTP Category term,
+  service the HTTP POST verb MUST be used. All possible information
+  for the \hl{Mixin} must be defined. At least the HTTP Category term,
   scheme and location MUST be defined. Actions and Attributes are not
   supported:
 \begin{verbatim}
-> PUT /-/ HTTP/1.1
+> POST /-/ HTTP/1.1
 > [...]
 > Category: my_stuff;
 >           scheme="http://example.com/occi/my_stuff#";
 >           class="mixin";
->           rel=http:/example.com/occi/something_else#mixin;
+>           rel="http:/example.com/occi/something_else#mixin";
 >           location=/my_stuff/;
 
 < HTTP/1.1 200 OK
@@ -289,8 +285,7 @@ complete rendering of the requested \hl{Kind} or \hl{Mixin}.
 \end{verbatim}
 The service might reject this request if it does not allow
 user-defined \hl{Mixin}s to be created. Also on name collisions of the
-defined location path the service provider MAY reject this
-operation.
+defined location path the service provider MAY reject this operation.
 
 \item[Removing a \hl{Mixin} definition] A user defined \hl{Mixin} MAY
   be removed (if allowed) by using the HTTP DELETE verb. The
@@ -299,12 +294,20 @@ operation.
 \begin{verbatim}
 > DELETE /-/ HTTP/1.1
 > [...]
-> Category: my_stuff; scheme="http://example.com/occi/my_stuff#"; class="mixin";
+> Category: my_stuff; 
+            scheme="http://example.com/occi/my_stuff#"; 
+            class="mixin";
 
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
 \end{description}
+
+%%
+%
+% TM: I'm here...all on top should be fine...Text following needs another pass after public comment...
+%
+%%
 
 \subsubsection{Operation on Paths in the Name-space}
 The following operations are defined when operating on paths in the
