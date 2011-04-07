@@ -186,15 +186,15 @@ table \ref{tbl:http_verbs}.
 \mytablefloat{\label{tbl:http_verbs}HTTP Verb Behavior (* = Supports filtering mechanisms)}{
 \begin{tabular}{p{0.8in} p{0.8in} p{0.8in} p{0.8in} p{0.8in} p{0.8in}}
 \toprule
-Path 								& GET 										& POST 																									& POST (action - Query = ?action=\ldots) 			& PUT 									& DELETE \\
+Path 								& GET 										& POST 												& POST (action - Query = ?action=\ldots) 			& PUT 									& DELETE \\
 \colrule
-resource instance (/vms/user1/vm1) 	& Retrieval of the resource instance 		& Partial update of the resource instance 																& Perform an action 								& Update (using the full representation) of the resource instance/Creation of an resource instance	& Deletion of the resource instance \\
+resource instance (/vms/user1/vm1) 	& Retrieval of the resource instance 		& Partial update of the resource instance 			& Perform an action 								& Update (using the full representation) of the resource instance/Creation of an resource instance	& Deletion of the resource instance \\
 \colrule
-\hl{Kind} collection (/compute/) 	& Retrieve a set of resource instances* 	& Create a new resource instance of this \hl{Kind} / Partial update a set of resource instances*	  	& Performs actions on a set of resource instances* 	& Update (using the full representation) of the collection 		& Removal of a (set of) resource instance from collection \\
+\hl{Kind} collection (/compute/) 	& Retrieve a set of resource instances* 	& Create a new resource instance of this \hl{Kind}	& Performs actions on a set of resource instances 	& Update (using the full representation) of the collection 		& Removal of a (set of) resource instance from collection \\
 \colrule
-\hl{Mixin} collection (/my\_stuff) 	& Retrieve a set of resource instances* 	& Adds a resource instance to this collection 															& Performs actions on a set of resource instances* 	& Update (using the full representation) of the collection 		& Removal of a (set of) resource instance from collection \\
+\hl{Mixin} collection (/my\_stuff) 	& Retrieve a set of resource instances* 	& Adds a resource instance to this collection 		& Performs actions on a set of resource instances 	& Update (using the full representation) of the collection 		& Removal of a (set of) resource instance from collection \\
 \colrule
-query interface (/-/) 				& Retrieve capabilites* 					& Add a user-defined \hl{Mixin} 																		& Not Defined 										& Not Defined 							& Removal of a user-defined \hl{Mixin} \\
+query interface (/-/) 				& Retrieve capabilites* 					& Add a user-defined \hl{Mixin} 					& Not Defined 										& Not Defined 							& Removal of a user-defined \hl{Mixin} \\
 \botrule
 \end{tabular}
 }
@@ -1104,7 +1104,7 @@ as defined in section \ref{sec:query} on the Query Interface.
 \subsubsection{Return codes}
 \label{sec:return_codes}
 At any point the service provider MAY return any of the following HTTP
-Return Codes:
+Return Codes in table \ref{tbl:http_codes}
 
 \mytablefloat{\label{tbl:http_codes}HTTP Return Codes}{
 \begin{tabular}{l|l|p{3in}}
@@ -1117,6 +1117,7 @@ Code & Description & Notes \\
 401 & Unauthorized & \\
 403 & Forbidden & \\
 405 & Method Not Allowed & \\
+406 & Bad Request & \\
 409 & Conflict & \\
 410 & Gone & \\
 415 & Unsupported Media Type & \\
@@ -1126,13 +1127,19 @@ Code & Description & Notes \\
 \botrule
 \end{tabular}}
 
+%%
+%
+% TM: all text after this is also Ok after public comment.
+%
+%%
+
 \subsection{More complete examples}
 Since most examples are not complete due to space limitations this
 section will give some more complete examples.
 
 \subsubsection{Creating a compute resource instance}
 \begin{verbatim}
-> POST / HTTP/1.1
+> POST /compute/ HTTP/1.1
 > User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
 > Host: localhost:8080
 > Accept: */*
@@ -1143,7 +1150,7 @@ section will give some more complete examples.
 < HTTP/1.1 200 OK
 < Content-Length: 2
 < Content-Type: text/html; charset=UTF-8
-< Location: /users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096
+< Location: http://example.com/users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096
 < Server: pyocci OCCI/1.1
 < 
 * Connection #0 to host localhost left intact
@@ -1160,7 +1167,7 @@ OK%
 > Cookie: pyocci_user=Zm9v|1291753962|7011a4821179ff98ea96d4b44fade0512b1ffc52
 > 
 < HTTP/1.1 200 OK
-< Content-Length: 510
+< Content-Length: 522
 < Etag: "ef485dc7066745cb0fe1e31ecdd4895c356b5bd5"
 < Content-Type: text/plain
 < Server: pyocci OCCI/1.1
@@ -1170,12 +1177,12 @@ Category: compute;
     class="kind";
 Link: </users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096?action=start>;
     rel="http://schemas.ogf.org/occi/infrastructure/compute/action#start"
-X-OCCI-Attribute: occi.compute.architecture=x86
-X-OCCI-Attribute: occi.compute.state=inactive
-X-OCCI-Attribute: occi.compute.speed=1.33
-X-OCCI-Attribute: occi.compute.memory=2.0
-X-OCCI-Attribute: occi.compute.cores=2
-X-OCCI-Attribute: occi.compute.hostname=dummy
+X-OCCI-Attribute: occi.compute.architecture="x86"
+X-OCCI-Attribute: occi.compute.state="inactive"
+X-OCCI-Attribute: occi.compute.speed="1.33"
+X-OCCI-Attribute: occi.compute.memory="2.0"
+X-OCCI-Attribute: occi.compute.cores="2"
+X-OCCI-Attribute: occi.compute.hostname="dummy"
 \end{verbatim}
 
 \section{OCCI Compliance Tools}
