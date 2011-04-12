@@ -948,8 +948,9 @@ response                   =  1*( resource_representation )
 \subsection{Syntax and Semantics of the Rendering}
 \label{sec:syntax}
 All data transferred using the \textit{text/occi} and
-\textit{text/plain} content types is encoded with HTTP \cite{rfc2616}
-compliant headers. Four specific HTTP headers are used:
+\textit{text/plain} content types is structured text. These rendering structures 
+are compliant with and follow the rules of HTTP headers \cite{rfc2616}. 
+Four specific rendering structures are used:
 
 \begin{itemize}
   \item Category
@@ -958,14 +959,14 @@ compliant headers. Four specific HTTP headers are used:
   \item X-OCCI-Location
 \end{itemize}
 
-The \textit{text/occi} content type renders these headers as true HTTP
+The \textit{text/occi} content type renders these rendering structures as HTTP
 headers in the header portion of a HTTP request or response. The
-\textit{text/plain} content type renders the same headers, with
+\textit{text/plain} content type renders the same rendering structures, with
 identical syntax, in the body of the HTTP request/response. See
 section \ref{sec:content_type} for more information on the use of
 different content types.
 
-Multiple HTTP header field values MUST be supported as defined by
+Multiple field values per rendering structure MUST be supported as defined by
 RFC~2616 \cite{rfc2616}. This applies to both the \textit{text/occi}
 and \textit{text/plain} content types. RFC 2616 defines two different
 methods to render multiple header field values, either a
@@ -1142,8 +1143,7 @@ e.g. \texttt{occi.compute.memory}, using X-OCCI-Attribute headers.
 The X-OCCI-Attribute header uses a simple key-value format where each
 HTTP header field value represent a single attribute. The field value
 consist of an attribute name followed by the equal sign (``='') and an
-attribute value. The attribute value MUST be quoted if it contains a
-separator character as specified in RFC 2616 (page 16) \cite{rfc2616}.
+attribute value.
 
 The following syntax MUST be used to represent OCCI \hl{Entity}
 attributes:
@@ -1175,7 +1175,7 @@ X-OCCI-Attribute: occi.compute.cores=2
 X-OCCI-Attribute: occi.compute.hostname="testserver"
 X-OCCI-Attribute: occi.compute.speed=2.66
 X-OCCI-Attribute: occi.compute.memory=3.0
-X-OCCI-Attribute: occi.compute.state=active
+X-OCCI-Attribute: occi.compute.state=''active''
 \end{verbatim}
 
 \subsubsection{Rendering of Location-URIs}
