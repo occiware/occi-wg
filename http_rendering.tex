@@ -278,9 +278,9 @@ response        = categories
   categories    = *( category_rendering )
 \end{verbatim}
 
-  \item[Adding a \hl{Mixin} definition] To add a \hl{Mixin} to the
+  \item[Adding a \hl{Mixin} Definition] To add a \hl{Mixin} to the
     service the HTTP POST verb MUST be used. All possible information
-    for the \hl{Mixin} must be defined. At least the HTTP Category
+    for the \hl{Mixin} MUST be defined. At least the HTTP Category
     term, scheme and location MUST be defined. Actions and Attributes
     are not supported:
 \begin{verbatim}
@@ -311,7 +311,7 @@ request     = mixin
 response    = N/A
 \end{verbatim}
 
-  \item[Removing a \hl{Mixin} definition] A user defined \hl{Mixin}
+  \item[Removing a \hl{Mixin} Definition] A user defined \hl{Mixin}
     MAY be removed (if allowed) by using the HTTP DELETE verb. The
     information about which \hl{Mixin} should be deleted MUST be
     provided in the request:
@@ -352,8 +352,8 @@ instances. They MUST end with \emph{/} (For example
 \emph{http://example.com/vms/user1/}).
 
 \begin{description}
-  \item[Retrieving All Resource instances Below a Path] The HTTP verb
-    GET must be used to retrieve all Resource instances. The service
+  \item[Retrieving All Resource Instances Below a Path] The HTTP verb
+    GET MUST be used to retrieve all Resource instances. The service
     provider MUST return a Listing containing all Resource instances
     which are children of the provided URI in the name-space
     hierarchy:
@@ -390,7 +390,7 @@ response                    = resource_representations
   resource_representations  = *( location ) 
 \end{verbatim}
 
-  \item[Deletion of all Resource instances below a path]
+  \item[Deletion of All Resource Instances Below a Path]
     \textbf{(Note: this is a potentially dangerous operation!)} The
     HTTP verb DELETE MUST be used to delete all Resource instances
     under a hierarchy:
@@ -417,7 +417,7 @@ an \emph{/}.
 
 \begin{description}
   \item[Retrieving All Resource Instances Belonging to \hl{Mixin} or
-    \hl{Kind}] The HTTP verb GET must be used to retrieve all Resource
+    \hl{Kind}] The HTTP verb GET MUST be used to retrieve all Resource
     instances. The service provider MUST return a listing containing
     all Resource instances which belong to the requested \hl{Mixin} or
     \hl{Kind}:
@@ -488,7 +488,7 @@ request              = action_definition
 response     = N/A
 \end{verbatim}
 
-  \item[Associate Resource instances with a \hl{Mixin}] One or
+  \item[Associate Resource Instances With a \hl{Mixin}] One or
     multiple Resource instances can be associated with a \hl{Mixin}
     using the HTTP POST verb. The URIs which uniquely defined the
     Resource instance MUST be provided in the request:
@@ -513,7 +513,7 @@ request      = 1*( resources )
 response     = N/A
 \end{verbatim}
 
-  \item[Full update of a \hl{Mixin} or \hl{Kind} collection] A
+  \item[Full Update of a \hl{Mixin} or \hl{Kind} Collection] A
     collection consisting of \hl{Mixin}s or \hl{Kind}s can be updated
     using the HTTP PUT verb. All URIs which are part of the
     collection MUST be provided along with the request. The URIs which
@@ -542,7 +542,7 @@ request      = 1*( resources )
 response     = N/A
 \end{verbatim}
 
-  \item[Unassociated Resource instance(s) from a \hl{Mixin} or
+  \item[Unassociate Resource Instance(s) From a \hl{Mixin} or
     \hl{Kind}] One or multiple Resource instances can be removed from
     a \hl{Mixin} or \hl{Kind} using the HTTP DELETE verb. The URIs
     which uniquely defined the Resource instance MUST be provided in
@@ -582,7 +582,7 @@ instance is uniquely identified by an URI (For example:
   in the name-space hierarchy}
 
 \begin{description}
-  \item[Creating a Resource instance] A request to create a Resource
+  \item[Creating a Resource Instance] A request to create a Resource
     instance MUST contain one and only one HTTP category rendering
     which refers to a specific \hl{Kind} instance. This \hl{Kind}
     MUST define the type of the Resource instance.  A request 
@@ -667,7 +667,7 @@ response     = N/A
     While creating a Resource instance the Resource instance is added
     to the collection defined by the \hl{Kind}.
 
-  \item[Retrieving a Resource instance] The HTTP GET
+  \item[Retrieving a Resource Instance] The HTTP GET
     verb is used for retrieval. It MUST return at least the HTTP category which
     defines the \hl{Kind} of the Resource instance and associated attributes. HTTP Links
     pointing to related Resource instances, other URI or Actions MUST
@@ -701,7 +701,7 @@ resource_representation  = 1( category_rendering )
                            *( attribute_rendering )
 \end{verbatim}
 
-  \item[Partial update of a Resource instance] Before updating a
+  \item[Partial Update of a Resource Instance] Before updating a
     Resource instance it is RECOMMENDED that the client first
     retrieves the Resource instance. Updating is done using the HTTP
     POST verb. Only the information (HTTP Links, HTTP
@@ -733,7 +733,7 @@ request                    = 1*( resource_representation )
 response     = N/A
 \end{verbatim}
 
-  \item[Full update of a Resource instance] Before updating a Resource
+  \item[Full Update of a Resource Instance] Before updating a Resource
     instance it is RECOMMENDED that the client first retrieves the
     Resource instance. Updating is done using the HTTP PUT verb. A
     complete representation of the Resource instances MUST be provided
@@ -763,10 +763,10 @@ request                    = 1*( resource_representation )
 response     = N/A
 \end{verbatim}
 
-  \item[Deleting a Resource instance] A Resource instance can be
+  \item[Deleting a Resource Instance] A Resource instance can be
     deleted using the HTTP DELETE verb. No other information SHOULD be
     added to the request.\footnote{If the Resource instances is a
-      \hl{Link} type the source and target must be updated
+      \hl{Link} type the source and target MUST be updated
       accordingly}
 
 \begin{verbatim}
@@ -787,7 +787,7 @@ request      = N/A
 response     = N/A
 \end{verbatim}
 
-  \item[Triggering an Action on a Resource instance] To trigger an
+  \item[Triggering an Action on a Resource Instance] To trigger an
     action on a Resource instance the request MUST containing the HTTP
     Category defining the \hl{Action}. It MAY include HTTP
     X-OCCI-Attributes which are the parameters of the action. Actions
@@ -834,7 +834,7 @@ in this section. They MUST be implemented by an OCCI implementation.
     representsthe requested \hl{Kind} MUST be returned. The URIs of
     the \hl{Link}s can be discovered by retrieving a rendering of the
     Resource instance. To render all the \hl{Entity} attributes of
-    the \hl{Link} those must be specified in the HTTP Link description
+    the \hl{Link} those MUST be specified in the HTTP Link description
     during creation.
 
 \begin{verbatim}
@@ -915,7 +915,7 @@ request                    = 1*( resource_representation )
 response     = 1( location_header )
 \end{verbatim}
 
-  \item[Retrieval of \hl{Link} Resource instances] Retrieval of a
+  \item[Retrieval of \hl{Link} Resource Instances] Retrieval of a
     \hl{Link} is analogue to the retrieval of any other Resource
     instance. Please review section \ref{sec:ops_on_instances} for
     more details.
@@ -991,7 +991,7 @@ X-OCCI-Location: /compute/123
 X-OCCI-Location: /compute/456
 \end{verbatim}
 
-\subsubsection{Rendering of the OCCI Category, Kind and Mixin types}
+\subsubsection{Rendering of the OCCI Category, Kind and Mixin Types}
 \label{sec:render_cats}
 Instances of the \hl{Category}, \hl{Kind} and \hl{Mixin} types
 \cite{occi:core} MUST be rendered using the Category header as defined
@@ -1061,7 +1061,7 @@ Category: storage;
     actions="http://schemas.ogf.org/occi/infrastructure/storage/action#resize ...";
 \end{verbatim}
 
-\subsubsection{Rendering of OCCI Link instance references}
+\subsubsection{Rendering of OCCI Link Instance References}
 The rendering of a \hl{Resource} instance \cite{occi:core} MUST
 represent any associated \hl{Link} instances using the HTTP Link
 header specified in the Web Linking RFC 5988 \cite{rfc5988}.  For
@@ -1104,7 +1104,7 @@ Link: </network/123>;
     occi.networkinterface.state="active";
 \end{verbatim}
 
-\subsubsection{Rendering of references to OCCI Action instances}
+\subsubsection{Rendering of References to OCCI Action Instances}
 The rendering of a \hl{Resource} instance \cite{occi:core} MUST
 represent any associated \hl{Action} instances using the HTTP Link
 header specified in the Web Linking RFC 5988 \cite{rfc5988}.  For
@@ -1136,7 +1136,7 @@ Link: </compute/123?action=start>;
     rel="http://schemas.ogf.org/occi/infrastructure/compute/action#start"
 \end{verbatim}
 
-\subsubsection{Rendering of OCCI Entity attributes}
+\subsubsection{Rendering of OCCI Entity Attributes}
 Attributes defined for OCCI \hl{Entity} sub-types \cite{occi:core},
 i.e.~\hl{Resource} and \hl{Link}, MUST be rendered using the
 X-OCCI-Attribute HTTP header. For example the rendering of a
@@ -1215,11 +1215,11 @@ authentication mechanisms that MAY be used with OCCI are those that
 can be used with HTTP and TLS. For further discussion see Section 
 \ref{sec:sec_consid}.
 
-\subsubsection{Additional headers (Caching Headers)}
+\subsubsection{Additional Headers (Caching Headers)}
 The responses from an OCCI implementation MAY include additional
 headers like those for Caching purposes like E-Tags.
 
-\subsubsection{Asynchronous operations}
+\subsubsection{Asynchronous Operations}
 OCCI implementations MAY implement a way to deal with asynchronous
 calls. Upon long-running operations the OCCI implementation MAY return
 a temporary resource (e.g. a task resource) using the HTTP 'Location'
@@ -1373,7 +1373,7 @@ Kinds and Categories the Content-types \textit{text/occi},
 \textit{text/plain} MUST be used. If a request is done with the
 \textit{text/uri-list} in the Accept header, while not requesting for
 a Listing a Bad Request MUST be returned. Otherwise a list of
-resources must be rendered in \emph{text/uri-list} format, which can
+resources MUST be rendered in \emph{text/uri-list} format, which can
 be used for listing resource in collections or the namespace of the
 OCCI implementation.
 
@@ -1389,7 +1389,7 @@ served from the authority:
 The functionality accessible at this location MUST exactly mirror that
 as defined in section \ref{sec:query} on the Query Interface.
 
-\subsubsection{Return codes}
+\subsubsection{Return Codes}
 \label{sec:return_codes}
 At any point the service provider MAY return any of the following HTTP
 Return Codes in table \ref{tbl:http_codes}
@@ -1421,11 +1421,11 @@ Code & Description & Notes \\
 %
 %%
 
-\subsection{More complete examples}
+\subsection{More Complete Examples}
 Since most examples are not complete due to space limitations this
 section will give some more complete examples.
 
-\subsubsection{Creating a compute Resource instance}
+\subsubsection{Creating a Compute Resource Instance}
 \begin{verbatim}
 > POST /compute/ HTTP/1.1
 > User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
@@ -1446,7 +1446,7 @@ section will give some more complete examples.
 OK% 
 \end{verbatim}
 
-\subsubsection{Retrieving a compute Resource instance}
+\subsubsection{Retrieving a Compute Resource Instance}
 \begin{verbatim}
 > GET /users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096 HTTP/1.1
 > User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
