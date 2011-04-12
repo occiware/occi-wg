@@ -165,7 +165,7 @@ methods known as HTTP verbs. These HTTP verbs map loosely to the
 resource related operations of Create (POST), Retrieve (GET), Update
 (POST/PUT) and Delete (DELETE).
 
-Each Resource instance within an OCCI system MUST be uniquely
+Each resource instance within an OCCI system MUST be uniquely
 identified by an URI stored in the \emph{occi.core.id} attribute of the
 \hl{Entity} type \cite{occi:core}.
 
@@ -175,7 +175,7 @@ a static, pre-determined scheme for their structure. For example
 
 \subsection{Behavior of the HTTP Verbs}
 As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
-foundation protocol,  Resource instances are interacted with 
+foundation protocol,  resource instances are interacted with 
 through the four main HTTP verbs. OCCI service
 implementations MUST, at a minimum, support these verbs as shown in
 table \ref{tbl:http_verbs}.
@@ -185,11 +185,11 @@ table \ref{tbl:http_verbs}.
 \toprule
 Path 								& GET 										& POST 												& POST (action - Query = ?action=\ldots) 			& PUT 									& DELETE \\
 \colrule
-Resource instance (/vms/user1/vm1) 	& Retrieval of the Resource instance 		& Partial update of the Resource instance 			& Perform an action 								& Update (using the full representation) of the Resource instance/Creation of a Resource instance	& Deletion of the Resource instance \\
+resource instance (/vms/user1/vm1) 	& Retrieval of the resource instance 		& Partial update of the resource instance 			& Perform an action 								& Update (using the full representation) of the resource instance/Creation of a resource instance	& Deletion of the resource instance \\
 \colrule
-\hl{Kind} collection (/compute/) 	& Retrieve a set of Resource instances* 	& Create a new Resource instance of this \hl{Kind}	& Performs actions on a set of Resource instances 	& Update (using the full representation) of the collection 		& Removal of a (set of) Resource instance from collection \\
+\hl{Kind} collection (/compute/) 	& Retrieve a set of resource instances* 	& Create a new resource instance of this \hl{Kind}	& Performs actions on a set of resource instances 	& Update (using the full representation) of the collection 		& Removal of a (set of) resource instance from collection \\
 \colrule
-\hl{Mixin} collection (/my\_stuff/) 	& Retrieve a set of Resource instances* 	& Adds a Resource instance to this collection 		& Performs actions on a set of Resource instances 	& Update (using the full representation) of the collection 		& Removal of a (set of) Resource instance from collection \\
+\hl{Mixin} collection (/my\_stuff/) 	& Retrieve a set of resource instances* 	& Adds a resource instance to this collection 		& Performs actions on a set of resource instances 	& Update (using the full representation) of the collection 		& Removal of a (set of) resource instance from collection \\
 \colrule
 query interface (/-/) 				& Retrieve capabilites* 					& Add a user-defined \hl{Mixin} 					& Not Defined 										& Not Defined 							& Removal of a user-defined \hl{Mixin} \\
 \botrule
@@ -206,7 +206,7 @@ defined are out of scope for this specification and MAY be implemented
 The name-space and the hierarchy are free definable by the Service
 Provider. The OCCI implementation MUST implement the location path
 feature, which is required by the OCCI Query Interface. Location paths tell the
-client where all Resource instances of one \hl{Kind} or \hl{Mixin} can be 
+client where all resource instances of one \hl{Kind} or \hl{Mixin} can be 
 found regardless of the hierarchy the service provider defines. Location 
 paths are defined through the HTTP Category rendering and MUST be present 
 for all HTTP Categories that can be instantiated (i.e. provisioned). The location
@@ -353,8 +353,8 @@ instances. They MUST end with \emph{/} (For example
 
 \begin{description}
   \item[Retrieving All Resource Instances Below a Path] The HTTP verb
-    GET MUST be used to retrieve all Resource instances. The service
-    provider MUST return a Listing containing all Resource instances
+    GET MUST be used to retrieve all resource instances. The service
+    provider MUST return a Listing containing all resource instances
     which are children of the provided URI in the name-space
     hierarchy:
 
@@ -370,11 +370,11 @@ instances. They MUST end with \emph{/} (For example
 
     An OCCI implementations MUST support a filtering mechanism. If a
     Category is provided in the request the server MUST only return
-    the Resource instances belonging to the provided \hl{Mixin} or
+    the resource instances belonging to the provided \hl{Mixin} or
     \hl{Kind}.
 
     If an OCCI Entity attribute (X-OCCI-Attribute) is provided in the
-    request the server MUST only return the Resource instances which
+    request the server MUST only return the resource instances which
     have a matching attribute value.
 
     The information which needs to be present in the request and
@@ -392,7 +392,7 @@ response                    = resource_representations
 
   \item[Deletion of All Resource Instances Below a Path]
     \textbf{(Note: this is a potentially dangerous operation!)} The
-    HTTP verb DELETE MUST be used to delete all Resource instances
+    HTTP verb DELETE MUST be used to delete all resource instances
     under a hierarchy:
 \begin{verbatim}
 > DELETE /vms/user1/ HTTP/1.1
@@ -419,7 +419,7 @@ an \emph{/}.
   \item[Retrieving All Resource Instances Belonging to \hl{Mixin} or
     \hl{Kind}] The HTTP verb GET MUST be used to retrieve all Resource
     instances. The service provider MUST return a listing containing
-    all Resource instances which belong to the requested \hl{Mixin} or
+    all resource instances which belong to the requested \hl{Mixin} or
     \hl{Kind}:
 
 \begin{verbatim}
@@ -436,13 +436,13 @@ an \emph{/}.
 
     An OCCI implementation MUST support a filtering mechanism. If a
     HTTP Category is provided in the request the server MUST only
-    return the Resource instances belonging to the provided \hl{Kind}
+    return the resource instances belonging to the provided \hl{Kind}
     or \hl{Mixin}. The provided HTTP category definition SHOULD be
     different from the \hl{Kind} or \hl{Mixin} definition which
     defined the location path used in the request.
 
     If an OCCI Entity attribute (X-OCCI-Attribute) is provided in the
-    request the server MUST only return the Resource instances which
+    request the server MUST only return the resource instances which
     have a matching attribute value.
 
     The information which needs to be present in the request and
@@ -459,7 +459,7 @@ response                    = resource_representations
 \end{verbatim}
 
   \item[Triggering Actions on All Instances of a \hl{Mixin} or
-    \hl{Kind}] Actions can be triggered on all Resource instances of
+    \hl{Kind}] Actions can be triggered on all resource instances of
     the same \hl{Mixin} or \hl{Kind}. The HTTP POST verb MUST be used
     and the request MUST contain the \hl{Category} defining the
     \hl{Action}.  Additionally the \hl{Action} MUST be defined by the
@@ -489,9 +489,9 @@ response     = N/A
 \end{verbatim}
 
   \item[Associate Resource Instances With a \hl{Mixin}] One or
-    multiple Resource instances can be associated with a \hl{Mixin}
+    multiple resource instances can be associated with a \hl{Mixin}
     using the HTTP POST verb. The URIs which uniquely defined the
-    Resource instance MUST be provided in the request:
+    resource instance MUST be provided in the request:
 
 \begin{verbatim}
 > POST /my_stuff/ HTTP/1.1
@@ -517,7 +517,7 @@ response     = N/A
     collection consisting of \hl{Mixin}s or \hl{Kind}s can be updated
     using the HTTP PUT verb. All URIs which are part of the
     collection MUST be provided along with the request. The URIs which
-    uniquely defined the Resource instances MUST be provided in the
+    uniquely defined the resource instances MUST be provided in the
     request:
 
 \begin{verbatim}
@@ -543,9 +543,9 @@ response     = N/A
 \end{verbatim}
 
   \item[Unassociate Resource Instance(s) From a \hl{Mixin} or
-    \hl{Kind}] One or multiple Resource instances can be removed from
+    \hl{Kind}] One or multiple resource instances can be removed from
     a \hl{Mixin} or \hl{Kind} using the HTTP DELETE verb. The URIs
-    which uniquely defined the Resource instance MUST be provided in
+    which uniquely defined the resource instance MUST be provided in
     the request:
 
 \begin{verbatim}
@@ -575,7 +575,7 @@ response     = N/A
 \subsubsection{Operations on Resource Instances}
 \label{sec:ops_on_instances}
 The following operations MUST be implemented by the OCCI
-implementation for operations on Resource instances. The Resource
+implementation for operations on resource instances. The Resource
 instance is uniquely identified by an URI (For example:
 \emph{http://example.com/vms/user1/vm1}).\footnote{The path MUST NOT
   end with an '/' - that would mean that a client operates on a path
@@ -585,15 +585,15 @@ instance is uniquely identified by an URI (For example:
   \item[Creating a Resource Instance] A request to create a Resource
     instance MUST contain one and only one HTTP category rendering
     which refers to a specific \hl{Kind} instance. This \hl{Kind}
-    MUST define the type of the Resource instance.  A request 
+    MUST define the type of the resource instance.  A request 
     MAY also contain one or more HTTP category
     renderings which refer to different \hl{Mixin} instances. Any such
     \hl{Mixin} instances MUST be applicable (if allowed) to the
-    Resource instance.  A client MAY be REQUIRED to provide additional
+    resource instance.  A client MAY be REQUIRED to provide additional
     information in the request based on whether the Kind indicates 
     \emph{required} attributes (see \ref{sec:render_cats}) or not.
     
-    Two ways can be used to create a new Resource instance - HTTP POST or PUT:
+    Two ways can be used to create a new resource instance - HTTP POST or PUT:
 
 \begin{verbatim}
 > POST /compute/ HTTP/1.1
@@ -612,7 +612,7 @@ instance is uniquely identified by an URI (For example:
     The path on which this POST verb is executed MUST be the location
     path of the corresponding \hl{Kind}. The OCCI
     implementation MUST return the Location of the newly created
-    Resource instance.
+    resource instance.
 
     The information which needs to be present in the request and
     response are defined as following and MUST be implemented by an
@@ -627,11 +627,11 @@ request                    = 1*( resource_representation )
 response     = 1( location_header )
 \end{verbatim}
 
-    HTTP PUT can also be used to create a Resource instance. In this
+    HTTP PUT can also be used to create a resource instance. In this
     case the client ask the service provider to create a Resource
     instance at a unique path in the name-space
     hierarchy.\footnote{If a Service Provider does not want the user
-      to define the path of a Resource instance it can return a Bad
+      to define the path of a resource instance it can return a Bad
       Request return code - See section
       \ref{sec:return_codes}. Service Providers MUST ensure that the
       paths of REST resources stays unique in their name-space.}
@@ -664,13 +664,13 @@ response     = N/A
 
     The OCCI implementation will return an OK code.
   
-    While creating a Resource instance the Resource instance is added
+    While creating a resource instance the resource instance is added
     to the collection defined by the \hl{Kind}.
 
   \item[Retrieving a Resource Instance] The HTTP GET
     verb is used for retrieval. It MUST return at least the HTTP category which
-    defines the \hl{Kind} of the Resource instance and associated attributes. HTTP Links
-    pointing to related Resource instances, other URI or Actions MUST
+    defines the \hl{Kind} of the resource instance and associated attributes. HTTP Links
+    pointing to related resource instances, other URI or Actions MUST
     be included if present. Only Actions currently applicable SHOULD
     be rendered using HTTP Links. The Attributes of the Resource
     instance MUST be exposed to the client if available.
@@ -702,12 +702,12 @@ resource_representation  = 1( category_rendering )
 \end{verbatim}
 
   \item[Partial Update of a Resource Instance] Before updating a
-    Resource instance it is RECOMMENDED that the client first
-    retrieves the Resource instance. Updating is done using the HTTP
+    resource instance it is RECOMMENDED that the client first
+    retrieves the resource instance. Updating is done using the HTTP
     POST verb. Only the information (HTTP Links, HTTP
     X-OCCI-Attributes or HTTP categories), which are updated MUST be
     provided along with the request.\footnote{Changing the type of the
-      Resource instance MUST not be possible.}
+      resource instance MUST not be possible.}
 
 \begin{verbatim}
 > POST /vms/user1/vm1 HTTP/1.1
@@ -735,8 +735,8 @@ response     = N/A
 
   \item[Full Update of a Resource Instance] Before updating a Resource
     instance it is RECOMMENDED that the client first retrieves the
-    Resource instance. Updating is done using the HTTP PUT verb. A
-    complete representation of the Resource instances MUST be provided
+    resource instance. Updating is done using the HTTP PUT verb. A
+    complete representation of the resource instances MUST be provided
     along with the request.
 
 \begin{verbatim}
@@ -763,9 +763,9 @@ request                    = 1*( resource_representation )
 response     = N/A
 \end{verbatim}
 
-  \item[Deleting a Resource Instance] A Resource instance can be
+  \item[Deleting a Resource Instance] A resource instance can be
     deleted using the HTTP DELETE verb. No other information SHOULD be
-    added to the request.\footnote{If the Resource instances is a
+    added to the request.\footnote{If the resource instances is a
       \hl{Link} type the source and target MUST be updated
       accordingly}
 
@@ -788,7 +788,7 @@ response     = N/A
 \end{verbatim}
 
   \item[Triggering an Action on a Resource Instance] To trigger an
-    action on a Resource instance the request MUST containing the HTTP
+    action on a resource instance the request MUST containing the HTTP
     Category defining the \hl{Action}. It MAY include HTTP
     X-OCCI-Attributes which are the parameters of the action. Actions
     are triggered using the HTTP POST verb and by adding a query to
@@ -819,21 +819,21 @@ response     = N/A
 
 \end{description}
 
-\subsubsection{Handling \hl{Link}s Resource instances}
+\subsubsection{Handling \hl{Link}s Resource Instances}
 Resource instance of the type \hl{Link} and \hl{Resource} MUST be
 handled in the same way. Some exceptions on handling in the creation
-and handling of Resource instance of the type \hl{Link} are described
+and handling of resource instance of the type \hl{Link} are described
 in this section. They MUST be implemented by an OCCI implementation.
 
 \begin{description}
   \item[Inline Creation of a \hl{Link} Instance] 
-    When creating a Resource instance and \hl{Link}s are defined in the 
+    When creating a resource instance and \hl{Link}s are defined in the 
     request, those \hl{Link}s MUST be
     created implicitly. This results in the creation of multiple REST
     resources. However, only the Location of the REST resource which
     representsthe requested \hl{Kind} MUST be returned. The URIs of
     the \hl{Link}s can be discovered by retrieving a rendering of the
-    Resource instance. To render all the \hl{Entity} attributes of
+    resource instance. To render all the \hl{Entity} attributes of
     the \hl{Link} those MUST be specified in the HTTP Link description
     during creation.
 
@@ -859,7 +859,7 @@ in this section. They MUST be implemented by an OCCI implementation.
 \end{verbatim}
 
   \item[Retrieval Resource Instances With
-    Defined \hl{Link}s] When an Resource instance is rendered it 
+    Defined \hl{Link}s] When an resource instance is rendered it 
     MUST expose all its own the \hl{Link}s. Since \hl{Link}s are
     directed only those originating outward SHOULD be listed.
 
@@ -883,9 +883,9 @@ in this section. They MUST be implemented by an OCCI implementation.
 \end{verbatim}
 
   \item[Creation of \hl{Link} Resource Instances] To directly create a
-    \hl{Link} between two Resource instances the \hl{Kind} as well as a
+    \hl{Link} between two resource instances the \hl{Kind} as well as a
     source and target attribute MUST be provide during creation of the
-    Resource instance\footnote{See section \ref{sec:ops_on_instances}}.
+    resource instance\footnote{See section \ref{sec:ops_on_instances}}.
 
 \begin{verbatim}
 > POST /link/networkinterface/ HTTP/1.1
@@ -1092,7 +1092,7 @@ Link               = "Link" ":" #link-value
 
 The following example illustrates the rendering of a
 \hl{NetworkInterface} \cite{occi:infrastructure} instance linking to a
-\hl{Network} Resource instance:
+\hl{Network} resource instance:
 
 \begin{verbatim}
 Link: </network/123>;
@@ -1110,7 +1110,7 @@ represent any associated \hl{Action} instances using the HTTP Link
 header specified in the Web Linking RFC 5988 \cite{rfc5988}.  For
 example, rendering of a \hl{Compute} instance MUST include a Link
 header displaying any \hl{Action}s currently applicable to the
-Resource instance.
+resource instance.
 
 The following syntax MUST be used to represent OCCI \hl{Action}
 instance references:
@@ -1184,9 +1184,9 @@ X-OCCI-Attribute: occi.compute.state=''active''
 \subsubsection{Rendering of Location-URIs}
 In order to render an OCCI representation solely in the HTTP header,
 i.e.~using the \textit{text/occi} content type, the X-OCCI-Location
-HTTP header MUST be used to return a list of Resource instance
+HTTP header MUST be used to return a list of resource instance
 URIs. Each header field value correspond to a single URI. Multiple
-Resource instance URIs are returned using multiple X-OCCI-Location
+resource instance URIs are returned using multiple X-OCCI-Location
 headers.
 
 \begin{verbatim}
@@ -1195,7 +1195,7 @@ Location      = "X-OCCI-Location" ":" location-value
 \end{verbatim}
 
 The following example illustrates the rendering of a list of
-\hl{Compute} Resource instances:
+\hl{Compute} resource instances:
 \begin{verbatim}
 X-OCCI-Location: http://example.com/compute/123
 X-OCCI-Location: http://example.com/compute/456
@@ -1289,7 +1289,7 @@ incomplete or faulty rendering the Service MUST return the unsupported
 media type , 415, HTTP code.
 
 The following examples demonstrate the behavior of an HTTP GET
-operations on the Resource instance \emph{} using two different HTTP
+operations on the resource instance \emph{} using two different HTTP
 Accept headers:
 
 \begin{verbatim}
@@ -1367,7 +1367,7 @@ appropriate measures so that truncation of header data does NOT occur.
 This Rendering can handle the \textit{text/uri-list} Accept Header. It
 will use the Content-type \textit{text/uri-list}.
 
-This rendering cannot render Resource instances or \hl{Kind}s or
+This rendering cannot render resource instances or \hl{Kind}s or
 \hl{Mixin}s directly but just links to them. For concrete rendering of
 Kinds and Categories the Content-types \textit{text/occi},
 \textit{text/plain} MUST be used. If a request is done with the
