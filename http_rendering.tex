@@ -219,8 +219,11 @@ client through the Query interface \ref{sec:query}.
 \label{sec:query}
 The query interface MUST be implemented by all OCCI
 implementations. It MUST be found at the path \emph{/-/} off the root
-of the OCCI implementation. With the help of the query interface it is
-possible for the client to determine the capabilites of the OCCI
+of the OCCI implementation. Implementations MAY also 
+adopt RFC 5785 \cite{rfc5785} compliance to advertise this location 
+(see Section \ref{sec:rfc5785_compliance} for more details).
+With the help of the query interface it is
+possible for the client to determine the capabilities of the OCCI
 implementation he refers to. The following operations, listed below,
 MUST be implemented by the service.
 
@@ -1209,7 +1212,8 @@ does it require that client to service communications are secured. It
 does recommend that an authentication mechanism be used and that where
 appropriate, communications are encrypted using HTTP over TLS. The
 authentication mechanisms that MAY be used with OCCI are those that
-can be used with HTTP and TLS.
+can be used with HTTP and TLS. For further discussion see Section 
+\ref{sec:sec_consid}.
 
 \subsubsection{Additional headers (Caching Headers)}
 The responses from an OCCI implementation MAY include additional
@@ -1489,6 +1493,7 @@ implementers use this tool to aid them in validating compliance with
 OCCI.
 
 \section{Security Considerations}
+\label{sec:sec_consid}
 The OCCI HTTP rendering assumes HTTP or HTTP-related mechanisms for
 security. As such, implementations SHOULD support
 TLS \footnote{http://datatracker.ietf.org/wg/tls/} for transport layer
