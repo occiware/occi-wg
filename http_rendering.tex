@@ -274,12 +274,12 @@ MUST be implemented by the service.
 
 \begin{verbatim}
 request     = filter
-  filter    = *( kind_category_header )
-              *( mixin_category_header ))
+  filter    = *( kind_category_rendering )
+              *( mixin_category_rendering ))
 
 response        = categories
-  categories    = *( kind_category_header )
-                  *( mixin_category_header ))
+  categories    = *( kind_category_rendering )
+                  *( mixin_category_rendering ))
 \end{verbatim}
 
   \item[Adding a \hl{Mixin} definition] To add a \hl{Mixin} to the
