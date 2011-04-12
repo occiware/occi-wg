@@ -27,7 +27,7 @@ all:
 	fi
 
 show: 
-	$(VIEW) $(PDFS)
+	$(VIEW) *.pdf
 
 show-mac: all
 	open *.pdf

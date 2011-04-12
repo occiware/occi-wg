@@ -274,12 +274,10 @@ MUST be implemented by the service.
 
 \begin{verbatim}
 request     = filter
-  filter    = *( kind_category_rendering )
-              *( mixin_category_rendering ))
+  filter    = *( category_rendering )
 
 response        = categories
-  categories    = *( kind_category_rendering )
-                  *( mixin_category_rendering ))
+  categories    = *( category_rendering )
 \end{verbatim}
 
   \item[Adding a \hl{Mixin} definition] To add a \hl{Mixin} to the
@@ -304,6 +302,17 @@ response        = categories
     the defined location path the service provider MAY reject this
     operation.
 
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request     = mixin
+  mixin     = 1( category_rendering ))
+
+response    = N/A
+\end{verbatim}
+
   \item[Removing a \hl{Mixin} definition] A user defined \hl{Mixin}
     MAY be removed (if allowed) by using the HTTP DELETE verb. The
     information about which \hl{Mixin} should be deleted MUST be
@@ -317,6 +326,17 @@ response        = categories
 
 < HTTP/1.1 200 OK
 < [...]
+\end{verbatim}
+
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request     = mixin
+  mixin     = 1( category_rendering ))
+
+response    = N/A
 \end{verbatim}
 
 \end{description}
