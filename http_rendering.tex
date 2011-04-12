@@ -100,12 +100,12 @@ Category: compute;
           [...]
     (This is an compute kind)
 
-Category: storage;
+Category: networkinterface;
           scheme="http://schemas.ogf.org/occi/infrastructure#";
           class="kind";
-          location=http://example.com/storage/
+          location=http://example.com/link/networkinterface/
           [...]
-    (This is an storage kind)
+    (This is an storage link)
 
 Category: my_stuff;
           scheme="http://example.com/occi/my_stuff#";
@@ -118,12 +118,9 @@ The following namespace hierarchy is used in the examples:
 
 http://example.com/-/
 http://example.com/vms/user1/vm1
-http://example.com/vms/user1/vm2
 http://example.com/vms/user2/vm1
-http://example.com/disks/user1/disk1
-http://example.com/disks/user2/disk1
 http://example.com/compute/
-http://example.com/storage/
+http://example.com/link/networkinterface/
 http://example.com/my_stuff/
 \end{verbatim}
 
@@ -308,7 +305,7 @@ response        = categories
 
 \begin{verbatim}
 request     = mixin
-  mixin     = 1( category_rendering ))
+  mixin     = 1( category_rendering )
 
 response    = N/A
 \end{verbatim}
@@ -334,7 +331,7 @@ response    = N/A
 
 \begin{verbatim}
 request     = mixin
-  mixin     = 1( category_rendering ))
+  mixin     = 1( category_rendering )
 
 response    = N/A
 \end{verbatim}
@@ -379,6 +376,19 @@ instances. They MUST end with \emph{/} (For example
     request the server MUST only return the resource instances which
     have a matching attribute value.
 
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request      = filter
+  filter     = *( category_rendering )
+               *( attribute_rendering )
+
+response                    = resource_representations
+  resource_representations  = *( location ) 
+\end{verbatim}
+
   \item[Deletion of all resource instances below a path]
     \textbf{(Note: this is a potentially dangerous operation!)} The
     HTTP verb DELETE must be used to delete all resource instances
@@ -389,6 +399,12 @@ instances. They MUST end with \emph{/} (For example
  
 < HTTP/1.1 200 OK
 < [...]
+\end{verbatim}
+
+\begin{verbatim}
+request      = N/A
+
+response     = N/A
 \end{verbatim}
 
 \end{description}
@@ -428,6 +444,19 @@ an \emph{/}.
     request the server MUST only return the resource instances which
     have a matching attribute value.
 
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request      = filter
+  filter     = *( category_rendering )
+               *( attribute_rendering )
+
+response                    = resource_representations
+  resource_representations  = *( location ) 
+\end{verbatim}
+
   \item[Triggering Actions on All Instances of a \hl{Mixin} or
     \hl{Kind}] Actions can be triggered on all resource instances of
     the same \hl{Mixin} or \hl{Kind}. The HTTP POST verb MUST be used
@@ -446,6 +475,18 @@ an \emph{/}.
 < [...]
 \end{verbatim}
 
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request              = action_definition
+  action_definition  = 1( category_rendering )
+                       *( attribute_rendering )
+
+response     = N/A
+\end{verbatim}
+
   \item[Associate resource instances with a \hl{Mixin}] One or
     multiple resource instances can be associated with a \hl{Mixin}
     using the HTTP POST verb. The URIs which uniquely defined the
@@ -460,9 +501,20 @@ an \emph{/}.
 < [...]
 \end{verbatim}
 
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request      = 1*( resources )
+  resources  = *( location )
+
+response     = N/A
+\end{verbatim}
+
   \item[Full update of a \hl{Mixin} or \hl{Kind} collection] A
     collection consisting of \hl{Mixin}s or \hl{Kind}s can be updated
-    using the HTTP POST verb. All URIs which are part of the
+    using the HTTP PUT verb. All URIs which are part of the
     collection MUST be provided along with the request. The URIs which
     uniquely defined the resource instances MUST be provided in the
     request:
@@ -476,6 +528,17 @@ an \emph{/}.
 
 < HTTP/1.1 200 OK
 < [...]
+\end{verbatim}
+
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request      = 1*( resources )
+  resources  = *( location )
+
+response     = N/A
 \end{verbatim}
 
   \item[Unassociated resource instance(s) from a \hl{Mixin} or
@@ -493,6 +556,17 @@ an \emph{/}.
 
 < HTTP/1.1 200 OK
 < [...]
+\end{verbatim}
+
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request      = 1*( resources )
+  resources  = *( location )
+
+response     = N/A
 \end{verbatim}
 
 \end{description}
@@ -540,6 +614,19 @@ instance is uniquely identified by an URI (For example:
     implementation MUST return the Location of the newly created
     resource instance.
 
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request                    = 1*( resource_representation )
+  resource_representation  = 1*( category_rendering )
+                             *( link_rendering )
+                             *( attribute_rendering )
+
+response     = 1( location_header )
+\end{verbatim}
+
     HTTP PUT can also be used to create a resource instance. In this
     case the client ask the service provider to create a resource
     instance at a certain path in the name-space
@@ -560,6 +647,19 @@ instance is uniquely identified by an URI (For example:
  
 < HTTP/1.1 200 OK
 < [...]
+\end{verbatim}
+
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request                    = 1*( resource_representation )
+  resource_representation  = 1*( category_rendering )
+                             *( link_rendering )
+                             *( attribute_rendering )
+
+response     = N/A
 \end{verbatim}
 
     The OCCI implementation will return an OK code.
@@ -588,6 +688,19 @@ instance is uniquely identified by an URI (For example:
 < Link: [...]
 \end{verbatim}
 
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request          = N/A
+
+response                 = resource_representation
+resource_representation  = 1( category_rendering )
+                           *( link_rendering )
+                           *( attribute_rendering )
+\end{verbatim}
+
   \item[Partial update of a resource instance] Before updating a
     resource instance it is RECOMMENDED that the client first
     retrieves the resource instance. Updating is done using the HTTP
@@ -607,6 +720,19 @@ instance is uniquely identified by an URI (For example:
 < [...]
 \end{verbatim}
 
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request                    = 1*( resource_representation )
+  resource_representation  = 1*( category_rendering )
+                             *( link_rendering )
+                             *( attribute_rendering )
+
+response     = N/A
+\end{verbatim}
+
   \item[Full update of a resource instance] Before updating a resource
     instance it is RECOMMENDED that the client first retrieves the
     resource instance. Updating is done using the HTTP PUT verb. A
@@ -624,6 +750,19 @@ instance is uniquely identified by an URI (For example:
 < [...]
 \end{verbatim}
 
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request                    = 1*( resource_representation )
+  resource_representation  = *( category_rendering )
+                             *( link_rendering )
+                             *( attribute_rendering )
+
+response     = N/A
+\end{verbatim}
+
   \item[Deleting a resource instance] A resource instance can be
     deleted using the HTTP DELETE verb. No other information SHOULD be
     added to the request.\footnote{If the resource instances is a
@@ -636,6 +775,16 @@ instance is uniquely identified by an URI (For example:
 
 < HTTP/1.1 200 OK
 < [...]
+\end{verbatim}
+
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request      = N/A
+
+response     = N/A
 \end{verbatim}
 
   \item[Triggering an Action on a resource instance] To trigger an
@@ -654,6 +803,18 @@ instance is uniquely identified by an URI (For example:
 
 < HTTP/1.1 200 OK
 < [...]
+\end{verbatim}
+
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request              = action_definition
+  action_definition  = 1( category_rendering )
+                       *( attribute_rendering )
+
+response     = N/A
 \end{verbatim}
 
 \end{description}
@@ -730,19 +891,31 @@ in this section. They MUST be implemented by an OCCI implementation.
     specification).
 
 \begin{verbatim}
-> POST /compute/ HTTP/1.1
+> POST /link/networkinterface/ HTTP/1.1
 > [...]
 > 
 > Category: networkinterface; 
             scheme="http://schemas.ogf.org/occi/infrastructure#"; 
             class="kind"; 
-> X-OCCI-Attribute: source=http://example.com/vms/user1/vm1
-> X-OCCI-Attribute: target=http://example.com/network/123
+> X-OCCI-Attribute: occi.core.source=http://example.com/vms/user1/vm1
+> X-OCCI-Attribute: occi.core.target=http://example.com/network/123
 > [...]
  
 < HTTP/1.1 200 OK
 < [...]
 < Location: http://example.com/link/networkinterface/456
+\end{verbatim}
+
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request                    = 1*( resource_representation )
+  resource_representation  = *( category_rendering )
+                             *( attribute_rendering )
+
+response     = 1( location_header )
 \end{verbatim}
 
   \item[Retrieval of \hl{Link} resource instances] Retrieval of a
@@ -760,8 +933,20 @@ in this section. They MUST be implemented by an OCCI implementation.
 < X-OCCI-Attribute: occi.networkinterface.interface="eth0";
 < X-OCCI-Attribute: occi.networkinterface.mac="00:11:22:33:44:55";
 < X-OCCI-Attribute: occi.networkinterface.state="active";
-< X-OCCI-Attribute: source=/vms/user1/vm1
-< X-OCCI-Attribute: target=/network/123
+< X-OCCI-Attribute: occi.core.source=/vms/user1/vm1
+< X-OCCI-Attribute: occi.core.target=/network/123
+\end{verbatim}
+
+    The information which needs to be present in the request and
+    response are defined as following and MUST be implemented by an
+    OCCI implementation.
+
+\begin{verbatim}
+request                    = N/A
+
+response                   =  1*( resource_representation )
+  resource_representation  = *( category_rendering )
+                             *( attribute_rendering )
 \end{verbatim}
 
 \end{description}
