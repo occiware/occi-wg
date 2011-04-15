@@ -165,13 +165,15 @@ methods known as HTTP verbs. These HTTP verbs map loosely to the
 resource related operations of Create (POST), Retrieve (GET), Update
 (POST/PUT) and Delete (DELETE).
 
-Each resource instance within an OCCI system MUST be uniquely
-identified by an URI stored in the \emph{occi.core.id} attribute of the
+Each resource instance within an OCCI system MUST have a unique
+identifier stored in the \emph{occi.core.id} attribute of the
 \hl{Entity} type \cite{occi:core}.
+It is RECOMMENDED to use a Uniform Resource Name (URN) as the
+identifier stored in \emph{occi.core.id}.
 
-The structure of these URIs is opaque and the system should not assume
+The structure of these identifiers is opaque and the system should not assume
 a static, pre-determined scheme for their structure. For example
-\emph{Entity::id} can be \emph{http://example.com/vms/user1/vm1}.
+\emph{occi.core.id} could be \emph{urn:uuid:de7335a7-07e0-4487-9cbd-ed51be7f2ce4}.
 
 \subsection{Behavior of the HTTP Verbs}
 As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
