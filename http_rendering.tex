@@ -230,12 +230,13 @@ capabilities of the OCCI implementation he refers to. The following
 Query Interface operations are listed below.
 
 \begin{description}
-  \item[Retrieval of all registered \hl{Kind}s and \hl{Mixin}s] The
-    HTTP verb GET MUST be used to retrieve all \hl{Kind}s and
-    \hl{Mixin}s the service can manage. This allows the client to
-    discover the capabilities of the OCCI implementation. The result
-    MUST contain all information about the \hl{Kind}s and \hl{Mixin}s
-    (including Attributes and \hl{Actions} assigned).
+  \item[Retrieval of all registered \hl{Kind}s, \hl{Action}s and
+    \hl{Mixin}s] The HTTP verb GET MUST be used to retrieve all
+    \hl{Kind}s, \hl{Actions}s and \hl{Mixin}s the service can
+    manage. This allows the client to discover the capabilities of the
+    OCCI implementation. The result MUST contain all information about
+    the \hl{Kind}s, \hl{Action}s and \hl{Mixin}s (including Attributes
+    and \hl{Actions} assigned).
 
 \begin{verbatim}
 > GET /-/ HTTP/1.1
@@ -266,10 +267,8 @@ Query Interface operations are listed below.
     An OCCI implementation MUST support a filtering mechanism. If one
     or multiple \hl{Categories} are provided in the request the server
     MUST only return the complete rendering of the requested
-    \hl{Kind}s or \hl{Mixin}s.
-
-    The \emph{text/occi} rendering SHOULD be used to define the
-    filters in a request.
+    \hl{Kind}s or \hl{Mixin}s. The \emph{text/occi} rendering SHOULD
+    be used to define the filters in a request.
 
     The information which needs to be present in the request and
     response are defined as following and MUST be implemented by an
@@ -277,10 +276,10 @@ Query Interface operations are listed below.
 
 \begin{verbatim}
 request     = filter
-  filter    = *( Category )
+  filter    = *( Category CRLF )
 
 response        = categories
-  categories    = *( Category )
+  categories    = *( Category CRLF )
 \end{verbatim}
 
   \item[Adding a \hl{Mixin} Definition] To add a
@@ -314,7 +313,7 @@ response        = categories
 
 \begin{verbatim}
 request     = mixin
-  mixin     = 1( Category )
+  mixin     = 1( Category CRLF )
 
 response    = N/A
 \end{verbatim}
@@ -341,7 +340,7 @@ response    = N/A
 
 \begin{verbatim}
 request     = mixin
-  mixin     = 1( Category )
+  mixin     = 1( Category CRLF )
 
 response    = N/A
 \end{verbatim}
@@ -384,10 +383,8 @@ instances. They MUST end with \emph{/} (For example
 
     If an OCCI Entity attribute (X-OCCI-Attribute) is provided in the
     request the server MUST only return the resource instances which
-    have a matching attribute value.
-    
-    The \emph{text/occi} rendering SHOULD be used to define the
-    filters in a request.
+    have a matching attribute value. The \emph{text/occi} rendering
+    SHOULD be used to define the filters in a request.
 
     The information which needs to be present in the request and
     response are defined as following and MUST be implemented by an
@@ -395,11 +392,11 @@ instances. They MUST end with \emph{/} (For example
 
 \begin{verbatim}
 request      = filter
-  filter     = *( Category )
-               *( Attribute )
+  filter     = *( Category CRLF )
+               *( Attribute CRLF )
 
 response                    = resource_representations
-  resource_representations  = *( Location ) 
+  resource_representations  = *( Location CRLF ) 
 \end{verbatim}
 
   \item[Deletion of All resource instances Below a Path]
@@ -455,10 +452,8 @@ an \emph{/}.
 
     If an OCCI Entity attribute (X-OCCI-Attribute) is provided in the
     request the server MUST only return the resource instances which
-    have a matching attribute value.
-
-    The \emph{text/occi} rendering SHOULD be used to define the
-    filters in a request.
+    have a matching attribute value. The \emph{text/occi} rendering
+    SHOULD be used to define the filters in a request.
 
     The information which needs to be present in the request and
     response are defined as following and MUST be implemented by an
@@ -466,11 +461,11 @@ an \emph{/}.
 
 \begin{verbatim}
 request      = filter
-  filter     = *( Category )
-               *( Attribute )
+  filter     = *( Category CRLF )
+               *( Attribute CRLF )
 
 response                    = resource_representations
-  resource_representations  = *( Location ) 
+  resource_representations  = *( Location CRLF ) 
 \end{verbatim}
 
   \item[Triggering Actions on All Instances of a \hl{Mixin} or
@@ -497,8 +492,8 @@ response                    = resource_representations
 
 \begin{verbatim}
 request              = action_definition
-  action_definition  = 1( Category )
-                       *( Attribute )
+  action_definition  = 1( Category CRLF )
+                       *( Attribute CRLF )
 
 response     = N/A
 \end{verbatim}
@@ -523,7 +518,7 @@ response     = N/A
 
 \begin{verbatim}
 request      = 1*( resources )
-  resources  = *( Location )
+  resources  = *( Location CRLF )
 
 response     = N/A
 \end{verbatim}
@@ -552,7 +547,7 @@ response     = N/A
 
 \begin{verbatim}
 request      = 1*( resources )
-  resources  = *( Location )
+  resources  = *( Location CRLF )
 
 response     = N/A
 \end{verbatim}
@@ -579,7 +574,7 @@ response     = N/A
 
 \begin{verbatim}
 request      = 1*( resources )
-  resources  = *( Location )
+  resources  = *( Location CRLF )
 
 response     = N/A
 \end{verbatim}
@@ -631,25 +626,29 @@ instance is uniquely identified by an URI (For example:
 
     The information which needs to be present in the request and
     response are defined as following and MUST be implemented by an
-    OCCI implementation.
+    OCCI implementation.\footnote{Please note that the Location here
+      is defined in RFC2616 \cite{rfc2616} and different from the
+      Location definition used in this document (see section
+      \ref{sec:render_cats}).}
+
 
 \begin{verbatim}
 request                    = 1*( resource_representation )
-  resource_representation  = 1*( Category )
-                             *( Link )
-                             *( Attribute )
+  resource_representation  = 1*( Category CRLF )
+                             *( Link CRLF )
+                             *( Attribute CRLF )
 
-response     = 1( Location )
+response     = 1( Location CRLF )
 \end{verbatim}
 
     HTTP PUT can also be used to create a resource instance. In this
     case the client ask the service provider to create a Resource
-    instance at a unique path in the name-space
-    hierarchy.\footnote{If a Service Provider does not want the user
-      to define the path of a resource instance it can return a Bad
-      Request return code - See section
-      \ref{sec:return_codes}. Service Providers MUST ensure that the
-      paths of REST resources stays unique in their name-space.}
+    instance at a unique path in the name-space hierarchy.\footnote{If
+      a Service Provider does not want the user to define the path of
+      a resource instance it can return a Bad Request return code -
+      See section \ref{sec:return_codes}. Service Providers MUST
+      ensure that the paths of REST resources stays unique in their
+      name-space.}
 
 \begin{verbatim}
 > PUT /vms/user1/my_first_virtual_machine HTTP/1.1
@@ -670,8 +669,8 @@ response     = 1( Location )
 
 \begin{verbatim}
 request                    = 1*( resource_representation )
-  resource_representation  = 1*( Category )
-                             *( Attribute )
+  resource_representation  = 1*( Category CRLF )
+                             *( Attribute CRLF )
 
 response     = N/A
 \end{verbatim}
@@ -711,9 +710,9 @@ response     = N/A
 request          = N/A
 
 response                 = resource_representation
-resource_representation  = 1( Category )
-                           *( Link )
-                           *( Attribute )
+resource_representation  = 1( Category CRLF )
+                           *( Link CRLF )
+                           *( Attribute CRLF )
 \end{verbatim}
 
   \item[Partial Update of a resource instance] Before updating a
@@ -741,9 +740,9 @@ resource_representation  = 1( Category )
 
 \begin{verbatim}
 request                    = 1*( resource_representation )
-  resource_representation  = 1*( Category )
-                             *( Link )
-                             *( Attribute )
+  resource_representation  = 1*( Category CRLF )
+                             *( Link CRLF )
+                             *( Attribute CRLF )
 
 response     = N/A
 \end{verbatim}
@@ -771,8 +770,8 @@ response     = N/A
 
 \begin{verbatim}
 request                    = 1*( resource_representation )
-  resource_representation  = *( Category )
-                             *( Attribute )
+  resource_representation  = *( Category CRLF )
+                             *( Attribute CRLF )
 
 response     = N/A
 \end{verbatim}
@@ -825,8 +824,8 @@ response     = N/A
 
 \begin{verbatim}
 request              = action_definition
-  action_definition  = 1( Category )
-                       *( Attribute )
+  action_definition  = 1( Category CRLF )
+                       *( Attribute CRLF )
 
 response     = N/A
 \end{verbatim}
@@ -834,10 +833,11 @@ response     = N/A
 \end{description}
 
 \subsubsection{Handling \hl{Link}s resource instances}
-Resource instance of the type \hl{Link} and \hl{Resource} MUST be
-handled in the same way. Some exceptions on handling in the creation
-and handling of resource instance of the type \hl{Link} are described
-in this section. They MUST be implemented by an OCCI implementation.
+\textbf{Resource instance of the type \hl{Link} and \hl{Resource} MUST
+  be handled in the same way}. Some exceptions on handling in the
+creation and handling of resource instance of the type \hl{Link} are
+described in this section. They MUST be implemented by an OCCI
+implementation.
 
 \begin{description}
   \item[Inline Creation of a \hl{Link} Instance] When creating a
@@ -922,8 +922,8 @@ in this section. They MUST be implemented by an OCCI implementation.
 
 \begin{verbatim}
 request                    = 1*( resource_representation )
-  resource_representation  = *( Category )
-                             *( Attribute )
+  resource_representation  = *( Category CRLF )
+                             *( Attribute CRLF )
 
 response     = 1( Location )
 \end{verbatim}
@@ -955,8 +955,8 @@ response     = 1( Location )
 request                    = N/A
 
 response                   =  1*( resource_representation )
-  resource_representation  = *( Category )
-                             *( Attribute )
+  resource_representation  = *( Category CRLF )
+                             *( Attribute CRLF )
 \end{verbatim}
 
 \end{description}
