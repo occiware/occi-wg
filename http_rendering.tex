@@ -72,6 +72,31 @@ definition of a Protocol and API. The document is based upon
 previously gathered requirements and focuses on the scope of important
 capabilities required to support modern service offerings.
 
+\underline{Comments}
+
+AE: The relationship and definition of namespace, hierarchy and location must be dealt with.
+
+AE: A introductory section of filtering must be added.
+
+AE: HTTP error codes must be contextualised.
+
+AE: HTTP 200/201 - if 200 is specified then the resource representation (collection or instance) 
+must be returned. if 201 a HTTP Location header should be set. It is more efficient to use 200.
+
+AE: HTTP behaviour summary table: removing a resource instance (DELETE) from a kind 
+collection (e.g. /compute/) means its destruction. Same of a subset of the collection or indeed all.
+
+AE: It should be specified that batch operations should be atomic, all or nothing in their execution. 
+No partial executions. Make this a section under general http behaviours.
+
+AE: For updates, the notion of a full resource representation must be defined. Also the same for
+creation via PUT.
+
+AE: Note in general behaviours that it is valid for a 200 response to return no content. This is used
+when wanting to represent an empty collection.
+
+AE: where a non-supported content-type is supplied we say that the service should return 415. Is it better to use 406 Not acceptable?
+
 \newpage
 \tableofcontents
 \newpage
@@ -86,6 +111,7 @@ This document uses the Augmented Backus-Naur Form (ABNF) notation of
 RFC 2616 \cite{rfc2616}, and explicitly includes the following rules
 from it: quoted-string, token, SP (space), LOALPHA, DIGIT.
 
+\subsection{Specification Examples}
 All examples in this document use one of the following three HTTP
 category definitions. An example name-space hierarchy is also
 given. Syntax and Semantics is explained in the remaining sections of
@@ -105,8 +131,8 @@ Category: networkinterface;
           class="kind";
           location=http://example.com/link/networkinterface/
           [...]
-    (This is an storage link)
-
+    (This is an storage link)\mathbf{
+}
 Category: my_stuff;
           scheme="http://example.com/occi/my_stuff#";
           class="mixin";
@@ -134,6 +160,7 @@ components:
 scheme     authority       path        query   fragment
 \end{verbatim}
 
+\subsection{Specification Examples' Content-type}
 All examples in this document use the \emph{text/plain} HTTP
 Content-Type for posting information. To retrieve information the HTTP
 Accept header \emph{text/plain} is used.
@@ -146,8 +173,15 @@ The OCCI HTTP Rendering document specifies how the OCCI Core Model
 HTTP protocol \cite{rfc2616}. The document describes the general
 behavior for all interaction with an OCCI implementation over HTTP
 together with three content types to represent the data being
-transferred. The content types specified are \textit{text/plain},
-\textit{text/occi} and \textit{text/uri-list}. Other data formats such
+transferred. The content types specified are: 
+
+\begin{itemize}
+	\item \textit{text/plain},
+	\item \textit{text/occi} and 
+	\item \textit{text/uri-list}. 
+\end{itemize}
+
+More details are discussed in section \ref{sec:content_type}. Other data formats such
 as e.g.~OVF and JSON will be specified in complimentary documents.
 
 \subsection{Introduction}
@@ -179,19 +213,19 @@ a static, pre-determined scheme for their structure. For example
 As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
 foundation protocol,  resource instances are interacted with 
 through the four main HTTP verbs. OCCI service
-implementations MUST, at a minimum, support these verbs as shown in
+implementations MUST, at a minimum, support these verbs as shown in the summary
 table \ref{tbl:http_verbs}.
 
-\mytablefloat{\label{tbl:http_verbs}HTTP Verb Behavior (* = Supports filtering mechanisms)}{
+\mytablefloat{\label{tbl:http_verbs}HTTP Verb Behavior Summary (* = Supports filtering mechanisms)}{
 \begin{tabular}{p{0.8in} p{0.8in} p{0.8in} p{0.8in} p{0.8in} p{0.8in}}
 \toprule
 Path 								& GET 										& POST 												& POST (action - Query = ?action=\ldots) 			& PUT 									& DELETE \\
 \colrule
-resource instance (/vms/user1/vm1) 	& Retrieval of the resource instance 		& Partial update of the resource instance 			& Perform an action 								& Update (using the full representation) of the resource instance/Creation of a resource instance	& Deletion of the resource instance \\
+resource instance (/vms/user1/vm1) 	& Retrieval of the resource instance's representation 		& Partial update of the resource instance 			& Perform an action 								& Creation/Update of the resource instance, supplying the full representation of the resource instance	& Deletion of the resource instance \\
 \colrule
-\hl{Kind} collection (/compute/) 	& Retrieve a set of resource instances* 	& Create a new resource instance of this \hl{Kind}	& Performs actions on a set of resource instances 	& Not Defined		& Removal of a (set of) resource instance from collection \\
+\hl{Kind} collection (/compute/) 	& Retrieve a collection of resource instances* 	& Create a new resource instance of this \hl{Kind}	& Performs actions on a collection of resource instances 	& Not Defined		& Removal of a single, a subset of or all the resource instances from the kind collection \\
 \colrule
-\hl{Mixin} collection (/my\_stuff/) 	& Retrieve a set of resource instances* 	& Adds a resource instance to this collection 		& Performs actions on a set of resource instances 	& Update (using the full representation) of the collection (Includes removal and addition of resources) 		& Removal of a (set of) resource instance from collection \\
+\hl{Mixin} collection (/my\_stuff/) 	& Retrieve a collection of resource instances* 	& Adds a resource instance to this collection 		& Performs actions on a collection of resource instances 	& Update of the collection supplying the full representation of it. Includes removal and addition of resources. 		& Removal of a single, a subset of or all the resource instances from the mixin collection \\
 \colrule
 query interface (/-/) 				& Retrieve capabilities* 					& Add a user-defined \hl{Mixin} 					& Not Defined 										& Not Defined 							& Removal of a user-defined \hl{Mixin} \\
 \botrule
@@ -205,6 +239,9 @@ defined are out of scope for this specification and MAY be implemented
 . This is the minimal set to ensure interoperability.
 
 \subsubsection{Resource instance Name-space Hierarchy and Location}
+
+AE: Define each and their relationship.
+
 The name-space and the hierarchy are free definable by the Service
 Provider. The OCCI implementation MUST implement the location path
 feature, which is required by the OCCI Query Interface. Location paths
@@ -216,7 +253,10 @@ instantiated (i.e. provisioned). The location paths MUST end with a
 \emph{'/'}. These paths are discoverable by the client through the
 Query interface \ref{sec:query}.
 
-\subsection{Various Operations and their Prerequisites and Behaviors}
+\subsection{Various Operations and their Prerequisites and Behaviours}
+\label{sec:behaviours}
+For the expected responses to all the behaviours specified in the sections below,
+please refer to the table in section \ref{sec:return_codes}.
 
 \subsubsection{Handling the Query Interface}
 \label{sec:query}
@@ -304,7 +344,7 @@ response        = categories
 
     The service might reject this request if it does not allow
     user-defined \hl{Mixin}s to be created. Also on name collisions of
-    the defined location path the service provider MAY reject this
+    the specified location, scheme, term or rel value the service provider MAY reject this
     operation.
 
     The information which needs to be present in the request and
@@ -337,6 +377,12 @@ response    = N/A
     The information which needs to be present in the request and
     response are defined as following and MUST be implemented by an
     OCCI implementation.
+    
+    If a client attempts to remove a provider-defined mixin category, the implementation
+    MUST respond with a HTTP error code of 403, Forbidden.
+    
+    When a user-defined Mixin is removed all associations with resource instances
+    must be removed by the implementation.
 
 \begin{verbatim}
 request     = mixin
@@ -354,6 +400,10 @@ response    = N/A
 %%
 
 \subsubsection{Operation on Paths in the Name-space}
+
+AE: Add example that retrieves a collection as well as the example below
+retrieving instances.
+
 The following operations are defined when operating on paths in the
 name-space hierarchy which are not location paths nor Resource
 instances. They MUST end with \emph{/} (For example
@@ -833,7 +883,7 @@ response     = N/A
 \end{description}
 
 \subsubsection{Handling \hl{Link}s resource instances}
-\textbf{Resource instance of the type \hl{Link} and \hl{Resource} MUST
+\textbf{Resource instances of the type \hl{Link} and \hl{Resource} MUST have their behaviours
   be handled in the same way}. Some exceptions on handling in the
 creation and handling of resource instance of the type \hl{Link} are
 described in this section. They MUST be implemented by an OCCI
@@ -1056,7 +1106,7 @@ of attribute properties is as follows:
   \item If no attribute properties are defined the attribute is
     mutable and non-required, i.e. multiplicity is 0..x.
   \item If the ``{\tt immutable}'' property is set the attribute is
-    immutable.
+    immutable (not modifiable by the client).
   \item If the ``{\tt required}'' property is set the attribute has a
     multiplicity of 1..x, i.e.~it MUST be specified by the client.
 \end{itemize}
@@ -1234,6 +1284,7 @@ The responses from an OCCI implementation MAY include additional
 headers like those for Caching purposes like E-Tags.
 
 \subsubsection{Asynchronous Operations}
+\label{sec:async_ops}
 OCCI implementations MAY implement a way to deal with asynchronous
 calls. Upon long-running operations the OCCI implementation MAY return
 a temporary resource (e.g. a task resource) using the HTTP 'Location'
@@ -1298,7 +1349,7 @@ The server MUST return the proper Content-type header. A client MUST
 provide the proper Content-Type when data is send to the OCCI
 implementation - the information MUST be parsed accordingly.
 
-When the Client request a Content-Type that will result in an
+When the Client requests a Content-Type that will result in an
 incomplete or faulty rendering the Service MUST return the unsupported
 media type , 415, HTTP code.
 
@@ -1406,26 +1457,28 @@ as defined in section \ref{sec:query} on the Query Interface.
 \subsubsection{Return Codes}
 \label{sec:return_codes}
 At any point the service provider MAY return any of the following HTTP
-Return Codes in table \ref{tbl:http_codes}
+Return Codes in table. These codes are for behaviours in section \ref{sec:behaviours} where appropriate \ref{tbl:http_codes}
 
 \mytablefloat{\label{tbl:http_codes}HTTP Return Codes}{
 \begin{tabular}{l|l|p{3in}}
 \toprule
 Code & Description & Notes \\
 \colrule
-200 & OK & \\
-202 & Accepted & Used for asynchronous non-blocking calls. \\
-400 & Bad Request & For example on parsing errors or missing information \\
-401 & Unauthorized & \\
-403 & Forbidden & \\
-405 & Method Not Allowed & \\
-406 & Bad Request & \\
-409 & Conflict & \\
-410 & Gone & \\
-415 & Unsupported Media Type & \\
-500 & Internal Server Error & \\
-501 & Not Implemented & \\
-503 & Service Unavailable & \\
+200 & OK & Indicates that the request was successful. The response MUST contain the created resource instance's representation.\\
+201 & OK & Indicates that the request was successful. The response MUST contain a HTTP Location header to the newly created resource instance.\\
+202 & Accepted & Used for asynchronous non-blocking calls. See section \ref{sec:async_ops}.\\
+400 & Bad Request & Used to signal parsing errors or missing information (e.g. an attribute that is required is not supplied in the request). This applies also to filters.  \\
+401 & Unauthorized & The client does not have the required permissions/credentials.\\
+403 & Forbidden & Used to signal that a particular mixin cannot be applied to a resource instance of a particular Kind. Used to signal that an attempt was made to modify an attribute that was marked as immutable.\\
+404 & Not Found & Used to signal that the request had information (e.g. a kind, mixin, action, attribute, location) that was unknown to the service and so not found.\\
+405 & Method Not Allowed & The service does not allow the client to issue the HTTP method against the requested path/location\\
+406 & Not Acceptable & \\
+409 & Conflict & A request contains content (e.g. mixin, kind, action) that results in an internal service, non-unique result (e.g. two types of start actions are found for Compute). The client MUST resolve the conflict by re-trying with specific Category information in the request.\\
+410 & Gone & A client attempts to retrieve a resource instance that no longer exists (i.e. it was deleted).\\
+415 & Unsupported Media Type & See section \ref{sec:content_type}\\
+500 & Internal Server Error & The state before the request should be maintained in such an error condition. The implementation MUST roll-back any partial changes made during the erroneous execution.\\
+501 & Not Implemented & If an implementation chooses not to implement a particular OCCI feature, it MUST signal the lack of that feature with this code. This implicitly points to a non-compliant OCCI implementation.\\
+503 & Service Unavailable & If the OCCI service is taken down for maintenance, this error code should be reported from the root of the OCCI API.\\
 \botrule
 \end{tabular}}
 
