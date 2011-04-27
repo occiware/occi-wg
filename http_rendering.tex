@@ -93,7 +93,8 @@ AE: For updates, the notion of a full resource representation must be defined. A
 creation via PUT.
 
 AE: Note in general behaviours that it is valid for a 200 response to return no content. This is used
-when wanting to represent an empty collection.
+when wanting to represent an empty collection. A 404 is raised when the requested resource 
+(instance or collection [e.g. location]) does not exist.
 
 AE: where a non-supported content-type is supplied we say that the service should return 415. Is it better to use 406 Not acceptable?
 
