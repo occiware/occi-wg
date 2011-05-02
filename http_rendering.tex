@@ -114,7 +114,7 @@ from it: quoted-string, token, SP (space), LOALPHA, DIGIT.
 
 \subsection{Specification Examples}
 All examples in this document use one of the following three HTTP
-category definitions. An example name-space hierarchy is also
+category definitions. An example URL name-space hierarchy is also
 given. Syntax and Semantics is explained in the remaining sections of
 the document. These Category examples do not strive to be complete but
 to show the features OCCI has:
@@ -141,9 +141,10 @@ Category: my_stuff;
           [...]
     (This is a mixin of user1)
 \end{verbatim}
-The following namespace hierarchy is used in the examples:
+The following URL name-space hierarchy is used in the examples:
 \begin{verbatim}
 http://example.com/-/
+http://example.com/vms/vm3
 http://example.com/vms/user1/vm1
 http://example.com/vms/user2/vm1
 http://example.com/compute/
@@ -182,8 +183,9 @@ transferred. The content types specified are:
 	\item \textit{text/uri-list}. 
 \end{itemize}
 
-More details are discussed in section \ref{sec:content_type}. Other data formats such
-as e.g.~OVF and JSON will be specified in complimentary documents.
+More details are discussed in section \ref{sec:content_type}. Other
+data formats such as e.g.~OVF and JSON will be specified in
+complimentary documents.
 
 \subsection{Introduction}
 The OCCI HTTP Rendering uses many of the features the HTTP and
@@ -206,16 +208,17 @@ identifier stored in the \emph{occi.core.id} attribute of the
 It is RECOMMENDED to use a Uniform Resource Name (URN) as the
 identifier stored in \emph{occi.core.id}.
 
-The structure of these identifiers is opaque and the system should not assume
-a static, pre-determined scheme for their structure. For example
-\emph{occi.core.id} could be \emph{urn:uuid:de7335a7-07e0-4487-9cbd-ed51be7f2ce4}.
+The structure of these identifiers is opaque and the system should not
+assume a static, pre-determined scheme for their structure. For
+example \emph{occi.core.id} could be
+\emph{urn:uuid:de7335a7-07e0-4487-9cbd-ed51be7f2ce4}.
 
 \subsection{Behavior of the HTTP Verbs}
 As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
-foundation protocol,  resource instances are interacted with 
-through the four main HTTP verbs. OCCI service
-implementations MUST, at a minimum, support these verbs as shown in the summary
-table \ref{tbl:http_verbs}.
+foundation protocol, resource instances are interacted with through
+the four main HTTP verbs. OCCI service implementations MUST, at a
+minimum, support these verbs as shown in the summary table
+\ref{tbl:http_verbs}.
 
 \mytablefloat{\label{tbl:http_verbs}HTTP Verb Behavior Summary (* = Supports filtering mechanisms)}{
 \begin{tabular}{p{0.8in} p{0.8in} p{0.8in} p{0.8in} p{0.8in} p{0.8in}}
@@ -239,25 +242,32 @@ be implemented by OCCI implementations. Operations which are not
 defined are out of scope for this specification and MAY be implemented
 . This is the minimal set to ensure interoperability.
 
-\subsubsection{Resource instance Name-space Hierarchy and Location}
+\subsubsection{Resource instance URL Name-space Hierarchy and Location}
 
-AE: Define each and their relationship.
+The URL name-space (in this document referred to as name-space) and
+the URL hierarchy (in this document referred to as hierarchy) are free
+definable by the Service Provider. The OCCI implementation MUST
+implement the location path feature, which is required by the OCCI
+Query Interface. Location paths tell the client where all resource
+instances of one \hl{Kind} or \hl{Mixin} can be found regardless of
+the hierarchy the service provider defines. Location paths are defined
+through the HTTP Category rendering and MUST be present for all HTTP
+Categories that can be instantiated (i.e. provisioned). The location
+paths MUST end with a \emph{'/'}. These paths are discoverable by the
+client through the Query interface \ref{sec:query}.
 
-The name-space and the hierarchy are free definable by the Service
-Provider. The OCCI implementation MUST implement the location path
-feature, which is required by the OCCI Query Interface. Location paths
-tell the client where all resource instances of one \hl{Kind} or
-\hl{Mixin} can be found regardless of the hierarchy the service
-provider defines. Location paths are defined through the HTTP Category
-rendering and MUST be present for all HTTP Categories that can be
-instantiated (i.e. provisioned). The location paths MUST end with a
-\emph{'/'}. These paths are discoverable by the client through the
-Query interface \ref{sec:query}.
-
-\subsection{Various Operations and their Prerequisites and Behaviours}
+\subsection{Various Operations and their Prerequisites and Behaviors}
 \label{sec:behaviours}
-For the expected responses to all the behaviours specified in the sections below,
-please refer to the table in section \ref{sec:return_codes}.
+For the expected responses to all the behaviors specified in the
+sections below, please refer to the table in section
+\ref{sec:return_codes}. This part of the OCCI specification introduces
+a filter mechanism. Filtering means that the OCCI implementation MUST
+only return resources which match the filtering patterns defined in
+the request. This allows clients to be more specific in their request
+and limit the amount of data transferred. Clients CAN currently only
+filter on \hl{Category} and resource instance attributes. For
+\hl{Category} the client MUST supply a valid Category rendering. For
+attributes the client MUST supply and attribute with a specific value.
 
 \subsubsection{Handling the Query Interface}
 \label{sec:query}
@@ -345,8 +355,8 @@ response        = categories
 
     The service might reject this request if it does not allow
     user-defined \hl{Mixin}s to be created. Also on name collisions of
-    the specified location, scheme, term or rel value the service provider MAY reject this
-    operation.
+    the specified location, scheme, term or rel value the service
+    provider MAY reject this operation.
 
     The information which needs to be present in the request and
     response are defined as following and MUST be implemented by an
@@ -394,16 +404,7 @@ response    = N/A
 
 \end{description}
 
-%%
-%
-% TM: I'm here...all on top should be fine...Text following needs another pass after public comment...
-%
-%%
-
 \subsubsection{Operation on Paths in the Name-space}
-
-AE: Add example that retrieves a collection as well as the example below
-retrieving instances.
 
 The following operations are defined when operating on paths in the
 name-space hierarchy which are not location paths nor Resource
@@ -411,6 +412,27 @@ instances. They MUST end with \emph{/} (For example
 \emph{http://example.com/vms/user1/}).
 
 \begin{description}
+
+   \item[Retrieving the state of name-space hierarchy] The HTTP verb
+     GET MUST be used to retrieve the current state of the name-space
+     hierarchy. It CAN include URI of resource instances, Paths in the
+     name-space as well as URLs for \hl{Kind} and \hl{Mixin}
+     collections.
+
+   It is RECOMMENDED to use the \emph{text/uri-list} Accept HTTP
+   header for this request.
+
+\begin{verbatim}
+> GET /vms/ HTTP/1.1 [...]
+ 
+< HTTP/1.1 200 OK
+< [...]
+< 
+http://example.com/vms/vm3
+http://example.com/vms/user1/
+http://example.com/vms/user2/
+\end{verbatim}
+
   \item[Retrieving All resource instances Below a Path] The HTTP verb
     GET MUST be used to retrieve all resource instances. The service
     provider MUST return a Listing containing all resource instances
@@ -471,9 +493,16 @@ response     = N/A
 \end{description}
 
 \subsubsection{Operations on \hl{Mixin}s or \hl{Kind}s}
+\label{sec:mixin_and_kind_operations}
 All of the following operations MUST only be be performed on location
 paths provided by \hl{Kind}s and \hl{Mixin}s. The path MUST end with
 an \emph{/}.
+
+In contrast to the last section it is valid for the operations defined
+here to return a 200 HTTP response code with no content. This is used
+when wanting to represent an empty collection of \hl{Mixin}s or
+\hl{Kind}s.
+
 
 \begin{description}
   \item[Retrieving All resource instances Belonging to \hl{Mixin} or
@@ -665,7 +694,7 @@ instance is uniquely identified by an URI (For example:
 > X-OCCI-Attribute: occi.compute.hostname=foobar
 > [...]
  
-< HTTP/1.1 200 OK
+< HTTP/1.1 201 OK
 < [...]
 < Location: http://example.com/vms/user1/vm1
 \end{verbatim}
@@ -677,11 +706,7 @@ instance is uniquely identified by an URI (For example:
 
     The information which needs to be present in the request and
     response are defined as following and MUST be implemented by an
-    OCCI implementation.\footnote{Please note that the Location here
-      is defined in RFC2616 \cite{rfc2616} and different from the
-      Location definition used in this document (see section
-      \ref{sec:render_cats}).}
-
+    OCCI implementation.
 
 \begin{verbatim}
 request                    = 1*( resource_representation )
@@ -689,7 +714,8 @@ request                    = 1*( resource_representation )
                              *( Link CRLF )
                              *( Attribute CRLF )
 
-response     = 1( Location CRLF )
+response     = 1( HTTP-Location CRLF ) 
+               | 1(resource_representation)
 \end{verbatim}
 
     HTTP PUT can also be used to create a resource instance. In this
@@ -723,10 +749,17 @@ request                    = 1*( resource_representation )
   resource_representation  = 1*( Category CRLF )
                              *( Attribute CRLF )
 
-response     = N/A
+response    = 1( HTTP-Location CRLF ) 
+              | 1(resource_representation)
 \end{verbatim}
 
-    The OCCI implementation will return an OK code.
+    The OCCI implementation CAN either return 201 or 200 HTTP return
+    codes. If the OCCI implementation returns the 200 HTTP response
+    code the full representation (as described in 'Retrieving a
+    resource instance' in this section) MUST be
+    returned. \textbf{Please note} that the HTTP Location header used
+    when the service returns the 201 HTTP response code is defined in
+    RFC2616 \cite{rfc2616}.
   
     While creating a resource instance the resource instance is added
     to the collection defined by the \hl{Kind}.
@@ -800,9 +833,12 @@ response     = N/A
 
   \item[Full Update of a resource instance] Before updating a Resource
     instance it is RECOMMENDED that the client first retrieves the
-    resource instance. Updating is done using the HTTP PUT verb. A
-    complete representation of the resource instances MUST be provided
-    along with the request.
+    resource instance. Updating is done using the HTTP PUT verb. The
+    client must PUT the full representation, along with modifications,
+    of the resource instance that the service supplied in the most
+    recent GET. Missing information will result in the deletion of the
+    same.
+    
 
 \begin{verbatim}
 > PUT /vms/user1/vm1 HTTP/1.1
@@ -884,11 +920,11 @@ response     = N/A
 \end{description}
 
 \subsubsection{Handling \hl{Link}s resource instances}
-\textbf{Resource instances of the type \hl{Link} and \hl{Resource} MUST have their behaviours
-  be handled in the same way}. Some exceptions on handling in the
-creation and handling of resource instance of the type \hl{Link} are
-described in this section. They MUST be implemented by an OCCI
-implementation.
+\textbf{Resource instances of the type \hl{Link} and \hl{Resource}
+  MUST have their behaviors be handled in the same way}. Some
+exceptions on handling in the creation and handling of resource
+instance of the type \hl{Link} are described in this section. They
+MUST be implemented by an OCCI implementation.
 
 \begin{description}
   \item[Inline Creation of a \hl{Link} Instance] When creating a
@@ -1015,9 +1051,9 @@ response                   =  1*( resource_representation )
 \subsection{Syntax and Semantics of the Rendering}
 \label{sec:syntax}
 All data transferred using the \textit{text/occi} and
-\textit{text/plain} content types is structured text. These rendering structures 
-are compliant with and follow the rules of HTTP headers \cite{rfc2616}. 
-Four specific rendering structures are used:
+\textit{text/plain} content types is structured text. These rendering
+structures are compliant with and follow the rules of HTTP headers
+\cite{rfc2616}.  Four specific rendering structures are used:
 
 \begin{itemize}
   \item Category
@@ -1277,7 +1313,7 @@ does it require that client to service communications are secured. It
 does recommend that an authentication mechanism be used and that where
 appropriate, communications are encrypted using HTTP over TLS. The
 authentication mechanisms that MAY be used with OCCI are those that
-can be used with HTTP and TLS. For further discussion see Section 
+can be used with HTTP and TLS. For further discussion see Section
 \ref{sec:sec_consid}.
 
 \subsubsection{Additional Headers (Caching Headers)}
@@ -1294,6 +1330,11 @@ that resource until the operation finishes. Upon completion of the
 operation this temporary result will redirect to the resulting REST
 resource using the HTTP 'Location' header and return the HTTP 301
 return code signaling the completion.
+
+\subsubsection{Batch operations}
+Batch operations, like the ones in described in section
+\ref{sec:mixin_and_kind_operations}, are atomic. All parts of the
+request MUST be processed - no partial execution is allowed.
 
 \subsubsection{Versioning}
 Information about what version of OCCI is supported by a OCCI
@@ -1351,8 +1392,8 @@ provide the proper Content-Type when data is send to the OCCI
 implementation - the information MUST be parsed accordingly.
 
 When the Client requests a Content-Type that will result in an
-incomplete or faulty rendering the Service MUST return the unsupported
-media type , 415, HTTP code.
+incomplete or faulty rendering the Service MUST return the 406 'Not
+acceptable' HTTP code.
 
 The following examples demonstrate the behavior of an HTTP GET
 operations on the resource instance \emph{} using two different HTTP
@@ -1440,7 +1481,7 @@ Kinds and Categories the Content-types \textit{text/occi},
 \textit{text/uri-list} in the Accept header, while not requesting for
 a Listing a Bad Request MUST be returned. Otherwise a list of
 resources MUST be rendered in \emph{text/uri-list} format, which can
-be used for listing resource in collections or the namespace of the
+be used for listing resource in collections or the name-space of the
 OCCI implementation.
 
 \subsubsection{RFC5785 Compliance}
@@ -1458,7 +1499,8 @@ as defined in section \ref{sec:query} on the Query Interface.
 \subsubsection{Return Codes}
 \label{sec:return_codes}
 At any point the service provider MAY return any of the following HTTP
-Return Codes in table. These codes are for behaviours in section \ref{sec:behaviours} where appropriate \ref{tbl:http_codes}
+Return Codes in table. These codes are for behaviors in section
+\ref{sec:behaviours} where appropriate \ref{tbl:http_codes}
 
 \mytablefloat{\label{tbl:http_codes}HTTP Return Codes}{
 \begin{tabular}{l|l|p{3in}}
@@ -1482,12 +1524,6 @@ Code & Description & Notes \\
 503 & Service Unavailable & If the OCCI service is taken down for maintenance, this error code should be reported from the root of the OCCI API.\\
 \botrule
 \end{tabular}}
-
-%%
-%
-% TM: all text after this is also Ok after public comment.
-%
-%%
 
 \subsection{More Complete Examples}
 Since most examples are not complete due to space limitations this
@@ -1551,7 +1587,7 @@ Category, Link, X-OCCI-Attribute and X-OCCI-Location. It is
 recommended that implementers use this grammar as a means to generate
 OCCI compliant parsers.
 
-To verify an implementations runtime behaviour, the OCCI Compliance
+To verify an implementations run-time behavior, the OCCI Compliance
 Testing Tool is provided
 \footnote{http://forge.ogf.org/sf/scm/do/listRepositories/projects.occi-wg/scm}.
 This tool uses the OCCI ANTLR generated parser along with various HTTP
@@ -1581,11 +1617,11 @@ above MUST be used.
 Protection against potential Denial-of-Service scenarios are out of
 scope of this document; the OCCI HTTP Rendering specifications assumes
 cooperative clients that SHOULD use selection and filtering as
-provided by the Category mechanism whereever possible. Additional
+provided by the Category mechanism wherever possible. Additional
 profiles to this document, however, MAY specifically address such
 scenarios; in that case, best practices from the HTTP ecosystem and
 appropriate mechanisms as part of the HTTP protocol specification
-SHOULD be prefered.
+SHOULD be preferred.
 
 As long as specific extensions of the OCCI Core and Model
 specification do not impose additional security requirements than the
