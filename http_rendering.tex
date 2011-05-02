@@ -115,7 +115,7 @@ from it: quoted-string, token, SP (space), LOALPHA, DIGIT.
 \subsection{Specification Examples}
 All examples in this document use one of the following three HTTP
 category definitions. An example URL name-space hierarchy is also
-given. Syntax and Semantics is explained in the remaining sections of
+given. Syntax and Semantics are explained in the remaining sections of
 the document. These Category examples do not strive to be complete but
 to show the features OCCI has:
 
@@ -125,15 +125,15 @@ Category: compute;
           class="kind";
           location=http://example.com/compute/
           [...]
-    (This is an compute kind)
+    (This is a compute kind)
 
 Category: networkinterface;
           scheme="http://schemas.ogf.org/occi/infrastructure#";
           class="kind";
           location=http://example.com/link/networkinterface/
           [...]
-    (This is an storage link)\mathbf{
-}
+    (This is a storage link)
+
 Category: my_stuff;
           scheme="http://example.com/occi/my_stuff#";
           class="mixin";
@@ -239,13 +239,13 @@ query interface (/-/) 				& Retrieve capabilities* 					& Add a user-defined \hl
 \subsection{A RESTful Rendering of OCCI}
 The following sections and paragraphs describe how the OCCI model MUST
 be implemented by OCCI implementations. Operations which are not
-defined are out of scope for this specification and MAY be implemented
-. This is the minimal set to ensure interoperability.
+defined are out of scope for this specification and MAY be implemented. 
+This is the minimal set to ensure interoperability.
 
 \subsubsection{Resource instance URL Name-space Hierarchy and Location}
 
 The URL name-space (in this document referred to as name-space) and
-the URL hierarchy (in this document referred to as hierarchy) are free
+the URL hierarchy (in this document referred to as hierarchy) are freely
 definable by the Service Provider. The OCCI implementation MUST
 implement the location path feature, which is required by the OCCI
 Query Interface. Location paths tell the client where all resource
@@ -259,7 +259,7 @@ client through the Query interface \ref{sec:query}.
 \subsection{Various Operations and their Prerequisites and Behaviors}
 \label{sec:behaviours}
 For the expected responses to all the behaviors specified in the
-sections below, please refer to the table in section
+sections below, please refer to the HTTP return codes table in section
 \ref{sec:return_codes}. This part of the OCCI specification introduces
 a filter mechanism. Filtering means that the OCCI implementation MUST
 only return resources which match the filtering patterns defined in
@@ -281,9 +281,9 @@ capabilities of the OCCI implementation he refers to. The following
 Query Interface operations are listed below.
 
 \begin{description}
-  \item[Retrieval of all registered \hl{Kind}s, \hl{Action}s and
+  \item[Retrieval of all Registered \hl{Kind}s, \hl{Action}s and
     \hl{Mixin}s] The HTTP verb GET MUST be used to retrieve all
-    \hl{Kind}s, \hl{Actions}s and \hl{Mixin}s the service can
+    \hl{Kind}s, \hl{Action}s and \hl{Mixin}s the service can
     manage. This allows the client to discover the capabilities of the
     OCCI implementation. The result MUST contain all information about
     the \hl{Kind}s, \hl{Action}s and \hl{Mixin}s (including Attributes
@@ -413,7 +413,7 @@ instances. They MUST end with \emph{/} (For example
 
 \begin{description}
 
-   \item[Retrieving the state of name-space hierarchy] The HTTP verb
+   \item[Retrieving the State of Name-space Hierarchy] The HTTP verb
      GET MUST be used to retrieve the current state of the name-space
      hierarchy. It CAN include URI of resource instances, Paths in the
      name-space as well as URLs for \hl{Kind} and \hl{Mixin}
@@ -435,7 +435,7 @@ http://example.com/vms/user2/
 
   \item[Retrieving All resource instances Below a Path] The HTTP verb
     GET MUST be used to retrieve all resource instances. The service
-    provider MUST return a Listing containing all resource instances
+    provider MUST return a listing containing all resource instances
     which are children of the provided URI in the name-space
     hierarchy:
 
@@ -506,7 +506,7 @@ when wanting to represent an empty collection of \hl{Mixin}s or
 
 \begin{description}
   \item[Retrieving All resource instances Belonging to \hl{Mixin} or
-    \hl{Kind}] The HTTP verb GET MUST be used to retrieve all Resource
+    \hl{Kind}] The HTTP verb GET MUST be used to retrieve all resource
     instances. The service provider MUST return a listing containing
     all resource instances which belong to the requested \hl{Mixin} or
     \hl{Kind}:
@@ -526,7 +526,7 @@ when wanting to represent an empty collection of \hl{Mixin}s or
     An OCCI implementation MUST support a filtering mechanism. If a
     HTTP Category is provided in the request the server MUST only
     return the resource instances belonging to the provided \hl{Kind}
-    or \hl{Mixin}. The provided HTTP category definition SHOULD be
+    or \hl{Mixin}. The provided HTTP Category definition SHOULD be
     different from the \hl{Kind} or \hl{Mixin} definition which
     defined the location path used in the request.
 
@@ -580,7 +580,7 @@ response     = N/A
 
   \item[Associate resource instances With a \hl{Mixin}] One or
     multiple resource instances can be associated with a \hl{Mixin}
-    using the HTTP POST verb. The URIs which uniquely defined the
+    using the HTTP POST verb. The URIs which uniquely define the
     resource instance MUST be provided in the request:
 
 \begin{verbatim}
@@ -634,7 +634,7 @@ response     = N/A
 
   \item[Dissociate resource instance(s) From a \hl{Mixin}] One or
     multiple resource instances can be removed from a \hl{Mixin} using
-    the HTTP DELETE verb. The URIs which uniquely defined the resource
+    the HTTP DELETE verb. The URIs which uniquely define the resource
     instance MUST be provided in the request:
 
 \begin{verbatim}
@@ -671,18 +671,18 @@ instance is uniquely identified by an URI (For example:
   in the name-space hierarchy}
 
 \begin{description}
-  \item[Creating a resource instance] A request to create a Resource
+  \item[Creating a resource instance] A request to create a resource
     instance MUST contain one and only one HTTP category rendering
     which refers to a specific \hl{Kind} instance. This \hl{Kind}
     MUST define the type of the resource instance.  A request 
-    MAY also contain one or more HTTP category
+    MAY also contain one or more HTTP Category
     renderings which refer to different \hl{Mixin} instances. Any such
     \hl{Mixin} instances MUST be applicable (if allowed) to the
     resource instance.  A client MAY be REQUIRED to provide additional
     information in the request based on whether the Kind indicates 
     \emph{required} attributes (see \ref{sec:render_cats}) or not.
     
-    Two ways can be used to create a new resource instance - HTTP POST
+    A resource instance can be created using two ways - HTTP POST
     or PUT:
 
 \begin{verbatim}
