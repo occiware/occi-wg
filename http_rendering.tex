@@ -719,7 +719,7 @@ response     = 1( HTTP-Location CRLF )
 \end{verbatim}
 
     HTTP PUT can also be used to create a resource instance. In this
-    case the client ask the service provider to create a Resource
+    case the client asks the service provider to create a Resource
     instance at a unique path in the name-space hierarchy.\footnote{If
       a Service Provider does not want the user to define the path of
       a resource instance it can return a Bad Request return code -
@@ -761,15 +761,16 @@ response    = 1( HTTP-Location CRLF )
     when the service returns the 201 HTTP response code is defined in
     RFC2616 \cite{rfc2616}.
   
-    While creating a resource instance the resource instance is added
+    A created resource instance MUST be added
     to the collection defined by the \hl{Kind}.
 
   \item[Retrieving a resource instance] The HTTP GET verb is used for
-    retrieval. It MUST return at least the HTTP category which defines
+    representation retrieval. It MUST return at least the HTTP Category which defines
     the \hl{Kind} of the resource instance and associated
     attributes. HTTP Links pointing to related resource instances,
     other URI or Actions MUST be included if present. Only Actions
-    currently applicable SHOULD be rendered using HTTP Links. The
+    currently applicable \footnote{For example, it makes little sense to render the start action of a
+    resource instance if it is already running.} SHOULD be rendered using HTTP Links. The
     Attributes of the Resource instance MUST be exposed to the client
     if available.
 
@@ -801,7 +802,7 @@ resource_representation  = 1( Category CRLF )
 
   \item[Partial Update of a resource instance] Before updating a
     resource instance it is RECOMMENDED that the client first
-    retrieves the resource instance. Updating is done using the HTTP
+    retrieves the resource instance. Partial updating is done using the HTTP
     POST verb. Only the information (HTTP Links, HTTP
     X-OCCI-Attributes or HTTP categories), which are updated MUST be
     provided along with the request.\footnote{Changing the type of the
@@ -831,13 +832,13 @@ request                    = 1*( resource_representation )
 response     = N/A
 \end{verbatim}
 
-  \item[Full Update of a resource instance] Before updating a Resource
+  \item[Full Update of a resource instance] Before updating a resource
     instance it is RECOMMENDED that the client first retrieves the
-    resource instance. Updating is done using the HTTP PUT verb. The
+    resource instance. Full updating is done using the HTTP PUT verb. The
     client must PUT the full representation, along with modifications,
     of the resource instance that the service supplied in the most
     recent GET. Missing information will result in the deletion of the
-    same.
+    same, if allowed by the implementation.
     
 
 \begin{verbatim}
@@ -888,12 +889,12 @@ response     = N/A
 \end{verbatim}
 
   \item[Triggering an Action on a resource instance] To trigger an
-    action on a resource instance the request MUST containing the HTTP
+    Action on a resource instance the request MUST containing the HTTP
     Category defining the \hl{Action}. It MAY include HTTP
-    X-OCCI-Attributes which are the parameters of the action. Actions
+    X-OCCI-Attributes which are the parameters of the Action. Actions
     are triggered using the HTTP POST verb and by adding a query to
     the URI. This query exposes the term of the \hl{Action}. If an
-    action is not available a Bad Request should be returned.
+    Action is not available a Bad Request should be returned.
 
 \begin{verbatim}
 > POST /vms/user1/vm1?action=stop HTTP/1.1
@@ -921,8 +922,9 @@ response     = N/A
 
 \subsubsection{Handling \hl{Link}s resource instances}
 \textbf{Resource instances of the type \hl{Link} and \hl{Resource}
-  MUST have their behaviors be handled in the same way}. Some
-exceptions on handling in the creation and handling of resource
+  MUST have their behaviors be handled in the same way}. 
+  
+  Some exceptions on handling in the creation and handling of resource
 instance of the type \hl{Link} are described in this section. They
 MUST be implemented by an OCCI implementation.
 
@@ -960,7 +962,7 @@ MUST be implemented by an OCCI implementation.
 
   \item[Retrieval resource instances With
     Defined \hl{Link}s] When an resource instance is rendered it 
-    MUST expose all its own the \hl{Link}s. Since \hl{Link}s are
+    MUST expose all its owned \hl{Link}s. Since \hl{Link}s are
     directed only those originating outward SHOULD be listed.
 
 \begin{verbatim}
@@ -983,7 +985,7 @@ MUST be implemented by an OCCI implementation.
 \end{verbatim}
 
   \item[Creation of \hl{Link} resource instances] To directly create a
-    \hl{Link} between two resource instances the \hl{Kind} as well as a
+    \hl{Link} between two existing resource instances the \hl{Kind} as well as a
     source and target attribute MUST be provide during creation of the
     resource instance\footnote{See section \ref{sec:ops_on_instances}}.
 
@@ -1016,7 +1018,7 @@ response     = 1( Location )
 \end{verbatim}
 
   \item[Retrieval of \hl{Link} resource instances] Retrieval of a
-    \hl{Link} is analogue to the retrieval of any other Resource
+    \hl{Link} is the same to the retrieval of any other Resource
     instance. Please review section \ref{sec:ops_on_instances} for
     more details.
 
