@@ -1055,7 +1055,7 @@ response                   =  1*( resource_representation )
 All data transferred using the \textit{text/occi} and
 \textit{text/plain} content types is structured text. These rendering
 structures are compliant with and follow the rules of HTTP headers
-\cite{rfc2616}.  Four specific rendering structures are used:
+\cite{rfc2616}.  Four specific rendering structures are only ever used:
 
 \begin{itemize}
   \item Category
@@ -1165,7 +1165,7 @@ Category: storage;
 \end{verbatim}
 
 \subsubsection{Rendering of OCCI Link Instance References}
-The rendering of a \hl{Resource} instance \cite{occi:core} MUST
+The rendering of a \hl{resource} instance \cite{occi:core} MUST
 represent any associated \hl{Link} instances using the HTTP Link
 header specified in the Web Linking RFC 5988 \cite{rfc5988}.  For
 example, rendering of a \hl{Compute} instance linked to a \hl{Storage}
@@ -1286,7 +1286,9 @@ X-OCCI-Attribute: occi.compute.state=''active''
 
 \subsubsection{Rendering of Location-URIs}
 In order to render an OCCI representation solely in the HTTP header,
-i.e.~using the \textit{text/occi} content type, the X-OCCI-Location
+i.e.~using the \textit{text/occi} content type, the X-OCCI-Location 
+\footnote{This was introduced as the HTTP Location Header can have only one value
+where as this can have multiple.}
 HTTP header MUST be used to return a list of resource instance
 URIs. Each header field value correspond to a single URI. Multiple
 resource instance URIs are returned using multiple X-OCCI-Location
@@ -1320,18 +1322,18 @@ can be used with HTTP and TLS. For further discussion see Section
 
 \subsubsection{Additional Headers (Caching Headers)}
 The responses from an OCCI implementation MAY include additional
-headers like those for Caching purposes like E-Tags.
+headers like those for caching purposes like E-Tags.
 
 \subsubsection{Asynchronous Operations}
 \label{sec:async_ops}
 OCCI implementations MAY implement a way to deal with asynchronous
 calls. Upon long-running operations the OCCI implementation MAY return
-a temporary resource (e.g. a task resource) using the HTTP 'Location'
+a temporary resource (e.g. a task resource) using the HTTP Location
 header and a corresponding HTTP 202 return code. Clients can query
 that resource until the operation finishes. Upon completion of the
 operation this temporary result will redirect to the resulting REST
-resource using the HTTP 'Location' header and return the HTTP 301
-return code signaling the completion.
+resource using the HTTP Location header and return the HTTP 301
+return code signalling the completion.
 
 \subsubsection{Batch operations}
 Batch operations, like the ones in described in section
@@ -1343,9 +1345,9 @@ Information about what version of OCCI is supported by a OCCI
 implementation MUST be advertised to a client on each response to a
 client. The version field in the response MUST include the value
 OCCI/X.Y, where X is the major version number and Y is the minor
-version number of the implemented OCCI specification. In the case of a
-HTTP Header Rendering, the server response MUST relay versioning
-information using the HTTP header name 'Server'.
+version number of the implemented OCCI specification. The server 
+response MUST relay versioning
+information using the HTTP Server header.
 
 \begin{verbatim}
 HTTP/1.1 200 OK
@@ -1354,12 +1356,12 @@ Server: occi-server/1.1 (linux) OCCI/1.1
 \end{verbatim}
 
 Complimenting the service-side behavior of an OCCI implementation, a
-client SHOULD indicate to the OCCI service implementation the version
+client SHOULD indicate to the OCCI implementation the version
 it expects to interact with. For the clients, the information SHOULD
 be advertised in all requests it issues. A client request SHOULD relay
 versioning information in the 'User-Agent' header. The 'User-Agent'
 field MUST include the same value (OCCI/X.Y) as supported by the
-Server HTTP header.
+HTTP Server header.
 
 \begin{verbatim}
 GET <Path> HTTP/1.1
@@ -1368,22 +1370,22 @@ User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.1
 [...]
 \end{verbatim}
 
-If a OCCI implementation receives a request from a client that
+If an OCCI implementation receives a request from a client that
 supplies a version number higher than the service supports, the
 service MUST respond back to the client with an exception indicating
 that the requested version is not implemented. Where a client
 implements OCCI using a HTTP transport, the HTTP code 501, not
 implemented, MUST be used.
 
-OCCI implementations which implement this version of the Document MUST
-use the version String \emph{OCCI/1.1}.
+OCCI implementations which implement this version of this Document MUST
+use the version string \emph{OCCI/1.1}.
 
 \subsubsection{Content-type and Accept headers}
 \label{sec:content_type}
 A server MUST react according to the Accept header the client
 provides. A client SHOULD provide the Accept header in a request. If
 none is given - or \textit{*/*} is used - the service MUST use the
-Content-type \emph{text/plain}. This is the fall-back rendering and
+Content-type \emph{text/plain}. This is the default and fall-back rendering and
 MUST be implemented. Otherwise the according rendering MUST be
 used. Each Rendering SHOULD expose which Accept and Content-type
 header fields it can handle. Overall the service MUST support
@@ -1454,7 +1456,7 @@ separately for each of the header fields, see section
 \ref{sec:syntax}.
 
 \textbf{Limitations: } HTTP header fields MAY appear multiple times in
-a HTTP request or response. In order to be OCCI compliant the
+a HTTP request or response. In order to be OCCI compliant, the
 specification of multiple message-header fields according to RFC 2616
 MUST be fully supported. In essence there are two valid representation
 of multiple HTTP header field values. A header field might either
