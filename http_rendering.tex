@@ -292,27 +292,56 @@ Query Interface operations are listed below.
 \begin{verbatim}
 > GET /-/ HTTP/1.1
 > [...]
- 
+
 < HTTP/1.1 200 OK
-< [...]
+< Category: entity;
+<           scheme="http://schemas.ogf.org/occi/core#";
+<           class="kind";
+<           title="Entity type";
+<           attributes="occi.core.id{immutable} occi.core.title"
+< Category: resource;
+<           scheme="http://schemas.ogf.org/occi/core#";
+<           class="kind";
+<           title="Resource type";
+<           rel="http://schemas.ogf.org/occi/core#entity";
+<           attributes="occi.core.summary"
+< Category: link;
+<           scheme="http://schemas.ogf.org/occi/core#";
+<           class="kind";
+<           title="Link type";
+<           rel="http://schemas.ogf.org/occi/core#entity";
+<           attributes="occi.core.source{required} occi.core.target{required}"
 < Category: compute;
 <           scheme="http://schemas.ogf.org/occi/infrastructure#";
 <           class="kind";
+<           title="Compute Resource type";
 <           rel="http://schemas.ogf.org/occi/core#resource";
-<           attributes="occi.compute.cores occi.compute.state{immutable} ..."
+<           attributes="occi.compute.cores occi.compute.state{immutable} ...";
 <           actions="http://schemas.ogf.org/occi/infrastructure/compute/action#stop ...";
-<           location=http://example.com/compute/;
-< Category: my_stuff;
-<           scheme="http://example.com/occi/my_stuff#";
-<           class="mixin";
-<           location=http://example.com/my_stuff/;
+<           location="http://example.com/compute/"
 < Category: storage;
 <           scheme="http://schemas.ogf.org/occi/infrastructure#";
 <           class="kind";
+<           title="Storage Resource type";
 <           rel="http://schemas.ogf.org/occi/core#resource";
-<           attributes="...";
+<           attributes="occi.storage.size{required} occi.storage.state{immutable}";
 <           actions="...";
-<           location=http://example.com/storage/;
+<           location="http://example.com/storage/"
+< Category: start;
+<           scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#";
+<           class="action";
+<           title="Start Compute Resource";
+<           attributes="method"
+< Category: stop;
+<           scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#";
+<           class="action";
+<           title="Stop Compute Resource";
+<           attributes="method"
+< Category: my_stuff;
+<           scheme="http://example.com/occi/my_stuff#";
+<           class="mixin";
+<           location="http://example.com/my_stuff/"
+< [...]
 \end{verbatim}
 
     An OCCI implementation MUST support a filtering mechanism. If one
