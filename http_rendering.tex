@@ -75,30 +75,12 @@ capabilities required to support modern service offerings.
 \underline{Comments}
 \newcommand{\ralf}[1]{\textcolor{red}{RN: #1}}
 
-AE: The relationship and definition of namespace, hierarchy and location must be dealt with.
-
-AE: A introductory section of filtering must be added.
-
-AE: HTTP error codes must be contextualised.
-
-AE: HTTP 200/201 - if 200 is specified then the resource representation (collection or instance) 
-must be returned. if 201 a HTTP Location header should be set. It is more efficient to use 200.
-
-AE: HTTP behaviour summary table: removing a resource instance (DELETE) from a kind 
-collection (e.g. /compute/) means its destruction. Same of a subset of the collection or indeed all.
-
-AE: It should be specified that batch operations should be atomic, all or nothing in their execution. 
-No partial executions. Make this a section under general http behaviours.
-
 AE: For updates, the notion of a full resource representation must be defined. Also the same for
 creation via PUT.
 
-AE: Note in general behaviours that it is valid for a 200 response to return no content. This is used
+AE: Note in general behaviours that it is valid for a 204 response to return no content. This is used
 when wanting to represent an empty collection. A 404 is raised when the requested resource 
 (instance or collection [e.g. location]) does not exist.
-
-AE: where a non-supported content-type is supplied we say that the service should return 415. Is it better to use 406 Not acceptable?
-\ralf{+1 on using 406, that's how I read RFC2616 at least}
 
 \ralf{In "Operation on Paths in the Name-space" the GET verb is a MUST for 2
 slightly different use cases: "state of name-space hierarchy" and "all
@@ -1604,7 +1586,7 @@ Code & Description & Notes \\
 406 & Not Acceptable & See section \ref{sec:content_type} \\
 409 & Conflict & A request contains content (e.g. mixin, kind, action) that results in an internal service, non-unique result (e.g. two types of start actions are found for Compute). The client MUST resolve the conflict by re-trying with specific Category information in the request.\\
 410 & Gone & A client attempts to retrieve a resource instance that no longer exists (i.e. it was deleted).\\
-415 & Unsupported Media Type & See section \ref{sec:content_type}\\
+% 415 & Unsupported Media Type & See section \ref{sec:content_type}\\
 500 & Internal Server Error & The state before the request should be maintained in such an error condition. The implementation MUST roll-back any partial changes made during the erroneous execution.\\
 501 & Not Implemented & If an implementation chooses not to implement a particular OCCI feature, it MUST signal the lack of that feature with this code. This implicitly points to a non-compliant OCCI implementation.\\
 503 & Service Unavailable & If the OCCI service is taken down for maintenance, this error code should be reported from the root of the OCCI API.\\
