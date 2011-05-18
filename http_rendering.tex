@@ -16,7 +16,7 @@
 
 % header
 \fancyhf{}
-\lhead{GWD-R}
+\lhead{GFD-P-R.185}
 \rhead{\today}
 
 % footer
@@ -37,7 +37,7 @@
 % header on first page is different
 \thispagestyle{empty}
 
-GWD-R \hfill Thijs Metsch, Platform Computing\\
+GFD-P-R.185 \hfill Thijs Metsch, Platform Computing\\
 OCCI-WG \hfill Andy Edmonds, Intel\\
 \rightline {October 7, 2010}\\
 \rightline {Updated: \today}
@@ -72,33 +72,11 @@ definition of a Protocol and API. The document is based upon
 previously gathered requirements and focuses on the scope of important
 capabilities required to support modern service offerings.
 
-\underline{Comments}
-\newcommand{\ralf}[1]{\textcolor{red}{RN: #1}}
-
-AE: For updates, the notion of a full resource representation must be defined. Also the same for
-creation via PUT.
-
-AE: Note in general behaviours that it is valid for a 204 response to return no content. This is used
-when wanting to represent an empty collection. A 404 is raised when the requested resource 
-(instance or collection [e.g. location]) does not exist.
-
-\ralf{In "Operation on Paths in the Name-space" the GET verb is a MUST for 2
-slightly different use cases: "state of name-space hierarchy" and "all
-instances below a path". Since there appears to be no way for a server to
-differentiate between the 2 cases maybe put it all in the same paragraph?}
-
-\ralf{Shouldn't we use quotes (") around the URI in Category.location or at least make it possible in the ABNF?}
-
-\ralf{Associate/disassociate resource instance with/from Mixin returns a 200 response although there is never anything in the body. Would it be better to use 101?}
-
-\ralf{Partial and Full update of a resource instance return 200 but no data.
-Wouldn't it be useful to optionally return the resource representation {\em
-after} the update? That would save an extra GET operation. The other option
-would be 201 and no content.}
-
-\ralf{Inline Link creation should be clear on whether the "self=" parameter is allowed or not including the associated behaviour.}
-
-\ralf{Not 100\% sure how to read the examples with regard to what is in the header and the body. I added the "greater than" and "less than" symbols to the body content as well. Otherwise the examples would not be using text/plain rendering as stated.}
+% Dealt via errata
+% \ralf{In "Operation on Paths in the Name-space" the GET verb is a MUST for 2
+% slightly different use cases: "state of name-space hierarchy" and "all
+% instances below a path". Since there appears to be no way for a server to
+% differentiate between the 2 cases maybe put it all in the same paragraph?}
 
 \newpage
 \tableofcontents
@@ -125,21 +103,21 @@ to show the features OCCI has:
 Category: compute;
           scheme="http://schemas.ogf.org/occi/infrastructure#";
           class="kind";
-          location=http://example.com/compute/
+          location="http://example.com/compute/"
           [...]
     (This is a compute kind)
 
 Category: networkinterface;
           scheme="http://schemas.ogf.org/occi/infrastructure#";
           class="kind";
-          location=http://example.com/link/networkinterface/
+          location="http://example.com/link/networkinterface/"
           [...]
     (This is a storage link)
 
 Category: my_stuff;
           scheme="http://example.com/occi/my_stuff#";
           class="mixin";
-          location=http://example.com/my_stuff/
+          location="http://example.com/my_stuff/"
           [...]
     (This is a mixin of user1)
 \end{verbatim}
@@ -147,8 +125,8 @@ The following URL name-space hierarchy is used in the examples:
 \begin{verbatim}
 http://example.com/-/
 http://example.com/vms/vm3
-http://example.com/vms/user1/vm1
-http://example.com/vms/user2/vm1
+http://example.com/vms/foo/vm1
+http://example.com/vms/bar/vm1
 http://example.com/compute/
 http://example.com/link/networkinterface/
 http://example.com/my_stuff/
@@ -227,7 +205,7 @@ minimum, support these verbs as shown in the summary table
 \toprule
 Path 								& GET 										& POST 												& POST (action - Query = ?action=\ldots) 			& PUT 									& DELETE \\
 \colrule
-resource instance (/vms/user1/vm1) 	& Retrieval of the resource instance's representation 		& Partial update of the resource instance 			& Perform an action 								& Creation/Update of the resource instance, supplying the full representation of the resource instance	& Deletion of the resource instance \\
+resource instance (/vms/foo/vm1) 	& Retrieval of the resource instance's representation 		& Partial update of the resource instance 			& Perform an action 								& Creation/Update of the resource instance, supplying the full representation of the resource instance	& Deletion of the resource instance \\
 \colrule
 \hl{Kind} collection (/compute/) 	& Retrieve a collection of resource instances* 	& Create a new resource instance of this \hl{Kind}	& Performs actions on a collection of resource instances 	& Not Defined		& Removal of a single, a subset of or all the resource instances from the kind collection \\
 \colrule
@@ -297,23 +275,6 @@ Query Interface operations are listed below.
 
 < HTTP/1.1 200 OK
 < [...]
-< Category: entity;
-<           scheme="http://schemas.ogf.org/occi/core#";
-<           class="kind";
-<           title="Entity type";
-<           attributes="occi.core.id{immutable} occi.core.title"
-< Category: resource;
-<           scheme="http://schemas.ogf.org/occi/core#";
-<           class="kind";
-<           title="Resource type";
-<           rel="http://schemas.ogf.org/occi/core#entity";
-<           attributes="occi.core.summary"
-< Category: link;
-<           scheme="http://schemas.ogf.org/occi/core#";
-<           class="kind";
-<           title="Link type";
-<           rel="http://schemas.ogf.org/occi/core#entity";
-<           attributes="occi.core.source{required} occi.core.target{required}"
 < Category: compute;
 <           scheme="http://schemas.ogf.org/occi/infrastructure#";
 <           class="kind";
@@ -321,7 +282,7 @@ Query Interface operations are listed below.
 <           rel="http://schemas.ogf.org/occi/core#resource";
 <           attributes="occi.compute.cores occi.compute.state{immutable} ...";
 <           actions="http://schemas.ogf.org/occi/infrastructure/compute/action#stop ...";
-<           location=http://example.com/compute/
+<           location="http://example.com/compute/"
 < Category: storage;
 <           scheme="http://schemas.ogf.org/occi/infrastructure#";
 <           class="kind";
@@ -329,7 +290,7 @@ Query Interface operations are listed below.
 <           rel="http://schemas.ogf.org/occi/core#resource";
 <           attributes="occi.storage.size{required} occi.storage.state{immutable}";
 <           actions="...";
-<           location=http://example.com/storage/
+<           location="http://example.com/storage/"
 < Category: start;
 <           scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#";
 <           class="action";
@@ -343,7 +304,7 @@ Query Interface operations are listed below.
 < Category: my_stuff;
 <           scheme="http://example.com/occi/my_stuff#";
 <           class="mixin";
-<           location=http://example.com/my_stuff/
+<           location="http://example.com/my_stuff/"
 \end{verbatim}
 
     An OCCI implementation MUST support a filtering mechanism. If one
@@ -378,7 +339,7 @@ response        = categories
 >           scheme="http://example.com/occi/my_stuff#";
 >           class="mixin";
 >           rel="http:/example.com/occi/something_else#mixin";
->           location=/my_stuff/;
+>           location="/my_stuff/"
 
 < HTTP/1.1 200 OK
 < [...]
@@ -440,7 +401,7 @@ response    = N/A
 The following operations are defined when operating on paths in the
 name-space hierarchy which are not location paths nor resource
 instances. They MUST end with \emph{/} (For example
-\emph{http://example.com/vms/user1/}).
+\emph{http://example.com/vms/foo/}).
 
 \begin{description}
 
@@ -463,8 +424,8 @@ instances. They MUST end with \emph{/} (For example
 < [...]
 <
 http://example.com/vms/vm3
-http://example.com/vms/user1/
-http://example.com/vms/user2/
+http://example.com/vms/foo/
+http://example.com/vms/bar/
 \end{verbatim}
 
   \item[Retrieving All resource instances Below a Path] The HTTP verb
@@ -474,14 +435,14 @@ http://example.com/vms/user2/
     hierarchy:
 
 \begin{verbatim}
-> GET /vms/user1/ HTTP/1.1
+> GET /vms/foo/ HTTP/1.1
 > [...]
  
 < HTTP/1.1 200 OK
 < [...]
 < 
-< X-OCCI-Location: http://example.com/vms/user1/vm1
-< X-OCCI-Location: http://example.com/vms/user1/vm2
+< X-OCCI-Location: http://example.com/vms/foo/vm1
+< X-OCCI-Location: http://example.com/vms/bar/vm2
 \end{verbatim}
 
     An OCCI implementations MUST support a filtering mechanism. If a
@@ -512,7 +473,7 @@ response                    = resource_representations
     HTTP verb DELETE MUST be used to delete all resource instances
     under a hierarchy:
 \begin{verbatim}
-> DELETE /vms/user1/ HTTP/1.1
+> DELETE /vms/foo/ HTTP/1.1
 > [...]
  
 < HTTP/1.1 200 OK
@@ -534,7 +495,7 @@ paths provided by \hl{Kind}s and \hl{Mixin}s. The path MUST end with
 an \emph{/}.
 
 In contrast to the last section it is valid for the operations defined
-here to return a 200 HTTP response code with no content. This is used
+here to return a 204 HTTP response code with no content. This is used
 when wanting to represent an empty collection of \hl{Mixin}s or
 \hl{Kind}s.
 
@@ -553,9 +514,9 @@ when wanting to represent an empty collection of \hl{Mixin}s or
 < HTTP/1.1 200 OK
 < [...]
 < 
-< X-OCCI-Location: http://example.com/vms/user1/vm1
-< X-OCCI-Location: http://example.com/vms/user1/vm2
-< X-OCCI-Location: http://example.com/vms/user2/vm1
+< X-OCCI-Location: http://example.com/vms/foo/vm1
+< X-OCCI-Location: http://example.com/vms/foo/vm2
+< X-OCCI-Location: http://example.com/vms/bar/vm1
 \end{verbatim}
 
     An OCCI implementation MUST support a filtering mechanism. If a
@@ -595,7 +556,7 @@ response                    = resource_representations
 > POST /compute/?action=stop HTTP/1.1
 > [...]
 > Category: stop; scheme="[...]"; class="action";
-> X-OCCI-Attribute: method=poweroff
+> X-OCCI-Attribute: method="poweroff"
 
 < HTTP/1.1 200 OK
 < [...]
@@ -621,7 +582,7 @@ response     = N/A
 \begin{verbatim}
 > POST /my_stuff/ HTTP/1.1
 > [...]
-> X-OCCI-Location: http://example.com/vms/user1/vm1
+> X-OCCI-Location: http://example.com/vms/foo/vm1
 
 < HTTP/1.1 200 OK
 < [...]
@@ -648,9 +609,9 @@ response     = N/A
 \begin{verbatim}
 > PUT /my_stuff/ HTTP/1.1
 > [...]
-> X-OCCI-Location: http://example.com/vms/user1/vm1
-> X-OCCI-Location: http://example.com/vms/user1/vm2
-> X-OCCI-Location: http://example.com/disks/user1/disk1
+> X-OCCI-Location: http://example.com/vms/foo/vm1
+> X-OCCI-Location: http://example.com/vms/foo/vm2
+> X-OCCI-Location: http://example.com/disks/foo/disk1
 
 < HTTP/1.1 200 OK
 < [...]
@@ -675,9 +636,9 @@ response     = N/A
 \begin{verbatim}
 > DELETE /my_stuff/ HTTP/1.1
 > [...]
-> X-OCCI-Location: http://example.com/vms/user1/vm1
-> X-OCCI-Location: http://example.com/vms/user1/vm2
-> X-OCCI-Location: http://example.com/disks/user1/disk1
+> X-OCCI-Location: http://example.com/vms/foo/vm1
+> X-OCCI-Location: http://example.com/vms/foo/vm2
+> X-OCCI-Location: http://example.com/disks/foo/disk1
 
 < HTTP/1.1 200 OK
 < [...]
@@ -708,7 +669,7 @@ type or the OCCI \hl{Link} type.}
 %
 A resource
 instance is uniquely identified by an URI, for example
-\emph{http://example.com/vms/user1/vm1}.%
+\emph{http://example.com/vms/foo/vm1}.%
 \footnote{The path MUST NOT
   end with an '/' - that would mean that a client operates on a path
   in the name-space hierarchy}
@@ -739,7 +700,7 @@ instance is uniquely identified by an URI, for example
  
 < HTTP/1.1 201 OK
 < [...]
-< Location: http://example.com/vms/user1/vm1
+< Location: http://example.com/vms/foo/vm1
 \end{verbatim}
 
     The path on which this POST verb is executed MUST be the location
@@ -775,7 +736,7 @@ response                   = 0*1( resource_representation )
       name-space.}
 
 \begin{verbatim}
-> PUT /vms/user1/my_first_virtual_machine HTTP/1.1
+> PUT /vms/foo/my_first_virtual_machine HTTP/1.1
 > [...]
 > 
 > Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; "class=kind"; 
@@ -825,7 +786,7 @@ response                   = 0*1( resource_representation )
     if available.
 
 \begin{verbatim}
-> GET /vms/user1/vm1 HTTP/1.1
+> GET /vms/foo/vm1 HTTP/1.1
 > [...]
  
 < HTTP/1.1 200 OK
@@ -862,7 +823,7 @@ resource_representation  = 1( Category CRLF )
     HTTP Links MUST NOT be allowed in the request.
 
 \begin{verbatim}
-> POST /vms/user1/vm1 HTTP/1.1
+> POST /vms/foo/vm1 HTTP/1.1
 > [...]
 > 
 > X-OCCI-Attribute: occi.compute.memory=4.0
@@ -883,8 +844,17 @@ request                    = 1*( resource_representation )
                              *( Attribute CRLF )
 
 response     = N/A
-\end{verbatim}
 
+\end{verbatim}
+    
+    The OCCI implementation MAY either return 201 or 200 HTTP return
+    codes. If the OCCI implementation returns the 200 HTTP response
+    code the full representation (as described in 'Retrieving a
+    resource instance' in this section) MUST be
+    returned. \textbf{Please note} that the HTTP Location header used
+    when the service returns the 201 HTTP response code is defined in
+    RFC2616 \cite{rfc2616}.
+    
   \item[Full Update of a resource instance] Before updating a resource
     instance it is RECOMMENDED that the client first retrieves the
     resource instance. Full updating is done using the HTTP PUT verb. The
@@ -902,7 +872,7 @@ response     = N/A
     
 
 \begin{verbatim}
-> PUT /vms/user1/vm1 HTTP/1.1
+> PUT /vms/foo/vm1 HTTP/1.1
 > [...]
 > 
 > X-OCCI-Attribute: occi.compute.memory=4.0
@@ -924,6 +894,14 @@ request                    = 1*( resource_representation )
 response     = N/A
 \end{verbatim}
 
+    The OCCI implementation MAY either return 201 or 200 HTTP return
+    codes. If the OCCI implementation returns the 200 HTTP response
+    code the full representation (as described in 'Retrieving a
+    resource instance' in this section) MUST be
+    returned. \textbf{Please note} that the HTTP Location header used
+    when the service returns the 201 HTTP response code is defined in
+    RFC2616 \cite{rfc2616}.
+    
   \item[Deleting a resource instance] A resource instance can be
     deleted using the HTTP DELETE verb. No other information SHOULD be
     added to the request.\footnote{If the resource instances is an
@@ -931,7 +909,7 @@ response     = N/A
       accordingly.}
 
 \begin{verbatim}
-> DELETE /vms/user1/vm1 HTTP/1.1
+> DELETE /vms/foo/vm1 HTTP/1.1
 > [...]
 
 < HTTP/1.1 200 OK
@@ -957,7 +935,7 @@ response     = N/A
     Action is not available a Bad Request should be returned.
 
 \begin{verbatim}
-> POST /vms/user1/vm1?action=stop HTTP/1.1
+> POST /vms/foo/vm1?action=stop HTTP/1.1
 > [...]
 > Category: stop; scheme="[...]"; class="action";
 > X-OCCI-Attribute: method="poweroff"
@@ -996,7 +974,8 @@ implementation.
     returned. The URIs of the \hl{Link}s can be discovered by
     retrieving a rendering of the resource instance. Attributes for
     the \hl{Link} resource instance MUST be specified in the \hl{Link}
-    rendering during the creation of the resource instance.
+    rendering during the creation of the resource instance. It is NOT recommended to 
+    supply the 'self' parameter to inline Link representation.
 
 \begin{verbatim}
 > POST /compute/ HTTP/1.1
@@ -1016,7 +995,7 @@ implementation.
  
 < HTTP/1.1 200 OK
 < [...]
-< Location: http://example.com/vms/user1/vm1
+< Location: http://example.com/vms/foo/vm1
 \end{verbatim}
 
   \item[Retrieving \hl{Resource} instances With
@@ -1026,7 +1005,7 @@ implementation.
     directed only those originating outward SHOULD be listed.
 
 \begin{verbatim}
-> GET /vms/user1/vm1 HTTP/1.1
+> GET /vms/foo/vm1 HTTP/1.1
 > [...]
  
 < HTTP/1.1 200 OK
@@ -1056,7 +1035,7 @@ implementation.
 > Category: networkinterface; 
             scheme="http://schemas.ogf.org/occi/infrastructure#"; 
             class="kind"; 
-> X-OCCI-Attribute: occi.core.source="http://example.com/vms/user1/vm1"
+> X-OCCI-Attribute: occi.core.source="http://example.com/vms/foo/vm1"
 > X-OCCI-Attribute: occi.core.target="http://example.com/network/123"
 > [...]
  
@@ -1094,7 +1073,7 @@ response                   = 0*1( resource_representation )
 < X-OCCI-Attribute: occi.networkinterface.interface="eth0";
 < X-OCCI-Attribute: occi.networkinterface.mac="00:11:22:33:44:55";
 < X-OCCI-Attribute: occi.networkinterface.state="active";
-< X-OCCI-Attribute: occi.core.source="/vms/user1/vm1"
+< X-OCCI-Attribute: occi.core.source="/vms/foo/vm1"
 < X-OCCI-Attribute: occi.core.target="/network/123"
 \end{verbatim}
 
@@ -1172,7 +1151,7 @@ Category             = "Category" ":" #category-value
                       ";" "class" "=" ( class | <"> class <"> )
                       [ ";" "title" "=" quoted-string ]
                       [ ";" "rel" "=" <"> type-identifier <"> ]
-                      [ ";" "location" "=" URI ]
+                      [ ";" "location" "=" <"> URI <"> ]
                       [ ";" "attributes" "=" <"> attribute-list <"> ]
                       [ ";" "actions" "=" <"> action-list <"> ]
   term               = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
@@ -1221,7 +1200,7 @@ Category: storage;
     class="kind";
     title="Storage Resource";
     rel="http://schemas.ogf.org/occi/core#resource";
-    location=/storage/;
+    location="/storage/";
     attributes="occi.storage.size{required} occi.storage.state{immutable}";
     actions="http://schemas.ogf.org/occi/infrastructure/storage/action#resize ...";
 \end{verbatim}
@@ -1466,7 +1445,7 @@ operations on the resource instance \emph{} using two different HTTP
 Accept headers:
 
 \begin{verbatim}
-> GET /vms/user1/vm1 HTTP/1.1
+> GET /vms/foo/vm1 HTTP/1.1
 > Accept: text/plain
 > [...]
 
@@ -1483,7 +1462,7 @@ Accept headers:
 And with \emph{text/occi} as HTTP Accept header:
 
 \begin{verbatim}
-> GET /vms/user1/vm1 HTTP/1.1
+> GET /vms/foo/vm1 HTTP/1.1
 > Accept: text/occi
 > [...]
 
@@ -1578,6 +1557,7 @@ Code & Description & Notes \\
 200 & OK & Indicates that the request was successful. The response MUST contain the created resource instance's representation.\\
 201 & OK & Indicates that the request was successful. The response MUST contain a HTTP Location header to the newly created resource instance.\\
 202 & Accepted & Used for asynchronous non-blocking calls. See section \ref{sec:async_ops}.\\
+204 & OK, but no content returned. & This is used to indicate that a collection is empty.\\
 400 & Bad Request & Used to signal parsing errors or missing information (e.g. an attribute that is required is not supplied in the request). This applies also to filters.  \\
 401 & Unauthorized & The client does not have the required permissions/credentials.\\
 403 & Forbidden & Used to signal that a particular mixin cannot be applied to a resource instance of a particular Kind. Used to signal that an attempt was made to modify an attribute that was marked as immutable.\\
