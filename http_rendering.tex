@@ -155,7 +155,7 @@ The OCCI HTTP Rendering document specifies how the OCCI Core Model
 HTTP protocol \cite{rfc2616}. The document describes the general
 behavior for all interaction with an OCCI implementation over HTTP
 together with three content types to represent the data being
-transferred. The content types specified are: 
+transferred. The content types specified are:
 
 \begin{itemize}
 	\item \textit{text/plain},
@@ -381,11 +381,12 @@ response    = N/A
     response are defined as following and MUST be implemented by an
     OCCI implementation.
     
-    If a client attempts to remove a provider-defined Mixin category, the implementation
-    MUST respond with a HTTP error code of 403, Forbidden.
+    If a client attempts to remove a provider-defined Mixin category,
+    the implementation MUST respond with a HTTP error code of 403,
+    Forbidden.
     
-    When a user-defined Mixin is removed all associations with resource instances
-    must be removed by the implementation.
+    When a user-defined Mixin is removed all associations with
+    resource instances must be removed by the implementation.
 
 \begin{verbatim}
 request     = mixin
@@ -405,11 +406,11 @@ instances. They MUST end with \emph{/} (For example
 
 \begin{description}
 
-   \item[Retrieving the State of the Name-space Hierarchy] The HTTP verb
-     GET MUST be used to retrieve the current state of the name-space
-     hierarchy. It MAY include URIs of resource instances, Paths in the
-     name-space as well as URLs for \hl{Kind} and \hl{Mixin}
-     collections.
+   \item[Retrieving the State of the Name-space Hierarchy] The HTTP
+     verb GET MUST be used to retrieve the current state of the
+     name-space hierarchy. It MAY include URIs of resource instances,
+     Paths in the name-space as well as URLs for \hl{Kind} and
+     \hl{Mixin} collections.
 
    It is RECOMMENDED to use the \emph{text/uri-list} Accept HTTP
    header for this request.
@@ -468,13 +469,13 @@ response                    = resource_representations
   resource_representations  = *( Location CRLF ) 
 \end{verbatim}
 
-  \item[Deletion of All resource instances Below a Path]
-    \textbf{(Note: this is a potentially dangerous operation!)} The
-    HTTP verb DELETE MUST be used to delete all resource instances
+  \item[Deletion of All resource instances Below a
+    Path]\footnote{Note: this is a potentially dangerous operation!}
+    The HTTP verb DELETE MUST be used to delete all resource instances
     under a hierarchy:
+
 \begin{verbatim}
-> DELETE /vms/foo/ HTTP/1.1
-> [...]
+> DELETE /vms/foo/ HTTP/1.1 [...]
  
 < HTTP/1.1 200 OK
 < [...]
@@ -664,11 +665,11 @@ implementation for operations on resource instances, i.e.~instances of
 either OCCI \hl{Resource}, OCCI \hl{Link} or sub-types thereof. All
 resource instances MUST be handled equally (if not stated otherwise)
 independent of whether they are instances of the OCCI \hl{Resource}
-type or the OCCI \hl{Link} type.} A resource instance is uniquely
-  identified by an URI, for example
-  \emph{http://example.com/vms/foo/vm1}. \footnote{The path MUST NOT
-    end with an '/' - that would mean that a client operates on a path
-    in the name-space hierarchy}
+type or the OCCI \hl{Link} type. A resource instance is uniquely
+identified by an URI, for example
+\emph{http://example.com/vms/foo/vm1}. \footnote{The path MUST NOT end
+  with an '/' - that would mean that a client operates on a path in
+  the name-space hierarchy}
 
 \begin{description}
   \item[Creating a resource instance] A request to create a resource
@@ -771,13 +772,13 @@ response                   = 0*1( resource_representation )
     to the collection defined by the \hl{Kind}.
 
   \item[Retrieving a resource instance] The HTTP GET verb is used for
-    representation retrieval. It MUST return at least the HTTP Category which defines
-    the \hl{Kind} of the resource instance and associated
-    attributes. HTTP Links pointing to related resource instances,
-    other URI or Actions MUST be included if present. Only Actions
-    currently applicable%
-    \footnote{For example, it makes little sense to render the start action of a
-    resource instance if it is already running.} SHOULD be rendered using HTTP Links. The
+    representation retrieval. It MUST return at least the HTTP
+    Category which defines the \hl{Kind} of the resource instance and
+    associated attributes. HTTP Links pointing to related resource
+    instances, other URI or Actions MUST be included if present. Only
+    Actions currently applicable\footnote{For example, it makes little
+      sense to render the start action of a resource instance if it is
+      already running.} SHOULD be rendered using HTTP Links. The
     Attributes of the resource instance MUST be exposed to the client
     if available.
 
@@ -809,14 +810,13 @@ resource_representation  = 1( Category CRLF )
 
   \item[Partial Update of a resource instance] Before updating a
     resource instance it is RECOMMENDED that the client first
-    retrieves the resource instance. Partial updating is done using the HTTP
-    POST verb. Only the information (HTTP Links, HTTP
+    retrieves the resource instance. Partial updating is done using
+    the HTTP POST verb. Only the information (HTTP Links, HTTP
     X-OCCI-Attributes or HTTP categories), which are updated MUST be
-    provided along with the request.\footnote{Changing the type of the
-      resource instance MUST NOT be possible.}
-    %
-    If the resource instance updated is derived from the OCCI Link type
-    HTTP Links MUST NOT be allowed in the request.
+    provided along with the request. \footnote{Changing the type of
+      the resource instance MUST NOT be possible.} If the resource
+    instance updated is derived from the OCCI Link type HTTP Links
+    MUST NOT be allowed in the request.
 
 \begin{verbatim}
 > POST /vms/foo/vm1 HTTP/1.1
@@ -901,8 +901,8 @@ response     = N/A
   \item[Deleting a resource instance] A resource instance can be
     deleted using the HTTP DELETE verb. No other information SHOULD be
     added to the request.\footnote{If the resource instances is an
-      OCCI \hl{Link} type the source and target \hl{Resource}s MUST be updated
-      accordingly.}
+      OCCI \hl{Link} type the source and target \hl{Resource}s MUST be
+      updated accordingly.}
 
 \begin{verbatim}
 > DELETE /vms/foo/vm1 HTTP/1.1
@@ -963,15 +963,16 @@ implementation.
 
 \begin{description}
   \item[Inline Creation of a \hl{Link} Instance] When creating an
-    instance of the OCCI \hl{Resource} type and \hl{Link}s are defined in the request, those
-    \hl{Link}s MUST be created implicitly. This results in the
-    creation of multiple REST resources. However, only the Location of
-    the REST resource which represents the requested \hl{Kind} MUST be
-    returned. The URIs of the \hl{Link}s can be discovered by
-    retrieving a rendering of the resource instance. Attributes for
-    the \hl{Link} resource instance MUST be specified in the \hl{Link}
-    rendering during the creation of the resource instance. It is NOT recommended to 
-    supply the 'self' parameter to inline Link representation.
+    instance of the OCCI \hl{Resource} type and \hl{Link}s are defined
+    in the request, those \hl{Link}s MUST be created implicitly. This
+    results in the creation of multiple REST resources. However, only
+    the Location of the REST resource which represents the requested
+    \hl{Kind} MUST be returned. The URIs of the \hl{Link}s can be
+    discovered by retrieving a rendering of the resource
+    instance. Attributes for the \hl{Link} resource instance MUST be
+    specified in the \hl{Link} rendering during the creation of the
+    resource instance. It is NOT recommended to supply the 'self'
+    parameter to inline Link representation.
 
 \begin{verbatim}
 > POST /compute/ HTTP/1.1
@@ -994,11 +995,10 @@ implementation.
 < Location: http://example.com/vms/foo/vm1
 \end{verbatim}
 
-  \item[Retrieving \hl{Resource} instances With
-    Defined \hl{Link}s] When an resource instance of the OCCI \hl{Resource}
-    type is rendered it
-    MUST expose all its owned \hl{Link}s. Since \hl{Link}s are
-    directed only those originating outward SHOULD be listed.
+  \item[Retrieving \hl{Resource} instances With Defined \hl{Link}s]
+    When an resource instance of the OCCI \hl{Resource} type is
+    rendered it MUST expose all its owned \hl{Link}s. Since \hl{Link}s
+    are directed only those originating outward SHOULD be listed.
 
 \begin{verbatim}
 > GET /vms/foo/vm1 HTTP/1.1
@@ -1020,9 +1020,10 @@ implementation.
 \end{verbatim}
 
   \item[Creation of \hl{Link} resource instances] To directly create a
-    \hl{Link} between two existing resource instances the \hl{Kind} as well as a
-    occi.core.source and occi.core.target attribute MUST be provided during creation of the
-    \hl{Link} instance\footnote{See section \ref{sec:ops_on_instances}}.
+    \hl{Link} between two existing resource instances the \hl{Kind} as
+    well as a occi.core.source and occi.core.target attribute MUST be
+    provided during creation of the \hl{Link} instance\footnote{See
+      section \ref{sec:ops_on_instances}}.
 
 \begin{verbatim}
 > POST /link/networkinterface/ HTTP/1.1
@@ -1092,7 +1093,8 @@ response                   =  1*( resource_representation )
 All data transferred using the \textit{text/occi} and
 \textit{text/plain} content types is structured text. These rendering
 structures are compliant with and follow the rules of HTTP headers
-\cite{rfc2616}.  Four specific rendering structures are only ever used:
+\cite{rfc2616}.  Four specific rendering structures are only ever
+used:
 
 \begin{itemize}
   \item Category
@@ -1324,12 +1326,11 @@ X-OCCI-Attribute: occi.compute.state="active"
 \subsubsection{Rendering of Location-URIs}
 In order to render an OCCI representation solely in the HTTP header,
 i.e.~using the \textit{text/occi} content type, the X-OCCI-Location 
-\footnote{This was introduced as the HTTP Location Header can have only one value
-where as this can have multiple.}
-HTTP header MUST be used to return a list of resource instance
-URIs. Each header field value correspond to a single URI. Multiple
-resource instance URIs are returned using multiple X-OCCI-Location
-headers.
+\footnote{This was introduced as the HTTP Location Header can have
+  only one value where as this can have multiple.}  HTTP header MUST
+be used to return a list of resource instance URIs. Each header field
+value correspond to a single URI. Multiple resource instance URIs are
+returned using multiple X-OCCI-Location headers.
 
 \begin{verbatim}
 Location      = "X-OCCI-Location" ":" location-value
@@ -1369,8 +1370,8 @@ a temporary resource (e.g. a task resource) using the HTTP Location
 header and a corresponding HTTP 202 return code. Clients can query
 that resource until the operation finishes. Upon completion of the
 operation this temporary result will redirect to the resulting REST
-resource using the HTTP Location header and return the HTTP 301
-return code signalling the completion.
+resource using the HTTP Location header and return the HTTP 301 return
+code signalling the completion.
 
 \subsubsection{Batch operations}
 Batch operations, like the ones in described in section
@@ -1382,9 +1383,9 @@ Information about what version of OCCI is supported by a OCCI
 implementation MUST be advertised to a client on each response to a
 client. The version field in the response MUST include the value
 OCCI/X.Y, where X is the major version number and Y is the minor
-version number of the implemented OCCI specification. The server 
-response MUST relay versioning
-information using the HTTP Server header.
+version number of the implemented OCCI specification. The server
+response MUST relay versioning information using the HTTP Server
+header.
 
 \begin{verbatim}
 HTTP/1.1 200 OK
@@ -1393,12 +1394,12 @@ Server: occi-server/1.1 (linux) OCCI/1.1
 \end{verbatim}
 
 Complimenting the service-side behavior of an OCCI implementation, a
-client SHOULD indicate to the OCCI implementation the version
-it expects to interact with. For the clients, the information SHOULD
-be advertised in all requests it issues. A client request SHOULD relay
+client SHOULD indicate to the OCCI implementation the version it
+expects to interact with. For the clients, the information SHOULD be
+advertised in all requests it issues. A client request SHOULD relay
 versioning information in the 'User-Agent' header. The 'User-Agent'
-field MUST include the same value (OCCI/X.Y) as supported by the
-HTTP Server header.
+field MUST include the same value (OCCI/X.Y) as supported by the HTTP
+Server header.
 
 \begin{verbatim}
 GET <Path> HTTP/1.1
@@ -1414,19 +1415,20 @@ that the requested version is not implemented. Where a client
 implements OCCI using a HTTP transport, the HTTP code 501, not
 implemented, MUST be used.
 
-OCCI implementations which implement this version of this Document MUST
-use the version string \emph{OCCI/1.1}.
+OCCI implementations which implement this version of this Document
+MUST use the version string \emph{OCCI/1.1}.
 
 \subsubsection{Content-type and Accept headers}
 \label{sec:content_type}
 A server MUST react according to the Accept header the client
 provides. A client SHOULD provide the Accept header in a request. If
 none is given - or \textit{*/*} is used - the service MUST use the
-Content-type \emph{text/plain}. This is the default and fall-back rendering and
-MUST be implemented. Otherwise the according rendering MUST be
-used. Each Rendering SHOULD expose which Accept and Content-type
-header fields it can handle. Overall the service MUST support
-\textit{text/occi}, \textit{text/plain} and \textit{text/uri-list}.
+Content-type \emph{text/plain}. This is the default and fall-back
+rendering and MUST be implemented. Otherwise the according rendering
+MUST be used. Each Rendering SHOULD expose which Accept and
+Content-type header fields it can handle. Overall the service MUST
+support \textit{text/occi}, \textit{text/plain} and
+\textit{text/uri-list}.
 
 The server MUST return the proper Content-type header. A client MUST
 provide the proper Content-Type when data is send to the OCCI
@@ -1622,12 +1624,12 @@ section will give some more complete examples.
 \section{OCCI Compliance Tools}
 For the ease of generating compliant parsers an
 ANTLR\footnote{http://www.antlr.org} grammar is available
-from\footnote{http://github.com/dizz/occi-grammar} where it is
-updated and maintained. It is based on the ABNF grammars quoted
-through out the document. It can parse the OCCI text renderings of
-Category, Link, X-OCCI-Attribute and X-OCCI-Location. It is
-recommended that implementers use this grammar as a means to generate
-OCCI compliant parsers.
+from\footnote{http://github.com/dizz/occi-grammar} where it is updated
+and maintained. It is based on the ABNF grammars quoted through out
+the document. It can parse the OCCI text renderings of Category, Link,
+X-OCCI-Attribute and X-OCCI-Location. It is recommended that
+implementers use this grammar as a means to generate OCCI compliant
+parsers.
 
 To verify an implementations run-time behavior, the OCCI Compliance
 Testing Tool is provided
