@@ -58,7 +58,7 @@ unlimited.
 
 \underline{Copyright Notice}
 
-Copyright \copyright Open Grid Forum (2009-2011). All Rights Reserved.
+Copyright \copyright ~Open Grid Forum (2009-2011). All Rights Reserved.
 
 \underline{Trademarks}
 
@@ -660,19 +660,15 @@ response     = N/A
 \subsubsection{Operations on resource instances}
 \label{sec:ops_on_instances}
 The following operations MUST be implemented by the OCCI
-implementation for operations on resource instances, i.e.~instances
-of either OCCI \hl{Resource}, OCCI \hl{Link} or sub-types thereof.
-%
-\textbf{All resource instances MUST be handled equally (if not stated
-otherwise) independent of whether they are instances of the OCCI \hl{Resource}
-type or the OCCI \hl{Link} type.}
-%
-A resource
-instance is uniquely identified by an URI, for example
-\emph{http://example.com/vms/foo/vm1}.%
-\footnote{The path MUST NOT
-  end with an '/' - that would mean that a client operates on a path
-  in the name-space hierarchy}
+implementation for operations on resource instances, i.e.~instances of
+either OCCI \hl{Resource}, OCCI \hl{Link} or sub-types thereof. All
+resource instances MUST be handled equally (if not stated otherwise)
+independent of whether they are instances of the OCCI \hl{Resource}
+type or the OCCI \hl{Link} type.} A resource instance is uniquely
+  identified by an URI, for example
+  \emph{http://example.com/vms/foo/vm1}. \footnote{The path MUST NOT
+    end with an '/' - that would mean that a client operates on a path
+    in the name-space hierarchy}
 
 \begin{description}
   \item[Creating a resource instance] A request to create a resource
