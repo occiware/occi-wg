@@ -209,7 +209,7 @@ resource instance (/vms/foo/vm1) 	& Retrieval of the resource instance's represe
 \colrule
 \hl{Kind} collection (/compute/) 	& Retrieve a collection of resource instances* 	& Create a new resource instance of this \hl{Kind}	& Performs actions on a collection of resource instances 	& Not Defined		& Removal of a single, a subset of or all the resource instances from the kind collection \\
 \colrule
-\hl{Mixin} collection (/my\_stuff/) 	& Retrieve a collection of resource instances* 	& Adds a resource instance to this collection 		& Performs actions on a collection of resource instances 	& Update of the collection supplying the full representation of it. Includes removal and addition of resources. 		& Removal of a single, a subset of or all the resource instances from the mixin collection \\
+\hl{Mixin} collection (/my\_stuff/) 	& Retrieve a collection of resource instances* 	& Adds a resource instance to this collection 		& Performs actions on a collection of resource instances 	& Update of the collection supplying the full representation of it. Includes removal and addition of resources. 		& Removal of a single, a subset of or all the resource instances from the Mixin collection \\
 \colrule
 query interface (/-/) 				& Retrieve capabilities* 					& Add a user-defined \hl{Mixin} 					& Not Defined 										& Not Defined 							& Removal of a user-defined \hl{Mixin} \\
 \botrule
@@ -381,7 +381,7 @@ response    = N/A
     response are defined as following and MUST be implemented by an
     OCCI implementation.
     
-    If a client attempts to remove a provider-defined mixin category, the implementation
+    If a client attempts to remove a provider-defined Mixin category, the implementation
     MUST respond with a HTTP error code of 403, Forbidden.
     
     When a user-defined Mixin is removed all associations with resource instances
@@ -1560,7 +1560,7 @@ Code & Description & Notes \\
 204 & OK, but no content returned. & This is used to indicate that a collection is empty.\\
 400 & Bad Request & Used to signal parsing errors or missing information (e.g. an attribute that is required is not supplied in the request). This applies also to filters.  \\
 401 & Unauthorized & The client does not have the required permissions/credentials.\\
-403 & Forbidden & Used to signal that a particular mixin cannot be applied to a resource instance of a particular Kind. Used to signal that an attempt was made to modify an attribute that was marked as immutable.\\
+403 & Forbidden & Used to signal that a particular Mixin cannot be applied to a resource instance of a particular Kind. Used to signal that an attempt was made to modify an attribute that was marked as immutable.\\
 404 & Not Found & Used to signal that the request had information (e.g. a kind, mixin, action, attribute, location) that was unknown to the service and so not found.\\
 405 & Method Not Allowed & The service does not allow the client to issue the HTTP method against the requested path/location\\
 406 & Not Acceptable & See section \ref{sec:content_type} \\
@@ -1569,7 +1569,7 @@ Code & Description & Notes \\
 % 415 & Unsupported Media Type & See section \ref{sec:content_type}\\
 500 & Internal Server Error & The state before the request should be maintained in such an error condition. The implementation MUST roll-back any partial changes made during the erroneous execution.\\
 501 & Not Implemented & If an implementation chooses not to implement a particular OCCI feature, it MUST signal the lack of that feature with this code. This implicitly points to a non-compliant OCCI implementation.\\
-503 & Service Unavailable & If the OCCI service is taken down for maintenance, this error code should be reported from the root of the OCCI API.\\
+503 & Service Unavailable & If the OCCI service is taken down for maintenance, this error code should be reported from the root of the name-space the provider uses.\\
 \botrule
 \end{tabular}}
 
