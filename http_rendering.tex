@@ -808,15 +808,16 @@ resource_representation  = 1( Category CRLF )
                            *( Attribute CRLF )
 \end{verbatim}
 
-  \item[Partial Update of a resource instance] Before updating a
-    resource instance it is RECOMMENDED that the client first
-    retrieves the resource instance. Partial updating is done using
-    the HTTP POST verb. Only the information (HTTP Links, HTTP
-    X-OCCI-Attributes or HTTP categories), which are updated MUST be
-    provided along with the request. \footnote{Changing the type of
-      the resource instance MUST NOT be possible.} If the resource
-    instance updated is derived from the OCCI Link type HTTP Links
-    MUST NOT be allowed in the request.
+  \item[Partial Update of a resource instance] While this
+    specification describes a RESTful service it is RECOMMENDED that
+    the client first retrieves the resource instance. Partial updating
+    is done using the HTTP POST verb. Only the information (HTTP
+    Links, HTTP X-OCCI-Attributes or HTTP categories), which are
+    updated MUST be provided along with the
+    request. \footnote{Changing the type of the resource instance MUST
+      NOT be possible.} If the resource instance updated is derived
+    from the OCCI Link type HTTP Links MUST NOT be allowed in the
+    request.
 
 \begin{verbatim}
 > POST /vms/foo/vm1 HTTP/1.1
@@ -1416,7 +1417,8 @@ implements OCCI using a HTTP transport, the HTTP code 501, not
 implemented, MUST be used.
 
 OCCI implementations which implement this version of this Document
-MUST use the version string \emph{OCCI/1.1}.
+MUST use the version string \emph{OCCI/1.1}. Versioning of extensions
+is out of scope for this version of the document.
 
 \subsubsection{Content-type and Accept headers}
 \label{sec:content_type}
