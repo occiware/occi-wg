@@ -808,7 +808,7 @@ resource_representation  = 1( Category CRLF )
                            *( Attribute CRLF )
 \end{verbatim}
 
-  \item[Partial Update of a resource instance] While this
+  \item[Partial Update of a resource instance] As this
     specification describes a RESTful service it is RECOMMENDED that
     the client first retrieves the resource instance. Partial updating
     is done using the HTTP POST verb. Only the information (HTTP
@@ -1316,7 +1316,7 @@ The following example illustrates a rendering of the attributes
 defined by \hl{Compute} type \cite{occi:infrastructure}:
 
 \begin{verbatim}
-X-OCCI-Attribute: occi.compute.architechture="x86_64"
+X-OCCI-Attribute: occi.compute.architecture="x86_64"
 X-OCCI-Attribute: occi.compute.cores=2
 X-OCCI-Attribute: occi.compute.hostname="testserver"
 X-OCCI-Attribute: occi.compute.speed=2.66
