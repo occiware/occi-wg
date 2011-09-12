@@ -227,7 +227,7 @@ MUST be exposed by an instance of the \hl{Compute} type.
 	Action Term & Target state & Attributes \\
 	\colrule
 	start & active & -- \\
-	stop & inactive & method=\{graceful, acpioff, poweroff, terminate\} \\
+	stop & inactive & method=\{graceful, acpioff, poweroff\} \\
 	restart & active (via stop and start chain) & method=\{graceful, warm, cold\} \\
 	suspend & suspended & method=\{hibernate, suspend\} \\
 	\botrule
