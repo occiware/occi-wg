@@ -1,0 +1,396 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{occi}
+\setlength{\headheight}{13pt}
+\pagestyle{fancy}
+
+% default sans-serif
+\renewcommand{\familydefault}{\sfdefault}
+
+% no lines for headers and footers
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% header
+\fancyhf{}
+\lhead{GWD-R}
+\rhead{\today}
+
+% footer
+\lfoot{occi-wg@ogf.org}
+\rfoot{\thepage}
+
+% paragraphs need some space...
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+% some space between header and text...
+\headsep 13pt
+
+\setcounter{secnumdepth}{4}
+
+\begin{document}
+
+% header on first page is different
+\thispagestyle{empty}
+
+GWD-R \hfill Ralf Nyrén \\
+OCCI-WG \\
+\rightline {September 16, 2011}\\
+\rightline {Updated: \today}
+
+\vspace*{0.5in}
+
+\begin{Large}
+\textbf{Open Cloud Computing Interface - JSON Rendering}
+\end{Large}
+
+\vspace*{0.5in}
+
+\underline{Status of this Document}
+
+This document provides information to the community regarding the
+specification of the Open Cloud Computing Interface. Distribution is
+unlimited.
+
+\underline{Copyright Notice}
+
+Copyright \copyright Open Grid Forum (2011). All Rights Reserved.
+
+\underline{Trademarks}
+
+OCCI is a trademark of the Open Grid Forum.
+
+\underline{Abstract}
+
+This document, part of a document series, produced by the OCCI working
+group within the Open Grid Forum (OGF), provides a high-level
+definition of a Protocol and API. The document is based upon
+previously gathered requirements and focuses on the scope of important
+capabilities required to support modern service offerings.
+
+\underline{Comments}
+\newcommand{\ralf}[1]{\textcolor{red}{RN: #1}}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+%\input{include/introduction}
+
+\section{Notational Conventions}
+{\em todo}
+
+\section{Mandatory HTTP headers}
+\label{sec:mandatory_headers}
+
+\section{JSON representation}
+
+\section{HTTP methods applied to resource instance URLs}
+
+This section describes the HTTP methods used to retrieve and manipulate
+individual resource instances. Each HTTP method described is assumed to operate
+on an URL referring to a single element in a collection, an URL such as the
+following:
+\begin{verbatim}
+  http://example.com/compute/012d2b48-c334-47f2-9368-557e75249042
+\end{verbatim}
+
+An OCCI client MUST supply the mandatory headers described in
+section~\ref{sec:mandatory_headers} with every HTTP request.
+
+\subsection{GET resource instance}
+The HTTP GET method retrieves the JSON representation of an OCCI resource
+instance.
+
+\subsubsection{Client GET request}
+The body of the HTTP GET request MUST be empty.
+\begin{verbatim}
+GET /compute/012d2b48-c334-47f2-9368-557e75249042 HTTP/1.1
+Host: example.com
+Accept: application/occi+json
+User-Agent: occi-client/x.x OCCI/1.1
+\end{verbatim}
+
+\subsubsection{Server GET response}
+\begin{verbatim}
+HTTP/1.1 200 OK
+Server: occi-server/x.x OCCI/1.1
+Category: compute;
+          scheme="http://schemas.ogf.org/occi/infrastructure#";
+          class="kind";
+          title="Compute Resource"
+Content-Type: application/occi+json; charset=utf-8
+
+{
+  "categories": [ ... ],
+  "actions": [ ... ],
+  "links": [ ... ],
+  "attributes": { ... },
+  "location": "http://example.com/compute/012d2b48-c334-47f2-9368-557e75249042"
+}
+\end{verbatim}
+
+\subsection{PUT resource instance}
+The HTTP PUT method creates or replaces the resource instance at the specified
+URL. Since the resource identifier is supplied in the request URL an OCCI
+server MAY refuse to create a new instance.
+
+\subsubsection{Client PUT request}
+The full JSON representation of the resource instance MUST be supplied in the
+HTTP body of the request.
+
+\ralf{Including Links in the request breaks the rule of PUT being idempotent.
+Simply prohibit Links in PUT requests?}
+
+\begin{verbatim}
+PUT /compute/012d2b48-c334-47f2-9368-557e75249042 HTTP/1.1
+Host: example.com
+Accept: application/occi+json
+User-Agent: occi-client/x.x OCCI/1.1
+Content-Type: application/occi+json; charset=utf-8
+
+{
+  "categories": [ ... ],
+  "attributes": { ... },
+}
+\end{verbatim}
+
+\subsubsection{Server PUT response}
+Upon success an OCCI server MUST return HTTP status code 200 and a complete
+JSON representation of the created/replaced resource instance. The response MUST
+be identical%
+\footnote{Provided the resource instance was not changed in the meantime.} of the
+to that of a subsequent GET request same URL.
+
+\begin{verbatim}
+HTTP/1.1 200 OK
+Server: occi-server/x.x OCCI/1.1
+Category: compute;
+          scheme="http://schemas.ogf.org/occi/infrastructure#";
+          class="kind";
+          title="Compute Resource"
+Content-Type: application/occi+json; charset=utf-8
+
+{
+  "categories": [ ... ],
+  "actions": [ ... ],
+  "links": [ ... ],
+  "attributes": { ... },
+  "location": "http://example.com/compute/012d2b48-c334-47f2-9368-557e75249042"
+}
+\end{verbatim}
+
+\subsection{POST resource instance with``action'' query parameter}
+An OCCI Action is invoked using the HTTP POST method together with query
+parameter named ``action''.
+
+\subsubsection{Client POST action request}
+\begin{verbatim}
+POST /compute/012d2b48-c334-47f2-9368-557e75249042?action=stop HTTP/1.1
+Host: example.com
+Accept: application/occi+json
+User-Agent: occi-client/x.x OCCI/1.1
+Content-Type: application/occi+json; charset=utf-8
+
+{
+  "categories": [{
+    "term": "stop",
+    "scheme": "http://schemas.ogf.org/occi/infrastructure/compute/action#",
+    "class": "kind"
+  }],
+  "attributes": {
+    "method": "graceful"
+  },
+}
+\end{verbatim}
+
+\subsubsection{Server POST action response}
+
+\begin{verbatim}
+HTTP/1.1 204 OK
+Server: occi-server/x.x OCCI/1.1
+\end{verbatim}
+
+\subsection{POST resource instance without any query parameters}
+\ralf{This would imply a partial update of the resource instance. While it is
+easy to supply only the attributes to be updated the question is if there are any
+valid use cases for partial updates using JSON?}
+
+\subsection{DELETE resource instance}
+The HTTP DELETE method destroys a resource instance and any OCCI Links
+associated with the resource instance.
+
+\subsubsection{Client DELETE request}
+\begin{verbatim}
+DELETE /compute/012d2b48-c334-47f2-9368-557e75249042 HTTP/1.1
+Host: example.com
+Accept: application/occi+json
+\end{verbatim}
+
+\subsubsection{Server DELETE response}
+\begin{verbatim}
+HTTP/1.1 204 OK
+Server: occi-server/x.x OCCI/1.1
+\end{verbatim}
+
+
+\section{HTTP methods applied to collections URLs}
+This section describes the HTTP methods used to manipulate collections. Each
+HTTP method described is assumed to operate on an URL referring to a collection
+of elements, an URL such as the following:
+\begin{verbatim}
+  http://example.com/storage/
+\end{verbatim}
+
+A collection consist of a set of resource instances and there are three
+differrent types of collections which may be exposed by an OCCI server.  The
+request and response format is identical for all three types collections
+although the semantics differ slightly for the PUT and POST methods.
+\begin{description}
+\item[Kind locations] The location associated with an OCCI Kind instance
+represents the collection of all resource instances of that particulary Kind.
+\item[Mixin locations] The location of an OCCI Mixin instance represents the
+collection of all resource instances associated with that Mixin.
+\item[Arbitrary path] Any path in the URL namespace which is neither a Kind nor
+a Mixin location. A typical example is the root URL e.g.~{\tt
+http://example.com/}. Such a path combines all collections in the sub-tree
+starting at the path. Therefore the root URL is a collection of all resource
+instances available.
+\end{description}
+
+\subsection{GET collection}
+The HTTP GET method retreives a list of all resource instances in the
+collection. Filtering and pagination information is encoded in the query string
+of the URL.
+
+\subsubsection{Client GET request}
+The query string of the request URL MUST have the following format:
+\begin{verbatim}
+query-string        = ""
+                    | "?" query-parameter *( "&" query-parameter )
+  query-parameter   = attribute-filter
+                    | category-filter
+                    | pagination-start
+                    | pagination-count
+  attribute-filter  = "q=" attribute-search *( "+" attribute-search )
+  attribute-search  = 1*( string-urlencoded |
+                          attribute-name "%3D" string-urlencoded )
+  category-filter   = "category=" string-urlencoded
+  pagination-start  = "start=" 1*( DIGIT )
+  pagination-count  = "count=" 1*( DIGIT )
+  attribute-name    = attr-component *( "." attr-component )
+  attr-component    = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  string-urlencoded = *( ALPHA | DIGIT | "-" | "_" | "." | "~" | "%" )
+
+\end{verbatim}
+
+\paragraph*{Filtering} A search filter can be applied to categories and attributes
+of resource instances in a collection. An OCCI server SHOULD support filtering.
+The query parameters MUST be URL encoded.
+
+Attribute filters are specified using the {\em q} query parameter.  A filter such
+as {\tt q=ubuntu+inactive} would match all resource instances whose combined
+set of attribute values includes both the word ``ubuntu'' and ``inactive''. It
+is also possible to match on specific attributes by preceeding the search term
+with the attribute name and an equal sign, for example {\tt
+occi.core.title\%3Dubuntu+occi.compute.state\%3Dinactive}. 
+
+The category filter is specified using the {\em category} query parameter and
+represent a single Kind, Mixin or Action category to be matched. The following
+query would include only resource instances of the Compute type:
+{\tt category=http\%3A\%2F\%2Fschemas.ogf.org\%2Focci\%2Finfrastructure\%23compute}
+
+\paragraph*{Pagination} An OCCI client MAY request that the server only return
+a subset of a collection. This is accomplished using the {\em start} and
+{\em count} query parameters.  An OCCI server MUST support pagination.
+
+The {\em start} parameter specifies the offset into the collection. A value of
+zero, {\tt start=0} indicates the beginning of the collection.
+%
+The {\em count} parameter sets the maximum number of elements to include in the
+response. For example {\tt ?start=20\&count=10} would indicate the third page
+with a limit of 10 elements per page.
+
+\paragraph*{Example request}
+
+\begin{verbatim}
+GET /storage/?q=ubuntu+server&start=0&count=20 HTTP/1.1
+Host: example.com
+Accept: application/occi+json
+User-Agent: occi-client/x.x OCCI/1.1
+\end{verbatim}
+
+\subsubsection{Server GET response}
+\begin{verbatim}
+HTTP/1.1 200 OK
+Server: occi-server/x.x OCCI/1.1
+Content-Type: application/occi+json; charset=utf-8
+
+{
+  "start": 0,
+  "count": 3,
+  "collection": [
+    {
+      "categories": [ ... ],
+      "actions": [ ... ],
+      "links": [ ... ],
+      "attributes": { ... },
+      "location": "http://example.com/storage/e3578467-b6ba-448b-8032-5203278d54db"
+    },
+    { ... },
+    { ... }
+  ]
+}
+\end{verbatim}
+
+
+
+\subsection{POST collection}
+The HTTP POST method is used to create/update one or more resource instances in
+a single atomic request. An OCCI server MUST identify existing resource instances
+using the {\tt occi.core.id} attribute.
+
+\subsubsection{Client POST request}
+\begin{verbatim}
+POST /storage/ HTTP/1.1
+Host: example.com
+Accept: application/occi+json
+User-Agent: occi-client/x.x OCCI/1.1
+Content-Type: application/occi+json; charset=utf-8
+
+{
+  "collection": [
+    {
+      "categories": [ ... ],
+      "links": [ ... ],
+      "attributes": { ... },
+    },
+    { ... },
+    { ... }
+  ]
+}
+\end{verbatim}
+
+\subsubsection{Server POST response}
+\begin{verbatim}
+HTTP/1.1 204 OK
+Server: occi-server/x.x OCCI/1.1
+\end{verbatim}
+\ralf{Should we support HTTP 200 returning the whole collection? Or maybe just the resource instances created/updated?}
+
+\subsection{POST collection with ``action'' query parameter}
+{\em todo}
+
+\subsection{PUT collection}
+Replace the entiry collection with a new one. \ralf{Should we support this?}
+
+\subsection{DELETE collection}
+Delete the entiry collection. \ralf{Should we support this?}
+
+
+\end{document}
