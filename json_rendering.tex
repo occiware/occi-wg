@@ -88,7 +88,92 @@ capabilities required to support modern service offerings.
 \section{Mandatory HTTP headers}
 \label{sec:mandatory_headers}
 
+HTTP headers which MUST be present in every JSON-rendered request and response.
+
+\subsection{Mandatory HTTP request headers}
+\begin{description}
+\item[Accept:] application/occi+json
+\item[Content-Type:] application/occi+json
+\end{description}
+
+\subsection{Mandatory HTTP response headers}
+\begin{description}
+\item[Content-Type:] application/occi+json
+\end{description}
+
 \section{JSON representation}
+\ralf{This section would describe all the details of the JSON objects used to
+represent resource instances and collections. IOW lots of ABNF,
+MUST/MUST-NOTs, etc... but for now an example will have to do.}
+
+The JSON representation of a Compute instance. Notice that the ``full''
+category representation is used here, i.e.~what you would normally only see in
+the discovery interface. It has been included here to show how things are
+rendered.
+\begin{verbatim}
+{
+  "kind": {
+    "term": "compute",
+    "scheme": "http://schemas.ogf.org/occi/infrastructure#",
+    "title": "Compute Resource",
+    "related": "http://schemas.ogf.org/occi/core#resource",
+    "attributes": {
+      "occi.compute.architecture": {
+        "mutable": true,
+        "required": false,
+        "type": "string"
+      },
+      "occi.compute.cores": {
+        "mutable": true,
+        "required": false,
+        "type": "integer"
+      },
+      "occi.compute.hostname": {
+        "mutable": true,
+        "required": false,
+        "type": "string"
+      },
+      "occi.compute.speed": {
+        "mutable": true,
+        "required": false,
+        "type": "float"
+      },
+      "occi.compute.memory": {
+        "mutable": true,
+        "required": false,
+        "type": "float"
+      },
+      "occi.compute.state": {
+        "mutable": false,
+        "required": false,
+        "type": "string"
+      }
+    },
+    "actions": [
+      "http://schemas.ogf.org/occi/infrastructure/compute/action#start",
+      "http://schemas.ogf.org/occi/infrastructure/compute/action#stop",
+      "http://schemas.ogf.org/occi/infrastructure/compute/action#restart",
+      "http://schemas.ogf.org/occi/infrastructure/compute/action#suspend"
+    ],
+    "location": "/api/compute/"
+  },
+  "actions": [
+    {
+      "title": "Start Compute Resource",
+      "uri": "/api/compute/1154cb39-ea39-4a3a-a9da-c480968252f4?action=start",
+      "type": "http://schemas.ogf.org/occi/infrastructure/compute/action#start"
+    }
+  ],
+  "attributes": {
+    "occi.core.id": "1154cb39-ea39-4a3a-a9da-c480968252f4",
+    "occi.compute.architecture": "x86_64",
+    "occi.compute.hostname": "My Server",
+    "occi.compute.speed": 2.67,
+    "occi.compute.memory": 1.0,
+    "occi.compute.state": "inactive"
+  }
+}
+\end{verbatim}
 
 \section{HTTP methods applied to resource instance URLs}
 
@@ -127,7 +212,8 @@ Category: compute;
 Content-Type: application/occi+json; charset=utf-8
 
 {
-  "categories": [ ... ],
+  "kind": { ... },
+  "mixins": [ ... ],
   "actions": [ ... ],
   "links": [ ... ],
   "attributes": { ... },
@@ -155,7 +241,8 @@ User-Agent: occi-client/x.x OCCI/1.1
 Content-Type: application/occi+json; charset=utf-8
 
 {
-  "categories": [ ... ],
+  "kind": { ... },
+  "mixins": [ ... ],
   "attributes": { ... },
 }
 \end{verbatim}
@@ -177,7 +264,8 @@ Category: compute;
 Content-Type: application/occi+json; charset=utf-8
 
 {
-  "categories": [ ... ],
+  "kind": { ... },
+  "mixins": [ ... ],
   "actions": [ ... ],
   "links": [ ... ],
   "attributes": { ... },
@@ -198,11 +286,10 @@ User-Agent: occi-client/x.x OCCI/1.1
 Content-Type: application/occi+json; charset=utf-8
 
 {
-  "categories": [{
+  "action": {
     "term": "stop",
     "scheme": "http://schemas.ogf.org/occi/infrastructure/compute/action#",
-    "class": "kind"
-  }],
+  },
   "attributes": {
     "method": "graceful"
   },
@@ -248,12 +335,12 @@ of elements, an URL such as the following:
 \end{verbatim}
 
 A collection consist of a set of resource instances and there are three
-differrent types of collections which may be exposed by an OCCI server.  The
+different types of collections which may be exposed by an OCCI server.  The
 request and response format is identical for all three types collections
 although the semantics differ slightly for the PUT and POST methods.
 \begin{description}
 \item[Kind locations] The location associated with an OCCI Kind instance
-represents the collection of all resource instances of that particulary Kind.
+represents the collection of all resource instances of that particular Kind.
 \item[Mixin locations] The location of an OCCI Mixin instance represents the
 collection of all resource instances associated with that Mixin.
 \item[Arbitrary path] Any path in the URL namespace which is neither a Kind nor
@@ -264,7 +351,7 @@ instances available.
 \end{description}
 
 \subsection{GET collection}
-The HTTP GET method retreives a list of all resource instances in the
+The HTTP GET method retrieves a list of all resource instances in the
 collection. Filtering and pagination information is encoded in the query string
 of the URL.
 
@@ -296,7 +383,7 @@ The query parameters MUST be URL encoded.
 Attribute filters are specified using the {\em q} query parameter.  A filter such
 as {\tt q=ubuntu+inactive} would match all resource instances whose combined
 set of attribute values includes both the word ``ubuntu'' and ``inactive''. It
-is also possible to match on specific attributes by preceeding the search term
+is also possible to match on specific attributes by preceding the search term
 with the attribute name and an equal sign, for example {\tt
 occi.core.title\%3Dubuntu+occi.compute.state\%3Dinactive}. 
 
@@ -336,7 +423,8 @@ Content-Type: application/occi+json; charset=utf-8
   "count": 3,
   "collection": [
     {
-      "categories": [ ... ],
+      "kind": { ... },
+      "mixins": [ ... ],
       "actions": [ ... ],
       "links": [ ... ],
       "attributes": { ... },
@@ -366,7 +454,8 @@ Content-Type: application/occi+json; charset=utf-8
 {
   "collection": [
     {
-      "categories": [ ... ],
+      "kind": { ... },
+      "mixins": [ ... ],
       "links": [ ... ],
       "attributes": { ... },
     },
@@ -387,10 +476,29 @@ Server: occi-server/x.x OCCI/1.1
 {\em todo}
 
 \subsection{PUT collection}
-Replace the entiry collection with a new one. \ralf{Should we support this?}
+Replace the entire collection with a new one. \ralf{Should we support this?}
 
 \subsection{DELETE collection}
-Delete the entiry collection. \ralf{Should we support this?}
+Delete the entire collection. \ralf{Should we support this?}
 
+\section{More examples}
+The OCCI demo instance of occi-py%
+\footnote{\tt http://github.com/nyren/occi-py}
+running at {\tt http://www.nyren.net/api/} has an early version of the draft
+JSON rendering available.  Feel free to play around with it. However, please
+note the following limitations:
+\begin{itemize}
+\item The Content-Type is {\tt application/json} and not {\tt application/occi+json}
+which would be more appropriate.
+\item It does not support request data in JSON.
+\item Filtering and pagination is not yet supported.
+\end{itemize}
+
+A few example queries using curl:
+\begin{verbatim}
+curl -i -H 'accept: application/json' http://www.nyren.net/api/-/
+curl -i -H 'accept: application/json' http://www.nyren.net/api/link/
+curl -i -X POST -H 'accept: application/json' http://www.nyren.net/api/compute/
+\end{verbatim}
 
 \end{document}
