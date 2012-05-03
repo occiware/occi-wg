@@ -102,7 +102,7 @@ existing HTTP Rendering, etc}
 
 \section{Namespace}
 
-The JSON Rendering maps the OCCI Core model into the URL hierarchy by binding
+The JSON Rendering provides a represenation of the OCCI Core model into the URL hierarchy by binding
 \hl{Kind} and \hl{Mixin} instances to unique URL paths. Such an URL path is called
 the {\em location} of the \hl{Kind} or \hl{Mixin}.
 A provider is free to choose the {\em location} as long as it is unique
@@ -154,8 +154,8 @@ collection ``below'' the unbound path.
 
 \section{JSON format}
 \label{sec:json_format}
-The OCCI JSON Rendering uses uses one format to render entities and categories
-exchanged between an OCCI client and server.
+The OCCI JSON Rendering constists of a JSON object holding information on the OCCI core objects kind, mixin, action, link and resource.
+
 The following media-type has been assigned to the OCCI JSON Rendering:
 
 {\tt application/occi+json}
@@ -183,25 +183,30 @@ The following media-type has been assigned to the OCCI JSON Rendering:
 %See section~\ref{sec:format_discovery}.
 %\end{description}
 
-An OCCI client MUST specify the media-type whenever request payload is
-submitted. Likewise an OCCI server MUST specify the media-type of the response
-payload. The media-type MUST be specified in the HTTP Content-Type header as specified
-in RFC2616 \cite{rfc2616}.
+%An OCCI client MUST specify the media-type whenever request payload is
+%submitted. Likewise an OCCI server MUST specify the media-type of the response
+%payload. The media-type MUST be specified in the HTTP Content-Type header as specified
+%in RFC2616 \cite{rfc2616}.
 
-\subsection{Single resource instance format}
-\label{sec:format_entity}
+\subsection{Resource instance format}
+\label{sec:format_resource}
 
 A {\em resource instance} is a sub-type of OCCI Entity which has been instantiated.
 OCCI Resource and OCCI Link are the top-most sub-types of OCCI Entity.
 OCCI Entity itself cannot be instantiated.
 
-The single resource instance format consists of a JSON object as shown in the
+The resource instance format consists of a JSON object as shown in the
 following example.
-Table~\ref{tbl:format_entity} define the object members.
+Table~\ref{tbl:format_entity} defines the object members.
 \begin{verbatim}
 {
     "resources": [
         {
+            "kind": "http: //schemas.ogf.org/occi/infrastructure#compute",
+            "mixins": [
+                "http: //schemas.opennebula.org/occi/infrastructure#my_mixin",
+                "http: //schemas.other.org/occi#my_mixin"
+            ],
             "attributes": {
                 "occi": {
                     "core": {
@@ -224,11 +229,6 @@ Table~\ref{tbl:format_entity} define the object members.
                     }
                 }
             },
-            "kind": "http: //schemas.ogf.org/occi/infrastructure#compute",
-            "mixins": [
-                "http: //schemas.opennebula.org/occi/infrastructure#my_mixin",
-                "http: //schemas.other.org/occi#my_mixin"
-            ],
             "actions": [
                 {
                     "title": "Start My Server",
@@ -248,62 +248,35 @@ Table~\ref{tbl:format_entity} define the object members.
         }
     ]
 }
-
-{
-  "kind": "http://schemas.ogf.org/occi/infrastructure#compute",
-  "mixins": [ "http://example.com/templates/os#ubuntu-12.04" ],
-  "actions": [
-    {
-      "title": "Start My Server",
-      "href": "/compute/1154cb39-ea39-4a3a-a9da-c480968252f4?action=start",
-      "rel": "http://schemas.ogf.org/occi/infrastructure/compute/action#start"
-    }
-  ],
-  "links": [
-    {
-      "title": "My disk",
-      "href": "http://example.com/storage/ff0fcfee-711f-4f33-8202-f0beac5427a6",
-      "rel": [ "http://schemas.ogf.org/occi/infrastructure#storage" ],
-      "link_href": "http://example.com/link/storage/17aef983-945a-4adf-a841-34abd7445fbb",
-      "link_rel": [ "http://schemas.ogf.org/occi/infrastructure#storagelink" ],
-      "attributes": { "occi.storagelink.deviceid": "ide:0:1" }
-    }
-  ],
-  "attributes": {
-    "occi.core.id": "1154cb39-ea39-4a3a-a9da-c480968252f4",
-    "occi.compute.architecture": "x86_64",
-    "occi.compute.hostname": "My Server",
-    "occi.compute.speed": 2.67,
-    "occi.compute.memory": 1.0,
-    "occi.compute.state": "inactive"
-  }
-}
 \end{verbatim}
 \mytablefloat{
-    \label{tbl:format_entity}
-    A single resource instance is rendered using the the
-    {\tt application/occi-entity+json} format which consists of a JSON object
-    with the members described in the table.
+    \label{tbl:format_resource}
+    Resource instances are rendered using the
+    {\tt application/occi+json} format which consists of a JSON object with name {\em resources}
+    containing an array of JSON objects with the following entries.
     } {
     \begin{tabular}{llp{5.0cm}p{3.0cm}}
     \toprule
-    Object member & JSON type & Description & Applicable to \\
+    Object member & JSON type & Description & Manadatory \\
     \colrule
-    kind & string & Kind identifier & Request/response \\
+    kind & string & Kind identifier & mandatory \\
 
-    mixin & array of strings & List of Mixin identifiers &
-    Request/response \\
+    mixin & array of URIs & List of Mixin identifiers &
+    mandatory if resource has mixins \\
 
     actions & array of objects & Actions applicable to the resource instance &
-    Response {\em only} \\
+    mandatory if resource has applicable actions \\
 
-    links & array of objects & Associated OCCI Links &
-    Request/response. OCCI Resource {\em only} \\
+    links & array of URIs & Associated OCCI Links &
+    mandatory if resource has links\\
 
-    attributes & object & Instance attributes & Request/response \\
+    attributes & object & Instance attributes & mandatory if resource has attributes \\
     \botrule
     \end{tabular}
 }
+
+\subsection{Single link instance format}
+\label{sec:format_link}
 
 %\subsection{Collection format}
 %\label{sec:format_collection}
