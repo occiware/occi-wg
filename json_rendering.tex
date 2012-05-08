@@ -626,13 +626,10 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
 
 \subsection{Attribute description format}
 
-Attribute descriptions of OCCI Categories are rendered as JSON objects. As attributes
+Attribute descriptions of OCCI Categories are rendered as JSON objects. The dots of the attribute names define a hierarchy. This hierarchy is reflected by JSON objects within the higher layer JSON object or within the top level JSON object with name {\em attributes}. The last part of the attribute name hierarchy includes the properties-object pairs of the attribute as defined in table~\ref{tbl:format_attribute}
 
 \mytablefloat{
-    \label{tbl:format_discovery:attribute}
-    Table~\ref{tbl:format_discovery:kind_mixin} and \ref{tbl:format_discovery:category}
-    define the attribute properties of a \hl{Kind}, \hl{Mixin} or \hl{Action} to be
-    rendered as a JSON object consisting of attribute-name and properties-object pairs.
+    \label{tbl:format_attribute}
     The attribute-properties object has the members defined in this table.
     %
     All attribute properties are optional and the table shows which property default value
