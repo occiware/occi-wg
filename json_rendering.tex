@@ -5,6 +5,8 @@
 \usepackage{fancyhdr}
 \usepackage{comment}
 \usepackage{occi}
+\usepackage{lineno} % adds line numbers, may be removed for non draft versions
+\linenumbers        % adds line numbers, may be removed for non draft versions
 \setlength{\headheight}{13pt}
 \pagestyle{fancy}
 
@@ -197,7 +199,7 @@ OCCI Entity itself cannot be instantiated.
 
 The resource instance format consists of a JSON object as shown in the
 following example.
-Table~\ref{tbl:format_entity} defines the object members.
+Table~\ref{tbl:format_resource} defines the object members.
 \begin{verbatim}
 {
     "resources": [
@@ -210,7 +212,7 @@ Table~\ref{tbl:format_entity} defines the object members.
             "attributes": {
                 "occi": {
                     "core": {
-                        "id": 456,
+                        "id": "996ad860-2a9a-504f-8861-aeafd0b2ae29",
                         "summary": "This is a summary"
                     },
                     "compute": {
@@ -232,19 +234,27 @@ Table~\ref{tbl:format_entity} defines the object members.
             "actions": [
                 {
                     "title": "Start My Server",
-                    "href": "/compute/456?action=start",
-                    "category": "http: //schemas.ogf.org/occi/infrastructure/compute/action#start"
+                    "href": "/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29?action=start",
+                    "category": "http://schemas.ogf.org/occi/infrastructure/compute/action#start"
                 }
             ],
-            "links": [
-                {
-                		"title": "My disk",
-                    	"target": "http://myservice.tld/storage/456",
-                    	"rel": [ "http://schemas.ogf.org/occi/infrastructure#storage" ],
-                		"kind": "http://schemas.ogf.org/occi/infrastructure#storagelink"
-                		"attributes": { "occi.storagelink.deviceid": "ide:0:1" }
-                }
-            ]
+		    "links": [
+		        {
+		            "target": "http://myservice.tld/storage/59e06cf8-f390-5093-af2e-3685be593a25",
+		            "kind": "http://schemas.ogf.org/occi/infrastructure#storagelink",
+		            "attributes": {
+		                "occi": {
+		                    "core": {
+		                         "id": 391ada15-580c-5baa-b16f-eeb35d9b1122,
+		                    		"title": "My disk"
+		                    	},
+		                    "storagelink": {
+		                        "deviceid": "ide:0:1"
+		                    }
+		                }
+		            }
+		        }
+		    ]
         }
     ]
 }
@@ -257,26 +267,94 @@ Table~\ref{tbl:format_entity} defines the object members.
     } {
     \begin{tabular}{llp{5.0cm}p{3.0cm}}
     \toprule
-    Object member & JSON type & Description & Manadatory \\
+    Object member & JSON type & Description & Necessity \\
     \colrule
-    kind & string & Kind identifier & mandatory \\
+    kind & string & Kind identifier & Mandatory \\
 
-    mixin & array of URIs & List of Mixin identifiers &
-    mandatory if resource has mixins \\
+    mixins & array of URIs & List of Mixin identifiers &
+    Mandatory if resource has mixins \\
 
-    actions & array of objects & Actions applicable to the resource instance &
-    mandatory if resource has applicable actions \\
+    attributes & object & Instance attributes & Mandatory if resource has attributes \\
 
-    links & array of URIs & Associated OCCI Links &
-    mandatory if resource has links\\
-
-    attributes & object & Instance attributes & mandatory if resource has attributes \\
+    actions & array of objects & Actions applicable to the resource instance as defined in~\ref{tbl:format_action} &
+    Mandatory if resource has applicable actions \\
+    
+    links & array of objects & Associated OCCI Links as defined in~\ref{tbl:format_link} &
+    Mandatory if resource has links\\
     \botrule
     \end{tabular}
 }
 
-\subsection{Single link instance format}
+\subsection{Link instance format}
 \label{sec:format_link}
+
+The link instance format consists of a JSON object as shown in the
+following example.
+Table~\ref{tbl:format_link} defines the object members.
+\begin{verbatim}
+{
+    "links": [
+        {
+            "kind": "http://schemas.ogf.org/occi/infrastructure#networkinterface",
+            "mixins": [
+                "http://schemas.ogf.org/occi/infrastructure/networkinterface#ipnetworkinterface"
+            ],
+            "attributes": {
+                "occi": {
+                    "core": {
+                        "id": "22fe83ae-a20f-54fc-b436-cec85c94c5e8",
+		                "title": "My network interface"
+                    },
+                    "infrastructure": {
+                        "networkinterface": {
+                            "interface": "eth0",
+                            "mac": "00:80:41:ae:fd:7e",
+                            "address": "192.168.0.100",
+                            "gateway": "192.168.0.1",
+                            "allocation": "dynamic"
+                        }
+                    }
+                }
+            },
+            "actions": [
+                {
+                    "title": "Disable networkinterface",
+                    "href": "/networkinterface/22fe83ae-a20f-54fc-b436-cec85c94c5e8?action=up",
+                    "category": "http: //schemas.ogf.org/occi/infrastructure/networkinterface/action#up"
+                }
+            ],
+            "target": "http://myservice.tld/network/b7d55bf4-7057-5113-85c8-141871bf7635",
+            "source": "http://myservice.tld/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
+        }
+    ]
+}
+\end{verbatim}
+\mytablefloat{
+    \label{tbl:format_link}
+    Link instances are rendered using the
+    {\tt application/occi+json} format which consists of a JSON object with name {\em links}
+    containing an array of JSON objects with the following entries.
+    } {
+    \begin{tabular}{llp{5.0cm}p{3.0cm}}
+    \toprule
+    Object member & JSON type & Description & Necessity \\
+    \colrule
+    kind & string & Kind identifier & Mandatory \\
+
+    mixins & array of URIs & List of Mixin identifiers &
+    Mandatory if resource has mixins \\
+
+    attributes & object & Instance attributes & Mandatory if resource has attributes \\
+
+    actions & array of objects & Actions applicable to the resource instance as defined in~\ref{tbl:format_action} &
+    Mandatory if resource has applicable actions \\
+        
+    target & URI & Location of target resource & Mandatory \\
+    
+    source & URI & Location of source resource & Mandatory unless rendered within the source resource\\
+    \botrule
+    \end{tabular}
+}
 
 %\subsection{Collection format}
 %\label{sec:format_collection}
@@ -367,90 +445,24 @@ Table~\ref{tbl:format_entity} defines the object members.
 %    \end{tabular}
 %}
 
-\subsection{Discovery interface format}
+\subsection{Kind format}
 \label{sec:format_discovery}
 
-The OCCI discovery mechanism enables an OCCI client to discovery the types
-available for resource instantiation \cite{occi:core}.
-%
-The OCCI JSON Rendering provides an interface to this mechanism called the {\em
-discovery interface}%
-\footnote{Referred to as the ``Query interface'' in the OCCI HTTP Rendering
-\cite{occi:http_rendering}.}.
-%
-An OCCI client MAY add or remove custom \hl{Mixin}s through the discovery
-interface.
+\label{sec:format_kind}
 
-The discovery interface is rendered in the {\tt application/occi-discovery+json}
-format. The same format is used for both request and response.
-%
-The format consists of a JSON object as shown in the
-example below. Table~\ref{tbl:format_discovery} define the top-level object
-members.
-%
-The object members describing a \hl{Kind} or a \hl{Mixin} are defined in
-table~\ref{tbl:format_discovery:kind_mixin} while the object members describing
-a \hl{Category}%
-\footnote{A \hl{Category} instance is the identifier of an OCCI Action
-\cite{occi:core}.}
-are defined in table~\ref{tbl:format_discovery:category}.
-%
-The object members describing attribute properties are defined in
-table~\ref{tbl:format_discovery:attribute}.
+An OCCI kind is used to describe a OCCI entity and cannot itself be 
+instantiated. OCCI kinds can only be queried through the discovery interface 
+of an OCCI server to get a complete description of a specific OCCI entity sub type.
+
+The kind format consists of a JSON object as shown in the
+following example.
+Table~\ref{tbl:format_kind} defines the top-level object members.
+
 \mytablefloat{
-    \label{tbl:format_discovery}
-    The {\tt application/occi-discovery+json} format is used to render the
-    discovery mechanism. The format consists of a JSON object with the
-    following members.
-    } {
-    \begin{tabular}{llll}
-    \toprule
-    Object member & JSON type & Description & Applicable to \\
-    \colrule
-    kinds & array of objects
-    & List of \hl{Kind} instances, see table~\ref{tbl:format_discovery:kind_mixin}.
-    & Response {\em only} \\
-    mixins & array of objects
-    & List of \hl{Mixin} instances, see table~\ref{tbl:format_discovery:kind_mixin}.
-    & Request/response \\
-    categories & array of objects
-    & List of \hl{Action} instances, see table~\ref{tbl:format_discovery:action}.
-    & Response {\em only} \\
-    \botrule
-    \end{tabular}
-}
-\mytablefloat{
-    \label{tbl:format_discovery:kind_mixin}
-    Table~\ref{tbl:format_discovery} describe that \hl{Kind} and \hl{Mixin}
-    instances are rendered as two separate arrays of JSON objects. Each such
-    object has the following members.
-    } {
-    \begin{tabular}{llll}
-    \toprule
-    Object member & JSON type & Description & Applicable to \\
-    \colrule
-    term & string & Unique identifier within the categorisation scheme
-    & Request/response \\
-    scheme & string & Categorisation scheme & Request/response \\
-    title & string & Display name & Request/response \\
-    related & string & Identifier of related ``parent'' \hl{Kind} or \hl{Mixin} instance
-    & Request/response \\
-    attributes & object of name-object pairs & Attribute properties, see table~\ref{tbl:format_discovery:attribute}
-    & Request/response \\
-    actions & array of strings & List of action identifiers
-    & Response {\em only} \\
-    location & string & URL bound to the \hl{Kind} or \hl{Mixin} instance
-    & Request/response \\
-    \botrule
-    \end{tabular}
-}
-\mytablefloat{
-    \label{tbl:format_discovery:category}
-    A \hl{Action} instance identifies the category of an action and is only relevant to
-    responses from the discovery interface.
-    Table~\ref{tbl:format_discovery} describe that \hl{Action} instances are
-    rendered as an array of JSON objects. Each such object has the following
-    members.
+    \label{tbl:format_kind}
+    Kinds are rendered using the
+    {\tt application/occi+json} format which consists of a JSON object with name {\em kinds}
+    containing an array of JSON objects with the following entries.
     } {
     \begin{tabular}{llll}
     \toprule
@@ -458,39 +470,14 @@ table~\ref{tbl:format_discovery:attribute}.
     \colrule
     term & string & Unique identifier within the categorisation scheme \\
     scheme & string & Categorisation scheme \\
-    title & string & Display name \\
-    attributes & object & Attribute properties, see table~\ref{tbl:format_discovery:attribute} \\
+    related & array of URIs & List containing the related ``parent'' \hl{Kind} instance \\
+    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} \\
+    actions & array of URIs & List of action identifiers \\
+    location & string & URL bound to the \hl{Kind} instance \\
     \botrule
     \end{tabular}
 }
-\mytablefloat{
-    \label{tbl:format_discovery:attribute}
-    Table~\ref{tbl:format_discovery:kind_mixin} and \ref{tbl:format_discovery:category}
-    define the attribute properties of a \hl{Kind}, \hl{Mixin} or \hl{Category} to be
-    rendered as a JSON object consisting of attribute-name and properties-object pairs.
-    The attribute-properties object has the members defined in this table.
-    %
-    All attribute properties are optional and the table shows which property default value
-    an OCCI client MUST assume if a particular property is unspecified.
-    %
-    Only the {\tt default} property is valid in client requests to the
-    discovery interface.
-    \ralf{Should we have both float and integer?}
-    } {
-    \begin{tabular}{llll}
-    \toprule
-    Object member & JSON type & Description & Default \\
-    \colrule
-    mutable & boolean & Attribute mutability & true \\
-    required & boolean & Whether the attribute MUST be specified at resource instantiation & false \\
-    type & string & Enum \{string, integer, float, boolean\}
-    & string \\
-    range & 2 elements array & Lower and upper bound of an integer/float attribute & - \\
-    default & string, number or boolean & Attribute default when not specified by client. Implies required = false
-    & - \\
-    \botrule
-    \end{tabular}
-}
+
 \begin{verbatim}
 {
     "kinds": [
@@ -516,8 +503,7 @@ table~\ref{tbl:format_discovery:attribute}.
                             "type": "string",
                             "pattern": "inactive|active|suspended|failed",
                             "default": "inactive"
-                        },
-                        ...
+                        }
                     }
                 }
             },
@@ -528,13 +514,47 @@ table~\ref{tbl:format_discovery:attribute}.
                 "http://schemas.ogf.org/occi/infrastructure/compute/action#suspend"
             ],
             "location": "/compute/"
-        },
-        ...
-    ],
+        }
+    ]
+}
+\end{verbatim}
+
+\subsection{Mixin format}
+
+An OCCI mixin can be used to extend the description of OCCI entities and cannot itself be 
+instantiated. OCCI mixins can be queried through the discovery interface 
+of an OCCI server and also be created by a user.
+
+The mixin format consists of a JSON object as shown in the
+following example.
+Table~\ref{tbl:format_mixin} defines the top-level object members.
+
+\mytablefloat{
+    \label{tbl:format_mixin}
+    Mixins are rendered using the
+    {\tt application/occi+json} format which consists of a JSON object with name {\em mixins}
+    containing an array of JSON objects with the following entries.
+    } {
+    \begin{tabular}{llll}
+    \toprule
+    Object member & JSON type & Description \\
+    \colrule
+    term & string & Unique identifier within the categorisation scheme \\
+    scheme & string & Categorisation scheme \\
+    related & array of URIs & List containing the related ``parent'' \hl{mixin} instances \\
+    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} \\
+    actions & array of URIs & List of action identifiers \\
+    location & string & URL bound to the \hl{Mixin} instance \\
+    \botrule
+    \end{tabular}
+}
+
+\begin{verbatim}
+{
     "mixins": [
         {
             "term": "medium",
-            "scheme": "http://example.com/templates/resource#",
+            "scheme": "http://example.com/template/resource#",
             "title": "Medium VM",
             "related": [
                 "http://schemas.ogf.org/occi/infrastructure#resource_tpl",
@@ -549,11 +569,42 @@ table~\ref{tbl:format_discovery:attribute}.
                         }
                     }
                 }
-            }
-        },
-        ...
+            },
+            "location": "/template/resource/medium/"
+        }
     ]
-    {
+}
+\end{verbatim}
+
+\subsection{Action format}
+
+An OCCI action can be used to trigger specific actions on an OCCI entity and cannot itself be 
+instantiated. OCCI actions can only be queried through the discovery interface 
+of an OCCI server.
+
+The action format consists of a JSON object as shown in the
+following example.
+Table~\ref{tbl:format_mixin} defines the top-level object members.
+
+\mytablefloat{
+    \label{tbl:format_mixin}
+    Mixins are rendered using the
+    {\tt application/occi+json} format which consists of a JSON object with name {\em actions}
+    containing an array of JSON objects with the following entries.
+    } {
+    \begin{tabular}{llll}
+    \toprule
+    Object member & JSON type & Description \\
+    \colrule
+    term & string & Unique identifier within the categorisation scheme \\
+    scheme & string & Categorisation scheme \\
+    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} \\
+    \botrule
+    \end{tabular}
+}
+
+\begin{verbatim}
+{
     "actions": [
         {
             "term": "stop",
@@ -568,11 +619,38 @@ table~\ref{tbl:format_discovery:attribute}.
                     "default": "poweroff"
                 }
             }
-        },
-		...
+        }
 	]
 }
 \end{verbatim}
+
+\subsection{Attribute description format}
+
+Attribute descriptions of OCCI Categories are rendered as JSON objects. As attributes
+
+\mytablefloat{
+    \label{tbl:format_discovery:attribute}
+    Table~\ref{tbl:format_discovery:kind_mixin} and \ref{tbl:format_discovery:category}
+    define the attribute properties of a \hl{Kind}, \hl{Mixin} or \hl{Action} to be
+    rendered as a JSON object consisting of attribute-name and properties-object pairs.
+    The attribute-properties object has the members defined in this table.
+    %
+    All attribute properties are optional and the table shows which property default value
+    an OCCI client MUST assume if a particular property is unspecified.
+    } {
+    \begin{tabular}{llll}
+    \toprule
+    Object member & JSON type & Description & Default \\
+    \colrule
+    mutable & boolean & Attribute mutability & true \\
+    required & boolean & Whether the attribute MUST be specified at resource instantiation & false \\
+    type & string & Enum \{string, number, boolean\}
+    & string \\
+    pattern & string & Posix Extended Regular Expression as defined in \cite{iso9945:2009}. For interoperability reasons, POSIX character classes like e.g. [:alpha:] should not be used. & - \\
+    default & string, number or boolean & Attribute default when not specified by client. & - \\
+    \botrule
+    \end{tabular}
+}
 
 
 %\section{HTTP methods applied to resource instance URLs}
