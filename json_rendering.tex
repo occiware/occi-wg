@@ -7,6 +7,7 @@
 \usepackage{occi}
 \usepackage{lineno} % adds line numbers, may be removed for non draft versions
 \linenumbers        % adds line numbers, may be removed for non draft versions
+\usepackage{minted} % code highlighting
 \setlength{\headheight}{13pt}
 \pagestyle{fancy}
 
@@ -61,7 +62,7 @@ unlimited.
 
 \underline{Copyright Notice}
 
-Copyright \copyright Open Grid Forum (2011). All Rights Reserved.
+Copyright \copyright Open Grid Forum (2012). All Rights Reserved.
 
 \underline{Trademarks}
 
@@ -198,67 +199,24 @@ OCCI Resource and OCCI Link are the top-most sub-types of OCCI Entity.
 OCCI Entity itself cannot be instantiated.
 
 The resource instance format consists of a JSON object as shown in the
-following example.
+following example. Section \ref{sec:example_resource} contains a detailed example.
 Table~\ref{tbl:format_resource} defines the object members.
-\begin{verbatim}
+\begin{minted}{json}
 {
     "resources": [
         {
-            "kind": "http: //schemas.ogf.org/occi/infrastructure#compute",
-            "mixins": [
-                "http: //schemas.opennebula.org/occi/infrastructure#my_mixin",
-                "http: //schemas.other.org/occi#my_mixin"
-            ],
-            "attributes": {
-                "occi": {
-                    "core": {
-                        "id": "996ad860-2a9a-504f-8861-aeafd0b2ae29",
-                        "summary": "This is a summary"
-                    },
-                    "compute": {
-                        "speed": 2,
-                        "memory": 4,
-                        "cores": 2
-                    }
-                },
-                "org": {
-                    "other": {
-                        "occi": {
-                            "my_mixin": {
-                                "my_attribute": "my_value"
-                            }
-                        }
-                    }
-                }
-            },
-            "actions": [
-                {
-                    "title": "Start My Server",
-                    "href": "/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29?action=start",
-                    "category": "http://schemas.ogf.org/occi/infrastructure/compute/action#start"
-                }
-            ],
-		    "links": [
-		        {
-		            "target": "http://myservice.tld/storage/59e06cf8-f390-5093-af2e-3685be593a25",
-		            "kind": "http://schemas.ogf.org/occi/infrastructure#storagelink",
-		            "attributes": {
-		                "occi": {
-		                    "core": {
-		                         "id": 391ada15-580c-5baa-b16f-eeb35d9b1122,
-		                    		"title": "My disk"
-		                    	},
-		                    "storagelink": {
-		                        "deviceid": "ide:0:1"
-		                    }
-		                }
-		            }
-		        }
-		    ]
+            "kind": "...",
+            "mixins": [ "...", "..." ],
+            "attributes": { },
+            "actions": [ { }, { } ],
+            "id": "...",
+            "title": "...",
+            "summary": "...",
+            "links": [ { }, { } ],
         }
     ]
 }
-\end{verbatim}
+\end{minted}
 \mytablefloat{
     \label{tbl:format_resource}
     Resource instances are rendered using the
@@ -271,13 +229,19 @@ Table~\ref{tbl:format_resource} defines the object members.
     \colrule
     kind & string & Kind identifier & Mandatory \\
 
-    mixins & array of URIs & List of Mixin identifiers &
+    mixins & array of strings & List of Mixin identifiers &
     Mandatory if resource has mixins \\
 
     attributes & object & Instance attributes & Mandatory if resource has attributes \\
 
     actions & array of objects & Actions applicable to the resource instance as defined in~\ref{tbl:format_action} &
     Mandatory if resource has applicable actions \\
+    
+    id & string & UUID of the resource & Mandatory\\
+        
+    title & string & Title of the resource & Optional\\
+    
+    summary & string & Summary describing the resource & Optional\\
     
     links & array of objects & Associated OCCI Links as defined in~\ref{tbl:format_link} &
     Mandatory if resource has links\\
@@ -289,46 +253,24 @@ Table~\ref{tbl:format_resource} defines the object members.
 \label{sec:format_link}
 
 The link instance format consists of a JSON object as shown in the
-following example.
+following example. Section \ref{sec:example_link} contains a detailed example.
 Table~\ref{tbl:format_link} defines the object members.
-\begin{verbatim}
+\begin{minted}{json}
 {
     "links": [
         {
-            "kind": "http://schemas.ogf.org/occi/infrastructure#networkinterface",
-            "mixins": [
-                "http://schemas.ogf.org/occi/infrastructure/networkinterface#ipnetworkinterface"
-            ],
-            "attributes": {
-                "occi": {
-                    "core": {
-                        "id": "22fe83ae-a20f-54fc-b436-cec85c94c5e8",
-		                "title": "My network interface"
-                    },
-                    "infrastructure": {
-                        "networkinterface": {
-                            "interface": "eth0",
-                            "mac": "00:80:41:ae:fd:7e",
-                            "address": "192.168.0.100",
-                            "gateway": "192.168.0.1",
-                            "allocation": "dynamic"
-                        }
-                    }
-                }
-            },
-            "actions": [
-                {
-                    "title": "Disable networkinterface",
-                    "href": "/networkinterface/22fe83ae-a20f-54fc-b436-cec85c94c5e8?action=up",
-                    "category": "http: //schemas.ogf.org/occi/infrastructure/networkinterface/action#up"
-                }
-            ],
-            "target": "http://myservice.tld/network/b7d55bf4-7057-5113-85c8-141871bf7635",
-            "source": "http://myservice.tld/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
+            "kind": "...",
+            "mixins": [ "...", "..." ],
+            "attributes": { },
+            "actions": [ { }, { } ],
+            "id": "...",
+            "title": "...",
+            "target": "...",
+            "source": "..."
         }
     ]
 }
-\end{verbatim}
+\end{minted}
 \mytablefloat{
     \label{tbl:format_link}
     Link instances are rendered using the
@@ -341,17 +283,21 @@ Table~\ref{tbl:format_link} defines the object members.
     \colrule
     kind & string & Kind identifier & Mandatory \\
 
-    mixins & array of URIs & List of Mixin identifiers &
+    mixins & array of strings & List of Mixin identifiers &
     Mandatory if resource has mixins \\
 
     attributes & object & Instance attributes & Mandatory if resource has attributes \\
 
     actions & array of objects & Actions applicable to the resource instance as defined in~\ref{tbl:format_action} &
     Mandatory if resource has applicable actions \\
-        
-    target & URI & Location of target resource & Mandatory \\
     
-    source & URI & Location of source resource & Mandatory unless rendered within the source resource\\
+    id & string & UUID of the link & Mandatory\\
+        
+    title & string & Title of the link & Optional\\
+        
+    target & string & Absolute location of target resource & Mandatory \\
+    
+    source & string & Absolute location of source resource & Mandatory unless rendered within the source resource\\
     \botrule
     \end{tabular}
 }
@@ -446,8 +392,6 @@ Table~\ref{tbl:format_link} defines the object members.
 %}
 
 \subsection{Kind format}
-\label{sec:format_discovery}
-
 \label{sec:format_kind}
 
 An OCCI kind is used to describe a OCCI entity and cannot itself be 
@@ -455,7 +399,7 @@ instantiated. OCCI kinds can only be queried through the discovery interface
 of an OCCI server to get a complete description of a specific OCCI entity sub type.
 
 The kind format consists of a JSON object as shown in the
-following example.
+following example. Section \ref{sec:example_kind} contains a detailed example.
 Table~\ref{tbl:format_kind} defines the top-level object members.
 
 \mytablefloat{
@@ -466,19 +410,275 @@ Table~\ref{tbl:format_kind} defines the top-level object members.
     } {
     \begin{tabular}{llll}
     \toprule
-    Object member & JSON type & Description \\
+    Object member & JSON type & Description & Necessity\\
     \colrule
-    term & string & Unique identifier within the categorisation scheme \\
-    scheme & string & Categorisation scheme \\
-    related & array of URIs & List containing the related ``parent'' \hl{Kind} instance \\
-    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} \\
-    actions & array of URIs & List of action identifiers \\
-    location & string & URL bound to the \hl{Kind} instance \\
+    term & string & Unique identifier within the categorisation scheme & Mandatory\\
+    scheme & string & Categorisation scheme & Mandatory\\
+    title & string & Title of the kind & Mandatory\\
+    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} & Mandatory if kind has attributes\\
+    related & array of strings & List containing the related ``parent'' \hl{Kind} instance & Mandatory if kind is related to another kind\\
+    actions & array of strings & List of action identifiers & Mandatory if kind has actions\\
+    location & string & Relative URL bound to the \hl{Kind} instance & Mandatory\\
     \botrule
     \end{tabular}
 }
 
-\begin{verbatim}
+\begin{minted}{json}
+{
+    "kinds": [
+        {
+            "term": "...",
+            "scheme": "...",
+            "title": "...",
+            "attributes": { },
+            "actions": [ "...", "..." ],
+            "related": [ "...", "..." ],
+            "location": "..."
+        }
+    ]
+}
+\end{minted}
+
+\subsection{Mixin format}
+\label{sec:format_mixin}
+
+An OCCI mixin can be used to extend the description of OCCI entities and cannot itself be 
+instantiated. OCCI mixins can be queried through the discovery interface 
+of an OCCI server and also be created by a user.
+
+The mixin format consists of a JSON object as shown in the
+following example. Section \ref{sec:example_kind} contains a detailed example.
+Table~\ref{tbl:format_mixin} defines the top-level object members.
+
+\mytablefloat{
+    \label{tbl:format_mixin}
+    Mixins are rendered using the
+    {\tt application/occi+json} format which consists of a JSON object with name {\em mixins}
+    containing an array of JSON objects with the following entries.
+    } {
+    \begin{tabular}{llll}
+    \toprule
+    Object member & JSON type & Description & Necessity\\
+    \colrule
+    term & string & Unique identifier within the categorisation scheme & Mandatory\\
+    scheme & string & Categorisation scheme & Mandatory\\
+    title & string & Title of the mixin & Mandatory\\
+    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} & Mandatory if mixin has attributes\\
+    related & array of strings & List containing the related ``parent'' \hl{Mixin} instance & Mandatory if mixin is related to other mixins\\
+    actions & array of strings & List of action identifiers & Mandatory if mixin has actions\\
+    location & string & Relative URL bound to the \hl{Kind} instance & Mandatory\\
+    \botrule
+    \end{tabular}
+}
+
+\begin{minted}{json}
+{
+    "mixins": [
+        {
+            "term": "...",
+            "scheme": "...",
+            "title": "...",
+            "attributes": { },
+            "actions": [ "...", "..." ],
+            "related": [ "...", "..." ],
+            "location": "..."
+        }
+    ]
+}
+\end{minted}
+
+\subsection{Action format}
+\label{sec:format_action}
+
+An OCCI action can be used to trigger specific actions on an OCCI entity and cannot itself be 
+instantiated. OCCI actions can only be queried through the discovery interface 
+of an OCCI server.
+
+The action format consists of a JSON object as shown in the
+following example.
+Table~\ref{tbl:format_action} defines the top-level object members.
+
+\mytablefloat{
+    \label{tbl:format_action}
+    Actions are rendered using the
+    {\tt application/occi+json} format which consists of a JSON object with name {\em actions}
+    containing an array of JSON objects with the following entries.
+    } {
+    \begin{tabular}{llll}
+    \toprule
+    Object member & JSON type & Description & Necessity\\
+    \colrule
+    term & string & Unique identifier within the categorisation scheme & Mandatory\\
+    scheme & string & Categorisation scheme & Mandatory\\
+    title & string & Title of the mixin & Optional\\
+    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} & Mandatory if action has attributes\\
+    \botrule
+    \end{tabular}
+}
+
+\begin{minted}{json}
+{
+    "actions": [
+        {
+            "term": "...",
+            "scheme": "...",
+            "title": "...",
+            "attributes": { }
+        }
+	]
+}
+\end{minted}
+
+\subsection{Attribute description format}
+\label{sec:format_attribute_description}
+
+Attribute descriptions of OCCI Categories are rendered as JSON objects. The dots of the attribute names define a hierarchy. This hierarchy is reflected by JSON objects within the higher layer JSON object or within the top level JSON object with name {\em attributes}. The last part of the attribute name hierarchy includes the properties-object pairs of the attribute as defined in table~\ref{tbl:format_attribute}
+
+\mytablefloat{
+    \label{tbl:format_attribute_description}
+    The attribute-properties object has the members defined in this table.
+    %
+    All attribute properties are optional and the table shows which property default value
+    an OCCI client MUST assume if a particular property is unspecified.
+    } {
+    \begin{tabular}{llll}
+    \toprule
+    Object member & JSON type & Description & Default \\
+    \colrule
+    mutable & boolean & Attribute mutability & true \\
+    required & boolean & Whether the attribute MUST be specified at resource instantiation & false \\
+    type & string & Enum \{string, number, boolean\}
+    & string \\
+    pattern & string & Posix Extended Regular Expression as defined in \cite{iso9945:2009}. For interoperability reasons, POSIX character classes like e.g. [:alpha:] should not be used. & .* \\
+    minimum & number & If type is a number, then minimum defines the lowest number allowed. If type is a string, then minimum defines the minimal length of the string. \\
+    maximum & If type is a number, then maximum defines the highest number allowed. If type is a string, then maximum defines the maximal length of the string.\\
+    default & string, number or boolean & Attribute default when not specified by client. & null \\
+    \botrule
+    \end{tabular}
+}
+\begin{minted}{json}
+{
+    "attributes": {
+        "...": {
+            "mutable": true,
+            "required": false,
+            "type": "string",
+            "pattern": ".*",
+            "minimum": 1,
+            "maximum": 65535,
+            "default": null
+        }
+    }
+}
+\end{minted}
+
+\section{Detailed examples}
+\label{sec:examples}
+
+\subsection{Resource instance format example}
+\label{sec:example_resource}
+
+\begin{minted}{json}
+{
+    "resources": [
+        {
+            "kind": "http: //schemas.ogf.org/occi/infrastructure#compute",
+            "mixins": [
+                "http: //schemas.opennebula.org/occi/infrastructure#my_mixin",
+                "http: //schemas.other.org/occi#my_mixin"
+            ],
+            "attributes": {
+                "occi": {
+                    "compute": {
+                        "speed": 2,
+                        "memory": 4,
+                        "cores": 2
+                    }
+                },
+                "org": {
+                    "other": {
+                        "occi": {
+                            "my_mixin": {
+                                "my_attribute": "my_value"
+                            }
+                        }
+                    }
+                }
+            },
+            "actions": [
+                {
+                    "title": "Start My Server",
+                    "href": "/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29?action=start",
+                    "category": "http://schemas.ogf.org/occi/infrastructure/compute/action#start"
+                }
+            ],
+            	"id": "996ad860-2a9a-504f-8861-aeafd0b2ae29",
+		    "title": "Compute resource",
+		    "summary": "This is a compute resource",
+		    "links": [
+		        {
+		            "target": "http://myservice.tld/storage/59e06cf8-f390-5093-af2e-3685be593a25",
+		            "kind": "http://schemas.ogf.org/occi/infrastructure#storagelink",
+		            "attributes": {
+		                "occi": {
+		                    "storagelink": {
+		                        "deviceid": "ide:0:1"
+		                    }
+		                }
+		            },
+		            "id": "391ada15-580c-5baa-b16f-eeb35d9b1122",
+		            "title": "My disk"
+		        }
+		    ]
+        }
+    ]
+}
+\end{minted}
+
+\subsection{Link instance format example}
+\label{sec:example_link}
+
+\begin{minted}{json}
+{
+    "links": [
+        {
+            "kind": "http://schemas.ogf.org/occi/infrastructure#networkinterface",
+            "mixins": [
+                "http://schemas.ogf.org/occi/infrastructure/networkinterface#ipnetworkinterface"
+            ],
+            "attributes": {
+                "occi": {
+                    "infrastructure": {
+                        "networkinterface": {
+                            "interface": "eth0",
+                            "mac": "00:80:41:ae:fd:7e",
+                            "address": "192.168.0.100",
+                            "gateway": "192.168.0.1",
+                            "allocation": "dynamic"
+                        }
+                    }
+                }
+            },
+            "actions": [
+                {
+                    "title": "Disable networkinterface",
+                    "href": "/networkinterface/22fe83ae-a20f-54fc-b436-cec85c94c5e8?action=up",
+                    "category": "http: //schemas.ogf.org/occi/infrastructure/networkinterface/action#up"
+                }
+            ],
+            "id": "22fe83ae-a20f-54fc-b436-cec85c94c5e8",
+		    "title": "My network interface",
+            "target": "http://myservice.tld/network/b7d55bf4-7057-5113-85c8-141871bf7635",
+            "source": "http://myservice.tld/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
+        }
+    ]
+}
+\end{minted}
+
+\subsection{Kind format example}
+\label{sec:example_kind}
+
+\begin{minted}{json}
 {
     "kinds": [
         {
@@ -495,7 +695,9 @@ Table~\ref{tbl:format_kind} defines the top-level object members.
                             "mutable": true,
                             "required": false,
                             "type": "string",
-                            "pattern": "(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*"
+                            "pattern": "(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*",
+                            "minimum": "1",
+                            "maximum": "255"
                         },
                         "state": {
                             "mutable": false,
@@ -517,39 +719,12 @@ Table~\ref{tbl:format_kind} defines the top-level object members.
         }
     ]
 }
-\end{verbatim}
+\end{minted}
 
-\subsection{Mixin format}
+\subsection{Mixin format example}
+\label{sec:example_mixin}
 
-An OCCI mixin can be used to extend the description of OCCI entities and cannot itself be 
-instantiated. OCCI mixins can be queried through the discovery interface 
-of an OCCI server and also be created by a user.
-
-The mixin format consists of a JSON object as shown in the
-following example.
-Table~\ref{tbl:format_mixin} defines the top-level object members.
-
-\mytablefloat{
-    \label{tbl:format_mixin}
-    Mixins are rendered using the
-    {\tt application/occi+json} format which consists of a JSON object with name {\em mixins}
-    containing an array of JSON objects with the following entries.
-    } {
-    \begin{tabular}{llll}
-    \toprule
-    Object member & JSON type & Description \\
-    \colrule
-    term & string & Unique identifier within the categorisation scheme \\
-    scheme & string & Categorisation scheme \\
-    related & array of URIs & List containing the related ``parent'' \hl{mixin} instances \\
-    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} \\
-    actions & array of URIs & List of action identifiers \\
-    location & string & URL bound to the \hl{Mixin} instance \\
-    \botrule
-    \end{tabular}
-}
-
-\begin{verbatim}
+\begin{minted}{json}
 {
     "mixins": [
         {
@@ -557,8 +732,7 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
             "scheme": "http://example.com/template/resource#",
             "title": "Medium VM",
             "related": [
-                "http://schemas.ogf.org/occi/infrastructure#resource_tpl",
-                "http://schemas.ogf.org/occi/infrastructure#compute"
+                "http://schemas.ogf.org/occi/infrastructure#resource_tpl"
             ],
             "attributes": {
                 "occi": {
@@ -574,36 +748,12 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
         }
     ]
 }
-\end{verbatim}
+\end{minted}
 
-\subsection{Action format}
+\subsection{Action format example}
+\label{sec:example_action}
 
-An OCCI action can be used to trigger specific actions on an OCCI entity and cannot itself be 
-instantiated. OCCI actions can only be queried through the discovery interface 
-of an OCCI server.
-
-The action format consists of a JSON object as shown in the
-following example.
-Table~\ref{tbl:format_mixin} defines the top-level object members.
-
-\mytablefloat{
-    \label{tbl:format_mixin}
-    Mixins are rendered using the
-    {\tt application/occi+json} format which consists of a JSON object with name {\em actions}
-    containing an array of JSON objects with the following entries.
-    } {
-    \begin{tabular}{llll}
-    \toprule
-    Object member & JSON type & Description \\
-    \colrule
-    term & string & Unique identifier within the categorisation scheme \\
-    scheme & string & Categorisation scheme \\
-    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} \\
-    \botrule
-    \end{tabular}
-}
-
-\begin{verbatim}
+\begin{minted}{json}
 {
     "actions": [
         {
@@ -620,35 +770,9 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
                 }
             }
         }
-	]
+    ]
 }
-\end{verbatim}
-
-\subsection{Attribute description format}
-
-Attribute descriptions of OCCI Categories are rendered as JSON objects. The dots of the attribute names define a hierarchy. This hierarchy is reflected by JSON objects within the higher layer JSON object or within the top level JSON object with name {\em attributes}. The last part of the attribute name hierarchy includes the properties-object pairs of the attribute as defined in table~\ref{tbl:format_attribute}
-
-\mytablefloat{
-    \label{tbl:format_attribute}
-    The attribute-properties object has the members defined in this table.
-    %
-    All attribute properties are optional and the table shows which property default value
-    an OCCI client MUST assume if a particular property is unspecified.
-    } {
-    \begin{tabular}{llll}
-    \toprule
-    Object member & JSON type & Description & Default \\
-    \colrule
-    mutable & boolean & Attribute mutability & true \\
-    required & boolean & Whether the attribute MUST be specified at resource instantiation & false \\
-    type & string & Enum \{string, number, boolean\}
-    & string \\
-    pattern & string & Posix Extended Regular Expression as defined in \cite{iso9945:2009}. For interoperability reasons, POSIX character classes like e.g. [:alpha:] should not be used. & - \\
-    default & string, number or boolean & Attribute default when not specified by client. & - \\
-    \botrule
-    \end{tabular}
-}
-
+\end{minted}
 
 %\section{HTTP methods applied to resource instance URLs}
 %
