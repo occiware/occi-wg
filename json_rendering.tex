@@ -78,6 +78,7 @@ capabilities required to support modern service offerings.
 
 \underline{Comments}
 \newcommand{\ralf}[1]{\textcolor{red}{RN: #1}}
+\newcommand{\andy}[1]{\textcolor{green}{AE: #1}}
 
 \newpage
 \tableofcontents
@@ -105,8 +106,9 @@ existing HTTP Rendering, etc}
 
 \section{Namespace}
 
-The JSON Rendering provides a represenation of the OCCI Core model into the URL hierarchy by binding
-\hl{Kind} and \hl{Mixin} instances to unique URL paths. Such an URL path is called
+The JSON Rendering provides a rendering (i.e. serialisation) of the OCCI 
+Core model into the URL hierarchy by binding
+\hl{Kind} and \hl{Mixin} instances to unique URL paths. Such a URL path is called
 the {\em location} of the \hl{Kind} or \hl{Mixin}.
 A provider is free to choose the {\em location} as long as it is unique
 within the service provider's URL namespace.
@@ -117,7 +119,7 @@ for the \hl{Compute} type may be bound to {\tt /my/occi/api/compute/}.
 A \hl{Kind} instance whose associated type cannot be instantiated MUST NOT be
 bound to an URL path. This applies to the \hl{Kind} instance for OCCI Entity.
 
-\subsection{Bound and unbound paths}
+\subsection{Bound and Unbound Paths}
 
 Since a limited set of URL paths are bound to \hl{Kind} and \hl{Mixin}
 instances the URL hierarchy consists of both {\em bound} and {\em unbound}
@@ -127,6 +129,7 @@ A bound URL path is the {\em location} of a \hl{Kind} or \hl{Mixin} collection.
 An unbound URL path MAY represent the union of all \hl{Kind} and \hl{Mixin}
 collection ``below'' the unbound path.
 \ralf{FIXME: Should this be a MUST instead?}
+\andy{Q: Do these apply for instances also?}
 
 % TODO move to OCCI Core
 
@@ -155,9 +158,10 @@ collection ``below'' the unbound path.
 %A request to {\tt /ipnetwork/30782156-c5e1-43c2-99fd-7cf46bc2daa7} MUST yield a
 %representation of the same \hl{Network} instance as in example 1.
 
-\section{JSON format}
+\section{JSON Format}
 \label{sec:json_format}
-The OCCI JSON Rendering constists of a JSON object holding information on the OCCI core objects kind, mixin, action, link and resource.
+The OCCI JSON Rendering consists of a JSON object holding information on the 
+OCCI core objects kind, mixin, action, link and resource.
 
 The following media-type has been assigned to the OCCI JSON Rendering:
 
@@ -191,7 +195,7 @@ The following media-type has been assigned to the OCCI JSON Rendering:
 %payload. The media-type MUST be specified in the HTTP Content-Type header as specified
 %in RFC2616 \cite{rfc2616}.
 
-\subsection{Resource instance format}
+\subsection{Resource Instance Format}
 \label{sec:format_resource}
 
 A {\em resource instance} is a sub-type of OCCI Entity which has been instantiated.
@@ -248,8 +252,7 @@ Table~\ref{tbl:format_resource} defines the object members.
     \botrule
     \end{tabular}
 }
-
-\subsection{Link instance format}
+\subsection{Link Instance Format}
 \label{sec:format_link}
 
 The link instance format consists of a JSON object as shown in the
@@ -391,12 +394,12 @@ Table~\ref{tbl:format_link} defines the object members.
 %    \end{tabular}
 %}
 
-\subsection{Kind format}
+\subsection{Kind Format}
 \label{sec:format_kind}
 
 An OCCI kind is used to describe a OCCI entity and cannot itself be 
-instantiated. OCCI kinds can only be queried through the discovery interface 
-of an OCCI server to get a complete description of a specific OCCI entity sub type.
+instantiated. OCCI kinds can only be queried through the query interface 
+of an OCCI server to get a complete description of a specific OCCI entity sub-type.
 
 The kind format consists of a JSON object as shown in the
 following example. Section \ref{sec:example_kind} contains a detailed example.
@@ -439,12 +442,12 @@ Table~\ref{tbl:format_kind} defines the top-level object members.
 }
 \end{minted}
 
-\subsection{Mixin format}
+\subsection{Mixin Format}
 \label{sec:format_mixin}
 
-An OCCI mixin can be used to extend the description of OCCI entities and cannot itself be 
-instantiated. OCCI mixins can be queried through the discovery interface 
-of an OCCI server and also be created by a user.
+An OCCI mixin can be used to extend OCCI entities and cannot itself be 
+instantiated. OCCI mixins can be queried through the query interface 
+of an OCCI server and also be created by a user, where permitted.
 
 The mixin format consists of a JSON object as shown in the
 following example. Section \ref{sec:example_kind} contains a detailed example.
@@ -487,11 +490,11 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
 }
 \end{minted}
 
-\subsection{Action format}
+\subsection{Action Format}
 \label{sec:format_action}
 
 An OCCI action can be used to trigger specific actions on an OCCI entity and cannot itself be 
-instantiated. OCCI actions can only be queried through the discovery interface 
+instantiated. OCCI actions can only be queried through the query interface 
 of an OCCI server.
 
 The action format consists of a JSON object as shown in the
@@ -529,10 +532,15 @@ Table~\ref{tbl:format_action} defines the top-level object members.
 }
 \end{minted}
 
-\subsection{Attribute description format}
+\subsection{Attribute Description Format}
 \label{sec:format_attribute_description}
 
-Attribute descriptions of OCCI Categories are rendered as JSON objects. The dots of the attribute names define a hierarchy. This hierarchy is reflected by JSON objects within the higher layer JSON object or within the top level JSON object with name {\em attributes}. The last part of the attribute name hierarchy includes the properties-object pairs of the attribute as defined in table~\ref{tbl:format_attribute}
+Attribute descriptions of OCCI Categories are rendered as JSON objects. 
+The dots of the attribute names define a hierarchy. This hierarchy is reflected 
+by JSON objects within the higher layer JSON object or within the top level 
+JSON object with name {\em attributes}. The last part of the attribute name
+ hierarchy includes the properties-object pairs of the attribute as defined 
+ in table~\ref{tbl:format_attribute_description}
 
 \mytablefloat{
     \label{tbl:format_attribute_description}
@@ -572,10 +580,10 @@ Attribute descriptions of OCCI Categories are rendered as JSON objects. The dots
 }
 \end{minted}
 
-\section{Detailed examples}
+\section{Detailed Examples}
 \label{sec:examples}
 
-\subsection{Resource instance format example}
+\subsection{Resource Instance Format Example}
 \label{sec:example_resource}
 
 \begin{minted}{json}
@@ -635,7 +643,7 @@ Attribute descriptions of OCCI Categories are rendered as JSON objects. The dots
 }
 \end{minted}
 
-\subsection{Link instance format example}
+\subsection{Link Instance Format Example}
 \label{sec:example_link}
 
 \begin{minted}{json}
@@ -675,7 +683,7 @@ Attribute descriptions of OCCI Categories are rendered as JSON objects. The dots
 }
 \end{minted}
 
-\subsection{Kind format example}
+\subsection{Kind Format Example}
 \label{sec:example_kind}
 
 \begin{minted}{json}
@@ -721,7 +729,7 @@ Attribute descriptions of OCCI Categories are rendered as JSON objects. The dots
 }
 \end{minted}
 
-\subsection{Mixin format example}
+\subsection{Mixin Format Example}
 \label{sec:example_mixin}
 
 \begin{minted}{json}
@@ -750,7 +758,7 @@ Attribute descriptions of OCCI Categories are rendered as JSON objects. The dots
 }
 \end{minted}
 
-\subsection{Action format example}
+\subsection{Action Format Example}
 \label{sec:example_action}
 
 \begin{minted}{json}
