@@ -224,7 +224,7 @@ if __name__ == '__main__':
         print(str(err))
         sys.exit(2)
 
-    use_gui = True
+    use_gui = False
     url = 'http://localhost:8888'
 
     for o, a in opts:
