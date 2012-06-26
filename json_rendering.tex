@@ -5,9 +5,25 @@
 \usepackage{fancyhdr}
 \usepackage{comment}
 \usepackage{occi}
-\usepackage{lineno} % adds line numbers, may be removed for non draft versions
-\linenumbers        % adds line numbers, may be removed for non draft versions
-\usepackage{minted} % code highlighting
+\usepackage{lineno}   % adds line numbers, may be removed for non draft versions
+\linenumbers          % adds line numbers, may be removed for non draft versions
+\usepackage{verbatim} % adds verbatim options
+\usepackage{tabularx} % adds extended tabular formatting options
+%\usepackage{minted}   % code highlighting
+
+% fallback if minted is not available
+\makeatletter
+\def\provideenvironment{\@star@or@long\provide@environment}
+\def\provide@environment#1{%
+        \@ifundefined{#1}%
+                {\def\reserved@a{\newenvironment{#1}}}%
+                {\def\reserved@a{\renewenvironment{dummy@environ}}}%
+        \reserved@a
+}
+\def\dummy@environ{}
+\makeatother
+\provideenvironment{minted}[1]{\verbatim}{\endverbatim}
+
 \setlength{\headheight}{13pt}
 \pagestyle{fancy}
 
@@ -79,66 +95,65 @@ capabilities required to support modern service offerings.
 \underline{Comments}
 \newcommand{\ralf}[1]{\textcolor{red}{RN: #1}}
 \newcommand{\andy}[1]{\textcolor{green}{AE: #1}}
+\newcommand{\florian}[1]{\textcolor{blue}{FF: #1}}
 
 \newpage
 \tableofcontents
 \newpage
 
 \section{Introduction}
-%\input{include/introduction}
+\input{include/introduction}
 
 \section{Notational Conventions}
 \input{include/notational}
 
 \section{OCCI JSON Rendering}
-{\em TBD: intro, JSON Rendering is RESTful, can happily co-exist with the
-existing HTTP Rendering, etc}
+
+The OCCI JSON Rendering specifies a rendering of OCCI instance types in the JSON
+data interchange format as defined in \cite{rfc4627}.
+
+The Rendering can be used to render OCCI instances independently of the
+transport mechanism being used. Thus messages can be delivered by e.g. the HTTP
+protocol as specified in \cite{occi:http_rendering} or by using text files with
+the .json file extension as defined in \cite{rfc4627}.
 
 \section{Namespace}
 
 The JSON Rendering provides a rendering (i.e. serialisation) of the OCCI 
-Core model into the URL hierarchy by binding
-\hl{Kind} and \hl{Mixin} instances to unique URL paths. Such a URL path is called
-the {\em location} of the \hl{Kind} or \hl{Mixin}.
+Core model into an URL hierarchy by binding
+\hl{Kind} and \hl{Mixin} instances to unique URL paths. Such a URL path is
+called the {\em location} of the \hl{Kind} or \hl{Mixin}.
+
 A provider is free to choose the {\em location} as long as it is unique
-within the service provider's URL namespace.
-For example, the \hl{Kind} instance%
-\footnote{\tt http://schemas.ogf.org/occi/infrastructure\#compute}
-for the \hl{Compute} type may be bound to {\tt /my/occi/api/compute/}.
+within the service provider's URL namespace. It is recommended, that the
+locations are based on the term of the \hl{Kind} or \hl{Mixin}. To prevent
+namespace collisions between \hl{Kind} and \hl{Mixin} locations, it is
+recommended to prefix all \hl{Mixin} locations with the location {\tt /mixins/}.
 
 A \hl{Kind} instance whose associated type cannot be instantiated MUST NOT be
 bound to an URL path. This applies to the \hl{Kind} instance for OCCI Entity.
 
-\subsection{Bound and Unbound Paths}
-
-Since a limited set of URL paths are bound to \hl{Kind} and \hl{Mixin}
-instances the URL hierarchy consists of both {\em bound} and {\em unbound}
-paths.
-A bound URL path is the {\em location} of a \hl{Kind} or \hl{Mixin} collection.
-
-An unbound URL path MAY represent the union of all \hl{Kind} and \hl{Mixin}
-collection ``below'' the unbound path.
-\ralf{FIXME: Should this be a MUST instead?}
-\andy{Q: Do these apply for instances also?}
+\florian{Should go into OCCI Core}
 
 \section{JSON Format}
 \label{sec:json_format}
 The OCCI JSON Rendering consists of a JSON object holding information on the 
-OCCI core objects kind, mixin, action, link and resource.
+OCCI Core instances kind, mixin, action, link and resource. The rendering of
+each OCCI Core instance will be described in the following sections. 
 
-The following media-type has been assigned to the OCCI JSON Rendering:
+\florian{To make it right, do we need to add the attribute definition
+instance to the OCCI Core model.}
+
+The following media-type MUST be used for the OCCI JSON Rendering:
 
 {\tt application/occi+json}
 
 \subsection{Resource Instance Format}
 \label{sec:format_resource}
 
-A {\em resource instance} is a sub-type of OCCI Entity which has been instantiated.
-OCCI Resource and OCCI Link are the top-most sub-types of OCCI Entity.
-OCCI Entity itself cannot be instantiated.
-
 The resource instance format consists of a JSON object as shown in the
-following example. Section \ref{sec:example_resource} contains a detailed example.
+following example. Section \ref{sec:example_resource} contains a detailed
+example.
 Table~\ref{tbl:format_resource} defines the object members.
 \begin{minted}{json}
 {
@@ -147,45 +162,39 @@ Table~\ref{tbl:format_resource} defines the object members.
             "kind": "...",
             "mixins": [ "...", "..." ],
             "attributes": { },
-            "actions": [ { }, { } ],
-            "id": "...",
-            "title": "...",
-            "summary": "...",
-            "links": [ { }, { } ],
+            "actions": [ { } ],
+            "links": [ { }, { } ]
         }
     ]
 }
 \end{minted}
 \mytablefloat{
     \label{tbl:format_resource}
-    Resource instances are rendered using the
-    {\tt application/occi+json} format which consists of a JSON object with name {\em resources}
-    containing an array of JSON objects with the following entries.
+    Resource instances are rendered inside the top-level JSON object with name
+{\em resources}
+    as an array of JSON objects with the following entries:
     } {
-    \begin{tabular}{llp{5.0cm}p{3.0cm}}
+    \begin{tabularx}{\textwidth}{llXll}
     \toprule
-    Object member & JSON type & Description & Necessity \\
+    Object member & JSON type & Description & Mutability & Multiplicity \\
     \colrule
-    kind & string & Kind identifier & Mandatory \\
+    kind & string & Type identifier & immutable & 1 \\
 
-    mixins & array of strings & List of Mixin identifiers &
-    Mandatory if resource has mixins \\
+    mixins & array of strings & List of type identifiers of associated mixins  &
+mutable & 0..* \\
 
-    attributes & object & Instance attributes & Mandatory if resource has attributes \\
-
-    actions & array of objects & Actions applicable to the resource instance as defined in~\ref{tbl:format_action} &
-    Mandatory if resource has applicable actions \\
+    attributes & object & Instance attributes & mutable & 0..* \\
     
-    id & string & UUID of the resource & Mandatory\\
-        
-    title & string & Title of the resource & Optional\\
+    actions & array of objects & Applicable actions as defined
+in~\ref{tbl:format_action} \florian{what about action rendering inside of
+resources? In the text/plain rendering actions are rendered through links. What
+is the best way? Must this relation be introduced in OCCI Core?} & mutable &
+0..* \\
     
-    summary & string & Summary describing the resource & Optional\\
-    
-    links & array of objects & Associated OCCI Links as defined in~\ref{tbl:format_link} &
-    Mandatory if resource has links\\
+    links & array of objects & Associated OCCI Links as defined
+in~\ref{tbl:format_link} & mutable & 0..*\\
     \botrule
-    \end{tabular}
+    \end{tabularx}
 }
 \subsection{Link Instance Format}
 \label{sec:format_link}
@@ -198,54 +207,48 @@ Table~\ref{tbl:format_link} defines the object members.
     "links": [
         {
             "kind": "...",
+            "rel": "...",
             "mixins": [ "...", "..." ],
             "attributes": { },
-            "actions": [ { }, { } ],
-            "id": "...",
-            "title": "...",
-            "target": "...",
-            "source": "..."
+            "actions": [ { } ]
         }
     ]
 }
 \end{minted}
 \mytablefloat{
     \label{tbl:format_link}
-    Link instances are rendered using the
-    {\tt application/occi+json} format which consists of a JSON object with name {\em links}
-    containing an array of JSON objects with the following entries.
+    Link instances are rendered inside the top-level JSON object with name {\em
+links}
+    as an array of JSON objects with the following entries:
     } {
-    \begin{tabular}{llp{5.0cm}p{3.0cm}}
+    \begin{tabularx}{\textwidth}{llXll}
     \toprule
-    Object member & JSON type & Description & Necessity \\
+    Object member & JSON type & Description & Mutability & Multiplicity \\
     \colrule
-    kind & string & Kind identifier & Mandatory \\
-
-    mixins & array of strings & List of Mixin identifiers &
-    Mandatory if resource has mixins \\
-
-    attributes & object & Instance attributes & Mandatory if resource has attributes \\
-
-    actions & array of objects & Actions applicable to the resource instance as defined in~\ref{tbl:format_action} &
-    Mandatory if resource has applicable actions \\
-    
-    id & string & UUID of the link & Mandatory\\
+    kind & string & Type identifier & immutable & 1 \\
         
-    title & string & Title of the link & Optional\\
-        
-    target & string & Absolute location of target resource & Mandatory \\
+    rel & string & Type identifier of the target resource & immutable & 1 \\
+
+    mixins & array of strings & List of type identifiers of associated mixins &
+    mutable & 0..* \\
+
+    attributes & object & Instance attributes & mutable & 0..* \\
     
-    source & string & Absolute location of source resource & Mandatory unless rendered within the source resource\\
+    actions & array of objects & Applicable actions as defined
+in~\ref{tbl:format_action} \florian{what about action rendering inside of links?
+May links have actions? In the text/plain rendering actions are rendered through
+links. What is the best way? Must this relation be introduced in OCCI Core?} &
+mutable & 0..* \\
     \botrule
-    \end{tabular}
+    \end{tabularx}
 }
 
 \subsection{Kind Format}
 \label{sec:format_kind}
 
 An OCCI kind is used to describe a OCCI entity and cannot itself be 
-instantiated. OCCI kinds can only be queried through the query interface 
-of an OCCI server to get a complete description of a specific OCCI entity sub-type.
+instantiated. OCCI kinds provide a complete description of a specific OCCI
+entity sub-type.
 
 The kind format consists of a JSON object as shown in the
 following example. Section \ref{sec:example_kind} contains a detailed example.
@@ -253,23 +256,31 @@ Table~\ref{tbl:format_kind} defines the top-level object members.
 
 \mytablefloat{
     \label{tbl:format_kind}
-    Kinds are rendered using the
-    {\tt application/occi+json} format which consists of a JSON object with name {\em kinds}
-    containing an array of JSON objects with the following entries.
+    Kind instances are rendered inside the top-level JSON object with name {\em
+kinds}
+    as an array of JSON objects with the following entries:
     } {
-    \begin{tabular}{llll}
+    \begin{tabularx}{\textwidth}{llXll}
     \toprule
-    Object member & JSON type & Description & Necessity\\
+    Object member & JSON type & Description & Mutability & Multiplicity \\
     \colrule
-    term & string & Unique identifier within the categorisation scheme & Mandatory\\
-    scheme & string & Categorisation scheme & Mandatory\\
-    title & string & Title of the kind & Mandatory\\
-    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} & Mandatory if kind has attributes\\
-    related & array of strings & List containing the related ``parent'' \hl{Kind} instance & Mandatory if kind is related to another kind\\
-    actions & array of strings & List of action identifiers & Mandatory if kind has actions\\
-    location & string & Relative URL bound to the \hl{Kind} instance & Mandatory\\
+    term & string & Unique identifier within the categorisation scheme &
+immutable & 1 \\
+    scheme & string & Categorisation scheme & immutable & 1 \\
+    title & string & Title of the kind & immutable & 0..1 \\
+    attributes & object & Attribute description, see
+~\ref{tbl:format_attribute_description} & immutable & 0..* \\
+    related & array of strings & List of type identifiers containing only the
+related ``parent''
+\hl{Kind} instance & immutable & 0..1 \\
+    actions & array of strings & List of action type identifiers & immutable &
+0..*
+\\
+    location & string & URI bound to the \hl{Kind} instance. MUST be
+supplied for the kinds of all entities except the entity kind itself & immutable
+& 0..1 \\
     \botrule
-    \end{tabular}
+    \end{tabularx}
 }
 
 \begin{minted}{json}
@@ -292,32 +303,39 @@ Table~\ref{tbl:format_kind} defines the top-level object members.
 \label{sec:format_mixin}
 
 An OCCI mixin can be used to extend OCCI entities and cannot itself be 
-instantiated. OCCI mixins can be queried through the query interface 
-of an OCCI server and also be created by a user, where permitted.
+instantiated. OCCI mixins provide a description of attributes and actions
+extending a specific OCCI entity sub-type.
 
 The mixin format consists of a JSON object as shown in the
-following example. Section \ref{sec:example_kind} contains a detailed example.
+following example. Section \ref{sec:example_mixin} contains a detailed example.
 Table~\ref{tbl:format_mixin} defines the top-level object members.
 
 \mytablefloat{
     \label{tbl:format_mixin}
-    Mixins are rendered using the
-    {\tt application/occi+json} format which consists of a JSON object with name {\em mixins}
-    containing an array of JSON objects with the following entries.
+    Mixin instances are rendered inside the top-level JSON object with name {\em
+mixins}
+    as an array of JSON objects with the following entries:
     } {
-    \begin{tabular}{llll}
+    \begin{tabularx}{\textwidth}{llXll}
     \toprule
-    Object member & JSON type & Description & Necessity\\
+    Object member & JSON type & Description & Mutability & Multiplicity \\
     \colrule
-    term & string & Unique identifier within the categorisation scheme & Mandatory\\
-    scheme & string & Categorisation scheme & Mandatory\\
-    title & string & Title of the mixin & Mandatory\\
-    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} & Mandatory if mixin has attributes\\
-    related & array of strings & List containing the related ``parent'' \hl{Mixin} instance & Mandatory if mixin is related to other mixins\\
-    actions & array of strings & List of action identifiers & Mandatory if mixin has actions\\
-    location & string & Relative URL bound to the \hl{Kind} instance & Mandatory\\
+    term & string & Unique identifier within the categorisation scheme &
+immutable & 1 \\
+    scheme & string & Categorisation scheme & immutable & 1 \\
+    title & string & Title of the mixin & immutable & 0..1 \\
+    attributes & object & Attribute description, see
+~\ref{tbl:format_attribute_description} & immutable & 0..* \\
+    related & array of strings & List of type identifiers of the related
+``parent''
+\hl{Mixin} instances & immutable & 0..* \\
+    actions & array of strings & List of action type identifiers & immutable &
+0..*
+\\
+    location & string & URI bound to the \hl{Mixin} instance & immutable
+& 1 \\
     \botrule
-    \end{tabular}
+    \end{tabularx}
 }
 
 \begin{minted}{json}
@@ -339,9 +357,12 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
 \subsection{Action Format}
 \label{sec:format_action}
 
-An OCCI action can be used to trigger specific actions on an OCCI entity and cannot itself be 
-instantiated. OCCI actions can only be queried through the query interface 
-of an OCCI server.
+An OCCI action can be used to trigger specific actions on an OCCI entity and
+cannot itself be 
+instantiated. Applicable actions SHOULD be linked to an OCCI resource. 
+
+\florian{Q: (see resource and link) should actions be attached as links or
+included as actions?} 
 
 The action format consists of a JSON object as shown in the
 following example.
@@ -349,20 +370,23 @@ Table~\ref{tbl:format_action} defines the top-level object members.
 
 \mytablefloat{
     \label{tbl:format_action}
-    Actions are rendered using the
-    {\tt application/occi+json} format which consists of a JSON object with name {\em actions}
-    containing an array of JSON objects with the following entries.
+    Action instances are rendered inside the top-level JSON object with name
+{\em actions}
+    as an array of JSON objects with the following entries:
     } {
-    \begin{tabular}{llll}
+    \begin{tabularx}{\textwidth}{llXll}
     \toprule
-    Object member & JSON type & Description & Necessity\\
+    Object member & JSON type & Description & Mutability & Multiplicity \\
     \colrule
-    term & string & Unique identifier within the categorisation scheme & Mandatory\\
-    scheme & string & Categorisation scheme & Mandatory\\
-    title & string & Title of the mixin & Optional\\
-    attributes & object & Attribute description, see ~\ref{tbl:format_attribute} & Mandatory if action has attributes\\
+    term & string & Unique type identifier within the categorisation scheme &
+immutable & 1 \\
+    scheme & string & Categorisation scheme & immutable & 1 \\
+    title & string & Title of the action & immutable & 0..1 \\
+    attributes & object & Attribute description, see
+~\ref{tbl:format_attribute_description} & immutable & 0..* \\
+    location & string & URI bound to the \hl{Action} instance & immutable
     \botrule
-    \end{tabular}
+    \end{tabularx}
 }
 
 \begin{minted}{json}
@@ -372,7 +396,8 @@ Table~\ref{tbl:format_action} defines the top-level object members.
             "term": "...",
             "scheme": "...",
             "title": "...",
-            "attributes": { }
+            "attributes": { },
+            "location": "..."
         }
 	]
 }
@@ -380,6 +405,24 @@ Table~\ref{tbl:format_action} defines the top-level object members.
 
 \subsection{Attribute Description Format}
 \label{sec:format_attribute_description}
+
+\florian{How do we handle the attribute names? ECMAScript defines properties
+(similar to our attributes) in section 11.2.1. As JSON is derived from the
+JavaScript/ECMAScript language, it should be close to that spec. Thus the usage
+of a dot should be in accordance with the dot notation as defined in section
+11.2.1. The biggest problem with this is, that this notation would not allow
+attribute names which are part of another attribute name (e.g. if the attribute
+one.two.three is defined, the attribute name one.two would not be allowed). This
+could only be solved if attributes is a list of attribute strings.}
+
+\florian{Do we have to specify attributes as used within resource and link? In a
+class diagram, we would need the attribute description for defining the
+properties of the attribute and the attribute itself.}
+
+\florian{Should we limit attributes to just strings? Then we don't need the type
+property and can use the pattern to define arbitrary restrictions on the
+content. When using true/false and number as well, we might have trouble with
+applying the pattern and introduce additional complexity.}
 
 Attribute descriptions of OCCI Categories are rendered as JSON objects. 
 The dots of the attribute names define a hierarchy. This hierarchy is reflected 
@@ -392,23 +435,28 @@ JSON object with name {\em attributes}. The last part of the attribute name
     \label{tbl:format_attribute_description}
     The attribute-properties object has the members defined in this table.
     %
-    All attribute properties are optional and the table shows which property default value
+    All attribute properties are optional and the table shows which property
+default value
     an OCCI client MUST assume if a particular property is unspecified.
     } {
-    \begin{tabular}{llll}
+    \begin{tabularx}{\textwidth}{llXll}
     \toprule
     Object member & JSON type & Description & Default \\
     \colrule
-    mutable & boolean & Attribute mutability & true \\
-    required & boolean & Whether the attribute MUST be specified at resource instantiation & false \\
+    mutable & boolean & Defines if the attribute is mutable by the client &
+false \\
+    required & boolean & defines if the attribute MUST be specified at resource
+instantiation & false \\
     type & string & Enum \{string, number, boolean\}
     & string \\
-    pattern & string & Posix Extended Regular Expression as defined in \cite{iso9945:2009}. For interoperability reasons, POSIX character classes like e.g. [:alpha:] should not be used. & .* \\
-    minimum & number & If type is a number, then minimum defines the lowest number allowed. If type is a string, then minimum defines the minimal length of the string. \\
-    maximum & If type is a number, then maximum defines the highest number allowed. If type is a string, then maximum defines the maximal length of the string.\\
-    default & string, number or boolean & Attribute default when not specified by client. & null \\
+    pattern & string & Posix Extended Regular Expression as defined in
+\cite{iso9945:2009}. For interoperability reasons, POSIX character classes (e.g.
+[:alpha:]) MUST NOT be used. & .* \\
+    default & string, number or boolean & Attribute default when not specified
+by client. & \\
+    description & string & Description of the attribute & \\
     \botrule
-    \end{tabular}
+    \end{tabularx}
 }
 \begin{minted}{json}
 {
@@ -418,9 +466,8 @@ JSON object with name {\em attributes}. The last part of the attribute name
             "required": false,
             "type": "string",
             "pattern": ".*",
-            "minimum": 1,
-            "maximum": 65535,
-            "default": null
+            "default": null,
+            "description": "..."
         }
     }
 }
@@ -428,6 +475,8 @@ JSON object with name {\em attributes}. The last part of the attribute name
 
 \section{Detailed Examples}
 \label{sec:examples}
+
+\florian{examples need to be revised}
 
 \subsection{Resource Instance Format Example}
 \label{sec:example_resource}
@@ -439,7 +488,7 @@ JSON object with name {\em attributes}. The last part of the attribute name
             "kind": "http: //schemas.ogf.org/occi/infrastructure#compute",
             "mixins": [
                 "http: //schemas.opennebula.org/occi/infrastructure#my_mixin",
-                "http: //schemas.other.org/occi#my_mixin"
+                "http: //example.com/occi#my_mixin"
             ],
             "attributes": {
                 "occi": {
@@ -449,8 +498,8 @@ JSON object with name {\em attributes}. The last part of the attribute name
                         "cores": 2
                     }
                 },
-                "org": {
-                    "other": {
+                "com": {
+                    "example": {
                         "occi": {
                             "my_mixin": {
                                 "my_attribute": "my_value"
@@ -462,8 +511,10 @@ JSON object with name {\em attributes}. The last part of the attribute name
             "actions": [
                 {
                     "title": "Start My Server",
-                    "href": "/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29?action=start",
-                    "category": "http://schemas.ogf.org/occi/infrastructure/compute/action#start"
+                    "location":
+"/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29?action=start",
+                    "category":
+"http://schemas.ogf.org/occi/infrastructure/compute/action#start"
                 }
             ],
             	"id": "996ad860-2a9a-504f-8861-aeafd0b2ae29",
@@ -471,8 +522,10 @@ JSON object with name {\em attributes}. The last part of the attribute name
 		    "summary": "This is a compute resource",
 		    "links": [
 		        {
-		            "target": "http://myservice.tld/storage/59e06cf8-f390-5093-af2e-3685be593a25",
-		            "kind": "http://schemas.ogf.org/occi/infrastructure#storagelink",
+		            "target":
+"http://myservice.tld/storage/59e06cf8-f390-5093-af2e-3685be593a25",
+		            "kind":
+"http://schemas.ogf.org/occi/infrastructure#storagelink",
 		            "attributes": {
 		                "occi": {
 		                    "storagelink": {
@@ -496,9 +549,11 @@ JSON object with name {\em attributes}. The last part of the attribute name
 {
     "links": [
         {
-            "kind": "http://schemas.ogf.org/occi/infrastructure#networkinterface",
+            "kind":
+"http://schemas.ogf.org/occi/infrastructure#networkinterface",
             "mixins": [
-                "http://schemas.ogf.org/occi/infrastructure/networkinterface#ipnetworkinterface"
+                "http://schemas.ogf.org/occi/infrastructure/networkinterface#
+ipnetworkinterface"
             ],
             "attributes": {
                 "occi": {
@@ -516,14 +571,18 @@ JSON object with name {\em attributes}. The last part of the attribute name
             "actions": [
                 {
                     "title": "Disable networkinterface",
-                    "href": "/networkinterface/22fe83ae-a20f-54fc-b436-cec85c94c5e8?action=up",
-                    "category": "http: //schemas.ogf.org/occi/infrastructure/networkinterface/action#up"
+                    "href":
+"/networkinterface/22fe83ae-a20f-54fc-b436-cec85c94c5e8?action=up",
+                    "category": "http:
+//schemas.ogf.org/occi/infrastructure/networkinterface/action#up"
                 }
             ],
             "id": "22fe83ae-a20f-54fc-b436-cec85c94c5e8",
 		    "title": "My network interface",
-            "target": "http://myservice.tld/network/b7d55bf4-7057-5113-85c8-141871bf7635",
-            "source": "http://myservice.tld/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
+            "target":
+"http://myservice.tld/network/b7d55bf4-7057-5113-85c8-141871bf7635",
+            "source":
+"http://myservice.tld/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
         }
     ]
 }
@@ -549,7 +608,8 @@ JSON object with name {\em attributes}. The last part of the attribute name
                             "mutable": true,
                             "required": false,
                             "type": "string",
-                            "pattern": "(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*",
+                            "pattern":
+"(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*",
                             "minimum": "1",
                             "maximum": "255"
                         },
@@ -564,10 +624,14 @@ JSON object with name {\em attributes}. The last part of the attribute name
                 }
             },
             "actions": [
-                "http://schemas.ogf.org/occi/infrastructure/compute/action#start",
-                "http://schemas.ogf.org/occi/infrastructure/compute/action#stop",
-                "http://schemas.ogf.org/occi/infrastructure/compute/action#restart",
-                "http://schemas.ogf.org/occi/infrastructure/compute/action#suspend"
+                "http://schemas.ogf.org/occi/infrastructure/compute/action#start
+",
+                "http://schemas.ogf.org/occi/infrastructure/compute/action#stop"
+,
+                "http://schemas.ogf.org/occi/infrastructure/compute/action#
+restart",
+                "http://schemas.ogf.org/occi/infrastructure/compute/action#
+suspend"
             ],
             "location": "/compute/"
         }
@@ -612,7 +676,8 @@ JSON object with name {\em attributes}. The last part of the attribute name
     "actions": [
         {
             "term": "stop",
-            "scheme": "http://schemas.ogf.org/occi/infrastructure/compute/action#",
+            "scheme":
+"http://schemas.ogf.org/occi/infrastructure/compute/action#",
             "title": "Stop Compute instance",
             "attributes": {
                 "method": {
