@@ -3,7 +3,9 @@ Term & Description \\
 \hline
 \hl{Action} & An OCCI base type. Represent an invocable operation on a \hl{Entity} sub-type instance or collection thereof. \\
 
-\hl{Category} & A type in the OCCI model. The parent type of \hl{Kind}. \\
+\hl{Attribute} & A type in the OCCI Core Model. Describes the name and properties of attributes found in \hl{Entity} types. \\
+
+\hl{Category} & A type in the OCCI Core Model and the basis of the OCCI type identification mechanism. The parent type of \hl{Kind}. \\
 
 \hl{Client} & An OCCI client.\\
 
@@ -11,7 +13,7 @@ Term & Description \\
 
 \hl{Entity} & An OCCI base type. The parent type of \hl{Resource} and \hl{Link}. \\
 
-\hl{Kind} & A type in the OCCI model. A core component of the OCCI classification system. \\
+\hl{Kind} & A type in the OCCI Core Model. A core component of the OCCI classification system. \\
 
 \hl{Link} & An OCCI base type. A \hl{Link} instance associate one \hl{Resource} instance with another. \\
 
@@ -19,18 +21,26 @@ mixin & An instance of the \hl{Mixin} type associated with a {\bf resource
  instance}. The ``mixin'' concept as used by OCCI {\em only} applies to
  instances, never to \hl{Entity} types. \\
 
-\hl{Mixin} & A type in the OCCI model. A core component of the OCCI classification system. \\
+\hl{Mixin} & A type in the OCCI Core Model. A core component of the OCCI classification system. \\
 
 \hl{OCCI} & Open Cloud Computing Interface. \\
 
 OCCI base type & One of \hl{Entity}, \hl{Resource}, \hl{Link} or \hl{Action}. \\
+
+OCCI Action & see \hl{Action}. \\
+OCCI Attribute & A client discoverable attribute identified by an instance of the \hl{Attribute} type. Examples are \hl{occi.core.title} and \hl{occi.core.summary}. \\
+OCCI Category & see \hl{Category}. \\
+OCCI Entity & see \hl{Entity}. \\
+OCCI Kind & see \hl{Kind}. \\
+OCCI Link & see \hl{Link}. \\
+OCCI Mixin & see \hl{Mixin}. \\
 
 OGF & Open Grid Forum. \\
 
 \hl{Resource} & An OCCI base type. The parent type for all domain-specific resource types. \\
 
 resource instance & An instance of a sub-type of \hl{Entity}. The OCCI
- model defines two sub-types of \hl{Entity}, the \hl{Resource} type and the
+ Core Model defines two sub-types of \hl{Entity}, the \hl{Resource} type and the
  \hl{Link} type. However, the term {\em resource instance} is defined to
  include any instance of a {\em sub-type} of \hl{Resource} or \hl{Link} as
  well. \\
@@ -40,8 +50,9 @@ Tag & A \hl{Mixin} instance with no attributes or actions defined. \\
 Template & A \hl{Mixin} instance which if associated at resource instantiation
 time pre-populate certain attributes. \\
 
-type & One of the types defined by the OCCI model.  The OCCI model types are
- \hl{Category}, \hl{Kind}, \hl{Mixin}, \hl{Action}, \hl{Entity}, \hl{Resource}
+type & One of the types defined by the OCCI Core Model.  The Core Model types are
+ \hl{Category}, \hl{Attribute},
+ \hl{Kind}, \hl{Mixin}, \hl{Action}, \hl{Entity}, \hl{Resource}
  and \hl{Link}. \\
  
 concrete type/sub-type & A concrete type/sub-type is a type that can be instantiated.\\
