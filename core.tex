@@ -173,7 +173,7 @@ inherit.  Each sub-type of \hl{Entity} is identified by a unique
 The \hl{Kind} type is the core of the type classification system built
 into the OCCI Core Model. \hl{Kind} is a specialisation of
 \hl{Category} and introduces additional resource capabilities in terms
-of \hl{Action}s.  An \hl{Action} represents an invocable operation
+of \hl{Action}s.  An \hl{Action} identifies an invocable operation
 applicable to a resource instance.
 
 \hl{Attribute} describe the name and properties of the OCCI Attributes found in
@@ -214,7 +214,7 @@ in the OCCI context:
     and \hl{occi.core.summary}. See section~\ref{sec:attribute}.
 
   \item[OCCI base type(s)] The OCCI base types are \hl{Entity},
-    \hl{Resource}, \hl{Link} and \hl{Action}.
+    \hl{Resource} and \hl{Link}.
     See section~\ref{sec:base_types}.
 
   \item[resource capabilities] Resource capabilities refer to
@@ -293,9 +293,9 @@ features:
 The \hl{Category} type is the basis of the type identification
 mechanism used by the OCCI classification system. It MUST be
 implemented.
-Instances of the \hl{Category} type itself are only used
-to identify \hl{Action} types. All other uses of \hl{Category}
-properties are managed through its sub-types \hl{Kind} and \hl{Mixin}.
+There are no instances of the \hl{Category} type itself in the OCCI Core Model.
+The \hl{Category} type is only used through its sub-types \hl{Kind}, \hl{Mixin}
+and \hl{Action}.
 %
 Table~\ref{tbl:category} defines the model attributes the \hl{Category} type
 MUST implement to be compliant.
@@ -322,7 +322,7 @@ renderings such as HTTP. All renderings MUST make use of and
 understand concatenated unique type identifiers of \hl{Category}
 instances.
 %
-Sub-types of \hl{Category} such as \hl{Kind} and \hl{Mixin} inherit
+Sub-types of \hl{Category} such as \hl{Kind}, \hl{Mixin} and \hl{Action} inherit
 this property.
 
 The categorisation schemes defined in the OCCI specification all use
@@ -330,7 +330,7 @@ the \textit{http://schemas.ogf.org/occi/} base URL. This base URL is
 reserved for OCCI an MUST NOT be used by service provider extensions.
 
 A \hl{Category} instance%
-\footnote{Also applies to \hl{Kind} and \hl{Mixin} instances.}
+\footnote{Also applies to \hl{Kind}, \hl{Mixin} and \hl{Action} instances.}
 have zero or more associated \hl{Attribute} instances.
 Each \hl{Attribute}, see section~\ref{sec:attribute},
 describes the name and properties of single attribute.
@@ -418,7 +418,7 @@ for \hl{Entity}, another for \hl{Resource} and the last one for
     \toprule
     Model attribute	& Type 		& Multiplicity 		& Client Mutability 		& Description \\
     \colrule
-    actions 		& \hl{Action} 	& 0..* 			& Immutable 			& Set of \hl{Action}s defined by the \hl{Kind} instance. \\
+    actions 		& \hl{Action} 	& 0..* 			& Immutable 			& Set of \hl{Action} instances defined by the \hl{Kind} instance. \\
     related 		& \hl{Kind} 	& 0..1 			& Immutable 			& Another \hl{Kind} instances which this \hl{Kind} relates to. \\
     entities 		& \hl{Entity} 	& 0..* 			& Immutable 			& Set of resource instances, i.e.~\hl{Entity} sub-type instances. Resources instantiated from the \hl{Entity} sub-type which is uniquely identified by this \hl{Kind} instance. \\
     \botrule
@@ -446,7 +446,7 @@ of the \hl{Kind} type:
   \item A \hl{Kind} instance MUST expose the \hl{Action}s defined for
     its \hl{Entity} sub-type. \hl{Action}s are exposed through the
     \hl{Kind}.{\tt actions} model attribute which represent the association
-    between a \hl{Kind} instance and the \hl{Action}s it defines.
+    between a \hl{Kind} instance and the \hl{Action} instances it defines.
 
   \item A \hl{Kind} instance MUST be related, either directly or
     indirectly, to the \hl{Kind} instance of \hl{Entity},
@@ -545,7 +545,7 @@ implement.
     \toprule
     Model attribute	& Type 	& Multiplicity 	& Client Mutability 	& Description \\
     \colrule
-    actions 	& \hl{Action} 	& 0..* 			& Immutable 			& Set of \hl{Action}s defined by the \hl{Mixin} instance. \\
+    actions 	& \hl{Action} 	& 0..* 			& Immutable 			& Set of \hl{Action} instances defined by the \hl{Mixin} instance. \\
     related 	& \hl{Mixin} 	& 0..* 			& Immutable 			& Set of related \hl{Mixin} instances. \\
     entities 	& \hl{Entity} 	& 0..* 			& Mutable 				& Set of resource instances, i.e.~\hl{Entity} sub-type instances, associated with the \hl{Mixin} instance. \\
     \botrule
@@ -570,11 +570,12 @@ of the \hl{Mixin} type:
     have Location.{\tt attributes} populated with a single \hl{Attribute}
     instance where \hl{Attribute}.{\tt name} is {\tt "com.example.location"}.
 
-  \item A \hl{Mixin} instance MAY define \hl{Action}s that will be
-    made applicable to any resource instance associated with the
+  \item A \hl{Mixin} instance MAY define \hl{Action} instances that will
+    identify additional invocable operations on any resource instance
+    associated with the
     \hl{Mixin}.  \hl{Action}s defined by a \hl{Mixin} are exposed
     through the \hl{Mixin}.{\tt actions} model attribute that represent the
-    association between a \hl{Mixin} instance and the \hl{Action}s it
+    association between a \hl{Mixin} instance and the \hl{Action} instances it
     defines.
   \item A \hl{Mixin} instance MAY be related to another \hl{Mixin}
     instance.  If \hl{Mixin} {\bf B} is related to \hl{Mixin} {\bf A},
@@ -598,11 +599,68 @@ system templates, implemented as \hl{Mixin} instances, could be
 related to an ``OS-template'' \hl{Mixin} in order to help
 identification.
 
-Attributes and \hl{Action}s defined by different \hl{Mixin} instances
-are combined when \hl{Mixin} relationships are present. Therefore a
+\hl{Attribute}s and \hl{Action}s defined by different \hl{Mixin} instances
+are {\em combined} when \hl{Mixin} relationships are present. Therefore a
 resource instance associated with a particular \hl{Mixin} will receive
 the additional capabilities defined by any related \hl{Mixin}
 instances as well as those defined by the \hl{Mixin} associated.
+
+
+\subsubsection{Action}
+The \hl{Action} type is the final part of the OCCI type classification system
+and identifies invocable operations on resource instances and collections.
+It MUST be implemented.
+Each \hl{Action} instance identifies a single invocable operation.
+The \hl{Action} instance is only an identifier and does not represent the
+implementation of the operation.
+
+The \hl{Action} type inherit the \hl{Category} type. To be compliant
+the \hl{Action} type MUST implement the inherited model attributes defined in
+table~\ref{tbl:category}.
+
+An \hl{Action} instance MUST always bound to either a \hl{Kind} or a \hl{Mixin}
+instance through a composite association. An \hl{Action} is considered
+to be a capability of the \hl{Kind} or \hl{Mixin} instance it is
+associated with.  The operation identified by an \hl{Action} MAY be invoked on
+any resource
+instance associated with the \hl{Kind} or \hl{Mixin} instance defining
+the \hl{Action}. An OCCI implementation MAY however refuse an
+the operation from being invoked if currently not applicable.
+
+The operation identified by an \hl{Action} instance MAY be invoked on a
+collection of \hl{Entity} sub-type
+instances. The \hl{Action} is only considered valid if all resource
+instances of the collection are associated with the \hl{Kind} or
+\hl{Mixin} defining the \hl{Action} instance.
+
+\mytablefloat{
+  \label{tbl:action_example}Example of an \hl{Action} instance which identifies a ``resize'' operation.}{
+  \begin{tabular}{ll}
+    \toprule
+    Model attribute 	& Value \\
+    \colrule
+    term 		& resize \\
+    scheme 		& {\tt http://schemas.ogf.org/occi/infrastructure/storage/action\#} \\
+    title 		& Resize virtual disk \\
+    attributes 		& Attribute({\tt "resize"}) \\
+  \botrule
+  \end{tabular}
+}
+
+An \hl{Action} instance MAY identify OCCI Attributes which correspond to
+parameters of the invocable operation.
+The mechanism to define OCCI Attributes is inherited from \hl{Category}
+and follow the same semantics.
+The namespace restrictions imposed on resource instance attributes
+(see~\ref{sec:attribute}) does however not apply to \hl{Action}s.
+
+Table~\ref{tbl:action_example} shows an example of a ``resize'' operation
+defined for a storage
+resource could have a ``size'' parameter which represent the size
+argument of the resize operation. In that example the identifying
+\hl{Action} instance would have \hl{Action}.{\tt attributes} populated
+with an \hl{Attribute} instance where \hl{Attribute}.{\tt name = "size"}.
+
 
 \subsubsection{Resource Instantiation}
 \label{sec:instantiation}
@@ -694,7 +752,7 @@ be able to, at a minimum, deduce the following information:
   \item Any \hl{Mixin} instances that can be associated to resource
     instances.
   \item Additional capabilities defined by a particular \hl{Mixin}
-    instance, i.e.~attributes and \hl{Action}s.
+    instance, i.e.~\hl{Attribute}s and \hl{Action}s.
 \end{itemize}
 %
 The above requirements comprise the OCCI discovery mechanism. It MUST
@@ -894,75 +952,6 @@ and thus the ability of linking with external resources.
 The \hl{Link} type is the second of three entry points to extend the
 OCCI Core Model, see section~\ref{sec:extensibility}.
 
-\subsubsection{Action}
-The \hl{Action} type is an abstract type. Each sub-type of \hl{Action}
-defines an invocable operation applicable to an \hl{Entity} sub-type
-instance or a collection thereof. It MUST be implemented. In general,
-\hl{Action}s modify state by, for example,~performing a complex
-operation such as rebooting a virtual machine.
-
-Table~\ref{tbl:action} defines the attributes the \hl{Action} type
-MUST implement to be compliant.
-
-\mytablefloat{
-  \label{tbl:action}Attributes defined for the \hl{Action} type.}{
-  \begin{tabular}{llllp{7.5cm}}
-    \toprule
-    Attribute 	& Type 			& Multiplicity 	& Client Mutability 	& Description \\
-    \colrule
-    category 	& \hl{Category} & 1 			& Immutable 			& The identifying \hl{Category} of the \hl{Action}. \\
-    \botrule
-  \end{tabular}
-}
-
-An \hl{Action} MUST always bound to either a \hl{Kind} or a \hl{Mixin}
-instance through a composite association. An \hl{Action} is considered
-to be a capability of the \hl{Kind} or \hl{Mixin} instance it is
-associated with.  An \hl{Action} MAY be invoked on any resource
-instance associated with the \hl{Kind} or \hl{Mixin} instance defining
-the \hl{Action}. An OCCI implementation MAY however refuse an
-\hl{Action} from being invoked if currently not applicable.
-
-An \hl{Action} MAY be invoked on a collection of \hl{Entity} sub-type
-instances. The \hl{Action} is only considered valid if all resource
-instances of the collection are associated with the \hl{Kind} or
-\hl{Mixin} defining the \hl{Action}.
-
-\mytablefloat{
-  \label{tbl:action_kind}The \hl{Category} instance assigned to the \hl{Action} type.}{
-  \begin{tabular}{ll}
-    \toprule
-    Attribute 	& Value \\
-    \colrule
-    term 		& action \\
-    scheme 		& {\tt http://schemas.ogf.org/occi/core\#} \\
-    title 		& Action \\
-    attributes 	& -- \\
-    \botrule
-  \end{tabular}
-}
-
-The \hl{Action} type is assigned the \hl{Category} type identifier
-\textit{http://schemas.ogf.org/occi/core\#action}, see
-table~\ref{tbl:action_kind}.
-
-An \hl{Action} can expose OCCI Attributes which correspond to arguments of
-the invocable operation.  A sub-type of \hl{Action} define the
-attributes available for the invocable operation represented. The
-names of any such attributes MUST be exposed through
-\hl{Category}.{\tt attributes} of the \hl{Action} sub-type's
-identifying \hl{Category} instance.
-
-For example, a ``resize'' \hl{Action} sub-type defined for a storage
-resource could have a ``size'' attribute which represent the size
-argument of the resize operation. In that example the identifying
-\hl{Category} instance would have \hl{Category}.{\tt attributes = [
-    size ]}.
-
-The \hl{Action} type is the third and last of the entry points to
-extend the OCCI Core Model, see section~\ref{sec:extensibility}. Since
-\hl{Action} is an abstract type a sub-type is always necessary to
-define a specific \hl{Action}.
 
 \subsection{Extensibility}
 \label{sec:extensibility}
@@ -974,8 +963,8 @@ The OCCI Core Model can be extended using two different methods,
 sub-typing and mix-in. Custom sub-typing require provider-specific
 \hl{Kind} instances and custom mix-ins require provider-specific
 \hl{Mixin} instances.  Both methods MAY involve the use of
-provider-specific \hl{Category} instance since those are REQUIRED for
-provider-specific \hl{Action} sub-types.  The following sections
+provider-specific \hl{Action} instances.
+The following sections
 define the rules for extending the OCCI Core Model.
 
 The rules defined in section~\ref{sec:classification} and
@@ -1003,20 +992,13 @@ consisting of the provider's reverse domain name,
 e.g.~``\texttt{com.example.}''.
 
 \subsubsection{Sub-typing}
-The OCCI Core Model MAY be extended through sub-typing.  Three OCCI
-Core Model types MAY be sub-typed, those are \hl{Resource}, \hl{Link}
-and \hl{Action}.
+The OCCI Core Model MAY be extended through sub-typing.  Two OCCI
+Core Model types MAY be sub-typed, those are \hl{Resource} and \hl{Link}.
 
 In order to define a sub-type of \hl{Resource} or \hl{Link} a
 provider-specific \hl{Kind} instance MUST be defined and assigned to
 the sub-type. This \hl{Kind} instance MUST be directly related to the
 \hl{Kind} instance of the type extended.
-
-In order to define a sub-type of \hl{Action} a provider-specific
-\hl{Category} instance MUST be assigned to the \hl{Action} sub-type as
-its unique type identifier.  Furthermore the \hl{Action} sub-type MUST
-be associated as a capability of a provider-specific \hl{Kind} or
-\hl{Mixin} instance.
 
 \subsubsection{Mix-ins}
 The OCCI Core Model MAY be extended using a ``mix-in'' like concept by
@@ -1038,7 +1020,7 @@ Since the OCCI Core and Model specification describes a model, not an interface
 or protocol, no specific security mechanisms are described as part of this
 document. However, the elements described by this specification, namely type
 instance attribute mutability, Category, Kind, and Mixin instantiations; Entity,
-Resource, Link, and Action subtypes,  whether direct or indirect; resource or
+Resource, and Link subtypes,  whether direct or indirect; resource or
 collection manipulation; and the discovery mechanism need to implement a proper
 authorization scheme, which MUST be part of a concrete OCCI rendering
 specification, part of an OCCI specification profile, or part of the specific
