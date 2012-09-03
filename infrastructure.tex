@@ -166,7 +166,7 @@ or \hl{Link} sub-types.
 For information on extending these types, please refer to the OCCI Core Model 
 document \cite{occi:core}.
 
-The following sections on \hl{Compute}, \hl{Storage} and \hl{Network} types detail the attributes, 
+The following sections on \hl{Compute}, \hl{Storage} and \hl{Network} types detail the \hl{Attribute}s, 
 \hl{Actions} and states defined for each of them, including type-specific mixins (\hl{IPNetwork} 
 and \hl{IPNetworkInterface}) where 
 appropriate. Following those, the definition of infrastructure-related \hl{Link} sub-types 
@@ -183,7 +183,7 @@ A \hl{Compute} instance MUST use and expose this \hl{Kind}.
 
 
 \mytablefloat{
-	\label{tbl:compute}Attributes defined for the \hl{Compute} type. 
+	\label{tbl:compute}\hl{Attribute}s defined for the \hl{Compute} type. 
 }
 {
 	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
@@ -206,7 +206,7 @@ A \hl{Compute} instance MUST use and expose this \hl{Kind}.
 	\end{tabular}
 }
 
-Table~\ref{tbl:compute} describes the attributes%
+Table~\ref{tbl:compute} describes the OCCI Attributes%
 \footnote{See the ``{\tt attributes}'' attribute defined by the \hl{Category}
 type and inherited by \hl{Kind} \cite{occi:core}.} 
 defined by \hl{Compute} through its \hl{Kind} instance. These attributes
@@ -217,10 +217,9 @@ MUST be exposed by an instance of the \hl{Compute} type.
 	\hl{Action}s applicable to instances of the \hl{Compute} type. The
 	\hl{Action}s are defined by the \hl{Kind} instance
 	\textit{http://schemas.ogf.org/occi/infrastructure\#compute}. Every \hl{Action}
-	in the table is identified by a \hl{Category} instance using the
+	instance in the table uses the
 	\textit{http://schemas.ogf.org/occi/infrastructure/compute/action\#}
-	categorisation scheme. ``Action Term'' below refers to the term of the \hl{Action}'s
-	\hl{Category} identifier.
+	categorisation scheme. ``Action Term'' below refers to \hl{Action}.{\tt term}.
 }
 {
 	\begin{tabular}{lll}
@@ -262,7 +261,7 @@ The \hl{Network} type is assigned the
 \hl{Network} instance MUST use and expose this \hl{Kind}.
 
 \mytablefloat{
-	\label{tbl:network}Attributes defined for the \hl{Network} type. 
+	\label{tbl:network}\hl{Attribute}s defined for the \hl{Network} type. 
 }
 {
 	\begin{tabular}{lllll}
@@ -278,7 +277,7 @@ The \hl{Network} type is assigned the
 	\botrule
 	\end{tabular}
 }
-Table~\ref{tbl:network} describes the attributes%
+Table~\ref{tbl:network} describes the OCCI Attributes%
 \footnote{See the ``{\tt attributes}'' attribute defined by the \hl{Category}
 type and inherited by \hl{Kind} \cite{occi:core}.} 
 defined by \hl{Network} through its \hl{Kind} instance. These attributes
@@ -289,10 +288,9 @@ MUST be exposed by an instance of the \hl{Network} type.
 	\hl{Action}s applicable to instances of the \hl{Network} type. The
 	\hl{Action}s are defined by the \hl{Kind} instance
 	\textit{http://schemas.ogf.org/occi/infrastructure\#network}. Every \hl{Action}
-	in the table is identified by a \hl{Category} instance using the
+	instance in the table uses the
 	\textit{http://schemas.ogf.org/occi/infrastructure/network/action\#}
-	categorisation scheme. ``Action Term'' below refers to the term of the \hl{Action}'s
-	\hl{Category} identifier.
+	categorisation scheme. ``Action Term'' below refers to \hl{Action}.{\tt term}.
 }
 {
 	\begin{tabular}{lll}
@@ -334,7 +332,7 @@ Table~\ref{tbl:ipnetworking} define the attributes introduced by the
 
 \mytablefloat{
 	\label{tbl:ipnetworking}%
-	Attributes defined by the \hl{IPNetworking} mixin. A \hl{Network}
+	\hl{Attribute}s defined by the \hl{IPNetworking} mixin. A \hl{Network}
 	instance associated with this \hl{Mixin} instance MUST expose these
 	attributes.
 }{
@@ -367,7 +365,7 @@ The \hl{Storage} type is assigned the \hl{Kind} instance \textit{http://schemas.
 A \hl{Storage} instance MUST use and expose this \hl{Kind}.
 
 \mytablefloat{
-	\label{tbl:storage}Attributes defined for the \hl{Storage} type. 
+	\label{tbl:storage}\hl{Attribute}s defined for the \hl{Storage} type. 
 }
 {
 	\begin{tabular}{lp{2.8cm}clp{5cm}}
@@ -381,7 +379,7 @@ A \hl{Storage} instance MUST use and expose this \hl{Kind}.
 	\botrule
 	\end{tabular}
 }
-Table~\ref{tbl:storage} describes the attributes%
+Table~\ref{tbl:storage} describes the OCCI Attributes%
 \footnote{See the ``{\tt attributes}'' attribute defined by the \hl{Category}
 type and inherited by \hl{Kind} \cite{occi:core}.} 
 defined by \hl{Storage} through its \hl{Kind} instance. These attributes
@@ -392,10 +390,9 @@ MUST be exposed by an instance of the \hl{Storage} type.
 	\hl{Action}s applicable to instances of the \hl{Storage} type. The
 	\hl{Action}s are defined by the \hl{Kind} instance
 	\textit{http://schemas.ogf.org/occi/infrastructure\#storage}. Every \hl{Action}
-	in the table is identified by a \hl{Category} instance using the
+	instance in the table uses the
 	\textit{http://schemas.ogf.org/occi/infrastructure/storage/action\#}
-	categorisation scheme. ``Action Term'' below refers to the term of the \hl{Action}'s
-	\hl{Category} identifier.
+	categorisation scheme. ``Action Term'' below refers to \hl{Action}.{\tt term}.
 }
 {
 	\begin{tabular}{lll}
@@ -452,7 +449,7 @@ The \hl{Kind} instance assigned to the \hl{NetworkInterface} type MUST be
 related to the \textit{http://schemas.ogf.org/occi/core\#link} \hl{Kind}.
 
 \mytablefloat{
-	\label{tbl:networklink}Attributes defined for the \hl{NetworkInterface} type.
+	\label{tbl:networklink}\hl{Attribute}s defined for the \hl{NetworkInterface} type.
 }
 {
 	\begin{tabular}{lp{1.8cm}clp{5cm}}
@@ -468,7 +465,7 @@ related to the \textit{http://schemas.ogf.org/occi/core\#link} \hl{Kind}.
 	\botrule
 	\end{tabular}
 }
-Table~\ref{tbl:networklink} describes the attributes%
+Table~\ref{tbl:networklink} describes the OCCI Attributes%
 \footnote{See the ``{\tt attributes}'' attribute defined by the \hl{Category}
 type and inherited by \hl{Kind} \cite{occi:core}.} 
 defined by \hl{NetworkInterface} through its \hl{Kind} instance. These attributes
@@ -500,7 +497,7 @@ Table~\ref{tbl:ipnetworkinterface} define the attributes introduced by the
 
 \mytablefloat{
 	\label{tbl:ipnetworkinterface}%
-	Attributes defined by the \hl{IPNetworkInterface} mixin. A \hl{NetworkInterface}
+	\hl{Attribute}s defined by the \hl{IPNetworkInterface} mixin. A \hl{NetworkInterface}
 	instance associated with this \hl{Mixin} instance MUST expose these
 	attributes.
 }{
@@ -542,7 +539,7 @@ The \hl{Kind} instance assigned to the \hl{StorageLink} type MUST be related to
 the \textit{http://schemas.ogf.org/occi/core\#link} \hl{Kind}.
 
 \mytablefloat{
-	\label{tbl:storagelink}Attributes defined for the \hl{StorageLink} type. 
+	\label{tbl:storagelink}\hl{Attribute}s defined for the \hl{StorageLink} type. 
 }
 {
 	\begin{tabular}{lp{1.8cm}p{1cm}lp{5cm}}
@@ -559,7 +556,7 @@ the \textit{http://schemas.ogf.org/occi/core\#link} \hl{Kind}.
 	\end{tabular}
 }
 
-Table~\ref{tbl:storagelink} describes the attributes%
+Table~\ref{tbl:storagelink} describes the OCCI Attributes%
 \footnote{See the ``{\tt attributes}'' attribute defined by the \hl{Category}
 type and inherited by \hl{Kind} \cite{occi:core}.} 
 defined by \hl{StorageLink} through its \hl{Kind} instance. These attributes
@@ -598,6 +595,9 @@ detailing the OS. The ``term'' value of the template \hl{Mixin} is a provider-sp
 corresponds to a particular virtual machine image configuration. Where an implementation requires 
 additional attributes associated with the OS Template, it can do so using ``{\tt attributes}'' value
 inherited from the \hl{Category} type.
+
+Default values for OCCI Attributes defined by the \hl{Kind} or the OS Template \hl{Mixin} MAY
+be provided using the \hl{Attribute}.{\tt default} attribute property \cite{occi:core}.
 
 A implementation-defined OS Template \hl{Mixin} MUST be related to 
 the OCCI OS Template \hl{Mixin} in order to give absolute type information. 
