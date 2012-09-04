@@ -40,7 +40,7 @@ title: String [0..1]
 --
 </panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>370</x><y>280</y><w>100</w><h>60</h></coordinates><panel_attributes>Entity
 --
- id: UUID
+ id: URI
 --
 </panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>230</x><y>380</y><w>100</w><h>60</h></coordinates><panel_attributes>Resource
 --
@@ -50,12 +50,12 @@ title: String [0..1]
 --
  
 --
-</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>590</x><y>10</y><w>170</w><h>140</h></coordinates><panel_attributes>Attribute
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>590</x><y>10</y><w>180</w><h>140</h></coordinates><panel_attributes>Attribute
 --
 name: String
-type: String
-mutable: Boolean
-required: Boolean
+type: String [0..1]
+mutable: Boolean [0..1]
+required: Boolean [0..1]
 default: String [0..1]
 --
 </panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>300</x><y>80</y><w>120</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>30;30;100;100</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>180</x><y>80</y><w>90</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>70;30;30;100</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>380</x><y>80</y><w>270</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>30;30;250;100</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>180</x><y>180</y><w>210</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
@@ -65,27 +65,27 @@ r2=actions
 </panel_attributes><additional_attributes>30;30;190;30</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>440</x><y>180</y><w>210</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=*
-r2=actions</panel_attributes><additional_attributes>190;30;30;30</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>440</x><y>210</y><w>244</w><h>120</h></coordinates><panel_attributes>lt=-
+r2=actions</panel_attributes><additional_attributes>190;30;30;30</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>440</x><y>210</y><w>246</w><h>120</h></coordinates><panel_attributes>lt=-
 m1=*
 m2=*
 r1=          mixins
-r2=entities</panel_attributes><additional_attributes>210;30;180;100;30;100</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>150</x><y>210</y><w>240</w><h>120</h></coordinates><panel_attributes>lt=-
+r2=entities</panel_attributes><additional_attributes>210;30;180;100;30;100</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>160</x><y>210</y><w>230</w><h>120</h></coordinates><panel_attributes>lt=-
 m1=1
 m2=*
 r1=          kind
-r2=entities</panel_attributes><additional_attributes>40;30;70;100;220;100</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>440</x><y>310</y><w>90</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>30;30;70;70</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>300</x><y>310</y><w>90</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>70;30;30;70</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>300</x><y>360</y><w>230</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+r2=entities</panel_attributes><additional_attributes>30;30;60;100;210;100</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>440</x><y>310</y><w>90</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>30;30;70;70</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>300</x><y>310</y><w>90</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>70;30;30;70</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>300</x><y>360</y><w>230</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
 m1=1
 r1=target</panel_attributes><additional_attributes>30;30;210;30</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>300</x><y>400</y><w>230</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=*
 r1=source
-r2=links</panel_attributes><additional_attributes>30;30;210;30</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>60</x><y>180</y><w>122</w><h>120</h></coordinates><panel_attributes>lt=-
+r2=links</panel_attributes><additional_attributes>30;30;210;30</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>60</x><y>180</y><w>120</w><h>120</h></coordinates><panel_attributes>lt=-
 m1=      0..1
 m2=*
-r1=           related</panel_attributes><additional_attributes>70;60;70;100;30;100;30;30;50;30</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>600</x><y>180</y><w>206</w><h>120</h></coordinates><panel_attributes>lt=-
+r1=          related</panel_attributes><additional_attributes>70;60;70;100;30;100;30;30;50;30</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>620</x><y>180</y><w>174</w><h>120</h></coordinates><panel_attributes>lt=-
 m1=  *
 m2=*
-r1=                              related</panel_attributes><additional_attributes>110;60;110;100;150;100;150;30;130;30</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>380</x><y>30</y><w>230</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r1=                          related</panel_attributes><additional_attributes>90;60;90;100;130;100;130;30;110;30</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>380</x><y>30</y><w>230</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=*
 r2=attributes</panel_attributes><additional_attributes>30;30;210;30</additional_attributes></element></umlet_diagram>

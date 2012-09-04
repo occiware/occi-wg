@@ -17,7 +17,7 @@
 
 % header
 \fancyhf{}
-\lhead{GFD-P-R.183}
+\lhead{Errata Draft GFD-P-R.183}
 \rhead{\today}
 
 % footer
@@ -38,12 +38,12 @@
 % header on first page is different
 \thispagestyle{empty}
 
-GFD-P-R.183 \hfill  {Ralf Nyrén, Aurenav}\\
+Errata Draft GFD-P-R.183 \hfill  {Ralf Nyrén, Aurenav}\\
 OCCI-WG \hfill  Andy Edmonds, Intel\\
 \rightline {Alexander Papaspyrou, TU Dortmund University}
 \rightline {Thijs Metsch, Platform Computing}
-\rightline {October 14, 2010}\\
-\rightline {Updated: \today}
+\rightline {April 7, 2011}\\
+\rightline {Errata Update: \today}
 
 \vspace*{0.5in}
 
@@ -206,7 +206,7 @@ in the OCCI context:
 
   \item[model attribute] An internal attribute of a the Core Model which is
     {\em not} client discoverable. Examples are \hl{Entity}.id,
-    \hl{Link}.source and \hl{Link}.target. A model attribute is \em{not}
+    \hl{Link}.source and \hl{Link}.target. A model attribute is {\em not}
     identified by an \hl{Attribute} instance.
 
   \item[OCCI Attribute] A client discoverable attribute identified by an
@@ -347,7 +347,7 @@ MUST implement to be compliant.
 
 \mytablefloat{
   \label{tbl:attribute}Model attributes defined for the \hl{Attribute} type.}{
-  \begin{tabular}{llllp{2.7in}}
+  \begin{tabular}{lp{23mm}llp{60mm}}
     \toprule
     Model attribute 	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
     \colrule
@@ -393,12 +393,14 @@ The \hl{Kind} type, together with the \hl{Mixin} type, defines the
 classification system of the OCCI Core Model. It MUST be
 implemented. The \hl{Kind} type represents the type identification
 mechanism for all \hl{Entity} types present in the model.
+%
+Sub-types MUST NOT be derived from the \hl{Kind} type.
 
 A unique \hl{Kind} {\em instance} MUST be assigned to each and every
 \hl{Entity} sub-type defined in an OCCI implementation.
 
 Every instance of \hl{Kind} represents a unique type identifier for a
-particular sub-type of \hl{Entity}.  Consequently, when an \hl{Entity}
+particular sub-{\em type} of \hl{Entity}.  Consequently, when an \hl{Entity}
 sub-type is instantiated the resource instance MUST be associated with
 its type identifier, i.e.~the \hl{Kind} instance.  A resource instance
 MUST remain associated with its \hl{Kind} instance throughout its
@@ -512,10 +514,13 @@ OCCI Core Model type classification system. It MUST be
 implemented. The \hl{Mixin} type represent an extension mechanism,
 which allows new resource capabilities to be added to resource
 instances both at creation-time and/or run-time.
+%
+Sub-types MUST NOT be derived from the \hl{Mixin} type.
 
 A \hl{Mixin} {\em instance} can be associated with any existing
-resource instance and thereby add new resource capabilities,
-i.e.~\hl{Attribute}s and \hl{Action}s, to the resource instance. However, a
+resource instance and thereby identify new resource capabilities,
+i.e.~\hl{Attribute}s and \hl{Action}s, for the resource instance.
+However, a
 \hl{Mixin} can never be applied to a type.  In the initial
 instantiation of the OCCI Core Model, with no extensions, no
 \hl{Mixin} instances are present.
@@ -562,6 +567,11 @@ of the \hl{Mixin} type:
   \item A \hl{Mixin} instance MUST only be associated with resource
     {\em instances}, not types, either at creation-time or run-time.
 
+  \item A \hl{Mixin} instance is {\em only} a type identifier. It MUST NOT
+    provide the implementation of the new resource capabilities it introduces.
+    For example, a \hl{Mixin} instance never contains the value of an OCCI
+    \hl{Attribute}.
+
   \item A \hl{Mixin} instance MAY introduce additional \hl{Attribute}s
     when applied to a resource instance. The name and properties of those
     OCCI Attributes MUST be exposed through \hl{Mixin}.{\tt attributes}
@@ -577,11 +587,13 @@ of the \hl{Mixin} type:
     through the \hl{Mixin}.{\tt actions} model attribute that represent the
     association between a \hl{Mixin} instance and the \hl{Action} instances it
     defines.
+
   \item A \hl{Mixin} instance MAY be related to another \hl{Mixin}
     instance.  If \hl{Mixin} {\bf B} is related to \hl{Mixin} {\bf A},
     any resource instance associated with \hl{Mixin} {\bf B} will
     receive the resource capabilities defined by both \hl{Mixin} {\bf
       B} and \hl{Mixin} {\bf A}.  See Mixin Relationships below.
+
   \item A \hl{Mixin} instance defining no additional resource
     capabilities is considered to be a tag.
 
@@ -618,6 +630,20 @@ The \hl{Action} type inherit the \hl{Category} type. To be compliant
 the \hl{Action} type MUST implement the inherited model attributes defined in
 table~\ref{tbl:category}.
 
+\mytablefloat{
+  \label{tbl:action_example}Example of an \hl{Action} instance which identifies a ``resize'' operation.}{
+  \begin{tabular}{ll}
+    \toprule
+    Model attribute 	& Value \\
+    \colrule
+    term 		& resize \\
+    scheme 		& {\tt http://schemas.ogf.org/occi/infrastructure/storage/action\#} \\
+    title 		& Resize virtual disk \\
+    attributes 		& Attribute({\tt "resize"}) \\
+  \botrule
+  \end{tabular}
+}
+
 An \hl{Action} instance MUST always bound to either a \hl{Kind} or a \hl{Mixin}
 instance through a composite association. An \hl{Action} is considered
 to be a capability of the \hl{Kind} or \hl{Mixin} instance it is
@@ -632,20 +658,6 @@ collection of \hl{Entity} sub-type
 instances. The \hl{Action} is only considered valid if all resource
 instances of the collection are associated with the \hl{Kind} or
 \hl{Mixin} defining the \hl{Action} instance.
-
-\mytablefloat{
-  \label{tbl:action_example}Example of an \hl{Action} instance which identifies a ``resize'' operation.}{
-  \begin{tabular}{ll}
-    \toprule
-    Model attribute 	& Value \\
-    \colrule
-    term 		& resize \\
-    scheme 		& {\tt http://schemas.ogf.org/occi/infrastructure/storage/action\#} \\
-    title 		& Resize virtual disk \\
-    attributes 		& Attribute({\tt "resize"}) \\
-  \botrule
-  \end{tabular}
-}
 
 An \hl{Action} instance MAY identify OCCI Attributes which correspond to
 parameters of the invocable operation.
@@ -767,7 +779,25 @@ The relevant details can be found in the OCCI Rendering documents.
 \label{sec:base_types}
 The following sections describe the OCCI base types defined by the
 OCCI Core Model.  The base types are \hl{Entity}, \hl{Resource},
-\hl{Link} and \hl{Action}. All base types MUST be implemented.
+\hl{Link}. All base types MUST be implemented.
+
+An instance of the \hl{Resource} type, the \hl{Link} type or one of their
+sub-types is called a {\em resource instance}.
+Each resource instance within an OCCI system MUST have a unique identifier%
+\footnote{A resource instance identifier MUST be unique within the service
+provider's name-space. It is RECOMMENDED to use globally unique identifiers.}
+stored in the {\tt id} model attribute of the \hl{Entity} type, as defined in
+table~\ref{tbl:entity}.
+%
+The structure of these identifiers is opaque and the system should not assume a
+static, pre-determined scheme for their structure other than the rules imposed
+by the Uniform Resource Identifier (URI) \cite{rfc3986} syntax.
+
+Although every unique resource instance identifier MUST be valid URI it is
+RECOMMENDED to use the Uniform Resource Name (URN) \cite{rfc2141} syntax.
+
+For example \hl{Entity}.{\tt id} could be
+{\tt urn:uuid:de7335a7-07e0-4487-9cbd-ed51be7f2ce4}.
 
 \subsubsection{Entity}
 \label{sec:entity}
@@ -783,7 +813,7 @@ MUST implement to be compliant.
     \toprule
     Model attribute	& Type 		& Multiplicity 	& Client Mutability 	& Discover\-able 	& Description \\
     \colrule
-    id			& UUID 		& 1 		& Immutable 		& Yes 			& A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
+    id			& URI 		& 1 		& Immutable 		& Yes 			& A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
     kind 		& \hl{Kind}	& 1 		& Immutable 		& No 			& The \hl{Kind} instance uniquely identifying the \hl{Entity} sub-type of the resource instance. \\
     mixins 		& \hl{Kind}	& 0..* 		& Mutable 		& No 			& The \hl{Mixin} instances associated to this resource instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\ 
     \botrule
@@ -794,7 +824,7 @@ MUST implement to be compliant.
 \texttt{occi.core.title}, see table~\ref{tbl:entity_attr}.
 %
 \mytablefloat{
-  \label{tbl:entity}OCCI Attributes defined by the \hl{Entity} type.}{
+  \label{tbl:entity_attr}OCCI Attributes defined by the \hl{Entity} type.}{
   \begin{tabular}{lllp{1.3cm}p{1.0cm}p{7cm}}
     \toprule
     OCCI Attribute	& Type 		& Multiplicity	& Client Mutability	& Discover\-able 	& Description \\
@@ -844,11 +874,6 @@ general object in the OCCI model and MUST be implemented. A
 e.g. virtual machines, networks, services, etc.~through
 specialisation.
 
-The \hl{Resource} type MUST implement all model attributes and OCCI Attributes
-inherited from
-\hl{Entity} as well as the model and OCCI Attributes defined in
-table~\ref{tbl:resource} and \ref{tbl:resource_attr} in order to be compliant.
-%
 \mytablefloat{
   \label{tbl:resource}Model attributes defined for the \hl{Resource} type.}{
   \begin{tabular}{llllp{8cm}}
@@ -859,7 +884,12 @@ table~\ref{tbl:resource} and \ref{tbl:resource_attr} in order to be compliant.
     \botrule
   \end{tabular}
 }
-%
+
+The \hl{Resource} type MUST implement all model attributes and OCCI Attributes
+inherited from
+\hl{Entity} as well as the model and OCCI Attributes defined in
+table~\ref{tbl:resource} and \ref{tbl:resource_attr} in order to be compliant.
+
 \mytablefloat{
   \label{tbl:resource_attr}OCCI Attributes defined for the \hl{Resource} type.}{
   \begin{tabular}{llllp{8cm}}
