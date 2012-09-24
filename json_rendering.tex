@@ -20,7 +20,8 @@
   ndkeywordstyle=\itshape
 }
 \lstset{
-   language=json
+   language=json,
+   basicstyle=\footnotesize,
 }
 
 \setlength{\headheight}{13pt}
@@ -124,7 +125,7 @@ The following media-type MUST be used for the OCCI JSON Rendering:
 \section{JSON Format}
 \label{sec:json_format}
 The OCCI JSON Rendering consists of a JSON object containing information on the 
-OCCI Core instances OCCI Kind, OCCI Mixin, OCCI Action Category, OCCI Action,
+OCCI Core instances OCCI Kind, OCCI Mixin, OCCI Action, OCCI Action instance,
 OCCI Link and OCCI Resource. The rendering of each OCCI Core instance will be
 described in the following sections. 
 
@@ -160,7 +161,7 @@ Table~\ref{tbl:format_resource} defines the object members.
             "kind": String,
             "mixins": Array,
             "attributes": Object,
-            "action_categories": Array,
+            "actions": Array,
             "id": String,
             "links": Array
         }
@@ -187,14 +188,12 @@ mutable & 0..* \\
     attributes & Object & Instance Attributes (see
 \ref{sec:format_attribute_description}) & mutable & 0..* \\
     
-    action\_categories & Array of Strings & List of type identifiers of OCCI
-Action Categories applicable to the OCCI Resource instance & mutable & 0..* \\
+    actions & Array of Strings & List of type identifiers of OCCI
+Actions applicable to the OCCI Resource instance & mutable & 0..* \\
     
-    id & String & URN representing the UUID \cite{rfc4122} of the OCCI Resource
-& immutable & 1\\
+    id & String & ID of the OCCI Resource & immutable & 1\\
             
-    links & Array of Strings & List of URNs representing the UUID \cite{rfc4122}
-of an OCCI Link & mutable & 0..*\\
+    links & Array of Strings & List of URIs of OCCI Links & mutable & 0..*\\
     \botrule
     \end{tabularx}
 }
@@ -212,7 +211,7 @@ Table~\ref{tbl:format_link} defines the object members.
             "kind": String,
             "mixins": Array,
             "attributes": Object,
-            "action_categories": Array,
+            "actions": Array,
             "id": String,
             "source": String,
             "target": String,
@@ -239,18 +238,16 @@ Mixins &
     attributes & Object & Instance attributes (see
 \ref{sec:format_attribute_description}) & mutable & 0..* \\
     
-    action\_categories & Array of Strings & List of type identifiers of OCCI
+    actions & Array of Strings & List of type identifiers of OCCI
 Action Categories applicable to the OCCI Link instance & mutable & 0..* \\
     
-    id & String & URN representing the UUID \cite{rfc4122} of the OCCI Link &
-immutable & 1\\
+    id & String & ID of the OCCI Link & immutable & 1\\
         
-    source & String & URN representing the UUID \cite{rfc4122} of the source
-OCCI Resource & immutable & 1\\
+    source & String & URI of the source OCCI Resource. If only one OCCI 
+Resource is rendered in the same collection, this OCCI Resource is the 
+source of the OCCI Link if this entry is omitted & immutable & 0..1\\
     
-    target & String & URN representing the UUID \cite{rfc4122} of the target
-Resource if the target is an OCCI Resource. URI representing an external
-Resource otherwise. & immutable & 1\\
+    target & String & URI of the target Resource & immutable & 1\\
          
     rel & string & Type identifier of the target Resource. MUST be supplied if
 the target is an OCCI Resource. & immutable & 0..1 \\
@@ -258,34 +255,32 @@ the target is an OCCI Resource. & immutable & 0..1 \\
     \end{tabularx}
 }
 
-\subsection{Action Format}
-\label{sec:format_action}
+\subsection{Action Instance Format}
+\label{sec:format_action_instance}
 
-To trigger an OCCI Action a representation of the OCCI Action is needed. This
-representation includes all information to carry out the OCCI Action on an OCCI
-Entity.
+To trigger an OCCI Action an instance of the OCCI Action is required. This
+ OCCI Action Instance includes all information to trigger the OCCI Action on an
+ OCCI Entity.
 
-The OCCI Action instance format consists of a JSON object as shown in the
-following example. Section \ref{sec:example_action} contains a detailed example.
-Table~\ref{tbl:format_action} defines the object members.
+The OCCI Action Instance format consists of a JSON object as shown in the
+following example. Section \ref{sec:example_action_instance} contains a detailed example.
+Table~\ref{tbl:format_action_instance} defines the object members.
 \begin{lstlisting}
 {
-    "action": {
-            "action_category": String,
-            "attributes": Object,
-    }
+    "action": String,
+    "attributes": Object
 }
 \end{lstlisting}
 \mytablefloat{
-    \label{tbl:format_action}
-    OCCI Action instances are rendered inside the top-level JSON object with
-name {\em action} as a JSON objects with the following entries:
+    \label{tbl:format_action_instance}
+    OCCI Action Instances are rendered as top-level JSON object with
+ the following entries:
     } {
     \begin{tabularx}{\textwidth}{llXll}
     \toprule
     Object member & JSON type & Description & Mutability & Multiplicity \\
     \colrule
-    action\_category & String & Type identifier & immutable & 1 \\
+    action & String & Type identifier & immutable & 1 \\
 
     attributes & Object & Instance attributes (see
 \ref{sec:format_attribute_description}) & mutable & 0..* \\
@@ -317,7 +312,7 @@ immutable & 1 \\
 ~\ref{tbl:format_attribute_description} & immutable & 0..* \\
     related & Array of Strings & List of type identifiers containing only the
 related ``parent'' \hl{Kind} instance & immutable & 0..1 \\
-    action\_categories & Array of Strings & List of OCCI Action Category type
+    actions & Array of Strings & List of OCCI Action Category type
 identifiers & immutable & 0..* \\
     location & string & Transport protocol specific URI bound to the OCCI Kind
 instance. MUST be supplied for the OCCI Kinds of all OCCI Entities except OCCI
@@ -334,7 +329,7 @@ Entity itself & immutable & 0..1 \\
             "scheme": String,
             "title": String,
             "attributes": Object,
-            "action_categories": Array,
+            "actions": Array,
             "related": Array,
             "location": String
         }
@@ -347,6 +342,22 @@ Entity itself & immutable & 0..1 \\
 
 The OCCI Mixin format consists of a JSON object as shown in the following example. Section \ref{sec:example_mixin} contains a detailed example.
 Table~\ref{tbl:format_mixin} defines the top-level object members.
+
+\begin{lstlisting}
+{
+    "mixins": [
+        {
+            "term": String,
+            "scheme": String,
+            "title": String,
+            "attributes": Object,
+            "actions": Array,
+            "related": Array,
+            "location": String
+        }
+    ]
+}
+\end{lstlisting}
 
 \mytablefloat{
     \label{tbl:format_mixin}
@@ -365,7 +376,7 @@ immutable & 1 \\
 ~\ref{tbl:format_attribute_description} & immutable & 0..* \\
     related & Array of Strings & List of type identifiers of the related
 ``parent'' \hl{Mixin} instances & immutable & 0..* \\
-    action\_categories & Array of Strings & List of OCCI Action type identifiers
+    actions & Array of Strings & List of OCCI Action type identifiers
 & immutable & 0..* \\
     location & String & Transport protocol specific URI bound to the OCCI Mixin
 instance & immutable & 1 \\
@@ -373,35 +384,18 @@ instance & immutable & 1 \\
     \end{tabularx}
 }
 
-\begin{lstlisting}
-{
-    "mixins": [
-        {
-            "term": String,
-            "scheme": String,
-            "title": String,
-            "attributes": Object,
-            "action_categories": Array,
-            "related": Array,
-            "location": String
-        }
-    ]
-}
-\end{lstlisting}
-
-\subsection{Action Category Format}
+\subsection{Action Format}
 \label{sec:format_action}
 
-An OCCI Category is used to describe an OCCI Action. 
-
-The OCCI Action Category format consists of a JSON object as shown in the
+The OCCI Action format consists of a JSON object as shown in the
 following example.
-Table~\ref{tbl:format_action_category} defines the top-level object members.
+Table~\ref{tbl:format_action} defines the top-level object members.
 
 \mytablefloat{
-    \label{tbl:format_action_category}
-    OCCI Categories describing OCCI Actions instances are rendered inside the
-top-level JSON object with name {\em actions} as an array of JSON Objects with the following entries:
+    \label{tbl:format_action}
+    OCCI Actions are rendered inside the
+top-level JSON object with name {\em actions} as an array of JSON Objects with
+ the following entries:
     } {
     \begin{tabularx}{\textwidth}{llXll}
     \toprule
@@ -419,14 +413,14 @@ immutable & 1 \\
 
 \begin{lstlisting}
 {
-    "action_categories": [
+    "actions": [
         {
             "term": String,
             "scheme": String,
             "title": String,
             "attributes": Object,
         }
-	]
+    ]
 }
 \end{lstlisting}
 
@@ -483,9 +477,9 @@ present in the instantiated OCCI Entity & \\
 {
     "resources": [
         {
-            "kind": "http: //schemas.ogf.org/occi/infrastructure#compute",
+            "kind": "http://schemas.ogf.org/occi/infrastructure#compute",
             "mixins": [
-                "http: //example.com/occi/templates#my_os_mixin"
+                "http://example.com/occi/templates#my_os_mixin"
             ],
             "attributes": {
                 "occi": {
@@ -507,12 +501,12 @@ present in the instantiated OCCI Entity & \\
                     }
                 }
             },
-            "action_categories": [
+            "actions": [
                 "http://schemas.ogf.org/occi/infrastructure/compute/action#start"
             ],
-            "id": "urn:uuid:996ad860-2a9a-504f-8861-aeafd0b2ae29",
+            "id": "996ad860-2a9a-504f-8861-aeafd0b2ae29",
             "links": [
-                "urn:uuid:22fe83ae-a20f-54fc-b436-cec85c94c5e8"
+                "/storage/22fe83ae-a20f-54fc-b436-cec85c94c5e8"
             ]
         }
     ]
@@ -526,8 +520,7 @@ present in the instantiated OCCI Entity & \\
 {
     "links": [
         {
-            "kind":
-"http://schemas.ogf.org/occi/infrastructure#networkinterface",
+            "kind": "http://schemas.ogf.org/occi/infrastructure#networkinterface",
             "mixins": [
                 "http://schemas.ogf.org/occi/infrastructure/networkinterface#ipnetworkinterface"
             ],
@@ -544,27 +537,25 @@ present in the instantiated OCCI Entity & \\
                     }
                 }
             },
-            "action_categories": [
+            "actions": [
                 "http://schemas.ogf.org/occi/infrastructure/networkinterface/action#up"
             ],
-            "id": "urn:uuid:22fe83ae-a20f-54fc-b436-cec85c94c5e8",
-            "target": "urn:uuid:b7d55bf4-7057-5113-85c8-141871bf7635",
-            "source": "urn:uuid:996ad860-2a9a-504f-8861-aeafd0b2ae29"
+            "id": "22fe83ae-a20f-54fc-b436-cec85c94c5e8",
+            "target": "/network/b7d55bf4-7057-5113-85c8-141871bf7635",
+            "source": "/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
         }
     ]
 }
 \end{lstlisting}
 
 \subsection{Action Instance Format Example}
-\label{sec:example_action}
+\label{sec:example_action_instance}
 
 \begin{lstlisting}
 {
-    "action": {
-        "action_category": "http://schemas.ogf.org/occi/infrastructure/compute/action#stop",
-        "attributes": {
-            "method": "graceful"
-        }
+    "action": "http://schemas.ogf.org/occi/infrastructure/compute/action#stop",
+    "attributes": {
+        "method": "graceful"       
     }
 }
 \end{lstlisting}
@@ -601,7 +592,7 @@ present in the instantiated OCCI Entity & \\
                     }
                 }
             },
-            "action_categories": [
+            "actions": [
                 "http://schemas.ogf.org/occi/infrastructure/compute/action#start",
                 "http://schemas.ogf.org/occi/infrastructure/compute/action#stop",
                 "http://schemas.ogf.org/occi/infrastructure/compute/action#restart",
@@ -642,12 +633,12 @@ present in the instantiated OCCI Entity & \\
 }
 \end{lstlisting}
 
-\subsection{Action Category Format Example}
+\subsection{Action Format Example}
 \label{sec:example_action}
 
 \begin{lstlisting}
 {
-    "action_categories": [
+    "actions": [
         {
             "term": "stop",
             "scheme": "http://schemas.ogf.org/occi/infrastructure/compute/action#",
