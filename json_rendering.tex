@@ -125,8 +125,10 @@ The following media-type MUST be used for the OCCI JSON Rendering:
 \section{JSON Format}
 \label{sec:json_format}
 The OCCI JSON Rendering consists of a JSON object containing information on the 
-OCCI Core instances OCCI Kind, OCCI Mixin, OCCI Action, OCCI Action instance,
-OCCI Link and OCCI Resource. The rendering of each OCCI Core instance will be
+OCCI Core instances OCCI Kind, OCCI Mixin, OCCI Action,
+OCCI Link and OCCI Resource. The rendering also include a JSON object to invoke
+the operation identified by OCCI Actions.
+The rendering of each OCCI Core instance will be
 described in the following sections. 
 
 \subsection{Attributes}
@@ -255,16 +257,16 @@ the target is an OCCI Resource. & immutable & 0..1 \\
     \end{tabularx}
 }
 
-\subsection{Action Instance Format}
-\label{sec:format_action_instance}
+\subsection{Action Invocation Format}
+\label{sec:format_action_invocation}
 
-To trigger an OCCI Action an instance of the OCCI Action is required. This
- OCCI Action Instance includes all information to trigger the OCCI Action on an
- OCCI Entity.
+An OCCI Action instance identifies an invocable operation on a OCCI Resource or
+OCCI Link instance. To trigger such an operation the OCCI Action invocation
+format is required.
 
-The OCCI Action Instance format consists of a JSON object as shown in the
-following example. Section \ref{sec:example_action_instance} contains a detailed example.
-Table~\ref{tbl:format_action_instance} defines the object members.
+The OCCI Action invocation format consists of a top-level JSON object as shown in the
+following example. Section \ref{sec:example_action_invocation} contains a detailed example.
+Table~\ref{tbl:format_action_invocation} defines the object members.
 \begin{lstlisting}
 {
     "action": String,
@@ -272,8 +274,8 @@ Table~\ref{tbl:format_action_instance} defines the object members.
 }
 \end{lstlisting}
 \mytablefloat{
-    \label{tbl:format_action_instance}
-    OCCI Action Instances are rendered as top-level JSON object with
+    \label{tbl:format_action_invocation}
+    An OCCI Action invocation is rendered as top-level JSON object with
  the following entries:
     } {
     \begin{tabularx}{\textwidth}{llXll}
@@ -548,8 +550,8 @@ present in the instantiated OCCI Entity & \\
 }
 \end{lstlisting}
 
-\subsection{Action Instance Format Example}
-\label{sec:example_action_instance}
+\subsection{Action Invocation Format Example}
+\label{sec:example_action_invocation}
 
 \begin{lstlisting}
 {
