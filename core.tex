@@ -1063,6 +1063,33 @@ address transport level security and authentication on the protocol level.
 All security considerations listed above apply to all (existing and future)
 extensions of the OCCI Core and Model specification.
 
+\section{Errata}
+
+The {\today} errata update contains the following corrections:
+\begin{itemize}
+\item Introduce an explicit \hl{Attribute} type to expose the discoverable
+  attribute properties already defined for the OCCI base types \hl{Entity},
+  \hl{Resource}, \hl{Link} and their sub-types.
+
+\item Distinguish between discoverable OCCI \hl{Attributes} and internal model
+  attributes.
+
+\item Correct the previously unclear definition of OCCI \hl{Action}. The
+  \hl{Action} type inherits \hl{Category} and is only an identifier of
+  an invocable operation. It does {\em not} represent the operation itself.
+  The \hl{Action} definition now aligns with its use in the OCCI HTTP Rendering
+  \cite{occi:http_rendering}.
+
+\item Clarify the format of the unique resource instance identifier defined in
+  OCCI \hl{Entity}. Incorporate the description and recommendations from the
+  OCCI HTTP Rendering \cite{occi:http_rendering}.
+
+\item Clarify that an OCCI \hl{Mixin} instance is only a type identifier. The
+  Core Model does not specify how a mixed-in attribute is implemented. The
+  \hl{Mixin} instance only states that the attribute exists.
+\end{itemize}
+
+
 \section{Glossary}
 \label{sec:glossary}
 \input{include/glossary}
