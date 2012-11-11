@@ -617,7 +617,10 @@ of the \hl{Mixin} type:
 \paragraph*{Mixin Relationships}
 
 A \hl{Mixin} instance MAY be related to another \hl{Mixin} instance
-for type classification purposes. For example a set of operating
+for type classification purposes.
+\hl{Mixin} relationship is implemented using the \hl{Mixin}.{\tt related}
+model attribute.
+For example a set of operating
 system templates, implemented as \hl{Mixin} instances, could be
 related to an ``OS-template'' \hl{Mixin} in order to help
 identification.
