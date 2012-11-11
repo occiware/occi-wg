@@ -50,13 +50,14 @@ title: String [0..1]
 --
  
 --
-</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>590</x><y>10</y><w>180</w><h>140</h></coordinates><panel_attributes>Attribute
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>590</x><y>10</y><w>180</w><h>150</h></coordinates><panel_attributes>Attribute
 --
 name: String
 type: String [0..1]
 mutable: Boolean [0..1]
 required: Boolean [0..1]
 default: String [0..1]
+description: String [0..1]
 --
 </panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>300</x><y>80</y><w>120</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>30;30;100;100</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>180</x><y>80</y><w>90</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>70;30;30;100</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>380</x><y>80</y><w>270</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>30;30;250;100</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>180</x><y>180</y><w>210</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=0..1
