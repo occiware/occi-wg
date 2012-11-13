@@ -1109,7 +1109,7 @@ extensions of the OCCI Core and Model specification.
 \section{Errata}
 \label{sec:errata}
 
-The corrections introduced by the {\today} errata update is summarized below.
+The corrections introduced by the {\today} errata update are summarized below.
 The following sub-sections describe the possible impact of the corrections
 on existing implementations and associated dependent specifications such
 as OCCI HTTP Rendering \cite{occi:http_rendering} and  OCCI Infrastructure
@@ -1120,7 +1120,7 @@ as OCCI HTTP Rendering \cite{occi:http_rendering} and  OCCI Infrastructure
   attribute properties already defined for the OCCI base types \hl{Entity},
   \hl{Resource}, \hl{Link} and their sub-types.
 
-\item Distinguish between discoverable OCCI \hl{Attributes} and internal model
+\item Distinguish between discoverable OCCI \hl{Attribute}s and internal model
   attributes.
 
 \item Correct the previously unclear definition of OCCI \hl{Action}. The
@@ -1138,7 +1138,7 @@ as OCCI HTTP Rendering \cite{occi:http_rendering} and  OCCI Infrastructure
   \hl{Mixin} instance only states that the attribute exists.
 
 \item Rename the term {\em resource instance} to {\em entity instance}.
-  An {\em entity instance} refers to a instance of either OCCI \hl{Resource},
+  An {\em entity instance} refers to an instance of either OCCI \hl{Resource},
   OCCI \hl{Link} or a sub-type of either type. The {\em resource instance}
   term, while defined identically, was due to its name a source of
   misinterpretations in the specification.
@@ -1146,32 +1146,31 @@ as OCCI HTTP Rendering \cite{occi:http_rendering} and  OCCI Infrastructure
 
 \subsection{Introducing the OCCI \hl{Attribute} type}
 
-The \hl{Attribute} type formalize how attribute properties are represented in
+The \hl{Attribute} type formalizes how attribute properties are represented in
 the OCCI Core Model. Since all attribute properties are optional no modifications
 are necessary in existing implementations to remain compliant.
 
-OCCI Infrastructure \cite{occi:infrastructure} define attribute properties for
+OCCI Infrastructure \cite{occi:infrastructure} defines attribute properties for
 its sub-types of \hl{Entity}. The errata corrections allows these attribute
 properties to be represented in the Core Model. However, the definitions remain the
 same.
 
-OCCI HTTP Rendering \cite{occi:http_rendering} already expose the ``required'' and
-``mutable'' attribute properties. Future updates may include support for all optional
-attribute properties.
+OCCI HTTP Rendering \cite{occi:http_rendering} already exposes the ``required'' and
+``mutable'' attribute properties.
 
 \subsection{OCCI \hl{Attribute}s versus model attributes}
 
 The change is editorial and does not affect existing implementations.
 %
-The OCCI Infrastructure \cite{occi:infrastructure} specification only define
-discoverable OCCI \hl{Attribute} although this is not explicitly stated.
+The OCCI Infrastructure \cite{occi:infrastructure} specification only defines
+discoverable OCCI \hl{Attribute}s although this is not explicitly stated.
 
 \subsection{Action definition}
 
-The corrected definition of OCCI \hl{Action} have no impact on neither discovery
+The corrected definition of OCCI \hl{Action} has no impact on neither discovery
 nor invocation of \hl{Action}s in existing implementations. The OCCI HTTP Rendering
 \cite{occi:http_rendering} is better aligned with OCCI Core after the corrections
-since it already use {\tt type="action"} in its rendering of categories.
+since it already uses {\tt type="action"} in its rendering of categories.
 
 \subsection{Rename ``resource instance'' to ``entity instance''}
 
