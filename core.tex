@@ -432,7 +432,7 @@ for \hl{Entity}, another for \hl{Resource} and the last one for
     Model attribute	& Type 		& Multiplicity 		& Client Mutability 		& Description \\
     \colrule
     actions 		& \hl{Action} 	& 0..* 			& Immutable 			& Set of \hl{Action} instances defined by the \hl{Kind} instance. \\
-    related 		& \hl{Kind} 	& 0..1 			& Immutable 			& Another \hl{Kind} instances which this \hl{Kind} relates to. \\
+    parent 		& \hl{Kind} 	& 0..1 			& Immutable 			& Another \hl{Kind} instance which this \hl{Kind} relates to. \\
     entities 		& \hl{Entity} 	& 0..* 			& Immutable 			& Set of entity instances. Instances of the particular \hl{Entity} sub-type which is uniquely identified by this \hl{Kind} instance. \\
     \botrule
   \end{tabular}
@@ -461,22 +461,22 @@ of the \hl{Kind} type:
     \hl{Kind}.{\tt actions} model attribute which represent the association
     between a \hl{Kind} instance and the \hl{Action} instances it defines.
 
-  \item A \hl{Kind} instance MUST be related, either directly or
-    indirectly, to the \hl{Kind} instance of \hl{Entity},
-    i.e. \textit{http://schemas.ogf.org/occi/core\#entity}.  The
-    \hl{Kind}.{\tt related} model attribute represent the relationship to
+  \item A \hl{Kind} instance MUST have the \hl{Kind} instance of \hl{Entity}%
+    \footnote{\textit{http://schemas.ogf.org/occi/core\#entity}}
+    as its direct or indirect parent.
+    The \hl{Kind}.{\tt parent} model attribute represent the relationship to
     another \hl{Kind} instance.
 
   \item If type {\bf B} inherits type {\bf A}, where {\bf A} is a
-    sub-type of \hl{Entity}, the \hl{Kind} instance of {\bf B} MUST be
-    directly related to the \hl{Kind} instance of {\bf A}. See Kind
-    Relationships below.
+    sub-type of \hl{Entity}, the \hl{Kind} instance of {\bf B} MUST
+    have its {\tt parent} attribute set to the \hl{Kind} instance of {\bf A}.
+    See Kind Relationships below.
 \end{itemize}
 
 \paragraph*{Kind Relationships}
-\hl{Kind} relationships are defined through the ``{\tt related}''
-model attribute present in every \hl{Kind} instance. The ``{\tt related}''
-model attribute define which other \hl{Kind} instances a particular
+\hl{Kind} relationships are defined through the ``{\tt parent}''
+model attribute present in every \hl{Kind} instance. The ``{\tt parent}''
+model attribute define which other \hl{Kind} instance a particular
 \hl{Kind} is related to.
 
 A \hl{Kind} instance identifies a unique type, either the \hl{Entity}
@@ -485,7 +485,7 @@ related to the \hl{Kind} of the parent type.
 
 The OCCI base types \hl{Resource} and \hl{Link} both extend
 \hl{Entity} and therefore their identifying \hl{Kind} instances MUST
-be related to \hl{Kind} assigned to the \hl{Entity} type.
+have the \hl{Entity} \hl{Kind} instance as its parent.
 
 These rules imply a hierarchy of related \hl{Kind} instances. The
 \hl{Kind} relationships thus mirror the type inheritance structure of
@@ -510,8 +510,9 @@ the \hl{Kind} instances assigned to the \hl{Entity}, \hl{Resource} and
 types.
 %
 \hl{Compute} inherits \hl{Resource} and therefore the \hl{Kind}
-instance assigned to \hl{Compute} is related to the \hl{Kind} instance
-of \hl{Resource}.  The same applies to the \hl{Resource} type which
+instance assigned to \hl{Compute} has the \hl{Kind} instance
+of \hl{Resource} as its parent.
+The same applies to the \hl{Resource} type which
 inherit \hl{Entity}.
 
 As can be seen in figure~\ref{fig:kind_relationships} the \hl{Kind}
@@ -536,24 +537,23 @@ However, a
 instantiation of the OCCI Core Model, with no extensions, no
 \hl{Mixin} instances are present.
 
-A \hl{Mixin} instance MAY be associated with any entity instance,
-either at instance creation-time or at run-time. Although the OCCI
-Core Model has no such restrictions, an OCCI implementation MAY impose
-restrictions on which entity instances can be associated with a
-particular \hl{Mixin} instance.
+A \hl{Mixin} instance MAY be associated with an entity instance
+either at instance creation-time or at run-time.
+Restrictions on which entity instances a particular \hl{Mixin} can be associated
+to SHOULD be advertised through the \hl{Mixin}.{\tt applies} model attribute.
 
 When a client attempts to associate a \hl{Mixin} instance to an entity instance
 at a stage not supported by a particular provider's OCCI
 implementation, the provider MUST notify the client it has issued a
 bad request.
 %
-For example a ``geographical location'' \hl{Mixin} might be applicable
-to all entity instances while a ``bandwidth'' \hl{Mixin} may only
+For example a ``bandwidth'' \hl{Mixin} may only
 be applicable to instances of the \hl{Network}%
 \footnote{The \hl{Network} type is defined in OCCI
-  Infrastructure~\cite{occi:infrastructure}.}  type. Such
-restrictions, if not otherwise stated, are up to the provider to
-implement.
+  Infrastructure~\cite{occi:infrastructure}.}  type.
+An OCCI provider SHOULD advertise such a restriction by setting
+\hl{Mixin}.{\tt applies} to the \hl{Kind} instance of the \hl{Network} type%
+\footnote{\textit{http://schemas.ogf.org/occi/infrastructure\#network}}.
 
 \mytablefloat{
   \label{tbl:mixin}Model attributes defined for the \hl{Mixin} type.}{
@@ -562,7 +562,8 @@ implement.
     Model attribute	& Type 	& Multiplicity 	& Client Mutability 	& Description \\
     \colrule
     actions 	& \hl{Action} 	& 0..* 			& Immutable 			& Set of \hl{Action} instances defined by the \hl{Mixin} instance. \\
-    related 	& \hl{Mixin} 	& 0..* 			& Immutable 			& Set of related \hl{Mixin} instances. \\
+    depends 	& \hl{Mixin} 	& 0..* 			& Immutable 	& Set of \hl{Mixin} instances this \hl{Mixin} instance depends on. \\
+    applies 	& \hl{Kind} 	& 0..* 			& Immutable 	& Set of \hl{Kind} instances this \hl{Mixin} instance applies to. \\
     entities 	& \hl{Entity} 	& 0..* 			& Mutable 				& Set of entity instances associated with the \hl{Mixin} instance. \\
     \botrule
   \end{tabular}
@@ -599,8 +600,8 @@ of the \hl{Mixin} type:
     association between a \hl{Mixin} instance and the \hl{Action} instances it
     defines.
 
-  \item A \hl{Mixin} instance MAY be related to another \hl{Mixin}
-    instance.  If \hl{Mixin} {\bf B} is related to \hl{Mixin} {\bf A},
+  \item A \hl{Mixin} instance MAY depend on another \hl{Mixin}
+    instance.  If \hl{Mixin} {\bf B} depends on \hl{Mixin} {\bf A},
     any entity instance associated with \hl{Mixin} {\bf B} will
     receive the capabilities defined by both \hl{Mixin} {\bf
       B} and \hl{Mixin} {\bf A}.  See Mixin Relationships below.
@@ -612,13 +613,18 @@ of the \hl{Mixin} type:
     defines default values for OCCI Attributes to be applied at entity instance
     creation-time. See section \ref{sec:template}.
 
+  \item A \hl{Mixin} instance MAY restrict which \hl{Kind} instances it applies
+    to using the {\tt applies} model attribute.  If \hl{Mixin}.{\tt applies}
+    is unspecified the \hl{Mixin} may be associated to any entity instance,
+    i.e.~equivalent of having \hl{Mixin}.{\tt applies} set to the \hl{Kind}
+    instance of \hl{Entity}.
+
 \end{itemize}
 
 \paragraph*{Mixin Relationships}
 
-A \hl{Mixin} instance MAY be related to another \hl{Mixin} instance
-for type classification purposes.
-\hl{Mixin} relationship is implemented using the \hl{Mixin}.{\tt related}
+A \hl{Mixin} instance MAY be depend on other \hl{Mixin} instances.
+\hl{Mixin} relationships are implemented using the \hl{Mixin}.{\tt depends}
 model attribute.
 For example a set of operating
 system templates, implemented as \hl{Mixin} instances, could be
@@ -1046,7 +1052,7 @@ Core Model types MAY be sub-typed, those are \hl{Resource} and \hl{Link}.
 In order to define a new sub-type of \hl{Resource} or \hl{Link}, a
 provider-specific \hl{Kind} instance MUST be defined and assigned to
 the new sub-type.
-This provider-specific \hl{Kind} instance MUST have its \hl{Kind}.{\tt related}
+This provider-specific \hl{Kind} instance MUST have its \hl{Kind}.{\tt parent}
 model attribute equal to the \hl{Kind} instance of the type extended.
 See figure~\ref{fig:kind_relationships} for an example of \hl{Kind}
 relationships.
@@ -1142,6 +1148,13 @@ as OCCI HTTP Rendering \cite{occi:http_rendering} and  OCCI Infrastructure
   OCCI \hl{Link} or a sub-type of either type. The {\em resource instance}
   term, while defined identically, was due to its name a source of
   misinterpretations in the specification.
+
+\item Rename \hl{Kind}.{\tt related} to \hl{Kind}.{\tt parent} and
+  \hl{Mixin}.{\tt related} to \hl{Mixin}.{\tt depends}. Clarify the use
+  of \hl{Kind} and \hl{Mixin} relationships.
+
+\item Add a new model attribute \hl{Mixin}.{\tt applies} to optionally
+  advertise which entity instances a \hl{Mixin} instance may be associated to.
 \end{itemize}
 
 \subsection{Introducing the OCCI \hl{Attribute} type}
