@@ -1,0 +1,20 @@
+
+\section{Security Considerations}
+\label{s:security}
+
+The API described in this document relies on the same mechanism as the basic OCCI API, of which it is an extension. In its turn, the OCCI API is designed according with a RESTFul model, a style of exposing a web service to the users.
+
+The way this API is exposed inherits the security aspects of the RESTFul model, that can be summarized as follows:
+
+\begin{itemize}
+\item the web site MUST be protected to allow access only to authorized users, and to protect the content of the communication;
+\item the content uploaded on the web site by the user (using POST) MUST be protected;
+\item the content cached on third party sites not directly accessible by the user and by the provider (proxies etc.) MUST be protected.
+\end{itemize}
+
+We stress that these security warnings are shared with any ReStFul API.
+
+The provider must ensure that a user defined \mi\ does not compromise the security of other services. The provider may attain this by restricting the functionalities associated to a \mi\ (the limit case is the provision of templates) or run the functionalities associated to a \mi\ in a protected environment (e.g., as a Unix user in a chroot jail). This issue is shared with the OCCI model.
+
+Concerning the kind of monitoring infrastructure deployed using the \sens\ and the \coll , security aspects are managed using appropriate \mi s. For instance the \coll\ might be associated with a \mi\ describing a secure transport protocol, while the sensor might be configured to be accessible only from authenticated users (?). The provider SHOULD offer the user a set of predefined \mi s that introduce the appropriate level of security. User defined \mi s SHOULD be avoided for this kind of options.
+

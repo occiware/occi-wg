@@ -1,0 +1,14 @@
+\begin{table}
+\scriptsize
+\resource{\sens}{(see below)}
+
+\attributes{Sensor Resource}{
+occi.sensor.period & number & true & true & The time between two following measurements \\
+occi.sensor.periodspec & string & true & false & granularity, accuracy, exponent of period measument \\
+occi.sensor.timebase & number & false & true & The server time when the timestart and timestop are modified \\  
+occi.sensor.timestart &	number & true & true & The delay after which the session is planned to start \\
+occi.sensor.timestop & number	& true & true & The delay after which the session is planned to stop \\
+occi.sensor.timespec & string & true & false & granularity, accuracy, exponent of time measurement \\
+}
+\caption{Definition of the {\em Sensor Resource} Kind \label{tab:sensor}}
+\end {table}
