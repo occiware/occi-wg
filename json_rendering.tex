@@ -152,7 +152,7 @@ following the Attribute Description Format (see
 \subsection{Resource Instance Format}
 \label{sec:format_resource}
 
-The OCCI Resource instance format consists of a JSON object as shown in the
+The OCCI Resource Instance Format consists of a JSON object as shown in the
 following example. Section \ref{sec:example_resource} contains a detailed
 example.
 Table~\ref{tbl:format_resource} defines the object members.
@@ -203,7 +203,7 @@ Actions applicable to the OCCI Resource instance & mutable & 0..* \\
 \subsection{Link Instance Format}
 \label{sec:format_link}
 
-The OCCI Link instance format consists of a JSON object as shown in the
+The OCCI Link Instance Format consists of a JSON object as shown in the
 following example. Section \ref{sec:example_link} contains a detailed example.
 Table~\ref{tbl:format_link} defines the object members.
 \begin{lstlisting}
@@ -251,7 +251,7 @@ source of the OCCI Link if this entry is omitted & immutable & 0..1\\
     
     target & String & URI of the target Resource & immutable & 1\\
          
-    rel & string & Type identifier of the target Resource. MUST be supplied if
+    rel & string & Type identifier of the target Resource, to be supplied if
 the target is an OCCI Resource. & immutable & 0..1 \\
     \botrule
     \end{tabularx}
@@ -260,11 +260,11 @@ the target is an OCCI Resource. & immutable & 0..1 \\
 \subsection{Action Invocation Format}
 \label{sec:format_action_invocation}
 
-An OCCI Action instance identifies an invocable operation on a OCCI Resource or
-OCCI Link instance. To trigger such an operation the OCCI Action invocation
-format is required.
+The OCCI Action Invocation  Format identifies an invocable operation on a OCCI Resource or
+OCCI Link instance. To trigger such an operation the OCCI Action Invocation
+Format is required.
 
-The OCCI Action invocation format consists of a top-level JSON object as shown in the
+The OCCI Action Invocation Format consists of a top-level JSON object as shown in the
 following example. Section \ref{sec:example_action_invocation} contains a detailed example.
 Table~\ref{tbl:format_action_invocation} defines the object members.
 \begin{lstlisting}
@@ -290,10 +290,10 @@ Table~\ref{tbl:format_action_invocation} defines the object members.
     \end{tabularx}
 }
 
-\subsection{Kind Format}
+\subsection{Kind Instance Format}
 \label{sec:format_kind}
 
-The OCCI Kind instance format consists of a JSON object as shown in the
+The OCCI Kind Instance Format consists of a JSON object as shown in the
 following example. Section \ref{sec:example_kind} contains a detailed example.
 Table~\ref{tbl:format_kind} defines the top-level object members.
 
@@ -308,14 +308,20 @@ Table~\ref{tbl:format_kind} defines the top-level object members.
     \colrule
     term & String & Unique identifier within the categorisation scheme &
 immutable & 1 \\
+
     scheme & String & Categorisation scheme & immutable & 1 \\
+    
     title & String & Title of the OCCI Kind & immutable & 0..1 \\
+    
     attributes & Object & Attribute description, see
 ~\ref{tbl:format_attribute_description} & immutable & 0..* \\
-    related & Array of Strings & List of type identifiers containing only the
+
+    parent & String & OCCI Kind type identifier of the
 related ``parent'' \hl{Kind} instance & immutable & 0..1 \\
-    actions & Array of Strings & List of OCCI Action Category type
+
+    actions & Array of Strings & List of OCCI Action type
 identifiers & immutable & 0..* \\
+
     location & string & Transport protocol specific URI bound to the OCCI Kind
 instance. MUST be supplied for the OCCI Kinds of all OCCI Entities except OCCI
 Entity itself & immutable & 0..1 \\
@@ -332,17 +338,17 @@ Entity itself & immutable & 0..1 \\
             "title": String,
             "attributes": Object,
             "actions": Array,
-            "related": Array,
+            "parent": Array,
             "location": String
         }
     ]
 }
 \end{lstlisting}
 
-\subsection{Mixin Format}
+\subsection{Mixin Instance Format}
 \label{sec:format_mixin}
 
-The OCCI Mixin format consists of a JSON object as shown in the following example. Section \ref{sec:example_mixin} contains a detailed example.
+The OCCI Mixin Instance Format consists of a JSON object as shown in the following example. Section \ref{sec:example_mixin} contains a detailed example.
 Table~\ref{tbl:format_mixin} defines the top-level object members.
 
 \begin{lstlisting}
@@ -354,7 +360,8 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
             "title": String,
             "attributes": Object,
             "actions": Array,
-            "related": Array,
+            "depends": Array,
+            "applies": Array,
             "location": String
         }
     ]
@@ -372,24 +379,33 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
     \colrule
     term & String & Unique identifier within the categorisation scheme &
 immutable & 1 \\
+
     scheme & String & Categorisation scheme & immutable & 1 \\
+    
     title & String & Title of the OCCI Mixin & immutable & 0..1 \\
+    
     attributes & Object & Attribute description, see
 ~\ref{tbl:format_attribute_description} & immutable & 0..* \\
-    related & Array of Strings & List of type identifiers of the related
-``parent'' \hl{Mixin} instances & immutable & 0..* \\
+
+    depends & Array of Strings & List of type identifiers of the dependent
+ \hl{Mixin} instances & immutable & 0..* \\
+ 
+    applies & Array of Strings & List of OCCI Kind type identifiers this OCCI 
+Mixin can be applied to \\
+
     actions & Array of Strings & List of OCCI Action type identifiers
 & immutable & 0..* \\
+
     location & String & Transport protocol specific URI bound to the OCCI Mixin
 instance & immutable & 1 \\
     \botrule
     \end{tabularx}
 }
 
-\subsection{Action Format}
+\subsection{Action Instance Format}
 \label{sec:format_action}
 
-The OCCI Action format consists of a JSON object as shown in the
+The OCCI Action Instance Format consists of a JSON object as shown in the
 following example.
 Table~\ref{tbl:format_action} defines the top-level object members.
 
@@ -405,8 +421,11 @@ top-level JSON object with name {\em actions} as an array of JSON Objects with
     \colrule
     term & String & Unique type identifier within the categorisation scheme &
 immutable & 1 \\
+
     scheme & String & Categorisation scheme & immutable & 1 \\
+    
     title & String & Title of the OCCI Action & immutable & 0..1 \\
+    
     attributes & Object & Attribute description, see
 ~\ref{tbl:format_attribute_description} & immutable & 0..* \\
     \botrule
@@ -433,7 +452,7 @@ OCCI Attribute Descriptions are rendered as JSON objects as defined in table~\re
 
 \mytablefloat{
     \label{tbl:format_attribute_description}
-    All OCCI Attribute Definition properties are optional, but may contain
+    All properties of the OCCI Attribute definition are optional, but may contain
 defaults which MUST be used if the Attribute is not present in the instantiated
 OCCI Entity.
     } {
@@ -443,16 +462,21 @@ OCCI Entity.
     \colrule
     mutable & Boolean & Defines if the Attribute is mutable after initialization
 & false \\
+
     required & Boolean & Defines if the Attribute MUST be specified at
 instantiation of the OCCI Entity & false \\
+
     type & String & Type of the Attribute. MUST be either string, number or
 boolean. & string \\
+
 %    Pattern & string & Posix Extended Regular Expression as defined in
 %\cite{iso9945:2009}. For interoperability reasons, POSIX character classes
 % (e.g. [:alpha:]) MUST NOT be used. & .* \\
+
     default & String, Number or Boolean & Attribute default. MUST be the same
 type as defined in the type property and MUST  be used if the Attribute is not
 present in the instantiated OCCI Entity & \\
+
     description & String & Description of the attribute & \\
     \botrule
     \end{tabularx}
@@ -572,9 +596,7 @@ present in the instantiated OCCI Entity & \\
             "term": "compute",
             "scheme": "http://schemas.ogf.org/occi/infrastructure#",
             "title": "Compute Resource",
-            "related": [
-                "http://schemas.ogf.org/occi/core#resource"
-            ],
+            "parent": "http://schemas.ogf.org/occi/core#resource",
             "attributes": {
                 "occi": {
                     "compute": {
@@ -615,8 +637,11 @@ present in the instantiated OCCI Entity & \\
         {
             "term": "medium",
             "scheme": "http://example.com/template/resource#",
-            "related": [
+            "depends": [
                 "http://schemas.ogf.org/occi/infrastructure#resource_tpl"
+            ],
+            "applies": [
+                "http://schemas.ogf.org/occi/infrastructure#compute"
             ],
             "attributes": {
                 "occi": {
