@@ -261,6 +261,12 @@ The three aspects of monitoring that we have thus outlined, namely the productio
 
 The simplest case of a monitoring infrastructure consists of a single \coll\ that links a monitored resource (e.g., a {\em Network}) to a resource with monitoring functionalities (e.g., a {\em Compute} resource hosting a database for measurements). Such a basic case is able of publishing only raw metrics. 
 
+\begin{figure}
+\centering
+\includegraphics[width=0.7 \linewidth]{self.pdf}
+\caption{The simplest case: one \coll\  \label{fig:onestage}}
+\end{figure}
+
 A less restrictive case is illustrated in figure \ref{fig:twostages}: here the presence of an intermediate \sens\ allows the processing of measurements: for instance, traffic data can be anonymized, filtered, aggregated, embedded into a pdf doc or a CSV form. All capabilities are controlled with \mi\ association.
 
 \begin{figure}
@@ -270,6 +276,8 @@ A less restrictive case is illustrated in figure \ref{fig:twostages}: here the p
 \end{figure}
 
 Although the interface based on \sens\ s and \coll\ s can describe very simple use cases with minimal effort, the designer is able to assemble complex, multilayer monitoring infrastructures using the same basic building blocks: for instance, a \sens\ can be used to aggregate a storage throughput using the input from three \coll s, one for the average response time, one for the mean time between failures, and another for network delay, and provide the results to an upstream \sens\ that aggregates the same results from other \sens s.
+
+The {\em Resource Management} box stands for a resource that is the end-user of the monitoring activity. It's {\em Kind} is bound to the publishing technique used in the \coll . It may be, for instance, a {\em Compute} resource that embeds a load balancing or accounting functionality, or a yet to define {\em Mailbox} resource where periodic reports are posted. 
 
 \rem{author}{Why not a mixin to the monitored resource directly? I envision problems emerging with the implementation. A resource can be ``prepared'' for monitoring, but the way in which the Monitoring Link will interact with such preparation is not clear. In addition, consider that the same tool might be the target of several links, with distinct configuration parameter. How can the control parameters of the mixin be exposed in such a case? Instead, if the mixin is embedded in the link, it is the responsibility of the link implementation to configure it, and to couple it with the publishing technology indicated in the link}
 
