@@ -1,5 +1,6 @@
 %!TEX TS-program = pdflatex
 \documentclass[12pt]{article}  % larger font to compensate for long lines with fullpage
+\usepackage{graphicx}
 \usepackage{ifpdf,ifxetex}
 
 \ifxetex
@@ -8,7 +9,6 @@
 \usepackage[utf8]{inputenc}
 \fi
 \usepackage{ifthen}
-\usepackage{graphicx}
 \usepackage[pdfborder={0 0 0}]{hyperref} % use hyperref without borders
 \usepackage{url}
 \usepackage{authblk}
@@ -174,14 +174,16 @@ attributes & #2 \\ \hline
 \end{tabular}
 }
 
-\newcommand{\extramixin}[2]{
+\newcommand{\extramixin}[3]{
 \begin{tabular}{ll}
 \hline
 Model attribute & value \\ \hline
 scheme & http://provider.com/monitoring\# \\
 term & #1 \\
+related & http://schemas.ogf.org/occi/monitoring\##3 \\ 
 attributes & #2 \\ \hline
 \end{tabular}
+\vspace{0.5cm}
 }
 % End of my comments
 
@@ -245,34 +247,41 @@ This document describes an interface to define a monitoring infrastructure. It i
 
 The purpose of this specification is that of giving the user the possibility to arrange a monitoring infrastructure in the way that best suits user's needs, instead of limiting the user to the implicit monitoring provided by a SLA. The existence of a standard specification makes it possible for the user to manage distinct cloud providers, possibly at the same time, using the same interface.
 
-The importance of a configurable monitoring infrastructure emerges specifically in complex scenarios, where the user is in fact an intermediate service provider, that provides SLA services to third party users: in that case, the intermediate provider may decide to provide SLA options that differ from that of the low level provider, and therefore to perform specific measurements on the infrastructure leased by the low level provider(s).
+The importance of a configurable monitoring infrastructure emerges in many scenarios, starting from the simple case of the user that wants to monitor the activity of a web service, to complex use cases where the user is in fact an intermediate service provider, that provides SLA services to third party users: in that case, the intermediate provider may decide to provide SLA options that differ from that of the low level provider, and therefore to perform specific measurements on the infrastructure leased by the low level provider(s).
 
 The management capabilities should also extend to the adaptive, and dynamic configuration of the components that contribute to the monitoring activity: the specification schema must give the user the possibility to explore the available functionalities in order to adaptively arrange a monitoring infrastructure, and to modify them according with changing needs.
 
-One relevant fact about monitoring infrastructures is that it is extremely difficult to give a {\em detailed} framework for them that extends its validity to any reasonable use case or provider. The reason is that each use case and provider exhibits local variants that do not fit a rigid {\em standard} approach. Also, the metrics that are used to evaluate the performance of the system are many, and subject to continuous changes due to the introduction of new technologies. Thus we have made an effort to introduce a generic schema that can be adapted to effectively describe the relevant aspects of a monitoring infrastructure, but that does not interfere with details that depend on the specific environment.
+One relevant fact about monitoring infrastructures is that it is extremely difficult to give a {\em detailed} framework for them that extends its validity to any reasonable use case or provider. The reason is that each of them exhibits local variants that do not fit a rigid approach. Also, the metrics that are used to evaluate the performance of the system are many, and subject to continuous changes due to the introduction of new technologies. Thus we have made an effort to introduce a generic schema that can be adapted to effectively describe the relevant aspects of a monitoring infrastructure, but that does not interfere with details that depend on the specific environment.
 
 The OCCI Core Model \cite{occi:core} is well suited for the task, since it embeds the tools needed to extend a framework with provider specific details: this enables the specification of the abstract model, leaving to the user the task of making explicit the details, targeting a specific provider or technology. Furthermore, we claim that the specifications given in this document can find an application in environments other than computing infrastructures, since we abstract from the details that characterize cloud infrastructure resources.
 
-The approach followed in this document is similar to that found in the infrastructure document (GFD-P-R.184 \cite{occi:infr}): the monitoring capability is associated with a new {\em Kind}, the {\em Sensor}, that is related with the OCCI Core Model Resource type. A \sens\ instance is a black box that collects metrics from its input side, and delivers aggregated metrics from its output. The input and output channels are modeled with another {\em Kind}, called {\em Collector}, that is related with the OCCI Core Model Link type. The role of a \coll\ instance is twofold: on one side it indicates the way metrics are conveyed to the target \rs, on the other it indicates a specific monitoring technique applied on the source \rs. A typical arrangement is illustrated in figure \ref{fig:twostages}. Both capabilities are controlled with \mi\ association. For instance, the provider may offer the client a specific {\em Ping Mixin} that can be associated with a \coll\ originating from a {\em Network Resource}: such a configuration will deliver metrics like the roundtrip time and the packet loss rate to the attached \sens. To enable the discovery of such \mi s, they are gathered under specific collections.  
+The approach followed in this document is similar to that found in the infrastructure document (GFD-P-R.184 \cite{occi:infr}): the monitoring capability is associated with a new {\em Kind}, the {\em Collector}, that is related with the OCCI Core Model {\em Link} type. The source of the \coll\ is the monitored resource originates measurements that are delivered to the {\em target} resource. The role of a \coll\ instance is therefore twofold: on one side it indicates a specific monitoring technique applied on the {\em source}, on the other it indicates the way metrics are conveyed to the {\em target}. In order to de-couple the production and delivery process form the processing of the measurements, we introduce the {\em Sensor} {\em kind}, that is related with the OCCI Core Model {\em Resource} type. A \sens\ instance is a black box that collects metrics from its input side, and delivers aggregated metrics from its output: a \sens\ is useful, for instance, to produce the average load of an array of servers. The input and output channels of a \sens\ are \coll s.
+
+The three aspects of monitoring that we have thus outlined, namely the production, the delivery, and the processing, are specified by association of specific \mi s with a \sens\ or \coll. The specific provider is therefore allowed to introduce specific supporting technologies, or simplify the configuration with the provision of templates. To enable the discovery of such \mi s, they are related with a {\em depends} relationship with well-known \mi s.
+
+The simplest case of a monitoring infrastructure consists of a single \coll\ that links a monitored resource (e.g., a {\em Network}) to a resource with monitoring functionalities (e.g., a {\em Compute} resource hosting a database for measurements). Such a basic case is able of publishing only raw metrics. 
+
+A less restrictive case is illustrated in figure \ref{fig:twostages}: here the presence of an intermediate \sens\ allows the processing of measurements: for instance, traffic data can be anonymized, filtered, aggregated, embedded into a pdf doc or a CSV form. All capabilities are controlled with \mi\ association.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.7\linewidth]{twostages.pdf}
+\includegraphics[width=0.7 \linewidth]{twostages.pdf}
 \caption{The typical arrangement: two \coll s and one \sens \label{fig:twostages}}
 \end{figure}
 
-Although the arrangement in figure \ref{fig:twostages} is considered as typical, the designer is able to assemble complex, multilayer monitoring infrastructures using the same basic building blocks: for instance, a \sens\ can be used to aggregate a storage throughput using the input from three \coll s, one for the average response time, one for the mean time between failures, and another for network delay, and provide the results to an upstream \sens\ that aggregates the same results from other \sens s. On the other hand, the model is able to describe very simple scenarios, like a compute \rs\ that logs its activity in a database hosted by a storage \rs: in that case one \coll\ connects the compute resource to the storage, without the need of a \sens. Appropriate \mi s associated with the \coll\ describe the logging activity and the database access mode.
+Although the interface based on \sens\ s and \coll\ s can describe very simple use cases with minimal effort, the designer is able to assemble complex, multilayer monitoring infrastructures using the same basic building blocks: for instance, a \sens\ can be used to aggregate a storage throughput using the input from three \coll s, one for the average response time, one for the mean time between failures, and another for network delay, and provide the results to an upstream \sens\ that aggregates the same results from other \sens s.
+
 \rem{author}{Why not a mixin to the monitored resource directly? I envision problems emerging with the implementation. A resource can be ``prepared'' for monitoring, but the way in which the Monitoring Link will interact with such preparation is not clear. In addition, consider that the same tool might be the target of several links, with distinct configuration parameter. How can the control parameters of the mixin be exposed in such a case? Instead, if the mixin is embedded in the link, it is the responsibility of the link implementation to configure it, and to couple it with the publishing technology indicated in the link}
 
 Note that the schema is transparent, in particular, to the existence of a standard for metric identifiers: if one exists, the interoperability of distinct monitoring infrastructures is certainly improved. We consider that the user that interacts with the monitoring infrastructures either knows about the identifiers used by the provider, or uses an interface (e.g., a SLA negotiation service) that translates provider specific identifiers into interoperable ones. This document highlights further standardization issues.
 
-Summarizing, the specification introduced in this document requires that the conformant provider implements two {\em Kind}s: the {\em Sensor Resource} and the {\coll. Three tagging \mi s are also defined, namely {\em ToolSet}, {\em CollectorSet} and {\em AggregatorSet}, to identify the collection of mixins that describe the specific capabilities associated with an instance of the above {\em Kind}s. 
+Summarizing, the specification introduced in this document requires that the conformant provider implements two {\em Kind}s: the {\em \coll Link} and the {\em \sens Resource}. Three generic \mi s are also defined to enable the classification of \mi s that are specific for the provider: namely {\em ToolSet} to specify the production of measurement, {\em AggregatorSet} for their processing, and {\em CollectorSet} for their publication. The generic \mi s are used to identify and apply restrictions on the provider-specific \mi s. 
 
 \subsection{Terminology shortcuts}
 
 To distinguish a {\em Resource} instance from its {\em Kind}, we will use the indeterminative article for the instance (e.g., ``a \rs''), and the determinative article for the {\em Kind} (e.g., ``the \rs''). The plural is reserved to instances (e.g., ``the \rs s''). In case of ambiguity we will further specify ``instance'' or ``{\em Kind}''. 
 
-We will use the term {\em $<$mixin id$>$ collection} to indicate the set of \mi s that are associated with the identified tagging \mi. The provider ensures that the \mi s in a given collection have defined semantics, as explained in the rest of this paper. 
+Similarly, we will use the term {\em a $<$mixin id$>$ \mi} to indicate a \mi\ that {\em depends} on the {\em $<$mixin id$>$} \mi. The provider ensures that \mi s inherit defined semantics from the \mi\ they depend on, as explained in the rest of this paper. 
 
 \section{Specification of the compliant server}
 
@@ -280,9 +289,9 @@ The compliant server MUST define the following {\em Kind}s:
 
 \begin{description}
 
-\item [\sens] that describes how monitoring results are aggregated (see table  \ref{tab:sensor});
+\item [\coll] that describes how monitoring results are collected and trasferred between {\em Resource}s (see table \ref{tab:collector});
 
-\item [\coll] that describes how monitoring results are trasferred between {\em Resource}s (see table \ref{tab:collector});
+\item [\sens] that describes how monitoring results are aggregated (see table  \ref{tab:sensor});
 
 \end{description}
 
@@ -290,23 +299,31 @@ In addition, the compliant server MUST define the following {\em Mixin}s (see ta
 
 \begin{description}
 
-\item [{\em AggregatorSet}] that is used to tag the \mi s describing the aggregation function operated by a \sens;
+\item [{\em AggregatorSet}] that is used to apply restrictions on the \mi s describing the aggregation function operated by a \sens;
 
-\item [{\em ToolSet}] that is used to tag \mi s describing Monitoring tools associated with a \coll;
+\item [{\em ToolSet}] that is used to apply restrictions on the \mi s describing Monitoring tools associated with a \coll;
 
-\item [{\em CollectorSet}] that is used to tag the \mi s that describe the technique used to transport monitoring results in a \coll;
+\item [{\em CollectorSet}] that is used to apply restrictions on the \mi s that describe the technique used to transport monitoring results in a \coll;
 
 \end{description}
 
 \input{mixin}
 
+\subsection{The \coll}
+
+\input{collector}
+
+The \coll\ models  (see table \ref{tab:collector}) the transfer of metric measurements from one \rs\ to another.
+
+A \coll\ is characterized by two aspects: one is the activity that extracts metric measurements from the source \rs, and the other is the transport of the measurements to the target \rs. Only the timing of the monitoring activity is defined by OCCI attributes defined for the \coll\ {\em kind}. Other parameters for such activities are defined by \mi s that depend, respectively, on the {\em ToolSet} and on the {\em CollectorSet} \mi s, and that are associated to a \coll\ instance to define its operation. 
+
 \subsection{The \sens \label{sec:sensor}}
 
 \input{sensor}
 
-The \sens\ (see table \ref{tab:sensor}) models the manager of a monitoring activity that encompasses the collection of measurements, their aggregation in composite metrics, and their delivery to the user.
+The \sens\ (see table \ref{tab:sensor}) models the processing of the measurements, like their aggregation in composite metrics, as well as their formatting to allow specific utilizations
 
-A \sens\ is characterized by attributes that define the rate with which new observations are produced, and by the scheduling times of its operation. The attributes with \verb|required=true| MUST be assigned a legal value upon instantiation. The server MUST reject an incomplete instantiation.
+A \sens\ is characterized by OCCI attributes that define the rate with which new observations are produced, and by the scheduling times of its operation. The attributes with \verb|required=true| MUST be assigned a legal value upon instantiation. The server MUST reject an incomplete instantiation.
 
 The execution rate is defined using three attributes: the rate itself, and an optional definition of the quality of the timing. This latter attribute contains a triple of numbers encoded as a string, that define the granularity with which the rate is measured, and the accuracy of rate measurement, and the floating point exponent. By default \verb|periodspec="NaN, NaN, 0"|.
 
@@ -314,11 +331,15 @@ The activation of a \sens\ is controlled by two attributes that describe the sch
 
 All time values are represented as numbers. The {\tt timebase} corresponds to Unix seconds, all timing values use a floating point notation. Also for time values there is a {\tt timespec} attribute analogous to {\tt periodspec}.
 
-\subsection{The \mi\ in the {\em AggregatorSet} collection}
+To define its operation, a \sens\ MUST be associated with \mi s that depend on the {\em AggregatorSet} \mi .
 
-A \mi\ instance in the {\em AggregatorSet} collection is meant to implement the computation of an aggregated metric starting from raw metrics: it represents the function applied by a \sens. In principle, each provider has a distinct offer of such \mi s, so here there is ground for further standardization. If the provider does not adhere to a defined standard, it MUST give an exhaustive documentation of the aggregation functions associated with a \mi.
+\subsection{Restrictions on \mi s that depend on {\em AggregatorSet} \label{sec:Aggregator}}
 
-The attributes of a \mi\ in the {\em AggregatorSet} collection are divided into three groups:
+The metric attributes of the {\em ToolSet} \mi\ associated a \coll\ instance contribute to the scope of the target \sens\ referenced in sect. \ref{sec:sensor}.
+
+A \mi\ that depends on the {\em AggregatorSet} \mi\ is meant to implement the computation of an aggregated metric starting from raw metrics: it represents the function applied by a \sens. In principle, each provider has a distinct offer of such \mi s, so here there is ground for further standardization. If the provider does not adhere to a defined standard, it MUST give an exhaustive documentation of the aggregation functions associated with a \mi.
+
+The attributes of a \mi\ that depends on the {\em AggregatorSet} are divided into three groups:
 
 \begin{itemize}
 \item Input attributes: they bind a metric in the scope of the \sens\ with an input of the aggregating function. The scope of a \sens\ consists of the {\tt name}s of all the metric attributes of the incoming \coll s. A metric indicated as the value of an input attribute MUST be in the scope of the \sens . For instance, a \sens\ that implements a EWMA may have an {\tt input} attribute equal to 
@@ -330,33 +351,16 @@ where \verb&roundtrip& is a metric delivered by an incoming \coll\ {\tt collecto
 \item Metric attributes: they correspond to the metrics delivered through the outgoing \coll.
 \end{itemize}
 
-To enable interoperabilty, the provider SHOULD follow a defined standard for the naming of input, control and result attributes, but its specification falls outside the scope of this document.
+To enable interoperabilty, the provider SHOULD follow a defined standard for the naming of input, control and result attributes, but its specification falls outside the scope of this document. Such naming MAY help the discovery of \mi\ that are appropriate for a given task.
 
-\section{The \coll}
 
-\input{collector}
+\subsection{Restrictions on \mi s that depend on {\em ToolSet} \label{sec:Tool}}
 
-The \coll\ models  (see table \ref{tab:collector}) the transfer of metric measurements from one \rs\ to another. The transfer may be motivated, for instance, by the existence of specialized \rs s, by administrative reasons, or to cross inter-provider boundaries.
-
-A \coll\ is characterized by two aspects: one is the activity that extracts metric measurements from the source \rs, and the other is the transport of the measurements to the target \rs. Both of them are defined by \mi s, respectively from the {\em ToolSet} and from the {\em CollectorSet} collections.
-
-Regarding the presence of an associated \mi\ in the above collections, we distinguish two basic cases:
-
-\begin{itemize}
-
-\item if the {\tt target} of the \coll\ is a \sens, then {\em CollectorSet} \mi s SHOULD NOT be associated with the \coll\ instance, and the provider has enough information to implement an appropriate channel;
-
-\item if the {\tt source} of the \coll\ is a \sens, then {\em ToolSet} \mi s SHOULD NOT be associated with the \coll\ instance, since it is considered as not meaningful to monitor a \sens.
-
-\end{itemize}
-
-The metric attributes of the \mi s associated to the \coll\ contribute to the scope of the target \sens\ referenced in sect. \ref{sec:sensor}.
-
-\subsection{The \mi\ in the {\em ToolSet} collection}
-
-The measurement activity is integrated in the \coll\ using a \mi\ in the {\em ToolSet} collection. A \mi\ in the {\em ToolSet} collection implements a measurement activity on the \rs that is the source of the \sens\ the \mi\ is associated with.
+The measurement activity is integrated in the \coll\ using a {\em ToolSet} \mi . Such a \mi\ implements a measurement activity on the \rs that is the source of the \sens\ the \mi\ is associated with.
 
 In principle, each provider may associate a different semantic to a given \mi, so here there is ground for further standardization. If the provider does not adhere to a defined standard, it MUST give an exhaustive documentation of the monitoring tool associated with a \mi.
+
+To enable interoperabilty, the provider SHOULD follow a defined standard for the naming of input, control and result attributes, but its specification falls outside the scope of this document. Such naming MAY help the discovery of \mi\ that are appropriate for a given task.
 
 Similar to the case of the \mi s in the {\em AggregatorSet}, the attributes are divided into two groups:
 \begin{itemize}
@@ -368,38 +372,55 @@ The role of the attributes is part of the specification of the specific \mi.
 \item Metric attributes: they correspond to the metrics delivered to the target \sens, and SHOULD hold a reasonably updated value for those metrics. In principle, each provider may associate a different semantic to a given \mi, so here there is ground for further standardization. If the provider does not adhere to a defined standard, it MUST give an exhaustive documentation of the monitoring tool associated with a \mi.
 \end{itemize}
 
-\subsection{The \mi\ in the {\em CollectorSet} collection}
+To enable interoperabilty, the provider SHOULD follow a defined standard for the naming of metric and control attributes, but its specification falls outside the scope of this document. Such naming MAY help the discovery of \mi\ that are appropriate for a given task.
 
-How data are delivered is defined by a \mi\ in the {\em CollectorSet} collection.
+
+\subsection{Restrictions on \mi s that depend on {\em CollectorSet} \label{sec:Collector}}
+
+How data are delivered is defined by a {\em CollectorSet} \mi .
 
 In principle, each provider may associate a different semantic to similar \mi s, so here there is ground for further standardization. If the provider does not adhere to a defined standard, it MUST give an exhaustive documentation of the publishing mode associated with this \mi.
 
 Examples of measurement delivery modes are through a Unix pipe, on demand through a TCP connection, pushed using UDP datagrams, persistently recorded in a database.
 
-The attributes of a \mi\ in the {\em CollectorSet} are divided into two groups:
+The attributes of a {\em CollectorSet} \mi\ are divided into two groups:
 
 \begin{itemize}
 \item Input attributes: their value MUST correspond to the name of one of the output parameters of the source \sens .
 \item Control attributes: they determine the process used to publish input parameters;
 \end{itemize}
 
-To enable interoperability, the provider SHOULD follow a defined standard for the naming of input and control attributes, but their specification falls outside the scope of this document.
+To enable interoperabilty, the provider SHOULD follow a defined standard for the naming of input and control attributes, but its specification falls outside the scope of this document. Such naming MAY help the discovery of \mi s that are appropriate for a given task.
 
-\subsection{Constraints on instances}
+\subsection{Restrictions on \coll s that with one \sens\ edge}
 
-The constraints defined on the instances of the {\em Kind}s and {\em Mixin}s defined in the previous section are:
+The interface between a \sens\ and a \coll\ is considered to be under control of the provider, so that the following restrictions SHOULD apply:
 
 \begin{itemize}
 
-\item a {\em Sensor Resource} MUST be the {\em target} of at least one \coll\ and MUST be the {\em source} of exactly one \coll;
+\item if the {\tt target} of the \coll\ is a \sens, then a {\em CollectorSet} \mi\ SHOULD NOT be associated with the \coll\ instance, since the provider has enough information to implement an appropriate channel;
 
-\item a \mi\ in the [{ToolSet}] collection can be associated ONLY with a \coll;
-
-\item a \mi\ in the [{CollectorSet}] collection can be associated ONLY with a \coll.
-
-\item a \mi\ in the [{AggregatorSet}] collection can be associated ONLY with a {\em Sensor Link}
+\item if the {\tt source} of the \coll\ is a \sens, then a {\em ToolSet} \mi\ SHOULD NOT be associated with the \coll\ instance, since it is considered as not meaningful to monitor a \sens.
 
 \end{itemize}
+
+\subsection{Constraints on the associations between instances and \mi s}
+
+The constraints on the association of \sens\ and \coll\ instances with the defined \mi s are the following:
+
+\begin{itemize}
+
+\item a {\em Sensor Resource} MUST be the {\em target} of at least one \coll\ and SHOULD be the {\em source} of exactly one \coll;
+
+\item a \mi\ a [{ToolSet}] \mi\ can be associated ONLY with a \coll;
+
+\item a \mi\ in the [{CollectorSet}] \mi\ can be associated ONLY with a \coll;
+
+\item a \mi\ in the [{AggregatorSet}] \mi\ can be associated ONLY with a \sens.
+
+\end{itemize}
+
+We consider the possibility that measurements produced by a \sens\ are not published with a \coll , but directly accessible through the \sens\ resource. To date, this is not considered to be an efficient solution.
 
 \rem{author}{The utilization of \mi s, instead of kind-specific attributes describing the operation, has the purpose of allowing the discovery of the capabilities offered by the provider. Kind specific attr. might be three, describing the tool id, and ohter two formatted strings for the input and output parameters}
 
@@ -409,11 +430,11 @@ The definition of conformance profiles is appropriate because the provision of a
 
 \begin{description}
 
-\item[Profile 0] The \coll\ and \sens\ {\em Kind} collections MUST NOT be implemented: attempt of instantiating such {\em Kinds} fails.  In an HTTP rendering a POST and GET over these \rs\ collections returns {\tt 404 Notfound}. The {\em AggregatorSet}, {\em ToolSet}, and {\em CollectorSet} \mi\ collections MUST NOT be implemented: discovery fails. In an HTTP rendering a GET over the \mi\ returns {\tt 404 Notfound}; 
+\item[Profile 0] The \coll\ and \sens\ {\em Kind} s MUST NOT be implemented: attempt of instantiating such {\em Kinds} fails.  In an HTTP rendering a POST and GET over the corresponding URI returns {\tt 404 Notfound}. The {\em AggregatorSet}, {\em ToolSet}, and {\em CollectorSet} \mi s MUST NOT be implemented: discovery fails. In an HTTP rendering a GET over the \mi\ returns {\tt 404 Notfound}; 
 
-\item[Profile 1] The \coll\ and \sens\ {\em Kind} collections MUST be implemented, and the user MUST be allowed to create new instances of such {\em Kinds}.  In an HTTP rendering a POST or a GET over these \rs\ collections return respectively {\tt 201} and {\tt 200}. In case of error, the server MUST NOT return {\tt 404 Notfound}. The {\em AggregatorSet}, {\em ToolSet}, and {\em CollectorSet} \mi\ collections MUST be implemented, and discovery is successful. The server MUST NOT allow the instantiation of new Mixins in the {\em AggregatorSet}, {\em ToolSet}, and {\em CollectorSet} collections. In an HTTP rendering, a POST over these mixins returns {\tt 405 Method Not allowed}; 
+\item[Profile 1] The \coll\ and \sens\ {\em Kind} s MUST be implemented, and the user MUST be allowed to create new instances of such {\em Kinds}.  In an HTTP rendering a POST or a GET over the corresponding URI return respectively {\tt 201} and {\tt 200}. In case of error, the server MUST NOT return {\tt 404 Notfound}. The {\em AggregatorSet}, {\em ToolSet}, and {\em CollectorSet} \mi\ MUST be implemented, and discovery is successful. The server MUST NOT allow to introduce {\em depends} relationships with the {\em AggregatorSet}, {\em ToolSet}, and {\em CollectorSet} \mi s. In an HTTP rendering, a POST over their URIs returns {\tt 405 Method Not allowed}; 
 
-\item[Profile 2]  The \coll\ and \sens\ {\em Kind} collections MUST be implemented, and the user MUST be allowed to create new instances of such {\em Kinds}.  In an HTTP rendering a POST and GET over these \rs\ collections returns respectively {\tt 201} and {\tt 200}. In case of error, the server MUST NOT return{\tt 404 Notfound}. The {\em AggregatorSet}, {\em ToolSet}, and {\em CollectorSet} \mi\ collections MUST be implemented, and discovery is successful. The user MUST be allowed to associate \mi\ instances with the  {\em AggregatorSet}, {\em ToolSet}, and {\em CollectorSet} collections. In an HTTP rendering, a POST over these mixins returns {\tt 200};
+\item[Profile 2]  The \coll\ and \sens\ {\em Kind} s MUST be implemented, and the user MUST be allowed to create new instances of such {\em Kinds}.  In an HTTP rendering a POST and GET over the corresponding URI returns respectively {\tt 201} and {\tt 200}. In case of error, the server MUST NOT return {\tt 404 Notfound}. The {\em AggregatorSet}, {\em ToolSet}, and {\em CollectorSet} \mi s MUST be implemented, and discovery is successful. The user MUST be allowed to introduce {\em depends} relationships with the  {\em AggregatorSet}, {\em ToolSet}, and {\em CollectorSet} \mi s. In an HTTP rendering, a POST over their URIs returns {\tt 200}.
 
 \end{description}
 
@@ -471,9 +492,9 @@ Both of them are compatible with the monitoring infrastructure management schema
 The Service Level Agreement is an aggregate of many \rs\, that describe financial, administrative, security aspects and much more. Among such \rs\, there are the Service  Objectives (SLO). Their function is to specify the meaning of "quality of service" for the specific infrastructure. This concept is translated in a function of system parameters of operation, or metrics.
  The SLA resource contains the instructions to associate an action to a given SLO pattern.
 
-A user that wants to instantiate a monitoring infrastructure starts from identifying the Resources and the metrics of interest. Next the basic monitoring infrastructure is instantiated, assembling generic \sens s and \coll s. The following step consists of browsing the {\em ToolSet} \mi\ collection finding a \mi\ that offers the right metrics, and the first stage \coll\ is associated with it. Note that a given monitoring technology may require more than one \coll\ to operate (e.g., consider iperf). Another \mi\ for the \sens\ is discovered inside the {\em AggregatorSet} collection, and the \sens\ is associated with it. Finally, a publishing technology is selectd from the {\em CollectorSet} \mi\ collection, and the second stage \coll\ is associated with it.
+A user that wants to instantiate a monitoring infrastructure starts from identifying the Resources and the metrics of interest. Next the basic monitoring infrastructure is instantiated, assembling generic \sens s and \coll s. The following step consists of browsing {\em ToolSet} \mi s finding one that offers the right metrics, and the first stage \coll\ is associated with it. Note that a given monitoring technology may require more than one \coll\ to operate (e.g., consider iperf). Another {\em AggregatorSet} \mi\ for the \sens\ is discovered, and the \sens\ is associated with it. Finally, a publishing technology is selected from the \mi\ that depend on {\em CollectorSet} \mi , and the second stage \coll\ is associated with it.
 
-Note that the first stage collector is not associated with a {\em CollectorSet} \mi, since the coupling between the \sens\ and the monitored \rs\ is managed internally, while the second stage collector is not associated with a \mi\ in the {\em ToolSet} collection since it has no monitoring activity. 
+Note that the first stage collector is not associated with a {\em CollectorSet} \mi, since the coupling between the \sens\ and the monitored \rs\ is managed internally, while the second stage collector is not associated with a {\em ToolSet} \mi\ since it has no monitoring activity. 
 
 The following example gives a more detailed insight of the process: it illustrates a \sens\ that measures processor utilization for a given virtual machine {\tt vm1}, and triggers an alarm when the idle time becomes less than 10\%. The alarm message is pushed as a UDP packet injected in a VLAN. We refer to the HTTP rendering to give a better insight of the operation. The object diagram is in figure \ref  {fig:example}
 
@@ -510,7 +531,7 @@ the input \coll:
 < Location: "http://provider.com/monitoring/collector1
 \end{verbatim}
 
-and the input \coll:
+and the output \coll:
 
 \begin{verbatim}
 > POST /collector/ HTTP/1.1
@@ -524,10 +545,11 @@ and the input \coll:
 < HTTP/1.1 201 OK
 < Location: "http://provider.com/monitoring/collector2
 \end{verbatim}
-The timing attribuites of the three instances are filled in
+
+The timing attributes of the three instances are filled in
 
 \begin{verbatim}
-POST /monitoring/sensor1/ HTTP/1.1
+> POST /monitoring/sensor1/ HTTP/1.1
 > ...
 > X-OCCI-Attribute: occi.sensor.period=10;
 > X-OCCI-Attribute: occi.sensor.periodspec="1,0.1,1";
@@ -537,14 +559,14 @@ POST /monitoring/sensor1/ HTTP/1.1
 \end{verbatim}
 
 \begin{verbatim}
-POST /monitoring/collector1/ HTTP/1.1
+> POST /monitoring/collector1/ HTTP/1.1
 > ...
 > X-OCCI-Attribute: occi.collector.period=10;
 > X-OCCI-Attribute: occi.collector.periodspec="1,0.1,1";
 \end{verbatim}
 
 \begin{verbatim}
-POST /monitoring/collector2/ HTTP/1.1
+> POST /monitoring/collector2/ HTTP/1.1
 > ...
 > X-OCCI-Attribute: occi.collector.period=10;
 > X-OCCI-Attribute: occi.collector.periodspec="1,0.1,1";
@@ -552,18 +574,26 @@ POST /monitoring/collector2/ HTTP/1.1
 
 The monitoring activity will start in 10 seconds and last for 1 hour, performing one measurement every 10 seconds. Granularity and accuracy are just consistent with the timing requirements.
 
-Next, the user browses the {\tt ToolSet} collection looking for a tool that measures processor idle time: the search pattern comes from outside our scenario. It finally finds {\tt mpstat}, defined as in table \ref{tab:mpstat} in the provider's namespace {\tt http://provider.com/monitoring/}.
+Next, the user browses the \mi s that depend on the {\tt ToolSet} \mi looking for a tool that measures processor idle time: the search pattern comes from outside our scenario. We may envision a query like the following:
+
+\begin{verbatim}
+> GET /-/toolset/ HTTP/1.1
+> ...
+attribute=idletimecpu
+\end{verbatim}
+
+where the user indicates the metric of interest (idletimecpu) as one of the attributes. The provider may return one or more \mi s, and we consider that one of them is {\tt mpstat}, as defined in table \ref{tab:mpstat} in the provider's namespace {\tt http://provider.com/monitoring/}.
 
 \begin{table}
 \scriptsize
-\extramixin{mpstat}{(see table below)}
+\extramixin{mpstat}{(see table below)}{toolset}
 
 \attributes{mpstat \mi}{
-com.provider.tool.port & number & true & true &  The port where to send a measurement trigger (control) \\
-com.provider.tool.ncpu & number & false & true & The number of processors (metric) \\ 
-com.provider.tool.idletimecpu & number & false & true & Total percent of idle time (metric)  \\ 
-com.provider.tool.usertimecpu & number & false & true & Total percent of user time (metric) \\
-com.provider.tool.systimecpu & number & false & true & Total percent of system time (metric) \\
+com.provider.mpstat.port & number & true & true &  The port where to send a measurement trigger (control) \\
+com.provider.mpstat.ncpu & number & false & true & The number of processors (metric) \\ 
+com.provider.mpstat.idletimecpu & number & false & true & Total percent of idle time (metric)  \\ 
+com.provider.mpstat.usertimecpu & number & false & true & Total percent of user time (metric) \\
+com.provider.mpstat.systimecpu & number & false & true & Total percent of system time (metric) \\
 }
 \caption{Attributes defined for the {\tt mpstat} mixin \label{tab:mpstat}}
 \end {table}
@@ -579,18 +609,18 @@ This latter operation is critical, and may give rise to a number of errors, that
 
 In the general case, the above steps are repeated for every metric that the user needs to measure to compute the application-denpendent metric. Here we proceed to the next step. 
 
-The user now searches a \mi\ in the {\tt AggregatorSet} collection that returns a threshold signal: it finds the {\tt Threshold} defined in table \ref{tab:vat}
+The user now searches in a similar way an {\tt AggregatorSet} \mi\ that returns a threshold signal: it finds the {\tt Threshold} defined in table \ref{tab:vat}
 
 \begin{table}
 \scriptsize
-\extramixin{threshold}{(see table below)}
+\extramixin{threshold}{(see table below)}{aggregatorset}
 
 \attributes{threshold}{
-com.provider.sensor.threshold & number & true & true & The threshold value (control) \\
-com.provider.sensor.mode & {Once,Continuous} & true & true & How frequent the warning message (control) \\ 
-com.provider.sensor.fallmsg & String & true & true & The falling edge message \\
-com.provider.sensor.risemsg & String & true & true & The rising edge message \\
-com.provider.sensor.input & URI & false & true & The input value (input)  \\  
+com.provider.threshold.threshold & number & true & true & The threshold value (control) \\
+com.provider.threshold.mode & {Once,Continuous} & true & true & How frequent the warning message (control) \\ 
+com.provider.threshold.fallmsg & String & true & true & The falling edge message \\
+com.provider.threshold.risemsg & String & true & true & The rising edge message \\
+com.provider.threshold.input & URI & false & true & The input value (input)  \\  
 }
 \caption{Attributes defined for the {\tt threshold} mixin \label{tab:vat}}
 \end {table}
@@ -608,26 +638,26 @@ and fills in the attributes as appropriate:
 \begin{verbatim}
 POST /monitoring/sensor1/ HTTP/1.1
 > ...
-> X-OCCI-Attribute: com.provider.sensor.threshold=10
-> X-OCCI-Attribute: com.provider.sensor.mode="Once"
-> X-OCCI-Attribute: com.provider.sensor.fallmgs="Warning: vm1 overloaded"
-> X-OCCI-Attribute: com.provider.sensor.risemgs="vm1 load below 90%"
-> X-OCCI-Attribute: com.provider.sensor.input="com.provider.monitoring.tool1.idletimecpu"
+> X-OCCI-Attribute: com.provider.threshold.threshold=10
+> X-OCCI-Attribute: com.provider.threshold.mode="Once"
+> X-OCCI-Attribute: com.provider.threshold.fallmgs="Warning: vm1 overloaded"
+> X-OCCI-Attribute: com.provider.threshold.risemgs="vm1 load below 90%"
+> X-OCCI-Attribute: com.provider.threshold.input="com.provider.monitoring.tool1.idletimecpu"
 \end{verbatim}
 
 The server here responds with a {\tt 404 Not found} if the {\tt input} attribute does not exist, or {\tt 401 Unauthorized} if the user is not allowed to operate on that \rs\ (e.g., the metric is outside its scope).
 
-Finally the user associates a way to publish the result: a UDP datagram on a network. It looks in the {\tt CollectorSet} collection the \mi\ that applies, and finds the one described in figure \ref{tab:udp}, that sends a string as a UDP datagram.
+Finally the user associates a way to publish the result: a UDP datagram on a network. It looks or a {\tt CollectorSet} \mi\ that applies, and finds the one described in figure \ref{tab:udp}, that sends a string as a UDP datagram.
 
 \begin{table}
 \scriptsize
-\extramixin{udptxtdgm}{(see table below)}
+\extramixin{udptxtdgm}{(see table below)}{collectorset}
 
 \attributes{udptxtdgm}{
-com.provider.sensor.dest & String & true & true & The destination of the message (control) \\
-com.provider.sensor.port & number & true & true & The destination port (control) \\ 
-com.provider.sensor.mode & {all,nonempty} & true & true & Indicate whether only non empty msg are sent (control) \\ 
-com.provider.sensor.input & URI & true & true & The msg to be sent \\
+com.provider.udptxtdgm.UDPdest & String & true & true & The destination of the message (control) \\
+com.provider.udptxtdgm.UDPport & number & true & true & The destination port (control) \\ 
+com.provider.udptxtdgm.mode & {all,nonempty} & true & true & Indicate whether only non empty msg are sent (control) \\ 
+com.provider.udptxtdgm.input & URI & true & true & The msg to be sent \\
 }
 \caption{Attributes defined for the {\tt udptxtdgm} mixin \label{tab:udp}}
 \end {table}
@@ -646,10 +676,10 @@ and fills in the attributes as appropriate:
 \begin{verbatim}
 POST /monitoring/collector2/ HTTP/1.1
 > ...
-> X-OCCI-Attribute: com.provider.schema.destination="ctr1.provider.com";
-> X-OCCI-Attribute: com.provider.schema.port="10222";
-> X-OCCI-Attribute: com.provider.schema.mode="nonempty";
-> X-OCCI-Attribute: com.provider.schema.input="http://provider.com/monitoring/sensor1/compoutput";
+> X-OCCI-Attribute: com.provider.udptxtdgm.UDPdest="ctr1.provider.com";
+> X-OCCI-Attribute: com.provider.udptxtdgm.UDPport="10222";
+> X-OCCI-Attribute: com.provider.udptxtdgm.mode="nonempty";
+> X-OCCI-Attribute: com.provider.udptxtdgm.input="http://provider.com/monitoring/sensor1/compoutput";
 \end{verbatim}
 
 \input{legal}
