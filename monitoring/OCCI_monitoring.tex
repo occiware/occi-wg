@@ -1,5 +1,5 @@
 %!TEX TS-program = pdflatex
-\documentclass[12pt]{article}  % larger font to compensate for long lines with fullpage
+\documentclass[10pt]{article}  % larger font to compensate for long lines with fullpage
 \usepackage{graphicx}
 \usepackage{ifpdf,ifxetex}
 
@@ -256,6 +256,13 @@ June 12, 2013: Second revision (Augusto Ciuffoletti):
 \item Changed names of {\em mixins} (ToolSet to Metric, the others removing ``Set'')
 \end{itemize}
 
+June 21, 2013: Minor revision (Augusto Ciuffoletti):
+\begin{itemize}
+\item Modified definition of scope, focus on links, not attributes;
+\item Refined definition of value for metric attributes.
+\item Bugs fixed in examples
+\end{itemize}
+
 \subsection*{Copyright Notice}
 
 Copyright \copyright \ Open Grid Forum (\copyrightyears).  Some Rights Reserved.  
@@ -288,7 +295,9 @@ This document describes an interface useful to define a monitoring infrastructur
 
 The purpose of this specification is that of giving the user the possibility to arrange a monitoring infrastructure in the way that best suits user's needs: notably, the existence of a standard specification enables the user to manage distinct cloud providers, possibly at the same time, using the same interface.
 
-The importance of a configurable monitoring infrastructure emerges in many scenarios, starting from the simple case of the user that wants to monitor the activity of a web service, to complex use cases where the user is in fact an intermediate service provider, that provides services to third party users: in that case, the intermediate provider may decide to offer quality of service options that differ from that of the low level provider, thus needing to perform specific measurements on the infrastructure leased by the low level provider(s).
+The importance of a configurable monitoring infrastructure emerges in many scenarios, starting from the simple case of the user that wants to monitor the activity of a web service, to complex use cases where the user is in fact an intermediate service provider, that provides services to third party users: in that case, the intermediate provider may decide to offer quality of service options that differ from that of the low level provider, thus needing to perform specific measurements on the infrastructure leased by the low level provider(s). The tools provided by an API that describes a monitoring infrastructure must be flexible to meet all degrees of complexity.
+
+The communication of measurements inside and outside the monitoring infrastructure is another issue the framework must be flexible about. In fact, the amount of information that is produced by a measurement activity may range from negligible to ``big data'' dimensions. Also in this respect, guidelines must be as permissive as possibile, to leave the provider the possibility to apply the solution that better fits the needs.
 
 The management of the monitoring capabilities should also extend to the adaptive, and dynamic configuration of the components that contribute to the monitoring activity: the specification schema must give the user the possibility to explore the available functionalities in order to adaptively arrange a monitoring infrastructure, and to modify them according with changing needs.
 
@@ -372,7 +381,7 @@ These tags are used to define features that are common to the {\em mixins} that 
 The \coll\ (see table \ref{tab:collector}) models the activity that extracts measurements from a source {\em resource} and the transfer of such measurements to another {\em resource}.
 
 The OCCI attributes of the \coll\ define the timing of the monitoring activity.
-The execution rate is defined using three attributes: the rate itself, and an optional definition of the quality of the timing. This latter attribute contains a triple of numbers encoded as a string, that define the granularity with which the rate is measured, and the accuracy of rate measurement, and the floating point exponent. By default \verb|periodspec="NaN, NaN, 0"|. All time values are represented as numbers.
+The execution rate is defined using three attributes: the rate itself, and an optional definition of the quality of the timing. This latter attribute contains a triple of numbers encoded as a string, that define the granularity with which the rate is measured, the accuracy of rate measurement, and the floating point exponent. By default \verb|periodspec="NaN, NaN, 0"|. All time values are represented as numbers.
 
 A {\em Collector Link} can be related ONLY with {\em metric mixins}.
 
@@ -390,16 +399,18 @@ The activation of a \sens\ is controlled by two attributes that describe the sch
 
 All time values are represented as numbers. The {\tt timebase} corresponds to Unix seconds, all timing values use a floating point notation. Also for time values there is a {\tt timespec} attribute analogous to {\tt periodspec}.
 
-A \sens\ can related ONLY with {\em Aggregator} and {\em Publisher} {\em mixins}.
+A \sens\ can be related ONLY with {\em Aggregator} and {\em Publisher} {\em mixins}.
 
+A \sens\ is the target of \coll\ links, and all of them (\sens\ included) are collectively indicated as the {\em scope} of that \sens . The {\em scope} has the role to specify the visibility of measurements before they are delivered outside the monitoring infrastructure. Consider that a generic \coll\ instance belongs to exactly one scope, so that we can speak as well of {\em the} scope of a \coll .
+ 
 \input{mixin}
 
 \subsection{Features of the \mi s that have the {\em metric} tag \label{sec:Tool}}
 
-A {\em mixin} with a {\em metric} tag represents the availability of measurements from the associated {\em Entity}. We envision two distinct cases, the latter justified to allow extremely simple configurations (see an example in the Appendix):
+A {\em mixin} with a {\em metric} tag represents the availability of measurements from the associated {\em Entity}. We envision two distinct cases, the latter justified to allow extremely simple configurations (see Section \ref{simple}):
 \begin{itemize}
-\item if the related {\em Entity} is a \coll, the measurement activity is integrated in the source {\em Resource} of the \coll;
-\item otherwise the measurement activity is integrated in the related {\em Entity} sub-type instance itself;
+\item if the related {\em Entity} is a \coll, the measurement activity refers to the source {\em Resource} of the \coll;
+\item otherwise the measurement activity refers to the related {\em Entity} sub-type instance itself;
 \end{itemize} 
 
 \newcommand{\misem}[1]{In principle, each provider may associate a different semantic to a given {\em mixin}, so here there is ground for further standardization. If the provider does not adhere to a defined standard, it MUST give an exhaustive documentation of #1 associated with a {\em mixin}.}
@@ -409,12 +420,16 @@ A {\em mixin} with a {\em metric} tag represents the availability of measurement
 The OCCI attributes of a {\em mixin} related with the {\em metric} tag are divided into two groups:
 \begin{itemize}
 
-\item Metric attributes: they correspond to the metrics delivered to the target \sens, and MAY hold a reasonably updated value for the metric. For instance, a metric providing the CPU utilization of a {\em Compute Resource} may have an attribute named {\tt \small cpuutilization}. 
-
+\item Metric attributes: they correspond to the delivered metrics. We distinguish two cases for the semantic of the {\em String}:
+\begin{itemize}
+\item it may represent the real value of the measurement ({\em here} mode), or
+\item it may be a generic identifier, unique in the {\em scope} of the Entity it is associated with ({\em named} mode);
+\end{itemize}
+For instance, a metric providing the CPU utilization of a {\em Compute Resource} may have an attribute named {\tt \small cpuutilization}. Depending on the definition of the {\em metric} mixin, at a certain time the value may reflect the last measurement, or a local identifier for the data set;
 \item Control attributes: they control the operation of the measurement activity. For instance the {\tt \small iostat} \mi\ implementing a cpu utilization tool may have a control attribute defined as (see figure \ref{tab:iostat}) 
 
 \begin{verbatim}
-name=com.acme.monitoring.what,
+name=com.acme.iostat.what,
 type=enum{"user","system"}
 \end{verbatim}
 
@@ -424,8 +439,8 @@ The role of the attributes is part of the specification of the specific \mi \foo
 
 \begin{table}
 \extramixin{iostat}{
-    com.acme.monitoring.cpuutilization & number & metric \\ 
-    com.acme.monitoring.what & enum(user,system) & control \\ 
+    com.acme.iostat.cpuutilization & String & metric \\ 
+    com.acme.iostat.what & enum(user,system) & control \\ 
  }{metric}
 \caption{Example -- Definition of the {\tt \small iostat} metric \mi \label{tab:iostat} }  
 \end{table}
@@ -433,8 +448,6 @@ The role of the attributes is part of the specification of the specific \mi \foo
 \newcommand{\attrname}[1]{To enable interoperabilty, the provider SHOULD follow a defined standard for the naming of #1 attributes, but its specification falls outside the scope of this document. Such naming MAY help the discovery of {\em mixin} that are appropriate for a given task.}
 
 \attrname{metric and control}
-
-The metric attributes of the {\em metric} \mi\ associated with a \coll\ instance contribute to the scope of the target \sens\ referenced in sect. \ref{sec:Aggregator}.
 
 \subsection{Features of the \mi s that have the {\em aggregator} tag \label{sec:Aggregator}}
 
@@ -446,23 +459,24 @@ The attributes of a \mi\ with the {\em Aggregator} tag are divided into three gr
 
 \begin{itemize}
 
-\item Input attributes: they bind a metric attribute in the scope of the {\em Entity} to which it is applied with an input of the aggregating algorithm. The scope of an {\em Entity} consists of the {\tt name}s of all the metric attributes of the incoming \coll s and of the {\em metric mixins} associated with the same {\em Entity}. A metric indicated as the value of an input attribute MUST be in the scope of the \sens . For instance, a \sens\ that computes the maximum CPU utilization for three {\em Compute Resources} may have a {\tt input} attributes 
+\item Input attributes: they bind an input of the aggregating algorithm with one of the {\em named} metric attributes defined in the scope of the {\em Sensor}. The binding is implemented using the identifier associated to the specific {\em named} metric in the {\em metric} mixin. For instance, a \sens\ that computes the maximum CPU utilization for three {\em Compute Resources} may have a {\tt input} attributes 
+
 \begin{tabular}{l}
-urn:acme:user529/collector1\#occi.collector.cpuutilization, \\
-urn:acme:user529/collector2\#occi.collector.cpuutilization, \\
-urn:acme:user529/collector3\#occi.collector.cpuutilization 
+name=com.acme.max.input, \\
+input= ``cpu-c1, cpu-c2, cpu-c3'' 
 \end{tabular}
-where \verb&cpuutilization& is a metric attribute of the incoming \coll s {\tt collector1}, {\tt collector2}, and {\tt collector3}.
+
+where {\small \tt cpu-c1}, {\small \tt cpu-c2}, and {\small \tt cpu-c3} are three identifiers defined in metric attributes in \sens\ scope. There is no need to give a syntax for such identifiers in this document.
 
 \item Control attributes: they control the operation of the aggregating function (for instance, the gain of an EWMA);
 
-\item Metric attributes: they correspond to the metrics delivered. Their value MAY correspond to the last computed value. They also contribute to the scope of the \sens\ they are associated with.
+\item Metric attributes: they correspond to the metrics delivered, and are defined like those of \coll s.
 \end{itemize}
 
 \begin{table}
 \extramixin{max}{
-    com.acme.monitoring.max & number & metric \\ 
-    com.acme.monitoring.data & String & input \\ 
+    com.acme.max.max & number & metric \\ 
+    com.acme.max.data & String & input \\ 
  }{aggregator}
 \caption{Example -- Definition of the {\tt \small max} aggregation \mi } 
 \end{table}
@@ -481,15 +495,15 @@ Examples of measurement delivery modes are through a Unix pipe, on demand throug
 The attributes of a {\em Publisher} \mi\ are divided into two groups:
 
 \begin{itemize}
-\item Input attributes: their value MUST correspond to URIs of one of the metrics in the scope of the \sens;
+\item Input attributes: they are defined like those of \sens s;;
 \item Control attributes: they determine the process used to publish input attributes.
 \end{itemize}
 
 \begin{table}
-\extramixin{max}{
-    com.acme.monitoring.in     & URI    & input \\ 
-    com.acme.monitoring.source & URI    & control \\
-    com.acme.monitoring.port   & number & control \\
+\extramixin{tcp}{
+    com.acme.tcp.in     & URI    & input \\ 
+    com.acme.tcp.source & URI    & control \\
+    com.acme.tcp.port   & number & control \\
  }{publisher}
 \caption{Example -- Definition of the {\tt \small tcp} publishing \mi } 
 \end{table}
@@ -511,6 +525,14 @@ The constraints on the association of \sens\ and \coll\ instances with the defin
 \end{itemize}
 
 \rem{author}{The utilization of \mi s, instead of kind-specific attributes describing the operation, has the purpose of allowing the discovery of the capabilities offered by the provider. Kind specific attr. might be three, describing the tool id, and ohter two formatted strings for the input and output parameters}
+
+\section{Addressing simple environments \label{simple}}
+
+We consider as a relevant issue the possibility to address simple use cases with a minimal effort. The provider should keep control over the application of simplified strategies, since in most cases they trade off efficiency for simplicity, so that the inappropriate application of a simple strategy may overload the provider infrastructure.
+
+The basic tool available to arrange a monitoring activity with minimal effort is the {\em here} metric \mi (see Section \ref{sec:Tool}). Using such a \mi\ the user bypasses measurement aggregation and publishing. However the resulting design is not fully REST compliant. An example is given in the appendix.
+
+Another simplifying strategy consists in associating the \mi\ to other {\em Entities}, thus avoiding the presence of \sens\ and \coll\ instances. Certain monitoring specific \mi s can be applied directly to {\em Entities}: for instance an infrastructure {\em compute} instance can take the role of a {\em Sensor} being associated with an appropriate \mi . In this case the provider looses control over measurement data, and cannot apply optimization and security strategies that are specific for monitoring data. An example is given in the appendix.
 
 \section{Conformance profiles}
 
@@ -582,14 +604,14 @@ The simplistic, yet suboptimal, solution is to associate the server with the mon
 Attribute                         & value \\ \hline
 {\bf id}                          & urn:acme:user529/vm1 \\
 {\bf kind}                        & compute \\
-{\bf mixin}                       & iostat \\
+{\bf mixin}                       & iostat-here \\
 occi.compute.architecture         & x86   \\
 occi.compute.cores                & 4     \\ 
 occi.compute.hostname             & vm1   \\            
 occi.compute.speed                & 3     \\                  
 occi.compute.memory               & 250   \\
-com.acme.collector.cpuutilization & 78    \\                     
-com.acme.collector.what           & user  \\
+com.acme.iostat.cpuutilization    & 78    \\                     
+com.acme.iostat.what              & user  \\
 \end{tabular}
 }
 
@@ -617,11 +639,11 @@ occi.compute.cores                & 4     \\
 occi.compute.hostname             & vm1   \\            
 occi.compute.speed                & 3     \\                  
 occi.compute.memory               & 250   \\
-com.acme.collector.cpuutilization & N/A   \\                     
-com.acme.collector.what           & user  \\
-com.acme.sensor.in                & urn:acme:user529-vm1\#com.acme.collector.cpuutilization \\
-com.acme.sensor.source            & urn:acme:user529-vm1 \\
-com.acme.sensor.port              & 4321 \\
+com.acme.iostat.cpuutilization    & cpustat   \\                     
+com.acme.iostat.what              & user  \\
+com.acme.tcp.in                   & cpustat \\
+com.acme.tcp.source               & http://www.acme.com/user529-vm1 \\
+com.acme.tcp.port                 & 4321 \\
 \end{tabular}
 }
 
@@ -648,11 +670,11 @@ Attribute                         & value \\ \hline
 {\bf id}                          & urn:acme:user529/c1 \\
 {\bf kind}                        & collector \\
 {\bf mixin}                       & iostat \\
-occi.core.source                  & urn:acme:user529/vm1 \\
-occi.core.target                  & urn:acme:user529/master \\
+{\bf source}                      & urn:acme:user529/vm1 \\
+{\bf target}                      & urn:acme:user529/master \\
 occi.collector.period             & 600 \\
-com.acme.collector.cpuutilization & N/A \\                     
-com.acme.collector.what           & user \\
+com.acme.iostat.cpuutilization    & cpustat1 \\                     
+com.acme.iostat.what              & user \\
 \end{tabular}
 }
 
@@ -676,16 +698,11 @@ occi.compute.cores            & 4     \\
 occi.compute.hostname         & master   \\            
 occi.compute.speed            & 3     \\                  
 occi.compute.memory           & 250   \\
-com.acme.sensor.in                & urn:acme:user529/c1\#occi.sensor.max \\
-com.acme.sensor.source            & urn:acme:user529/master \\
-com.acme.sensor.port              & 4321 \\
-com.acme.sensor.data              & 
-\begin{tabular}{l}
-urn:acme:user529/c1\#occi.collector.cpuutilization, \\
-urn:acme:user529/c2\#occi.collector.cpuutilization, \\
-urn:acme:user529/c3\#occi.collector.cpuutilization \\
-\end{tabular}   \\
-com.acme.sensor.max               & N/A  \\
+com.acme.tcp.in               & cpumax \\
+com.acme.tcp.source           & http://www.acme.com/user529/master \\
+com.acme.tcp.port             & 4321 \\
+com.acme.max.data             & cpustat1, cpustat2, cpustat3 \\
+com.acme.max.max              & cpumax  \\
 \end{tabular}
 }
 
@@ -711,8 +728,8 @@ Attribute                         & value \\ \hline
 {\bf source}                      & urn:acme:user529/vm1 \\
 {\bf target}                      & urn:acme:user529/s1  \\
 occi.collector.period             & 600   \\
-com.acme.collector.cpuutilization & N/A   \\                     
-com.acme.collector.what           & user  \\
+com.acme.iostat.cpuutilization    & cpustat1   \\                     
+com.acme.iostat.what              & user  \\
 \end{tabular}
 }
 
@@ -736,16 +753,11 @@ occi.sensor.period            & 600 \\
 occi.sensor.timebase          & 1371025907 \\  
 occi.sensor.timestart         & 10 \\
 occi.sensor.timestop          & 3610 \\
-com.acme.sensor.in            & urn:acme:user529/c1\#occi.sensor.max \\
-com.acme.sensor.source        & urn:acme:user529/master \\
-com.acme.sensor.port          & 4321 \\
-com.acme.sensor.data          & 
-\begin{tabular}{l}
-urn:acme:user529/c1\#occi.collector.cpuutilization, \\
-urn:acme:user529/c2\#occi.collector.cpuutilization, \\
-urn:acme:user529/c3\#occi.collector.cpuutilization \\
-\end{tabular}   \\
-com.acme.sensor.max           & N/A  \\
+com.acme.tcp.in            & maxcpu \\
+com.acme.tcp.source        & http://www.acme.com/user529/master \\
+com.acme.tcp.port          & 4321 \\
+com.acme.max.data          & cpustat1, cpustat2, cpustat3 \\
+com.acme.max.max           & maxcpu  \\
 \end{tabular}
 }
 
