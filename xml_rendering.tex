@@ -1,0 +1,199 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{comment}
+\usepackage{occi}
+\usepackage{lineno}   % adds line numbers, may be removed for non draft versions
+\linenumbers          % adds line numbers, may be removed for non draft versions
+\usepackage{verbatim} % adds verbatim options
+\usepackage{tabularx} % adds extended tabular formatting options
+\usepackage{listings}
+\usepackage{color}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+\lstdefinelanguage{json}{
+  ndkeywords={String, Number, Boolean, Null, Object, Array},
+  ndkeywordstyle=\itshape
+}
+\lstset{
+   language=json,
+   basicstyle=\footnotesize,
+}
+
+\setlength{\headheight}{13pt}
+\pagestyle{fancy}
+
+% default sans-serif
+\renewcommand{\familydefault}{\sfdefault}
+
+% no lines for headers and footers
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% header
+\fancyhf{}
+\lhead{GWD-R}
+\rhead{\today}
+
+% footer
+\lfoot{occi-wg@ogf.org}
+\rfoot{\thepage}
+
+% paragraphs need some space...
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+% some space between header and text...
+\headsep 13pt
+
+\setcounter{secnumdepth}{4}
+
+\begin{document}
+
+% header on first page is different
+\thispagestyle{empty}
+
+GWD-R \hfill Jean Parpaillon\\
+OCCI-WG \\
+\rightline {September 26, 2013}\\
+\rightline {Updated: \today}
+
+\vspace*{0.5in}
+
+\begin{Large}
+\textbf{Open Cloud Computing Interface - XML Rendering}
+\end{Large}
+
+\vspace*{0.5in}
+
+\underline{Status of this Document}
+
+This document provides information to the community regarding the
+specification of the Open Cloud Computing Interface. Distribution is
+unlimited.
+
+\underline{Copyright Notice}
+
+Copyright \copyright Open Grid Forum (2013). All Rights Reserved.
+
+\underline{Trademarks}
+
+OCCI is a trademark of the Open Grid Forum.
+
+\underline{Abstract}
+
+This document, part of a document series, produced by the OCCI working
+group within the Open Grid Forum (OGF), provides a high-level
+definition of a Protocol and API. The document is based upon
+previously gathered requirements and focuses on the scope of important
+capabilities required to support modern service offerings.
+
+\underline{Comments}
+\newcommand{\ralf}[1]{\textcolor{red}{RN: #1}}
+\newcommand{\andy}[1]{\textcolor{green}{AE: #1}}
+\newcommand{\florian}[1]{\textcolor{blue}{FF: #1}}
+\newcommand{\jean}[1]{\textcolor{purple}{JP: #1}}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\input{include/introduction}
+
+\section{Notational Conventions}
+\input{include/notational}
+
+\section{OCCI XML Rendering}
+
+The OCCI XML Rendering specifies a rendering of OCCI instance types in
+the eXtensible Markup Language (XML), as defined in \cite{w3c:xml11}.
+
+The Rendering can be used to render OCCI instances independently of the
+transport mechanism being used. Thus messages can be delivered by e.g. the HTTP
+protocol as specified in \cite{occi:http_rendering} or by using text files with
+the .xml file extension as defined in \cite{w3c:xml11}.
+
+The following media-type MUST be used for the OCCI XML Rendering:
+
+{\tt application/occi+xml}
+
+\section{XML Format}
+\label{sec:xml_format}
+
+The OCCI XML Rendering consists of a sequence of XML element containing
+information on the OCCI Core instances OCCI Kind, OCCI Mixin, OCCI
+Action, OCCI Link and OCCI Resource. The rendering also include an XML
+element to invoke the operation identified by OCCI Actions.
+The rendering of each OCCI Core instance will be described in the
+following sections.
+
+\jean{Planned, not present in XML schema}
+
+OCCI XML rendering include XML element to represent the
+CRUD\footnote{Create, Retrieve, Update, Delete} actions on OCCI types.
+
+\subsection{Resource Instance Format}
+\label{sec:format_resource}
+
+\subsection{Link Instance Format}
+\label{sec:format_link}
+
+\subsection{Action Invocation Format}
+\label{sec:format_action_invocation}
+
+\subsection{Kind Instance Format}
+\label{sec:format_kind}
+
+\subsection{Mixin Instance Format}
+\label{sec:format_mixin}
+
+\subsection{Action Instance Format}
+\label{sec:format_action}
+
+\subsection{Attribute Description Format}
+\label{sec:format_attribute_description}
+
+\section{Appendix: Full XML schema}
+\label{sec:full_xml_schema}
+
+\subsection{OCCI types schema}
+\label{sec:occi_types_schema}
+
+\lstinputlisting[language=XML]{schemas/occi-types.xsd}
+
+\subsection{OCCI query schema}
+\label{sec:occi_query_schema}
+
+\lstinputlisting[language=XML]{schemas/occi.xsd}
+
+\subsection{OCCI Extension schema}
+\label{sec:occi_extension_schema}
+
+\lstinputlisting[language=XML]{schemas/occi-extension.xsd}
+
+\section{Glossary}
+\label{sec:glossary}
+\input{include/glossary}
+
+\section{Contributors}
+\include{include/contributors}
+% FIXME: Insert an up-to-date table here!
+
+\section{Intellectual Property Statement}
+\input{include/ip}
+
+\section{Disclaimer}
+\input{include/disclaimer}
+
+\section{Full Copyright Notice}
+\input{include/copyright}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

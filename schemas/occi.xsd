@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://schemas.ogf.org/occi"
+	elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:occi="http://schemas.ogf.org/occi">
+	<xs:include schemaLocation="occi-types.xsd"></xs:include>
+
+	<xs:element name="objects" type="occi:objectsType"></xs:element>
+
+	<xs:complexType name="objectsType">
+		<xs:sequence>
+			<xs:element name="kind" type="occi:kindType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+			<xs:element name="mixin" type="occi:mixinType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+			<xs:element name="action" type="occi:actionType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+			<xs:element name="resource" type="occi:resourceType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+			<xs:element name="link" type="occi:linkType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

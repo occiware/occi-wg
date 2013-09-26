@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://schemas.ogf.org/occi"
+	elementFormDefault="qualified" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:occi="http://schemas.ogf.org/occi">
+    <xs:import schemaLocation="http://www.w3.org/2001/XMLSchema.xsd"
+        namespace="http://www.w3.org/2001/XMLSchema"></xs:import>
+	<xs:include schemaLocation="occi-types.xsd"></xs:include>
+
+    <xs:complexType name="extensionType">
+        <xs:sequence>
+            <xs:element name="kind" type="occi:kindType" minOccurs="0"
+                maxOccurs="unbounded">
+            </xs:element>
+            <xs:element name="mixin" type="occi:mixinType" minOccurs="0"
+                maxOccurs="unbounded">
+            </xs:element>
+            <xs:element name="action" type="occi:actionSpecType"
+                minOccurs="0" maxOccurs="unbounded">
+            </xs:element>
+            <xs:element ref="xs:simpleType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string"></xs:attribute>
+        <xs:attribute name="version" type="xs:string"></xs:attribute>
+        <xs:attribute name="scheme" type="xs:anyURI" ></xs:attribute>
+    </xs:complexType>
+
+	<xs:element name="extension" type="occi:extensionType"></xs:element>
+</xs:schema>
