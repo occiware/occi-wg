@@ -32,30 +32,51 @@
 		</xs:sequence>
 	</xs:complexType>
 
-	<xs:complexType name="categoriesType" >
-	   <xs:group ref="occi:categoryElementGroup" />
+	<xs:complexType name="categoriesType">
+
+		<xs:sequence>
+			<xs:element name="kind" type="occi:kindType"
+				maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="mixin" type="occi:mixinType"
+				maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="action" type="occi:actionSpecType" maxOccurs="unbounded" minOccurs="0"></xs:element>
+		</xs:sequence>
 	</xs:complexType>
 
 	<xs:complexType name="extensionType">
-	   <xs:group ref="categoryElementGroup" />
-       <xs:attribute name="name" type="xs:string"></xs:attribute>
-       <xs:attribute name="version" type="xs:string"></xs:attribute>
-       <xs:attribute name="scheme" type="xs:anyURI" ></xs:attribute>
+		<xs:sequence>
+			<xs:element name="kind" type="occi:kindType"
+				maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="mixin" type="occi:mixinType"
+				maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="action" type="occi:actionSpecType"
+				maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element ref="xs:simpleType" maxOccurs="unbounded" minOccurs="0"></xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"></xs:attribute>
+		<xs:attribute name="version" type="xs:string"></xs:attribute>
+		<xs:attribute name="scheme" type="xs:anyURI"></xs:attribute>
 	</xs:complexType>
-	
+
 	<!-- 
 	     OCCI types
 	-->
 	<xs:complexType name="kindType">
 		<xs:sequence>
-			<xs:element name="rel" type="occi:relatedType" minOccurs="1"
-				maxOccurs="1">
+			<xs:element name="parent" type="occi:relatedType"
+				minOccurs="1" maxOccurs="1">
 			</xs:element>
 			<xs:element name="attribute" type="occi:attributeSpecType"
 				minOccurs="0" maxOccurs="unbounded">
 			</xs:element>
 			<xs:element name="action" type="occi:actionSpecType"
-				minOccurs="0" maxOccurs="unbounded"></xs:element>
+				minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
 		</xs:sequence>
 		<xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
 		<xs:attribute name="location" type="xs:anyURI"></xs:attribute>
@@ -187,8 +208,8 @@
 	</xs:attributeGroup>
 
 	<xs:complexType name="relatedType">
-		<xs:attribute name="scheme" type="xs:anyURI"></xs:attribute>
-		<xs:attribute name="term" type="xs:string"></xs:attribute>
+		<xs:attribute name="scheme" type="xs:anyURI" use="required"></xs:attribute>
+		<xs:attribute name="term" type="xs:string" use="required"></xs:attribute>
 	</xs:complexType>
 
 	<xs:complexType name="actionType">
@@ -201,15 +222,6 @@
 	<xs:complexType name="uriType">
 		<xs:attribute name="uri" type="xs:anyURI"></xs:attribute>
 	</xs:complexType>
-
-	<xs:group name="categoryElementGroup">
-		<xs:sequence>
-			<xs:element name="kind" type="occi:kindType"></xs:element>
-			<xs:element name="mixin" type="occi:mixinType"></xs:element>
-			<xs:element name="action" type="occi:actionSpecType"></xs:element>
-		</xs:sequence>
-	</xs:group>
-
 
 	<xs:element name="filter" type="occi:filterType"></xs:element>
 </xs:schema>
