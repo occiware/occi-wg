@@ -1,42 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<occi:extension xmlns:occi="http://schemas.ogf.org/occi"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://schemas.ogf.org/occi occi.xsd " name="Monitoring"
+<!--
+  Augusto Ciuffoletti
+  Dept. of Computer Science
+  Univ. of Pisa
+  e.mail: augusto@di.unipi.it
+-->
+<occi:extension
+        xmlns:occi="http://schemas.ogf.org/occi"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://schemas.ogf.org/occi occi.xsd "
+        name="Monitoring"
 	version="0.1">
-
-  <occi:kind title="Sensor"
-		scheme="http://www.acme.com/monitoring#"
-        term="sensor" 
-        use="optional">
-	  <occi:parent term="resource" scheme="http://schemas.ogf.org/occi/core#"/>
-	  <occi:attribute name="period" immutable="true" minOccurs="0" maxOccurs="1"></occi:attribute>
-	  <occi:attribute name="periodspec" immutable="true" minOccurs="0" maxOccurs="1"></occi:attribute>
-	  <occi:attribute name="timebase" immutable="true" minOccurs="0" maxOccurs="1"></occi:attribute>
-	  <occi:attribute name="timestart" immutable="true" minOccurs="0" maxOccurs="1"></occi:attribute>
-	  <occi:attribute name="timestop" immutable="true" minOccurs="0" maxOccurs="1"></occi:attribute>
-	  <occi:attribute name="spec" immutable="true" minOccurs="0" maxOccurs="1"></occi:attribute>
-  </occi:kind>
-  <occi:kind title="Collector"
-		scheme="http://www.acme.com/monitoring#"
+   <occi:kind 
+          title="Sensor"
+	  scheme="http://schemas.ogf.org/monitoring#"
+          term="sensor" 
+          use="optional">
+     <occi:parent 
+            term="resource" 
+            scheme="http://schemas.ogf.org/occi/core#"/>
+     <occi:attribute 
+            name="period"
+            immutable="false" 
+            minOccurs="1" 
+            maxOccurs="1"/>
+     <occi:attribute 
+            name="periodspec" 
+            immutable="true" 
+            minOccurs="0" 
+            maxOccurs="1"/>
+     <occi:attribute
+            name="timebase" 
+            immutable="true" 
+            minOccurs="1" 
+            maxOccurs="1"/>
+     <occi:attribute
+            name="timestart" 
+            immutable="true" 
+            minOccurs="1" 
+            maxOccurs="1"/>
+     <occi:attribute 
+            name="timestop" 
+            immutable="false" 
+            minOccurs="0"
+            maxOccurs="1"/>
+     <occi:attribute
+            name="spec"
+            immutable="false" 
+            minOccurs="0"
+            maxOccurs="1"/>
+   </occi:kind>
+   <occi:kind 
+        title="Collector"
+        scheme="http://schemas.ogf.org/monitoring#"
         term="collector" 
         use="optional">
-	  <occi:parent term="link" scheme="http://schemas.ogf.org/occi/core#"/>
-	  <occi:attribute name="period" immutable="true" minOccurs="0" maxOccurs="1"></occi:attribute>
-	  <occi:attribute name="periodspec" immutable="true" minOccurs="0" maxOccurs="1"></occi:attribute>
-  </occi:kind>
-  <occi:mixin title="Metric"
-		scheme="http://www.acme.com/monitoring#"
+     <occi:parent 
+           term="link" 
+           scheme="http://schemas.ogf.org/occi/core#"/>
+     <occi:attribute 
+           name="period" 
+           immutable="false"
+           minOccurs="1" 
+           maxOccurs="1"/>
+     <occi:attribute 
+           name="periodspec" 
+           immutable="true" 
+           minOccurs="0" 
+           maxOccurs="1"/>
+   </occi:kind>
+   <occi:mixin 
+        title="Metric"
+	scheme="http://schemas.ogf.org/monitoring#"
         term="metric" 
         use="optional">
-  </occi:mixin>
-  <occi:mixin title="Aggregator"
-		scheme="http://www.acme.com/monitoring#"
+   </occi:mixin>
+   <occi:mixin 
+        title="Aggregator"
+	scheme="http://www.acme.com/monitoring#"
         term="collector" 
         use="optional">
-  </occi:mixin>
-  <occi:mixin title="Publisher"
-		scheme="http://www.acme.com/monitoring#"
+   </occi:mixin>
+   <occi:mixin
+        title="Publisher"
+	scheme="http://www.acme.com/monitoring#"
         term="publisher" 
         use="optional">
-  </occi:mixin>
+   </occi:mixin>
 </occi:extension>
