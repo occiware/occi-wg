@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Augusto Ciuffoletti
+  Dept. of Computer Science
+  Univ. of Pisa
+  e.mail: augusto@di.unipi.it
+-->
+<occi:extension
+        xmlns:occi="http://schemas.ogf.org/occi"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://schemas.ogf.org/occi occi.xsd "
+        name="Acme-Monitoring"
+	version="0.1">
+   <occi:mixin 
+          title="iostat"
+	  scheme="http://www.acme.com/occimon#"
+          term="iostat" 
+          use="optional">
+     <occi:depends 
+            term="metric" 
+            scheme="http://schemas.ogf.org/occi/monitoring#"/>
+     <occi:attribute 
+            name="cpuutilization"
+            immutable="true" 
+            minOccurs="1" 
+            maxOccurs="1"/>
+     <occi:attribute 
+            name="what" 
+            immutable="true" 
+            minOccurs="0" 
+            maxOccurs="1"/>
+   </occi:mixin> 
+   <occi:mixin 
+          title="max"
+	  scheme="http://www.acme.com/occimon#"
+          term="max" 
+          use="optional">
+     <occi:depends 
+            term="aggregator" 
+            scheme="http://schemas.ogf.org/occi/monitoring#"/>
+     <occi:attribute 
+            name="cpuutilization"
+            immutable="true" 
+            minOccurs="1" 
+            maxOccurs="1"/>
+     <occi:attribute 
+            name="what" 
+            immutable="true" 
+            minOccurs="0" 
+            maxOccurs="1"/>
+   </occi:mixin> 
+   <occi:mixin 
+          title="tcp"
+	  scheme="http://www.acme.com/occimon#"
+          term="tcp" 
+          use="optional">
+     <occi:depends 
+            term="publisher" 
+            scheme="http://schemas.ogf.org/occi/monitoring#"/>
+     <occi:attribute 
+            name="in"
+            immutable="true" 
+            minOccurs="1" 
+            maxOccurs="1"/>
+     <occi:attribute 
+            name="source" 
+            immutable="true" 
+            minOccurs="1" 
+            maxOccurs="1"/>
+     <occi:attribute 
+            name="port" 
+            immutable="true" 
+            minOccurs="1" 
+            maxOccurs="1"/>
+   </occi:mixin> 
+</occi:extension>

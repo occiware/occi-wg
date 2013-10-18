@@ -14,7 +14,7 @@
 	version="0.1">
    <occi:kind 
           title="Sensor"
-	  scheme="http://schemas.ogf.org/monitoring#"
+	  scheme="http://schemas.ogf.org/occi/monitoring#"
           term="sensor" 
           use="optional">
      <occi:parent 
@@ -53,7 +53,7 @@
    </occi:kind>
    <occi:kind 
         title="Collector"
-        scheme="http://schemas.ogf.org/monitoring#"
+        scheme="http://schemas.ogf.org/occi/monitoring#"
         term="collector" 
         use="optional">
      <occi:parent 
@@ -72,19 +72,19 @@
    </occi:kind>
    <occi:mixin 
         title="Metric"
-	scheme="http://schemas.ogf.org/monitoring#"
+	scheme="http://schemas.ogf.org/occi/monitoring#"
         term="metric" 
         use="optional">
    </occi:mixin>
    <occi:mixin 
         title="Aggregator"
-	scheme="http://www.acme.com/monitoring#"
+	scheme="http://schemas.ogf.org/occi/monitoring#"
         term="collector" 
         use="optional">
    </occi:mixin>
    <occi:mixin
         title="Publisher"
-	scheme="http://www.acme.com/monitoring#"
+	scheme="http://schemas.ogf.org/occi/monitoring#"
         term="publisher" 
         use="optional">
    </occi:mixin>
