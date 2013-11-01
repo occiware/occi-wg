@@ -14,53 +14,79 @@
 	</xs:annotation>
 
 	<!-- 
-	     OCCI request/response elements
+	     OCCI containers elements
 	-->
 	<xs:element name="extension" type="occi:extensionType"></xs:element>
 	<xs:element name="categories" type="occi:categoriesType"></xs:element>
 	<xs:element name="mixin" type="occi:mixinType" ></xs:element>
+	<xs:element name="manifest" type="occi:manifestType" ></xs:element>
 	
 	<!--
-	    OCCI request types
+	    OCCI containers types
 	-->
 	<xs:complexType name="filterType">
-		<xs:sequence>
-			<xs:element name="kind" type="occi:kindType" maxOccurs="unbounded" minOccurs="0"></xs:element>
-			<xs:element name="mixin" type="occi:mixinType" maxOccurs="unbounded" minOccurs="0"></xs:element>
-			<xs:element name="action" type="occi:actionSpecType" maxOccurs="unbounded" minOccurs="0"></xs:element>
-			<xs:element name="attribute" type="occi:attributeType" maxOccurs="unbounded" minOccurs="0"></xs:element>
-		</xs:sequence>
+	  <!--
+	      Only elements listed in the filter and exposed by the server will be sent back 
+	      as a response.
+	  -->
+	  <xs:sequence>
+	    <xs:element name="kind" type="occi:kindType" maxOccurs="unbounded" minOccurs="0"></xs:element>
+	    <xs:element name="mixin" type="occi:mixinType" maxOccurs="unbounded" minOccurs="0"></xs:element>
+	    <xs:element name="action" type="occi:actionSpecType" maxOccurs="unbounded" minOccurs="0"></xs:element>
+	    <xs:element name="attribute" type="occi:attributeType" maxOccurs="unbounded" minOccurs="0"></xs:element>
+	  </xs:sequence>
 	</xs:complexType>
 
 	<xs:complexType name="categoriesType">
-
-		<xs:sequence>
-			<xs:element name="kind" type="occi:kindType"
-				maxOccurs="unbounded" minOccurs="0">
-			</xs:element>
-			<xs:element name="mixin" type="occi:mixinType"
-				maxOccurs="unbounded" minOccurs="0">
-			</xs:element>
-			<xs:element name="action" type="occi:actionSpecType" maxOccurs="unbounded" minOccurs="0"></xs:element>
-		</xs:sequence>
+	  <!--
+	      Describe a set of categories implemented by an OCCI server.
+	      Typically returned from a query request.
+	  -->
+	  <xs:sequence>
+	    <xs:element name="kind" type="occi:kindType"
+			maxOccurs="unbounded" minOccurs="0">
+	    </xs:element>
+	    <xs:element name="mixin" type="occi:mixinType"
+			maxOccurs="unbounded" minOccurs="0">
+	    </xs:element>
+	    <xs:element name="action" type="occi:actionSpecType" maxOccurs="unbounded" minOccurs="0"></xs:element>
+	  </xs:sequence>
 	</xs:complexType>
 
 	<xs:complexType name="extensionType">
-		<xs:sequence>
-			<xs:element name="kind" type="occi:kindType"
-				maxOccurs="unbounded" minOccurs="0">
-			</xs:element>
-			<xs:element name="mixin" type="occi:mixinType"
-				maxOccurs="unbounded" minOccurs="0">
-			</xs:element>
-			<xs:element name="action" type="occi:actionSpecType"
-				maxOccurs="unbounded" minOccurs="0">
-			</xs:element>
-			<xs:element ref="xs:simpleType" maxOccurs="unbounded" minOccurs="0"></xs:element>
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string"></xs:attribute>
-		<xs:attribute name="version" type="xs:string"></xs:attribute>
-		<xs:attribute name="scheme" type="xs:anyURI"></xs:attribute>
+	  <!--
+	      Describe a set of categories and simple types for a specific topic
+	  -->
+	  <xs:sequence>
+	    <xs:element name="kind" type="occi:kindType"
+			maxOccurs="unbounded" minOccurs="0">
+	    </xs:element>
+	    <xs:element name="mixin" type="occi:mixinType"
+			maxOccurs="unbounded" minOccurs="0">
+	    </xs:element>
+	    <xs:element name="action" type="occi:actionSpecType"
+			maxOccurs="unbounded" minOccurs="0">
+	    </xs:element>
+	    <xs:element ref="xs:simpleType" maxOccurs="unbounded" minOccurs="0"></xs:element>
+	  </xs:sequence>
+	  <xs:attribute name="name" type="xs:string"></xs:attribute>
+	  <xs:attribute name="version" type="xs:string"></xs:attribute>
+	  <xs:attribute name="scheme" type="xs:anyURI"></xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="manifestType" >
+	  <!--
+	      Describe a set of entities.
+	      Can reference other manifests
+	  -->
+	  <xs:sequence>
+	    <xs:element name="resource" type="occi:resourceType" minOccurs="0" maxOccurs="unbounded" />
+	    <xs:element name="link" type="occi:linkType" minOccurs="0" maxOccurs="unbounded" />
+	    <xs:element name="action" type="occi:actionType" minOccurs="0" maxOccurs="unbounded" />
+	    <xs:element name="manifest" type="xs:amyURI" minOccurs="0" maxOccurs="unbounded" />
+	  </xs:sequence>
+	  <xs:attribute name="id" type="xsd:string" />
+	  <xs:attribute name="title" type="xsd:string" />
 	</xs:complexType>
 
 	<!-- 
