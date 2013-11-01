@@ -4,13 +4,13 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:occi="http://schemas.ogf.org/occi">
 
 	<xs:import schemaLocation="http://www.w3.org/2001/XMLSchema.xsd"
-		namespace="http://www.w3.org/2001/XMLSchema"></xs:import>
+		   namespace="http://www.w3.org/2001/XMLSchema"></xs:import>
 	<xs:annotation>
-		<xs:documentation xml:lang="en">
-			OCCI model Description
-			Schema Aligned with the OCCI Core
-			Document
-		</xs:documentation>
+	  <xs:documentation xml:lang="en">
+	    OCCI model Description
+	    Schema Aligned with the OCCI Core
+	    Document
+	  </xs:documentation>
 	</xs:annotation>
 
 	<!-- 
@@ -25,10 +25,13 @@
 	    OCCI containers types
 	-->
 	<xs:complexType name="filterType">
-	  <!--
-	      Only elements listed in the filter and exposed by the server will be sent back 
-	      as a response.
-	  -->
+	  <xs:annotation>
+	    <xs:documentation xml:lang="en" >
+	      Only elements listed in the filter and exposed by the
+	      server will be sent back as a response.
+	    </xs:documentation>
+	  </xs:annotation>
+
 	  <xs:sequence>
 	    <xs:element name="kind" type="occi:kindType" maxOccurs="unbounded" minOccurs="0"></xs:element>
 	    <xs:element name="mixin" type="occi:mixinType" maxOccurs="unbounded" minOccurs="0"></xs:element>
@@ -38,10 +41,13 @@
 	</xs:complexType>
 
 	<xs:complexType name="categoriesType">
-	  <!--
-	      Describe a set of categories implemented by an OCCI server.
-	      Typically returned from a query request.
-	  -->
+	  <xs:annotation>
+	    <xs:documentation xml:lang="en" >
+	      Describe a set of categories implemented by an OCCI
+	      server. Typically returned from a query request.
+	    </xs:documentation>
+	  </xs:annotation>
+
 	  <xs:sequence>
 	    <xs:element name="kind" type="occi:kindType"
 			maxOccurs="unbounded" minOccurs="0">
@@ -54,9 +60,13 @@
 	</xs:complexType>
 
 	<xs:complexType name="extensionType">
-	  <!--
-	      Describe a set of categories and simple types for a specific topic
-	  -->
+	  <xs:annotation>
+	    <xs:documentation xml:lang="en" >
+	      Describe a set of categories and simple types for a
+	      specific topic
+	    </xs:documentation>
+	  </xs:annotation>
+
 	  <xs:sequence>
 	    <xs:element name="kind" type="occi:kindType"
 			maxOccurs="unbounded" minOccurs="0">
@@ -75,10 +85,13 @@
 	</xs:complexType>
 
 	<xs:complexType name="manifestType" >
-	  <!--
-	      Describe a set of entities.
-	      Can reference other manifests
-	  -->
+	  <xs:annotation>
+	    <xs:documentation xml:lang="en" >
+	      Describe a set of entities. Can reference other
+	      manifests
+	    </xs:documentation>
+	  </xs:annotation>
+
 	  <xs:sequence>
 	    <xs:element name="resource" type="occi:resourceType" minOccurs="0" maxOccurs="unbounded" />
 	    <xs:element name="link" type="occi:linkType" minOccurs="0" maxOccurs="unbounded" />
