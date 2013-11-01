@@ -82,6 +82,20 @@
 	  <xs:attribute name="name" type="xs:string"></xs:attribute>
 	  <xs:attribute name="version" type="xs:string"></xs:attribute>
 	  <xs:attribute name="scheme" type="xs:anyURI"></xs:attribute>
+	  <xs:attribute name="status" >
+	    <xs:simpleType>
+	      <xs:retriction base="xs:string" >
+		<xs:enumeration value="experimental" />
+		<xs:enumeration value="deferred" />
+		<xs:enumeration value="retracted" />
+		<xs:enumeration value="draft" />
+		<xs:enumeration value="rejected" />
+		<xs:enumeration value="final" />
+		<xs:enumeration value="deprecated" />
+		<xs:enumeration value="obsolete" />
+	      </xs:retriction>
+	    </xs:simpleType>
+	  </xs:attribute>
 	</xs:complexType>
 
 	<xs:complexType name="manifestType" >
