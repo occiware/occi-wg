@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<occi:manifest xmlns:occi="http://schemas.ogf.org/occi" 
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	       xsi:schemaLocation="http://schemas.ogf.org/occi occi.xsd" >
+  <occi:resource id="SensorX" title="SensorX" >
+    <!-- resource types -->
+    <occi:kind scheme="http://schemas.ogf.org/occi/monitoring#" term="sensor" />
+    <occi:mixin scheme="http://example.com/occi/monitoring/publisher#" term="udpstream" />
+    <occi:mixin scheme="http://example.com/occi/monitoring/publisher#" term="sql" />
+    <occi:mixin scheme="http://example.com/occi/monitoring/aggregator#" term="sum" />
+    <occi:mixin scheme="http://example.com/occi/monitoring/aggregator#" term="ewma" />
+
+    <!-- 
+      NOTE: To respect the resource oriented architecture, any links needs to be identified 
+      with an URI
+    -->
+    <occi:link uri="http://example.com/links/collectorX" />
+    <occi:link uri="http://example.com/links/collectorY" />
+
+    <!-- Attributes from sensor kind -->
+    <occi:attribute name="period"     value="10" />
+    <occi:attribute name="timebase"   value="1380289405" />
+    <occi:attribute name="timestart"  value="60" />
+    <occi:attribute name="timestop"   value="7200" />
+
+    <!-- 
+      Attributes from udpstream mixin 
+      NOTE: flat list of attributes comes from the OCCI text/occi or text/plain
+      rendering but for clarity, it should be better to group them by the respective
+      category they belongs to.
+    -->
+    <occi:attribute name="input1"    value="b" />
+    <occi:attribute name="Input2"    value="c" />
+    <occi:attribute name="port"      value="5555" />
+    <occi:attribute name="ip"        value="211.9.9.9" />
+
+    <!-- attributes from sql mixin -->
+    <occi:attribute name="v1"        value="f" />
+    <occi:attribute name="v2"        value="g" />
+    <occi:attribute name="v3"        value="h" />
+    <occi:attribute name="serverdomain" value="mysql.example.com" />
+    <occi:attribute name="dbname"       value="monitoringxy" />
+
+    <!-- attributes from sum mixin -->
+    <occi:attribute name="val1"       value="a" />
+    <occi:attribute name="val2"       value="b" />
+    <occi:attribute name="res"        value="f" />
+    <occi:attribute name="trigger"    value="all" />
+    
+    <!-- attributes from ewma mixin -->
+    <occi:attribute name="input"      value="b" />
+    <occi:attribute name="gain"       value="8" />
+    <occi:attribute name="average"    value="e" />
+  </occi:resource>
+
+  <occi:link id="http://example.com/links/collectorX" >
+    <occi:kind scheme="http://schemas.ogf.org/occi/monitoring#" term="collector" />
+    <occi:mixin scheme="http://example.com/occi/monitoring/aggregator#" term="" />
+
+    <!-- attributes from collector kind -->
+    <occi:attribute name="period"      value="10" />
+    
+    <!-- attributes from metric1 mixin -->
+    <occi:attribute name=""      value="10" />
+
+  </occi:link>
+
+
+  <!-- etc -->
+</occi:manifest>
