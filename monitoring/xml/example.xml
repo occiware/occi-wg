@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Augusto Ciuffoletti
+  Dept. of Computer Science
+  Univ. of Pisa
+  e.mail: augusto@di.unipi.it
+--><occi:extension name="example" version="0.1" xmlns:occi="http://schemas.ogf.org/occi" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.ogf.org/occi occi.xsd ">
+  <occi:mixin scheme="http://www.example.com/occi/monitoring/publisher#" term="udpstream" title="UDPstream" use="optional">
+    <occi:depends scheme="http://schemas.ogf.org/occi/monitoring#" term="publisher"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="input1"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="0" name="input2"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="port"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="0" name="ip"/>
+  </occi:mixin>
+  <occi:mixin scheme="http://www.example.com/occi/monitoring/publisher#" term="sql" title="SQL" use="optional">
+    <occi:depends scheme="http://schemas.ogf.org/occi/monitoring#" term="publisher"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="V1"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="0" name="V2"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="0" name="V3"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="servername"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="0" name="dbname"/>
+  </occi:mixin>
+  <occi:mixin scheme="http://www.acme.com/occimon#" term="max" title="max" use="optional">
+    <occi:depends scheme="http://schemas.ogf.org/occi/monitoring#" term="aggregator"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="cpuutilization"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="0" name="what"/>
+  </occi:mixin>
+  <occi:mixin scheme="http://www.example.com/occi/monitoring/aggregator#" term="sum" title="sum" use="optional">
+    <occi:depends scheme="http://schemas.ogf.org/occi/monitoring#" term="aggregator"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="Val1"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="Val2"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="Res"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="Trigger"/>
+  </occi:mixin>
+  <occi:mixin scheme="http://www.example.com/occi/monitoring/aggregator#" term="EWMA" title="EWMA" use="optional">
+    <occi:depends scheme="http://schemas.ogf.org/occi/monitoring#" term="aggregator"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="Val1"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="Input"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="Gain"/>
+  </occi:mixin>
+  <occi:mixin scheme="http://www.example.com/occi/monitoring/metric#" term="TimeAndMeasure" title="TimeAndMeasure" use="optional">
+    <occi:depends scheme="http://schemas.ogf.org/occi/monitoring#" term="metric"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="Val1"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="0" name="Val2"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="Input"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="Gain"/>
+  </occi:mixin>
+  <occi:mixin scheme="http://www.example.com/occi/monitoring/metric#" term="TimeAndMeasure" title="RTT" use="optional">
+    <occi:depends scheme="http://schemas.ogf.org/occi/monitoring#" term="metric"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="rtt"/>
+    <occi:attribute immutable="true" maxOccurs="1" minOccurs="1" name="target"/>
+  </occi:mixin>
+</occi:extension>
