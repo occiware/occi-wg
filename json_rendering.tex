@@ -59,6 +59,7 @@
 
 GWD-R \hfill Ralf Nyrén \\
 OCCI-WG \hfill Florian Feldhaus, GWDG\\
+\hfill Jean Parpaillon\\
 \rightline {February 25, 2011}\\
 \rightline {Updated: \today}
 
@@ -96,6 +97,7 @@ capabilities required to support modern service offerings.
 \newcommand{\ralf}[1]{\textcolor{red}{RN: #1}}
 \newcommand{\andy}[1]{\textcolor{green}{AE: #1}}
 \newcommand{\florian}[1]{\textcolor{blue}{FF: #1}}
+\newcommand{\jean}[1]{\textcolor{purple}{JP: #1}}
 
 \newpage
 \tableofcontents
@@ -146,6 +148,47 @@ following the Attribute Description Format (see
             "three": Number|String|Boolean|Object
         }
     }
+}
+\end{lstlisting}
+
+\jean{
+  Note on core entity attributes rendering, I mention it because of the current implementations.
+  IMO, we should avoid multiple representations. The second one is consistent with core.
+}
+
+Entity, resource and link attributes defined in OCCI core
+specification MAY be represented in the namespace described above or
+as top-level attributes in the {\em resource} or {\em link} object.
+
+For instance, the following representations of {\em 'occi.core.target'} attribute of a link
+instance are possible.
+
+\begin{lstlisting}
+{
+  "links": [
+    {
+      ...
+      "target": "http://example.org/occi/id1",
+      ...
+    }
+  ]
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+{
+  "links": [
+    {
+      ...
+      "attributes": {
+        "occi": {
+          "core": {
+            "target": "http://example.org/occi/id1"
+          }
+        }
+      }
+    }
+  ]
 }
 \end{lstlisting}
 
@@ -344,6 +387,13 @@ Entity itself & immutable & 0..1 \\
     ]
 }
 \end{lstlisting}
+
+\subsection{Collection Format}
+\label{sec:format_collection}
+
+\jean{Added from discussion on maillist}
+
+The OCCI Collection Format consists of a JSON list containint URIs to entities. Section \ref{sec:example_collection} contains a detailed example.
 
 \subsection{Mixin Instance Format}
 \label{sec:format_mixin}
@@ -584,6 +634,13 @@ present in the instantiated OCCI Entity & \\
         "method": "graceful"       
     }
 }
+\end{lstlisting}
+
+\subsection{Collection Format Example}
+\label{sec:example_collection}
+
+\begin{lstlisting}
+  [ "http://example.org/id1", "http://example.org/id2" ]
 \end{lstlisting}
 
 \subsection{Kind Format Example}
