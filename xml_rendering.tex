@@ -11,6 +11,7 @@
 \usepackage{tabularx} % adds extended tabular formatting options
 \usepackage{listings}
 \usepackage{color}
+\usepackage{placeins}
 \definecolor{lightgray}{rgb}{.9,.9,.9}
 \definecolor{darkgray}{rgb}{.4,.4,.4}
 \definecolor{purple}{rgb}{0.65, 0.12, 0.82}
@@ -137,6 +138,161 @@ following sections.
 OCCI XML rendering include XML element to represent the
 CRUD\footnote{Create, Retrieve, Update, Delete} actions on OCCI types.
 
+\subsection{Category Format}
+\label{sec:format_category}
+The OCCI Category Format consists of a XML object.
+Table~\ref{tbl:format_category} defines the object members.
+
+\begin{lstlisting}
+<xs:complexType name="categoryType">	
+	<xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
+</xs:complexType>
+
+<xs:attributeGroup name="categoryIdGroup" >
+	<xs:attribute name="scheme" type="xs:anyURI"></xs:attribute>
+	<xs:attribute name="term" type="xs:string" use="required"></xs:attribute>
+</xs:attributeGroup>
+
+<xs:attributeGroup name="categoryGroup">	
+	<xs:attributeGroup ref="occi:categoryIdGroup"></xs:attributeGroup>
+	<xs:attribute name="title" type="xs:string"></xs:attribute>
+	<xs:attribute name="use">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="required"></xs:enumeration>
+				<xs:enumeration value="optional"></xs:enumeration>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+</xs:attributeGroup>
+\end{lstlisting}
+
+%FIXME : finir table remettre mytablefloat
+\mytablefloat{
+    \label{tbl:format_category}
+	}
+	{
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object Member & XML type & Description & Mutability & Multiplicity \\
+    \colrule
+    Attribute \\
+    term & xs:string & Unique identifier of the Category instance within the categorisation scheme & Immutable & 1 \\
+    scheme & xs:anyURI & The categorisation scheme & Immutable & 1 \\
+    title & xs:string & The display name of an instance & Immutable & 0..1 \\
+    use & xs:string & & & \\
+    \botrule
+    \end{tabularx}
+}
+
+\subsection{Attribute Description Format}
+\label{sec:format_attribute_description}
+
+OCCI Attribute Descriptions are rendered as XML objects as defined in table~\ref{tbl:format_attribute_description}
+%FIXME : voir model attribute dans core il manque des choses
+\begin{lstlisting}
+<xs:complexType name="attributeSpecType">
+	<xs:complexContent>
+		<xs:extension base="xs:attribute">
+			<xs:attribute name="immutable" type="xs:boolean" default="false">
+				<xs:annotation>
+					<xs:documentation>
+						If 'immutable' is true, the attribute can
+						not be
+						modified by user.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="attributeType">
+	<xs:sequence>
+		<xs:element name="value" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded" />
+	</xs:sequence>
+	<xs:attribute name="name" type="xs:string"></xs:attribute>
+	<xs:attribute name="value" type="xs:string"></xs:attribute>
+</xs:complexType>
+\end{lstlisting}
+
+
+\mytablefloat{
+    \label{tbl:format_attribute_description}
+    All properties of the OCCI Attribute definition are optional, but may contain
+defaults which MUST be used if the Attribute is not present in the instantiated
+OCCI Entity.
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & XML type & Description & Default \\
+    \colrule
+    Element \\
+    value & xs:anyURI & & & 0..* \\
+    Attribute\\
+    name & xs:string \\
+    value & xs:string \\
+
+%    Pattern & string & Posix Extended Regular Expression as defined in
+%\cite{iso9945:2009}. For interoperability reasons, POSIX character classes
+% (e.g. [:alpha:]) MUST NOT be used. & .* \\
+
+    \botrule
+    \end{tabularx}
+}
+
+\subsection{Entity Format}
+\label{sec:format_entity}
+
+The OCCI Entity Format consists of a XML object.
+Table~\ref{tbl:format_entity} defines the object members.
+
+\begin{lstlisting}
+<xs:complexType name="entityType">
+	<xs:sequence>
+		<xs:element name="kind" type="occi:categoryType" minOccurs="1" maxOccurs="1" />
+		<xs:element name="mixin" type="occi:categoryType" minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="attribute" type="occi:attributeType" minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="action" type="occi:categoryType" minOccurs="0" maxOccurs="unbounded" />
+	</xs:sequence>
+	<xs:attribute name="id" type="xs:anyURI" ></xs:attribute>
+	<xs:attribute name="title" type="xs:string" ></xs:attribute>
+	<xs:attribute name="href" type="xl:href" />
+</xs:complexType>
+\end{lstlisting}
+
+\mytablefloat{
+    \label{tbl:format_entity}
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & XML type & Description & Mutability & Multiplicity \\
+    \colrule
+    Element \\
+    kind & occi:categoryType & Type identifier & immutable & 1 \\
+
+    mixins & occi:categoryType & List of type identifiers of associated OCCI
+Mixins  &
+mutable & 0..* \\
+
+    attributes & occi:attributeType & Instance Attributes (see
+\ref{sec:format_attribute_description}) & mutable & 0..* \\
+    
+    actions & occi:category & List of type identifiers of OCCI
+Actions applicable to the OCCI Resource instance & mutable & 0..* \\
+    \\
+    
+    Attribute\\
+    id & xs:anyURI & ID of the OCCI Resource & immutable & 1\\
+
+    title & xs:string &  & immutable & 1\\
+            
+    href & xl:href & & & 1\\
+    \botrule
+    \end{tabularx}
+}
+\FloatBarrier
+
 \subsection{Resource Instance Format}
 \label{sec:format_resource}
 
@@ -144,7 +300,7 @@ The OCCI Resource Instance Format consists of a XML object as shown in the
 following example. Section \ref{sec:example_resource} contains a detailed
 example.
 Table~\ref{tbl:format_resource} defines the object members.
-%FIXME : attribute? id title href
+
 \begin{lstlisting}
 <xs:complexType name="resourceType">
 	<xs:complexContent>
@@ -156,7 +312,31 @@ Table~\ref{tbl:format_resource} defines the object members.
 		</xs:extension>
 	</xs:complexContent>
 </xs:complexType>
+\end{lstlisting}
 
+\mytablefloat{
+    \label{tbl:format_resource}
+    OCCI Resource instances are rendered inside the top-level XML object with
+name
+{\em resources}
+    as a ressourceType of XML objects with the following entries:
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & XML type & Description & Mutability & Multiplicity \\
+    \colrule
+    Element\\
+    entity & occi:entityType & & & \\
+
+    Attribute\\
+    summary & xs:string &  & immutable & 1\\
+            
+    links & occi:resourceLinkType & List of URIs of OCCI Links & mutable & 0..*\\
+    \botrule
+    \end{tabularx}
+}
+
+\begin{lstlisting}
 Example:
 <resources id="xs:anyURI" title="xs:string" href="xl:href">
 	<kind type="occi:categoryType"/>
@@ -167,51 +347,39 @@ Example:
 </resources>
 \end{lstlisting}
 
-\mytablefloat{
-    \label{tbl:format_resource}
-    OCCI Resource instances are rendered inside the top-level XML object with
-name
-{\em resources}
-    as a xs:complexType of XML objects with the following entries:
-    } {
-    \begin{tabularx}{\textwidth}{llXll}
-    \toprule
-    Object member & XML type & Description & Mutability & Multiplicity \\
-    \colrule
-    kind & occi:categoryType & Type identifier & immutable & 1 \\
-
-    mixins & occi:categoryType & List of type identifiers of associated OCCI
-Mixins  &
-mutable & 0..* \\
-
-    attributes & occi:attributeType & Instance Attributes (see
-\ref{sec:format_attribute_description}) & mutable & 0..* \\
-    
-    actions & complexType & List of type identifiers of OCCI
-Actions applicable to the OCCI Resource instance & mutable & 0..* \\
-    
-    id & xs:anyURI & ID of the OCCI Resource & immutable & 1\\
-
-	summary & xs:string &  & immutable & 1\\
-            
-    links & occi:resourceLinkType & List of URIs of OCCI Links & mutable & 0..*\\
-    \botrule
-    \end{tabularx}
-}
-
 \subsection{Link Instance Format}
 \label{sec:format_link}
 
 The OCCI Link Instance Format consists of a XML object as shown in the
 following example. Section \ref{sec:example_link} contains a detailed example.
 Table~\ref{tbl:format_link} defines the object members.
+
 \begin{lstlisting}
 <xs:complexType name="linkType">
 	<xs:complexContent>
 		<xs:extension base="occi:entityType" />
 	</xs:complexContent>
 </xs:complexType>
+\end{lstlisting}
 
+\mytablefloat{
+    \label{tbl:format_link}
+    OCCI Resource instances are rendered inside the top-level XML object with
+name
+{\em resources}
+    as a linkType of XML objects with the following entries:
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & XML type & Description & Mutability & Multiplicity \\
+    \colrule
+    Element\\
+    entity & occi:entityType & & & \\
+    \botrule
+    \end{tabularx}
+}
+
+\begin{lstlisting}
 Example:
 <link id="xs:anyURI" title="xs:string" href="xl:href">
 	<kind type="occi:categoryType"/>
@@ -221,36 +389,6 @@ Example:
         <links type="occi:resourceLinkType">
 <link>
 \end{lstlisting}
-
-\mytablefloat{
-    \label{tbl:format_link}
-    OCCI Resource instances are rendered inside the top-level XML object with
-name
-{\em resources}
-    as a xs:compleType of XML objects with the following entries:
-    } {
-    \begin{tabularx}{\textwidth}{llXll}
-    \toprule
-    Object member & XML type & Description & Mutability & Multiplicity \\
-    \colrule
-    kind & occi:categoryType & Type identifier & immutable & 1 \\
-
-    mixins & occi:categoryType & List of type identifiers of associated OCCI
-Mixins  &
-mutable & 0..* \\
-
-    attributes & occi:attributeType & Instance Attributes (see
-\ref{sec:format_attribute_description}) & mutable & 0..* \\
-    
-    actions & complexType & List of type identifiers of OCCI
-Actions applicable to the OCCI Resource instance & mutable & 0..* \\
-    
-    id & xs:anyURI & ID of the OCCI Resource & immutable & 1\\
-            
-    links & occi:resourceLinkType & List of URIs of OCCI Links & mutable & 0..*\\
-    \botrule
-    \end{tabularx}
-}
 
 \subsection{Action Invocation Format}
 \label{sec:format_action_invocation}
@@ -262,7 +400,7 @@ Format is required.
 The OCCI Action Invocation Format consists of a top-level XML object as shown in the
 following example. Section \ref{sec:example_action_invocation} contains a detailed example.
 Table~\ref{tbl:format_action_invocation} defines the object members.
-%FIXME : categoryGroup?
+%FIXME : categoryGroup in table
 \begin{lstlisting}
 <xs:complexType name="actionType">
 	<xs:sequence>
@@ -286,9 +424,10 @@ Example:
     \toprule
     Object member & XML type & Description & Mutability & Multiplicity \\
     \colrule
-    action & String & Type identifier & immutable & 1 \\
+    attributeGroup & occi:categoryGroup & & &  \\
 
-    attributes & occi:attributeType & Instance attributes (see
+    Attribute \\
+    attribute & occi:attributeType & Instance attributes (see
 \ref{sec:format_attribute_description}) & mutable & 0..* \\
     \botrule
     \end{tabularx}
@@ -311,25 +450,18 @@ Table~\ref{tbl:format_kind} defines the top-level object members.
 	<xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
 	<xs:attribute name="location" type="xs:anyURI"></xs:attribute>
 </xs:complexType>
-
-Example:
-<kinds location="xs:anyURI">
-	<parent type="occi:categoryType"/>
-	<attribute type="occi:attributeSpecType"/>
-	<action type="occi:actionSpecType"/>
-</kind>
 \end{lstlisting}
 
 \mytablefloat{
     \label{tbl:format_kind}
     OCCI Kind instances are rendered inside the top-level XML object with name
-{\em kinds} as a xs:complexType of XML objects with the following entries:
+{\em kinds} as a kindType of XML objects with the following entries:
     } {
     \begin{tabularx}{\textwidth}{llXll}
     \toprule
     Object member & XML type & Description & Mutability & Multiplicity \\
     \colrule
-
+    Element \\
     parent & occi:categoryType & OCCI Kind type identifier of the
 related ``parent'' \hl{Kind} instance & immutable & 1..1 \\
 
@@ -339,28 +471,53 @@ related ``parent'' \hl{Kind} instance & immutable & 1..1 \\
     actions & occi:actionSpecType & List of OCCI Action type
 identifiers & immutable & 0..* \\
 
+    Attribute\\
     location & xs:anyURI & Transport protocol specific URI bound to the OCCI Kind
 instance. MUST be supplied for the OCCI Kinds of all OCCI Entities except OCCI
 Entity itself & immutable & 0..1 \\
+   
+    attributeGroup & occi:attributeGroup & & & \\
     \botrule
     \end{tabularx}
 }
+\begin{lstlisting}
+Example:
+<kinds location="xs:anyURI">
+	<parent type="occi:categoryType"/>
+	<attribute type="occi:attributeSpecType"/>
+	<action type="occi:actionSpecType"/>
+</kind>
+\end{lstlisting}
 
 \subsection{Mixin Instance Format}
 \label{sec:format_mixin}
 
 The OCCI Mixin Instance Format consists of a XML object as shown in the following example. Section \ref{sec:example_mixin} contains a detailed example.
 Table~\ref{tbl:format_mixin} defines the top-level object members.
-%FIXME : attributeGroup? and location?
+%FIXME : attributeGroup? 
+\begin{lstlisting}
+<xs:complexType name="mixinType">
+	<xs:sequence>
+		<xs:element name="depends" type="occi:categoryType" minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="applies" type="occi:categoryType" minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="attribute" type="occi:attributeSpecType" minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="action" type="occi:actionSpecType" minOccurs="0" maxOccurs="unbounded" />
+	</xs:sequence>
+	<xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
+	<xs:attribute name="location" type="xs:anyURI"></xs:attribute>
+</xs:complexType>
+\end{lstlisting}
+
 \mytablefloat{
     \label{tbl:format_mixin}
     OCCI Mixin instances are rendered inside the top-level XML object with name
-{\em mixins} as a xs:complexType of XML objects with the following entries:
+{\em mixins} as a mixinType of XML objects with the following entries:
     } {
     \begin{tabularx}{\textwidth}{llXll}
     \toprule
     Object member & XML type & Description & Mutability & Multiplicity \\
     \colrule
+    Element \\
     attributes & occi:attributeSpecType & Attribute description, see
 ~\ref{tbl:format_attribute_description} & immutable & 0..* \\
 
@@ -373,24 +530,16 @@ Mixin can be applied to \\
     actions & occi:actionSpecType & List of OCCI Action type identifiers
 & immutable & 0..* \\
 
+    Attribute \\
     location & xs:anyURI & Transport protocol specific URI bound to the OCCI Mixin
 instance & immutable & 1 \\
+
+    attributeGroup & occi:attributeGroup & & & \\
     \botrule
     \end{tabularx}
 }
 
 \begin{lstlisting}
-<xs:complexType name="mixinType">
-	<xs:sequence>
-		<xs:element name="depends" type="occi:categoryType" minOccurs="0" maxOccurs="unbounded" />
-		<xs:element name="applies" type="occi:categoryType" minOccurs="0" maxOccurs="unbounded" />
-		<xs:element name="attribute" type="occi:attributeSpecType" minOccurs="0" maxOccurs="unbounded" />
-		<xs:element name="action" type="occi:actionSpecType" minOccurs="0" maxOccurs="unbounded" />
-	</xs:sequence>
-	<xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
-	<xs:attribute name="location" type="xs:anyURI"></xs:attribute>
-</xs:complexType>
-
 Example:
 <mixins location="xs:anyURI">
 	<depends type="occi:categoryType"/>
@@ -430,56 +579,12 @@ Example:
     \toprule
     Object member & XML type & Description & Mutability & Multiplicity \\
     \colrule
-
+    Element\\
     attributes & occi:attributeSpecType & Instance attributes (see
 \ref{sec:format_attribute_description}) & mutable & 0..* \\
-    \botrule
-    \end{tabularx}
-}
-
-\subsection{Attribute Description Format}
-\label{sec:format_attribute_description}
-
-OCCI Attribute Descriptions are rendered as XML objects as defined in table~\ref{tbl:format_attribute_description}
-
-\begin{lstlisting}
-<xs:complexType name="attributeSpecType">
-	<xs:complexContent>
-		<xs:extension base="xs:attribute">
-			<xs:attribute name="immutable" type="xs:boolean" default="false">
-				<xs:annotation>
-					<xs:documentation>
-						If 'immutable' is true, the attribute can
-						not be
-						modified by user.
-					</xs:documentation>
-				</xs:annotation>
-			</xs:attribute>
-		</xs:extension>
-	</xs:complexContent>
-</xs:complexType>
-
-Example:
-<immutable type="xs:boolean">
-\end{lstlisting}
-
-\mytablefloat{
-    \label{tbl:format_attribute_description}
-    All properties of the OCCI Attribute definition are optional, but may contain
-defaults which MUST be used if the Attribute is not present in the instantiated
-OCCI Entity.
-    } {
-    \begin{tabularx}{\textwidth}{llXll}
-    \toprule
-    Object member & XML type & Description & Default \\
-    \colrule
-    immutable & boolean & Defines if the Attribute is mutable after initialization
-& false \\
-
-%    Pattern & string & Posix Extended Regular Expression as defined in
-%\cite{iso9945:2009}. For interoperability reasons, POSIX character classes
-% (e.g. [:alpha:]) MUST NOT be used. & .* \\
-
+ 
+    Attribute\\
+    attributeGroup & occi:attributeGroup & & & \\
     \botrule
     \end{tabularx}
 }
