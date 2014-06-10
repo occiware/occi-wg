@@ -5,8 +5,8 @@
 \usepackage{fancyhdr}
 \usepackage{comment}
 \usepackage{occi}
-\usepackage{lineno}   % adds line numbers, may be removed for non draft versions
-\linenumbers          % adds line numbers, may be removed for non draft versions
+%\usepackage{lineno}   % adds line numbers, may be removed for non draft versions
+%\linenumbers          % adds line numbers, may be removed for non draft versions
 \usepackage{verbatim} % adds verbatim options
 \usepackage{tabularx} % adds extended tabular formatting options
 \usepackage{listings}
@@ -140,23 +140,349 @@ CRUD\footnote{Create, Retrieve, Update, Delete} actions on OCCI types.
 \subsection{Resource Instance Format}
 \label{sec:format_resource}
 
+The OCCI Resource Instance Format consists of a XML object as shown in the
+following example. Section \ref{sec:example_resource} contains a detailed
+example.
+Table~\ref{tbl:format_resource} defines the object members.
+%FIXME : attribute? id title href
+\begin{lstlisting}
+<xs:complexType name="resourceType">
+	<xs:complexContent>
+		<xs:extension base="occi:entityType">
+			<xs:sequence>
+				<xs:element name="summary" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="link" type="occi:resourceLinkType" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+Example:
+<resources id="xs:anyURI" title="xs:string" href="xl:href">
+	<kind type="occi:categoryType"/>
+	<mixins type="occi:categoryType"/>
+        <attributes type="occi:attributeType"/>
+        <actions: type="occi:attributeType"/>
+        <links type="occi:resourceLinkType"> 
+</resources>
+\end{lstlisting}
+
+\mytablefloat{
+    \label{tbl:format_resource}
+    OCCI Resource instances are rendered inside the top-level XML object with
+name
+{\em resources}
+    as a xs:complexType of XML objects with the following entries:
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & XML type & Description & Mutability & Multiplicity \\
+    \colrule
+    kind & occi:categoryType & Type identifier & immutable & 1 \\
+
+    mixins & occi:categoryType & List of type identifiers of associated OCCI
+Mixins  &
+mutable & 0..* \\
+
+    attributes & occi:attributeType & Instance Attributes (see
+\ref{sec:format_attribute_description}) & mutable & 0..* \\
+    
+    actions & complexType & List of type identifiers of OCCI
+Actions applicable to the OCCI Resource instance & mutable & 0..* \\
+    
+    id & xs:anyURI & ID of the OCCI Resource & immutable & 1\\
+
+	summary & xs:string &  & immutable & 1\\
+            
+    links & occi:resourceLinkType & List of URIs of OCCI Links & mutable & 0..*\\
+    \botrule
+    \end{tabularx}
+}
+
 \subsection{Link Instance Format}
 \label{sec:format_link}
+
+The OCCI Link Instance Format consists of a XML object as shown in the
+following example. Section \ref{sec:example_link} contains a detailed example.
+Table~\ref{tbl:format_link} defines the object members.
+\begin{lstlisting}
+<xs:complexType name="linkType">
+	<xs:complexContent>
+		<xs:extension base="occi:entityType" />
+	</xs:complexContent>
+</xs:complexType>
+
+Example:
+<link id="xs:anyURI" title="xs:string" href="xl:href">
+	<kind type="occi:categoryType"/>
+	<mixins type="occi:categoryType"/>
+        <attributes type="occi:attributeType"/>
+        <actions: type="occi:attributeType"/>
+        <links type="occi:resourceLinkType">
+<link>
+\end{lstlisting}
+
+\mytablefloat{
+    \label{tbl:format_link}
+    OCCI Resource instances are rendered inside the top-level XML object with
+name
+{\em resources}
+    as a xs:compleType of XML objects with the following entries:
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & XML type & Description & Mutability & Multiplicity \\
+    \colrule
+    kind & occi:categoryType & Type identifier & immutable & 1 \\
+
+    mixins & occi:categoryType & List of type identifiers of associated OCCI
+Mixins  &
+mutable & 0..* \\
+
+    attributes & occi:attributeType & Instance Attributes (see
+\ref{sec:format_attribute_description}) & mutable & 0..* \\
+    
+    actions & complexType & List of type identifiers of OCCI
+Actions applicable to the OCCI Resource instance & mutable & 0..* \\
+    
+    id & xs:anyURI & ID of the OCCI Resource & immutable & 1\\
+            
+    links & occi:resourceLinkType & List of URIs of OCCI Links & mutable & 0..*\\
+    \botrule
+    \end{tabularx}
+}
 
 \subsection{Action Invocation Format}
 \label{sec:format_action_invocation}
 
+The OCCI Action Invocation  Format identifies an invocable operation on a OCCI Resource or
+OCCI Link instance. To trigger such an operation the OCCI Action Invocation
+Format is required.
+
+The OCCI Action Invocation Format consists of a top-level XML object as shown in the
+following example. Section \ref{sec:example_action_invocation} contains a detailed example.
+Table~\ref{tbl:format_action_invocation} defines the object members.
+%FIXME : categoryGroup?
+\begin{lstlisting}
+<xs:complexType name="actionType">
+	<xs:sequence>
+		<xs:element name="attribute" type="occi:attributeType"></xs:element>
+	</xs:sequence>
+	<xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
+</xs:complexType>
+
+Example:
+<action>
+	<attributes type="occi:attributeType">
+</action>
+\end{lstlisting}
+
+\mytablefloat{
+    \label{tbl:format_action_invocation}
+    An OCCI Action invocation is rendered as top-level XML object with
+ the following entries:
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & XML type & Description & Mutability & Multiplicity \\
+    \colrule
+    action & String & Type identifier & immutable & 1 \\
+
+    attributes & occi:attributeType & Instance attributes (see
+\ref{sec:format_attribute_description}) & mutable & 0..* \\
+    \botrule
+    \end{tabularx}
+}
+
 \subsection{Kind Instance Format}
 \label{sec:format_kind}
+
+The OCCI Kind Instance Format consists of a XML object as shown in the
+following example. Section \ref{sec:example_kind} contains a detailed example.
+Table~\ref{tbl:format_kind} defines the top-level object members.
+%FIXME : categoryGroup?
+\begin{lstlisting}
+<xs:complexType name="kindType">
+	<xs:sequence>
+		<xs:element name="parent" type="occi:categoryType" minOccurs="1" maxOccurs="1" />
+		<xs:element name="attribute" type="occi:attributeSpecType" minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="action" type="occi:actionSpecType" minOccurs="0" maxOccurs="unbounded" />
+	</xs:sequence>
+	<xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
+	<xs:attribute name="location" type="xs:anyURI"></xs:attribute>
+</xs:complexType>
+
+Example:
+<kinds location="xs:anyURI">
+	<parent type="occi:categoryType"/>
+	<attribute type="occi:attributeSpecType"/>
+	<action type="occi:actionSpecType"/>
+</kind>
+\end{lstlisting}
+
+\mytablefloat{
+    \label{tbl:format_kind}
+    OCCI Kind instances are rendered inside the top-level XML object with name
+{\em kinds} as a xs:complexType of XML objects with the following entries:
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & XML type & Description & Mutability & Multiplicity \\
+    \colrule
+
+    parent & occi:categoryType & OCCI Kind type identifier of the
+related ``parent'' \hl{Kind} instance & immutable & 1..1 \\
+
+    attributes & occi:attributeSpecType & Attribute description, see
+~\ref{tbl:format_attribute_description} & immutable & 0..* \\
+
+    actions & occi:actionSpecType & List of OCCI Action type
+identifiers & immutable & 0..* \\
+
+    location & xs:anyURI & Transport protocol specific URI bound to the OCCI Kind
+instance. MUST be supplied for the OCCI Kinds of all OCCI Entities except OCCI
+Entity itself & immutable & 0..1 \\
+    \botrule
+    \end{tabularx}
+}
 
 \subsection{Mixin Instance Format}
 \label{sec:format_mixin}
 
+The OCCI Mixin Instance Format consists of a XML object as shown in the following example. Section \ref{sec:example_mixin} contains a detailed example.
+Table~\ref{tbl:format_mixin} defines the top-level object members.
+%FIXME : attributeGroup? and location?
+\mytablefloat{
+    \label{tbl:format_mixin}
+    OCCI Mixin instances are rendered inside the top-level XML object with name
+{\em mixins} as a xs:complexType of XML objects with the following entries:
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & XML type & Description & Mutability & Multiplicity \\
+    \colrule
+    attributes & occi:attributeSpecType & Attribute description, see
+~\ref{tbl:format_attribute_description} & immutable & 0..* \\
+
+    depends & occi:categoryType & List of type identifiers of the dependent
+ \hl{Mixin} instances & immutable & 0..* \\
+ 
+    applies & occi:categoryType & List of OCCI Kind type identifiers this OCCI 
+Mixin can be applied to \\
+
+    actions & occi:actionSpecType & List of OCCI Action type identifiers
+& immutable & 0..* \\
+
+    location & xs:anyURI & Transport protocol specific URI bound to the OCCI Mixin
+instance & immutable & 1 \\
+    \botrule
+    \end{tabularx}
+}
+
+\begin{lstlisting}
+<xs:complexType name="mixinType">
+	<xs:sequence>
+		<xs:element name="depends" type="occi:categoryType" minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="applies" type="occi:categoryType" minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="attribute" type="occi:attributeSpecType" minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="action" type="occi:actionSpecType" minOccurs="0" maxOccurs="unbounded" />
+	</xs:sequence>
+	<xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
+	<xs:attribute name="location" type="xs:anyURI"></xs:attribute>
+</xs:complexType>
+
+Example:
+<mixins location="xs:anyURI">
+	<depends type="occi:categoryType"/>
+	<applies type="occi:categoryType"/>
+	<attribute type="occi:attributeSpecType"/>
+	<action type="occi:actionSpecType"/>
+</mixins>
+\end{lstlisting}
+
 \subsection{Action Instance Format}
 \label{sec:format_action}
 
+The OCCI Action Instance Format consists of a XML object as shown in the
+following example.
+Table~\ref{tbl:format_action} defines the top-level object members.
+%FIXME : categoryGroup?
+\begin{lstlisting}
+<xs:complexType name="actionSpecType">
+	<xs:sequence>
+		<xs:element name="attribute" type="occi:attributeSpecType" minOccurs="0" maxOccurs="unbounded"/>
+	</xs:sequence>
+	<xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
+</xs:complexType>
+
+Example:
+<action>
+	<attributes type="occi:attributeSpecType">
+</action>
+\end{lstlisting}
+
+\mytablefloat{
+    \label{tbl:format_action}
+    An OCCI Action invocation is rendered as top-level XML object with
+ the following entries:
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & XML type & Description & Mutability & Multiplicity \\
+    \colrule
+
+    attributes & occi:attributeSpecType & Instance attributes (see
+\ref{sec:format_attribute_description}) & mutable & 0..* \\
+    \botrule
+    \end{tabularx}
+}
+
 \subsection{Attribute Description Format}
 \label{sec:format_attribute_description}
+
+OCCI Attribute Descriptions are rendered as XML objects as defined in table~\ref{tbl:format_attribute_description}
+
+\begin{lstlisting}
+<xs:complexType name="attributeSpecType">
+	<xs:complexContent>
+		<xs:extension base="xs:attribute">
+			<xs:attribute name="immutable" type="xs:boolean" default="false">
+				<xs:annotation>
+					<xs:documentation>
+						If 'immutable' is true, the attribute can
+						not be
+						modified by user.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+Example:
+<immutable type="xs:boolean">
+\end{lstlisting}
+
+\mytablefloat{
+    \label{tbl:format_attribute_description}
+    All properties of the OCCI Attribute definition are optional, but may contain
+defaults which MUST be used if the Attribute is not present in the instantiated
+OCCI Entity.
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & XML type & Description & Default \\
+    \colrule
+    immutable & boolean & Defines if the Attribute is mutable after initialization
+& false \\
+
+%    Pattern & string & Posix Extended Regular Expression as defined in
+%\cite{iso9945:2009}. For interoperability reasons, POSIX character classes
+% (e.g. [:alpha:]) MUST NOT be used. & .* \\
+
+    \botrule
+    \end{tabularx}
+}
 
 \section{Appendix: Full XML schema}
 \label{sec:full_xml_schema}
@@ -165,6 +491,106 @@ CRUD\footnote{Create, Retrieve, Update, Delete} actions on OCCI types.
 \label{sec:occi_xml_schema}
 
 \lstinputlisting[language=XML]{schemas/occi.xsd}
+
+\section{Detailed Examples}
+\label{sec:examples}
+
+%FIXME: Check that examples are correct and cover most aspects
+
+\subsection{Resource Instance Format Example}
+\label{sec:example_resource}
+
+\begin{lstlisting}
+<resource xmlns='http://schemas.ogf.org/occi' xmlns:xl='http://www.w3.org/2008/06/xlink' title='Machine a toto'>
+	<kind scheme='http://schemas.ogf.org/occi/infrastructure#'term='compute'/>
+	<attribute name='occi.compute.speed' value='4.0e3'/>
+	<attribute name='occi.compute.memory' value='5.0'/>
+	<attribute name='occi.compute.hostname' value='pc_toto'/>
+	<attribute name='occi.compute.cores' value='2'/>
+	<attribute name='occi.compute.architecture' value='x86'/>
+	<link id='xmpp+occi:user-1@localhost/store/mylinks/json/networkinterface/0008413e-4091-42a8-9e01-f93c8c40ec21'>
+	<kind scheme='http://schemas.ogf.org/occi/infrastructure#'term='networkinterface'/>
+		<attribute name='occi.core.target' xl:href='xmpp+occi:user-1@localhost/store/myresources/xml/network/6a7d9971-214d-44c1-9da2-af1229584844'/>
+		<attribute name='occi.networkinterface.address' value='192.168.3.4'/>
+		<attribute name='occi.networkinterface.allocation' value='dynamic'/>
+		<attribute name='occi.networkinterface.gateway' value='192.168.3.0'/>
+		<attribute name='occi.networkinterface.interface' value='eth0'/>
+		<attribute name='occi.networkinterface.mac' value='00:80:41:ae:fd:32'/>
+		<mixin scheme='http://schemas.ogf.org/occi/infrastructure/networkinterface#' term='ipnetworkinterface'/>
+	</link>
+</resource>
+\end{lstlisting}
+
+\subsection{Link Instance Format Example}
+\label{sec:example_link}
+
+\begin{lstlisting}
+<link xmlns='http://schemas.ogf.org/occi' xmlns:xl='http://www.w3.org/2008/06/xlink' id='xmpp+occi:user-1@localhost/store/mylinks/xml/networkinterfaces/id9e295664-afff-419b-8a1d-e092bdf6f718'>
+	<attribute name='occi.core.source' xl:href='xmpp+occi:user-1@localhost/store/myresources
+	/xml/compute/f322e40a-6c9f-42b0-8a63-231f7ac7f3e4'/>
+	<kind scheme='http://schemas.ogf.org/occi/infrastructure#' term='networkinterface'/>
+	<attribute name='occi.core.target' xl:href='xmpp+occi:user-1@localhost/store/myresources/xml/network/6a7d9971-214d-44c1-9da2-af1229584844'/>
+	<attribute name='occi.networkinterface.address' value='192.168.3.4'/>
+	<attribute name='occi.networkinterface.allocation' value='dynamic'/>
+	<attribute name='occi.networkinterface.gateway' value='192.168.3.0'/>
+	<attribute name='occi.networkinterface.interface' value='eth0'/>
+	<attribute name='occi.networkinterface.mac' value='00:80:41:ae:fd:32'/>
+	<mixin scheme='http://schemas.ogf.org/occi/infrastructure/networkinterface#' term='ipnetworkinterface'/>
+</link>
+\end{lstlisting}
+
+\subsection{Action Invocation Format Example}
+\label{sec:example_action_invocation}
+%FIXME : A voir
+\begin{lstlisting}
+<occi:action xmlns="http://schemas.ogf.org/occi"
+term="stop" scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#" >
+	<occi:attribute name="method" value="graceful"/>
+</occi:action>
+\end{lstlisting}
+
+\subsection{Kind Format Example}
+\label{sec:example_kind}
+%FIXME : A voir
+\begin{lstlisting}
+<occi:kind scheme="http://schemas.ogf.org/occi/infrastructure#" term="compute" title="Compute Ressource">
+	<occi:attribute name="occi.compute.hostname.mutable" value="true"/>
+	<occi:attribute name="occi.compute.hostname.required" value="false"/>
+	<occi:attribute name="occi.compute.hostname.type" value="xs:string"/>
+	<occi:attribute name="occi.compute.hostname.description" value="Hostname of the compute ressource"/>
+	<occi:attribute name="occi.compute.state.mutable" value="false"/>
+	<occi:attribute name="occi.compute.hostname.required" value="false"/>
+	<occi:attribute name="occi.compute.hostname.type" value="xs:string"/>
+	<occi:attribute name="occi.compute.hostname.default" value="inactive"/>
+	<occi:attribute name="occi.compute.hostname.description" value="State the compute ressource is in"/>
+	<occi:action sechme="http://schemas.ogf.org/occi/infrastructure/compute/action#start"/>
+	<occi:action sechme="http://schemas.ogf.org/occi/infrastructure/compute/action#stop"/>
+	<occi:action sechme="http://schemas.ogf.org/occi/infrastructure/compute/action#restart"/>
+	<occi:action sechme="http://schemas.ogf.org/occi/infrastructure/compute/action#suspend"/>
+</occi:kind>
+\end{lstlisting}
+
+\subsection{Mixin Format Example}
+\label{sec:example_mixin}
+%FIXME : A regarder
+\begin{lstlisting}
+<occi:mixin scheme="http://schemas.ogf.org/occi/infrastructure#" term="ressource_tpl" title="Medium VM">
+	<occi:attribute name="occi.compute.speed.type" value="number"/>
+	<occi:attribute name="occi.compute.speed.default" value="2.8">		
+</occi:mixin>
+\end{lstlisting}
+
+\subsection{Action Format Example}
+\label{sec:example_action}
+%FIXME : A regarder 
+\begin{lstlisting}
+<occi:action scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#" term="stop" title="Stop Compute instance">
+	<occi:attribute name="method.mutable" value="true"/>
+	<occi:attribute name="method.required" value="false"/>
+	<occi:attribute name="method.type" value="string"/>
+	<occi:attribute name="method.default" value="poweroff"/>
+</occi:action>
+\end{lstlisting}
 
 \section{Glossary}
 \label{sec:glossary}
