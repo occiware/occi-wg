@@ -157,7 +157,7 @@
 	</xs:complexType>
 
 	<xs:complexType name="categoryType">	
-	  <xs:attributeGroup ref="occi:categoryIdGroup"></xs:attributeGroup>
+	  <xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
 	</xs:complexType>
 
 	<xs:attributeGroup name="categoryIdGroup" >
@@ -166,7 +166,7 @@
 	</xs:attributeGroup>
 	
 	<xs:attributeGroup name="categoryGroup">	
-	  <xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
+	  <xs:attributeGroup ref="occi:categoryIdGroup"></xs:attributeGroup>
 	  <xs:attribute name="title" type="xs:string"></xs:attribute>
 	  <xs:attribute name="use">
 	    <xs:simpleType>
