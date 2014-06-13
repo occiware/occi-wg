@@ -15,14 +15,28 @@
 \definecolor{lightgray}{rgb}{.9,.9,.9}
 \definecolor{darkgray}{rgb}{.4,.4,.4}
 \definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
 
 \lstdefinelanguage{json}{
   ndkeywords={String, Number, Boolean, Null, Object, Array},
   ndkeywordstyle=\itshape
 }
+\lstdefinelanguage{XML}
+{
+  morestring=[b]",
+  morestring=[s]{>}{<},
+  morecomment=[s]{<?}{?>},
+  stringstyle=\color{black},
+  identifierstyle=\color{darkblue},
+  keywordstyle=\color{cyan},
+  morekeywords={xmlns,version,type}% list your attributes here
+}
 \lstset{
-   language=json,
+   language=XML,
    basicstyle=\footnotesize,
+   showstringspaces=false
 }
 
 \setlength{\headheight}{13pt}
@@ -58,8 +72,8 @@
 % header on first page is different
 \thispagestyle{empty}
 
-GWD-R \hfill Jean Parpaillon\\
-OCCI-WG \\
+GWD-R \hfill Jean Parpaillon, Lizenn\\
+OCCI-WG \hfill Jean Hany, Lizenn\\
 \rightline {September 26, 2013}\\
 \rightline {Updated: \today}
 
@@ -143,27 +157,27 @@ CRUD\footnote{Create, Retrieve, Update, Delete} actions on OCCI types.
 The OCCI Category Format consists of a XML object.
 Table~\ref{tbl:format_category} defines the object members.
 
-\begin{lstlisting}
+\begin{lstlisting}[language=xml]
 <xs:complexType name="categoryType">	
-	<xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
+  <xs:attributeGroup ref="occi:categoryGroup"></xs:attributeGroup>
 </xs:complexType>
 
 <xs:attributeGroup name="categoryIdGroup" >
-	<xs:attribute name="scheme" type="xs:anyURI"></xs:attribute>
-	<xs:attribute name="term" type="xs:string" use="required"></xs:attribute>
+  <xs:attribute name="scheme" type="xs:anyURI"></xs:attribute>
+  <xs:attribute name="term" type="xs:string" use="required"></xs:attribute>
 </xs:attributeGroup>
 
 <xs:attributeGroup name="categoryGroup">	
-	<xs:attributeGroup ref="occi:categoryIdGroup"></xs:attributeGroup>
-	<xs:attribute name="title" type="xs:string"></xs:attribute>
-	<xs:attribute name="use">
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:enumeration value="required"></xs:enumeration>
-				<xs:enumeration value="optional"></xs:enumeration>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:attribute>
+  <xs:attributeGroup ref="occi:categoryIdGroup"></xs:attributeGroup>
+  <xs:attribute name="title" type="xs:string"></xs:attribute>
+  <xs:attribute name="use">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="required"></xs:enumeration>
+        <xs:enumeration value="optional"></xs:enumeration>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
 </xs:attributeGroup>
 \end{lstlisting}
 
@@ -775,8 +789,19 @@ term="stop" scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#" 
 \input{include/glossary}
 
 \section{Contributors}
-\include{include/contributors}
-% FIXME: Insert an up-to-date table here!
+
+We would like to thank the following people who contributed to this
+document:
+
+\begin{tabular}{l|p{2in}|p{2in}}
+Name & Affiliation & Contact \\
+\hline
+Jean Parpaillon & Lizenn & jean.parpaillon at free.fr \\
+Jean Hany & Lizenn & jean\_hany at hotmail.fr
+\end{tabular}
+
+Next to these individual contributions we value the contributions from
+the OCCI working group.
 
 \section{Intellectual Property Statement}
 \input{include/ip}
