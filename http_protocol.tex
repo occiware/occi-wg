@@ -59,7 +59,7 @@ Interface specification suite.
 
 \underline{Copyright Notice}
 
-Copyright \copyright Open Grid Forum (2013). All Rights Reserved.
+Copyright \copyright Open Grid Forum (2013-2014). All Rights Reserved.
 
 \underline{Trademarks}
 
@@ -70,7 +70,7 @@ OCCI is a trademark of the Open Grid Forum.
 \input{include/abstract}
 
 \underline{Comments}
-\newcommand{\ralf}[1]{\textcolor{red}{RN: #1}}
+\newcommand{\todo}[1]{\textcolor{red}{RN: #1}}
 \begin{itemize}
 \item ...
 \end{itemize}
@@ -128,7 +128,7 @@ A bound URL path is the {\em location} of a \hl{Kind} or \hl{Mixin} collection.
 
 An unbound URL path MAY represent the union of all \hl{Kind} and \hl{Mixin}
 collection ``below'' the unbound path.
-\ralf{FIXME: Should this be a MUST instead?}
+\todo{FIXME: Should this be a MUST instead?}
 
 \section{Headers and status codes}
 
@@ -174,6 +174,8 @@ behaviour in such cases is not specified.
 
 
 \section{HTTP methods applied to entity instance URLs}
+
+\todo{Sanity check this section against v1.1...}
 
 This section describes the HTTP methods used to retrieve and manipulate
 individual entity instances. An {\em entity instance} refers to an instance
@@ -334,7 +336,7 @@ Server: occi-server/x.x OCCI/1.1
 \begin{description}
 \item[Content-Type] {\tt application/occi-entity+json}
 \end{description}
-\ralf{This would imply a partial update of the entity instance. While it is
+\todo{This would imply a partial update of the entity instance. While it is
 easy to supply only the attributes to be updated the question is if there are any
 valid use cases for partial updates using JSON?}
 
@@ -361,7 +363,7 @@ Server: occi-server/x.x OCCI/1.1
 
 \section{HTTP methods applied to collections URLs}
 
-\ralf{NOT fully updated yet!}
+\todo{NOT fully updated yet!}
 
 This section describes the HTTP methods used to manipulate collections. Each
 HTTP method described is assumed to operate on an URL referring to a collection
@@ -411,7 +413,7 @@ query-string        = ""
   string-urlencoded = *( ALPHA | DIGIT | "-" | "_" | "." | "~" | "%" )
 
 \end{verbatim}
-\ralf{FIXME: UUID in ABNF}
+\todo{FIXME: UUID in ABNF}
 
 \paragraph*{Filtering} A search filter can be applied to categories and attributes
 of entity instances in a collection. An OCCI server SHOULD support filtering.
@@ -430,7 +432,7 @@ query would include only entity instances of the Compute type:
 {\tt category=http\%3A\%2F\%2Fschemas.ogf.org\%2Focci\%2Finfrastructure\%23compute}
 
 \paragraph*{Pagination}
-\ralf{FIXME: marker instead of start}
+\todo{FIXME: marker instead of start}
 \label{sec:collection:pagination}
 An OCCI client MAY request that the server only return
 a subset of a collection. This is accomplished using the {\em marker} and
@@ -509,16 +511,16 @@ Content-Type: application/occi-collection+json; charset=utf-8
 HTTP/1.1 204 OK
 Server: occi-server/x.x OCCI/1.1
 \end{verbatim}
-\ralf{Should we support HTTP 200 returning the whole collection? Or maybe just the entity instances created/updated?}
+\todo{Should we support HTTP 200 returning the whole collection? Or maybe just the entity instances created/updated?}
 
 \subsection{POST collection with ``action'' query parameter}
 {\em todo}
 
 \subsection{PUT collection}
-Replace the entire collection with a new one. \ralf{Should we support this?}
+Replace the entire collection with a new one. \todo{Should we support this?}
 
 \subsection{DELETE collection}
-Delete the entire collection. \ralf{Should we support this?}
+Delete the entire collection. \todo{Should we support this?}
 
 \begin{comment}
 \section{More examples}
