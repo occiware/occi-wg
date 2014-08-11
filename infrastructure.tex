@@ -44,7 +44,7 @@
 % header on first page is different
 \thispagestyle{empty}
 
-GFD-P-R.184 \hfill  Thijs Metsch, Platform Computing\\
+Draft \hfill  Thijs Metsch, Platform Computing\\
 OCCI-WG \hfill  Andy Edmonds, Intel\\
 \rightline {October 7, 2010}\\
 \rightline {Updated: \today}
@@ -59,11 +59,18 @@ OCCI-WG \hfill  Andy Edmonds, Intel\\
 
 \underline{Status of this Document}
 
-\input{include/status}
+% \input{include/status}
+
+This document is a \underline{draft} including proposed errata updates to the
+OCCI Infrastructure \cite{occi:infrastructure} specification.
+
+The errata updates are summarized in section~\ref{sec:errata}.
+
+Eventually this document will obsolete GFD-P-R.143. This document is fully backward compatible to \cite{occi:infrastructure}. 
 
 \underline{Copyright Notice}
 
-Copyright \copyright ~Open Grid Forum (2009-2011). All Rights Reserved.
+Copyright \copyright ~Open Grid Forum (2009-2014). All Rights Reserved.
 
 \underline{Trademarks}
 
@@ -72,6 +79,19 @@ OCCI is a trademark of the Open Grid Forum.
 \underline{Abstract}
 
 \input{include/abstract}
+
+{\color{red}
+\underline{TODO}
+\begin{itemize}
+\item add error states
+\item fix category naming (check all schemes)
+\item review for invalid attribute names?
+\item contextualization
+\item ssh key mgmt
+\item state model of storage entities
+\item OCCI has no way to manage snapshots or backups once created - should this be addressed?
+\end{itemize}
+}
 
 \newpage
 \tableofcontents
@@ -154,7 +174,7 @@ That assigned \hl{Kind} instance MUST always remain immutable to any client.
 	networkinterface & $<$schema$>$/infrastructure\# & NetworkInterface \hl{Link}
 	& $<$schema$>$/core\#link \\
 	
-	ipnetworkinterface & $<$schema$>$/infrastucture/networkinterface\# & IP NetworkInterface \hl{Mixin}
+	ipnetworkinterface & $<$schema$>$/infrastructure/networkinterface\# & IP NetworkInterface \hl{Mixin}
 	& -- \\
 	\botrule
 	\end{tabular}
@@ -175,7 +195,7 @@ of the various types involved in this infrastructure specification.
 
 \subsection{Compute}
 The \hl{Compute} type represents a generic information processing resource, e.g.~a
-virtual machine. \hl{Compute} inherits the \hl{Resource} base type defined in
+virtual machine or container. \hl{Compute} inherits the \hl{Resource} base type defined in
 OCCI Core Model \cite{occi:core}.
 \hl{Compute} is assigned the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
@@ -592,7 +612,7 @@ and necessary template that a provider SHOULD offer.
 
 Its construction is a \hl{Mixin} instance consisting of a provider specific ``scheme'' and a descriptive ``title'' 
 detailing the OS. The ``term'' value of the template \hl{Mixin} is a provider-specific identifier that 
-corresponds to a particular virtual machine image configuration. Where an implementation requires 
+corresponds to a particular image configuration. Where an implementation requires 
 additional attributes associated with the OS Template, it can do so using ``{\tt attributes}'' value
 inherited from the \hl{Category} type.
 
@@ -715,5 +735,11 @@ the OCCI Core and Model specification apply here.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
+
+\appendix
+
+\newpage
+\section{Errata}
+\label{sec:errata}
 
 \end{document}
