@@ -1,0 +1,565 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{comment}
+\usepackage{occi}
+\setlength{\headheight}{13pt}
+\pagestyle{fancy}
+
+% default sans-serif
+\renewcommand{\familydefault}{\sfdefault}
+
+% no lines for headers and footers
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% header
+\fancyhf{}
+\lhead{GWD-R}
+\rhead{\today}
+
+% footer
+\lfoot{occi-wg@ogf.org}
+\rfoot{\thepage}
+
+% paragraphs need some space...
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+% some space between header and text...
+\headsep 13pt
+
+\setcounter{secnumdepth}{4}
+
+\begin{document}
+
+% header on first page is different
+\thispagestyle{empty}
+
+GWD-R \hfill Ralf Nyrén \\
+OCCI-WG \\
+\rightline {February 4, 2013}\\
+\rightline {Updated: \today}
+
+\vspace*{0.5in}
+
+\begin{Large}
+\textbf{Open Cloud Computing Interface - RESTful HTTP Protocol}
+\end{Large}
+
+\vspace*{0.5in}
+
+\underline{Status of this Document}
+
+%\input{include/status}
+This is a draft proposal of a new document in the Open Cloud Computing
+Interface specification suite.
+
+\underline{Copyright Notice}
+
+Copyright \copyright Open Grid Forum (2013). All Rights Reserved.
+
+\underline{Trademarks}
+
+OCCI is a trademark of the Open Grid Forum.
+
+\underline{Abstract}
+
+\input{include/abstract}
+
+\underline{Comments}
+\newcommand{\ralf}[1]{\textcolor{red}{RN: #1}}
+\begin{itemize}
+\item ...
+\end{itemize}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+%\input{include/introduction}
+
+\section{Notational Conventions}
+\input{include/notational}
+
+The following terms \cite{rfc3986} are used when referring to URI
+components:
+
+\begin{verbatim}
+ http://example.com:8080/over/there?action=stop#xyz
+ \__/   \______________/\_________/ \_________/ \_/
+  |           |            |            |        |
+scheme     authority       path        query   fragment
+\end{verbatim}
+
+\section{OCCI RESTful HTTP Protocol}
+
+This document specifies the OCCI HTTP Protocal, a RESTful protocol for
+communication between OCCI Server and OCCI Client. The OCCI HTTP Protocol
+support multiple different data formats as payload. Data formats are specified
+an separate documents.
+
+{\em TBD: general intro to REST etc}
+
+\section{Namespace}
+
+The OCCI HTTP Protocol maps the OCCI Core model into the URL hierarchy by binding
+\hl{Kind} and \hl{Mixin} instances to unique URL paths. Such a URL path is called
+the {\em location} of the \hl{Kind} or \hl{Mixin}.
+A provider is free to choose the {\em location} as long as it is unique
+within the service provider's URL namespace.
+For example, the \hl{Kind} instance%
+\footnote{\tt http://schemas.ogf.org/occi/infrastructure\#compute}
+for the \hl{Compute} type may be bound to {\tt /my/occi/api/compute/}.
+
+A \hl{Kind} instance whose associated type cannot be instantiated MUST NOT be
+bound to an URL path. This applies to the \hl{Kind} instance for OCCI Entity
+which, according to OCCI Core, cannot be instantiated \cite{occi:core}.
+
+\subsection{Bound and unbound paths}
+
+Since a limited set of URL paths are bound to \hl{Kind} and \hl{Mixin}
+instances the URL hierarchy consists of both {\em bound} and {\em unbound}
+paths.
+A bound URL path is the {\em location} of a \hl{Kind} or \hl{Mixin} collection.
+
+An unbound URL path MAY represent the union of all \hl{Kind} and \hl{Mixin}
+collection ``below'' the unbound path.
+\ralf{FIXME: Should this be a MUST instead?}
+
+\section{Headers and status codes}
+
+OCCI Clients and Servers must include a minimum set of mandatory HTTP headers
+in each request and response in order to be compliant.
+There is also a minimum set of HTTP status codes which must be supported by
+an implementation of the OCCI HTTP Protocol.
+
+\subsection{Mandatory HTTP requests headers}
+
+\begin{description}
+\item[Accept] An OCCI Client SHOULD specify the media-types the OCCI data
+formats it supports in the {\tt Accept} header.
+
+\item[Content-type] If an OCCI Client submits payload in a HTTP request
+the OCCI Client MUST specify the media-type of the OCCI data format
+in the {\tt Content-type} header.
+\end{description}
+
+\subsection{Mandatory HTTP response headers}
+
+\begin{description}
+\item[Content-type] An OCCI Server MUST specify the media-type of the OCCI data
+format used in a HTTP Response.
+\item[Server] An OCCI Server MUST specify the OCCI HTTP Protocol version number.
+\end{description}
+
+\subsection{HTTP status codes}
+
+The below list specifies the minimum set of HTTP status codes an OCCI Client MUST
+understand. An OCCI Server MAY return other HTTP status codes but the exact client
+behaviour in such cases is not specified.
+
+\begin{description}
+\item[200]
+\item[204]
+\item[301]
+\item[400]
+\item[403]
+\item[404]
+\item[405]
+\end{description}
+
+
+\section{HTTP methods applied to entity instance URLs}
+
+This section describes the HTTP methods used to retrieve and manipulate
+individual entity instances. An {\em entity instance} refers to an instance
+of the OCCI \hl{Resource} type, OCCI \hl{Link} type or a sub-type thereof
+\cite{occi:core}.
+
+Each HTTP method described is assumed to operate
+on an URL referring to a single element in a collection, an URL such as the
+following:
+\begin{verbatim}
+  http://example.com/compute/012d2b48-c334-47f2-9368-557e75249042
+\end{verbatim}
+
+
+\subsection{GET entity instance}
+The HTTP GET method retrieves a representation of a single (existing)
+entity instance.
+
+\subsubsection{Client GET request}
+The body of the HTTP GET request MUST be empty.
+\begin{verbatim}
+GET /compute/012d2b48-c334-47f2-9368-557e75249042 HTTP/1.1
+Host: example.com
+Accept: application/occi+xxx
+User-Agent: occi-client/x.x OCCI/1.1
+\end{verbatim}
+
+\subsubsection{Server GET response}
+% HTTP status: 200
+The body of the HTTP GET response MUST contain a representation of the entity
+instance.
+\begin{verbatim}
+HTTP/1.1 200 OK
+Server: occi-server/x.x OCCI/1.1
+Content-Type: application/occi+xxx; charset=utf-8
+
+...
+\end{verbatim}
+
+
+\subsection{PUT entity instance}
+The HTTP PUT method either {\em creates} a new or {\em replaces} an existing
+entity instance at the specified URL.
+%
+The unique identifier of the entity instance (\hl{Entity}.{\tt id}) MUST be
+specified in the request URL.
+An OCCI Client MAY also specify \hl{Entity}.{\tt id} in the payload however it
+MUST be identical to the identifier specified as part of the request URL.
+
+If an entity instance with the specified identifier does not exist the PUT
+request allows the OCCI Client to choose the \hl{Entity}.{\tt id} of the new
+instance.
+An OCCI Server MAY refuse such a request with HTTP status code 405. This would
+indicate that the OCCI Server does not allow user defined entity identifiers.
+
+The PUT method MUST be idempotent, i.e. multiple identical PUT requests should
+have the same effect as a single request.
+
+
+\subsubsection{Client PUT request}
+The full representation of the entity instance MUST be supplied in the HTTP
+body of the request. The request body MUST only include a representation of
+a single entity instance.
+
+If the request represent an OCCI \hl{Resource} (as opposed to an OCCI
+\hl{Link}) the representation MUST NOT include any \hl{Link} instances
+associated with the \hl{Resource} instance.
+A server MUST refuse a request including associated \hl{Link}s
+
+Any OCCI \hl{Link}s associated with an existing OCCI \hl{Resource} MUST be left
+intact.
+\begin{verbatim}
+PUT /compute/012d2b48-c334-47f2-9368-557e75249042 HTTP/1.1
+Host: example.com
+Accept: application/occi-entity+json
+User-Agent: occi-client/x.x OCCI/1.1
+Content-Type: application/occi-entity+json; charset=utf-8
+
+{
+  "kind": "http://schemas.ogf.org/occi/infrastructure#compute",
+  "mixins": [ ... ],
+  "attributes": { ... }
+}
+\end{verbatim}
+
+\subsubsection{Server PUT response}
+\begin{description}
+\item[Content-Type] {\tt application/occi-entity+json}
+\end{description}
+Upon success an OCCI server MUST return HTTP status code 200 and a complete
+JSON representation of the created/replaced entity instance in
+single-entity-instance format.
+The response MUST be identical%
+\footnote{Provided the entity instance was not changed in the meantime.}
+to that of a subsequent GET request of the same URL.
+
+\begin{verbatim}
+HTTP/1.1 200 OK
+Server: occi-server/x.x OCCI/1.1
+Content-Type: application/occi-entity+json; charset=utf-8
+
+{
+  "kind": "http://schemas.ogf.org/occi/infrastructure#compute",
+  "mixins": [ ... ],
+  "actions": [ ... ],
+  "links": [ ... ],
+  "attributes": { ... }
+}
+\end{verbatim}
+
+
+\subsection{POST entity instance (action)}
+There are two methods to invoke an OCCI Action using the JSON Rendering.
+\begin{enumerate}
+\item Supply the query parameter ``action'' together with the request. The value
+of ``action'' MUST be the {\tt term} of the action \hl{Category}.
+\item Specify {\tt application/occi-action+json} in the Content-Type header
+and supply a request payload formatted according to section~\ref{sec:format_action}.
+In order to specify action attributes this method MUST be used.
+\end{enumerate}
+An OCCI Client MAY combine the two methods if the ``action'' parameter's value
+is equal to the \hl{Category} {\tt term} in the body.
+
+\subsubsection{Client POST action request}
+\begin{description}
+\item[Accept] {\tt application/occi-entity+json}
+\item[Content-Type] {\tt application/occi-action+json}
+\end{description}
+The example shows the combined method.
+\begin{verbatim}
+POST /compute/012d2b48-c334-47f2-9368-557e75249042?action=stop HTTP/1.1
+Host: example.com
+Accept: application/occi-entity+json
+User-Agent: occi-client/x.x OCCI/1.1
+Content-Type: application/occi-action+json; charset=utf-8
+
+{
+  "category": "http://schemas.ogf.org/occi/infrastructure/compute/action#stop",
+  "attributes": {
+    "method": "graceful"
+  }
+}
+\end{verbatim}
+
+\subsubsection{Server POST action response}
+\begin{description}
+\item[Content-Type] {\tt application/occi-entity+json}
+\end{description}
+If the request Accept header contains {\tt application/occi-entity+json} the
+server MAY return status code 200 and a full representation of the entity instance.
+Otherwise the server MUST return status code 204 and no response payload.
+\begin{verbatim}
+HTTP/1.1 204 OK
+Server: occi-server/x.x OCCI/1.1
+\end{verbatim}
+
+\subsection{POST entity instance}
+\begin{description}
+\item[Content-Type] {\tt application/occi-entity+json}
+\end{description}
+\ralf{This would imply a partial update of the entity instance. While it is
+easy to supply only the attributes to be updated the question is if there are any
+valid use cases for partial updates using JSON?}
+
+\subsection{DELETE entity instance}
+The HTTP DELETE method destroys an entity instance and any OCCI Links
+associated with an OCCI Resource.
+
+\subsubsection{Client DELETE request}
+\begin{description}
+\item[Content-Type] {\tt application/occi-entity+json}
+\end{description}
+\begin{verbatim}
+DELETE /compute/012d2b48-c334-47f2-9368-557e75249042 HTTP/1.1
+Host: example.com
+Accept: application/occi-entity+json
+\end{verbatim}
+
+\subsubsection{Server DELETE response}
+\begin{verbatim}
+HTTP/1.1 204 OK
+Server: occi-server/x.x OCCI/1.1
+\end{verbatim}
+
+
+\section{HTTP methods applied to collections URLs}
+
+\ralf{NOT fully updated yet!}
+
+This section describes the HTTP methods used to manipulate collections. Each
+HTTP method described is assumed to operate on an URL referring to a collection
+of elements, an URL such as the following:
+\begin{verbatim}
+  http://example.com/storage/
+\end{verbatim}
+
+A collection consist of a set of entity instances and there are three
+different types of collections which may be exposed by an OCCI server.  The
+request and response format is identical for all three types collections
+although the semantics differ slightly for the PUT and POST methods.
+\begin{description}
+\item[Kind locations] The location associated with an OCCI Kind instance
+represents the collection of all entity instances of that particular Kind.
+\item[Mixin locations] The location of an OCCI Mixin instance represents the
+collection of all entity instances associated with that Mixin.
+\item[Arbitrary path] Any path in the URL namespace which is neither a Kind nor
+a Mixin location. A typical example is the root URL e.g.~{\tt
+http://example.com/}. Such a path combines all collections in the sub-tree
+starting at the path. Therefore the root URL is a collection of all entity
+instances available.
+\end{description}
+
+\subsection{GET collection}
+The HTTP GET method retrieves a list of all entity instances in the
+collection. Filtering and pagination information is encoded in the query string
+of the URL.
+
+\subsubsection{Client GET request}
+The query string of the request URL MUST have the following format:
+\begin{verbatim}
+query-string        = ""
+                    | "?" query-parameter *( "&" query-parameter )
+  query-parameter   = attribute-filter
+                    | category-filter
+                    | pagination-marker
+                    | pagination-limit
+  attribute-filter  = "q=" attribute-search *( "+" attribute-search )
+  attribute-search  = 1*( string-urlencoded |
+                          attribute-name "%3D" string-urlencoded )
+  category-filter   = "category=" string-urlencoded
+  pagination-marker = "marker=" UUID
+  pagination-limit  = "limit=" 1*( DIGIT )
+  attribute-name    = attr-component *( "." attr-component )
+  attr-component    = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  string-urlencoded = *( ALPHA | DIGIT | "-" | "_" | "." | "~" | "%" )
+
+\end{verbatim}
+\ralf{FIXME: UUID in ABNF}
+
+\paragraph*{Filtering} A search filter can be applied to categories and attributes
+of entity instances in a collection. An OCCI server SHOULD support filtering.
+The query parameters MUST be URL encoded.
+
+Attribute filters are specified using the {\em q} query parameter.  A filter such
+as {\tt q=ubuntu+inactive} would match all entity instances whose combined
+set of attribute values includes both the word ``ubuntu'' and ``inactive''. It
+is also possible to match on specific attributes by preceding the search term
+with the attribute name and an equal sign, for example {\tt
+occi.core.title\%3Dubuntu+occi.compute.state\%3Dinactive}.
+
+The category filter is specified using the {\em category} query parameter and
+represent a single Kind, Mixin or Action category to be matched. The following
+query would include only entity instances of the Compute type:
+{\tt category=http\%3A\%2F\%2Fschemas.ogf.org\%2Focci\%2Finfrastructure\%23compute}
+
+\paragraph*{Pagination}
+\ralf{FIXME: marker instead of start}
+\label{sec:collection:pagination}
+An OCCI client MAY request that the server only return
+a subset of a collection. This is accomplished using the {\em marker} and
+{\em limit} query parameters.  An OCCI server MUST support pagination.
+
+The {\em marker} parameter specifies the offset into the collection. A value of
+zero, {\tt marker=0} indicates the beginning of the collection.
+%
+The {\em limit} parameter sets the maximum number of elements to include in the
+response. For example {\tt ?marker=...\&limit=10} would indicate the third page
+with a limit of 10 elements per page.
+
+\paragraph*{Example request}
+
+\begin{verbatim}
+GET /storage/?q=ubuntu+server&limit=20 HTTP/1.1
+Host: example.com
+Accept: application/occi-collection+json
+User-Agent: occi-client/x.x OCCI/1.1
+\end{verbatim}
+
+\subsubsection{Server GET response}
+\begin{verbatim}
+HTTP/1.1 200 OK
+Server: occi-server/x.x OCCI/1.1
+Content-Type: application/occi-collection+json; charset=utf-8
+
+{
+  "collection": [
+    {
+      "kind": "..." ,
+      "mixins": [ ... ],
+      "actions": [ ... ],
+      "links": [ ... ],
+      "attributes": { ... },
+    },
+    { ... },
+    { ... }
+  ],
+  "limit": 20,
+  "size": 137,
+  "next": "http://example.com/storage/?q=ubuntu+server&marker=59b50...9b3&limit=20"
+}
+\end{verbatim}
+
+
+\subsection{POST collection}
+The HTTP POST method is used to create/update one or more entity instances in
+a single atomic request. An OCCI server MUST identify existing entity instances
+using the {\tt occi.core.id} attribute.
+
+\subsubsection{Client POST request}
+\begin{verbatim}
+POST /storage/ HTTP/1.1
+Host: example.com
+Accept: application/occi-collection+json
+User-Agent: occi-client/x.x OCCI/1.1
+Content-Type: application/occi-collection+json; charset=utf-8
+
+{
+  "collection": [
+    {
+      "kind": "...",
+      "mixins": [ ... ],
+      "links": [ ... ],
+      "attributes": { ... },
+    },
+    { ... },
+    { ... }
+  ]
+}
+\end{verbatim}
+
+\subsubsection{Server POST response}
+\begin{verbatim}
+HTTP/1.1 204 OK
+Server: occi-server/x.x OCCI/1.1
+\end{verbatim}
+\ralf{Should we support HTTP 200 returning the whole collection? Or maybe just the entity instances created/updated?}
+
+\subsection{POST collection with ``action'' query parameter}
+{\em todo}
+
+\subsection{PUT collection}
+Replace the entire collection with a new one. \ralf{Should we support this?}
+
+\subsection{DELETE collection}
+Delete the entire collection. \ralf{Should we support this?}
+
+\begin{comment}
+\section{More examples}
+The OCCI demo instance of occi-py%
+\footnote{\tt http://github.com/nyren/occi-py}
+running at {\tt http://www.nyren.net/api/} has an early version of the draft
+JSON rendering available.  Feel free to play around with it. However, please
+note the following limitations:
+\begin{itemize}
+\item The Content-Type is {\tt application/json} and not {\tt application/occi+json}
+which would be more appropriate.
+\item It does not support request data in JSON.
+\item Filtering and pagination is not yet supported.
+\end{itemize}
+
+A few example queries using curl:
+\begin{verbatim}
+curl -i -H 'accept: application/json' http://www.nyren.net/api/-/
+curl -i -H 'accept: application/json' http://www.nyren.net/api/link/
+curl -i -X POST -H 'accept: application/json' http://www.nyren.net/api/compute/
+\end{verbatim}
+\end{comment}
+
+\section{Glossary}
+\label{sec:glossary}
+\input{include/glossary}
+
+%\section{Contributors}
+%\include{include/contributors}
+% FIXME: Insert an up-to-date table here!
+
+\section{Intellectual Property Statement}
+\input{include/ip}
+
+\section{Disclaimer}
+\input{include/disclaimer}
+
+\section{Full Copyright Notice}
+\input{include/copyright}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
