@@ -85,13 +85,10 @@ OCCI is a trademark of the Open Grid Forum.
 {\color{red}
 \underline{TODO}
 \begin{itemize}
-\item add error states
 \item fix category naming (check all schemes)
 \item review for invalid attribute names?
 \item contextualization
 \item ssh key mgmt
-\item state model of storage entities
-\item OCCI has no way to manage snapshots or backups once created - should this be addressed?
 \end{itemize}
 }
 
@@ -264,6 +261,7 @@ attributes MUST be exposed by an instance of the \hl{Compute} type.
 	stop & inactive & method=\{graceful, acpioff, poweroff\} \\
 	restart & active (via stop and start chain) & method=\{graceful, warm, cold\} \\
 	suspend & suspended & method=\{hibernate, suspend\} \\
+	error & error & -- \\
 	\botrule
 	\end{tabular}
 }
@@ -333,6 +331,7 @@ attributes MUST be exposed by an instance of the \hl{Network} type.
 	\colrule
 	up & active & --\\
 	down & inactive & --\\
+	error & error & --\\
 	\botrule
 	\end{tabular}
 }
@@ -414,7 +413,7 @@ type defined in the OCCI Core Model \cite{occi:core}.  The
 	\colrule
 	occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable 
 	& Storage size in gigabytes of the 	instance.\\
-	occi.storage.state & Enum \{online, offline, backup, snapshot, resize, degraded\} & 1 & Immutable 
+	occi.storage.state & Enum \{online, offline, resize\} & 1 & Immutable 
 	& Current status of the instance.\\
 	\botrule
 	\end{tabular}
@@ -442,9 +441,7 @@ attributes MUST be exposed by an instance of the \hl{Storage} type.
 	\colrule
 	online & online & --\\
 	offline & offline & --\\
-	backup & None & --\\
-	snapshot & None & --\\
-	resize & None & size = Float  ${\mathbf 10}^9$ (GiB)
+	error & error & --\\
 %	\botrule
 	\end{tabular}
 }
