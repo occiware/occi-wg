@@ -70,7 +70,7 @@ OCCI is a trademark of the Open Grid Forum.
 \input{include/abstract}
 
 \underline{Comments}
-\newcommand{\todo}[1]{\textcolor{red}{RN: #1}}
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
 \begin{itemize}
 \item ...
 \end{itemize}
@@ -119,6 +119,8 @@ A \hl{Kind} instance whose associated type cannot be instantiated MUST NOT be
 bound to an URL path. This applies to the \hl{Kind} instance for OCCI Entity
 which, according to OCCI Core, cannot be instantiated \cite{occi:core}.
 
+\todo{sub resources here.}
+
 \subsection{Bound and unbound paths}
 
 Since a limited set of URL paths are bound to \hl{Kind} and \hl{Mixin}
@@ -131,6 +133,8 @@ collection ``below'' the unbound path.
 \todo{FIXME: Should this be a MUST instead?}
 
 \section{Headers and status codes}
+
+\todo{add all other HTTP niftyness from old spec here.}
 
 OCCI Clients and Servers must include a minimum set of mandatory HTTP headers
 in each request and response in order to be compliant.
@@ -521,6 +525,10 @@ Replace the entire collection with a new one. \todo{Should we support this?}
 
 \subsection{DELETE collection}
 Delete the entire collection. \todo{Should we support this?}
+
+\section{HTTP methods applied to QI}
+
+\todo{write this.}
 
 \begin{comment}
 \section{More examples}
