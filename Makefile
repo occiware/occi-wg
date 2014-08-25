@@ -34,5 +34,5 @@ show-mac: all
 
 clean:
 	@rm -f *.pdf *.aux *.bbl *.blg *.log *.dvi *.png \
-		*.idx *.ilg *.ind *.toc *.lot *.lof
+		*.idx *.ilg *.ind *.toc *.lot *.lof *.gz
 
