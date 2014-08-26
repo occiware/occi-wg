@@ -760,6 +760,39 @@ From the administrative point of view, how an OCCI service provider
 manages their set of \hl{Resource} Templates will be determined by
 themselves and so is implementation-specific.
 
+\paragraph{Contextualisation Mixin}
+% new as of OCCI 1.2
+In order to ease automation, OCCI supports the means to execute a 
+program once Resource has been instantiated. This feature is 
+provided by the contextualisation mixin. On receipt of the 
+contextualisation data the OCCI implementation MUST distinguish 
+the type of data being presented and then supply that content to the 
+Compute Resource being instantiated. That content is then executed
+by the Compute Resource as the last step in the Compute's boot-order.
+
+OCCI implementations SHOULD support this otherwise no 
+contextualisation of a resource instance can be done.
+
+The OCCI contextualisation mixin has the term \textit{user\_data} 
+and the schema \textit{http://schemas.ogf.org/occi/compute\#}
+
+\mytablefloat{
+	\label{tbl:contextmixin}%
+	\hl{Attribute}s defined by the \hl{Contextualisation} mixin. A \hl{Compute}
+	instance associated with this \hl{Mixin} instance MUST expose these
+	attributes.
+}{
+\begin{tabular}{llp{1cm}lp{5cm}}
+\toprule
+Attribute&Type&Multi\-plicity&Mutability&Description\\
+\colrule
+occi.compute.user\_data & String & 1 & Immutable & 
+Contextualisation data (e.g. script, executable)\\
+\botrule
+\end{tabular}
+}
+
+
 % end infrastructure content
 
 \section{Security Considerations}
