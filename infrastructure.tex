@@ -85,13 +85,10 @@ OCCI is a trademark of the Open Grid Forum.
 {\color{red}
 \underline{TODO}
 \begin{itemize}
-\item add error states
 \item fix category naming (check all schemes)
 \item review for invalid attribute names?
 \item contextualization
 \item ssh key mgmt
-\item state model of storage entities
-\item OCCI has no way to manage snapshots or backups once created - should this be addressed?
 \end{itemize}
 }
 
@@ -182,14 +179,9 @@ remain immutable to any client.
 	network & $<$schema$>$/infrastructure\# & Network \hl{Resource}
 	& $<$schema$>$/core\#resource \\
 	
-	ipnetworking & $<$schema$>$/infrastructure/network\# & IP Networking \hl{Mixin}
-	& -- \\
-	
 	networkinterface & $<$schema$>$/infrastructure\# & NetworkInterface \hl{Link}
 	& $<$schema$>$/core\#link \\
 	
-	ipnetworkinterface & $<$schema$>$/infrastructure/networkinterface\# & IP NetworkInterface \hl{Mixin}
-	& -- \\
 	\botrule
 	\end{tabular}
 }
@@ -201,12 +193,11 @@ Model document \cite{occi:core}.
 
 The following sections on \hl{Compute}, \hl{Storage} and \hl{Network}
 types detail the \hl{Attribute}s, \hl{Actions} and states defined for
-each of them, including type-specific mixins (\hl{IPNetwork} and
-\hl{IPNetworkInterface}) where appropriate. Following those, the
-definition of infrastructure-related \hl{Link} sub-types are given and
-finally OS and Resource Templates are defined.
-Figure~\ref{fig:infra_uml} gives an overview of the various types
-involved in this infrastructure specification.
+each of them, including type-specific mixins where appropriate. 
+Following those, the definition of infrastructure-related \hl{Link} 
+sub-types are given and finally OS and Resource Templates 
+are defined. Figure~\ref{fig:infra_uml} gives an overview of 
+the key types involved in this infrastructure specification.
 
 \subsection{Compute}
 The \hl{Compute} type represents a generic information processing
@@ -264,6 +255,7 @@ attributes MUST be exposed by an instance of the \hl{Compute} type.
 	stop & inactive & method=\{graceful, acpioff, poweroff\} \\
 	restart & active (via stop and start chain) & method=\{graceful, warm, cold\} \\
 	suspend & suspended & method=\{hibernate, suspend\} \\
+	error & error & -- \\
 	\botrule
 	\end{tabular}
 }
@@ -333,6 +325,7 @@ attributes MUST be exposed by an instance of the \hl{Network} type.
 	\colrule
 	up & active & --\\
 	down & inactive & --\\
+	error & error & --\\
 	\botrule
 	\end{tabular}
 }
@@ -363,7 +356,14 @@ The \hl{IPNetworking} mixin is assigned%
 MUST support these values.
 
 Table~\ref{tbl:ipnetworking} define the attributes introduced by the
-\hl{IPNetworking} mixin.  A \hl{Network} instance associated with the
+\hl{IPNetworking} mixin.  
+
+The \hl{IPNetworking} mixin MUST be related to the \hl{Network} kind 
+by setting the \textit{rel} attribute to:
+
+\textit{http://schemas.ogf.org/occi/infrastructure\#network}.
+
+A \hl{Network} instance associated with the
 \hl{IPNetworking} mixin \hl{Mixin} instance MUST implement these
 attributes.
 
@@ -414,7 +414,7 @@ type defined in the OCCI Core Model \cite{occi:core}.  The
 	\colrule
 	occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable 
 	& Storage size in gigabytes of the 	instance.\\
-	occi.storage.state & Enum \{online, offline, backup, snapshot, resize, degraded\} & 1 & Immutable 
+	occi.storage.state & Enum \{online, offline, resize\} & 1 & Immutable 
 	& Current status of the instance.\\
 	\botrule
 	\end{tabular}
@@ -442,9 +442,7 @@ attributes MUST be exposed by an instance of the \hl{Storage} type.
 	\colrule
 	online & online & --\\
 	offline & offline & --\\
-	backup & None & --\\
-	snapshot & None & --\\
-	resize & None & size = Float  ${\mathbf 10}^9$ (GiB)
+	error & error & --\\
 %	\botrule
 	\end{tabular}
 }
@@ -537,6 +535,11 @@ the ``{\tt scheme}'' of
 \textit{http://schemas.ogf.org/occi/infrastructure/networkinterface\#} and the ``{\tt term}'' value 
 \textit{ipnetworkinterface}. 
 An \hl{IPNetworkInterface} mixin MUST support these attributes.
+
+The \hl{IPNetworkInterface} mixin MUST be related to the \hl{NetworkInterface} kind 
+by setting the \textit{rel} attribute to:
+
+\textit{http://schemas.ogf.org/occi/infrastructure\#networkinterface}.
 
 Table~\ref{tbl:ipnetworkinterface} define the attributes introduced by
 the \hl{IPNetworkInterface} mixin.  A \hl{NetworkInterface} instance
