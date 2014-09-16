@@ -760,6 +760,31 @@ From the administrative point of view, how an OCCI service provider
 manages their set of \hl{Resource} Templates will be determined by
 themselves and so is implementation-specific.
 
+\paragraph{Credentials Mixin}
+
+% can only be used by Compute
+
+When creating a Compute Resource a client normally supplies security credentials in the form of a public SSH key. This SSH key is injected into the Compute Resource by the provider on the client's behalf. This feature is provided by the Credentials Mixin.
+
+If a provider that offers VMs with access secured by SSH then that OCCI implementation SHOULD support this. Otherwise no user supplied public SSH key can be injected into the Compute Resource.
+
+The OCCI contextualisation mixin has the term \textit{'ssh\_key'} and the schema \textit{'http://schemas.ogf.org/occi/credentials\#'}.
+
+\mytablefloat{
+	\label{tbl:contextmixin}%
+	\hl{Attribute}s defined by the \hl{Credentials} mixin. A \hl{Compute}
+	instance associated with this \hl{Mixin} instance MUST expose these
+	attributes.
+}{
+\begin{tabular}{llp{1cm}lp{5cm}}
+\toprule
+Attribute&Type&Multi\-plicity&Mutability&Description\\
+\colrule
+occi.credentials.ssh.publickey & String & 1 & Mutable & The contents of the public key file to be injected into the Compute Resource\\
+\botrule
+\end{tabular}
+}
+
 % end infrastructure content
 
 \section{Security Considerations}
