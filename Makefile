@@ -33,6 +33,6 @@ show-mac: all
 	open *.pdf
 
 clean:
-	@rm -f *.pdf *.aux *.bbl *.blg *.log *.dvi *.png \
+	@rm -f *.pdf *.aux *.bbl *.blg *.log *.dvi *.png *~ \
 		*.idx *.ilg *.ind *.toc *.lot *.lof *.gz
 
