@@ -1,0 +1,277 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{occi}
+\setlength{\headheight}{13pt}
+\pagestyle{fancy}
+
+% default sans-serif
+\renewcommand{\familydefault}{\sfdefault}
+
+% no lines for headers and footers
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% header
+\fancyhf{}
+\lhead{GFD-P-R.185}
+\rhead{\today}
+
+% footer
+\lfoot{occi-wg@ogf.org}
+\rfoot{\thepage}
+
+% paragraphs need some space...
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+% some space between header and text...
+\headsep 13pt
+
+\setcounter{secnumdepth}{4}
+
+\begin{document}
+
+% header on first page is different
+\thispagestyle{empty}
+
+GFD-P-R.185 \hfill Thijs Metsch, Platform Computing\\
+OCCI-WG \hfill Andy Edmonds, Intel\\
+\rightline {October 7, 2010}\\
+\rightline {Updated: \today}
+
+\vspace*{0.5in}
+
+\begin{Large}
+\textbf{Open Cloud Computing Interface - RESTful HTTP Rendering}
+\end{Large}
+
+\vspace*{0.5in}
+
+\underline{Status of this Document}
+
+This document provides information to the community regarding the
+specification of the Open Cloud Computing Interface. Distribution is
+unlimited.
+
+\underline{Copyright Notice}
+
+Copyright \copyright ~Open Grid Forum (2009-2011). All Rights Reserved.
+
+\underline{Trademarks}
+
+OCCI is a trademark of the Open Grid Forum.
+
+\underline{Abstract}
+
+This document, part of a document series, produced by the OCCI working
+group within the Open Grid Forum (OGF), provides a high-level
+definition of a Protocol and API. The document is based upon
+previously gathered requirements and focuses on the scope of important
+capabilities required to support modern service offerings.
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\input{include/introduction}
+
+\section{Notational Conventions}
+\input{include/notational}
+
+\todo{update rfc}
+
+This document uses the Augmented Backus-Naur Form (ABNF) notation of
+RFC 2616 \cite{rfc2616}, and explicitly includes the following rules
+from it: quoted-string, token, SP (space), LOALPHA, DIGIT.
+
+The following terms \cite{rfc3986} are used when referring to URI
+components:
+
+\begin{verbatim}
+ http://example.com:8080/over/there?action=stop#xyz
+ \__/   \______________/\_________/ \_________/ \_/
+  |           |            |            |        |
+scheme     authority       path        query   fragment
+\end{verbatim}
+
+\section{OCCI HTTP Rendering}
+The OCCI HTTP Rendering document specifies how the OCCI Core Model
+\cite{occi:core}, including extensions thereof, is rendered over the
+HTTP protocol \cite{rfc2616}. 
+
+\subsection{Introduction}
+The OCCI HTTP Rendering uses many of the features the HTTP and
+underlying protocols offer and builds upon the Resource Oriented
+Architecture (ROA). ROA's use Representation State Transfer (REST)
+\cite{REST_Fielding} to cater for client and service
+interactions. Interaction with the system is by inspection and
+modification of a set of related resources and their states, be it on
+the complete state or a sub-set. Resources MUST be uniquely
+identified. HTTP is an ideal protocol to use in ROA systems as it
+provides the means to uniquely identify individual resources through
+URLs as well as operating upon them with a set of general-purpose
+methods known as HTTP verbs. These HTTP verbs map loosely to the
+resource related operations of Create (POST), Retrieve (GET), Update
+(POST/PUT) and Delete (DELETE).
+
+Each resource instance within an OCCI system MUST have a unique
+identifier stored in the \emph{occi.core.id} attribute of the
+\hl{Entity} type \cite{occi:core}.
+It is RECOMMENDED to use a Uniform Resource Name (URN) as the
+identifier stored in \emph{occi.core.id}.
+
+The structure of these identifiers is opaque and the system should not
+assume a static, pre-determined scheme for their structure. For
+example \emph{occi.core.id} could be
+\emph{urn:uuid:de7335a7-07e0-4487-9cbd-ed51be7f2ce4}.
+
+The following sections and paragraphs describe how the OCCI model MUST
+be implemented by OCCI implementations. Operations which are not
+defined are out of scope for this specification and MAY be implemented. 
+This is the minimal set to ensure interoperability.
+
+\subsection{Namespace}
+
+The OCCI HTTP Protocol maps the OCCI Core model into the URL hierarchy by binding
+\hl{Kind} and \hl{Mixin} instances to unique URL paths. Such a URL path is called
+the {\em location} of the \hl{Kind} or \hl{Mixin}.
+A provider is free to choose the {\em location} as long as it is unique
+within the service provider's URL namespace. 
+
+Location paths are defined through specific renderings and MUST be present for all \hl{Kind} or \hl{Mixin} instances. The location
+paths MUST end with a \emph{'/'}. The {\em location} MAY be realized by applying URI templates defined by \cite{rfc6570}.
+
+A \hl{Kind} instance whose associated type cannot be instantiated MUST NOT be
+bound to an URL path. This applies to the \hl{Kind} instance for OCCI Entity
+which, according to OCCI Core, cannot be instantiated \cite{occi:core}.
+
+\subsubsection{unbound/bound}
+
+Since a limited set of URL paths are bound to \hl{Kind} and \hl{Mixin}
+instances the URL hierarchy consists of both {\em bound} and {\em unbound}
+paths. A bound URL path is the {\em location} of a \hl{Kind} or \hl{Mixin} collection.
+
+An unbound URL path MAY represent the union of all \hl{Kind} and \hl{Mixin}
+collection ``below'' the unbound path.
+
+\subsection{HTTP}
+
+\subsubsection{General Status codes}
+
+\subsubsection{Versioning}
+
+\subsubsection{Media types}
+
+\paragraph{text uri-list (rendering)}
+
+\subsubsection{Well known QI}
+
+\subsubsection{Async op}
+
+\subsubsection{Import Export}
+
+\begin{itemize}
+\item realize as Category
+\item HTTP POST user defined mixin
+\item HTTP POST against that collection with Content-Type…
+\item HTTP GET against that collection with Accept...
+\end{itemize}
+
+\subsection{Operations}
+
+\subsubsection{Entity instances}
+POST
+partial-update
+action
+PUT
+create
+full-update
+GET
+retrieval
+DELETE
+delete
+Link instances
+POST
+inline creation 
+\subsubsection{Collections}
+POST
+create entity instance
+add entity to mixin
+action
+PUT
+full-update on mixins...not kinds.
+full-update on kind collection -> not defined
+GET + filter/query?
+retrieval
+DELETE
+delete all or single (!) entity
+remove entity of mixins 
+\subsubsection{QI}
+POST
+user defined mixin
+PUT
+N/A
+GET + filter/query!
+retrieve capabilities
+DELETE
+Removal user defined mixin
+
+\section{Security Considerations}
+\label{sec:sec_consid}
+The OCCI HTTP rendering assumes HTTP or HTTP-related mechanisms for
+security. As such, implementations SHOULD support
+TLS \footnote{http://datatracker.ietf.org/wg/tls/} for transport layer
+security.
+
+Authentication SHOULD be realized by HTTP authentication mechanisms,
+namely HTTP Basic or Digest Auth \cite{rfc2617}, with the former as
+default. Additional profiles MAY specify other methods and should
+ensure that the selected authentication scheme can be renderable over
+the HTTP or HTTP-related protocols.
+
+Authorization is not enforced on the protocol level, but SHOULD be
+performed by the implementation. For the authorization decision, the
+authentication information as provided by the mechanisms described
+above MUST be used.
+
+Protection against potential Denial-of-Service scenarios are out of
+scope of this document; the OCCI HTTP Rendering specifications assumes
+cooperative clients that SHOULD use selection and filtering as
+provided by the Category mechanism wherever possible. Additional
+profiles to this document, however, MAY specifically address such
+scenarios; in that case, best practices from the HTTP ecosystem and
+appropriate mechanisms as part of the HTTP protocol specification
+SHOULD be preferred.
+
+As long as specific extensions of the OCCI Core and Model
+specification do not impose additional security requirements than the
+OCCI Core and Model specification itself, the security considerations
+documented above apply to all (existing and future)
+extensions. Otherwise, an additional profile to this specification
+MUST be provided; this profile MUST express all additional security
+considerations using HTTP mechanisms.
+
+\section{Glossary}
+\label{sec:glossary}
+\input{include/glossary}
+ 
+\section{Contributors}
+\input{include/contributors}
+
+\section{Intellectual Property Statement}
+\input{include/ip}
+
+\section{Disclaimer}
+\input{include/disclaimer}
+
+\section{Full Copyright Notice}
+\input{include/copyright}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
