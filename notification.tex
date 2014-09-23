@@ -1,0 +1,207 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{occi}
+\setlength{\headheight}{13pt}
+\pagestyle{fancy}
+
+\newcommand{\doccode}{XXXXX}
+
+% default sans-serif
+\renewcommand{\familydefault}{\sfdefault}
+
+% no lines for headers and footers
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% header
+\fancyhf{}
+\lhead{\doccode}
+\rhead{\today}
+
+% footer
+\lfoot{occi-wg@ogf.org}
+\rfoot{\thepage}
+
+% paragraphs need some space...
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+% some space between header and text...
+\headsep 13pt
+
+\setcounter{secnumdepth}{4}
+
+\begin{document}
+
+% header on first page is different
+\thispagestyle{empty}
+
+\doccode \hfill Augusto Ciuffoletti, Università di Pisa\\ 
+OCCI-WG \hfill Thijs Metsch, Platform Computing\\
+\rightline {Andy Edmonds, Intel}\\
+\rightline {September 22, 2014}\\
+\rightline {Updated: \today}
+
+\vspace*{0.5in}
+
+\begin{Large}
+\textbf{Open Cloud Computing Interface - Notification Extension}
+\end{Large}
+
+\vspace*{0.5in}
+
+\underline{Status of this Document}
+
+This document provides information to the community regarding the
+specification of the Open Cloud Computing Interface. Distribution is
+unlimited.
+
+\underline{Copyright Notice}
+
+Copyright \copyright ~Open Grid Forum (2009-2011). All Rights Reserved.
+
+\underline{Trademarks}
+
+OCCI is a trademark of the Open Grid Forum.
+
+\underline{Abstract}
+
+This document, part of a document series, produced by the OCCI working
+group within the Open Grid Forum (OGF), provides a high-level
+definition of a Protocol and API. The document is based upon
+previously gathered requirements and focuses on the scope of important
+capabilities required to support modern service offerings.
+
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\input{include/introduction}
+
+\section{Notational conventions}
+\input{include/notational}
+
+\newcommand{\smx}{{\bf Notify}}
+\newcommand{\ntfl}{{\bf Notification}}
+
+\section{Motivations}
+
+It is often the case that an entity changes during its lifetime: for instance a Compute resource experiences a transient at the beginning of its lifetime during bootup \cite{occi:infrastructure}.
+
+We want to give the provider the tools to allow the user to define entities such that their changes are observable. The specifications for such tools are the premises for an interoperable notification framework.
+
+We introduce an OCCI Extension that allows the user to differentiate an OCCI resource that produces notifications, and how such notifications are visible to other OCCI Resources.
+
+\section{OCCI notification}
+
+The way to define a property of an OCCI entity is to associate a mixin to it. So the straightforward way to assert that an entity is one whose changes are observable is by associating a mixin that is related with this property. We call this mixin \smx.
+
+To define where a notification is directed the user defines an OCCI Link of a definite subkind, that is called \ntfl.
+
+%\begin{figure}[!h]
+%	{\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{270}
+%	    {\includegraphics{figs/infrastructure_model.pdf}}} \par}
+%	\caption{Overview Diagram of OCCI Infrastructure Types.}
+%	\label{fig:infra_uml}
+%\end{figure}
+
+
+\subsection{The \smx\ mixin}
+
+\mytablefloat{
+	\label{tbl:smx}The immutable model attributes of the \smx\ mixin.
+	The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
+	{\bf $<$schema$>$} in this table for a better reading experience. 
+	} {
+	\begin{tabular}{lllllll}
+	\toprule
+	Term & Scheme & Title & Attributes & Actions & Depends & Applies \\
+	\colrule
+	\ntfl &  $<$schema$>$/notification\# & \smx 
+	& \{\} & \{\} & \{\} & $<$schema$>$/core\#Resource \\
+	\botrule
+	\end{tabular}
+}
+
+The provider that supports the OCCI Notification extension MUST implement the \smx mixin for each provided entity kind.
+
+There is no capabillity associated with the \smx mixin: it is a {\em tag}.
+
+\subsection{The \ntfl\ link} 
+
+\mytablefloat{
+	\label{tbl:ntfl}The immutable model attributes of the \ntfl category.
+	The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
+	{\bf $<$schema$>$} in this table for a better readability experience. 
+	} {
+	\begin{tabular}{llllll}
+	\toprule
+	Term & Scheme & Title & Attributes & Actions & Parent \\
+	\colrule
+	\ntfl &  $<$schema$>$/notification\# & NotifyLink \hl{Link}
+	& \{\} & \{\} & $<$schema$>$/core\#Link\\
+	\botrule
+	\end{tabular}
+}
+
+ The target of a \ntfl\ is a generic Resource, while the source MUST be associated with the \smx\ mixin. 
+
+The instantiation of an \ntfl\ whose source is not associated with a \smx\ mixin fails and an error is raised.
+
+If the \ntfl\ mixin associated with a Resource is removed, all outgoing \ntfl\ links are silently removed.
+
+There is no capability associated with the \ntfl.
+
+\section{Application notes and an example}
+
+From the user perspective, the application of the \smx\ corresponds to enabling the access to the dynamic content of a resource. This is significant for a Resource that is changing in time.
+
+The \smx\ alone does ot specify which changing aspect is in fact notified, and how. This specification may be made explicit with a further mixin, or may be left implicit as in the following example.
+
+From the provider perspective the association of an \smx\ is reflected in the implementation of the functionalities needed to observe and render the change. This operation is guided by the Resources that are targets of the \ntfl.
+
+The way in which notifications are used falls ouside the scope of this document: as a general rule, they are used for monitoring and management. Such aspects can be defined by the user with mixins associated with the \ntfl, or in the Resource targeted by the \ntfl.
+
+The following example illustrates a use case where the explicit description of the capabilities of the involved entities is not required.
+
+\begin{quote}
+A provider offers a Resource of type {\em 3-out-of-k}, that keeps in the {\em active} state 3 of the Compute resources from which it receives notifications.
+
+The user that wants to take advantage of this service instantes a {\em 3-out-of-k} Resource $3ook$, and associated an \smx\ to each of the $k$ Compute resources $C_{1..k}$. For each of them a \ntfl\ link $N_i$ is instantiated that originates from $C_i$ and targets $3ook$.
+\end{quote}
+
+The schema is portable across any platform that offers the OCCI-infrastructure and OCCI-notification, and that provides a  {\em 3-out-of-k} Resource type.
+
+Distinct providers may interoperate, for instance if one provides the  {\em 3-out-of-k} Resource and another the Compute resources, provided that an agreement exists between the two that allows cross provider information transfer.
+
+\section{Security issues}
+The OCCI Notification specification is an extension to the OCCI Core
+and Model specification \cite{occi:core}; thus the same security
+considerations as for the OCCI Core and Model specification apply
+here.
+
+\section{Glossary}
+\label{sec:glossary}
+\input{include/glossary}
+ 
+%\section{Contributors}
+%\input{include/contributors}
+
+\section{Intellectual Property Statement}
+\input{include/ip}
+
+\section{Disclaimer}
+\input{include/disclaimer}
+
+\section{Full Copyright Notice}
+\input{include/copyright}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
