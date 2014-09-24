@@ -149,13 +149,17 @@ There is no capabillity associated with the \smx mixin: it is a {\em tag}.
 	\end{tabular}
 }
 
- The target of a \ntfl\ is a generic Resource, while the source MUST be associated with the \smx\ mixin. 
+The target of a \ntfl\ is a generic Resource, while the source MUST be associated with the \smx\ mixin. 
 
 The instantiation of an \ntfl\ whose source is not associated with a \smx\ mixin fails and an error is raised.
 
 If the \ntfl\ mixin associated with a Resource is removed, all outgoing \ntfl\ links are silently removed.
 
 There is no capability associated with the \ntfl.
+
+According with the core model \cite{occi:core}, the resource that is the source of \ntfl s is able to discover all such links through the {\em links} property: this is not true for the target of the link.
+
+According with the core model \cite{occi:core}, the removal of the source of an \ntfl link determines the removal of the link itself: the same is not true for the target.
 
 \section{Application notes and an example}
 
