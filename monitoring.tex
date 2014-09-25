@@ -1,0 +1,201 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{occi}
+\setlength{\headheight}{13pt}
+\pagestyle{fancy}
+
+\newcommand{\doccode}{XXXXX}
+
+% default sans-serif
+\renewcommand{\familydefault}{\sfdefault}
+
+% no lines for headers and footers
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% header
+\fancyhf{}
+\lhead{\doccode}
+\rhead{\today}
+
+% footer
+\lfoot{occi-wg@ogf.org}
+\rfoot{\thepage}
+
+% paragraphs need some space...
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+% some space between header and text...
+\headsep 13pt
+
+\setcounter{secnumdepth}{4}
+
+\begin{document}
+
+% header on first page is different
+\thispagestyle{empty}
+
+\doccode \hfill Augusto Ciuffoletti, Università di Pisa\\ 
+OCCI-WG\\
+\rightline {September 22, 2014}\\
+\rightline {Updated: \today}
+
+\vspace*{0.5in}
+
+\begin{Large}
+\textbf{Open Cloud Computing Interface - Monitoring Extension}
+\end{Large}
+
+\vspace*{0.5in}
+
+\underline{Status of this Document}
+
+This document provides information to the community regarding the
+specification of the Open Cloud Computing Interface. Distribution is
+unlimited.
+
+\underline{Copyright Notice}
+
+Copyright \copyright ~Open Grid Forum (2009-2011). All Rights Reserved.
+
+\underline{Trademarks}
+
+OCCI is a trademark of the Open Grid Forum.
+
+\underline{Abstract}
+
+This document, part of a document series, produced by the OCCI working
+group within the Open Grid Forum (OGF), provides a high-level
+definition of a Protocol and API. The document is based upon
+previously gathered requirements and focuses on the scope of important
+capabilities required to support modern service offerings.
+
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\input{include/introduction}
+
+\section{Notational conventions}
+\input{include/notational}
+
+\newcommand{\smx}{{\bf Notify}}
+\newcommand{\ntfl}{{\bf Notification}}
+\newcommand{\sens}{{\bf Sensor}}
+
+\section{Motivations}
+
+The provider may want to give the user the tools to undertake actions based on the functional parameters of a resource performance: for instance, depending on how many jobs are running, on how much storage is available, or on the current state of a WAN link.
+
+These actions, as well as the collected functional parameters, are  primarily controlled by the provider, and so is the the way in which they are processed in order to implement the service.
+
+This document defines an OCCI Resource subtype, the {\bf Sensor}, that is in charge of implementing these kinds of activities.
+
+\section{OCCI monitoring}
+
+Resource monitoring is one component of the service the provider gives to the user: so it is naturally configured as an OCCI-resource. We define the {\em Sensor} as the Resource subtype for this purpose.
+
+Among the distinguishing capabilities of a monitoring activity is its relationship with time: it may be limited in time, and exhibit real-time properties.
+
+Other capabilities that are specific for a given monitoring service are added as mixins of the \sens.
+
+A \sens\ instance is the target of {\em Notification} links from the resources it monitors.
+
+%\begin{figure}[!h]
+%	{\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{270}
+%	    {\includegraphics{figs/infrastructure_model.pdf}}} \par}
+%	\caption{Overview Diagram of OCCI Infrastructure Types.}
+%	\label{fig:infra_uml}
+%\end{figure}
+
+
+%\subsection{The {\bf Sensor} resource}
+
+\mytablefloat{
+	\label{tbl:smx}The immutable model attributes of the \sens\ resource.
+	The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
+	{\bf $<$schema$>$} in this table for a better reading experience. 
+	} {
+	\begin{tabular}{lllllll}
+	\toprule
+	Term & Scheme & Title & Attributes & Actions & Parent \\
+	\colrule
+	\sens &  $<$schema$>$/monitoring\# & \sens\ Resource
+	& see Table \ref{tbl:sensor} & \{\} & \{\} & $<$schema$>$/core\#Resource \\
+	\botrule
+	\end{tabular}
+}
+
+\mytablefloat{
+	\label{tbl:sensor}\hl{Attribute}s defined for the \sens\ type. 
+}
+{
+	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+	\toprule
+	Attribute&Type&Multi\-plicity&Mutability&Description\\
+	\colrule
+occi.sensor.period & number & 0..1 & true & The time between two following measurements \\
+occi.sensor.accuracy & number & 1 & false & of period or delay \\
+occi.sensor.timebase & number & 0..1 & true & The server time when the timestart and timestop are modified \\  
+occi.sensor.timestart &	number & 0..1 & true & The delay after which the session is planned to start \\
+occi.sensor.timestop & number	& 0..1 & true & The delay after which the session is planned to stop \\
+	\botrule
+	\end{tabular}
+}
+
+\section{Application notes and an example}
+
+The sensor is characterized mainly by timing attributes. The only atttribute that MUST be defined is the real-time {\em accuracy} of the monitoring activity. Other non mandatory attributes describe how frequently the monitoring activity is performed, and the time lapse during which the monitoring activity takes place.
+
+The accuracy of the timing represents the maximum distance between an event, and its observation from the \sens.
+
+The \sens\ gathers the functional parameters for its activity using data that is received from resources: therefore, the \sens\ SHOULD be the target of {\em Notification} links, as defined in document \cite{occi:notification}.
+
+The operation of the sensor is defined by mixins: the provider offers the user a choice of mixins, thus allowing the user to inspect the performance of the provision.
+
+The provider uses the capabilities indicated in the mixins associated with a \sens\ instance to implement the {\bf notification} link and to instrument the Resource at the source of the {\bf Notification} link.
+
+For instance, consider the following simple example, where the mixin that specifies the operation of the \sens\ is a simple tag:
+
+\begin{quote}
+A provider offers a {\em 3-out-of-k} mixin that can be associated to a \sens\ Resource, that keeps in the {\em active} state 3 of the Compute resources from which it receives notifications.
+
+The user that wants to take advantage of this service instantiates a \sens\ and associates with it a {\em 3-out-of-k} mixin. Next it associated an \smx\ to each of the $k$ Compute resources $C_{1..k}$. For each of them a \ntfl\ link $N_i$ is instantiated that originates from $C_i$ and targets the \sens.
+\end{quote}
+
+The schema is portable across any platform that offers the OCCI-infrastructure, OCCI-notification, and OCCI-monitoring, and that provides a {\em 3-out-of-k} mixin.
+
+Distinct providers may interoperate, for instance if one provides the  {\em 3-out-of-k} Resource and another the Compute resources, provided that an agreement exists between the two that allows cross provider information transfer.
+
+\section{Security issues}
+The OCCI Notification specification is an extension to the OCCI Core
+and Model specification \cite{occi:core}; thus the same security
+considerations as for the OCCI Core and Model specification apply
+here.
+
+\section{Glossary}
+\label{sec:glossary}
+\input{include/glossary}
+ 
+%\section{Contributors}
+%\input{include/contributors}
+
+\section{Intellectual Property Statement}
+\input{include/ip}
+
+\section{Disclaimer}
+\input{include/disclaimer}
+
+\section{Full Copyright Notice}
+\input{include/copyright}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
