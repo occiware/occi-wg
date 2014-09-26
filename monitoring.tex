@@ -51,12 +51,43 @@ OCCI-WG\\
 \end{Large}
 
 \vspace*{0.5in}
+% My commands!
+
+% This is for signed remarks
+%\newcommand{\rem}[2]{\footnote{{\bf Remark by #1}: #2}}
+\newcommand{\rem}[2]{}
+
+\newcommand{\oc}[0]{\tt OCCI}
+\newcommand{\mi}[0]{{\em mixin}}
+\newcommand{\metr}[0]{{\em metric}}
+\newcommand{\aggr}[0]{{\em aggregator}}
+\newcommand{\publ}[0]{{\em publisher}}
+\newcommand{\ent}[0]{{\em Entity}}
+\newcommand{\rs}[0]{{\em Resource}}
+\renewcommand{\ln}[0]{{\em Link}}
+\newcommand{\sens}[0]{{\em Sensor}}
+\newcommand{\comp}[0]{{\em Compute}}
+\newcommand{\coll}[0]{{\em Collector}}
+
+\newcommand{\extramixin}[3]{
+\small
+\begin{tabular}{ll}
+\hline
+Model attribute & value \\ \hline
+scheme & http://acme.com/monitoring\# \\
+term & #1 \\
+related & http://schemas.ogf.org/occi/monitoring\##3 \\ 
+attributes & 
+  \scriptsize
+  \begin{tabular}{|ll|p{3cm}|} \hline
+  {\bf name} & {\bf type} &  Description \\ \hline
+  #2 \hline
+  \end{tabular} \\
+\end{tabular}
+}
 
 \underline{Status of this Document}
-
-This document provides information to the community regarding the
-specification of the Open Cloud Computing Interface. Distribution is
-unlimited.
+\input{include/status}
 
 \underline{Copyright Notice}
 
@@ -68,110 +99,409 @@ OCCI is a trademark of the Open Grid Forum.
 
 \underline{Abstract}
 
-This document, part of a document series, produced by the OCCI working
-group within the Open Grid Forum (OGF), provides a high-level
-definition of a Protocol and API. The document is based upon
-previously gathered requirements and focuses on the scope of important
-capabilities required to support modern service offerings.
+This document {\em provides information} to the Grid community about resource monitoring. It {\em describes} an OCCI Extension that allows to inspect the operation of functional resources; the provision of this API is considered as optional for the provider.
 
+This document {\em presents} two further {\em Kinds}: the \sens, that processes metrics, and the \coll, that extracts and transports metrics. They are defined as OCCI types whose instances need to be specialized using OCCI \mi s. Using this API, the user is provided with a monitoring infrastructure {\em on demand}.
+
+This document does not define any standards or technical recommendations.
+
+One relevant target of this document is to provide a building block for the design of an API for Service Level Agreement (SLA): under this light, the API for the Resource Monitoring Infrastructure offers the tools to verify and implement the Service Level Objectives (SLO).
 
 \newpage
 \tableofcontents
 \newpage
 
 \section{Introduction}
-\input{include/introduction}
 
-\section{Notational conventions}
-\input{include/notational}
+This document describes an interface useful to define a monitoring infrastructure. It is based on the concepts introduced by the OCCI Working Group of the OGF, and it is intended to be a first step towards the definition of a protocol to measure service quality: its applicability extends to fault detection, billing, and the implementation of a server level agreement (SLA).
 
-\newcommand{\smx}{{\bf Notify}}
-\newcommand{\ntfl}{{\bf Notification}}
-\newcommand{\sens}{{\bf Sensor}}
+The purpose of this specification is that of giving the user the possibility to arrange a monitoring infrastructure in the way that best suits user's needs: notably, the existence of a standard specification enables the user to manage distinct cloud providers, possibly at the same time, using the same interface.
 
-\section{Motivations}
+The importance of a configurable monitoring infrastructure emerges in many scenarios, starting from the simple case of the user that wants to monitor the activity of an array of servers, to composite use cases, where the user is in fact an intermediate service provider, that provides services to third party users in a multi-provider environment: in that case, the intermediate provider may decide to offer quality of service options that differ from that of the low level provider, thus needing to perform specific measurements on the infrastructure leased by the low level provider(s). The tools provided by an API that describes a monitoring infrastructure must be flexible to meet all degrees of complexity.
 
-The provider may want to give the user the tools to undertake actions based on the functional parameters of a resource performance: for instance, depending on how many jobs are running, on how much storage is available, or on the current state of a WAN link.
+\begin{figure}[b]
+\centering
+\includegraphics[width=0.5\textwidth]{figs/multilayer.pdf}
+\caption{A multilayer and multiprovider scenario \label{img:scenario}}
+\end{figure}
 
-These actions, as well as the collected functional parameters, are  primarily controlled by the provider, and so is the the way in which they are processed in order to implement the service.
+The communication of measurements inside and outside the monitoring infrastructure is another issue the framework must be flexible about. In fact, the amount of information that is produced by a measurement activity may range from negligible to ``big data'' dimensions, with various degrees of confidentiality. Also in this respect, guidelines must be as permissive as possibile, to give the provider the possibility to apply the solution that better fits the needs.
 
-This document defines an OCCI Resource subtype, the {\bf Sensor}, that is in charge of implementing these kinds of activities.
+The management of the monitoring capabilities should also extend to the adaptive, and dynamic configuration of the components that contribute to the monitoring activity: the specification schema must give the user the possibility to explore the available functionalities in order to adaptively arrange a monitoring infrastructure, and to modify them according with changing needs.
 
-\section{OCCI monitoring}
+One relevant fact about monitoring infrastructures is that it is extremely difficult to give a {\em detailed} framework for them that extends its validity to any conceivable use case or provider. The reason is that each of them exhibits local variants that do not fit a rigid approach. Also, the metrics that are used to evaluate the performance of the system are many, and subject to continuous changes due to the introduction of new technologies. Thus we have made an effort to introduce a generic schema that can be adapted so to effectively describe the relevant aspects of a monitoring infrastructure, but that does not interfere with details that depend on the specific environment.
 
-Resource monitoring is one component of the service the provider gives to the user: so it is naturally configured as an OCCI-resource. We define the {\em Sensor} as the Resource subtype for this purpose.
+The OCCI Core Model \cite{occi:core} is well suited to support an extremely flexible framework, since it embeds the tools needed to avoid to get into provider specific details: this enables the specification of the abstract model, leaving to the user the task of making explicit the details, targeting a specific provider or technology. Furthermore, we claim that the specifications given in this document can find an application in environments other than computing infrastructures, since we abstract from the details that characterize cloud infrastructure resources.
 
-Among the distinguishing capabilities of a monitoring activity is its relationship with time: it may be limited in time, and exhibit real-time properties.
+The approach followed in this document is similar to that found in the infrastructure document (GFD-P-R.184 \cite{occi:infrastructure}): the monitoring capability is associated with a new {\em Kind} instance, the {\em Collector}, that is related with the OCCI Core Model {\em Link} type. The source of the \coll\ is the monitored resource that originates measurements that are delivered to the {\em target} resource. The role of a \coll\ instance is to indicate a specific monitoring technique applied on the {\em source}. The processing of the measurements and their delivery are described by the {\em Sensor} {\em kind}, that is related with the OCCI Core Model {\em Resource} type. A \sens\ instance collects metrics across a \coll\ and publishes aggregated metrics with a defined modality: for instance a \sens\ might produce the average load of an array of servers and publish it on a web page.
 
-Other capabilities that are specific for a given monitoring service are added as mixins of the \sens.
+The three aspects of monitoring that we have thus outlined -- namely production, processing, and publishing -- are specified through the association of specific \mi s, primarily with a \sens\ or \coll. For the sake of simplicity, we introduce the possibility to associate such mixins to ordinary resources: this option is regarded as a tradeoff between simplicity and adherence to the REST approach, as explained in the appendix.
 
-A \sens\ instance is the target of {\em Notification} links from the resources it monitors.
+The encapsulation of technology dependent features into \mi s leaves the specific provider free to introduce specific supporting technologies, or to simplify the configuration with the provision of templates. To enable the discovery of such \mi s, they are related with a {\em depends} relationship with well-known \mi s.
 
-%\begin{figure}[!h]
-%	{\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{270}
-%	    {\includegraphics{figs/infrastructure_model.pdf}}} \par}
-%	\caption{Overview Diagram of OCCI Infrastructure Types.}
-%	\label{fig:infra_uml}
+%The simplest case of a monitoring infrastructure consists of a single \coll\ that links a monitored resource to a \sens\ that publishes the raw metrics; it is illustrated in figure \ref{fig:onestage}.
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.5 \linewidth]{onestage.pdf}
+%\caption{The simplest case: one \coll\ and one \sens\ \label{fig:onestage}}
 %\end{figure}
 
+Although the interface based on \sens s and \coll s may describe very simple use cases with minimal effort, the designer is able to assemble complex, multilayer monitoring infrastructures using the same basic building blocks: for instance, a \sens\ can be used to aggregate a storage throughput using the input from three \coll s, one for the average response time, one for the mean time between failures, and another for network delay, and provide the results to an upstream \sens\ that aggregates the same results from other \sens s.
 
-%\subsection{The {\bf Sensor} resource}
+%The {\em Resource Management} box stands for a resource that is the end-user of the monitoring activity. It's {\em Kind} is bound to the publishing technique used in the \coll . It may be, for instance, a {\em Compute} resource that embeds a load balancing or accounting functionality, or a yet to define {\em Mailbox} resource where periodic reports are posted. 
+
+\rem{author}{Why not a mixin to the monitored resource directly? I envision problems emerging with the implementation. A resource can be ``prepared'' for monitoring, but the way in which the Monitoring Link will interact with such preparation is not clear. In addition, consider that the same tool might be the target of several links, with distinct configuration parameter. How can the control parameters of the mixin be exposed in such a case? Instead, if the mixin is embedded in the link, it is the responsibility of the link implementation to configure it, and to couple it with the publishing technology indicated in the link}
+
+We point out that the interface is transparent to the existence of a standard for metric identifiers: if one exists, the interoperability of distinct monitoring infrastructures is certainly improved. We consider that the user that interacts with the monitoring infrastructures either knows about the identifiers used by the provider, or uses an interface (e.g., a SLA negotiation service) that translates provider specific identifiers into interoperable ones. This document highlights other similar standardization issues.
+
+This document considers the monitoring activity as a time-related activity: as a matter of fact, the only characterization we introduce for a monitoring activity is the period with which samples are collected. This excludes from the range of applicability of this document those cases that envision the event driven inspection of a component. We consider that the availability of event driven inspectio has relevant use cases, but has aspects that differentiate from what is commonly expected from a monitoring framework.
+
+The relevance of the timing pediod and its utilization varies from case to case: at one end there is an application that uses as a reference to compute the real timing, in a IGMP-like way. In other cases this indication has a real-time aspect: thus we complement the definition of the period with a granularity and an accuracy that binds the precision of the clock used to compute the period.
+
+Similarly, the start of the monitoring activity is time-driven: the monitoring activity is scheduled as a task with a start and an end time. Similarly to the case of the period, the clock used to this timing may be subject to accuracy and granularity constraints.
+
+The definition of the timing is dynamic, and can be modified while the monitoring is in effect. Thus the dynamic adaptation of the timing of the monitoring activity can be explicitely controlloed via the attributes of the monitoring resorces.   
+
+Summarizing, the specifications introduced in this document require that the conformant provider implements two {\em Kind}s: the {\em \coll } and the {\em \sens }. Three generic \mi s are also defined to enable the classification of \mi s that are specific for the provider: namely {\em Metric} to specify the production of measurement, {\em Aggregator} for their processing, and {\em Publisher} for their publication. The generic \mi s are used to identify and apply restrictions to provider-specific \mi s, for the sake of interoperability.  Given that monitoring is recognized as a basic building block for the introduction of a SLA, we have dedicated an appendix to the discussion of how the API may contribute to this.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.3\textwidth]{figs/Monitoring_UML.pdf}
+\caption{Class inheritance diagram for OCCI-monitoring}
+\end{figure}
+
+\subsection{Terminology shortcuts}
+
+To distinguish an {\em Entity} instance from the related {\em Kind}, we will use the indeterminative article for the instance (e.g., ``a \rs''), and the determinative article for the {\em Kind} (e.g., ``the \rs''). The plural is reserved to instances (e.g., ``the \rs s''). In case of ambiguity we will use ``{\em Entity} instance related with'' or ``{\em Kind}''. 
+
+Similarly, we will use the term {\em a $<$mixin id$>$ \mi} to indicate a \mi\ that {\em depends} on the {\em $<$mixin id$>$} \mi. The provider ensures that \mi s inherit defined semantics from the \mi\ they depend on, as explained in the rest of this paper. 
+
+To disambiguate the usage of the term "resource" we will use the term "REST resource" when appropriate, and simply {\em Resource} when referring to the concept defined in the OCCI Core model.
+
+\section{Specification of the compliant server}
+
+The compliant server MUST define the following {\em Kind}s:
+
+\begin{description}
+
+\item [\coll] that describes the extraction of measurements (see table \ref{tab:collector});
+
+\item [\sens] that describes how measurements are aggregated and used (see table  \ref{tab:sensor}).
+
+\end{description}
+ 
+%\begin{table}
+%\scriptsize
+%\begin{tabular}{llll}
+%\hline
+%{\bf Term}  & {\bf Scheme} & {\bf Title} & {\bf Related Kind} \\ \hline
+%collector & http://schemas.ogf.org/occi/monitoring\# & Collector Link & http://schemas.ogf.org/occi/core\#link\\ 
+%sensor    & http://schemas.ogf.org/occi/monitoring\# & Sensor Resource & http://schemas.ogf.org/occi/core\#resource \\ \hline
+%\end{tabular}
+%\caption{The {\em Kind} instances defined for the Resource sub-types in the monitoring API}
+%\end{table}
+
+In addition, the compliant server MUST define the following {\em Mixin} tags (see table \ref{tab:mixin}): 
+
+\begin{description}
+
+\item [{\em Metric}] that is used as a tag for \mi s that describe a measurement activity;
+
+\item [{\em Aggregator}] that is used as a tag for \mi s that describe a measurement aggregation function;
+
+\item [{\em Publisher}] that is used as a tag for \mi s that describe measurement utilization.
+
+\end{description}
+
+These tags are used to define features that are common to the {\em mixins} that depend on same tag. In principle, a {\em mixin} MAY depend on more than one of these tags. 
+
+\subsection{The \coll}
 
 \mytablefloat{
-	\label{tbl:smx}The immutable model attributes of the \sens\ resource.
-	The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
-	{\bf $<$schema$>$} in this table for a better reading experience. 
-	} {
-	\begin{tabular}{lllllll}
-	\toprule
-	Term & Scheme & Title & Attributes & Actions & Parent \\
-	\colrule
-	\sens &  $<$schema$>$/monitoring\# & \sens\ Resource
-	& see Table \ref{tbl:sensor} & \{\} & \{\} & $<$schema$>$/core\#Resource \\
-	\botrule
-	\end{tabular}
+        \label{tab:collector}The immutable model attributes of the \coll category.
+        The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
+        {\bf $<$schema$>$} in this table for a better readability experience. 
+        } {
+        \begin{tabular}{llllll}
+        \toprule
+        Term & Scheme & Title & Attributes & Actions & Parent \\
+        \colrule
+        collector &  $<$schema$>$/monitoring\# & collector Link
+        & see Table \ref{tbl:collector} & \{\} & $<$schema$>$/core\#Link\\
+        \botrule
+        \end{tabular}
 }
 
 \mytablefloat{
-	\label{tbl:sensor}\hl{Attribute}s defined for the \sens\ type. 
+        \label{tbl:collector}%
+        \hl{Attribute}s of the Collector link.
+}{
+\begin{tabular}{lp{1.5cm}p{1cm}lp{5.0cm}}
+\toprule
+Attribute&Type&Multi\-plicity&Mutability&Description\\
+\colrule
+occi.collector.period & number & 1 & true & The time between two following measurements \\
+occi.collector.periodspec & string & 0..1 & true & granularity, accuracy, exponent of period measument \\
+\botrule
+\end{tabular}
 }
-{
-	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
-	\toprule
-	Attribute&Type&Multi\-plicity&Mutability&Description\\
-	\colrule
-occi.sensor.period & number & 0..1 & true & The time between two following measurements \\
-occi.sensor.accuracy & number & 1 & false & of period or delay \\
-occi.sensor.timebase & number & 0..1 & true & The server time when the timestart and timestop are modified \\  
+
+The \coll\ (see table \ref{tab:collector}) models the activity that extracts measurements from a source {\em resource} and the transfer of such measurements to another {\em resource}.
+
+The OCCI attributes of the \coll\ define the timing of the monitoring activity.
+The execution rate is defined using three attributes: the rate itself (\verb|period|), and an optional definition of the quality of the timing. This latter attribute (\verb|periodspec|) contains a triple of numbers encoded as a string, that define the granularity with which the rate is measured, the accuracy of rate measurement, and the floating point exponent. By default \verb|periodspec="undef, undef, 0"|. All time values are represented as numbers.
+
+A {\em Collector Link} can be associated ONLY with {\em metric mixins}.
+
+\subsection{The \sens \label{sec:sensor}}
+
+
+\mytablefloat{
+        \label{tab:sensor}The immutable model attributes of the \sens\ category.
+        The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
+        {\bf $<$schema$>$} in this table for a better readability experience. 
+        } {
+        \begin{tabular}{llllll}
+        \toprule
+        Term & Scheme & Title & Attributes & Actions & Parent \\
+        \colrule
+        sensor &  $<$schema$>$/monitoring\# & sensor resource
+        & see Table \ref{tbl:sensor} & \{\} & $<$schema$>$/core\#Resource\\
+        \botrule
+        \end{tabular}
+}
+
+\mytablefloat{
+        \label{tbl:sensor}%
+        \hl{Attribute}s of the Sensor resource.
+}{
+\begin{tabular}{lp{1.5cm}p{1cm}lp{5.0cm}}
+\toprule
+Attribute&Type&Multi\-plicity&Mutability&Description\\
+\colrule
+occi.sensor.period & number & 1 & true & The time between two following measurements \\
+occi.sensor.periodspec & string & 0..1 & true & granularity, accuracy, exponent of period measument \\
+occi.sensor.timebase & number & 0..1 & false & The server time when the timestart and timestop are modified \\  
 occi.sensor.timestart &	number & 0..1 & true & The delay after which the session is planned to start \\
 occi.sensor.timestop & number	& 0..1 & true & The delay after which the session is planned to stop \\
-	\botrule
-	\end{tabular}
+occi.sensor.timespec & string & 0..1 & true & granularity, accuracy, exponent of time measurement \\
+\botrule
+\end{tabular}
 }
 
-\section{Application notes and an example}
 
-The sensor is characterized mainly by timing attributes. The only atttribute that MUST be defined is the real-time {\em accuracy} of the monitoring activity. Other non mandatory attributes describe how frequently the monitoring activity is performed, and the time lapse during which the monitoring activity takes place.
+The \sens\ (see table \ref{tab:sensor}) models the processing of the measurements, like their aggregation in composite metrics, as well as their effects outside the monitoring infrastructure, like their delivery to a billing office.
 
-The accuracy of the timing represents the maximum distance between an event, and its observation from the \sens.
+A \sens\ is characterized by OCCI attributes that define the rate with which new observations are produced, and by the scheduling times of its operation.
 
-The \sens\ gathers the functional parameters for its activity using data that is received from resources: therefore, the \sens\ SHOULD be the target of {\em Notification} links, as defined in document \cite{occi:notification}.
+The execution rate is defined using two attributes: the rate itself, and an optional definition of the quality of the timing. This latter attribute contains a triple of numbers encoded as a string, that define the granularity with which the rate is measured, the accuracy of rate measurement, and the floating point exponent. By default \verb|periodspec="undef, undef, 0"|.
 
-The operation of the sensor is defined by mixins: the provider offers the user a choice of mixins, thus allowing the user to inspect the performance of the provision.
+The activation of a \sens\ is controlled by two attributes that describe the scheduling of sensor activity: to schedule the execution of a sensor the user modifies the {\tt starttime} with a value indicating how far in the future the instance is going to start its activity. A value of zero corresponds to the immediate start. The server sets the {\tt timebase} attribute corresponding to the reference time of the start time.
 
-The provider uses the capabilities indicated in the mixins associated with a \sens\ instance to implement the {\bf notification} link and to instrument the Resource at the source of the {\bf Notification} link.
+All time values are represented as numbers. The {\tt timebase} corresponds to Unix seconds, all timing values use a floating point notation. Also for time values there is a {\tt timespec} attribute analogous to {\tt periodspec}.
 
-For instance, consider the following simple example, where the mixin that specifies the operation of the \sens\ is a simple tag:
+A \sens\ can be related ONLY with {\em Aggregator} and {\em Publisher} {\em mixins}.
 
-\begin{quote}
-A provider offers a {\em 3-out-of-k} mixin that can be associated to a \sens\ Resource, that keeps in the {\em active} state 3 of the Compute resources from which it receives notifications.
+A \sens\ is the source of \coll\ links, and all of them (\sens\ included) are collectively indicated as the {\em scope} of that \sens . The removal of a \sens\ determines the removal of all \coll s in its scope. \rem{ The {\em scope} has the role to specify the visibility of measurements before they are delivered outside the monitoring infrastructure. Consider that a generic \coll\ instance belongs to exactly one scope, so that we can speak as well of {\em the} scope of a \coll .}
 
-The user that wants to take advantage of this service instantiates a \sens\ and associates with it a {\em 3-out-of-k} mixin. Next it associated an \smx\ to each of the $k$ Compute resources $C_{1..k}$. For each of them a \ntfl\ link $N_i$ is instantiated that originates from $C_i$ and targets the \sens.
-\end{quote}
+\mytablefloat{
+        \label{tab:mixin}The immutable model attributes of the mixins.
+        The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
+        {\bf $<$schema$>$} in this table for a better reading experience. 
+        } {
+        \begin{tabular}{lllllll}
+        \toprule
+        Term & Scheme & Title & Attributes & Actions & Depends & Applies \\
+        \colrule
+        metric &  $<$schema$>$/monitoring\# & Metric Mixin 
+        & \{\} & \{\} & \{\} & $<$schema$>$/monitoring\#Collector \\
+        aggregator &  $<$schema$>$/monitoring\# & Aggregator Mixin 
+        & \{\} & \{\} & \{\} & $<$schema$>$/monitoring\#Sensor \\
+        publisher &  $<$schema$>$/monitoring\# & Publisher Mixin 
+        & \{\} & \{\} & \{\} & $<$schema$>$/monitoring\#Sensor \\
+        \botrule
+        \end{tabular}
+}
+ 
 
-The schema is portable across any platform that offers the OCCI-infrastructure, OCCI-notification, and OCCI-monitoring, and that provides a {\em 3-out-of-k} mixin.
 
-Distinct providers may interoperate, for instance if one provides the  {\em 3-out-of-k} Resource and another the Compute resources, provided that an agreement exists between the two that allows cross provider information transfer.
+\subsection{Features of the \mi s that depend on the {\em metric} tag \label{sec:Tool}}
+
+A {\em mixin} with a {\em metric} tag represents the availability of measurements from the associated \coll.
+\rem{We envision two distinct cases, the latter justified to allow extremely simple configurations:
+\begin{itemize}
+\item if the related {\em Entity} is a \coll, the measurement activity refers to the source {\em Resource} of the \coll;
+\item otherwise the measurement activity refers to the related {\em Entity} sub-type instance itself;
+\end{itemize} 
+}
+
+\newcommand{\misem}[1]{In principle, each provider may associate a different semantic to \mi s that share the same identifier, so here there is ground for further standardization. If the provider does not adhere to a defined standard, it MUST give an exhaustive documentation of #1 associated with a certain {\em mixin}.}
+
+\misem{the monitoring tool}
+
+The OCCI attributes of a {\em mixin} that depends on the {\em metric} tag are divided into two groups:
+\begin{itemize}
+
+\item Metric attributes: they correspond to the delivered metrics. We distinguish two cases for the semantic of the {\em String}:
+\begin{itemize}
+\item it may represent the real value of the measurement ({\em here} mode), or
+\item it may be a generic identifier, unique in the {\em scope} of the source Sensor ({\em named} mode);
+\end{itemize}
+
+\rem{For instance, a metric providing the CPU utilization of a {\em Compute Resource} may have an attribute named {\tt \small cpuutilization}. Depending on the definition of the {\em metric} mixin, at a certain time the value may reflect the last measurement, or a local identifier for the data set;}
+
+\item Control attributes: they control the operation of the measurement activity.
+\rem{ For instance the {\tt \small iostat} \mi\ implementing a cpu utilization tool may have a control attribute defined as (see figure \ref{tab:iostat}) 
+
+\begin{verbatim}
+name=com.acme.iostat.what,
+type=enum{"user","system"}
+\end{verbatim}
+
+The role of the attributes is part of the specification of the specific \mi.
+}
+
+\end{itemize}
+
+\rem{
+\begin{table}
+\extramixin{iostat}{
+    com.acme.iostat.cpuutilization & String & metric \\ 
+    com.acme.iostat.what & enum(user,system) & control \\ 
+ }{metric}
+\caption{Example -- Definition of the {\tt \small iostat} metric \mi \label{tab:iostat} }  
+\end{table}
+}
+
+%\newcommand{\attrname}[1]{To enable interoperabilty, the provider SHOULD follow a defined standard for the naming of #1 attributes, but its specification falls outside the scope of this document. Such naming MAY help the discovery of \mi s that are appropriate for a given task.}
+\newcommand{\attrname}[1]{}
+\attrname{metric and control}
+
+\subsection{Features of the \mi s that depend on the {\em aggregator} tag \label{sec:Aggregator}}
+
+A \mi\ with the {\em aggregator} tag is meant to implement the computation of an aggregated metric starting from raw metrics and is applied to \sens.
+ 
+\rem{It is intended to complement a \sens, but it can be associated also to a generic {\em Entity} instance, to meet very simple use case, as explained in the appendix.}
+
+\misem{the aggregation algorithm}
+
+The attributes of a \mi\ with the {\em Aggregator} tag are divided into three groups:
+
+\begin{itemize}
+
+\item Input attributes: they bind an input of the aggregating algorithm with one of the {\em named} metric attributes defined in the scope of the {\em Sensor}. The binding is implemented using the identifier associated to the specific {\em named} metric in the {\em metric} mixin. \rem{For instance, a \sens\ that computes the maximum CPU utilization for three {\em Compute Resources} may have an {\tt input} attribute like the following: 
+
+\begin{tabular}{l}
+name=com.acme.max.input, \\
+input= ``cpu-c1, cpu-c2, cpu-c3'' 
+\end{tabular}
+
+where {\small \tt cpu-c1}, {\small \tt cpu-c2}, and {\small \tt cpu-c3} are three identifiers defined in metric attributes in \sens\ scope .}
+
+We do not introduce a syntax for such identifiers in this document.
+
+\item Control attributes: they control the operation of the aggregating function;
+
+\item Metric attributes: they correspond to the metrics delivered, and are defined like those of {\em metric} mixin.
+\end{itemize}
+
+\rem{
+\begin{table}
+\extramixin{max}{
+    com.acme.max.max & number & metric \\ 
+    com.acme.max.data & String & input \\ 
+ }{aggregator}
+\caption{Example -- Definition of the {\tt \small max} aggregation \mi } 
+\end{table}
+}
+
+\attrname{input, control and result}
+
+\subsection{Features of the \mi s that depend on the {\em Publisher} tag \label{sec:Publisher}}
+
+How data are delivered is defined by a {\em Publisher} \mi .
+
+\misem{publishing mode}
+
+\rem{
+Examples of measurement delivery modes are: through a Unix pipe, on demand through a TCP connection, pushed through HTTP or UDP, persistently recorded in a database. However a {\em Publisher} can be associated also with an activity outside the monitoring infrastructure, like triggering recovery strategies in case of failure.
+}
+
+The attributes of a {\em Publisher} \mi\ are divided into two groups:
+
+\begin{itemize}
+\item Input attributes: they are defined like those of the {\em Aggregator};
+\item Control attributes: they determine the process used to publish input attributes.
+\end{itemize}
+
+\rem{
+\begin{table}
+\extramixin{tcp}{
+    com.acme.tcp.in     & URI    & input \\ 
+    com.acme.tcp.source & URI    & control \\
+    com.acme.tcp.port   & number & control \\
+ }{publisher}
+\caption{Example -- Definition of the {\tt \small tcp} publishing \mi } 
+\end{table}
+}
+
+\attrname{input and control}
+
+\subsection{Constraints on the associations between instances and \mi s}
+
+The constraints on the association of \sens\ and \coll\ instances with the defined \mi s are the following:
+
+\begin{itemize}
+
+\item a {\em Sensor Resource} MUST be the {\em target} of at least one \coll ;
+
+\item a \coll\ can be associated ONLY with \metr\ \mi s;
+
+\item a \sens\ can be associated ONLY with \publ\ and \aggr\ \mi s;
+
+\end{itemize}
+
+\rem{author}{The utilization of \mi s, instead of kind-specific attributes describing the operation, has the purpose of allowing the discovery of the capabilities offered by the provider. Kind specific attr. might be three, describing the tool id, and ohter two formatted strings for the input and output parameters}
+
+\rem{
+\section{Addressing simple environments \label{simple}}
+
+We consider as a relevant issue the possibility to address simple use cases with a minimal effort. The provider should keep control over the application of simplified strategies, since in most cases they trade off efficiency for simplicity, so that the inappropriate application of a simple strategy may overload the provider infrastructure.
+
+The basic tool available to arrange a monitoring activity with minimal effort is the {\em here} metric \mi (see Section \ref{sec:Tool}). Using such a \mi\ the user bypasses measurement aggregation and publishing. However the resulting design is not fully REST compliant. An example is given in the appendix.
+
+Another simplifying strategy consists in associating the \mi\ to {\em Entities} that are not those specified in this document, thus avoiding the presence of \sens\ and \coll\ instances. Certain monitoring specific \mi s can be applied directly to {\em Entities}: for instance an infrastructure {\em Compute} instance can take the role of a {\em Sensor} being associated with an appropriate \mi . In this case the provider looses control over measurement data, and cannot apply optimization and security strategies that are specific for monitoring data. An example is given in the appendix.
+}
+
+\section{Conformance profiles}
+
+The definition of conformance profiles is appropriate because the provision of an interface for the management of a monitoring infrastructure is optional. 
+
+\begin{description}
+
+\item[Profile 0] The \coll\ and \sens\ {\em Kind} s MUST NOT be implemented: attempt of instantiating such {\em Kinds} fails.  In an HTTP rendering a POST and GET over the corresponding URI returns {\tt 404 Notfound}. The {\em Aggregator}, {\em Metric}, and {\em Publisher} \mi s MUST NOT be implemented: discovery fails. In an HTTP rendering a GET over the \mi\ returns {\tt 404 Notfound}; 
+
+\item[Profile 1] The \coll\ and \sens\ {\em Kind} s MUST be implemented, and the user MUST be allowed to create new instances of such {\em Kinds}.  In an HTTP rendering a POST or a GET over the corresponding URI return respectively {\tt 201} and {\tt 200}. In case of error, the server MUST NOT return {\tt 404 Notfound}. The {\em Aggregator}, {\em Metric}, and {\em Publisher} \mi\ MUST be implemented, and discovery is successful. The server MUST NOT allow to introduce {\em depends} relationships with the {\em Aggregator}, {\em Metric}, and {\em Publisher} \mi s. In an HTTP rendering, a POST over their URIs returns {\tt 405 Method Not allowed}; 
+
+\item[Profile 2]  The \coll\ and \sens\ {\em Kind} s MUST be implemented, and the user MUST be allowed to create new instances of such {\em Kinds}.  In an HTTP rendering a POST and GET over the corresponding URI returns respectively {\tt 201} and {\tt 200}. In case of error, the server MUST NOT return {\tt 404 Notfound}. The \aggr , \metr , and \publ\ \mi s MUST be implemented, and discovery is successful. The user MUST be allowed to introduce {\em depends} relationships with the  \aggr , \metr , and \publ\ \mi s. In an HTTP rendering, a POST over their URIs returns {\tt 200}.
+
+\end{description}
+
+\rem{
+\section{Related works}
+
+The topic of Cloud Service Level Agreement has been extensively studied in a number of research projects, and there are results that have an impact on Cloud Monitoring: a report \cite{EU-SLA} of the European Union illustrates the results in the field. We have taken input from this activity in the design of this API.
+
+In particular, we considered the need of taking into account the presence of {\em composite services} encompassing several providers for their implementation. Tightly related ot this is the need of representing multilevel monitoring infrastructures, a fact anticipated by the results of the SLA@SOI EU project. The results of the {\em Stream} project highlight how monitoring data may introduce {\em big data} issues, that need specific, flexible solutions on the provider's side: this is one of the reasons that induced the introduction of opaque {\em connectors} that hide sophisticated, rapidly evolving technologies. The IRMOS project puts an accent on timing requirements for multimedia services, that justify the attention we paid to define and qualify timing attributes. Many project made precise statements about the specific metrics that describe the Service Level for specific types of resource: the mPlane project addresses specifically the metrics for Network resources, while Cloud4SOA focusses on the relevance of an agreed set of standard metrics.
+
+In the design of this API we also took advantage of the experience gained during the CoreGRID EU-project \cite{cur:08:a}, where we implemented a Grid monitoring infrastructure, in its turn inspired by many previous works (see the bibliography in the paper).
+
+The reading of the CompatibleOne prototype \cite{mar12a} is an Open Source project aimed at developing an OCCI-compliant Cloud Infrastructure: its interface, that already covers monitoring and SLA aspects, helped with a concrete view of a possibile interface. It has been enlightening concerning (among the rest) the need and possibility of modularizing the monitoring part.
+
+The 2012 revision of the OCCI core model \cite{occi:core} has been used as a reference.
+
+}
 
 \section{Security issues}
 The OCCI Notification specification is an extension to the OCCI Core
@@ -179,23 +509,289 @@ and Model specification \cite{occi:core}; thus the same security
 considerations as for the OCCI Core and Model specification apply
 here.
 
-\section{Glossary}
+\rem{\label{s:security}
+
+The API described in this document relies on the same mechanism as the basic OCCI API, of which it is an extension. In its turn, the OCCI API is designed according with a RESTFul model, a style of exposing a web service to the users.
+
+The way this API is exposed inherits the security aspects of the RESTFul model, that can be summarized as follows:
+
+\begin{itemize}
+\item the web site MUST be protected to allow access only to authorized users, and to protect the content of the communication;
+\item the content uploaded on the web site by the user (using POST) MUST be protected;
+\item the content cached on third party sites not directly accessible by the user and by the provider (proxies etc.) MUST be protected.
+\end{itemize}
+
+We stress that these security warnings are shared with any ReStFul API.
+
+The provider must ensure that a user defined \mi\ does not compromise the security of other services. The provider may attain this by restricting the functionalities associated to a \mi\ (the limit case is the provision of templates) or run the functionalities associated to a \mi\ in a protected environment (e.g., as a Unix user in a chroot jail). This issue is shared with the OCCI model.
+
+Concerning the kind of monitoring infrastructure deployed using the \sens\ and the \coll , security aspects are managed using appropriate \mi s. For instance the \coll\ might be associated with a \mi\ describing a secure transport protocol, while the sensor might be configured to be accessible only from authenticated users (?). The provider SHOULD offer the user a set of predefined \mi s that introduce the appropriate level of security. User defined \mi s SHOULD be avoided for this kind of options.
+}
+
 \label{sec:glossary}
 \input{include/glossary}
  
-%\section{Contributors}
-%\input{include/contributors}
+\section{Contributors}
 
-\section{Intellectual Property Statement}
-\input{include/ip}
+\textbf{Augusto Ciuffoletti (corresponding author)} \\
+Dept. of Computer Science \\
+L.go B. Pontecorvo - Pisa\\
+Italy \\
+Email: augusto.ciuffoletti@gmail.com \\
 
-\section{Disclaimer}
-\input{include/disclaimer}
+\textbf{Andrew Edmonds}\\
+Institute of Information Technology \\
+Zürich University of Applied Sciences \\
+Zürich \\
+Switzerland \\
+Email: andrew.edmonds@zhaw.ch
 
-\section{Full Copyright Notice}
-\input{include/copyright}
+\textbf{Metsch, Thijs} \\
+Intel Ireland Limited \\
+Collinstown Industrial Park \\
+Leixlip, County Kildare, Ireland
+Email: thijsx.metsch@intel.com
+
+\textbf{Ralf Nyren} \\
+Email: ralf@nyren.net 
+
+%\section{Acknowledgments}
+
+%Include if desired. Contributors to the document may also be listed in the previous section.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
+
+\end{document}
+\appendix
+
+\section*{Appendix - Examples: from simple to complex}
+
+The OCCI Monitoring API is able to meet the demands of a wide range of users. It is understood that an application that has a limited interest in monitoring (for instance to trigger human intervention to cope with a fault) wants an interface able to configure in a straightforward way a simple strategy. In contrast, the user that is faced with a complex infrastructure and tight quality requirements needs an expressive interface. On the provider side as well there is interest for the possibility of restricting the monitoring tools available to certain users to a restricted set, with limited capabilities. The challenge for the overall scheme is to cover the whole range, from simple to complex.
+
+In this appendix we explore use cases starting from a very simple one, approached in a simplistic way. The involved {\em Entities} are described by listing their attributes; both model attributes, in bold, and OCCI attributes. We recall that model attributes are not discoverable by the client, while OCCI attributes are.
+
+\subsection*{Case 1: too simple}
+
+We start from an extremely simple case, that the user wants to implement trading off efficiency for simplicity. We focus on the {\tt iostat} \mi\ used above, that a user wants to use to be warned about the overload of a server {\tt \small vm1}.
+
+The simplistic, yet suboptimal, solution is to associate the server with the monitoring tool. At a certain point in time, when the cpuutilization is $78\%$, the state of a certain server might be the following:
+
+{
+\small
+\begin{tabular}{l|l}
+Attribute                         & value \\ \hline
+{\bf id}                          & urn:acme:user529/vm1 \\
+{\bf kind}                        & compute \\
+{\bf mixin}                       & iostat-here \\
+occi.compute.architecture         & x86   \\
+occi.compute.cores                & 4     \\ 
+occi.compute.hostname             & vm1   \\            
+occi.compute.speed                & 3     \\                  
+occi.compute.memory               & 250   \\
+com.acme.iostat.cpuutilization    & 78    \\                     
+com.acme.iostat.what              & user  \\
+\end{tabular}
+}
+
+The provider declares to update the {\em metric} attribute {\tt \small cpuutilization} every 10 minutes, and the user is happy with that latency. From time to time the user will download the REST resource associated with the {\em Compute Resource} and parse out the value of the attribute, that will be processed in user's premises.
+
+Let's consider a possible implementation on provider's side. Whenever the user associates the {\tt \small iostat} mixin to the {\em Compute Resource}, the Cloud Management Infrastructure will install and launch a script that performs the call to the {\tt \small iostat} command, and then sends the data to the Cloud Management Interface. In its turn, the Cloud Management server will update the record describing the Compute Resource. At this time any cached content of the same record should become invalid.
+
+It is a quite complex operation that hardly fits in a REST environment.
+
+This solution, which is admissible for our API, is extremely simple for the user, but extremely inefficient and complex for the provider. Let us explore an slightly more complex alternative that exhibits a reasonable footprint.
+
+\subsection*{Case 2: simple but effective}
+
+The user, in addition to the \metr\ \mi , associates to {\tt \small vm1} also a \publ\ \mi : for instance a {\tt \small tcp} mixin. Its semantic is that the data is returned after a {\tt \small connect} to a given TCP address, that we assume to be located on the same virtual machine.
+
+{
+\small
+\begin{tabular}{l|l}
+Attribute                         & value \\ \hline
+{\bf id}                          & urn:acme:user529/vm1 \\
+{\bf kind}                        & compute \\
+{\bf mixin}                       & iostat, tcp \\
+occi.compute.architecture         & x86   \\
+occi.compute.cores                & 4     \\ 
+occi.compute.hostname             & vm1   \\            
+occi.compute.speed                & 3     \\                  
+occi.compute.memory               & 250   \\
+com.acme.iostat.cpuutilization    & cpustat   \\                     
+com.acme.iostat.what              & user  \\
+com.acme.tcp.in                   & cpustat \\
+com.acme.tcp.source               & http://www.acme.com/user529-vm1 \\
+com.acme.tcp.port                 & 4321 \\
+\end{tabular}
+}
+
+The provider declares that the latency of the data is less than 10 minutes. The user will poll the socket from time to time, and obtain the CPU utilization.
+
+Let's consider a possible implementation on the provider's side. Upon association of the two \mi , the Cloud Management server will trigger the {\tt \small iostat} script, and implement a pipe to trasfer the results to a TCP server listening on the indicated port. The configuration of the pipe is driven by the correspondence between the string ({\tt cpustat}) associated with the {\em metric attribute} of the {\tt \small iostat} \mi , and the {\em input attribute} of the {\tt \small tcp} \mi .
+
+In a similar way, not shown in this example, the user may associate also an \aggr\ \mi\ to {\tt \small vm1} to process the raw measurements and obtain a filtered metric.
+
+Note that the activity of the Cloud Management server is limited to the configuration of the two {\em mixins}. After that, the record of {\tt \small vm1} will be updated with the presence of the two \mi s. There is no further activity on the side of the provider, and caches will remain consistent after that operation.
+
+\subsection*{Widening the horizon}
+
+Consider that the user has allocated a pool of servers {\tt \small vm1...vmn} and that she needs only the maximum CPU utilization in the pool. Instead of downloading all measurements and find the maximum in her premises, she prefers to delegate the task to the Cloud Management.
+
+Our solution is to create one \coll\ instance in egress from each server, and to associate a {\tt \small iostat} \mi\ to each of them, thus adding the possibility to control the timing of the measurements. There will be one addressable REST resource for each of them.
+
+All the \coll\ instances will share the same destination, that might be one of the servers. There an \aggr\ \mi\ aggregates the data by computing the maximum each time a new value is received, and delivers the data to the TCP server described in the previous example. The following is the state of one of the collectors:
+
+{
+\small
+\begin{tabular}{l|l}
+Attribute                         & value \\ \hline
+{\bf id}                          & urn:acme:user529/c1 \\
+{\bf kind}                        & collector \\
+{\bf mixin}                       & iostat \\
+{\bf source}                      & urn:acme:user529/vm1 \\
+{\bf target}                      & urn:acme:user529/master \\
+occi.collector.period             & 600 \\
+com.acme.iostat.cpuutilization    & cpustat1 \\                     
+com.acme.iostat.what              & user \\
+\end{tabular}
+}
+
+and this is the state of the master server that receives all measurements, computes the output value and delivers the result throufh a TCP socket:
+
+{
+\small
+\begin{tabular}{l|l}
+Attribute                     & value \\ \hline
+{\bf id}                      & urn:acme:user529/master \\
+{\bf kind}                    & compute \\
+{\bf mixin}                   & max, tcp \\
+{\bf links}                   & 
+\begin{tabular}{l}
+urn:acme:user529/c1, \\
+urn:acme:user529/c2, \\
+urn:acme:user529/c3 
+\end{tabular} \\
+occi.compute.architecture     & x86   \\
+occi.compute.cores            & 4     \\ 
+occi.compute.hostname         & master   \\            
+occi.compute.speed            & 3     \\                  
+occi.compute.memory           & 250   \\
+com.acme.tcp.in               & cpumax \\
+com.acme.tcp.source           & http://www.acme.com/user529/master \\
+com.acme.tcp.port             & 4321 \\
+com.acme.max.data             & cpustat1, cpustat2, cpustat3 \\
+com.acme.max.max              & cpumax  \\
+\end{tabular}
+}
+
+The use of \coll\ has a number of advantages, that are all related with the fact that the activities associated with the \mi\ obtain a distinguished address in the system, and thus are REST resources on their own. For instance, multiple instances of the same monitoring tool may run on the same \rs .
+
+\subsection*{Separation of concern}
+
+In the above example the measurements are processed on a generic computing resource: however, there are cases when monitoring data deserve a specific treatment, that can be hardly implemented inside a generic virtual machine. For instance when it has an heavy footprint, or it requires accurate timing, or it has effects that cannot be triggered by a generic virtual machine, or it is considered as confidential. If this is the case, then it is time to create an instance of a \sens .
+
+For our example, we consider a user that wants to put in place a mechanism that instantiates a new server as soon as the maximum {\tt \small cpuutilization} on one of the servers reaches a given threshold. For reasons related with system integrity, the provider does not allow to associate this activity to a generic \rs , but it implements this privileged operation in a \publ\ \mi\ that can be associated only with a \sens . The \mi\ that manages the generation of the new request is called {\em elasticpool}: for simplicity, we assume that it exposes a single attribute, the threshold, in the interval $[0..1]$, but we may imagine that a realistic \mi\ may indicate a template for the new resource, a {\em Collection} where to include the resource, and a deallocation rule.
+
+The layout of the system is now made of a number of \coll , one for each server in the pool, and one sensor that aggregates all results and allocates new \comp\ when needed.
+
+Each of the collectors will be defined as follows:
+
+{
+\small
+\begin{tabular}{l|l}
+Attribute                         & value \\ \hline
+{\bf id}                          & urn:acme:user529/c1 \\
+{\bf kind}                        & collector \\
+{\bf mixin}                       & iostat    \\
+{\bf source}                      & urn:acme:user529/vm1 \\
+{\bf target}                      & urn:acme:user529/s1  \\
+occi.collector.period             & 600   \\
+com.acme.iostat.cpuutilization    & cpustat1   \\                     
+com.acme.iostat.what              & user  \\
+\end{tabular}
+}
+
+The \sens\ state is the following :
+
+
+{
+\small
+\begin{tabular}{l|l}
+Attribute                     & value \\ \hline
+{\bf id}                      & urn:acme:user529/s1 \\
+{\bf kind}                    & sensor \\
+{\bf mixin}                   & max, tcp \\
+{\bf links}                   & 
+\begin{tabular}{l}
+urn:acme:user529/c1, \\
+urn:acme:user529/c2, \\
+urn:acme:user529/c3 
+\end{tabular} \\
+occi.sensor.period            & 600 \\
+occi.sensor.timebase          & 1371025907 \\  
+occi.sensor.timestart         & 10 \\
+occi.sensor.timestop          & 3610 \\
+com.acme.tcp.in            & maxcpu \\
+com.acme.tcp.source        & http://www.acme.com/user529/master \\
+com.acme.tcp.port          & 4321 \\
+com.acme.max.data          & cpustat1, cpustat2, cpustat3 \\
+com.acme.max.max           & maxcpu  \\
+\end{tabular}
+}
+
+
+\input{sla.tex}
+
+
+\input{legal}
+
+
+% \phantomsection\addcontentsline{toc}{section}{References}
+\section{References}
+
+% Define heading of bibliography to be empty, since we already have a heading above the text.
+\renewcommand{\refname}{}
+\vspace*{-3em}
+
+% Use bibliography.bib for references.
+\bibliography{biblio,cur}
+
+% Alternatively, you can insert the bibliography inline, like so:
+% 
+% \begin{thebibliography}{5}
+% 
+% \bibitem[GFD0000()]{gfd0000}
+% Firstname Author1 and Firstname Author2.
+% \newblock {Our Awesome Grid Forum Document}.
+% \newblock GWD-C.0000, April 2002.
+% 
+% \bibitem[GFD152()Catlett, de~Laat, Martin, Newby, and Skow]{gfd152}
+% Charlie Catlett, Cees de~Laat, David Martin, Gregory~B. Newby, and Dane Skow.
+% \newblock {Open Grid Forum Document Process and Requirements}.
+% \newblock GFD-C.152, June 2009.
+% \newblock URL \url{http://www.ogf.org/documents/GFD.152.pdf}.
+% 
+% \bibitem[RFC2119()]{rfc2119}
+% Scott Bradner.
+% \newblock {Key words for use in RFCs to Indicate Requirement Levels}.
+% \newblock RFC 2119 (Best Current Practice), March 1997.
+% \newblock URL \url{http://tools.ietf.org/html/rfc2119}.
+% 
+% \bibitem[RFC3552()Rescorla, Korver, and {Internet Architectures Board}]{rfc3552}
+% Eric Rescorla, Brian Korver, and {Internet Architectures Board}.
+% \newblock {Guidelines for Writing RFC Text on Security Considerations}.
+% \newblock RFC 3552 (Best Current Practice), July 2003.
+% \newblock URL \url{http://tools.ietf.org/html/rfc3552}.
+% 
+% \bibitem[RFC3967()]{rfc3967}
+% Randy Bush and Thomas Narten.
+% \newblock {Clarifying when Standards Track Documents may Refer Normatively to Documents at a Lower Level}.
+% \newblock RFC 3967 (Best Current Practice), December 2004.
+% \newblock URL \url{http://tools.ietf.org/html/rfc3967}.
+% 
+% \end{thebibliography}
+
+
 
 \end{document}
