@@ -73,14 +73,13 @@ OCCI-WG\\
 \input{include/status}
 
 \underline{Copyright Notice}
-
 Copyright \copyright ~Open Grid Forum (2009-2011). All Rights Reserved.
 
 \underline{Trademarks}
-
 OCCI is a trademark of the Open Grid Forum.
 
 \underline{Abstract}
+\input{include/abstract}
 
 This document {\em defines} an OCCI Extension that provides an API to define the monitoring of Resources defined using the OCCI paradigm. To this end it {\em introduces} two further types: the \sens Resource, that processes metrics, and the \coll Link, that extracts and transports metrics. They are defined as OCCI types whose instances may be refined using OCCI \mi s.
 
@@ -90,7 +89,17 @@ This document {\em defines} an OCCI Extension that provides an API to define the
 
 \section{Introduction}
 
-This document describes an interface useful to define a monitoring infrastructure. This functionality is a building block towards the measurement of service quality: its applicability extends to fault detection, billing, and to the implementation of a verifiable server level agreement.
+The Open Cloud Computing Interface (OCCI) is a RESTful Protocol and API for all kinds of management tasks. OCCI was originally initiated to create a remote management API for IaaS 1 model-based services, allowing for the development of interoperable tools for common tasks including deployment, autonomic scaling
+and monitoring. It has since evolved into a flexible API with a strong focus on interoperability while still offering a high degree of extensibility. The current release of the Open Cloud Computing Interface is suitable to serve many other models in addition to IaaS, including PaaS and SaaS.
+
+In order to be modular and extensible the current OCCI specification is released as a suite of complimentary documents, which together form the complete specification. The documents are divided into three categories consisting of the OCCI Core, the OCCI Renderings and the OCCI Extensions.
+\begin{itemize}
+\item The OCCI Core specification consists of a single document defining the OCCI Core Model. The OCCI Core Model can be interacted with renderings (including associated behaviours) and expanded through extensions.
+\item The OCCI Rendering specifications consist of multiple documents each describing a particular rendering of the OCCI Core Model. Multiple renderings can interact with the same instance of the OCCI Core Model and will automatically support any additions to the model which follow the extension rules defined in OCCI Core.
+\item The OCCI Extension specifications consist of multiple documents each describing a particular extension of the OCCI Core Model. The extension documents describe additions to the OCCI Core Model defined within the OCCI specification suite. They do not require changes to the HTTP Rendering specifications as of this version of the specification.
+\end{itemize}
+
+This document describes an {\em OCCI Extension} useful to define a monitoring infrastructure. Its applicability extends to fault detection, billing, and to the implementation of a verifiable server level agreement.
 
 The API should be sufficiently expressive to allow the user to arrange a monitoring infrastructure in the way that best suits his needs: notably, the existence of an agreed interface enables the user to manage distinct cloud providers, possibly at the same time, in a uniform way.
 
@@ -134,16 +143,12 @@ Summarizing, the specifications introduced in this document require that the con
 \caption{Class inheritance diagram for OCCI-monitoring}
 \end{figure}
 
-\subsection{Terminology shortcuts}
-
-To distinguish an {\em Entity} instance from the related {\em Kind}, we will use the indeterminative article for the instance (e.g., ``a \rs''), and the determinative article for the {\em Kind} (e.g., ``the \rs''). The plural is reserved to instances (e.g., ``the \rs s''). In case of ambiguity we will use ``{\em Entity} instance of kind ...'' or ``{\em Kind} ...''. 
-
 \section{Specification of the compliant server}
 
-The compliant server MUST implement the {\em Kind}s in table \ref{tab:kinds}, and the mixins in table \ref{tab:mixin}.
+The compliant server MUST implement the {\em kind}s in table \ref{tab:kinds}, and the {\em mixin}s in table \ref{tab:mixin}.
 
 \mytablefloat{
-        \label{tab:kinds}The immutable model attributes of the \sens\ and of the \coll\ {\em Kind}s.
+        \label{tab:kinds}The immutable model attributes of the \sens\ and of the \coll\ kinds.
         The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
         {\bf $<$schema$>$} in this table for a better readability experience. 
         } {
@@ -151,32 +156,21 @@ The compliant server MUST implement the {\em Kind}s in table \ref{tab:kinds}, an
         \toprule
         Term & Scheme & Title & Attributes & Actions & Parent\\
         \colrule
-        sensor &  $<$schema$>$/monitoring\# & sensor resource
+        sensor &  $<$schema$>$/monitoring\# & Sensor Resource
         & see Table \ref{tab:sensor} & \{\} &  $<$schema$>$/core\#resource\\
-        collector &  $<$schema$>$/monitoring\# & collector link
+        collector &  $<$schema$>$/monitoring\# & Collector Link
         & see Table \ref{tab:collector} & \{\} & $<$schema$>$/core\#link \\
         \botrule
         \end{tabular}
 }
- 
-%\begin{table}
-%\scriptsize
-%\begin{tabular}{llll}
-%\hline
-%{\bf Term}  & {\bf Scheme} & {\bf Title} & {\bf Related Kind} \\ \hline
-%collector & http://schemas.ogf.org/occi/monitoring\# & Collector Link & http://schemas.ogf.org/occi/core\#link\\ 
-%sensor    & http://schemas.ogf.org/occi/monitoring\# & Sensor Resource & http://schemas.ogf.org/occi/core\#resource \\ \hline
-%\end{tabular}
-%\caption{The {\em Kind} instances defined for the Resource sub-types in the monitoring API}
-%\end{table}
 
-Tha attributes of the two kinds are illustrated in section \ref{sec:sensor} and in section \ref{sec:collector} respectively.
+The attributes of the two kinds are illustrated in section \ref{sec:sensor} and in section \ref{sec:collector} respectively.
 
 The mixins have no capabilities: they are used as tags for other mixins with given features, as described in section \ref{sec:metric}, \ref{sec:aggregator}, \ref{sec:publisher}.
 
 
 \mytablefloat{
-        \label{tab:mixin}The immutable model attributes of the mixins.
+        \label{tab:mixin}The immutable model attributes of the {\em Metric}, {\em Aggregator} and {\em Publisher} mixins.
         The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
         {\bf $<$schema$>$} in this table for a better reading experience. 
         } {
@@ -213,9 +207,9 @@ occi.sensor.accuracy & number & 0..1 & true & Accuracy of time measument (second
 \end{tabular}
 }
 
-The {\em Kind} instance assigned to the \sens\ type is {\tt http://schemas.ogf.org/occi/monitoring\#sensor}, as in table \ref{tab:kinds}. The attributes of the \sens\ (see table \ref{tab:sensor}) describe the real-time properties of the sequence of metric values: the time interval during which the monitoring activity is in effect, and its frequency.
+The {\em kind} instance assigned to the \sens\ type is {\tt http://schemas.ogf.org/occi/monitoring\#sensor}, as in table \ref{tab:kinds}. The attributes of the \sens\ (see table \ref{tab:sensor}) describe the real-time properties of the sequence of metric values: the time interval during which the monitoring activity is in effect, and its frequency.
 
-The start of the monitoring activity is determined as the sum between a reference date and time ({\tt timebase}) and an offset ({\tt timestart}). Another offset determines the time when the monitoring activity terminates ({\tt timestop}). The attributes may be left undefined, to indicate that the monitoring activity persists for the lifetime of the sensor. A negative ({\tt timebase} indicates that the monitoring activity is suspended. The three attributes can be modified by the user to dynamically control the monitoring activity.
+The start of the monitoring activity is determined as the sum between a reference date and time ({\tt timebase}) and an offset ({\tt timestart}). Another offset determines the time when the monitoring activity terminates ({\tt timestop}). The attributes may be left undefined, to indicate that the monitoring activity persists for the lifetime of the sensor. A negative {\tt timebase} indicates that the monitoring activity is suspended. The three attributes can be modified by the user to dynamically control the monitoring activity.
 
 The frequency of the monitoring operation is controlled by a value that corresponds to the time lapse between successive samples ({\tt period}). This attribute is required.
 
@@ -240,7 +234,7 @@ occi.collector.accuracy & number & 0..1 & true & Accuracy of time measument (sec
 \end{tabular}
 }
 
-The {\em Kind} instance assigned to the \coll\ type is {\tt http://schemas.ogf.org/occi/monitoring\#collector}, as in table \ref{tab:kinds}. The attributes of the \coll\ (see table \ref{tab:collector}) model the activity that extracts measurements from a destination {\em resource} and the transfer of such measurements to a source \sens. The {\em source} of a \coll\ MUST be a \sens.
+The {\em kind} instance assigned to the \coll\ type is {\tt http://schemas.ogf.org/occi/monitoring\#collector}, as in table \ref{tab:kinds}. The attributes of the \coll\ (see table \ref{tab:collector}) model the activity that extracts measurements from a destination {\em resource} and the transfer of such measurements to a source \sens. The {\em source} of a \coll\ MUST be a \sens.
 
 The OCCI attributes of the \coll\ define the timing of the monitoring activity.
 The execution rate is defined using three attributes: the rate itself (\verb|period|), and the quality of the timing ({\tt granularity} and {\tt timing}). All three values can be left unspecified.
@@ -249,46 +243,48 @@ The server SHOULD NOT respond with an error when the {\tt period}, the {\tt gran
 
 \subsection{Features of the \mi s that depend on the {\em Metric} tag \label{sec:metric}}
 
-A {\em mixin} with a {\em metric} tag is used to customize a \coll\ link.
+The {\em mixin} instance assigned to the {\em metric} mixin is {\tt http://schemas.ogf.org/occi/monitoring\#metric}, as in table \ref{tab:mixin}. The {\em metric} mixin has no capabilities, and is used as a tag for mixins that customize a \coll\ link, by specifing the collected metrics and the measurement process.
 
 The OCCI attributes of a {\em mixin} that depends on the {\em metric} tag are divided into two groups:
 \begin{itemize}
 
-\item Metric attributes: they represent the delivered measurements, that are represented as a {\em String} identifier, unique in the {\em scope} of the source Sensor (see section \ref{sec:scope});
+\item Metric attributes: they represent the delivered measurements. They are a {\em String} identifier that is associated with an {\em output channel} (see section \ref{sec:channel});
 \item Control attributes: they control the operation of the measurement activity.
 \end{itemize}
 
 \subsection{Features of the \mi s that depend on the {\em Aggregator} tag \label{sec:aggregator}}
 
-A \mi\ with the {\em aggregator} tag is meant to implement the computation of an aggregated metric starting from raw metrics and is applied to a \sens resource.
+The {\em mixin} instance assigned to the {\em aggregator} mixin is {\tt http://schemas.ogf.org/occi/monitoring\#aggregator}, as in table \ref{tab:mixin}. The {\em aggregator} mixin has no capabilities, and is used as a tag for mixins that customize a \sens\ resource, by specifing how raw metrics are processed before being published.
 
-The attributes of a \mi\ with the {\em Aggregator} tag are divided into three groups:
+The OCCI attributes of a \mi\ that depends on the {\em aggregator} tag are divided into three groups:
 
 \begin{itemize}
 
-\item Input attributes: they bind an input of the aggregating algorithm with the metrics coming from monitored resources connected with outgoing \coll s. The binding is implemented using the identifier associated with a specific metric in the {\em metric} mixin.
+\item Input attributes: they bind an input of the aggregating algorithm with the metrics coming from monitored resources connected with outgoing \coll s. They are {\em String} identifiers that are associated with an {\em input channel} (see section \ref{sec:channel}).
 \item Control attributes: they control the operation of the aggregating function;
-\item Metric attributes: they correspond to the metrics delivered, and are defined like those of {\em metric} mixin.
+\item Metric attributes: they represent the delivered measurements. They are a {\em String} identifier that is associated with an {\em output channel} (see section \ref{sec:channel}).
 \end{itemize}
 
 \subsection{Features of the \mi s that depend on the {\em Publisher} tag \label{sec:publisher}}
 
-How data are delivered is defined by a \publ\ mixin .
+The {\em mixin} instance assigned to the {\em publisher} mixin is {\tt http://schemas.ogf.org/occi/monitoring\#publisher}, as in table \ref{tab:mixin}. The {\em publisher} mixin has no capabilities, and is used as a tag for mixins that customize a \sens\ resource, by specifing how metrics are published.
 
-The attributes of a {\em Publisher} \mi\ are divided into two groups:
+The OCCI attributes of a \mi\ that depends on the {\em publisher} tag are divided into two groups:
 
 \begin{itemize}
-\item Input attributes: they are defined like those of the {\em Aggregator};
-\item Control attributes: they determine the process used to publish input attributes.
+\item Input attributes: they bind the publishing process with the metrics produced by metric or aggregator mixins. They are {\em String} identifiers that are associated with an {\em input channel} (see section \ref{sec:channel}).;
+\item Control attributes: they control the process used to publish input attributes.
 \end{itemize}
 
-\subsection{The scope and the monitoring pipe}
+\subsection{The scope and the monitoring pipe \label{sec:channel}}
 
-The three types of mixins, {\tt metric}, {\tt aggregator}, and {\tt publisher}, are meant to represent the three stages of a pipe. Measurements flow across the three stages, from the monitored resource to the point where they leave the \sens\. Their presence is useful when the provider wants to give the user the possibility to extensively customize the monitoring infrastructure.
+The three types of mixins --- namely, {\em metric}, {\em aggregator}, and {\em publisher} --- are meant to represent the three stages of a pipe. Measurements flow across the three stages, from the monitored resource to the point where they are published. The available plugins are the tools the user has to define and customize his monitoring infrastructure.
 
-When this is the case, the provider needs to describe the flow of data: for instance, which metric output goes to which aggregator input. Inpute and output attributes, as defined above, allow this by connecting input and output attributes that share the same value: we call this value a {\em channel}. Such values must be unique identifiers among all input and output attributes of the mixins of the \sens and of all outgoing \coll s. It is limited range, so the designer should be able to manage this.
+In case the provider offers the user basic building blocks, instead of pre-configured monitoring schemas, the API must be powerful enough to define the flow of data between such building blocks. Input and output attributes allow this: when such attributes share the same value (or {\em channel} identifier) measuments flow from input ones to output ones.
 
-A \sens\ is the source of \coll\ links, and all of them (\sens\ included) are collectively indicated as the {\em scope} of that \sens . The removal of a \sens\ determines the removal of all \coll s in its scope.
+The visibility of {\em channel} identifiers is limited within a \sens\ and its outgoing \coll. For this reason all of them are collectively indicated as the {\em scope} of that \sens .
+
+According with the core properties of resources and links (see \cite{occi:core}), the removal of a \sens\ determines the removal of all \coll s in its scope.
 
 \section{Conformance profiles}
 
@@ -344,6 +340,7 @@ The provider must ensure that a user defined \mi\ does not compromise the securi
 Concerning the kind of monitoring infrastructure deployed using the \sens\ and the \coll , security aspects are managed using appropriate \mi s. For instance the \coll\ might be associated with a \mi\ describing a secure transport protocol, while the sensor might be configured to be accessible only from authenticated users (?). The provider SHOULD offer the user a set of predefined \mi s that introduce the appropriate level of security. User defined \mi s SHOULD be avoided for this kind of options.
 }
 
+\section{Glossary}
 \label{sec:glossary}
 \input{include/glossary}
  
@@ -370,6 +367,18 @@ Email: thijsx.metsch@intel.com
 
 \textbf{Ralf Nyren} \\
 Email: ralf@nyren.net 
+
+
+\section{Intellectual Property Statement}
+\input{include/ip}
+
+\section{Disclaimer}
+\input{include/disclaimer}
+
+\section{Full Copyright Notice}
+\input{include/copyright}
+
+
 
 %\section{Acknowledgments}
 
