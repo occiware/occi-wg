@@ -86,16 +86,21 @@ capabilities required to support modern service offerings.
 \section{Notational conventions}
 \input{include/notational}
 
-\newcommand{\smx}{{\bf Notify}}
-\newcommand{\ntfl}{{\bf Notification}}
+\newcommand{\smx}{{\em notifier}}
+\newcommand{\ntfl}{{\em notification}}
 
 \section{Motivations}
 
-It is often the case that an entity changes during its lifetime: for instance a Compute resource experiences a transient at the beginning of its lifetime during bootup \cite{occi:infrastructure}.
+It is often the case that an entity changes during its lifetime: for instance a {\em Compute} resource experiences a transient at the beginning of its lifetime during bootup \cite{occi:infrastructure}.
 
-We want to give the provider the tools to allow the user to define entities such that their changes are observable. The specifications for such tools are the premises for an interoperable notification framework.
+We want to give the provider the tools to allow the user to define entities such that their changes are observable.
 
-We introduce an OCCI Extension that allows the user to differentiate an OCCI resource that produces notifications, and how such notifications are visible to other OCCI Resources.
+We introduce an OCCI Extension that allows the user
+
+\begin{itemize} 
+\item to differentiate an OCCI resource that produces notifications, and 
+\item to describe how such notifications are visible to other OCCI Resources.
+\end{itemize}
 
 \section{OCCI notification}
 
@@ -122,15 +127,15 @@ To define where a notification is directed the user defines an OCCI Link of a de
 	\toprule
 	Term & Scheme & Title & Attributes & Actions & Depends & Applies \\
 	\colrule
-	\ntfl &  $<$schema$>$/notification\# & \smx 
+	\smx &  $<$schema$>$/notification\# & \smx\ Mixin 
 	& \{\} & \{\} & \{\} & $<$schema$>$/core\#Resource \\
 	\botrule
 	\end{tabular}
 }
 
-The provider that supports the OCCI Notification extension MUST implement the \smx mixin for each provided entity kind.
+The {\em mixin} instance assigned to the \smx\ type is {\tt http://schemas.ogf.org/occi/notification\#notifier}, as in table \ref{tbl:smx}. The provider that supports the OCCI Notification extension MUST implement the \smx\ mixin for each provided entity kind.
 
-There is no capabillity associated with the \smx mixin: it is a {\em tag}.
+There is no capability associated with the \smx\ mixin: it is a {\em tag}.
 
 \subsection{The \ntfl\ link} 
 
@@ -143,35 +148,42 @@ There is no capabillity associated with the \smx mixin: it is a {\em tag}.
 	\toprule
 	Term & Scheme & Title & Attributes & Actions & Parent \\
 	\colrule
-	\ntfl &  $<$schema$>$/notification\# & NotifyLink \hl{Link}
+	\ntfl &  $<$schema$>$/notification\# & \ntfl\ Link
 	& \{\} & \{\} & $<$schema$>$/core\#Link\\
 	\botrule
 	\end{tabular}
 }
 
-The target of a \ntfl\ is a generic Resource, while the source MUST be associated with the \smx\ mixin. 
+The {\em kind} instance assigned to the \ntfl\ type is {\tt http://schemas.ogf.org/occi/notification\#notification}, as in table \ref{tbl:ntfl}. The target of a \ntfl\ is a generic {\em Resource}, while the source MUST be associated with the \smx\ mixin. 
 
-The instantiation of an \ntfl\ whose source is not associated with a \smx\ mixin fails and an error is raised.
+If the user requests the creation of an \ntfl\ whose source is not associated with a \smx\ mixin, the request MUST fail with an error.
 
-If the \ntfl\ mixin associated with a Resource is removed, all outgoing \ntfl\ links are silently removed.
+If the user removes the \ntfl\ mixin associated with a {\em Resource}, all outgoing \ntfl\ links MUST be silently removed.
 
 There is no capability associated with the \ntfl.
 
-According with the core model \cite{occi:core}, the resource that is the source of \ntfl s is able to discover all such links through the {\em links} property: this is not true for the target of the link.
+According with the core model \cite{occi:core}, the user is able to discover all \ntfl\ links that have their source in a given {\em Resource}.
 
-According with the core model \cite{occi:core}, the removal of the source of an \ntfl link determines the removal of the link itself: the same is not true for the target.
+According with the core model \cite{occi:core}, the removal of the source of an \ntfl link determines the removal of the link itself.
 
 \section{Application notes and an example}
 
 From the user perspective, the application of the \smx\ corresponds to enabling the access to the dynamic content of a resource. This is significant for a Resource that is changing in time.
 
-The \smx\ alone does ot specify which changing aspect is in fact notified, and how. This specification may be made explicit with a further mixin, or may be left implicit as in the following example.
+The \smx\ mixin alone does not specify which changing aspect is in fact notified, and how. This specification may be made explicit with a further mixin, or may be left implicit as in the following example.
 
-From the provider perspective the association of an \smx\ is reflected in the implementation of the functionalities needed to observe and render the change. This operation is guided by the Resources that are targets of the \ntfl.
+From the provider perspective the association of a \smx\ mixin is reflected in the implementation of the functionalities needed to observe and render the change. This operation is guided by the {\em Resources} that are targets of the \ntfl.
 
-The way in which notifications are used falls ouside the scope of this document: as a general rule, they are used for monitoring and management. Such aspects can be defined by the user with mixins associated with the \ntfl, or in the Resource targeted by the \ntfl.
+The way in which notifications are used falls ouside the scope of this document: as a general rule, they are used for management purposes. Such aspects can be defined by the user with mixins associated with the \ntfl\ link, or in the {\em Resource} targeted by the \ntfl.
 
-The following example illustrates a use case where the explicit description of the capabilities of the involved entities is not required.
+The notification extension is inappropriate to define the planned and periodic measurement of operational parameters of a resource for monitoring purposes: the monitoring extension \cite{occi:monitoring} specifically addresses such aspects.
+
+The following example (see figure \ref{fig:example}) illustrates a use case where the explicit description of the capabilities of the involved entities is not required.
+
+\begin{figure}
+\includegraphics[width=0.3\textwidth]{figs/notificationExample.pdf}
+\caption{Compute resources that notify their state to a control resource \label{fig:example}}
+\end{figure}
 
 \begin{quote}
 A provider offers a Resource of type {\em 3-out-of-k}, that keeps in the {\em active} state 3 of the Compute resources from which it receives notifications.
