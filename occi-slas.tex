@@ -235,9 +235,9 @@ Table~\ref{tbl:terms-attributes} shows the defined attributes for the \hl{Agreem
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
-	occi.agreement.term.type & Enum \{SERVICE-TERM,SLO, n/a\} & 1 & Immutable & The type of the term that is being defined.\\
+	occi.agreement.term.type & Enum \{SERVICE-TERM,SLO, n/a\} & 1 & Mutable & The type of the term that is being defined.\\
 	occi.agreement.term.state & Enum \{Undefined,Fulfilled  Violated\} & 1 & Immutable & The state of fulfillment of the specific term. \\
-	occi.agreement.term.desc & String & 0\ldots1 & Immutable & The description of the agreement term defined with this mixin. \\
+	occi.agreement.term.desc & String & 0\ldots1 & Mutable & The description of the agreement term defined with this mixin. \\
 	\botrule
 	\end{tabular}
 }
