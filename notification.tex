@@ -39,9 +39,9 @@
 % header on first page is different
 \thispagestyle{empty}
 
-\doccode \hfill Augusto Ciuffoletti, Università di Pisa\\ 
-OCCI-WG \hfill Thijs Metsch, Platform Computing\\
-\rightline {Andy Edmonds, Intel}\\
+\doccode \hfill Augusto Ciuffoletti, Univ. of Pisa\\ 
+OCCI-WG \hfill Thijs Metsch, Intel Corp.\\
+\rightline {Andy Edmonds, Zurich University of Applied Sciences}\\
 \rightline {September 22, 2014}\\
 \rightline {Updated: \today}
 
@@ -106,7 +106,7 @@ We introduce an OCCI Extension that allows the user
 
 The way to define a property of an OCCI entity is to associate a mixin to it. So the straightforward way to assert that an entity is one whose changes are observable is by associating a mixin that is related with this property. We call this mixin \smx.
 
-To define where a notification is directed the user defines an OCCI Link of a definite subkind, that is called \ntfl.
+To define where a notification is directed the user instantiates a \ntfl\ link.
 
 %\begin{figure}[!h]
 %	{\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{270}
@@ -140,7 +140,7 @@ There is no capability associated with the \smx\ mixin: it is a {\em tag}.
 \subsection{The \ntfl\ link} 
 
 \mytablefloat{
-	\label{tbl:ntfl}The immutable model attributes of the \ntfl category.
+	\label{tbl:ntfl}The immutable model attributes of the \ntfl\ kind.
 	The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
 	{\bf $<$schema$>$} in this table for a better readability experience. 
 	} {
@@ -156,7 +156,7 @@ There is no capability associated with the \smx\ mixin: it is a {\em tag}.
 
 The {\em kind} instance assigned to the \ntfl\ type is {\tt http://schemas.ogf.org/occi/notification\#notification}, as in table \ref{tbl:ntfl}. The target of a \ntfl\ is a generic {\em Resource}, while the source MUST be associated with the \smx\ mixin. 
 
-If the user requests the creation of an \ntfl\ whose source is not associated with a \smx\ mixin, the request MUST fail with an error.
+If the user requests the creation of a \ntfl\ whose source is not associated with a \smx\ mixin, the request MUST fail with an error.
 
 If the user removes the \ntfl\ mixin associated with a {\em Resource}, all outgoing \ntfl\ links MUST be silently removed.
 
@@ -164,36 +164,37 @@ There is no capability associated with the \ntfl.
 
 According with the core model \cite{occi:core}, the user is able to discover all \ntfl\ links that have their source in a given {\em Resource}.
 
-According with the core model \cite{occi:core}, the removal of the source of an \ntfl link determines the removal of the link itself.
+According with the core model \cite{occi:core}, the removal of the source of an \ntfl\ link determines the removal of the link itself.
 
 \section{Application notes and an example}
 
-From the user perspective, the application of the \smx\ corresponds to enabling the access to the dynamic content of a resource. This is significant for a Resource that is changing in time.
+From the user perspective, the application of the \smx\ to a {\em Resource} corresponds to enabling the access to its state. This is significant mainly for {\em Resources} whose state changes in time.
 
-The \smx\ mixin alone does not specify which changing aspect is in fact notified, and how. This specification may be made explicit with a further mixin, or may be left implicit as in the following example.
+The \smx\ mixin alone does not specify which changing aspect is in fact notified, and how: notably, not necessarily the attribute with {\sc state} id, if one exists. A further specification may be made explicit with a other mixins.
 
-From the provider perspective the association of a \smx\ mixin is reflected in the implementation of the functionalities needed to observe and render the change. This operation is guided by the {\em Resources} that are targets of the \ntfl.
+From the provider perspective the association of a \smx\ mixin is reflected in the implementation of the functionalities needed to observe and render the change. How this implemented depends on the {\em Resources} that are targets of the \ntfl.
 
-The way in which notifications are used falls ouside the scope of this document: as a general rule, they are used for management purposes. Such aspects can be defined by the user with mixins associated with the \ntfl\ link, or in the {\em Resource} targeted by the \ntfl.
+The way in which notifications are used falls ouside the scope of this document: as a general rule, they are for management purposes. Such aspects can be defined by the user with mixins associated with the \ntfl\ link, or in the {\em Resource} targeted by the \ntfl.
 
-The notification extension is inappropriate to define the planned and periodic measurement of operational parameters of a resource for monitoring purposes: the monitoring extension \cite{occi:monitoring} specifically addresses such aspects.
+The notification extension is inappropriate to describe the planned and periodic measurement of operational parameters of a resource for monitoring purposes: the monitoring extension \cite{occi:monitoring} specifically addresses such aspects, and may be coordinated with notification.
 
-The following example (see figure \ref{fig:example}) illustrates a use case where the explicit description of the capabilities of the involved entities is not required.
+The following example (see figure \ref{fig:example}) illustrates a use case where the capabilities of the involved entities are implicit in the {\em Kind} of the target resource.
 
 \begin{figure}
+\centering
 \includegraphics[width=0.3\textwidth]{figs/notificationExample.pdf}
 \caption{Compute resources that notify their state to a control resource \label{fig:example}}
 \end{figure}
 
 \begin{quote}
-A provider offers a Resource of type {\em 3-out-of-k}, that keeps in the {\em active} state 3 of the Compute resources from which it receives notifications.
+A provider offers a Management Resource of {\em Kind} {\em 3-out-of-k}, that keeps in the {\em active} state 3 of the Compute resources from which it receives notifications.
 
-The user that wants to take advantage of this service instantes a {\em 3-out-of-k} Resource $3ook$, and associated an \smx\ to each of the $k$ Compute resources $C_{1..k}$. For each of them a \ntfl\ link $N_i$ is instantiated that originates from $C_i$ and targets $3ook$.
+The user that wants to take advantage of this service instantes a {\em 3-out-of-k} Resource $3ook$, and associates a \smx\ to each of the $k$ Compute resources $C_{1..k}$. For each of them a \ntfl\ link $N_i$ is instantiated that originates from $C_i$ and targets $3ook$.
 \end{quote}
 
-The schema is portable across any platform that offers the OCCI-infrastructure and OCCI-notification, and that provides a  {\em 3-out-of-k} Resource type.
+The schema is portable across any platform that offers the OCCI-infrastructure and OCCI-notification, and that provides a  {\em 3-out-of-k} {\em Kind}.
 
-Distinct providers may interoperate, for instance if one provides the  {\em 3-out-of-k} Resource and another the Compute resources, provided that an agreement exists between the two that allows cross provider information transfer.
+Distinct providers may interoperate, if an agreement exists that allows cross-provider information transfer: for instance, one provides the  {\em 3-out-of-k} Resource and another the Compute resources.
 
 \section{Security issues}
 The OCCI Notification specification is an extension to the OCCI Core
