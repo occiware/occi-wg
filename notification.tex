@@ -170,9 +170,9 @@ According with the core model \cite{occi:core}, the removal of the source of an 
 
 From the user perspective, the application of the \smx\ to a {\em Resource} corresponds to enabling the access to its state. This is significant mainly for {\em Resources} whose state changes in time.
 
-The \smx\ mixin alone does not specify which changing aspect is in fact notified, and how: notably, not necessarily the attribute with {\sc state} id, if one exists. A further specification may be made explicit with a other mixins.
+The \smx\ mixin alone does not specify which changing aspect is in fact notified, and how: notably, not necessarily the attribute with {\sc state} id, if one exists. When needed, additional mixins are used to address specific events.
 
-From the provider perspective the association of a \smx\ mixin is reflected in the implementation of the functionalities needed to observe and render the change. How this implemented depends on the {\em Resources} that are targets of the \ntfl.
+From the provider perspective the association of a \smx\ mixin is reflected in the implementation of the functionalities needed to observe and render the change. How this is implemented depends on the {\em Resources} that are targets of the \ntfl.
 
 The way in which notifications are used falls ouside the scope of this document: as a general rule, they are for management purposes. Such aspects can be defined by the user with mixins associated with the \ntfl\ link, or in the {\em Resource} targeted by the \ntfl.
 
@@ -182,17 +182,32 @@ The following example (see figure \ref{fig:example}) illustrates a use case wher
 
 \begin{figure}
 \centering
-\includegraphics[width=0.3\textwidth]{figs/notificationExample.pdf}
+\includegraphics[width=0.4\textwidth]{figs/notificationExample.pdf}
 \caption{Compute resources that notify their state to a control resource \label{fig:example}}
 \end{figure}
 
 \begin{quote}
-A provider offers a Management Resource of {\em Kind} {\em 3-out-of-k}, that keeps in the {\em active} state 3 of the Compute resources from which it receives notifications.
+A provider offers a Management Resource of {\em Kind} {\em 3-out-of-k}, that keeps in the {\em active} state three of the Compute resources from which it receives notifications.
 
 The user that wants to take advantage of this service instantes a {\em 3-out-of-k} Resource $3ook$, and associates a \smx\ to each of the $k$ Compute resources $C_{1..k}$. For each of them a \ntfl\ link $N_i$ is instantiated that originates from $C_i$ and targets $3ook$.
 \end{quote}
 
 The schema is portable across any platform that offers the OCCI-infrastructure and OCCI-notification, and that provides a  {\em 3-out-of-k} {\em Kind}.
+
+From the point of view of cloud management, the existence of a \smx\ entails the activation of a process that is able to detect and notify the occurrence of relevant events. The existence of a \ntfl\ corresponds to a kind of {\em subscribe} request: the occurrence of relevant events is notified to the target resource. 
+
+The cloud management, knowing the type of resource that is the target of the notification, is able to optimize and configure the production of events and the notification protocol. However, such details are kept deliberatly hidden to the user, that has limited capabilities to configure the notifications service, bound to the existence of specialized mixins.
+
+The API is therefore mostly opaque to the user: this is a feature of the notification service that is introduced to improve its useability, performance and robustness. Whenever the user needs better control on the monitoring process, for instance to perform custom management activities, the monitoring extension is preferable.
+
+In figure \ref{fig:deploy} we give an idea of a possible deployment of a {\em 3ook} resource. The definition of the service attached to the resource is not relevant: all we need to know is that it controls resources based on notifications from the resources themselves, in a closed control loop. On the left side we see the virtual resources: the {\em 3-out-of-k} resource receives notifications in the form of {\sc xmpp} messages from the {\em notify processes} running on the Virtual Machine. The creation of this infrastructure is governed by the presence of \smx\ mixins and \ntfl. On the right there is the Cloud management architecture, that has control over the resources, in particular to process the input messages of the {\em 3ook} implementation (inside the container labelled {\em User Management}) and to control the state of the virtual machines (inside the container labelled {\em Resource Management}).
+
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{figs/notificationDeploy.pdf}
+\caption{Deploying a {\em 3ook} resource \label{fig:deploy}}
+\end{figure}
+
 
 Distinct providers may interoperate, if an agreement exists that allows cross-provider information transfer: for instance, one provides the  {\em 3-out-of-k} Resource and another the Compute resources.
 
