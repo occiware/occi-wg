@@ -159,21 +159,22 @@ format used in a HTTP Response.
 \end{description}
 
 \subsection{HTTP status codes}
-
 The below list specifies the minimum set of HTTP status codes an OCCI Client MUST
 understand. An OCCI Server MAY return other HTTP status codes but the exact client
-behaviour in such cases is not specified.
-
-TODO:
+behaviour in such cases is not specified. The return codes are specified by 
+\cite{rfc7231} and \cite{rfc7235}.
 
 \begin{description}
-\item[200]
-\item[204]
-\item[301]
-\item[400]
-\item[403]
-\item[404]
-\item[405]
+\item[200 OK] indicates that the request has succeeded.
+\item[201 CREATED] indicates that the request has been fulfilled and has resulted in one or more new resources being created.
+\item[400 Bad Request] indicates that the server cannot or will not process the request due to something that is perceived to be a client error
+\item[401 Unauthorized] indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+\item[403 Forbidden] indicates that the server understood the request but refuses to authorize it.
+\item[404 Not Found] indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists
+\item[405 Method Not Allowed] indicates that the method received in the request-line is known by the origin server but not supported by the target resource.
+\item[406 Not Acceptable] status code indicates that the target resource does not have a current representation that would be acceptable to the user agent
+\item[500 Internal Server Error] indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+\item[501 Not Implemented] indicates that the server does not support the functionality required to fulfill the request.
 \end{description}
 
 \section{Filters}
@@ -183,8 +184,7 @@ remove filters later one.
 
 \section{Pagination}
 
-TODO: define filters
-remove filters later one.
+TODO
 
 \section{HTTP methods applied to entity instance URLs}
 
@@ -224,7 +224,7 @@ The message MUST contain the full representaiton of a entity instance.
 \paragraph{Server PUT reponse}
 The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the OCCI implementation
 returns the \\tt{200 OK} HTTP response code the full representation of an entity instance MUST be returned. 
-In case of a \tt{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC2616 \cite{?}.
+In case of a \tt{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC7231 \cite{rfc7231}.
 
 \subsubsection{replace}
 
@@ -234,7 +234,7 @@ The message must contain the full representaiton of a entity instance.
 \paragraph{Server PUT reponse}
 The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the OCCI implementation
 returns the \\tt{200 OK} HTTP response code the full representation of an entity instance MUST be returned. 
-In case of a \tt{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC2616 \cite{?}.
+In case of a \tt{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC7231 \cite{rfc7231}.
 
 Any OCCI \hl{Link}s associated with an existing OCCI \hl{Resource} MUST be left intact.
 
@@ -249,7 +249,7 @@ The message MUST contain a partial representation of a entity instance to be cha
 \paragraph{Server POST reponse}
 The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the OCCI implementation
 returns the \\tt{200 OK} HTTP response code the full representation of an entity instance MUST be returned. 
-In case of a \tt{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC2616 \cite{?}.
+In case of a \tt{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC7231 \cite{rfc7231}.
 
 \subsubsection{action}
 Actions are triggered using the HTTP POST verb and by adding a query to the URI. This query MUST contain a key-value pair. The key MUST be "action". The value MUST equal to the \hl{Action}'s term.
