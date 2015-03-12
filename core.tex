@@ -38,10 +38,10 @@
 % header on first page is different
 \thispagestyle{empty}
 
-Draft \hfill  {Ralf Nyrén, Aurenav}\\
-OCCI-WG \hfill  Andy Edmonds, Intel\\
-\rightline {Alexander Papaspyrou, TU Dortmund University}
-\rightline {Thijs Metsch, Platform Computing}
+Draft \hfill  {Ralf Nyrén, Independent}\\
+OCCI-WG \hfill  Andy Edmonds, Zhaw
+\rightline {Alexander Papaspyrou, Adesso}
+\rightline {Thijs Metsch, Intel}
 \rightline {April 7, 2011}\\
 \rightline {Update: \today}
 
@@ -66,7 +66,7 @@ Eventually this document will obsolete GFD-P-R.183. This document is fully backw
 
 \underline{Copyright Notice}
 
-Copyright \copyright ~Open Grid Forum (2009-2014). All Rights Reserved.
+Copyright \copyright ~Open Grid Forum (2009-2015). All Rights Reserved.
 
 \underline{Trademarks}
 
@@ -163,8 +163,8 @@ for renderings and extensions to build upon.
 
 \section{OCCI Core Model}
 The OCCI Core Model defines a representation of instance types which
-can be manipulated through an OCCI rendering implementation.  It is an
-abstraction of real-world resources, including the means to identify,
+can be manipulated through an OCCI protocol and rendering implementations.
+It is an abstraction of real-world resources, including the means to identify,
 classify, associate and extend those resources.
 
 A fundamental feature of the OCCI Core Model is that it can be
@@ -317,7 +317,6 @@ MUST implement to be compliant.
     term 		& String 	& 1 			& Immutable 			& Unique identifier of the \hl{Category} instance within the categorisation scheme. \\
     scheme 		& URI 		& 1 			& Immutable 			& The categorisation scheme. \\
     title 		& String 	& 0..1 			& Immutable 			& The display name of an instance. \\
-    attributes		& \hl{Attribute} & 0..* 		& Immutable 			& Set of \hl{Attribute} instances. \\
     \botrule
   \end{tabular}
 }
@@ -363,7 +362,7 @@ MUST implement to be compliant.
     type    &   Enum \{Object, List, Hash\}   &   1   &   Immutable   &   OCCI Attribute type. \\
     mutable   &   Boolean   &   1   &   Immutable   &   OCCI Attribute mutability. \\
     required    &   Boolean   &   1   &   Immutable   &   Whether the OCCI Attribute must be supplied by the client at instance creation-time. \\
-    pattern   &   String    &   0..1    &   Immutable   &   OCCI Attribute pattern, when applicable specified as PCRE, restricts value given to the attribute in instances.\todo{Keeping this?} \\
+    pattern   &   String    &   0..1    &   Immutable   &   OCCI Attribute pattern expressed as PCRE \\
     default   &   String    &   0..1    &   Immutable   &   OCCI Attribute default value. \\
     description   &   String    &   0..1    &   Immutable   &   A description of the OCCI Attribute. \\
     \botrule
@@ -381,8 +380,7 @@ An \hl{Attribute} MAY specify the following properties in addition to the OCCI
 Attribute name. Attribute properties are OPTIONAL but MUST be client
 discoverable if used.
 \begin{description}
-\item[type] The type of the OCCI Attribute. The types supported are ``Object'',
-  ``List'' and ``Hash''.
+\item[type] The type of the OCCI Attribute. The types supported are ``Object'', ``List'' and ``Hash''.
 
 \item[mutable] Whether a OCCI client can change the OCCI Attribute value. See
   section~\ref{sec:mutability}.
@@ -390,13 +388,10 @@ discoverable if used.
 \item[required] If an OCCI Attribute is ``required'' a client MUST specify an
   value at instance creation-time.
 
-\item[pattern] When specified, places additional restrictions on value given to
-  the attribute in instances. Instance attribute value MUST conform to this
-  restriction. \todo{Keeping this?}
+\item[pattern] MAY be specified in ERE \cite{ere} format, places additional restrictions on possibles values given. 
 
 \item[default] The default value given to an OCCI Attribute if the client does
-  not specify a value at instance creation-time.  The {\em default} property is
-  used to implement templates, see section~\ref{sec:template}.
+  not specify a value at instance creation-time.  The {\em default} property is used to implement templates, see section~\ref{sec:template}.
 
 \item[description] A summarizing description of the OCCI Attribute to
   complement the attribute name. For example, an interactive OCCI client may
