@@ -152,7 +152,7 @@ remain immutable to any client.
 	\label{tbl:kinds}The \hl{Kind} instances defined for
 	the infrastructure sub-types of \hl{Resource}, \hl{Link} and related \hl{Mixin}s.
 	The base URL {\bf http://schemas.ogf.org/occi} has been replaced with
-	{\bf $<$schema$>$} in this table for a better readability experience. 
+	{\bf $<$schema$>$} in this table for a better readability experience.
 	} {
 	\begin{tabular}{llll}
 	\toprule
@@ -160,19 +160,19 @@ remain immutable to any client.
 	\colrule
 	compute &  $<$schema$>$/infrastructure\# & Compute \hl{Resource}
 	& $<$schema$>$/core\#resource \\
-	
+
 	storage & $<$schema$>$/infrastructure\# & Storage \hl{Resource}
 	& $<$schema$>$/core\#resource \\
-	
+
 	storagelink & $<$schema$>$/infrastructure\# & StorageLink \hl{Link}
 	& $<$schema$>$/core\#link \\
-	
+
 	network & $<$schema$>$/infrastructure\# & Network \hl{Resource}
 	& $<$schema$>$/core\#resource \\
-	
+
 	networkinterface & $<$schema$>$/infrastructure\# & NetworkInterface \hl{Link}
 	& $<$schema$>$/core\#link \\
-	
+
 	\botrule
 	\end{tabular}
 }
@@ -184,11 +184,12 @@ Model document \cite{occi:core}.
 
 The following sections on \hl{Compute}, \hl{Storage} and \hl{Network}
 types detail the \hl{Attribute}s, \hl{Actions} and states defined for
-each of them, including type-specific mixins where appropriate. 
-Following those, the definition of infrastructure-related \hl{Link} 
-sub-types are given and finally OS and Resource Templates 
-are defined. Figure~\ref{fig:infra_uml} gives an overview of 
+each of them, including type-specific mixins where appropriate.
+Following those, the definition of infrastructure-related \hl{Link}
+sub-types are given and finally OS and Resource Templates
+are defined. Figure~\ref{fig:infra_uml} gives an overview of
 the key types involved in this infrastructure specification.
+\todo{Need to fix Link (Model Attributes + 'target' arrow) in Figure~\ref{fig:infra_uml}. No idea how to open $\ast$.zuml!}
 
 \subsection{Compute}
 The \hl{Compute} type represents a generic information processing
@@ -199,22 +200,22 @@ the \hl{Resource} base type defined in OCCI Core Model
 \hl{Compute} instance MUST use and expose this \hl{Kind}.
 
 \mytablefloat{
-	\label{tbl:compute}\hl{Attribute}s defined for the \hl{Compute} type. 
+	\label{tbl:compute}\hl{Attribute}s defined for the \hl{Compute} type.
 }
 {
 	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
-	occi.compute.architecture & Enum \{x86, x64\} & 0\ldots1 
+	occi.compute.architecture & Enum \{x86, x64\} & 0\ldots1
 	& Mutable & CPU Architecture of the instance.\\
-	occi.compute.cores & Integer & 0\ldots1 & Mutable 
+	occi.compute.cores & Integer & 0\ldots1 & Mutable
 	& Number of CPU cores assigned to the instance.\\
-	occi.compute.hostname & String & 0\ldots1 
+	occi.compute.hostname & String & 0\ldots1
 	& Mutable & Fully Qualified DNS hostname for the instance.\\
-	occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 0\ldots1 
+	occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 0\ldots1
 	& Mutable & CPU Clock frequency (speed) in gigahertz.\\
-	occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 0\ldots1 
+	occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 0\ldots1
 	& Mutable & Maximum RAM in gigabytes allocated to the instance.\\
 	occi.compute.state & Enum \{active, inactive, suspended, error\} & 1 
 	& Immutable & Current state of the instance.\\
@@ -276,16 +277,16 @@ The \hl{Network} type is assigned the
 \hl{Kind}. A \hl{Network} instance MUST use and expose this \hl{Kind}.
 
 \mytablefloat{
-	\label{tbl:network}\hl{Attribute}s defined for the \hl{Network} type. 
+	\label{tbl:network}\hl{Attribute}s defined for the \hl{Network} type.
 }
 {
 	\begin{tabular}{lllll}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
-	occi.network.vlan & Integer: 0-4095 & 0\ldots1 & Mutable 
+	occi.network.vlan & Integer: 0-4095 & 0\ldots1 & Mutable
 	& 802.1q VLAN Ientifier (e.g. 343).\\
-	occi.network.label & Token & 0\ldots1 & Mutable 
+	occi.network.label & Token & 0\ldots1 & Mutable
 	& Tag based VLANs (e.g. external-dmz).\\
 	occi.network.state & Enum \{active, inactive, error\} & 1 & Immutable 
 	& Current state of the instance.\\
@@ -345,7 +346,7 @@ The \hl{IPNetworking} mixin is assigned%
 MUST support these values.
 
 Table~\ref{tbl:ipnetworking} define the attributes introduced by the
-\hl{IPNetworking} mixin.  
+\hl{IPNetworking} mixin.
 
 The \hl{IPNetworking} mixin MUST be related to the \hl{Network} kind 
 by setting the \textit{depends} attribute to:
@@ -380,7 +381,7 @@ both are instantiated.
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.5]{figs/infrastructure_mixins_obj_dia1_network}
-	\caption{Object Diagram of a \hl{Network} Instance and its 
+	\caption{Object Diagram of a \hl{Network} Instance and its
 	Associated \hl{IPNetwork} \hl{Mixin}.}
 	\label{fig:network_mixin}
 \end{figure}
@@ -394,14 +395,14 @@ type defined in the OCCI Core Model \cite{occi:core}.  The
 \hl{Storage} instance MUST use and expose this \hl{Kind}.
 
 \mytablefloat{
-	\label{tbl:storage}\hl{Attribute}s defined for the \hl{Storage} type. 
+	\label{tbl:storage}\hl{Attribute}s defined for the \hl{Storage} type.
 }
 {
 	\begin{tabular}{lp{2.8cm}clp{5cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
-	occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable 
+	occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable
 	& Storage size in gigabytes of the 	instance.\\
 	occi.storage.state & Enum \{online, offline, error\} & 1 & Immutable 
 	& Current status of the instance.\\
@@ -486,9 +487,9 @@ be related to the \textit{http://schemas.ogf.org/occi/core\#link}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
-	occi.networkinterface.interface & String & 1 & Immutable 
+	occi.networkinterface.interface & String & 1 & Immutable
 	& Identifier that relates the link to the link's device interface\\
-	occi.networkinterface.mac & String & 1 & Mutable 
+	occi.networkinterface.mac & String & 1 & Mutable
 	& MAC address associated with the link's device interface\\
 	occi.networkinterface.state & Enum \{active, inactive, error\}& 1 
 	& Immutable & Current status of the instance.\\
@@ -520,8 +521,8 @@ The \hl{IPNetworkInterface} mixin is assigned%
 \footnote{Both assignments use data members from the inherited \hl{Category}
 type \cite{occi:core}.}
 the ``{\tt scheme}'' of
-\textit{http://schemas.ogf.org/occi/infrastructure/networkinterface\#} and the ``{\tt term}'' value 
-\textit{ipnetworkinterface}. 
+\textit{http://schemas.ogf.org/occi/infrastructure/networkinterface\#} and the ``{\tt term}'' value
+\textit{ipnetworkinterface}.
 An \hl{IPNetworkInterface} mixin MUST support these attributes.
 
 The \hl{IPNetworkInterface} mixin MUST be related to the \hl{NetworkInterface} kind 
@@ -558,7 +559,7 @@ depicts how \hl{NetworkInterface} would be associated with an
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.5]{figs/infrastructure_mixins_obj_dia2_networkinterface}
-	\caption{Object Diagram of a \hl{NetworkInterface} Instance and its Associated 
+	\caption{Object Diagram of a \hl{NetworkInterface} Instance and its Associated
 	IPNetworkInterface \hl{Mixin}.}
 	\label{fig:networkinterface_mixin}
 \end{figure}
@@ -579,16 +580,16 @@ related to the \textit{http://schemas.ogf.org/occi/core\#link}
 \hl{Kind} by setting the \textit{parent} attribute.
 
 \mytablefloat{
-	\label{tbl:storagelink}\hl{Attribute}s defined for the \hl{StorageLink} type. 
+	\label{tbl:storagelink}\hl{Attribute}s defined for the \hl{StorageLink} type.
 }
 {
 	\begin{tabular}{lp{1.8cm}p{1cm}lp{5cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
-	occi.storagelink.deviceid & String & 1 & Mutable 
+	occi.storagelink.deviceid & String & 1 & Mutable
 	& Device identifier as defined by the OCCI service provider.\\
-	occi.storagelink.mountpoint & String & 0\ldots1 & Mutable 
+	occi.storagelink.mountpoint & String & 0\ldots1 & Mutable
 	& Point to where the storage is mounted in the guest OS.\\
 	occi.storagelink.state & Enum \{active, inactive, error\}& 1 
 	& Immutable & Current status of the instance.\\
@@ -667,9 +668,9 @@ OCCI implementation.
 
 %\begin{verbatim}
 %POST /compute
-%Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; 
-%    title='Compute Instance', 
-%    ubuntu-9.10; scheme='http://provider.com/templates/os#'; 
+%Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#';
+%    title='Compute Instance',
+%    ubuntu-9.10; scheme='http://provider.com/templates/os#';
 %    title='Ubuntu 9.10'
 %Attribute: occi.compute.memory=0.5, occi.compute.cores=2
 %\end{verbatim}
@@ -710,18 +711,18 @@ implementation.
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.5]{figs/infra_template_obj_diag2}
-	\caption{Object Diagram of a \hl{Compute} Instance and its Associated OS Template 
+	\caption{Object Diagram of a \hl{Compute} Instance and its Associated OS Template
 	\hl{Mixin} and Resource Template \hl{Mixin}.}
 	\label{fig:infra_template_obj_diag2}
 \end{figure}
 
 %\begin{verbatim}
 %POST /compute
-%Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#'; 
-%    title='Compute Instance', 
-%    small; scheme="http://provider.com/templates/compute#"; 
-%    title="Small Instance", 
-%    ubuntu-9.10; scheme="http://provider.com/templates/os#"; 
+%Category: compute; scheme='http://schemas.ogf.org/occi/infrastructure#';
+%    title='Compute Instance',
+%    small; scheme="http://provider.com/templates/compute#";
+%    title="Small Instance",
+%    ubuntu-9.10; scheme="http://provider.com/templates/os#";
 %    title="Ubuntu 9.10"
 %\end{verbatim}
 
@@ -741,7 +742,7 @@ instance named ``attributes'' in
 figure~\ref{fig:infra_template_obj_diag2}.
 
 %\begin{verbatim}
-%Attribute: occi.compute.cores='2', occi.compute.speed='2.4', 
+%Attribute: occi.compute.cores='2', occi.compute.speed='2.4',
 %    occi.compute.memory='1.0', occi.compute.arch='x86'
 %\end{verbatim}
 
@@ -777,17 +778,17 @@ occi.credentials.ssh.publickey & String & 1 & Mutable & The contents of the publ
 \paragraph{Contextualisation Mixin}
 
 % new as of OCCI 1.2
-In order to ease automation, OCCI supports the means to execute a 
-program once Resource has been instantiated. This feature is 
-provided by the contextualisation mixin. On receipt of the 
-contextualisation data the OCCI implementation MUST distinguish 
-the type of data being presented and then supply that content to the 
+In order to ease automation, OCCI supports the means to execute a
+program once Resource has been instantiated. This feature is
+provided by the contextualisation mixin. On receipt of the
+contextualisation data the OCCI implementation MUST distinguish
+the type of data being presented and then supply that content to the
 Compute Resource being instantiated. That content is then executed
 by the Compute Resource as the last step in the Compute's boot-order.
 
-OCCI implementations SHOULD support this otherwise no 
+OCCI implementations SHOULD support this otherwise no
 contextualisation of a resource instance can be done.
-The OCCI contextualisation mixin has the term \textit{user\_data} 
+The OCCI contextualisation mixin has the term \textit{user\_data}
 and the schema \textit{http://schemas.ogf.org/occi/compute\#}
 \mytablefloat{
 	\label{tbl:contextmixin}%
@@ -799,8 +800,8 @@ and the schema \textit{http://schemas.ogf.org/occi/compute\#}
 \toprule
 Attribute&Type&Multi\-plicity&Mutability&Description\\
 \colrule
-occi.compute.user\_data & String & 1 & Mutable & 
-Contextualisation data (e.g. script, executable) that the client supplies once 
+occi.compute.user\_data & String & 1 & Mutable &
+Contextualisation data (e.g. script, executable) that the client supplies once
 and only once. It cannot be updated.\\
 \botrule
 \end{tabular}
