@@ -173,6 +173,7 @@ behaviour in such cases is not specified. The return codes are specified by
 \item[404 Not Found] indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists
 \item[405 Method Not Allowed] indicates that the method received in the request-line is known by the origin server but not supported by the target resource.
 \item[406 Not Acceptable] status code indicates that the target resource does not have a current representation that would be acceptable to the user agent
+\item[413 Request Entity Too Large] status code indicates that the request is larger than the server is willing or able to process.
 \item[500 Internal Server Error] indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
 \item[501 Not Implemented] indicates that the server does not support the functionality required to fulfill the request.
 \end{description}
@@ -184,7 +185,18 @@ remove filters later one.
 
 \section{Pagination}
 
-TODO
+To request partial results of an otherwise large collection message response, pagination SHOULD be used to reduce the load on 
+both the client and the service provider. This is done in the following manner.
+
+The HTTP verb GET is used against a URI to a collection and the query parameters of {\em page} and {\em number} MUST be used. {\em page} is a indexed 
+integer that refers to a sub-collection of the requested collection. {\em number} is an integer of items that SHOULD be displayed in one paged response.
+
+% e.g. GET http://host/path/to/collection?page=1;number=100
+
+If {\em number} is too large for the provider to handle (policy, technical) then a HTTP 413 response status code MUST be issued to the requesting client.
+
+If there is no more content to be served the result should be a HTTP 200 response status code MUST be issued to the requesting client.
+
 
 \section{HTTP methods applied to entity instance URLs}
 
