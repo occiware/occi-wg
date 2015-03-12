@@ -154,7 +154,8 @@ As REQUIRED by the OCCI Core Model specification, every type
 instantiated that is a sub-type of \hl{Resource} or \hl{Link} MUST be
 assigned a \hl{Kind} that identifies the instantiated type. Each such
 \hl{Kind} instance MUST be related to the \hl{Resource} or \hl{Link}
-base type's \hl{Kind}.  That assigned \hl{Kind} instance MUST always
+base type's \hl{Kind} by setting the \textit{parent} attribute. 
+ That assigned \hl{Kind} instance MUST always
 remain immutable to any client.
 
 \mytablefloat{
@@ -165,7 +166,7 @@ remain immutable to any client.
 	} {
 	\begin{tabular}{llll}
 	\toprule
-	Term & Scheme & Title & Related \hl{Kind} \\
+	Term & Scheme & Title & Parent \hl{Kind} \\
 	\colrule
 	compute &  $<$schema$>$/infrastructure\# & Compute \hl{Resource}
 	& $<$schema$>$/core\#resource \\
@@ -357,7 +358,7 @@ Table~\ref{tbl:ipnetworking} define the attributes introduced by the
 \hl{IPNetworking} mixin.  
 
 The \hl{IPNetworking} mixin MUST be related to the \hl{Network} kind 
-by setting the \textit{rel} attribute to:
+by setting the \textit{depends} attribute to:
 
 \textit{http://schemas.ogf.org/occi/infrastructure\#network}.
 
@@ -485,7 +486,7 @@ The \hl{NetworkInterface} type is assigned the \hl{Kind} instance
 A \hl{NetworkInterface} instance MUST use and expose this \hl{Kind}.
 The \hl{Kind} instance assigned to the \hl{NetworkInterface} type MUST
 be related to the \textit{http://schemas.ogf.org/occi/core\#link}
-\hl{Kind}.
+\hl{Kind} by setting the \textit{parent} attribute.
 
 \mytablefloat{
 	\label{tbl:networklink}\hl{Attribute}s defined for the \hl{NetworkInterface} type.
@@ -534,7 +535,7 @@ the ``{\tt scheme}'' of
 An \hl{IPNetworkInterface} mixin MUST support these attributes.
 
 The \hl{IPNetworkInterface} mixin MUST be related to the \hl{NetworkInterface} kind 
-by setting the \textit{rel} attribute to:
+by setting the \textit{depends} attribute to:
 
 \textit{http://schemas.ogf.org/occi/infrastructure\#networkinterface}.
 
@@ -585,7 +586,7 @@ The \hl{StorageLink} type is assigned the \hl{Kind} instance
 \hl{StorageLink} instance MUST use and expose this \hl{Kind}.  The
 \hl{Kind} instance assigned to the \hl{StorageLink} type MUST be
 related to the \textit{http://schemas.ogf.org/occi/core\#link}
-\hl{Kind}.
+\hl{Kind} by setting the \textit{parent} attribute.
 
 \mytablefloat{
 	\label{tbl:storagelink}\hl{Attribute}s defined for the \hl{StorageLink} type. 
@@ -660,7 +661,7 @@ Template \hl{Mixin} MAY be provided using the \hl{Attribute}.{\tt
 
 A implementation-defined OS Template \hl{Mixin} MUST be related to the
 OCCI OS Template \hl{Mixin} in order to give absolute type
-information.
+information by setting the \textit{depends} attribute.
 
 The OCCI OS Template is defined by the
 \textit{http://schemas.ogf.org/occi/infrastructure\#os\_tpl}
@@ -709,7 +710,8 @@ The OCCI implementation associates a set of Resource attributes (via
 
 An implementation-defined Resource Template \hl{Mixin} MUST be related
 to the OCCI Resource Template \hl{Mixin} in order to give absolute
-type information. The OCCI Resource Template is defined by the
+type information. This is done by setting the \textit{depends} attribute.
+The OCCI Resource Template is defined by the
 \hl{Mixin} instance
 \textit{http://schemas.ogf.org/occi/infrastructure\#resource\_tpl} and
 MUST be supported SHOULD Resource Templates be offered by the OCCI
