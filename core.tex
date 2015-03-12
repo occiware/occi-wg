@@ -62,7 +62,7 @@ OCCI Core \cite{occi:core} specification.
 
 The errata updates are summarized in section~\ref{sec:errata}.
 
-Eventually this document will obsolete GFD-P-R.183. This document is fully backward compatible to \cite{occi:core}. 
+Eventually this document will obsolete GFD-P-R.183. This document is fully backward compatible to \cite{occi:core}.
 
 \underline{Copyright Notice}
 
@@ -357,15 +357,15 @@ MUST implement to be compliant.
   \label{tbl:attribute}Model attributes defined for the \hl{Attribute} type.}{
   \begin{tabular}{lp{23mm}llp{60mm}}
     \toprule
-    Model attribute 	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
+    Model attribute   &   Type    &   Multiplicity    &   Client Mutability   &   Description \\
     \colrule
-    name 		& String 	& 1 		& Immutable 			& OCCI Attribute name. \\
-    type		& Enum \{string, number, boolean\}
-    					& 0..1 		& Immutable 			& OCCI Attribute type. \\
-    mutable		& Boolean	& 0..1 		& Immutable 			& OCCI Attribute mutability. \\
-    required		& Boolean	& 0..1 		& Immutable 			& Whether the OCCI Attribute must be supplied by the client at instance creation-time. \\
-    default		& String	& 0..1 		& Immutable 			& OCCI Attribute default value. \\
-    description		& String	& 0..1 		& Immutable 			& A description of the OCCI Attribute. \\
+    name    &   String    &   1   &   Immutable   & OCCI Attribute name. \\
+    type    &   Enum \{Object, List, Hash\}   &   1   &   Immutable   &   OCCI Attribute type. \\
+    mutable   &   Boolean   &   1   &   Immutable   &   OCCI Attribute mutability. \\
+    required    &   Boolean   &   1   &   Immutable   &   Whether the OCCI Attribute must be supplied by the client at instance creation-time. \\
+    pattern   &   String    &   0..1    &   Immutable   &   OCCI Attribute pattern, when applicable specified as PCRE, restricts value given to the attribute in instances.\todo{Keeping this?} \\
+    default   &   String    &   0..1    &   Immutable   &   OCCI Attribute default value. \\
+    description   &   String    &   0..1    &   Immutable   &   A description of the OCCI Attribute. \\
     \botrule
   \end{tabular}
 }
@@ -381,8 +381,8 @@ An \hl{Attribute} MAY specify the following properties in addition to the OCCI
 Attribute name. Attribute properties are OPTIONAL but MUST be client
 discoverable if used.
 \begin{description}
-\item[type] The type of the OCCI Attribute. The types supported are ``String'',
-  ``Number'' and ``Boolean''.
+\item[type] The type of the OCCI Attribute. The types supported are ``Object'',
+  ``List'' and ``Hash''.
 
 \item[mutable] Whether a OCCI client can change the OCCI Attribute value. See
   section~\ref{sec:mutability}.
@@ -390,11 +390,15 @@ discoverable if used.
 \item[required] If an OCCI Attribute is ``required'' a client MUST specify an
   value at instance creation-time.
 
+\item[pattern] When specified, places additional restrictions on value given to
+  the attribute in instances. Instance attribute value MUST conform to this
+  restriction. \todo{Keeping this?}
+
 \item[default] The default value given to an OCCI Attribute if the client does
   not specify a value at instance creation-time.  The {\em default} property is
   used to implement templates, see section~\ref{sec:template}.
 
-\item[description] A summarising description of the OCCI Attribute to
+\item[description] A summarizing description of the OCCI Attribute to
   complement the attribute name. For example, an interactive OCCI client may
   use the description property when presenting the content of an entity
   instance.
@@ -833,7 +837,7 @@ The \hl{Entity} type is an abstract type of the \hl{Resource} type and
 the \hl{Link} type. It MUST be implemented.
 %
 Table~\ref{tbl:entity} defines the model attributes the \hl{Entity} type
-MUST implement to be compliant.
+MUST implement to be compliant. \todo{How does model attribute 'id' render into 'text/occi' or 'text/plain'? Would OCCI Attribute 'occi.core.id' be a better idea?}
 %
 \mytablefloat{
   \label{tbl:entity}Model attributes defined for the \hl{Entity} type.}{
@@ -964,7 +968,8 @@ another.
 
 The \hl{Link} type MUST implement all attributes inherited from the
 \hl{Entity} type together with the model attributes defined in
-table~\ref{tbl:link} in order to be compliant.
+table~\ref{tbl:link} in order to be compliant. \todo{How does model attribute 'source' render into 'text/occi' or 'text/plain'? Would OCCI Attribute 'occi.core.source' be a better idea?}\\
+\todo{How does model attribute 'target' render into 'text/occi' or 'text/plain'? Would OCCI Attribute 'occi.core.target' be a better idea?}
 
 \mytablefloat{
   \label{tbl:link}Model attributes defined for the \hl{Link} type.}{
@@ -972,8 +977,8 @@ table~\ref{tbl:link} in order to be compliant.
     \toprule
     Model attribute	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
     \colrule
-    source 		& \hl{Resource} & 1 		& Mutable 		& The \hl{Resource} instances the \hl{Link} instance originates from.\\
-    target 		& \hl{Resource} & 1 		& Mutable 		& The \hl{Resource} instances the \hl{Link} instance points to.\\
+    source 		& \hl{Resource} & 1 		& Mutable 		& The \hl{Resource} instances the \hl{Link} instance originates from. \\
+    target 		& \hl{URI} & 1 		& Mutable 		& The unique identifier of an \hl{Object} this \hl{Link} instance points to. MAY point outside of the known domain\todo{Formulation? Idea how to draw this in core\_model UML?}.\\
     \botrule
   \end{tabular}
 }
