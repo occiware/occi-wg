@@ -215,7 +215,7 @@ the \hl{Resource} base type defined in OCCI Core Model
 	& Mutable & CPU Clock frequency (speed) in gigahertz.\\
 	occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 0\ldots1 
 	& Mutable & Maximum RAM in gigabytes allocated to the instance.\\
-	occi.compute.state & Enum \{active, inactive, suspended\} & 1 
+	occi.compute.state & Enum \{active, inactive, suspended, error\} & 1 
 	& Immutable & Current state of the instance.\\
 	\botrule
 	\end{tabular}
@@ -245,7 +245,6 @@ attributes MUST be exposed by an instance of the \hl{Compute} type.
 	stop & inactive & method=\{graceful, acpioff, poweroff\} \\
 	restart & active (via stop and start chain) & method=\{graceful, warm, cold\} \\
 	suspend & suspended & method=\{hibernate, suspend\} \\
-	error & error & -- \\
 	\botrule
 	\end{tabular}
 }
@@ -287,7 +286,7 @@ The \hl{Network} type is assigned the
 	& 802.1q VLAN Ientifier (e.g. 343).\\
 	occi.network.label & Token & 0\ldots1 & Mutable 
 	& Tag based VLANs (e.g. external-dmz).\\
-	occi.network.state & Enum \{active, inactive\} & 1 & Immutable 
+	occi.network.state & Enum \{active, inactive, error\} & 1 & Immutable 
 	& Current state of the instance.\\
 	\botrule
 	\end{tabular}
@@ -315,7 +314,6 @@ attributes MUST be exposed by an instance of the \hl{Network} type.
 	\colrule
 	up & active & --\\
 	down & inactive & --\\
-	error & error & --\\
 	\botrule
 	\end{tabular}
 }
@@ -404,7 +402,7 @@ type defined in the OCCI Core Model \cite{occi:core}.  The
 	\colrule
 	occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable 
 	& Storage size in gigabytes of the 	instance.\\
-	occi.storage.state & Enum \{online, offline, resize\} & 1 & Immutable 
+	occi.storage.state & Enum \{online, offline, error\} & 1 & Immutable 
 	& Current status of the instance.\\
 	\botrule
 	\end{tabular}
@@ -432,7 +430,6 @@ attributes MUST be exposed by an instance of the \hl{Storage} type.
 	\colrule
 	online & online & --\\
 	offline & offline & --\\
-	error & error & --\\
 %	\botrule
 	\end{tabular}
 }
@@ -492,7 +489,7 @@ be related to the \textit{http://schemas.ogf.org/occi/core\#link}
 	& Identifier that relates the link to the link's device interface\\
 	occi.networkinterface.mac & String & 1 & Mutable 
 	& MAC address associated with the link's device interface\\
-	occi.networkinterface.state & Enum \{active, inactive\}& 1 
+	occi.networkinterface.state & Enum \{active, inactive, error\}& 1 
 	& Immutable & Current status of the instance.\\
 	\botrule
 	\end{tabular}
@@ -592,7 +589,7 @@ related to the \textit{http://schemas.ogf.org/occi/core\#link}
 	& Device identifier as defined by the OCCI service provider.\\
 	occi.storagelink.mountpoint & String & 0\ldots1 & Mutable 
 	& Point to where the storage is mounted in the guest OS.\\
-	occi.storagelink.state & Enum \{active, inactive\}& 1 
+	occi.storagelink.state & Enum \{active, inactive, error\}& 1 
 	& Immutable & Current status of the instance.\\
 	\botrule
 	\end{tabular}
