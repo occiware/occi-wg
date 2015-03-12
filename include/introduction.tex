@@ -14,13 +14,16 @@ In order to be modular and extensible the current OCCI specification is
 released as a suite of complimentary documents, which together form the complete
 specification.
 %
-The documents are divided into three categories consisting of the OCCI Core,
-the OCCI Renderings and the OCCI Extensions.
+The documents are divided into four categories consisting of the OCCI Core,
+the OCCI Protocols, the OCCI Renderings and the OCCI Extensions.
 %
 \begin{itemize}
 \item The OCCI Core specification consists of a single document defining the
  OCCI Core Model. The OCCI Core Model can be interacted through {\em
  renderings} (including associated behaviours) and expanded through {\em extensions}.
+\item The OCCI Protocol specifications consist of multiple documents each
+ describing how the model can be interacted with over a particular protocol (e.g. HTTP, AMQP etc.). 
+ Multiple protocols can interact with the same instance of the OCCI Core Model.
 \item The OCCI Rendering specifications consist of multiple documents each
  describing a particular rendering of the OCCI Core Model. Multiple renderings can
  interact with the same instance of the OCCI Core Model and will automatically support
@@ -33,11 +36,13 @@ the OCCI Renderings and the OCCI Extensions.
 \end{itemize}
 %
 \todo{replace with 1.2, note backwards compatibility. define new set of docs for 1.2 below...}
+\todo{add table showing what should be implemented for what version to be compliant}
 
-%The current specification consists of three documents. This
-%specification describes version 1.1 of OCCI. Future releases of OCCI
-%may include additional rendering and extension specifications. The
-%documents of the current OCCI specification suite are:
+The current specification consists of seven documents. This 
+specification describes version 1.2 of OCCI and is backward compatible with 1.1. 
+Future releases of OCCI
+may include additional protocol, rendering and extension specifications. 
+%The documents of the current OCCI specification suite are:
 %
 %\begin{description}
 %\item[OCCI Core] describes the formal definition of the the OCCI Core Model
