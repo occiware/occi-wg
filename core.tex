@@ -811,14 +811,14 @@ MUST implement to be compliant.
 %
 \mytablefloat{
   \label{tbl:entity}Model attributes defined for the \hl{Entity} type.}{
-  \begin{tabular}{lllp{1.3cm}p{1.0cm}p{7cm}}
+  \begin{tabular}{llllp{7.5cm}}
     \toprule
-    Model attribute	& Type 		& Multiplicity 	& Client Mutability 	& Discover\-able 	& Description \\
+    Model attribute	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
     \colrule
-    id			& URI 		& 1 		& Immutable 		& Yes 			& A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
-	title	    & String	& 0..1		& Mutable			& Yes 			& The display name of the instance. \\
-    kind 		& \hl{Kind}	& 1 		& Immutable 		& No 			& The \hl{Kind} instance uniquely identifying the particular \hl{Entity} sub-type of this instance. \\
-    mixins 		& \hl{Kind}	& 0..* 		& Mutable 		& No 			& The \hl{Mixin} instances associated to this entity instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\
+    id			& URI 		& 1 		& Immutable 		& A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
+	title	    & String	& 0..1		& Mutable			& The display name of the instance. \\
+    kind 		& \hl{Kind}	& 1 		& Immutable 		& The \hl{Kind} instance uniquely identifying the particular \hl{Entity} sub-type of this instance. \\
+    mixins 		& \hl{Kind}	& 0..* 		& Mutable 		& The \hl{Mixin} instances associated to this entity instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\
     \botrule
   \end{tabular}
 }
