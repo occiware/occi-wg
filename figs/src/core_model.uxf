@@ -97,6 +97,7 @@ title: String [0..1]
     <panel_attributes>Entity
 --
  id: URI
+ title: String
 --
 </panel_attributes>
     <additional_attributes/>
