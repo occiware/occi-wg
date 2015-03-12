@@ -116,8 +116,8 @@ in the OCCI context:
     identified by an \hl{Attribute} instance.
 
   \item[OCCI Attribute] A client discoverable attribute identified by an
-    instance of the \hl{Attribute} type. Examples are \hl{occi.core.title}
-    and \hl{occi.core.summary}. See section~\ref{sec:attribute}.
+    instance of the \hl{Attribute} type. Examples are \hl{title}
+    and \hl{summary}. See section~\ref{sec:attribute}.
 
   \item[OCCI base type(s)] The OCCI base types are \hl{Entity},
     \hl{Resource} and \hl{Link}.
@@ -807,7 +807,7 @@ The \hl{Entity} type is an abstract type of the \hl{Resource} type and
 the \hl{Link} type. It MUST be implemented.
 %
 Table~\ref{tbl:entity} defines the model attributes the \hl{Entity} type
-MUST implement to be compliant. \todo{How does model attribute 'id' render into 'text/occi' or 'text/plain'? Would OCCI Attribute 'occi.core.id' be a better idea?}
+MUST implement to be compliant. 
 %
 \mytablefloat{
   \label{tbl:entity}Model attributes defined for the \hl{Entity} type.}{
@@ -816,22 +816,9 @@ MUST implement to be compliant. \todo{How does model attribute 'id' render into 
     Model attribute	& Type 		& Multiplicity 	& Client Mutability 	& Discover\-able 	& Description \\
     \colrule
     id			& URI 		& 1 		& Immutable 		& Yes 			& A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
+	title	    & String	& 0..1		& Mutable			& Yes 			& The display name of the instance. \\
     kind 		& \hl{Kind}	& 1 		& Immutable 		& No 			& The \hl{Kind} instance uniquely identifying the particular \hl{Entity} sub-type of this instance. \\
     mixins 		& \hl{Kind}	& 0..* 		& Mutable 		& No 			& The \hl{Mixin} instances associated to this entity instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\
-    \botrule
-  \end{tabular}
-}
-
-\hl{Entity} enforces for all sub-types an optional OCCI Attribute named
-\texttt{occi.core.title}, see table~\ref{tbl:entity_attr}.
-%
-\mytablefloat{
-  \label{tbl:entity_attr}OCCI Attributes defined by the \hl{Entity} type.}{
-  \begin{tabular}{lllp{1.3cm}p{1.0cm}p{7cm}}
-    \toprule
-    OCCI Attribute	& Type 		& Multiplicity	& Client Mutability	& Discover\-able 	& Description \\
-    \colrule
-    occi.core.title 	& String	& 0..1		& Mutable 		& Yes 			& The display name of the instance. \\
     \botrule
   \end{tabular}
 }
@@ -883,22 +870,7 @@ specialisation.
     Model attribute 	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
     \colrule
     links 		& \hl{Link} & 0..* 			& Mutable 				& A set of \hl{Link} compositions. Being a composite relation the removal of a \hl{Link} from the set MUST also remove the \hl{Link} instance.\\
-    \botrule
-  \end{tabular}
-}
-
-The \hl{Resource} type MUST implement all model attributes and OCCI Attributes
-inherited from
-\hl{Entity} as well as the model and OCCI Attributes defined in
-table~\ref{tbl:resource} and \ref{tbl:resource_attr} in order to be compliant.
-
-\mytablefloat{
-  \label{tbl:resource_attr}OCCI Attributes defined for the \hl{Resource} type.}{
-  \begin{tabular}{llllp{8cm}}
-    \toprule
-    OCCI Attribute 	& Type		& Multiplicity 	& Client Mutability 	& Description \\
-    \colrule
-    occi.core.summary 	& String 	& 0..1 		& Mutable 		& A summarising description of the \hl{Resource} instance.\\
+    summary 	& String 	& 0..1 		& Mutable 		& A summarising description of the \hl{Resource} instance.\\
     \botrule
   \end{tabular}
 }
@@ -938,8 +910,7 @@ another.
 
 The \hl{Link} type MUST implement all attributes inherited from the
 \hl{Entity} type together with the model attributes defined in
-table~\ref{tbl:link} in order to be compliant. \todo{How does model attribute 'source' render into 'text/occi' or 'text/plain'? Would OCCI Attribute 'occi.core.source' be a better idea?}\\
-\todo{How does model attribute 'target' render into 'text/occi' or 'text/plain'? Would OCCI Attribute 'occi.core.target' be a better idea?}
+table~\ref{tbl:link} in order to be compliant.
 
 \mytablefloat{
   \label{tbl:link}Model attributes defined for the \hl{Link} type.}{
@@ -948,7 +919,7 @@ table~\ref{tbl:link} in order to be compliant. \todo{How does model attribute 's
     Model attribute	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
     \colrule
     source 		& \hl{Resource} & 1 		& Mutable 		& The \hl{Resource} instances the \hl{Link} instance originates from. \\
-    target 		& \hl{URI} & 1 		& Mutable 		& The unique identifier of an \hl{Object} this \hl{Link} instance points to. MAY point outside of the known domain\todo{Formulation? Idea how to draw this in core\_model UML?}.\\
+    target 		& \hl{URI} & 1 		& Mutable 		& The unique identifier of an \hl{Object} this \hl{Link} instance points to. \\
     \botrule
   \end{tabular}
 }
