@@ -362,7 +362,7 @@ MUST implement to be compliant.
     type    &   Enum \{Object, List, Hash\}   &   1   &   Immutable   &   OCCI Attribute type. \\
     mutable   &   Boolean   &   1   &   Immutable   &   OCCI Attribute mutability. \\
     required    &   Boolean   &   1   &   Immutable   &   Whether the OCCI Attribute must be supplied by the client at instance creation-time. \\
-    pattern   &   String    &   0..1    &   Immutable   &   OCCI Attribute pattern expressed as PCRE \\
+    pattern   &   String    &   0..1    &   Immutable   &   OCCI Attribute pattern expressed as ERE \\
     default   &   String    &   0..1    &   Immutable   &   OCCI Attribute default value. \\
     description   &   String    &   0..1    &   Immutable   &   A description of the OCCI Attribute. \\
     \botrule
@@ -435,7 +435,7 @@ for \hl{Entity}, another for \hl{Resource} and the last one for
     Model attribute	& Type 		& Multiplicity 		& Client Mutability 		& Description \\
     \colrule
     actions 		& \hl{Action} 	& 0..* 			& Immutable 			& Set of \hl{Action} instances defined by the \hl{Kind} instance. \\
-    parent 		& \hl{Kind} 	& 0..1 			& Immutable 			& Another \hl{Kind} instance which this \hl{Kind} relates to. \\
+    parent 		& \hl{Kind} 	& 0..1 			& Immutable 			& Another \hl{Kind} instance which this \hl{Kind} has an inheritance relationship with. \\
     entities 		& \hl{Entity} 	& 0..* 			& Immutable 			& Set of entity instances. Instances of the particular \hl{Entity} sub-type which is uniquely identified by this \hl{Kind} instance. \\
     \botrule
   \end{tabular}
@@ -452,23 +452,14 @@ of the \hl{Kind} type:
     sub-type of \hl{Entity}, including \hl{Entity} itself.
 
   \item A \hl{Kind} instance MUST expose the discoverable attributes defined for
-    the \hl{Entity} sub-type it identifies. The \hl{Entity} attributes are
-    described by \hl{Attribute} instances stored in the ``{\tt attributes}''
-    model attribute inherited from
-    \hl{Category}. E.g.~the \hl{Kind} instance identifying the
-    \hl{Resource} type has \hl{Kind}.{\tt attributes} populated with a single \hl{Attribute}
-    instance where \hl{Attribute}.{\tt name} is {\tt "occi.core.summary"}.
+    the \hl{Entity} sub-type it identifies.
 
   \item A \hl{Kind} instance MUST expose the \hl{Action}s defined for
-    its \hl{Entity} sub-type. \hl{Action}s are exposed through the
-    \hl{Kind}.{\tt actions} model attribute which represent the association
-    between a \hl{Kind} instance and the \hl{Action} instances it defines.
+    its \hl{Entity} sub-type.
 
   \item A \hl{Kind} instance MUST have the \hl{Kind} instance of \hl{Entity}%
     \footnote{\textit{http://schemas.ogf.org/occi/core\#entity}}
-    as its direct or indirect parent.
-    The \hl{Kind}.{\tt parent} model attribute represent the relationship to
-    another \hl{Kind} instance.
+    as its parent.
 
   \item If type {\bf B} inherits type {\bf A}, where {\bf A} is a
     sub-type of \hl{Entity}, the \hl{Kind} instance of {\bf B} MUST
@@ -477,22 +468,7 @@ of the \hl{Kind} type:
 \end{itemize}
 
 \paragraph*{Kind Relationships}
-\hl{Kind} relationships are defined through the ``{\tt parent}''
-model attribute present in every \hl{Kind} instance. The ``{\tt parent}''
-model attribute define which other \hl{Kind} instance a particular
-\hl{Kind} is related to.
-
-A \hl{Kind} instance identifies a unique type, either the \hl{Entity}
-type itself or a sub-type thereof.  Each \hl{Kind} instance MUST be
-related to the \hl{Kind} of the parent type.
-
-The OCCI base types \hl{Resource} and \hl{Link} both extend
-\hl{Entity} and therefore their identifying \hl{Kind} instances MUST
-have the \hl{Entity} \hl{Kind} instance as its parent.
-
-These rules imply a hierarchy of related \hl{Kind} instances. The
-\hl{Kind} relationships thus mirror the type inheritance structure of
-the OCCI Core Model and any extension thereof.
+A relationship between \hl{Kind} instances is defined by the ''{\tt parent}'' attribute. This implies a setup of a hierarchy where the capabilites of the parent MUST be inherited by the child \hl{Kind} instance.
 
 \begin{figure}[!h]
   {\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{0}
@@ -520,7 +496,6 @@ inherit \hl{Entity}.
 
 As can be seen in figure~\ref{fig:kind_relationships} the \hl{Kind}
 instance relationships mirror the inheritance structure of the types.
-
 
 \subsubsection{Mixin}
 \label{sec:mixin}
