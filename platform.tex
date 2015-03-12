@@ -1,0 +1,123 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{occi}
+\setlength{\headheight}{13pt}
+\pagestyle{fancy}
+
+%  just a test
+% default sans-serif
+\renewcommand{\familydefault}{\sfdefault}
+
+% no lines for headers and footers
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% header
+\fancyhf{}
+\lhead{GFD-P-R.184}
+\rhead{\today}
+
+% footer
+\lfoot{occi-wg@ogf.org}
+\rfoot{\thepage}
+
+% paragraphs need some space...
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+%\renewcommand\paragraph{%
+%  \@startsection{paragraph}{4}{0mm}%
+%     {-\baselineskip}%
+%     {.5\baselineskip}%
+%     {\normalfont\normalsize\bfseries}}
+
+% some space between header and text...
+\headsep 13pt
+
+\setcounter{secnumdepth}{4}
+
+\begin{document}
+
+% header on first page is different
+\thispagestyle{empty}
+
+Draft \hfill  Thijs Metsch, Intel\\
+OCCI-WG \hfill  Mohamed Mohamed, Telecom SudParis\\
+\rightline {\today}
+
+\vspace*{0.5in}
+
+\begin{Large}
+\textbf{Open Cloud Computing Interface - Platform}
+\end{Large}
+
+\vspace*{0.5in}
+
+\underline{Status of this Document}
+
+% \input{include/status}
+
+This document is a \underline{draft} of the OCCI Platform \cite{occi:platform} specification.
+
+\underline{Copyright Notice}
+
+Copyright \copyright ~Open Grid Forum (2014-2015). All Rights
+Reserved.
+
+\underline{Trademarks}
+
+OCCI is a trademark of the Open Grid Forum.
+
+\underline{Abstract}
+
+\input{include/abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\input{include/introduction}
+
+OCCI makes an ideal interoperable boundary interface between the web
+and the internal resource management system of platform
+providers.
+
+\section{Notational Conventions}
+\input{include/notational}
+
+% begin infrastructure content
+
+\section{Platform}
+
+% end platform content
+
+\section{Security Considerations}
+The OCCI Infrastructure specification is an extension to the OCCI Core
+and Model specification \cite{occi:core}; thus the same security
+considerations as for the OCCI Core and Model specification apply
+here.
+
+\section{Glossary}
+\label{sec:glossary}
+\input{include/glossary}
+
+\section{Contributors}
+\include{include/contributors}
+
+\section{Intellectual Property Statement}
+\input{include/ip}
+
+\section{Disclaimer}
+\input{include/disclaimer}
+
+\section{Full Copyright Notice}
+\input{include/copyright}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
