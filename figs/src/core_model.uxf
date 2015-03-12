@@ -97,6 +97,7 @@ title: String [0..1]
     <panel_attributes>Entity
 --
  id: URI
+ title: String
 --
 </panel_attributes>
     <additional_attributes/>
@@ -104,14 +105,14 @@ title: String [0..1]
   <element>
     <type>com.baselet.element.old.element.Class</type>
     <coordinates>
-      <x>170</x>
+      <x>140</x>
       <y>530</y>
-      <w>100</w>
+      <w>130</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>Resource
 --
- 
+ summary: String
 --
 </panel_attributes>
     <additional_attributes/>

@@ -126,8 +126,8 @@ Supporting these Resource types are the following \hl{Link} sub-types:
 \end{description}
 
 \begin{figure}[!h]
-	{\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{270}
-	    {\includegraphics{figs/infrastructure_model.pdf}}} \par}
+	{\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{0}
+	{\includegraphics[scale=0.4]{figs/infrastructure_model.png}}} \par}
 	\caption{Overview Diagram of OCCI Infrastructure Types.}
 	\label{fig:infra_uml}
 \end{figure}
@@ -349,7 +349,7 @@ Table~\ref{tbl:ipnetworking} define the attributes introduced by the
 \hl{IPNetworking} mixin.
 
 The \hl{IPNetworking} mixin MUST be related to the \hl{Network} kind 
-by setting the \textit{depends} attribute to:
+by setting the \textit{applies} attribute to:
 
 \textit{http://schemas.ogf.org/occi/infrastructure\#network}.
 
@@ -526,7 +526,7 @@ the ``{\tt scheme}'' of
 An \hl{IPNetworkInterface} mixin MUST support these attributes.
 
 The \hl{IPNetworkInterface} mixin MUST be related to the \hl{NetworkInterface} kind 
-by setting the \textit{depends} attribute to:
+by setting the \textit{applies} attribute to:
 
 \textit{http://schemas.ogf.org/occi/infrastructure\#networkinterface}.
 
@@ -752,13 +752,19 @@ themselves and so is implementation-specific.
 
 \paragraph{Credentials Mixin}
 
-% can only be used by Compute
+% new as of OCCI 1.2
 
 When creating a Compute Resource a client normally supplies security credentials in the form of a public SSH key. This SSH key is injected into the Compute Resource by the provider on the client's behalf. This feature is provided by the Credentials Mixin.
 
 If a provider that offers VMs with access secured by SSH then that OCCI implementation SHOULD support this. Otherwise no user supplied public SSH key can be injected into the Compute Resource.
 
-The OCCI contextualisation mixin has the term \textit{'ssh\_key'} and the schema \textit{'http://schemas.ogf.org/occi/credentials\#'}.
+The OCCI credentials mixin has the term \textit{'ssh\_key'} and the schema \textit{'http://schemas.ogf.org/occi/credentials\#'}.
+
+The credentials mixin MUST only apply to the Compute Kind and therefore 
+the mixin should have its  \textit{applies} attribute set to:
+
+\textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
+
 
 \mytablefloat{
 	\label{tbl:contextmixin}%
@@ -790,6 +796,12 @@ OCCI implementations SHOULD support this otherwise no
 contextualisation of a resource instance can be done.
 The OCCI contextualisation mixin has the term \textit{user\_data}
 and the schema \textit{http://schemas.ogf.org/occi/compute\#}
+
+Contextualisation mixin MUST only apply to the Compute Kind and therefore 
+the mixin should have its  \textit{applies} attribute set to:
+
+\textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
+
 \mytablefloat{
 	\label{tbl:contextmixin}%
 	\hl{Attribute}s defined by the \hl{Contextualisation} mixin. A \hl{Compute}
