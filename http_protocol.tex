@@ -70,10 +70,6 @@ OCCI is a trademark of the Open Grid Forum.
 
 \input{include/abstract}
 
-\underline{Comments}
-\begin{itemize}
-\item ...
-\end{itemize}
 
 \newpage
 \tableofcontents
@@ -113,11 +109,12 @@ For example, the \hl{Kind} instance%
 \footnote{\tt http://schemas.ogf.org/occi/infrastructure\#compute}
 for the \hl{Compute} type may be bound to {\tt /my/occi/api/compute/}.
 
+Whenever a {\em location} is rendered it MUST be either a String or as 
+defined in RFC6570 \cite{rfc6570}.
+
 A \hl{Kind} instance whose associated type cannot be instantiated MUST NOT be
 bound to an URL path. This applies to the \hl{Kind} instance for OCCI Entity
 which, according to OCCI Core, cannot be instantiated \cite{occi:core}.
-
-\todo{sub resources here.}
 
 \subsection{Bound and unbound paths}
 
@@ -128,15 +125,12 @@ A bound URL path is the {\em location} of a \hl{Kind} or \hl{Mixin} collection.
 
 An unbound URL path MAY represent the union of all \hl{Kind} and \hl{Mixin}
 collection ``below'' the unbound path.
-\todo{FIXME: Should this be a MUST instead?}
 
 \section{Headers and status codes}
 
-\todo{add all other HTTP niftyness from old spec here.}
-
-OCCI Clients and Servers must include a minimum set of mandatory HTTP headers
+OCCI Clients and Servers MUST include a minimum set of mandatory HTTP headers
 in each request and response in order to be compliant.
-There is also a minimum set of HTTP status codes which must be supported by
+There is also a minimum set of HTTP status codes which MUST be supported by
 an implementation of the OCCI HTTP Protocol.
 
 \subsection{Mandatory HTTP requests headers}
@@ -172,16 +166,11 @@ behaviour in such cases is not specified. The return codes are specified by
 \item[403 Forbidden] indicates that the server understood the request but refuses to authorize it.
 \item[404 Not Found] indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists
 \item[405 Method Not Allowed] indicates that the method received in the request-line is known by the origin server but not supported by the target resource.
-\item[406 Not Acceptable] status code indicates that the target resource does not have a current representation that would be acceptable to the user agent
-\item[413 Request Entity Too Large] status code indicates that the request is larger than the server is willing or able to process.
+\item[406 Not Acceptable] indicates that the target resource does not have a current representation that would be acceptable to the user agent
+\item[413 Request Entity Too Large] indicates that the request is larger than the server is willing or able to process.
 \item[500 Internal Server Error] indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
 \item[501 Not Implemented] indicates that the server does not support the functionality required to fulfill the request.
 \end{description}
-
-\section{Filters}
-
-TODO: define filters
-remove filters later one.
 
 \section{Pagination}
 
@@ -193,9 +182,9 @@ integer that refers to a sub-collection of the requested collection. {\em number
 
 % e.g. GET http://host/path/to/collection?page=1;number=100
 
-If {\em number} is too large for the provider to handle (policy, technical) then an HTTP 413 response status code MUST be issued to the requesting client.
+If {\em number} is too large for the provider to handle (policy, technical) then a HTTP 413 response status code MUST be issued to the requesting client.
 
-If there is no more content to be served, the result issued to the requesting client MUST have an HTTP 200 response status code and an empty body.
+If there is no more content to be served the result should be a \emph{HTTP 200 OK} response status code MUST be issued to the requesting client.
 
 \section{HTTP methods applied to entity instance URLs}
 
@@ -213,19 +202,21 @@ following:
   http://example.com/compute/012d2b48-c334-47f2-9368-557e75249042
 \end{verbatim}
 
+The renderings for the {\em entity} and {\em action} instances are defined in \cite{occi:text} and \cite{occi:json}.
+
 \subsection{GET entity instance}
-The HTTP GET method retrieves a representation of a single (existing) entity instance.
+The HTTP GET method retrieves a rendering of a single (existing) entity instance.
 
 \paragraph{Client GET request}
 N/A
 
 \paragraph{Server GET response}
-The message of the HTTP GET response MUST contain a representation of the entity instance.
+The message of the HTTP GET response MUST contain a rendering of the entity instance.
 
-Upon a successfully request a \tt{200 OK} status code MUST be used.
+Upon a successfully request a \emph{200 Ok} status code MUST be used.
 
 \subsection{PUT entity instance}
-The HTTP PUT method either \em{creates} a new or \em{replaces} an existing entity instance at the specified URL.
+The HTTP PUT method either {\em creates} a new or {\em replaces} an existing entity instance at the specified URL.
 
 \subsubsection{create}
 
@@ -234,33 +225,33 @@ The message MUST contain the full representaiton of a entity instance.
 
 \paragraph{Server PUT reponse}
 The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the OCCI implementation
-returns the \\tt{200 OK} HTTP response code the full representation of an entity instance MUST be returned. 
-In case of a \tt{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC7231 \cite{rfc7231}.
+returns the \emph{200 OK} HTTP response code the full rendering of an entity instance MUST be returned. 
+In case of a \emph{201 CREATED} HTTP response code is the HTTP Location header as defined in RFC7231 \cite{rfc7231} MUST be used.
 
 \subsubsection{replace}
 
 \paragraph{Client PUT request}
-The message must contain the full representaiton of a entity instance.
+The message MUST contain the full representaiton of a entity instance.
 
 \paragraph{Server PUT reponse}
 The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the OCCI implementation
-returns the \\tt{200 OK} HTTP response code the full representation of an entity instance MUST be returned. 
-In case of a \tt{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC7231 \cite{rfc7231}.
+returns the \emph{200 OK} HTTP response code the full rendering of an entity instance MUST be returned. 
+In case of a \emph{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC7231 \cite{rfc7231}.
 
 Any OCCI \hl{Link}s associated with an existing OCCI \hl{Resource} MUST be left intact.
 
 \subsection{POST entity instance}
-The HTTP POST method either \em{partially updates} or triggers and \em{actions} on an existing entity instance.
+The HTTP POST method either {\em partially updates} or triggers and {\em actions} on an existing entity instance.
 
 \subsubsection{partial update}
 
 \paragraph{POST request}
-The message MUST contain a partial representation of a entity instance to be changed.
+The message MUST contain a partial rendering of a entity instance to be changed.
 
 \paragraph{Server POST reponse}
 The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the OCCI implementation
-returns the \\tt{200 OK} HTTP response code the full representation of an entity instance MUST be returned. 
-In case of a \tt{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC7231 \cite{rfc7231}.
+returns the \emph{200 OK} HTTP response code the full rendering of an entity instance MUST be returned. 
+In case of a \emph{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC7231 \cite{rfc7231}.
 
 \subsubsection{action}
 Actions are triggered using the HTTP POST verb and by adding a query to the URI. This query MUST contain a key-value pair. The key MUST be "action". The value MUST equal to the \hl{Action}'s term.
@@ -269,9 +260,9 @@ Actions are triggered using the HTTP POST verb and by adding a query to the URI.
 The message MUST contain the unique identifier of the \hl{Action} instance. It MAY contain attributes associated with the triggered \hl{Action}.
 
 \paragraph{Server POST reponse}
-The message of the HTTP GET response MUST contain a representation of the entity instance.
+The message of the HTTP GET response MUST contain a rendering of the entity instance.
 
-Upon a successfully request a \tt{200 OK} status code MUST be used.
+Upon a successfully request a \emph{200 OK} status code MUST be used.
 
 \subsection{DELETE entity instance}
 The HTTP DELETE method delete an entity instance
@@ -280,42 +271,43 @@ The HTTP DELETE method delete an entity instance
 N/A
 
 \paragraph{Server DELETE response}
-Upon a successfully request a \tt{200 OK} status code MUST be used.
+Upon a successfully request a \emph{200 OK} status code MUST be used.
 
 \section{HTTP methods applied to collections URLs}
+The renderings for the {\em collection} and {\em action} instances are defined in \cite{occi:text} and \cite{occi:json}.
 
 \subsection{GET collection}
-The HTTP GET method retrieves a representation of the collection of a set of existing entity instance.
+The HTTP GET method retrieves a rendering of the collection of a set of existing entity instance.
 
 \paragraph{Client GET request}
-MAY include a possible filter representation.
+MAY include a possible filter rendering.
 
 \paragraph{Server GET response}
-The reponse MUST include a representation of a collection.
+The reponse MUST include a rendering of a collection.
 
-Upon a successfully request a \tt{200 OK} status code MUST be used.
+Upon a successfully request a \emph{200 OK} status code MUST be used.
 
 \subsection{PUT collection}
 The HTTP PUT is only defined for a collection defined by a \hl{Mixin}. It will will allow for replacing a collection.
 
 \paragraph{Client PUT request}
-MUST include a full representation of the collection.
+MUST include a full rendering of the collection.
 
 \paragraph{Server PUT response}
-The reponse MUST include a representation of a collection.
+The reponse MUST include a rendering of a collection.
 
-Upon a successfully request a \tt{200 OK} status code MUST be used.
+Upon a successfully request a \emph{200 OK} status code MUST be used.
 
 \subsection{POST collection}
-The HTTP POST method is defined for \em{creation} of entity instance, \em{association} of entity instance with a \hl{Mixin} and triggering \em{actions}.
+The HTTP POST method is defined for {\em creation} of entity instance, {\em association} of entity instance with a \hl{Mixin} and triggering {\em actions}.
 
 \subsubsection{create}
 
 \paragraph{Client POST request}
-MUST include at least one full entity representation. It MAY include mutliple full entity representations.
+MUST include at least one full entity rendering. It MAY include mutliple full entity renderings.
 
 \paragraph{Server POST response}
-In case server replies with \tt{200 OK} HTTP status code it MUST include either arepresentation of collection or single entitiy representation. In case a \tt{201 CREATED} HTTP status code a URI to a entity instance or a list of entity instance URIs MUST be returned.
+In case server replies with \emph{200 OK} HTTP status code it MUST include either arendering of collection or single entitiy rendering. In case a \emph{201 CREATED} HTTP status code a URI to a entity instance or a list of entity instance URIs MUST be returned.
 
 \subsubsection{associate}
 This operation MUST only be available for collections defined by a \hl{Mixin}
@@ -324,7 +316,7 @@ This operation MUST only be available for collections defined by a \hl{Mixin}
 The request MUST include one or more URIs for the entity instance which require the \hl{Mixin} to be applied.
 
 \paragraph{Server POST response}
-On successfull operation the server replies with the \tt{200 OK} HTTP status code it MUST include either a representation of collection or single entity representation. 
+On successfull operation the server replies with the \emph{200 OK} HTTP status code it MUST include either a rendering of collection or single entity rendering. 
 
 \subsubsection{action}
 Actions are triggered using the HTTP POST verb and by adding a query to the URI. This query MUST contain a key-value pair. The key MUST be "action". The value MUST equal to the \hl{Action}'s term.
@@ -333,12 +325,12 @@ Actions are triggered using the HTTP POST verb and by adding a query to the URI.
 The message MUST contain the unique identifier of the \hl{Action} instance. It MAY contain attributes associated with the triggered \hl{Action}.
 
 \paragraph{Server POST reponse}
-The message of the HTTP GET response MUST contain a full representation of the collection representation.
+The message of the HTTP GET response MUST contain a full rendering of the collection rendering.
 
-Upon a successfully request a \tt{200 OK} status code MUST be used.
+Upon a successfully request a \emph{200 OK} status code MUST be used.
 
 \subsection{DELETE collection}
-The HTTP delete method is used to either \em{delete} all entity instances in a collection or \em{diassociate} entity instance from a collection defined by a \hl{Mixin}.
+The HTTP delete method is used to either {\em delete} all entity instances in a collection or {\em diassociate} entity instance from a collection defined by a \hl{Mixin}.
 
 \subsubsection{delete}
 
@@ -346,7 +338,7 @@ The HTTP delete method is used to either \em{delete} all entity instances in a c
 NA
 
 \paragraph{Server DELETE reponse}
-Upon a successfully request a \tt{200 OK} status code MUST be used.
+Upon a successfully request a \emph{200 OK} status code MUST be used.
 
 \subsubsection{disassociate}
 This operation MUST only be available for collections defined by a \hl{Mixin}
@@ -355,19 +347,21 @@ This operation MUST only be available for collections defined by a \hl{Mixin}
 The request MAY include one or more URIs for the entity instance which requires the \hl{Mixin} to be disassociated.
 
 \paragraph{Server DELETE reponse}
-Upon a successfully request a \tt{200 OK} status code MUST be used.
+Upon a successfully request a \emph{200 OK} status code MUST be used.
 
 \section{HTTP methods applied to QI}
+The renderings for the {\em category} instances are defined in \cite{occi:text} and \cite{occi:json}.
 
 \subsection{GET on query interface}
+NA
 
 \paragraph{Client GET request}
-MAY include a possible filter representation.
+MAY include a possible filter rendering.
 
 \paragraph{Server GET response}
-The reponse MUST include a representation of a collection.
+The reponse MUST include a rendering of a collection.
 
-Upon a successfully request a \tt{200 OK} status code MUST be used.
+Upon a successfully request a \emph{200 OK} status code MUST be used.
 
 \subsection{PUT on query interface}
 
@@ -376,26 +370,25 @@ This HTTP method is not defined.
 \subsection{POST on query interface}
 
 \paragraph{Client POST request}
-MUST include at least one full category representation. It MAY include mutliple full category representations.
+MUST include at least one full category rendering. It MAY include mutliple full category renderings.
 
 \paragraph{Server POST response}
-Upon a successfully request a \tt{200 OK} status code MUST be used.
+Upon a successfully request a \emph{200 OK} status code MUST be used.
 
 \subsection{DELETE on query interface}
 
 \paragraph{Client DELETE request}
-MUST include at least one full category representation. It MAY include mutliple full category representations.
+MUST include at least one full category rendering. It MAY include mutliple full category renderings.
 
 \paragraph{Server DELETE response}
-Upon a successfully request a \tt{200 OK} status code MUST be used.
+Upon a successfully request a \emph{200 OK} status code MUST be used.
 
 \section{Glossary}
 \label{sec:glossary}
 \input{include/glossary}
 
-%\section{Contributors}
-%\include{include/contributors}
-% FIXME: Insert an up-to-date table here!
+\section{Contributors}
+\include{include/contributors}
 
 \section{Intellectual Property Statement}
 \input{include/ip}
