@@ -818,25 +818,10 @@ MUST implement to be compliant.
 
 Every sub-type of \hl{Entity} MUST be assigned a \hl{Kind} instance,
 see section~\ref{sec:kind}.
-%
-\mytablefloat{
-  \label{tbl:entity_kind}The \hl{Kind} instance assigned to the \hl{Entity} type.}{
-  \begin{tabular}{ll}
-    \toprule
-    Model attribute 	& Value \\
-    \colrule
-    term 		& entity \\
-    scheme 		& {\tt http://schemas.ogf.org/occi/core\#} \\
-    title 		& Entity type \\
-    attributes 		& Attribute({\tt "title"}) \\
-    actions 	& -- \\
-  \botrule
-  \end{tabular}
-}
+
 %
 \hl{Entity} itself is assigned the \hl{Kind} instance
-\textit{http://schemas.ogf.org/occi/core\#entity} for type
-identification, see table~\ref{tbl:entity_kind}.
+\textit{http://schemas.ogf.org/occi/core\#entity}.
 %
 Being an abstract type \hl{Entity} itself can never be instantiated.
 
@@ -869,23 +854,7 @@ specialisation.
 }
 
 The \hl{Resource} type is assigned the \hl{Kind} instance
-\textit{http://schemas.ogf.org/occi/core\#resource}, see
-table~\ref{tbl:resource_kind}.
-%
-\mytablefloat{
-  \label{tbl:resource_kind}The \hl{Kind} instance assigned to the \hl{Resource} type.}{
-  \begin{tabular}{ll}
-    \toprule
-    Model attribute 	& Value \\
-    \colrule
-    term 		& resource \\
-    scheme 		& {\tt http://schemas.ogf.org/occi/core\#} \\
-    title 		& Resource \\
-    attributes	 	& Attribute({\tt summary}) \\
-    actions 	& -- \\
-    \botrule
-  \end{tabular}
-}
+\textit{http://schemas.ogf.org/occi/core\#resource}.
 
 \hl{Resource} enforces the inheritance of a set of common attributes
 into sub-types. Moreover, it introduces relationships to other
@@ -920,31 +889,10 @@ table~\ref{tbl:link} in order to be compliant.
 The \hl{Link} type is assigned the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/core\#link}.
 
-\mytablefloat{
-  \label{tbl:link_kind}The \hl{Kind} instance assigned to the \hl{Link} type.}{
-  \begin{tabular}{ll}
-    \toprule
-    Model attribute 	& Value \\
-    \colrule
-    term 		& link \\
-    scheme 		& {\tt http://schemas.ogf.org/occi/core\#} \\
-    title 		& Link \\
-    attributes 	& -- \\
-    actions 	& -- \\
-    \botrule
-  \end{tabular}
-}
-
-The {\tt source} and {\tt target} attribute of a \hl{Link} instance
-MUST refer to \hl{Resource} {\em instances} within the service provider's
-namespace. A \hl{Link} MAY refer to an external \hl{Resource} instance, i.e.~a
-resource of which the service provider has no direct control, if and
-only if that external resource is mapped into an \hl{Entity} sub-type
-instance.
-
-A provider MAY however introduce a sub-type of \hl{Link} with
-different semantics, e.g.~having a target attribute containing an URI
-and thus the ability of linking with external resources.
+The {\tt source} attribute of a \hl{Link} instance
+MUST refer to \hl{Resource} {\em instance} within the service provider's
+namespace. The \hl{Link}'s {\tt target} attribute MUST point to a resource instance either within the provider's namespace or outside, 
+hosted by a third-party.
 
 The \hl{Link} type is the second of three entry points to extend the
 OCCI Core Model, see section~\ref{sec:extensibility}.
