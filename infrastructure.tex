@@ -211,11 +211,11 @@ the \hl{Resource} base type defined in OCCI Core Model
 	occi.compute.architecture & Enum \{x86, x64\} & 0\ldots1
 	& Mutable & CPU Architecture of the instance.\\
 	occi.compute.cores & Integer & 0\ldots1
-	& Mutable & Number of CPU cores assigned to the instance.\\
+	& Mutable & Number of virtual CPU cores assigned to the instance.\\
 	occi.compute.hostname & String & 0\ldots1
 	& Mutable & Fully Qualified DNS hostname for the instance.\\
-	occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 0\ldots1
-	& Mutable & CPU Clock frequency (speed) in gigahertz.\\
+	occi.compute.share & Integer & 0\ldots1
+	& Mutable & Relative number of CPU shares for the instance.\\
 	occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 0\ldots1
 	& Mutable & Maximum RAM in gigabytes allocated to the instance.\\
 	occi.compute.state & Enum \{active, inactive, suspended, error\} & 1
@@ -758,7 +758,7 @@ instance named ``attributes'' in
 figure~\ref{fig:infra_template_obj_diag2}.
 
 %\begin{verbatim}
-%Attribute: occi.compute.cores='2', occi.compute.speed='2.4',
+%Attribute: occi.compute.cores='2', occi.compute.share='200',
 %    occi.compute.memory='1.0', occi.compute.arch='x86'
 %\end{verbatim}
 
