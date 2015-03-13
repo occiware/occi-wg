@@ -144,7 +144,7 @@ As REQUIRED by the OCCI Core Model specification, every type
 instantiated that is a sub-type of \hl{Resource} or \hl{Link} MUST be
 assigned a \hl{Kind} that identifies the instantiated type. Each such
 \hl{Kind} instance MUST be related to the \hl{Resource} or \hl{Link}
-base type's \hl{Kind} by setting the \textit{parent} attribute. 
+base type's \hl{Kind} by setting the \textit{parent} attribute.
  That assigned \hl{Kind} instance MUST always
 remain immutable to any client.
 
@@ -189,7 +189,6 @@ Following those, the definition of infrastructure-related \hl{Link}
 sub-types are given and finally OS and Resource Templates
 are defined. Figure~\ref{fig:infra_uml} gives an overview of
 the key types involved in this infrastructure specification.
-\todo{Need to fix Link (Model Attributes + 'target' arrow) in Figure~\ref{fig:infra_uml}. No idea how to open $\ast$.zuml!}
 
 \subsection{Compute}
 The \hl{Compute} type represents a generic information processing
@@ -217,7 +216,7 @@ the \hl{Resource} base type defined in OCCI Core Model
 	& Mutable & CPU Clock frequency (speed) in gigahertz.\\
 	occi.compute.memory & Float, ${\mathbf 10}^9$ (GiB) & 0\ldots1
 	& Mutable & Maximum RAM in gigabytes allocated to the instance.\\
-	occi.compute.state & Enum \{active, inactive, suspended, error\} & 1 
+	occi.compute.state & Enum \{active, inactive, suspended, error\} & 1
 	& Immutable & Current state of the instance.\\
 	\botrule
 	\end{tabular}
@@ -288,7 +287,7 @@ The \hl{Network} type is assigned the
 	& 802.1q VLAN Ientifier (e.g. 343).\\
 	occi.network.label & Token & 0\ldots1 & Mutable
 	& Tag based VLANs (e.g. external-dmz).\\
-	occi.network.state & Enum \{active, inactive, error\} & 1 & Immutable 
+	occi.network.state & Enum \{active, inactive, error\} & 1 & Immutable
 	& Current state of the instance.\\
 	\botrule
 	\end{tabular}
@@ -348,7 +347,7 @@ MUST support these values.
 Table~\ref{tbl:ipnetworking} define the attributes introduced by the
 \hl{IPNetworking} mixin.
 
-The \hl{IPNetworking} mixin MUST be related to the \hl{Network} kind 
+The \hl{IPNetworking} mixin MUST be related to the \hl{Network} kind
 by setting the \textit{applies} attribute to:
 
 \textit{http://schemas.ogf.org/occi/infrastructure\#network}.
@@ -404,7 +403,7 @@ type defined in the OCCI Core Model \cite{occi:core}.  The
 	\colrule
 	occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable
 	& Storage size in gigabytes of the 	instance.\\
-	occi.storage.state & Enum \{online, offline, error\} & 1 & Immutable 
+	occi.storage.state & Enum \{online, offline, error\} & 1 & Immutable
 	& Current status of the instance.\\
 	\botrule
 	\end{tabular}
@@ -491,7 +490,7 @@ be related to the \textit{http://schemas.ogf.org/occi/core\#link}
 	& Identifier that relates the link to the link's device interface\\
 	occi.networkinterface.mac & String & 1 & Mutable
 	& MAC address associated with the link's device interface\\
-	occi.networkinterface.state & Enum \{active, inactive, error\}& 1 
+	occi.networkinterface.state & Enum \{active, inactive, error\}& 1
 	& Immutable & Current status of the instance.\\
 	\botrule
 	\end{tabular}
@@ -525,7 +524,7 @@ the ``{\tt scheme}'' of
 \textit{ipnetworkinterface}.
 An \hl{IPNetworkInterface} mixin MUST support these attributes.
 
-The \hl{IPNetworkInterface} mixin MUST be related to the \hl{NetworkInterface} kind 
+The \hl{IPNetworkInterface} mixin MUST be related to the \hl{NetworkInterface} kind
 by setting the \textit{applies} attribute to:
 
 \textit{http://schemas.ogf.org/occi/infrastructure\#networkinterface}.
@@ -591,7 +590,7 @@ related to the \textit{http://schemas.ogf.org/occi/core\#link}
 	& Device identifier as defined by the OCCI service provider.\\
 	occi.storagelink.mountpoint & String & 0\ldots1 & Mutable
 	& Point to where the storage is mounted in the guest OS.\\
-	occi.storagelink.state & Enum \{active, inactive, error\}& 1 
+	occi.storagelink.state & Enum \{active, inactive, error\}& 1
 	& Immutable & Current status of the instance.\\
 	\botrule
 	\end{tabular}
@@ -760,7 +759,7 @@ If a provider that offers VMs with access secured by SSH then that OCCI implemen
 
 The OCCI credentials mixin has the term \textit{'ssh\_key'} and the schema \textit{'http://schemas.ogf.org/occi/credentials\#'}.
 
-The credentials mixin MUST only apply to the Compute Kind and therefore 
+The credentials mixin MUST only apply to the Compute Kind and therefore
 the mixin should have its  \textit{applies} attribute set to:
 
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
@@ -797,7 +796,7 @@ contextualisation of a resource instance can be done.
 The OCCI contextualisation mixin has the term \textit{user\_data}
 and the schema \textit{http://schemas.ogf.org/occi/compute\#}
 
-Contextualisation mixin MUST only apply to the Compute Kind and therefore 
+Contextualisation mixin MUST only apply to the Compute Kind and therefore
 the mixin should have its  \textit{applies} attribute set to:
 
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
