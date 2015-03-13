@@ -113,16 +113,15 @@ capabilities required to support modern service offerings.
 The OCCI JSON Rendering specifies a rendering of OCCI instance types in the JSON
 data interchange format as defined in \cite{rfc4627}.
 
-The Rendering can be used to render OCCI instances independently of the
-transport mechanism being used. Thus messages can be delivered by e.g. the HTTP
-protocol as specified in \cite{occi:http_rendering} or by using text files with
-the .json file extension as defined in \cite{rfc4627}.
+The rendering can be used to render OCCI instances independently of the
+protocol being used. Thus messages can be delivered by e.g. the HTTP
+protocol as specified in \cite{occi:http_rendering}.
 
 The following media-type MUST be used for the OCCI JSON Rendering:
 
 {\tt application/occi+json}
 
-\section{JSON Format}
+\section{JSON Rendering}
 \label{sec:json_format}
 The OCCI JSON Rendering consists of a JSON object containing information on the 
 OCCI Core instances OCCI Kind, OCCI Mixin, OCCI Action,
@@ -131,51 +130,36 @@ the operation identified by OCCI Actions.
 The rendering of each OCCI Core instance will be
 described in the following sections. 
 
-\subsection{Attributes}
+\subsection{Entity Instance Rendering}
+\label{sec:format_entity_instance_rendering}
 
-Attribute names consist of alphanumeric characters separated by dots. The dots
-define a namespace hierarchy. This hierarchy is reflected by stacked JSON
-objects as shown in the following examle. The last object contains either a
-Number, String or Boolean value or, when used within a category, an Object
-following the Attribute Description Format (see
-\ref{sec:format_attribute_description}).
-\begin{lstlisting}
-{
-    "one": {
-        "two": {
-            "three": Number|String|Boolean|Object
-        }
-    }
-}
-\end{lstlisting}
+Entity instances MUST be rendered as JSON hashmaps.
 
-\subsection{Resource Instance Format}
+\subsubsection{Resource Instance Rendering}
 \label{sec:format_resource}
 
-The OCCI Resource Instance Format consists of a JSON object as shown in the
+The OCCI Resource Instance Rendering consists of a JSON object as shown in the
 following example. Section \ref{sec:example_resource} contains a detailed
 example.
 Table~\ref{tbl:format_resource} defines the object members.
 \begin{lstlisting}
-{
-    "resources": [
+
         {
             "kind": String,
             "mixins": Array,
             "attributes": Object,
             "actions": Array,
             "id": String,
-            "links": Array
+            "links": Array,
+            "summary": String,
+            "title": String,
         }
-    ]
-}
+
+
 \end{lstlisting}
 \mytablefloat{
     \label{tbl:format_resource}
-    OCCI Resource instances are rendered inside the top-level JSON object with
-name
-{\em resources}
-    as an array of JSON objects with the following entries:
+    OCCI Resource instance rendered with the following entries:
     } {
     \begin{tabularx}{\textwidth}{llXll}
     \toprule
@@ -196,19 +180,56 @@ Actions applicable to the OCCI Resource instance & mutable & 0..* \\
     id & String & ID of the OCCI Resource & immutable & 1\\
             
     links & Array of Strings & List of URIs of OCCI Links & mutable & 0..*\\
+    summary & String & Summary text of resource & mutable & 0..1 \\
+    title & String & Title of resource & mutable & 0..1 \\
     \botrule
     \end{tabularx}
 }
 
-\subsection{Link Instance Format}
+\paragraph{Action Invocation Rendering}
+\label{sec:format_action_invocation}
+
+The OCCI Action Invocation Rendering identifies an invocable operation on a OCCI Resource or
+OCCI Link instance. To trigger such an operation the OCCI Action Invocation
+Rendering is required.
+
+The OCCI Action Invocation Rendering consists of a top-level JSON object as shown in the
+following example. Section \ref{sec:example_action_invocation} contains a detailed example.
+Table~\ref{tbl:format_action_invocation} defines the object members.
+
+\begin{lstlisting}
+{
+    "action": String,
+    "attributes": Object
+}
+\end{lstlisting}
+
+\mytablefloat{
+    \label{tbl:format_action_invocation}
+    An OCCI Action invocation is rendered with
+ the following entries:
+    } {
+    \begin{tabularx}{\textwidth}{llXll}
+    \toprule
+    Object member & JSON type & Description & Mutability & Multiplicity \\
+    \colrule
+    action & String & Type identifier & immutable & 1 \\
+
+    attributes & Object & Instance attributes (see
+\ref{sec:format_attribute_description}) & mutable & 0..* \\
+    \botrule
+    \end{tabularx}
+}
+
+
+\subsubsection{Link Instance Rendering}
 \label{sec:format_link}
 
-The OCCI Link Instance Format consists of a JSON object as shown in the
+The OCCI Link Instance Rendering consists of a JSON object as shown in the
 following example. Section \ref{sec:example_link} contains a detailed example.
 Table~\ref{tbl:format_link} defines the object members.
 \begin{lstlisting}
-{
-    "links": [
+
         {
             "kind": String,
             "mixins": Array,
@@ -217,15 +238,15 @@ Table~\ref{tbl:format_link} defines the object members.
             "id": String,
             "source": String,
             "target": String,
-            "rel": String
+            "rel": String,
+            "title": String
         }
-    ]
-}
+
 \end{lstlisting}
+
 \mytablefloat{
     \label{tbl:format_link}
-    OCCI Link instances are rendered inside the top-level JSON object with name
-{\em links} as an array of JSON objects with the following entries:
+    OCCI Link instances are rendered with the following entries:
     } {
     \begin{tabularx}{\textwidth}{llXll}
     \toprule
@@ -253,54 +274,27 @@ source of the OCCI Link if this entry is omitted & immutable & 0..1\\
          
     rel & string & Type identifier of the target Resource, to be supplied if
 the target is an OCCI Resource. & immutable & 0..1 \\
+	title & String & title of the Link & mutable & 0..1\\
     \botrule
     \end{tabularx}
 }
 
-\subsection{Action Invocation Format}
-\label{sec:format_action_invocation}
 
-The OCCI Action Invocation  Format identifies an invocable operation on a OCCI Resource or
-OCCI Link instance. To trigger such an operation the OCCI Action Invocation
-Format is required.
 
-The OCCI Action Invocation Format consists of a top-level JSON object as shown in the
-following example. Section \ref{sec:example_action_invocation} contains a detailed example.
-Table~\ref{tbl:format_action_invocation} defines the object members.
-\begin{lstlisting}
-{
-    "action": String,
-    "attributes": Object
-}
-\end{lstlisting}
-\mytablefloat{
-    \label{tbl:format_action_invocation}
-    An OCCI Action invocation is rendered as top-level JSON object with
- the following entries:
-    } {
-    \begin{tabularx}{\textwidth}{llXll}
-    \toprule
-    Object member & JSON type & Description & Mutability & Multiplicity \\
-    \colrule
-    action & String & Type identifier & immutable & 1 \\
+\subsection{Category Instance Rendering}
+\label{sec:format_category_instance_rendering}
+Category instances MUST be rendered as JSON hashmaps.
 
-    attributes & Object & Instance attributes (see
-\ref{sec:format_attribute_description}) & mutable & 0..* \\
-    \botrule
-    \end{tabularx}
-}
-
-\subsection{Kind Instance Format}
+\subsubsection{Kind Instance Rendering}
 \label{sec:format_kind}
 
-The OCCI Kind Instance Format consists of a JSON object as shown in the
+The OCCI Kind Instance Rendering consists of a JSON object as shown in the
 following example. Section \ref{sec:example_kind} contains a detailed example.
 Table~\ref{tbl:format_kind} defines the top-level object members.
 
 \mytablefloat{
     \label{tbl:format_kind}
-    OCCI Kind instances are rendered inside the top-level JSON object with name
-{\em kinds} as an array of JSON objects with the following entries:
+    OCCI Kind instances are rendered with the following entries:
     } {
     \begin{tabularx}{\textwidth}{llXll}
     \toprule
@@ -330,8 +324,7 @@ Entity itself & immutable & 0..1 \\
 }
 
 \begin{lstlisting}
-{
-    "kinds": [
+
         {
             "term": String,
             "scheme": String,
@@ -341,19 +334,17 @@ Entity itself & immutable & 0..1 \\
             "parent": Array,
             "location": String
         }
-    ]
-}
+
 \end{lstlisting}
 
-\subsection{Mixin Instance Format}
+\subsubsection{Mixin Instance Rendering}
 \label{sec:format_mixin}
 
-The OCCI Mixin Instance Format consists of a JSON object as shown in the following example. Section \ref{sec:example_mixin} contains a detailed example.
+The OCCI Mixin Instance Rendering consists of a JSON object as shown in the following example. Section \ref{sec:example_mixin} contains a detailed example.
 Table~\ref{tbl:format_mixin} defines the top-level object members.
 
 \begin{lstlisting}
-{
-    "mixins": [
+
         {
             "term": String,
             "scheme": String,
@@ -364,14 +355,12 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
             "applies": Array,
             "location": String
         }
-    ]
-}
+
 \end{lstlisting}
 
 \mytablefloat{
     \label{tbl:format_mixin}
-    OCCI Mixin instances are rendered inside the top-level JSON object with name
-{\em mixins} as an array of JSON objects with the following entries:
+    OCCI Mixin instances are rendered with the following entries:
     } {
     \begin{tabularx}{\textwidth}{llXll}
     \toprule
@@ -402,10 +391,10 @@ instance & immutable & 1 \\
     \end{tabularx}
 }
 
-\subsection{Action Instance Format}
+\subsubsection{Action Instance Rendering}
 \label{sec:format_action}
 
-The OCCI Action Instance Format consists of a JSON object as shown in the
+The OCCI Action Instance Rendering consists of a JSON object as shown in the
 following example.
 Table~\ref{tbl:format_action} defines the top-level object members.
 
@@ -433,26 +422,121 @@ immutable & 1 \\
 }
 
 \begin{lstlisting}
-{
-    "actions": [
+
         {
             "term": String,
             "scheme": String,
             "title": String,
             "attributes": Object,
         }
-    ]
+
+\end{lstlisting}
+
+
+
+\subsection{Entity Collection Rendering}
+Collections of Entity instances MUST be rendered as JSON arrays. The content of that array is a set of entity instance renderings.
+
+That array MUST be a member of a JSON hashmap that is associated with the relevant key name specific to the type of Entity collection being rendered.
+
+\subsubsection{Resource Collection Rendering}
+
+The JSON hashmap key-name associated with the array of resource instances MUST be \hl{resources}.
+
+\begin{lstlisting}
+{
+    "resources": []
+}
+
+\end{lstlisting}
+
+\subsubsection{Link Collection Rendering}
+
+The JSON hashmap key-name associated with the array of link instances MUST be \hl{links}.
+
+\begin{lstlisting}
+{
+    "links": []
 }
 \end{lstlisting}
 
-\subsection{Attribute Description Format}
+\subsection{Category Collection Rendering}
+Collections of Category instances MUST be rendered as JSON arrays. The content of that array is a set of Category instance renderings.
+
+That array MUST be a member of a JSON hashmap that is associated with the relevant key name specific to the type of Category collection being rendered.
+
+
+\subsubsection{Kind Collection Rendering}
+
+The JSON hashmap key-name associated with the array of kind instances MUST be \hl{kinds}.
+
+\begin{lstlisting}
+{
+    "kinds": []
+}
+\end{lstlisting}
+
+\subsubsection{Mixin Collection Rendering}
+
+The JSON hashmap key-name associated with the array of mixin instances MUST be \hl{mixins}.
+
+\begin{lstlisting}
+{
+    "mixins": []
+}
+\end{lstlisting}
+
+\subsubsection{Action Collection Rendering}
+
+The JSON hashmap key-name associated with the array of action instances MUST be \hl{actions}.
+
+\begin{lstlisting}
+{
+    "actions": []
+}
+\end{lstlisting}
+
+
+Collections of Category instances are rendered as JSON arrays.
+
+\subsection{Attributes Rendering}
+
+Attribute names consist of alphanumeric characters separated by dots. The dots
+define a namespace hierarchy. This hierarchy is reflected by stacked JSON
+objects as shown in the following example. The last object contains either a
+Number, String or Boolean value or, when used within a category, an Object
+following the Attribute Description Rendering (see
+\ref{sec:format_attribute_description}).
+\begin{lstlisting}
+{
+    "one": {
+        "two": {
+            "three": Number|String|Boolean|Object
+        }
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Entity Instance Attribute Rendering Specifics}
+
+For Entity instances the following model attribute name to attribute name rendering mappings MUST be used
+
+Entity.id -> occi.core.id -> URN
+Entity.title -> occi.core.title -> string
+Resource.summary -> occi.core.summary -> string
+Link.target -> occi.core.target -> URI, string, internal to provider
+Link.source -> occi.core.source -> URI, string
+
+
+
+\subsubsection{Attribute Description Rendering}
 \label{sec:format_attribute_description}
 
-OCCI Attribute Descriptions are rendered as JSON objects as defined in table~\ref{tbl:format_attribute_description}
+Attribute Descriptions are rendered as JSON objects as defined in table~\ref{tbl:format_attribute_description}
 
 \mytablefloat{
     \label{tbl:format_attribute_description}
-    All properties of the OCCI Attribute definition are optional, but may contain
+    All properties of the Attribute definition are optional, but may contain
 defaults which MUST be used if the Attribute is not present in the instantiated
 OCCI Entity.
     } {
@@ -488,198 +572,6 @@ present in the instantiated OCCI Entity & \\
     "type": String,
     "default": String | Number | Boolean,
     "description": String
-}
-\end{lstlisting}
-
-\section{Detailed Examples}
-\label{sec:examples}
-
-%FIXME: Check that examples are correct and cover most aspects
-
-\subsection{Resource Instance Format Example}
-\label{sec:example_resource}
-
-\begin{lstlisting}
-{
-    "resources": [
-        {
-            "kind": "http://schemas.ogf.org/occi/infrastructure#compute",
-            "mixins": [
-                "http://example.com/occi/templates#my_os_mixin"
-            ],
-            "attributes": {
-                "occi": {
-                    "compute": {
-                        "speed": 2,
-                        "memory": 4,
-                        "cores": 2
-                    }
-                },
-                "com": {
-                    "example": {
-                        "occi": {
-                            "templates": {
-                                "my_os_mixin": {
-                                    "my_attribute": "my_value"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "actions": [
-                "http://schemas.ogf.org/occi/infrastructure/compute/action#start"
-            ],
-            "id": "urn:uuid:996ad860-2a9a-504f-8861-aeafd0b2ae29",
-            "links": [
-                "/storage/22fe83ae-a20f-54fc-b436-cec85c94c5e8"
-            ]
-        }
-    ]
-}
-\end{lstlisting}
-
-\subsection{Link Instance Format Example}
-\label{sec:example_link}
-
-\begin{lstlisting}
-{
-    "links": [
-        {
-            "kind": "http://schemas.ogf.org/occi/infrastructure#networkinterface",
-            "mixins": [
-                "http://schemas.ogf.org/occi/infrastructure/networkinterface#ipnetworkinterface"
-            ],
-            "attributes": {
-                "occi": {
-                    "infrastructure": {
-                        "networkinterface": {
-                            "interface": "eth0",
-                            "mac": "00:80:41:ae:fd:7e",
-                            "address": "192.168.0.100",
-                            "gateway": "192.168.0.1",
-                            "allocation": "dynamic"
-                        }
-                    }
-                }
-            },
-            "actions": [
-                "http://schemas.ogf.org/occi/infrastructure/networkinterface/action#up"
-            ],
-            "id": "urn:uuid:22fe83ae-a20f-54fc-b436-cec85c94c5e8",
-            "target": "/network/b7d55bf4-7057-5113-85c8-141871bf7635",
-            "source": "/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
-        }
-    ]
-}
-\end{lstlisting}
-
-\subsection{Action Invocation Format Example}
-\label{sec:example_action_invocation}
-
-\begin{lstlisting}
-{
-    "action": "http://schemas.ogf.org/occi/infrastructure/compute/action#stop",
-    "attributes": {
-        "method": "graceful"       
-    }
-}
-\end{lstlisting}
-
-\subsection{Kind Format Example}
-\label{sec:example_kind}
-
-\begin{lstlisting}
-{
-    "kinds": [
-        {
-            "term": "compute",
-            "scheme": "http://schemas.ogf.org/occi/infrastructure#",
-            "title": "Compute Resource",
-            "parent": "http://schemas.ogf.org/occi/core#resource",
-            "attributes": {
-                "occi": {
-                    "compute": {
-                        "hostname": {
-                            "mutable": true,
-                            "required": false,
-                            "type": "string",
-                            "description": "Hostname of the compute resource"
-                        },
-                        "state": {
-                            "mutable": false,
-                            "required": false,
-                            "type": "string",
-                            "default": "inactive",
-                            "description": "State the compute resource is in"
-                        }
-                    }
-                }
-            },
-            "actions": [
-                "http://schemas.ogf.org/occi/infrastructure/compute/action#start",
-                "http://schemas.ogf.org/occi/infrastructure/compute/action#stop",
-                "http://schemas.ogf.org/occi/infrastructure/compute/action#restart",
-                "http://schemas.ogf.org/occi/infrastructure/compute/action#suspend"
-            ],
-            "location": "/compute/"
-        }
-    ]
-}
-\end{lstlisting}
-
-\subsection{Mixin Format Example}
-\label{sec:example_mixin}
-
-\begin{lstlisting}
-{
-    "mixins": [
-        {
-            "term": "medium",
-            "scheme": "http://example.com/template/resource#",
-            "depends": [
-                "http://schemas.ogf.org/occi/infrastructure#resource_tpl"
-            ],
-            "applies": [
-                "http://schemas.ogf.org/occi/infrastructure#compute"
-            ],
-            "attributes": {
-                "occi": {
-                    "compute": {
-                        "speed": {
-                            "type": "number",
-                            "default": 2.8
-                        }
-                    }
-                }
-            },
-            "title": "Medium VM",
-            "location": "/template/resource/medium/"
-        }
-    ]
-}
-\end{lstlisting}
-
-\subsection{Action Format Example}
-\label{sec:example_action}
-
-\begin{lstlisting}
-{
-    "actions": [
-        {
-            "term": "stop",
-            "scheme": "http://schemas.ogf.org/occi/infrastructure/compute/action#",
-            "title": "Stop Compute instance",
-            "attributes": {
-                "method": {
-                    "mutable": true,
-                    "required": false,
-                    "type": "string",
-                    "default": "poweroff"
-                }
-            }
-        }
-    ]
 }
 \end{lstlisting}
 
