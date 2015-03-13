@@ -1,5 +1,7 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true]{microtype}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -202,14 +204,14 @@ the \hl{Resource} base type defined in OCCI Core Model
 	\label{tbl:compute}\hl{Attribute}s defined for the \hl{Compute} type.
 }
 {
-	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
+	\begin{tabular}{lp{2.5cm}p{1cm}lp{5cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
 	occi.compute.architecture & Enum \{x86, x64\} & 0\ldots1
 	& Mutable & CPU Architecture of the instance.\\
-	occi.compute.cores & Integer & 0\ldots1 & Mutable
-	& Number of CPU cores assigned to the instance.\\
+	occi.compute.cores & Integer & 0\ldots1
+	& Mutable & Number of CPU cores assigned to the instance.\\
 	occi.compute.hostname & String & 0\ldots1
 	& Mutable & Fully Qualified DNS hostname for the instance.\\
 	occi.compute.speed & Float, ${\mathbf 10}^9$ (GHz) & 0\ldots1
@@ -218,6 +220,8 @@ the \hl{Resource} base type defined in OCCI Core Model
 	& Mutable & Maximum RAM in gigabytes allocated to the instance.\\
 	occi.compute.state & Enum \{active, inactive, suspended, error\} & 1
 	& Immutable & Current state of the instance.\\
+	occi.compute.state.message & String & 0..1
+	& Immutable & Human-readable explanation of the current instance state.\\
 	\botrule
 	\end{tabular}
 }
@@ -225,8 +229,9 @@ the \hl{Resource} base type defined in OCCI Core Model
 Table~\ref{tbl:compute} describes the OCCI Attributes%
 \footnote{See the ``{\tt attributes}'' attribute defined by the
   \hl{Category} type and inherited by \hl{Kind} \cite{occi:core}.}
-defined by \hl{Compute} through its \hl{Kind} instance. These
-attributes MUST be exposed by an instance of the \hl{Compute} type.
+defined by \hl{Compute} through its \hl{Kind} instance. These attributes
+MAY or MUST be exposed by an instance of the \hl{Compute} type
+depending on the ``Multiplicity'' column in the aforementioned table.
 
 \mytablefloat{
 	\label{tbl:compute_actions}%
@@ -279,7 +284,7 @@ The \hl{Network} type is assigned the
 	\label{tbl:network}\hl{Attribute}s defined for the \hl{Network} type.
 }
 {
-	\begin{tabular}{lllll}
+	\begin{tabular}{lp{2.5cm}p{1cm}lp{5cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
@@ -289,6 +294,8 @@ The \hl{Network} type is assigned the
 	& Tag based VLANs (e.g. external-dmz).\\
 	occi.network.state & Enum \{active, inactive, error\} & 1 & Immutable
 	& Current state of the instance.\\
+	occi.network.state.message & String & 0..1 & Immutable
+	& Human-readable explanation of the current instance state.\\
 	\botrule
 	\end{tabular}
 }
@@ -296,8 +303,9 @@ The \hl{Network} type is assigned the
 Table~\ref{tbl:network} describes the OCCI Attributes%
 \footnote{See the ``{\tt attributes}'' attribute defined by the
   \hl{Category} type and inherited by \hl{Kind} \cite{occi:core}.}
-defined by \hl{Network} through its \hl{Kind} instance. These
-attributes MUST be exposed by an instance of the \hl{Network} type.
+defined by \hl{Network} through its \hl{Kind} instance. These attributes
+MAY or MUST be exposed by an instance of the \hl{Network} type
+depending on the ``Multiplicity'' column in the aforementioned table.
 
 \mytablefloat{
 	\label{tbl:network_actions}%
@@ -397,14 +405,16 @@ type defined in the OCCI Core Model \cite{occi:core}.  The
 	\label{tbl:storage}\hl{Attribute}s defined for the \hl{Storage} type.
 }
 {
-	\begin{tabular}{lp{2.8cm}clp{5cm}}
+	\begin{tabular}{lp{2.5cm}p{1cm}lp{5cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
 	occi.storage.size & Float, ${\mathbf 10}^9$ (GiB) & 1 & Mutable
 	& Storage size in gigabytes of the 	instance.\\
-	occi.storage.state & Enum \{online, offline, error\} & 1 & Immutable
+	occi.storage.state & Enum \{online, off\-line, error\} & 1 & Immutable
 	& Current status of the instance.\\
+	occi.storage.state.message & String & 0..1 & Immutable
+	& Human-readable explanation of the current instance state.\\
 	\botrule
 	\end{tabular}
 }
@@ -412,8 +422,9 @@ type defined in the OCCI Core Model \cite{occi:core}.  The
 Table~\ref{tbl:storage} describes the OCCI Attributes%
 \footnote{See the ``{\tt attributes}'' attribute defined by the
   \hl{Category} type and inherited by \hl{Kind} \cite{occi:core}.}
-defined by \hl{Storage} through its \hl{Kind} instance. These
-attributes MUST be exposed by an instance of the \hl{Storage} type.
+defined by \hl{Storage} through its \hl{Kind} instance. These attributes
+MAY or MUST be exposed by an instance of the \hl{Storage} type
+depending on the ``Multiplicity'' column in the aforementioned table.
 
 \mytablefloat{
 	\label{tbl:storage_actions}%
@@ -482,7 +493,7 @@ be related to the \textit{http://schemas.ogf.org/occi/core\#link}
 	\label{tbl:networklink}\hl{Attribute}s defined for the \hl{NetworkInterface} type.
 }
 {
-	\begin{tabular}{lp{1.8cm}clp{5cm}}
+	\begin{tabular}{lp{2.5cm}p{1cm}lp{5cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
@@ -492,6 +503,8 @@ be related to the \textit{http://schemas.ogf.org/occi/core\#link}
 	& MAC address associated with the link's device interface\\
 	occi.networkinterface.state & Enum \{active, inactive, error\}& 1
 	& Immutable & Current status of the instance.\\
+	occi.networkinterface.state.message & String & 0..1 & Immutable
+	& Human-readable explanation of the current instance state.\\
 	\botrule
 	\end{tabular}
 }
@@ -500,8 +513,9 @@ Table~\ref{tbl:networklink} describes the OCCI Attributes%
 \footnote{See the ``{\tt attributes}'' attribute defined by the
   \hl{Category} type and inherited by \hl{Kind} \cite{occi:core}.}
 defined by \hl{NetworkInterface} through its \hl{Kind} instance. These
-attributes MUST be exposed by an instance of the \hl{NetworkInterface}
-type.  Figure~\ref{fig:networklink_state} illustrates the state
+attributes MAY or MUST be exposed by an instance of the \hl{NetworkInterface} type
+depending on the ``Multiplicity'' column in the aforementioned table.
+Figure~\ref{fig:networklink_state} illustrates the state
 diagram for a \hl{NetworkInterface} instance.
 
 \begin{figure}[!h]
@@ -582,7 +596,7 @@ related to the \textit{http://schemas.ogf.org/occi/core\#link}
 	\label{tbl:storagelink}\hl{Attribute}s defined for the \hl{StorageLink} type.
 }
 {
-	\begin{tabular}{lp{1.8cm}p{1cm}lp{5cm}}
+	\begin{tabular}{lp{2.5cm}p{1cm}lp{5cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
@@ -592,6 +606,8 @@ related to the \textit{http://schemas.ogf.org/occi/core\#link}
 	& Point to where the storage is mounted in the guest OS.\\
 	occi.storagelink.state & Enum \{active, inactive, error\}& 1
 	& Immutable & Current status of the instance.\\
+	occi.storagelink.state.message & String & 0..1 & Immutable
+	& Human-readable explanation of the current instance state.\\
 	\botrule
 	\end{tabular}
 }
@@ -600,8 +616,9 @@ Table~\ref{tbl:storagelink} describes the OCCI Attributes%
 \footnote{See the ``{\tt attributes}'' attribute defined by the
   \hl{Category} type and inherited by \hl{Kind} \cite{occi:core}.}
 defined by \hl{StorageLink} through its \hl{Kind} instance. These
-attributes MUST be exposed by an instance of the \hl{StorageLink}
-type.  Figure~\ref{fig:storagelink_state} illustrates the state
+attributes MAY or MUST be exposed by an instance of the \hl{StorageLink} type
+depending on the ``Multiplicity'' column in the aforementioned table.
+Figure~\ref{fig:storagelink_state} illustrates the state
 diagram for a \hl{StorageLink} instance.
 
 \begin{figure}[!h]
