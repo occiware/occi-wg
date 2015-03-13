@@ -168,8 +168,8 @@ behaviour in such cases is not specified. The return codes are specified by
 \item[403 Forbidden] indicates that the server understood the request but refuses to authorize it.
 \item[404 Not Found] indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists
 \item[405 Method Not Allowed] indicates that the method received in the request-line is known by the origin server but not supported by the target resource.
-\item[406 Not Acceptable] status code indicates that the target resource does not have a current representation that would be acceptable to the user agent
-\item[413 Request Entity Too Large] status code indicates that the request is larger than the server is willing or able to process.
+\item[406 Not Acceptable] indicates that the target resource does not have a current representation that would be acceptable to the user agent
+\item[413 Request Entity Too Large] indicates that the request is larger than the server is willing or able to process.
 \item[500 Internal Server Error] indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
 \item[501 Not Implemented] indicates that the server does not support the functionality required to fulfill the request.
 \end{description}
@@ -191,7 +191,7 @@ integer that refers to a sub-collection of the requested collection. {\em number
 
 If {\em number} is too large for the provider to handle (policy, technical) then a HTTP 413 response status code MUST be issued to the requesting client.
 
-If there is no more content to be served the result should be a HTTP 200 response status code MUST be issued to the requesting client.
+If there is no more content to be served the result should be a \emph{HTTP 200 OK} response status code MUST be issued to the requesting client.
 
 
 \section{HTTP methods applied to entity instance URLs}
@@ -241,7 +241,7 @@ The message must contain the full representaiton of a entity instance.
 
 \paragraph{Server PUT reponse}
 The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the OCCI implementation
-returns the \\emph{200 OK} HTTP response code the full representation of an entity instance MUST be returned. 
+returns the \emph{200 OK} HTTP response code the full representation of an entity instance MUST be returned. 
 In case of a \emph{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC7231 \cite{rfc7231}.
 
 Any OCCI \hl{Link}s associated with an existing OCCI \hl{Resource} MUST be left intact.
@@ -256,7 +256,7 @@ The message MUST contain a partial representation of a entity instance to be cha
 
 \paragraph{Server POST reponse}
 The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the OCCI implementation
-returns the \\emph{200 OK} HTTP response code the full representation of an entity instance MUST be returned. 
+returns the \emph{200 OK} HTTP response code the full representation of an entity instance MUST be returned. 
 In case of a \emph{201 CREATED} HTTP response code is MUST the HTTP Location header as defined in RFC7231 \cite{rfc7231}.
 
 \subsubsection{action}
