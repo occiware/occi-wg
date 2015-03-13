@@ -1,5 +1,7 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true]{microtype}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -381,7 +383,7 @@ discoverable if used.
 \item[required] If an Attribute is ``required'' a client MUST specify an
   value at instance creation-time.
 
-\item[pattern] MAY be specified in ERE \cite{ere} format, places additional restrictions on possibles values given. 
+\item[pattern] MAY be specified in ERE \cite{ere} format, places additional restrictions on possibles values given.
 
 \item[default] The default value given to an Attribute if the client does
   not specify a value at instance creation-time.  The {\em default} property is used to implement templates, see section~\ref{sec:template}.
@@ -800,7 +802,7 @@ The \hl{Entity} type is an abstract type of the \hl{Resource} type and
 the \hl{Link} type. It MUST be implemented.
 %
 Table~\ref{tbl:entity} defines the model attributes the \hl{Entity} type
-MUST implement to be compliant. 
+MUST implement to be compliant.
 %
 \mytablefloat{
   \label{tbl:entity}Model attributes defined for the \hl{Entity} type.}{
@@ -891,7 +893,7 @@ The \hl{Link} type is assigned the \hl{Kind} instance
 
 The {\tt source} attribute of a \hl{Link} instance
 MUST refer to \hl{Resource} {\em instance} within the service provider's
-namespace. The \hl{Link}'s {\tt target} attribute MUST point to a resource instance either within the provider's namespace or outside, 
+namespace. The \hl{Link}'s {\tt target} attribute MUST point to a resource instance either within the provider's namespace or outside,
 hosted by a third-party.
 
 The \hl{Link} type is the second of three entry points to extend the

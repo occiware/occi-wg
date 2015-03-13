@@ -1,5 +1,7 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true]{microtype}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -109,7 +111,7 @@ For example, the \hl{Kind} instance%
 \footnote{\tt http://schemas.ogf.org/occi/infrastructure\#compute}
 for the \hl{Compute} type may be bound to {\tt /my/occi/api/compute/}.
 
-Whenever a {\em location} is rendered it MUST be either a String or as 
+Whenever a {\em location} is rendered it MUST be either a String or as
 defined in RFC6570 \cite{rfc6570}.
 
 A \hl{Kind} instance whose associated type cannot be instantiated MUST NOT be
@@ -155,7 +157,7 @@ format used in a HTTP Response.
 \subsection{HTTP status codes}
 The below list specifies the minimum set of HTTP status codes an OCCI Client MUST
 understand. An OCCI Server MAY return other HTTP status codes but the exact client
-behaviour in such cases is not specified. The return codes are specified by 
+behaviour in such cases is not specified. The return codes are specified by
 \cite{rfc7231} and \cite{rfc7235}.
 
 \begin{description}
@@ -174,7 +176,7 @@ behaviour in such cases is not specified. The return codes are specified by
 
 \section{Pagination}
 
-To request partial results of an otherwise large collection message response, pagination SHOULD be used to reduce the load on 
+To request partial results of an otherwise large collection message response, pagination SHOULD be used to reduce the load on
 both the client and the service provider. This is done in the following manner.
 
 The HTTP verb GET is used against a URI to a collection and the query parameters of {\em page} and {\em number} MUST be used. {\em page} is an indexed
@@ -225,7 +227,7 @@ The message MUST contain a entity instance rendering.
 
 \paragraph{Server PUT reponse}
 The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the OCCI implementation
-returns the \emph{200 OK} HTTP response code an entity instance rendering MUST be returned. 
+returns the \emph{200 OK} HTTP response code an entity instance rendering MUST be returned.
 In case of a \emph{201 CREATED} HTTP response code the HTTP Location header as defined in RFC7231 \cite{rfc7231} MUST be used.
 
 \subsubsection{Replacing a entity instance}
@@ -236,7 +238,7 @@ The message MUST contain a entity instance rendering.
 
 \paragraph{Server PUT reponse}
 The OCCI implementation MAY either return 201 or 200 HTTP return codes.  If the OCCI implementation
-returns the \emph{200 OK} HTTP response code an entity instance rendering MUST be returned. 
+returns the \emph{200 OK} HTTP response code an entity instance rendering MUST be returned.
 In case of a \emph{201 CREATED} HTTP response code the HTTP Location header as defined in RFC7231 \cite{rfc7231} MUST be used.
 
 \subsection{HTTP POST method applide to aentity instance}
@@ -249,7 +251,7 @@ The message MUST contain a partial entity instance rendering of the entity insta
 
 \paragraph{Server POST reponse}
 The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the OCCI implementation
-returns the \emph{200 OK} HTTP response a entity instance rendering MUST be returned. 
+returns the \emph{200 OK} HTTP response a entity instance rendering MUST be returned.
 In case of a \emph{201 CREATED} HTTP response code the HTTP Location header as defined in RFC7231 \cite{rfc7231} MUST be used.
 
 \subsubsection{Triggering a action on a entity instance}
@@ -358,7 +360,7 @@ The request MAY include entity collection rendering which requires the \hl{Mixin
 Upon a successfully request a \emph{200 OK} status code MUST be used.
 
 \section{HTTP methods applied to the Query Interface}
-This section describes the HTTP methods used to retrieve and manipulate category instances.  With the help of the query interface it is possible for the client to determine the capabilities of the OCCI implementation he refers to. 
+This section describes the HTTP methods used to retrieve and manipulate category instances.  With the help of the query interface it is possible for the client to determine the capabilities of the OCCI implementation he refers to.
 
 The query interface MUST be implemented by all OCCI implementations. It MUST be found at the path \emph{/-/} off the root of the OCCI implementation. Implementations MAY also adopt RFC 5785 \cite{rfc5785} compliance to advertise this location. Should implementations wish to advertise the Query Interface using the .well-known mechanism then they MUST use the following path served from the authority:
 

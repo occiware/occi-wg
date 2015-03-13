@@ -1,5 +1,7 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true]{microtype}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -120,12 +122,12 @@ The following media-type MUST be used for the OCCI JSON Rendering:
 
 {\tt application/occi+json}
 
-The OCCI JSON Rendering consists of a JSON object containing information on the 
+The OCCI JSON Rendering consists of a JSON object containing information on the
 OCCI Core instances OCCI Kind, OCCI Mixin, OCCI Action,
 OCCI Link and OCCI Resource. The rendering also include a JSON object to invoke
 the operation identified by OCCI Actions.
 The rendering of each OCCI Core instance will be
-described in the following sections. 
+described in the following sections.
 
 \subsection{Entity Instance Rendering}
 \label{sec:format_entity_instance_rendering}
@@ -170,12 +172,12 @@ mutable & 0..* \\
 
     attributes & Object & Instance Attributes (see
 \ref{sec:format_attribute_description}) & mutable & 0..* \\
-    
+
     actions & Array of Strings & List of type identifiers of OCCI
 Actions applicable to the OCCI Resource instance & mutable & 0..* \\
-    
+
     id & String & ID of the OCCI Resource & immutable & 1\\
-            
+
     links & Array of Strings & List of URIs of OCCI Links & mutable & 0..*\\
     summary & String & Summary text of resource & mutable & 0..1 \\
     title & String & Title of resource & mutable & 0..1 \\
@@ -257,18 +259,18 @@ Mixins &
 
     attributes & Object & Instance attributes (see
 \ref{sec:format_attribute_description}) & mutable & 0..* \\
-    
+
     actions & Array of Strings & List of type identifiers of OCCI
 Action Categories applicable to the OCCI Link instance & mutable & 0..* \\
-    
+
     id & String & ID of the OCCI Link & immutable & 1\\
-        
-    source & String & URI of the source OCCI Resource. If only one OCCI 
-Resource is rendered in the same collection, this OCCI Resource is the 
+
+    source & String & URI of the source OCCI Resource. If only one OCCI
+Resource is rendered in the same collection, this OCCI Resource is the
 source of the OCCI Link if this entry is omitted & immutable & 0..1\\
-    
+
     target & String & URI of the target Resource & immutable & 1\\
-         
+
     rel & string & Type identifier of the target Resource, to be supplied if
 the target is an OCCI Resource. & immutable & 0..1 \\
 	title & String & title of the Link & mutable & 0..1\\
@@ -301,9 +303,9 @@ Table~\ref{tbl:format_kind} defines the top-level object members.
 immutable & 1 \\
 
     scheme & String & Categorisation scheme & immutable & 1 \\
-    
+
     title & String & Title of the OCCI Kind & immutable & 0..1 \\
-    
+
     attributes & Object & Attribute description, see
 ~\ref{tbl:format_attribute_description} & immutable & 0..* \\
 
@@ -367,16 +369,16 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
 immutable & 1 \\
 
     scheme & String & Categorisation scheme & immutable & 1 \\
-    
+
     title & String & Title of the OCCI Mixin & immutable & 0..1 \\
-    
+
     attributes & Object & Attribute description, see
 ~\ref{tbl:format_attribute_description} & immutable & 0..* \\
 
     depends & Array of Strings & List of type identifiers of the dependent
  \hl{Mixin} instances & immutable & 0..* \\
- 
-    applies & Array of Strings & List of OCCI Kind type identifiers this OCCI 
+
+    applies & Array of Strings & List of OCCI Kind type identifiers this OCCI
 Mixin can be applied to \\
 
     actions & Array of Strings & List of OCCI Action type identifiers
@@ -409,9 +411,9 @@ top-level JSON object with name {\em actions} as an array of JSON Objects with
 immutable & 1 \\
 
     scheme & String & Categorisation scheme & immutable & 1 \\
-    
+
     title & String & Title of the OCCI Action & immutable & 0..1 \\
-    
+
     attributes & Object & Attribute description, see
 ~\ref{tbl:format_attribute_description} & immutable & 0..* \\
     \botrule

@@ -1,5 +1,7 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true]{microtype}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -159,8 +161,8 @@ transferred. The content types specified are:
 
 \begin{itemize}
 	\item \textit{text/plain},
-	\item \textit{text/occi} and 
-	\item \textit{text/uri-list}. 
+	\item \textit{text/occi} and
+	\item \textit{text/uri-list}.
 \end{itemize}
 
 More details are discussed in section \ref{sec:content_type}. Other
@@ -223,7 +225,7 @@ query interface (/-/) 				& Retrieve capabilities* 					& Add a user-defined \hl
 \subsection{A RESTful Rendering of OCCI}
 The following sections and paragraphs describe how the OCCI model MUST
 be implemented by OCCI implementations. Operations which are not
-defined are out of scope for this specification and MAY be implemented. 
+defined are out of scope for this specification and MAY be implemented.
 This is the minimal set to ensure interoperability.
 
 \subsubsection{Resource instance URL Name-space Hierarchy and Location}
@@ -372,12 +374,12 @@ response    = N/A
     MAY be removed (if allowed) by using the HTTP DELETE verb. The
     information about which \hl{Mixin} should be deleted MUST be
     provided in the request:
-    
+
 \begin{verbatim}
 > DELETE /-/ HTTP/1.1
 > [...]
-> Category: my_stuff; 
-            scheme="http://example.com/occi/my_stuff#"; 
+> Category: my_stuff;
+            scheme="http://example.com/occi/my_stuff#";
             class="mixin";
 
 < HTTP/1.1 200 OK
@@ -387,11 +389,11 @@ response    = N/A
     The information which needs to be present in the request and
     response are defined as following and MUST be implemented by an
     OCCI implementation.
-    
+
     If a client attempts to remove a provider-defined Mixin category,
     the implementation MUST respond with a HTTP error code of 403,
     Forbidden.
-    
+
     When a user-defined Mixin is removed all associations with
     resource instances must be removed by the implementation.
 
@@ -445,10 +447,10 @@ http://example.com/vms/bar/
 \begin{verbatim}
 > GET /vms/foo/ HTTP/1.1
 > [...]
- 
+
 < HTTP/1.1 200 OK
 < [...]
-< 
+<
 < X-OCCI-Location: http://example.com/vms/foo/vm1
 < X-OCCI-Location: http://example.com/vms/bar/vm2
 \end{verbatim}
@@ -473,7 +475,7 @@ request      = filter
                *( Attribute CRLF )
 
 response                    = resource_representations
-  resource_representations  = *( Location CRLF ) 
+  resource_representations  = *( Location CRLF )
 \end{verbatim}
 
   \item[Deletion of All resource instances Below a
@@ -483,7 +485,7 @@ response                    = resource_representations
 
 \begin{verbatim}
 > DELETE /vms/foo/ HTTP/1.1 [...]
- 
+
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
@@ -518,10 +520,10 @@ when wanting to represent an empty collection of \hl{Mixin}s or
 \begin{verbatim}
 > GET /compute/ HTTP/1.1
 > [...]
- 
+
 < HTTP/1.1 200 OK
 < [...]
-< 
+<
 < X-OCCI-Location: http://example.com/vms/foo/vm1
 < X-OCCI-Location: http://example.com/vms/foo/vm2
 < X-OCCI-Location: http://example.com/vms/bar/vm1
@@ -549,7 +551,7 @@ request      = filter
                *( Attribute CRLF )
 
 response                    = resource_representations
-  resource_representations  = *( Location CRLF ) 
+  resource_representations  = *( Location CRLF )
 \end{verbatim}
 
   \item[Triggering Actions on All Instances of a \hl{Mixin} or
@@ -682,26 +684,26 @@ identified by an URI, for example
   \item[Creating a resource instance] A request to create a resource
     instance MUST contain one and only one HTTP Category rendering
     which refers to a specific \hl{Kind} instance. This \hl{Kind}
-    MUST define the type of the resource instance.  A request 
+    MUST define the type of the resource instance.  A request
     MAY also contain one or more HTTP Category
     renderings which refer to different \hl{Mixin} instances. Any such
     \hl{Mixin} instances MUST be applicable (if allowed) to the
     resource instance.  A client MAY be REQUIRED to provide additional
-    information in the request based on whether the Kind indicates 
+    information in the request based on whether the Kind indicates
     \emph{required} attributes (see \ref{sec:render_cats}) or not.
-    
+
     A resource instance can be created using two ways - HTTP POST
     or PUT:
 
 \begin{verbatim}
 > POST /compute/ HTTP/1.1
 > [...]
-> 
-> Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="kind"; 
+>
+> Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="kind";
 > X-OCCI-Attribute: occi.compute.cores=2
 > X-OCCI-Attribute: occi.compute.hostname="foobar"
 > [...]
- 
+
 < HTTP/1.1 201 OK
 < [...]
 < Location: http://example.com/vms/foo/vm1
@@ -742,12 +744,12 @@ response                   = 0*1( resource_representation )
 \begin{verbatim}
 > PUT /vms/foo/my_first_virtual_machine HTTP/1.1
 > [...]
-> 
-> Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; "class=kind"; 
+>
+> Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; "class=kind";
 > X-OCCI-Attribute: occi.compute.cores=2
 > X-OCCI-Attribute: occi.compute.hostname="foobar"
 > [...]
- 
+
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
@@ -774,7 +776,7 @@ response                   = 0*1( resource_representation )
     returned. \textbf{Please note} that the HTTP Location header used
     when the service returns the 201 HTTP response code is defined in
     RFC2616 \cite{rfc2616}.
-  
+
     A created resource instance MUST be added
     to the collection defined by the \hl{Kind}.
 
@@ -792,7 +794,7 @@ response                   = 0*1( resource_representation )
 \begin{verbatim}
 > GET /vms/foo/vm1 HTTP/1.1
 > [...]
- 
+
 < HTTP/1.1 200 OK
 < [...]
 < Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="kind";
@@ -829,10 +831,10 @@ resource_representation  = 1( Category CRLF )
 \begin{verbatim}
 > POST /vms/foo/vm1 HTTP/1.1
 > [...]
-> 
+>
 > X-OCCI-Attribute: occi.compute.memory=4.0
 > [...]
- 
+
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
@@ -850,7 +852,7 @@ request                    = 1*( resource_representation )
 response     = N/A
 
 \end{verbatim}
-    
+
     The OCCI implementation MAY either return 201 or 200 HTTP return
     codes. If the OCCI implementation returns the 200 HTTP response
     code the full representation (as described in 'Retrieving a
@@ -858,7 +860,7 @@ response     = N/A
     returned. \textbf{Please note} that the HTTP Location header used
     when the service returns the 201 HTTP response code is defined in
     RFC2616 \cite{rfc2616}.
-    
+
   \item[Full Update of a resource instance] Before updating a resource
     instance it is RECOMMENDED that the client first retrieves the
     resource instance. Full updating is done using the HTTP PUT verb. The
@@ -873,15 +875,15 @@ response     = N/A
     associated after a successful Full Update operation. This is necessary
     for the PUT operation to be idempotent.
 
-    
+
 
 \begin{verbatim}
 > PUT /vms/foo/vm1 HTTP/1.1
 > [...]
-> 
+>
 > X-OCCI-Attribute: occi.compute.memory=4.0
 > [...]
- 
+
 < HTTP/1.1 200 OK
 < [...]
 \end{verbatim}
@@ -905,7 +907,7 @@ response     = N/A
     returned. \textbf{Please note} that the HTTP Location header used
     when the service returns the 201 HTTP response code is defined in
     RFC2616 \cite{rfc2616}.
-    
+
   \item[Deleting a resource instance] A resource instance can be
     deleted using the HTTP DELETE verb. No other information SHOULD be
     added to the request.\footnote{If the resource instances is an
@@ -985,10 +987,10 @@ implementation.
 \begin{verbatim}
 > POST /compute/ HTTP/1.1
 > [...]
-> 
-> Category: compute; 
-            scheme="http://schemas.ogf.org/occi/infrastructure#"; 
-            class="kind"; 
+>
+> Category: compute;
+            scheme="http://schemas.ogf.org/occi/infrastructure#";
+            class="kind";
 > Link: </network/123>;
         rel="http://schemas.ogf.org/occi/infrastructure#network";
         category="http://schemas.ogf.org/occi/infrastructure#networkinterface";
@@ -997,7 +999,7 @@ implementation.
 > X-OCCI-Attribute: occi.compute.cores=2
 > X-OCCI-Attribute: occi.compute.hostname="foobar"
 > [...]
- 
+
 < HTTP/1.1 200 OK
 < [...]
 < Location: http://example.com/vms/foo/vm1
@@ -1011,7 +1013,7 @@ implementation.
 \begin{verbatim}
 > GET /vms/foo/vm1 HTTP/1.1
 > [...]
- 
+
 < HTTP/1.1 200 OK
 < [...]
 < Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="kind";
@@ -1036,14 +1038,14 @@ implementation.
 \begin{verbatim}
 > POST /link/networkinterface/ HTTP/1.1
 > [...]
-> 
-> Category: networkinterface; 
-            scheme="http://schemas.ogf.org/occi/infrastructure#"; 
-            class="kind"; 
+>
+> Category: networkinterface;
+            scheme="http://schemas.ogf.org/occi/infrastructure#";
+            class="kind";
 > X-OCCI-Attribute: occi.core.source="http://example.com/vms/foo/vm1"
 > X-OCCI-Attribute: occi.core.target="http://example.com/network/123"
 > [...]
- 
+
 < HTTP/1.1 200 OK
 < [...]
 < Location: http://example.com/link/networkinterface/456
@@ -1188,7 +1190,7 @@ informs a client whether an attribute is required or immutable, see
 the ``attribute-property'' in the syntax description above. The logic
 of attribute properties is as follows:
 
-\begin{itemize} 
+\begin{itemize}
   \item If no attribute properties are defined the attribute is
     mutable and non-required, i.e. multiplicity is 0..x.
   \item If the ``{\tt immutable}'' property is set the attribute is
@@ -1305,7 +1307,7 @@ attributes:
 Attribute          = "X-OCCI-Attribute" ":" #attribute-repr
   attribute-repr   = attribute-name "=" ( string | number | bool | enum_val )
   attribute-name   = attr-component *( "." attr-component )
-  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )	
+  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
   string           = quoted-string
   number           = (int | float)
   int              = *DIGIT
@@ -1333,7 +1335,7 @@ X-OCCI-Attribute: occi.compute.state="active"
 
 \subsubsection{Rendering of Location-URIs}
 In order to render an OCCI representation solely in the HTTP header,
-i.e.~using the \textit{text/occi} content type, the X-OCCI-Location 
+i.e.~using the \textit{text/occi} content type, the X-OCCI-Location
 \footnote{This was introduced as the HTTP Location Header can have
   only one value where as this can have multiple.}  HTTP header MUST
 be used to return a list of resource instance URIs. Each header field
@@ -1460,7 +1462,7 @@ Accept headers:
 < [...]
 <
 < Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="kind";
-< Category: my_stuff; scheme="http://example.com/occi/my_stuff#"; class="mixin"; 
+< Category: my_stuff; scheme="http://example.com/occi/my_stuff#"; class="mixin";
 < X-OCCI-Attribute: occi.compute.cores=2
 < X-OCCI-Attribute: occi.compute.hostname="foobar"
 < Link: [...]
@@ -1687,7 +1689,7 @@ considerations using HTTP mechanisms.
 \section{Glossary}
 \label{sec:glossary}
 \input{include/glossary}
- 
+
 \section{Contributors}
 \input{include/contributors}
 
