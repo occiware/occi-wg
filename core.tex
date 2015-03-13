@@ -95,7 +95,7 @@ in the OCCI context:
 
 \begin{description}
   \item[capabilities] In the context of \hl{Entity} sub-types
-    {\bf  capabilities} refer to the OCCI \hl{Attribute}s and OCCI \hl{Action}s
+    {\bf  capabilities} refer to the \hl{Attribute}s and \hl{Action}s
     exposed by a {\bf entity instance}.
 
   \item[entity instance] An instance of a sub-type of
@@ -110,14 +110,7 @@ in the OCCI context:
     {\em only} applies to instances, never to \hl{Entity} types.
     See section~\ref{sec:mixin}.
 
-  \item[model attribute] An internal attribute of a the Core Model which is
-    {\em not} client discoverable. Examples are \hl{Entity}.id,
-    \hl{Link}.source and \hl{Link}.target. A model attribute is {\em not}
-    identified by an \hl{Attribute} instance.
-
-  \item[OCCI Attribute] A client discoverable attribute identified by an
-    instance of the \hl{Attribute} type. Examples are \hl{title}
-    and \hl{summary}. See section~\ref{sec:attribute}.
+  \item[model attribute] An attribute of a the Core Model.
 
   \item[OCCI base type(s)] The OCCI base types are \hl{Entity},
     \hl{Resource} and \hl{Link}.
@@ -233,7 +226,7 @@ into the OCCI Core Model. \hl{Kind} is a specialisation of
 of \hl{Action}s.  An \hl{Action} identifies an invocable operation
 applicable to an entity instance.
 
-\hl{Attribute} describe the name and properties of the OCCI Attributes found in
+\hl{Attribute} describe the name and properties of the Attributes found in
 \hl{Entity} and its sub-types.
 
 The last type defined by the OCCI Core Model is the \hl{Mixin}
@@ -347,7 +340,7 @@ describes the name and properties of single attribute.
 \label{sec:attribute}
 
 The \hl{Attribute} type has a composite relationship to \hl{Category} and
-defines the name and properties of client discoverable OCCI Attributes.
+defines the name and properties of client readable Attributes.
 %
 Table~\ref{tbl:attribute} defines the model attributes the \hl{Attribute} type
 MUST implement to be compliant.
@@ -358,42 +351,42 @@ MUST implement to be compliant.
     \toprule
     Model attribute   &   Type    &   Multiplicity    &   Client Mutability   &   Description \\
     \colrule
-    name    &   String    &   1   &   Immutable   & OCCI Attribute name. \\
-    type    &   Enum \{Object, List, Hash\}   &   1   &   Immutable   &   OCCI Attribute type. \\
-    mutable   &   Boolean   &   1   &   Immutable   &   OCCI Attribute mutability. \\
-    required    &   Boolean   &   1   &   Immutable   &   Whether the OCCI Attribute must be supplied by the client at instance creation-time. \\
-    pattern   &   String    &   0..1    &   Immutable   &   OCCI Attribute pattern expressed as ERE \\
-    default   &   String    &   0..1    &   Immutable   &   OCCI Attribute default value. \\
-    description   &   String    &   0..1    &   Immutable   &   A description of the OCCI Attribute. \\
+    name    &   String    &   1   &   Immutable   & Attribute name. \\
+    type    &   Enum \{Object, List, Hash\}   &   1   &   Immutable   &   Attribute type. \\
+    mutable   &   Boolean   &   1   &   Immutable   &   Attribute mutability. \\
+    required    &   Boolean   &   1   &   Immutable   &   Whether the Attribute must be supplied by the client at instance creation-time. \\
+    pattern   &   String    &   0..1    &   Immutable   &   Attribute pattern expressed as ERE \\
+    default   &   String    &   0..1    &   Immutable   &   Attribute default value. \\
+    description   &   String    &   0..1    &   Immutable   &   A description of the Attribute. \\
     \botrule
   \end{tabular}
 }
 
-An OCCI Attribute name MUST be defined by \hl{Attribute}.{\tt name}. The
-OCCI Attribute namespace is flat and the ``\texttt{occi.}''~prefix is reserved
+An Attribute name MUST be defined by \hl{Attribute}.{\tt name}. The
+Attribute namespace is flat and the ``\texttt{occi.}''~prefix is reserved
 for the OCCI specification.
-Domain-specific OCCI Attribute names MUST NOT contain the
+Domain-specific Attribute names MUST NOT contain the
 ``\texttt{occi.}''~prefix, instead they SHOULD use a prefix consisting of the
 provider's reverse domain name. E.g.~``\texttt{com.example.}''.
 
-An \hl{Attribute} MAY specify the following properties in addition to the OCCI
+An \hl{Attribute} MAY specify the following properties in addition to the
 Attribute name. Attribute properties are OPTIONAL but MUST be client
 discoverable if used.
 \begin{description}
-\item[type] The type of the OCCI Attribute. The types supported are ``Object'', ``List'' and ``Hash''.
+\item[type] The type of the Attribute. The types supported are ``Object'', ``List'' and ``Hash''.
 
-\item[mutable] Whether a OCCI client can change the OCCI Attribute value. See
+\item[mutable] Whether an OCCI client can change the Attribute value. See
   section~\ref{sec:mutability}.
 
-\item[required] If an OCCI Attribute is ``required'' a client MUST specify an
+\item[required] If an Attribute is ``required'' a client MUST specify an
   value at instance creation-time.
 
 \item[pattern] MAY be specified in ERE \cite{ere} format, places additional restrictions on possibles values given. 
 
-\item[default] The default value given to an OCCI Attribute if the client does
+\item[default] The default value given to an Attribute if the client does
   not specify a value at instance creation-time.  The {\em default} property is used to implement templates, see section~\ref{sec:template}.
 
-\item[description] A summarizing description of the OCCI Attribute to
+\item[description] A summarizing description of the Attribute to
   complement the attribute name. For example, an interactive OCCI client may
   use the description property when presenting the content of an entity
   instance.
@@ -564,9 +557,9 @@ of the \hl{Mixin} type:
 
   \item A \hl{Mixin} instance MAY introduce additional \hl{Attribute}s
     when applied to an entity instance. The name and properties of those
-    OCCI Attributes MUST be exposed through \hl{Mixin}.{\tt attributes}
+    Attributes MUST be exposed through \hl{Mixin}.{\tt attributes}
     inherited from \hl{Category}.  E.g.~a Location
-    \hl{Mixin} defining the ``com.example.location'' OCCI Attribute MUST
+    \hl{Mixin} defining the ``com.example.location'' Attribute MUST
     have Location.{\tt attributes} populated with a single \hl{Attribute}
     instance where \hl{Attribute}.{\tt name} is {\tt "com.example.location"}.
 
@@ -588,7 +581,7 @@ of the \hl{Mixin} type:
     capabilities is considered to be a tag.
 
   \item A \hl{Mixin} instance MAY be used as a template. A template
-    defines default values for OCCI Attributes to be applied at entity instance
+    defines default values for Attributes to be applied at entity instance
     creation-time. See section \ref{sec:template}.
 
   \item A \hl{Mixin} instance MAY restrict which \hl{Kind} instances it applies
@@ -657,9 +650,9 @@ instances. The \hl{Action} is only considered valid if all entity
 instances of the collection are associated with the \hl{Kind} or
 \hl{Mixin} defining the \hl{Action} instance.
 
-An \hl{Action} instance MAY identify OCCI Attributes which correspond to
+An \hl{Action} instance MAY identify Attributes which correspond to
 parameters of the invocable operation.
-The mechanism to define OCCI Attributes is inherited from \hl{Category}
+The mechanism to define Attributes is inherited from \hl{Category}
 and follow the same semantics.
 The namespace restrictions imposed on entity instance attributes
 (see~\ref{sec:attribute}) does however not apply to \hl{Action}s.
@@ -694,10 +687,10 @@ A template is a mechanism to provide default values for entity instances.
 OCCI supports templates through \hl{Mixin}s.
 
 A \hl{Mixin} instance associated at entity instance creation-time MAY provide default
-values for OCCI Attributes.
+values for Attributes.
 Each default value is specified through \hl{Attribute}.{\tt default}.
 
-A \hl{Mixin} instance MAY provide default values for OCCI Attributes already
+A \hl{Mixin} instance MAY provide default values for Attributes already
 defined by a \hl{Kind}. A \hl{Mixin}'s \hl{Attribute}.{\tt default} overrides
 the default specified by the \hl{Kind}.
 
@@ -988,10 +981,10 @@ e.g.~\textit{http://example.com/occi\#}. The {\tt term} of a
 provider-specific \hl{Category} instance can be any string
 corresponding to a ``token'' as defined by the OCCI Rendering documents.
 
-An OCCI Attribute introduced by a provider-specific \hl{Category} MUST use
+An Attribute introduced by a provider-specific \hl{Category} MUST use
 an attribute name prefix. This prefix MUST NOT be the
 ``\texttt{occi.}''~prefix which is reserved for the OCCI
-specification. Domain-specific OCCI Attribute names SHOULD use a prefix
+specification. Domain-specific Attribute names SHOULD use a prefix
 consisting of the provider's reverse domain name,
 e.g.~``\texttt{com.example.}''.
 
@@ -1076,9 +1069,6 @@ as OCCI HTTP Rendering \cite{occi:http_rendering} and  OCCI Infrastructure
   attribute properties already defined for the OCCI base types \hl{Entity},
   \hl{Resource}, \hl{Link} and their sub-types.
 
-\item Distinguish between discoverable OCCI \hl{Attribute}s and internal model
-  attributes.
-
 \item Correct the previously unclear definition of OCCI \hl{Action}. The
   \hl{Action} type inherits \hl{Category} and is only an identifier of
   an invocable operation. It does {\em not} represent the operation itself.
@@ -1106,27 +1096,6 @@ as OCCI HTTP Rendering \cite{occi:http_rendering} and  OCCI Infrastructure
 \item Add a new model attribute \hl{Mixin}.{\tt applies} to optionally
   advertise which entity instances a \hl{Mixin} instance may be associated to.
 \end{itemize}
-
-\subsection{Introducing the OCCI \hl{Attribute} type}
-
-The \hl{Attribute} type formalizes how attribute properties are represented in
-the OCCI Core Model. Since all attribute properties are optional no modifications
-are necessary in existing implementations to remain compliant.
-
-OCCI Infrastructure \cite{occi:infrastructure} defines attribute properties for
-its sub-types of \hl{Entity}. The errata corrections allows these attribute
-properties to be represented in the Core Model. However, the definitions remain the
-same.
-
-OCCI HTTP Rendering \cite{occi:http_rendering} already exposes the ``required'' and
-``mutable'' attribute properties.
-
-\subsection{OCCI \hl{Attribute}s versus model attributes}
-
-The change is editorial and does not affect existing implementations.
-%
-The OCCI Infrastructure \cite{occi:infrastructure} specification only defines
-discoverable OCCI \hl{Attribute}s although this is not explicitly stated.
 
 \subsection{Action definition}
 
