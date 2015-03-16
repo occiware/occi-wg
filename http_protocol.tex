@@ -135,6 +135,47 @@ in each request and response in order to be compliant.
 There is also a minimum set of HTTP status codes which MUST be supported by
 an implementation of the OCCI HTTP Protocol.
 
+\subsection{Versioning}
+Information about what version of OCCI is supported by an OCCI
+implementation MUST be advertised to a client on each response.
+The version field in the response MUST include the value
+OCCI/X.Y, where X is the major version number and Y is the minor
+version number of the implemented OCCI specification. The server
+response MUST relay versioning information using the HTTP Server
+header.
+
+\begin{verbatim}
+HTTP/1.1 200 OK
+Server: occi-server/1.1 (linux) OCCI/1.2
+[...]
+\end{verbatim}
+
+Complimenting the service-side behavior of an OCCI implementation, a
+client SHOULD indicate to the OCCI implementation the version it
+expects to interact with. For the clients, the information SHOULD be
+advertised in all requests it issues. A client request SHOULD relay
+versioning information in the 'User-Agent' header. The 'User-Agent'
+field MUST include the same value (OCCI/X.Y) as supported by the HTTP
+Server header.
+
+\begin{verbatim}
+GET <Path> HTTP/1.1
+Host: example.com
+User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.2
+[...]
+\end{verbatim}
+
+If an OCCI implementation receives a request from a client that
+supplies a version number higher than the service supports, the
+service MUST respond back to the client with an exception indicating
+that the requested version is not implemented. Where a client
+implements OCCI using a HTTP transport, the \emph{HTTP 501 Not Implemented}
+MUST be used.
+
+OCCI implementations which implement this version of this Document
+MUST use the version string \emph{OCCI/1.2}. Versioning of extensions
+is out of scope for this version of the document.
+
 \subsection{Mandatory HTTP requests headers}
 \todo{\textbf{Should this section be called `mandatory' request headers? We are mentioning optional headers as well.}}
 
