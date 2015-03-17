@@ -84,7 +84,7 @@ OCCI is a trademark of the Open Grid Forum.
 \section{Notational Conventions}
 \input{include/notational}
 
-The following terms \cite{rfc3986} are used when referring to URI
+The following terms \cite{rfc3986} are used when referring to URL
 components:
 
 \begin{verbatim}
@@ -226,7 +226,7 @@ behavior in such cases is not specified. The return codes are specified by
 To request partial results of an otherwise large collection message response, pagination SHOULD be used to reduce the load on
 both the client and the service provider. This is done in the following manner.
 
-The HTTP GET verb is used when accessing a URI of a collection and the query parameters of {\em page} and {\em number} MUST be used. {\em page} is an indexed
+The HTTP GET verb is used when accessing a URL of a collection and the query parameters of {\em page} and {\em number} MUST be used. {\em page} is an indexed
 integer that refers to a sub-collection of the requested collection. {\em number} is an integer of items that SHOULD be displayed in one paged response.
 
 % e.g. GET http://host/path/to/collection?page=1;number=100
@@ -238,8 +238,6 @@ If there is no more content to be served, the response status code issued to the
 \section{HTTP Methods Applied to Query Interface}
 
 \todo{\textbf{Sanity check this section against v1.1 \dots}}
-
-\todo{\textbf{Unify the use of URI and URL throughout the text}}
 
 \todo{\textbf{Explain formatting of subsections in this section}}
 
@@ -294,8 +292,6 @@ Upon a successfully request a \emph{200 OK} status code MUST be used.
 \section{HTTP Methods Applied to Entity Instance}
 
 \todo{\textbf{Sanity check this section against v1.1 \dots}}
-
-\todo{\textbf{Unify the use of URI and URL throughout the text}}
 
 \todo{\textbf{Explain formatting of subsections in this section}}
 
@@ -364,7 +360,7 @@ returns the \emph{200 OK} HTTP response an entity instance rendering MUST be ret
 In case of a \emph{201 CREATED} HTTP response code the HTTP Location header as defined in RFC7231 \cite{rfc7231} MUST be used.
 
 \subsubsection{Trigger Action}
-Actions are triggered using the HTTP POST verb and by adding a query to the URI. This query MUST contain a key-value pair. The key MUST be `action'. The value MUST equal to the \hl{Action}'s term.
+Actions are triggered using the HTTP POST verb and by adding a query to the URL. This query MUST contain a key-value pair. The key MUST be `action'. The value MUST equal to the \hl{Action}'s term.
 
 \paragraph{Client POST request}
 The message MUST contain an action invocation rendering.
@@ -386,8 +382,6 @@ Upon a successfully request a \emph{200 OK} status code MUST be used.
 \section{HTTP Methods Applied to Collection}
 
 \todo{\textbf{Sanity check this section against v1.1 \dots}}
-
-\todo{\textbf{Unify the use of URI and URL throughout the text}}
 
 \todo{\textbf{Explain formatting of subsections in this section}}
 
@@ -435,7 +429,7 @@ The HTTP POST method is defined for {\em creation} of an entity instance, {\em a
 MUST include at least one full entity instance rendering. It MAY include an entity collection rendering.
 
 \paragraph{Server POST response}
-In case server replies with \emph{200 OK} HTTP status code it MUST include either a rendering of entity collection rendering or single entity instance rendering. In case a \emph{201 CREATED} HTTP status code a URI to an entity instance or a list of entity instance URIs MUST be returned.
+In case server replies with \emph{200 OK} HTTP status code it MUST include either a rendering of entity collection rendering or single entity instance rendering. In case a \emph{201 CREATED} HTTP status code a URL to an entity instance or a list of entity instance URLs MUST be returned.
 
 \subsubsection{Associate Mixin with Entity Instance}
 This operation MUST only be available for collections defined by a \hl{Mixin}
@@ -447,7 +441,7 @@ The request MUST include an entity collection rendering which require the \hl{Mi
 On successful operation the server replies with the \emph{200 OK} HTTP status code it MUST include an entity collection rendering.
 
 \subsubsection{Trigger Action}
-Actions are triggered using the HTTP POST verb and by adding a query to the URI. This query MUST contain a key-value pair. The key MUST be `action'. The value MUST equal to the \hl{Action}'s term.
+Actions are triggered using the HTTP POST verb and by adding a query to the URL. This query MUST contain a key-value pair. The key MUST be `action'. The value MUST equal to the \hl{Action}'s term.
 
 \paragraph{Client POST request}
 The message MUST contain an action invocation rendering.
