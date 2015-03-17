@@ -14,19 +14,19 @@ all:
 
 %.pdf: %.tex *.sty
 	$(TEX) $*
-	
+
 	@if(grep "There were undefined references" $*.log > /dev/null);\
 	then \
 		$(BIBTEX) $*; \
 		$(TEX) $*; \
 	fi
-	
+
 	@if(grep "Rerun" $*.log > /dev/null);\
 	then \
 		$(TEX) $*;\
 	fi
 
-show: 
+show:
 	$(VIEW) *.pdf
 
 show-mac: all
@@ -34,5 +34,5 @@ show-mac: all
 
 clean:
 	@rm -f *.pdf *.aux *.bbl *.blg *.log *.dvi *.png *~ \
-		*.idx *.ilg *.ind *.toc *.lot *.lof *.gz
+		*.idx *.ilg *.ind *.toc *.lot *.lof *.gz *.out
 
