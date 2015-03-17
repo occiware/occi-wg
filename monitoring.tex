@@ -81,7 +81,7 @@ OCCI is a trademark of the Open Grid Forum.
 \underline{Abstract}
 \input{include/abstract}
 
-This document {\em defines} an OCCI Extension that allows the user to create a monitoring infrastructure for a cloud provision. The Monitoring Extension {\em introduces} two further entity types: the \sens\ Resource, that processes metrics, and the \coll\ Link, that extracts them.
+This document {\em defines} an OCCI Extension that allows the user to create a monitoring infrastructure for a cloud provision. The Monitoring Extension {\em introduces} two further entity types: the \coll\ Link, that performs measurements, and the \sens\ Resource, that processes them.
 
 \newpage
 \tableofcontents
@@ -91,23 +91,21 @@ This document {\em defines} an OCCI Extension that allows the user to create a m
 
 \input{include/introduction}
 
-This document defines an {\em OCCI Extension} that provides the user with the an interface to create a monitoring infrastructure, with the aim of implementing relevant features like autonomic management, billing, and service level verification. The existence of an agreed interface enables the user to manage distinct cloud providers, possibly at the same time, in a uniform way.
+\section{Features of the OCCI Monitoring Extension}
 
-The presence of a customized monitoring infrastructure is relevant in a wide range of scenarios, and the proposed interface is able to describe the many ways in which the monitoring results can be processed to obtain relevant metrics.
+A cloud monitoring infrastructure collects quantitative measurements of the performance of the provision; the results are used to implement relevant services like autonomic management, billing, and service level verification. This document defines an {\em OCCI Extension} that provides the user with the an interface to request the creation of a cloud monitoring infrastructure. The interest for a standard interface is that it enables the user to manage distinct cloud providers, possibly at the same time, in a uniform way.
 
-The communication of measurements inside and outside the monitoring infrastructure is another issue the framework must be flexible about. In fact, the amount of information that is produced by a measurement activity may range from negligible to ``big data'' dimensions, and the degree of confidentiality changes with the application scenario. The OCCI Monitoring Extension is sufficiently expressive to allow the user to describe the task, but leaves the provider the options to find a solution fitting the scale and the confidentiality terms of the problem.
+The {\em OCCI Monitoring Extension} is extremely flexible regarding the description of the management of the flow of measurements, to accomodate a variated and growing range of applications: it enables the user to describe the task, but leaves the provider the the task of implementing a solution fitting the terms of the specific case.
 
-One relevant fact about a monitoring infrastructure is that it is extremely difficult to give a {\em detailed} framework that extends its validity to any conceivable use case or provider. The reason is that the metrics that are used to evaluate the performance of the system are many, and subject to continuous changes due to the introduction of new technologies. The OCCI Monitoring Extension allows the user to describe the components a monitoring infrastructure, but does not interfere with details that may be transparently dealt with by the provider.
+The metrics that are used to evaluate the performance of a cloud provision are many, and subject to continuous changes due to the introduction of new technologies and services. It is therefore impossible to give a {\em detailed} framework that extends its validity to any conceivable use case or provider.  The OCCI Monitoring Extension allows the user to describe the components a monitoring infrastructure, but does not interfere with details that may be transparently dealt with by the provider. Its application is not limited to the realm of computing infrastructures, since it is not bound to definite kinds of resources.
 
-The applicability of the OCCI Monitoring Extension is not limited to the realm of computing infrastructures, since it is not bound to definite kinds of resources.
+The OCCI Monitoring Extension is designed to scale from very simple use cases, that the user can define with minimal effort, to complex cases, like multilayer monitoring infrastructures. The same basic building blocks are used at any degree of complexity.
 
-The OCCI Monitoring Extension defines two new entity types: the {\em Collector}, an OCCI-Link that defines the timing of the measurement process, and the {\em Sensor}, an OCCI-Resource that defines how the results of measurements are processed and used.
+The OCCI Monitoring Extension defines two new entity types: the {\em Collector}, an OCCI-Link that defines the timing of the measurement process, and the {\em Sensor}, an OCCI-Resource that defines how the results of measurements are processed and used. The user defines the frequency with which measurements are collected and the time lapse during which the measurement process takes place. 
 
-Using the OCCI-Monitoring API the user defines the frequency with which measurements are collected, as well as the time lapse during which the measurement process takes place. Such a {\em real-time} approach excludes those cases that envision an {\em event driven} notification of a state change: the OCCI-notification extension \ref{occi-notification} covers this case and is complementary to {\em OCCI monitoring}.
+Such a {\em real-time} approach excludes those cases that envision an {\em event driven} notification of a state change: the OCCI Notification Extension covers this case and is complementary to {\em OCCI monitoring}.
 
-Whenever appropriate, further details of the monitoring activity can be specified through the association of provider-specific \mi s to a \sens\ or \coll\ instance: this allows the provider to address ``black box'' solutions, or to give the user the tools to customize one.
-
-To classify the {\em mixin}s that define the operation of the {\em Sensor} and of the {\em Collector}, three tags, i.e. \mi s without attributes, are introduced: {\em Metric} to specify the production of measurement, {\em Aggregator} for their processing, and {\em Publisher} for their publication. Provider specific {\em Mixin}s are {\em related} to such tags, so to enforce a kind of subtyping. 
+To specify the details of the monitoring activity the user associates provider-specific \mi s to a \sens\ or \coll\ instance. Three tags are introduced to classify the {\em mixin}s: the {\em Metric} tag is associated with mixins that specify the production of measurement, the {\em Aggregator} tag is associated with mixins that describe how measurements are processed, and the {\em Publisher} tag is associated with mixins that control how results are published. Provider specific {\em Mixin}s are {\em related} to such tags, so to enforce a kind of subtyping. 
 
 %The simplest case of a monitoring infrastructure consists of a single \coll\ that links a monitored resource to a \sens\ that publishes the raw metrics; it is illustrated in figure \ref{fig:onestage}.
 
@@ -116,8 +114,6 @@ To classify the {\em mixin}s that define the operation of the {\em Sensor} and o
 %\includegraphics[width=0.5 \linewidth]{onestage.pdf}
 %\caption{The simplest case: one \coll\ and one \sens\ \label{fig:onestage}}
 %\end{figure}
-
-The OCCI-Monitoring API is designed to scale from very simple use cases, that the user can define with minimal effort, to complex cases, like multilayer monitoring infrastructures. The same basic building blocks are used at any degree of complexity.
 
 %The {\em Resource Management} box stands for a resource that is the end-user of the monitoring activity. It's {\em Kind} is bound to the publishing technique used in the \coll . It may be, for instance, a {\em Compute} resource that embeds a load balancing or accounting functionality, or a yet to define {\em Mailbox} resource where periodic reports are posted. 
 
