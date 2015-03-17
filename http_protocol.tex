@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true]{microtype}
+\usepackage[plainpages=false,pdfpagelabels,unicode]{hyperref}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -78,7 +79,7 @@ OCCI is a trademark of the Open Grid Forum.
 \newpage
 
 \section{Introduction}
-%\input{include/introduction}
+\input{include/introduction.tex}
 
 \section{Notational Conventions}
 \input{include/notational}
@@ -95,8 +96,8 @@ scheme     authority       path        query   fragment
 
 \section{OCCI RESTful HTTP Protocol}
 
-This document specifies the OCCI HTTP Protocal, a RESTful protocol for
-communication between OCCI Server and OCCI Client. The OCCI HTTP Protocol
+This document specifies the OCCI HTTP Protocol, a RESTful protocol for
+communication between OCCI server and OCCI client. The OCCI HTTP Protocol
 support multiple different data formats as payload. Data formats are specified
 an separate documents.
 
@@ -118,7 +119,7 @@ A \hl{Kind} instance whose associated type cannot be instantiated MUST NOT be
 bound to an URL path. This applies to the \hl{Kind} instance for OCCI Entity
 which, according to OCCI Core, cannot be instantiated \cite{occi:core}.
 
-\subsection{Bound and unbound paths}
+\subsection{Bound and Unbound Paths}
 
 Since a limited set of URL paths are bound to \hl{Kind} and \hl{Mixin}
 instances the URL hierarchy consists of both {\em bound} and {\em unbound}
@@ -126,22 +127,46 @@ paths.
 A bound URL path is the {\em location} of a \hl{Kind} or \hl{Mixin} collection.
 
 An unbound URL path MAY represent the union of all \hl{Kind} and \hl{Mixin}
-collection ``below'' the unbound path.
+collection `below' the unbound path.
 
-\section{Headers and status codes}
+\section{Headers and Status Codes}
 
-OCCI Clients and Servers MUST include a minimum set of mandatory HTTP headers
+OCCI clients and Servers MUST include a minimum set of mandatory HTTP headers
 in each request and response in order to be compliant.
 There is also a minimum set of HTTP status codes which MUST be supported by
 an implementation of the OCCI HTTP Protocol.
 
+\subsection{Requests Headers}
+
+\begin{description}
+\item[Accept] An OCCI client SHOULD specify the media types of the OCCI data
+formats it supports in the {\tt Accept} header.
+\item[Content-type] If an OCCI client submits payload in a HTTP request
+the OCCI client MUST specify the media type of the OCCI data format
+in the {\tt Content-type} header.
+\item[User-Agent] An OCCI client SHOULD specify the OCCI version
+number in the {\tt User-Agent} header. See Section~\ref{subsec:versioning}.
+\end{description}
+
+\subsection{Response Headers}
+
+\begin{description}
+\item[Accept] An OCCI server SHOULD specify the media types of the OCCI data
+formats it supports in the {\tt Accept} header.
+\item[Content-type] An OCCI server MUST specify the media type of the OCCI data
+format used in an HTTP response.
+\item[Server] An OCCI server MUST specify the OCCI version number in the {\tt Server}
+header. See Section~\ref{subsec:versioning}.
+\end{description}
+
 \subsection{Versioning}
-Information about what version of OCCI is supported by an OCCI
-implementation MUST be advertised to a client on each response.
+\label{subsec:versioning}
+Information about the OCCI version supported by a server implementation
+MUST be advertised to a client on each response.
 The version field in the response MUST include the value
 OCCI/X.Y, where X is the major version number and Y is the minor
-version number of the implemented OCCI specification. The server
-response MUST relay versioning information using the HTTP Server
+version number of the implemented OCCI version. The server
+response MUST relay versioning information using the HTTP `Server'
 header.
 
 \begin{verbatim}
@@ -150,58 +175,34 @@ Server: occi-server/1.1 (linux) OCCI/1.2
 [...]
 \end{verbatim}
 
-Complimenting the service-side behavior of an OCCI implementation, a
-client SHOULD indicate to the OCCI implementation the version it
-expects to interact with. For the clients, the information SHOULD be
-advertised in all requests it issues. A client request SHOULD relay
-versioning information in the 'User-Agent' header. The 'User-Agent'
-field MUST include the same value (OCCI/X.Y) as supported by the HTTP
-Server header.
+Complementing the server-side behavior of an OCCI implementation, a
+client SHOULD indicate the version it expects to interact with. In a
+client, this information SHOULD be advertised in all requests it issues.
+A client request SHOULD relay versioning information in the `User-Agent'
+header. The `User-Agent' header MUST include the same value (OCCI/X.Y)
+as advertised by the server.
 
 \begin{verbatim}
-GET <Path> HTTP/1.1
+GET /-/ HTTP/1.1
 Host: example.com
 User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.2
 [...]
 \end{verbatim}
 
 If an OCCI implementation receives a request from a client that
-supplies a version number higher than the service supports, the
-service MUST respond back to the client with an exception indicating
-that the requested version is not implemented. Where a client
-implements OCCI using a HTTP transport, the \emph{HTTP 501 Not Implemented}
-MUST be used.
+supplies a version number higher than the server supports, the
+server MUST respond back to the client with an HTTP status code indicating
+that the requested version is not implemented. The \emph{HTTP 501 Not
+Implemented} status code MUST be used.
 
-OCCI implementations which implement this version of this Document
-MUST use the version string \emph{OCCI/1.2}. Versioning of extensions
-is out of scope for this version of the document.
+OCCI implementations compliant with this version of the document MUST
+use the version string \emph{OCCI/1.2}. Versioning of extensions is
+out of scope for this document.
 
-\subsection{Mandatory HTTP requests headers}
-\todo{\textbf{Should this section be called `mandatory' request headers? We are mentioning optional headers as well.}}
-
-\begin{description}
-\item[Accept] An OCCI Client SHOULD specify the media-types of the OCCI data
-formats it supports in the {\tt Accept} header.
-
-\item[Content-type] If an OCCI Client submits payload in a HTTP request
-the OCCI Client MUST specify the media-type of the OCCI data format
-in the {\tt Content-type} header.
-\end{description}
-
-\subsection{Mandatory HTTP response headers}
-
-\begin{description}
-\item[Accept] An OCCI Server SHOULD specify the media-types of the OCCI data
-formats it supports in the {\tt Accept} header.
-\item[Content-type] An OCCI Server MUST specify the media-type of the OCCI data
-format used in a HTTP Response.
-\item[Server] An OCCI Server MUST specify the OCCI HTTP Protocol version number.
-\end{description}
-
-\subsection{HTTP status codes}
-The below list specifies the minimum set of HTTP status codes an OCCI Client MUST
-understand. An OCCI Server MAY return other HTTP status codes but the exact client
-behaviour in such cases is not specified. The return codes are specified by
+\subsection{Status Codes}
+The below list specifies the minimum set of HTTP status codes an OCCI client MUST
+understand. An OCCI server MAY return other HTTP status codes but the exact client
+behavior in such cases is not specified. The return codes are specified by
 \cite{rfc7231} and \cite{rfc7235}.
 
 \begin{description}
@@ -234,7 +235,63 @@ If {\em number} is too large for the provider to handle (policy, technical limit
 
 If there is no more content to be served, the response status code issued to the requesting client MUST be an \emph{HTTP 200 OK} and the response body MUST contain an empty collection.
 
-\section{HTTP methods applied to entity instance URLs}
+\section{HTTP Methods Applied to Query Interface}
+
+\todo{\textbf{Sanity check this section against v1.1 \dots}}
+
+\todo{\textbf{Unify the use of URI and URL throughout the text}}
+
+\todo{\textbf{Explain formatting of subsections in this section}}
+
+\todo{\textbf{Include an example for each (sub)section}}
+
+This section describes the HTTP methods used to retrieve and manipulate category instances.  With the help of the query interface it is possible for the client to determine the capabilities of the OCCI implementation he refers to.
+
+The query interface MUST be implemented by all OCCI implementations. It MUST be found at:
+
+\begin{verbatim}
+/-/
+\end{verbatim}
+
+Implementations MAY also adopt RFC 5785 \cite{rfc5785} compliance to advertise this location. Should implementations wish to advertise the Query Interface using the .well-known mechanism then they MUST use the following path served from the authority:
+
+\begin{verbatim}
+	/.well-known/org/ogf/occi/-/
+\end{verbatim}
+
+The renderings for the {\em category} instance and category {\em collection} are defined in \cite{occi:text} and \cite{occi:json}.
+
+\subsection{GET Method}
+
+\paragraph{Client GET request}
+MAY include a possible filter rendering.
+
+\paragraph{Server GET response}
+The response MUST include a category collection rendering.
+
+Upon a successfully request a \emph{200 OK} status code MUST be used.
+
+\subsection{PUT Method}
+
+N/A
+
+\subsection{POST Method}
+
+\paragraph{Client POST request}
+MUST include at least one full category instance rendering. It MAY include a category collection rendering.
+
+\paragraph{Server POST response}
+Upon a successfully request a \emph{200 OK} status code MUST be used.
+
+\subsection{DELETE Method}
+
+\paragraph{Client DELETE request}
+MUST include at least one full category instance rendering. It MAY include a category collection rendering.
+
+\paragraph{Server DELETE response}
+Upon a successfully request a \emph{200 OK} status code MUST be used.
+
+\section{HTTP Methods Applied to Entity Instance}
 
 \todo{\textbf{Sanity check this section against v1.1 \dots}}
 
@@ -258,7 +315,7 @@ following:
 
 The renderings for the {\em entity} and {\em action} instances are defined in \cite{occi:text} and \cite{occi:json}.
 
-\subsection{HTTP GET method applied to an entity instance}
+\subsection{GET Method}
 The HTTP GET method retrieves a rendering of a single (existing) entity instance.
 
 \paragraph{Client GET request}
@@ -269,12 +326,12 @@ The message of the HTTP GET response MUST contain an entity instance rendering.
 
 Upon a successfully request a \emph{200 OK} status code MUST be used.
 
-\subsection{HTTP PUT method applied to an entity instance}
+\subsection{PUT Method}
 The HTTP PUT method either {\em creates} a new or {\em replaces} an existing entity instance at the specified URL.
 
-\subsubsection{Create an entity instance}
+\subsubsection{Create}
 
-\paragraph{PUT request}
+\paragraph{Client PUT request}
 The message MUST contain an entity instance rendering.
 
 \paragraph{Server PUT response}
@@ -282,7 +339,7 @@ The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the O
 returns the \emph{200 OK} HTTP response code an entity instance rendering MUST be returned.
 In case of a \emph{201 CREATED} HTTP response code the HTTP Location header as defined in RFC7231 \cite{rfc7231} MUST be used.
 
-\subsubsection{Replacing an entity instance}
+\subsubsection{Replace}
 Any OCCI \hl{Link}s associated with an existing OCCI \hl{Resource} MUST be left intact.
 
 \paragraph{Client PUT request}
@@ -293,12 +350,12 @@ The OCCI implementation MAY either return 201 or 200 HTTP return codes.  If the 
 returns the \emph{200 OK} HTTP response code an entity instance rendering MUST be returned.
 In case of a \emph{201 CREATED} HTTP response code the HTTP Location header as defined in RFC7231 \cite{rfc7231} MUST be used.
 
-\subsection{HTTP POST method applied to an entity instance}
+\subsection{POST Method}
 The HTTP POST method either {\em partially update} or triggers and {\em actions} on an existing entity instance.
 
-\subsubsection{Performing a partial update of an entity instance}
+\subsubsection{Partial Update}
 
-\paragraph{POST request}
+\paragraph{Client POST request}
 The message MUST contain a partial entity instance rendering of the entity instance to be changed.
 
 \paragraph{Server POST response}
@@ -306,10 +363,10 @@ The OCCI implementation MAY either return 201 or 200 HTTP return codes. If the O
 returns the \emph{200 OK} HTTP response an entity instance rendering MUST be returned.
 In case of a \emph{201 CREATED} HTTP response code the HTTP Location header as defined in RFC7231 \cite{rfc7231} MUST be used.
 
-\subsubsection{Triggering a action on an entity instance}
-Actions are triggered using the HTTP POST verb and by adding a query to the URI. This query MUST contain a key-value pair. The key MUST be "action". The value MUST equal to the \hl{Action}'s term.
+\subsubsection{Trigger Action}
+Actions are triggered using the HTTP POST verb and by adding a query to the URI. This query MUST contain a key-value pair. The key MUST be `action'. The value MUST equal to the \hl{Action}'s term.
 
-\paragraph{POST request}
+\paragraph{Client POST request}
 The message MUST contain an action invocation rendering.
 
 \paragraph{Server POST response}
@@ -317,7 +374,7 @@ The message of the HTTP GET response MUST contain an entity instance rendering.
 
 Upon a successfully request a \emph{200 OK} status code MUST be used.
 
-\subsection{HTTP DELETE applied to an entity instance}
+\subsection{DELETE Method}
 The HTTP DELETE method deletes an entity instance
 
 \paragraph{Client DELETE request}
@@ -326,7 +383,16 @@ N/A
 \paragraph{Server DELETE response}
 Upon a successfully request a \emph{200 OK} status code MUST be used.
 
-\section{HTTP methods applied to collections URLs}
+\section{HTTP Methods Applied to Collection}
+
+\todo{\textbf{Sanity check this section against v1.1 \dots}}
+
+\todo{\textbf{Unify the use of URI and URL throughout the text}}
+
+\todo{\textbf{Explain formatting of subsections in this section}}
+
+\todo{\textbf{Include an example for each (sub)section}}
+
 This section describes the HTTP methods used to retrieve and manipulate
 collections. A collection refers to a set of {\em entity instances}.
 
@@ -338,7 +404,7 @@ on an URL referring to a collection, an URL such as the following:
 
 The renderings for the entity instance, entity {\em collection} and {\em action} instances are defined in \cite{occi:text} and \cite{occi:json}.
 
-\subsection{HTTP GET method applied to a collection}
+\subsection{GET Method}
 The HTTP GET method retrieves a rendering of the collection of a set of existing entity instance.
 
 \paragraph{Client GET request}
@@ -349,7 +415,7 @@ The response MUST include an entity collection rendering.
 
 Upon a successfully request a \emph{200 OK} status code MUST be used.
 
-\subsection{HTTP PUT method applied to a collection}
+\subsection{PUT Method}
 The HTTP PUT is only defined for a collection defined by a \hl{Mixin}. It will will allow for replacing a collection.
 
 \paragraph{Client PUT request}
@@ -360,10 +426,10 @@ The response MUST include an entity collection rendering.
 
 Upon a successfully request a \emph{200 OK} status code MUST be used.
 
-\subsection{HTTP POST method applied to a collection}
+\subsection{POST Method}
 The HTTP POST method is defined for {\em creation} of an entity instance, {\em association} of entity instance with a \hl{Mixin} and triggering {\em actions}.
 
-\subsubsection{Create an entity instance}
+\subsubsection{Create Entity Instance}
 
 \paragraph{Client POST request}
 MUST include at least one full entity instance rendering. It MAY include an entity collection rendering.
@@ -371,17 +437,17 @@ MUST include at least one full entity instance rendering. It MAY include an enti
 \paragraph{Server POST response}
 In case server replies with \emph{200 OK} HTTP status code it MUST include either a rendering of entity collection rendering or single entity instance rendering. In case a \emph{201 CREATED} HTTP status code a URI to an entity instance or a list of entity instance URIs MUST be returned.
 
-\subsubsection{Associate a Mixin to an entity instance}
+\subsubsection{Associate Mixin with Entity Instance}
 This operation MUST only be available for collections defined by a \hl{Mixin}
 
 \paragraph{Client POST request}
 The request MUST include an entity collection rendering which require the \hl{Mixin} to be applied.
 
 \paragraph{Server POST response}
-On successfull operation the server replies with the \emph{200 OK} HTTP status code it MUST include an entity collection rendering.
+On successful operation the server replies with the \emph{200 OK} HTTP status code it MUST include an entity collection rendering.
 
-\subsubsection{Trigger actions on a set of entity instances}
-Actions are triggered using the HTTP POST verb and by adding a query to the URI. This query MUST contain a key-value pair. The key MUST be "action". The value MUST equal to the \hl{Action}'s term.
+\subsubsection{Trigger Action}
+Actions are triggered using the HTTP POST verb and by adding a query to the URI. This query MUST contain a key-value pair. The key MUST be `action'. The value MUST equal to the \hl{Action}'s term.
 
 \paragraph{Client POST request}
 The message MUST contain an action invocation rendering.
@@ -391,10 +457,10 @@ The message of the HTTP GET response MUST contain an entity collection rendering
 
 Upon a successfully request a \emph{200 OK} status code MUST be used.
 
-\subsection{HTTP DELETE method applied to a collection}
+\subsection{DELETE Method}
 The HTTP delete method is used to either {\em delete} all entity instances in a collection or {\em disassociate} entity instance from a collection defined by a \hl{Mixin}.
 
-\subsubsection{Deleting all entity instances}
+\subsubsection{Delete Entity Instances}
 
 \paragraph{Client DELETE request}
 N/A
@@ -402,50 +468,11 @@ N/A
 \paragraph{Server DELETE response}
 Upon a successfully request a \emph{200 OK} status code MUST be used.
 
-\subsubsection{Disassociate entity instances from a Mixin}
+\subsubsection{Disassociate Mixin from Entity Instances}
 This operation MUST only be available for collections defined by a \hl{Mixin}
 
 \paragraph{Client DELETE request}
 The request MAY include entity collection rendering which requires the \hl{Mixin} to be disassociated.
-
-\paragraph{Server DELETE response}
-Upon a successfully request a \emph{200 OK} status code MUST be used.
-
-\section{HTTP methods applied to the Query Interface}
-This section describes the HTTP methods used to retrieve and manipulate category instances.  With the help of the query interface it is possible for the client to determine the capabilities of the OCCI implementation he refers to.
-
-The query interface MUST be implemented by all OCCI implementations. It MUST be found at the path \emph{/-/} off the root of the OCCI implementation. Implementations MAY also adopt RFC 5785 \cite{rfc5785} compliance to advertise this location. Should implementations wish to advertise the Query Interface using the .well-known mechanism then they MUST use the following path served from the authority:
-
-	/.well-known/org/ogf/occi/-/
-
-The renderings for the {\em category} instance and category {\em collection} are defined in \cite{occi:text} and \cite{occi:json}.
-
-\subsection{HTTP GET method applied on the Query Interface}
-
-\paragraph{Client GET request}
-MAY include a possible filter rendering.
-
-\paragraph{Server GET response}
-The response MUST include a category collection rendering.
-
-Upon a successfully request a \emph{200 OK} status code MUST be used.
-
-\subsection{HTTP PUT method applied on the Query Interface}
-
-N/A
-
-\subsection{HTTP POST method applied on the Query Interface}
-
-\paragraph{Client POST request}
-MUST include at least one full category instance rendering. It MAY include a category collection rendering.
-
-\paragraph{Server POST response}
-Upon a successfully request a \emph{200 OK} status code MUST be used.
-
-\subsection{HTTP DELETE method applied on the Query Interface}
-
-\paragraph{Client DELETE request}
-MUST include at least one full category instance rendering. It MAY include a category collection rendering.
 
 \paragraph{Server DELETE response}
 Upon a successfully request a \emph{200 OK} status code MUST be used.
