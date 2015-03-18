@@ -4,6 +4,8 @@
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{occi}
+
+
 \setlength{\headheight}{13pt}
 \pagestyle{fancy}
 
@@ -155,7 +157,8 @@ The following sections describe the \hl{Agreement} and \hl{AgreementLink} types,
 
 The \hl{Agreement} type represents a generic contract resource which holds the information related to a SLA between a cloud service consumer and a provider for the provisioned resources (e.g. compute, storage, network etc.). The \hl{Agreement} type inherits the \hl{Resource} base-type defined in the OCCI Core Model \cite{occi:core}. The \hl{Kind} instance assigned to the \hl{Agreement} type is \textit{http://schemas.ogf.org/occi/sla\#agreement}. An \hl{Agreement} instance MUST relate and expose this \hl{Kind}.
 
-Table~\ref{tbl:agreement} describes the attributes defined by the \hl{Agreement} type through its \hl{Kind} instance. These attributes MUST be exposed by an instance of the \hl{Agreement} type. In Figure~\ref{fig:agreement-states} the allowed states of an \hl{Agreement} instance are presented. Those specific states MUST be assigned to an \hl{Agreement} instance by a cloud service provider SHOULD the implements the OCCI SLAs specification. 
+Table~\ref{tbl:agreement} describes the attributes defined by the \hl{Agreement} type through its \hl{Kind} instance. These attributes MUST be exposed by an instance of the \hl{Agreement} type. In Figure~\ref{fig:agreement-states} the allowed states of an \hl{Agreement} instance are presented. Those specific states MUST be assigned to an \hl{Agreement} instance by a cloud service provider SHOULD the implements the OCCI SLAs specification. The \hl{agreedAt}, \hl{effectiveFrom} and \hl{effectiveUntil} attributes MUST have an absolute datetime value (data, time or combined format) but MUST NOT represent a duration or time interval formated value.
+
 
 
 \mytablefloat{
@@ -198,7 +201,7 @@ The actions that are applicable to \hl{Agreement} instances are presented in Tab
 	accept & Accepted & -- \\
 	reject & Rejected & -- \\
 	suspend & Suspended & -- \\
-	unsuspend & Accepted & -- \\
+	resume & Accepted & -- \\
 	terminate & Terminated & -- \\
 	\botrule
 	\end{tabular}
@@ -220,31 +223,32 @@ As can be seen in the example diagram bellow, the \hl{AgreementTemplate} mixin c
 \end{figure}
 
 \subsubsection{AgreementTerm Mixin}
-A necessary part of an agreement offer, as well as the consequent agreement, is the section of the agreement term. To this end, the OCCI SLAs suggests the introduction of the agreement terms through the \hl{Mixin} mechanism. The \hl{AgreementTerm Mixin} is assigned the “scheme” \textit{http://schemas.ogf.org/occi/sla\#} and the term \hl{agreement\_term}. An \hl{AgreementTerm} mixin MUST support these values. OCCI SLAs implementations SHOULD support this in order to provide a classification and definition mechanism for the various terms and conditions of the agreements. Therefore, the implementation of this functionality is OPTIONAL but RECOMMENDED. 
+A necessary part of an agreement offer, as well as the consequent agreement, is the section of the agreement term. To this end, the OCCI SLAs introduces the agreement terms through the \hl{Mixin} mechanism. The \hl{AgreementTerm Mixin} is assigned the “scheme” \textit{http://schemas.ogf.org/occi/sla\#} and the term \hl{agreement\_term}. An \hl{AgreementTerm} mixin MUST support these values. OCCI SLAs implementations SHOULD support this in order to provide a classification and definition mechanism for the various terms and conditions of the agreements. Therefore, the implementation of this functionality is OPTIONAL but RECOMMENDED. 
 
-Table~\ref{tbl:terms-attributes} shows the defined attributes for the \hl{AgreementTerm Mixin}. Following the rationale presented in the WS-Agreement specification \cite{ws-agreeement:2007} , OCCI SLAs defines two types of agreement terms: service terms and service level objectives (SLOs). The first includes information related with the service description and definition. The second refers to the guarantee terms that specify the service level which the two parties are agreeing to. A cloud service provider MAY introduce domain specific attributes to the \hl{AgreementTerm} mixin instances that he constructs, through the attributes set inherited from the \hl{Category} type. \hl{Mixin} relationships MAY be used in order to enforce classification of capabilities but also to allow resource specific instantiation of \hl{AgreementTerm}. For example, an availability \hl{Mixin} could be defined, which is depended on the \hl{AgreementTerm Mixin} type. The provider, then, MAY choose to instantiate different availability mixins for compute or storage resources (or any other offered resource) based on his own definition of availability for those resources. 
+While the Agreement Term Mixin as defined does not include any generic attribute, a provider specific term (e.g. availability, compute service term etc.) SHOULD be depended from the OCCI SLAs \hl{AgreementTerm Mixin} and introduce a set of attributes that characterize those terms. In Table~\ref{tbl:terms-attributes} a list of attributes is presented that a provider MAY use for the definition of the custom terms mixins. Following the rationale presented in the WS-Agreement specification \cite{ws-agreeement:2007} , OCCI SLAs defines two types of agreement terms: service terms and service level objectives (SLOs). The first includes information related with the service description and definition. The second refers to the guarantee terms that specify the service level which the two parties are agreeing to. A cloud service provider MAY introduce more domain specific attributes to the \hl{AgreementTerm} mixin instances that he constructs, through the attributes set inherited from the \hl{Category} type. \hl{Mixin} relationships MAY be used in order to enforce classification of capabilities but also to allow resource specific instantiation of \hl{AgreementTerm}. For example, an availability \hl{Mixin} could be defined, which is depended on the \hl{AgreementTerm Mixin} type. The provider, then, MAY choose to instantiate different availability mixins for compute or storage resources (or any other offered resource) based on his own definition of availability for those resources. 
 
 
 
 \mytablefloat{
 	\label{tbl:terms-attributes}
-	\hl{Attributes} for the AgreementTerm Mixin. 
+	Suggested \hl{Attributes} for a provider-defined AgreementTerm Mixin. 
 }
 {
 	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
-	occi.agreement.term.type & Enum \{SERVICE-TERM,SLO, n/a\} & 1 & Mutable & The type of the term that is being defined.\\
-	occi.agreement.term.state & Enum \{Undefined,Fulfilled  Violated\} & 1 & Immutable & The state of fulfillment of the specific term. \\
-	occi.agreement.term.desc & String & 0\ldots1 & Mutable & The description of the agreement term defined with this mixin. \\
+	\{term\_name\}.term.type & Enum \{SERVICE-TERM,SLO-TERM, n/a\} & 1 & Immutable & The type of the term that is being defined.\\
+	\{term\_name\}.term.state & Enum \{Undefined, Fulfilled, Violated\} & 1 & Immutable & The state of fulfillment of the specific term. \\
+	\{term\_name\}.term.desc & String & 0\ldots1 & Immutable & The description of the agreement term defined with this mixin. \\
+	\{term\_name\}.term.remedy & String & 0\ldots1 & Immutable & The remedy value (e.g. price penalty) or action e.g. command) when an SLO term is being violated. \\
 	\botrule
 	\end{tabular}
 }
 
 
 
-The \hl{AgreementTerm} state can be either \textit{undefined}, \textit{fulfilled} or \textit{violated} (Figure~\ref{fig:terms-states}). The undefined state is the initial state of the term until an assessment is made. During runtime and while the service and SLA is being monitored the state MUST be fulfilled or violated. When multiple terms exist (e.g. provider specific terms) then if at least one term in an agreement has state violated, then the agreement is considered violated (\textit{occi.agreement.term.state=violated}).
+The \hl{AgreementTerm} state can be either \textit{undefined}, \textit{fulfilled} or \textit{violated} (Figure~\ref{fig:terms-states}). The undefined state is the initial state of the term until an assessment is made. During runtime and while the service and SLA is being monitored the state MUST be fulfilled or violated. When multiple terms exist (e.g. provider specific terms) then if at least one term in an agreement has state violated, then the agreement is considered violated (\textit{\{term\_name\}.term.state=violated}).
 
 \begin{figure}[!h]
 	{\centering \resizebox*{0.6\columnwidth}{!}{{\includegraphics{figs/terms-states.jpg}}} \par}
@@ -392,6 +396,8 @@ Name & Affiliation & Contact \\
 Gregory Katsaros & Intel & gregory.katsaros at intel.com \\
 Thijs Metsch & Intel & thijs.metsch at intel.com \\
 John Kennedy & Intel & john.m.kennedy at intel.com \\
+Alexander Stanik & TU Berlin & alexander.stanik at tu-berlin.de \\
+Wolfgang Ziegler & SCAI Fraunhofer & wolfgang.ziegler at scai.fraunhofer.de \\
 \end{tabular}
 
 Next to these individual contributions we value the contributions from the OCCI working group.
