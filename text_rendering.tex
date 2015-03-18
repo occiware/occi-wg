@@ -112,7 +112,7 @@ The document is structures by defining based ABNFs which can then be combined to
 
 For the following section \ref{sec:renderings} these ABNF notations will be used. Implementations MUST hence implement the renderings according to these definitions.
 
-\subsection{Category CRLF}
+\subsection{Category rendering}
 
 The following syntax MUST be used for \hl{Category} renderings:
 
@@ -143,7 +143,7 @@ Category             = "Category" ":" #category-value
   action             = type-identifier
 \end{verbatim}
 
-\subsection{Link CRLF}
+\subsection{Link rendering}
 
 The following syntax MUST be used to represent OCCI \hl{Link} type
 instance references:
@@ -180,7 +180,7 @@ ActionLink         = "Link" ":" #link-value
   action-uri       = URI "?" "action=" term
 \end{verbatim}
 
-\subsection{Attribute CRLF}
+\subsection{Attribute rendering}
 
 \begin{verbatim}
 Attribute          = "X-OCCI-Attribute" ":" #attribute-repr
@@ -195,7 +195,7 @@ Attribute          = "X-OCCI-Attribute" ":" #attribute-repr
   enum_val         = string
 \end{verbatim}
 
-\subsection{Location CRLF}
+\subsection{Location rendering}
 
 \begin{verbatim}
 Location      = "X-OCCI-Location" ":" location-value
