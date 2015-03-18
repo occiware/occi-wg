@@ -868,4 +868,16 @@ here.
 \section{Errata}
 \label{sec:errata}
 
+\begin{itemize}
+\item New credentials mixin - allows credentials to be supplied to the creation of a compute resource
+\item New contextualisation mixin - allows a script to be supplied with the creation request of a compute resource
+\item Added error state to all resource state models
+\item Added occi.compute.share attribute to Compute. This allows for basic support of container virtualisation technologies.
+\item Added state.message to all infrastructure resources (Compute, Storage, Network, NetworkInterface, StorageLink)
+\item Added references to the core model parent, applies and depends for infrastructure mixins, kinds
+\item Updated figures to reflect new Core model
+\item Updated the storage state model - removes resize. removal of error action from tables. resize done through a resource update
+\item Removed backup, snapshot, resize and degraded actions from state tables
+\end{itemize}
+
 \end{document}
