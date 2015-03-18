@@ -1,4 +1,5 @@
 \documentclass[10pt,a4paper]{article}
+\usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
 \usepackage{graphicx}
@@ -101,18 +102,15 @@ capabilities required to support modern service offerings.
 \section{Notational Conventions}
 \input{include/notational}
 
-\section{Security and Authentication}
-OCCI does not require that an authentication mechanism be used nor
-does it require that client to service communications are secured. It
-does RECOMMEND that an authentication mechanism be used and that where
-appropriate, communications are encrypted using HTTP over TLS. The
-authentication mechanisms that MAY be used with OCCI are those that
-can be used with HTTP and TLS. For further discussion see Section
-\ref{sec:sec_consid}.
+\section{Text rendering}
+
+This document presents the text based renderings. To be complaint OCCI implementations MUST implement three renderings defined in sections \ref{sec:text}, \ref{sec:header} and \ref{sec:urilist}.
+
+The document is structures by defining based ABNFs which can then be combined to renderings which will be rendered using HTTP by the specific rendering definitions.
 
 \section{ABNF Definitions}
 
-For the following sections these notations will be used. Implementation MUST hence implement the renderings according to these definitions.
+For the following section \ref{sec:renderings} these ABNF notations will be used. Implementations MUST hence implement the renderings according to these definitions.
 
 \subsection{Category CRLF}
 
@@ -205,6 +203,9 @@ Location      = "X-OCCI-Location" ":" location-value
 \end{verbatim}
 
 \section{Renderings}
+\label{sec:renderings}
+
+The renderings defined in this section will be used in the specific text rendering defined in section \ref{sec:text} and \ref{sec:header}
 
 \subsection{Entity Instance Rendering}
 
@@ -217,9 +218,10 @@ A \hl{Resource} instance MUST be rendered using the following definition:
 \begin{verbatim}
 	resource_rendering = 1*( Category CRLF )
     	                  *( Link CRLF )
-    	                  *( ActionLink CRLF )
         	              *( Attribute CRLF )
 \end{verbatim}
+
+The rendering of a \hl{Resource} instance MUST represent any associated Action instances using the {\tt ActionLink CRLF}.
 
 \paragraph{Action Invocation Rendering}
 
@@ -245,27 +247,31 @@ A \hl{Link} instance MUST be rendered using the following definition:
 \subsection{Category Instance Rendering}
 \label{sec:format_category_instance_rendering}
 
-ABNF
+A \hl{Category} instances MUST be rendered as defined below.
 
 \subsubsection{Kind Instance Rendering}
 \label{sec:format_kind}
 
- look above
+A \hl{Kind} instance MUST be rendered as a {\tt Category CRLF}.
 
 \subsubsection{Mixin Instance Rendering}
 \label{sec:format_mixin}
 
-look above
+A \hl{Mixin} instance MUST be rendered as a {\tt Category CRLF}.
 
 \subsubsection{Action Instance Rendering}
 \label{sec:format_action}
 
-ABNF
+An \hl{Action} instance MUST be rendered as a {\tt Category CRLF}.
+
+Note that an \hl{Action} instance MUST NOT have \hl{Link} and \hl{Action}s references.
 
 \subsection{Entity Collection Rendering}
 
+A collection of \hl{Resource} or \hl{Link} instances MUST be rendered as following:
+
 \begin{verbatim}
-	resource_representations  = *( Location CRLF ) 
+	entity_collection_rendering = *( Location CRLF ) 
 \end{verbatim}
 
 \subsubsection{Resource Collection Rendering}
@@ -278,8 +284,10 @@ see above
 
 \subsection{Category Collection Rendering}
 
+For the Query interface the following \hl{Category} instance rendering MUST be used:
+
 \begin{verbatim}
-	resource\_representations  = *( Category CRLF ) 
+	category_collection_rendering = *( Category CRLF ) 
 \end{verbatim}
 
 \subsubsection{Kind Collection Rendering}
@@ -298,10 +306,31 @@ see above
 
 \subsubsection{Entity Instance Attribute Rendering Specifics}
 
+For Entity instances the following model attribute name to attribute name rendering mappings MUST be used:
+
+\mytablefloat{
+	\label{tbl:link}
+	Entity attributes naming convention } {
+	\begin{tabular}{ll}
+		\toprule
+			Attribute & Attribute name once rendered \\
+		\colrule
+			Entity.id & occi.core.id \\
+			Entity.title & occi.core.title \\
+			Resource.summary & occi.core.summary \\
+			Link.target & occi.core.target \\
+			Link.source & occi.core.source \\
+		\botrule
+	\end{tabular}
+}
+
 \subsubsection{Attribute Description Rendering}
 \label{sec:format_attribute_description}
 
+\hl{Attributes} MUST be rendered as define by the {\tt Attribute CRLF}
+
 \section{OCCI Text plain rendering}
+\label{sec:text}
 The OCCI Text plain rendering specifies a rendering of OCCI instance types in a simple text format.
 
 The rendering can be used to render OCCI instances independently of the
@@ -316,69 +345,75 @@ and
 
 	{\tt text/plain}
 
-TODO: say stuff goes in the body. eithe rmultiple enties sep by "\\n" or by
+While using this rendering the renderings MUST be placed in the HTTP Body. Each entry consists of a name followed by a colon (”:”) and the field value.
+
+\subsection{Example}
+
+The following example show an \hl{Entity} instance rendering using the Text plain rendering.
+
+\begin{verbatim}
+< Category: compute; \
+<     scheme="http://schemas.ogf.org/occi/infrastructure#" \
+<     class="kind";
+< Link: </users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096?action=start>; \
+<     rel="http://schemas.ogf.org/occi/infrastructure/compute/action#start"
+< X-OCCI-Attribute: occi.core.id="urn:uuid:b9ff813e-fee5-4a9d-b839-673f39746096"
+< X-OCCI-Attribute: occi.core.title="My Dummy VM"
+< X-OCCI-Attribute: occi.compute.architecture="x86"
+< X-OCCI-Attribute: occi.compute.state="inactive"
+< X-OCCI-Attribute: occi.compute.speed=1.33
+< X-OCCI-Attribute: occi.compute.memory=2.0
+< X-OCCI-Attribute: occi.compute.cores=2
+< X-OCCI-Attribute: occi.compute.hostname="dummy"\end{verbatim}
 
 \section{OCCI header rendering}
-The OCCI Text plain rendering specifies a rendering of OCCI instance types in a simple text format.
-
-The rendering can be used to render OCCI instances independently of the
-protocol being used. Thus messages can be delivered by e.g. the HTTP
-protocol as specified in \cite{occi:protocol}.
-
-The following media-type MUST be used for the OCCI JSON Rendering:
+\label{sec:header}
+The following media-type MUST be used for the OCCI header Rendering:
 
 {\tt text/occi}
 
-All stuff goes in headers.
+While using this rendering the renderings MUST be placed in the HTTP Header. The body MUST contain the string ’OK’ on successful operations.
 
-\section{URI listening}
-The OCCI Text plain rendering specifies a rendering of OCCI instance types in a simple text format.
+The HTTP header fields MUST follow the specification in RFC 7230 \cite{rfc7230}. A header field consists of a name followed by a colon (”:”) and the field value.
 
-The rendering can be used to render OCCI instances independently of the
-protocol being used. Thus messages can be delivered by e.g. the HTTP
-protocol as specified in \cite{occi:protocol}.
+\textbf{Limitations}: HTTP header fields MAY appear multiple times in a HTTP request or response. In order to be OCCI compliant, the specification of multiple message-header fields according to RFC 7230 MUST be fully supported. In essence there are two valid representation of multiple HTTP header field values. A header field might either appear several times or as a single header field with a comma-separated list of field values. Due to implementation issues in many web frameworks and client libraries it is RECOMMENDED to use the comma-separated list format for best interoperability.
 
-The following media-types MUST be used for the OCCI JSON Rendering:
+HTTP header field values which contain separator characters MUST be properly quoted according to RFC 7230.
 
-{\tt text/occi+plain}
-{\tt text/plain}
+Space in the HTTP header section of a HTTP request is a limited resource. By this, it is noted that many HTTP servers limit the number of bytes that can be placed in the HTTP Header area. Implementers MUST be aware of this limitation in their own implementation and take appropriate measures so that truncation of header data does NOT occur.
 
-\subsection{Entity Collection Rendering}
+\subsection{Example}
 
+The following example show an \hl{Entity} instance rendering using the Text header rendering.
+
+\begin{verbatim}
+< Category: compute; \
+    scheme="http://schemas.ogf.org/occi/infrastructure#" \
+    class="kind";
+< Link: </users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096?action=start>; \
+    rel="http://schemas.ogf.org/occi/infrastructure/compute/action#start"
+< X-OCCI-Attribute: occi.core.id="urn:uuid:b9ff813e-fee5-4a9d-b839-673f39746096", \
+ occi.core.title="My Dummy VM", occi.compute.architecture="x86", \
+ occi.compute.state="inactive", occi.compute.speed=1.33, \
+ occi.compute.memory=2.0, occi.compute.cores=2, \
+ occi.compute.hostname="dummy"
+< OK\end{verbatim}
+
+\section{URI listening rendering}
+\label{sec:urilist}
+The following media-types MUST be used for the URI Rendering:
+
+{\tt text/uri-list}
+
+This rendering cannot render resource instances or Kinds or Mixins directly but just links to them. For concrete rendering of Kinds and Categories the Content-types text/occi, text/plain MUST be used. If a request is done with the text/uri-list in the Accept header, while not requesting for a Listing a Bad Request MUST be returned. Otherwise a list of resources MUST be rendered in {\\tt text/uri-list} format as defined in \cite{rfc2483}, which can be used for listing resource in collections or the name-space of the OCCI implementation.
 \section{Security Considerations}
-\label{sec:sec_consid}
-The OCCI HTTP rendering assumes HTTP or HTTP-related mechanisms for
-security. As such, implementations SHOULD support
-TLS \footnote{http://datatracker.ietf.org/wg/tls/} for transport layer
-security.
-
-Authentication SHOULD be realized by HTTP authentication mechanisms,
-namely HTTP Basic or Digest Auth \cite{rfc2617}, with the former as
-default. Additional profiles MAY specify other methods and should
-ensure that the selected authentication scheme can be renderable over
-the HTTP or HTTP-related protocols.
-
-Authorization is not enforced on the protocol level, but SHOULD be
-performed by the implementation. For the authorization decision, the
-authentication information as provided by the mechanisms described
-above MUST be used.
-
-Protection against potential Denial-of-Service scenarios are out of
-scope of this document; the OCCI HTTP Rendering specifications assumes
-cooperative clients that SHOULD use selection and filtering as
-provided by the Category mechanism wherever possible. Additional
-profiles to this document, however, MAY specifically address such
-scenarios; in that case, best practices from the HTTP ecosystem and
-appropriate mechanisms as part of the HTTP protocol specification
-SHOULD be preferred.
-
-As long as specific extensions of the OCCI Core and Model
-specification do not impose additional security requirements than the
-OCCI Core and Model specification itself, the security considerations
-documented above apply to all (existing and future)
-extensions. Otherwise, an additional profile to this specification
-MUST be provided; this profile MUST express all additional security
-considerations using HTTP mechanisms.
+OCCI does not require that an authentication mechanism be used nor
+does it require that client to service communications are secured. It
+does RECOMMEND that an authentication mechanism be used and that where
+appropriate, communications are encrypted using HTTP over TLS. The
+authentication mechanisms that MAY be used with OCCI are those that
+can be used with HTTP and TLS. For further discussion see the 
+appropiate section in \cite{occi:protocol}.
 
 \section{Glossary}
 \label{sec:glossary}
