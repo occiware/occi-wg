@@ -574,6 +574,15 @@ present in the instantiated OCCI Entity & \\
 }
 \end{lstlisting}
 
+\section{Security Considerations}
+OCCI does not require that an authentication mechanism be used nor
+does it require that client to service communications are secured. It
+does RECOMMEND that an authentication mechanism be used and that where
+appropriate, communications are encrypted using HTTP over TLS. The
+authentication mechanisms that MAY be used with OCCI are those that
+can be used with HTTP and TLS. For further discussion see the 
+appropiate section in \cite{occi:protocol}.
+
 \section{Glossary}
 \label{sec:glossary}
 \input{include/glossary}
