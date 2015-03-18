@@ -79,9 +79,11 @@ OCCI is a trademark of the Open Grid Forum.
 \newpage
 
 \section{Introduction}
+\label{sec:intro}
 \input{include/introduction.tex}
 
 \section{Notational Conventions}
+\label{sec:not_conv}
 \input{include/notational}
 
 The following terms \cite{rfc3986} are used when referring to URL
@@ -102,6 +104,7 @@ support multiple different data formats as payload. Data formats are specified
 an separate documents.
 
 \section{Namespace}
+\label{sec:namspace}
 
 The OCCI HTTP Protocol maps the OCCI Core model into the URL hierarchy by binding
 \hl{Kind} and \hl{Mixin} instances to unique URL paths. Such a URL path is called
@@ -130,6 +133,7 @@ An unbound URL path MAY represent the union of all \hl{Kind} and \hl{Mixin}
 collection `below' the unbound path.
 
 \section{Headers and Status Codes}
+\label{sec:head_stat}
 
 OCCI clients and Servers MUST include a minimum set of mandatory HTTP headers
 in each request and response in order to be compliant.
@@ -222,6 +226,7 @@ behavior in such cases is not specified. The return codes are specified by
 \end{description}
 
 \section{Pagination}
+\label{sec:pagin}
 
 To request partial results of an otherwise large collection message response, pagination SHOULD be used to reduce the load on
 both the client and the service provider. This is done in the following manner.
@@ -236,6 +241,7 @@ If {\em number} is too large for the provider to handle (policy, technical limit
 If there is no more content to be served, the response status code issued to the requesting client MUST be an \emph{HTTP 200 OK} and the response body MUST contain an empty collection.
 
 \section{HTTP Methods Applied to Query Interface}
+\label{sec:http_methods_qi}
 
 \todo{\textbf{Sanity check this section against v1.1 \dots}}
 
@@ -288,6 +294,7 @@ The request MUST include at least one full category instance rendering. It MAY i
 Upon a successful processing of the request, the \emph{200 OK} status code MUST be returned.
 
 \section{HTTP Methods Applied to Entity Instance}
+\label{sec:http_methods_ei}
 
 \todo{\textbf{Sanity check this section against v1.1 \dots}}
 
@@ -378,6 +385,7 @@ N/A
 Upon a successful processing of the request, the \emph{200 OK} status code MUST be returned.
 
 \section{HTTP Methods Applied to Collection}
+\label{sec:http_methods_coll}
 
 \todo{\textbf{Sanity check this section against v1.1 \dots}}
 
@@ -477,20 +485,59 @@ The request MAY include entity collection rendering which requires the \hl{Mixin
 \paragraph*{Server DELETE response}\hfill\\
 Upon a successful processing of the request, the \emph{200 OK} status code MUST be returned.
 
+\section{Security Considerations}
+\label{sec:sec_consid}
+The OCCI HTTP rendering assumes HTTP or HTTP-related mechanisms for
+security. As such, implementations SHOULD support
+TLS \footnote{http://datatracker.ietf.org/wg/tls/} for transport layer
+security.
+
+Authentication SHOULD be realized by HTTP authentication mechanisms,
+namely HTTP Basic or Digest Auth \cite{rfc2617}, with the former as
+default. Additional profiles MAY specify other methods and should
+ensure that the selected authentication scheme can be rendered over
+the HTTP or HTTP-related protocols.
+
+Authorization is not enforced on the protocol level, but SHOULD be
+performed by the implementation. For the authorization decision, the
+authentication information as provided by the mechanisms described
+above MUST be used.
+
+Protection against potential Denial-of-Service scenarios is out of
+scope of this document; the OCCI HTTP Protocol specification assumes
+cooperative clients that SHOULD use selection and filtering as
+provided by the Category mechanism wherever possible. Additional
+profiles to this document, however, MAY specifically address such
+scenarios; in that case, best practices from the HTTP ecosystem and
+appropriate mechanisms as part of the HTTP protocol specification
+SHOULD be preferred.
+
+As long as specific extensions of the OCCI Core and Model
+specification do not impose additional security requirements than the
+OCCI Core and Model specification itself, the security considerations
+documented above apply to all (existing and future)
+extensions. Otherwise, an additional profile to this specification
+MUST be provided; this profile MUST express all additional security
+considerations using HTTP mechanisms.
+
 \section{Glossary}
 \label{sec:glossary}
 \input{include/glossary}
 
 \section{Contributors}
+\label{sec:contrib}
 \input{include/contributors}
 
 \section{Intellectual Property Statement}
+\label{sec:ips}
 \input{include/ip}
 
 \section{Disclaimer}
+\label{sec:disclaim}
 \input{include/disclaimer}
 
 \section{Full Copyright Notice}
+\label{sec:copy}
 \input{include/copyright}
 
 \bibliographystyle{IEEEtran}
