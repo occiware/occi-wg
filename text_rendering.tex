@@ -1,11 +1,29 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true]{microtype}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
+\usepackage{comment}
 \usepackage{occi}
+\usepackage{lineno}   % adds line numbers, may be removed for non draft versions
+\linenumbers          % adds line numbers, may be removed for non draft versions
+\usepackage{verbatim} % adds verbatim options
+\usepackage{tabularx} % adds extended tabular formatting options
+\usepackage{listings}
+\usepackage{color}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+\lstdefinelanguage{json}{
+  ndkeywords={String, Number, Boolean, Null, Object, Array},
+  ndkeywordstyle=\itshape
+}
+\lstset{
+   language=json,
+   basicstyle=\footnotesize,
+}
+
 \setlength{\headheight}{13pt}
 \pagestyle{fancy}
 
@@ -18,7 +36,7 @@
 
 % header
 \fancyhf{}
-\lhead{GFD-P-R.185}
+\lhead{GWD-R}
 \rhead{\today}
 
 % footer
@@ -39,15 +57,14 @@
 % header on first page is different
 \thispagestyle{empty}
 
-GFD-P-R.185 \hfill Thijs Metsch, Platform Computing\\
-OCCI-WG \hfill Andy Edmonds, Intel\\
-\rightline {October 7, 2010}\\
-\rightline {Updated: \today}
+Draft \hfill Andy Edmons, Zhaw \\
+OCCI-WG \hfill Thijs Metsch, Intel\\
+\rightline {\today}
 
 \vspace*{0.5in}
 
 \begin{Large}
-\textbf{Open Cloud Computing Interface - RESTful HTTP Rendering}
+\textbf{Open Cloud Computing Interface - Text Rendering}
 \end{Large}
 
 \vspace*{0.5in}
@@ -60,7 +77,7 @@ unlimited.
 
 \underline{Copyright Notice}
 
-Copyright \copyright ~Open Grid Forum (2009-2011). All Rights Reserved.
+Copyright \copyright Open Grid Forum (2015). All Rights Reserved.
 
 \underline{Trademarks}
 
@@ -74,12 +91,6 @@ definition of a Protocol and API. The document is based upon
 previously gathered requirements and focuses on the scope of important
 capabilities required to support modern service offerings.
 
-% Dealt via errata
-% \ralf{In "Operation on Paths in the Name-space" the GET verb is a MUST for 2
-% slightly different use cases: "state of name-space hierarchy" and "all
-% instances below a path". Since there appears to be no way for a server to
-% differentiate between the 2 cases maybe put it all in the same paragraph?}
-
 \newpage
 \tableofcontents
 \newpage
@@ -90,1071 +101,22 @@ capabilities required to support modern service offerings.
 \section{Notational Conventions}
 \input{include/notational}
 
-This document uses the Augmented Backus-Naur Form (ABNF) notation of
-RFC 2616 \cite{rfc2616}, and explicitly includes the following rules
-from it: quoted-string, token, SP (space), LOALPHA, DIGIT.
+\section{Security and Authentication}
+OCCI does not require that an authentication mechanism be used nor
+does it require that client to service communications are secured. It
+does RECOMMEND that an authentication mechanism be used and that where
+appropriate, communications are encrypted using HTTP over TLS. The
+authentication mechanisms that MAY be used with OCCI are those that
+can be used with HTTP and TLS. For further discussion see Section
+\ref{sec:sec_consid}.
 
-\subsection{Specification Examples}
-All examples in this document use one of the following three HTTP
-category definitions. An example URL name-space hierarchy is also
-given. Syntax and Semantics are explained in the remaining sections of
-the document. These Category examples do not strive to be complete but
-to show the features OCCI has:
+\section{ABNF Definitions}
 
-\begin{verbatim}
-Category: compute;
-          scheme="http://schemas.ogf.org/occi/infrastructure#";
-          class="kind";
-          location="http://example.com/compute/"
-          [...]
-    (This is a compute kind)
+For the following sections these notations will be used. Implementation MUST hence implement the renderings according to these definitions.
 
-Category: networkinterface;
-          scheme="http://schemas.ogf.org/occi/infrastructure#";
-          class="kind";
-          location="http://example.com/link/networkinterface/"
-          [...]
-    (This is a storage link)
+\subsection{Category CRLF}
 
-Category: my_stuff;
-          scheme="http://example.com/occi/my_stuff#";
-          class="mixin";
-          location="http://example.com/my_stuff/"
-          [...]
-    (This is a mixin of user1)
-\end{verbatim}
-The following URL name-space hierarchy is used in the examples:
-\begin{verbatim}
-http://example.com/-/
-http://example.com/vms/vm3
-http://example.com/vms/foo/vm1
-http://example.com/vms/bar/vm1
-http://example.com/compute/
-http://example.com/link/networkinterface/
-http://example.com/my_stuff/
-\end{verbatim}
-
-The following terms \cite{rfc3986} are used when referring to URI
-components:
-
-\begin{verbatim}
- http://example.com:8080/over/there?action=stop#xyz
- \__/   \______________/\_________/ \_________/ \_/
-  |           |            |            |        |
-scheme     authority       path        query   fragment
-\end{verbatim}
-
-\subsection{Specification Examples' Content-type}
-All examples in this document use the \emph{text/plain} HTTP
-Content-Type for posting information. To retrieve information the HTTP
-Accept header \emph{text/plain} is used.
-
-This specification is aligned with RFC 3986 \cite{rfc3986}.
-
-\section{OCCI HTTP Rendering}
-The OCCI HTTP Rendering document specifies how the OCCI Core Model
-\cite{occi:core}, including extensions thereof, is rendered over the
-HTTP protocol \cite{rfc2616}. The document describes the general
-behavior for all interaction with an OCCI implementation over HTTP
-together with three content types to represent the data being
-transferred. The content types specified are:
-
-\begin{itemize}
-	\item \textit{text/plain},
-	\item \textit{text/occi} and
-	\item \textit{text/uri-list}.
-\end{itemize}
-
-More details are discussed in section \ref{sec:content_type}. Other
-data formats such as e.g.~OVF and JSON will be specified in
-complimentary documents.
-
-\subsection{Introduction}
-The OCCI HTTP Rendering uses many of the features the HTTP and
-underlying protocols offer and builds upon the Resource Oriented
-Architecture (ROA). ROA's use Representation State Transfer (REST)
-\cite{REST_Fielding} to cater for client and service
-interactions. Interaction with the system is by inspection and
-modification of a set of related resources and their states, be it on
-the complete state or a sub-set. Resources MUST be uniquely
-identified. HTTP is an ideal protocol to use in ROA systems as it
-provides the means to uniquely identify individual resources through
-URLs as well as operating upon them with a set of general-purpose
-methods known as HTTP verbs. These HTTP verbs map loosely to the
-resource related operations of Create (POST), Retrieve (GET), Update
-(POST/PUT) and Delete (DELETE).
-
-Each resource instance within an OCCI system MUST have a unique
-identifier stored in the \emph{occi.core.id} attribute of the
-\hl{Entity} type \cite{occi:core}.
-It is RECOMMENDED to use a Uniform Resource Name (URN) as the
-identifier stored in \emph{occi.core.id}.
-
-The structure of these identifiers is opaque and the system should not
-assume a static, pre-determined scheme for their structure. For
-example \emph{occi.core.id} could be
-\emph{urn:uuid:de7335a7-07e0-4487-9cbd-ed51be7f2ce4}.
-
-\subsection{Behavior of the HTTP Verbs}
-
-
-\todo{\emph{Remove this section and move to protocol.}}
-
-As OCCI adopts a ROA, REST-based architecture and uses HTTP as the
-foundation protocol, resource instances are interacted with through
-the four main HTTP verbs. OCCI service implementations MUST, at a
-minimum, support these verbs as shown in the summary table
-\ref{tbl:http_verbs}.
-
-\mytablefloat{\label{tbl:http_verbs}HTTP Verb Behavior Summary (* = Supports filtering mechanisms)}{
-\begin{tabular}{p{0.8in} p{0.8in} p{0.8in} p{0.8in} p{0.8in} p{0.8in}}
-\toprule
-Path 								& GET 										& POST 												& POST (action - Query = ?action=\ldots) 			& PUT 									& DELETE \\
-\colrule
-resource instance (/vms/foo/vm1) 	& Retrieval of the resource instance's representation 		& Partial update of the resource instance 			& Perform an action 								& Creation/Update of the resource instance, supplying the full representation of the resource instance	& Deletion of the resource instance \\
-\colrule
-\hl{Kind} collection (/compute/) 	& Retrieve a collection of resource instances* 	& Create a new resource instance of this \hl{Kind}	& Performs actions on a collection of resource instances 	& Not Defined		& Removal of a single, a subset of or all the resource instances from the kind collection \\
-\colrule
-\hl{Mixin} collection (/my\_stuff/) 	& Retrieve a collection of resource instances* 	& Adds a resource instance to this collection 		& Performs actions on a collection of resource instances 	& Update of the collection supplying the full representation of it. Includes removal and addition of resources. 		& Removal of a single, a subset of or all the resource instances from the Mixin collection \\
-\colrule
-query interface (/-/) 				& Retrieve capabilities* 					& Add a user-defined \hl{Mixin} 					& Not Defined 										& Not Defined 							& Removal of a user-defined \hl{Mixin} \\
-\botrule
-\end{tabular}
-}
-
-\subsection{A RESTful Rendering of OCCI}
-The following sections and paragraphs describe how the OCCI model MUST
-be implemented by OCCI implementations. Operations which are not
-defined are out of scope for this specification and MAY be implemented.
-This is the minimal set to ensure interoperability.
-
-\subsubsection{Resource instance URL Name-space Hierarchy and Location}
-
-The URL name-space (in this document referred to as name-space) and
-the URL hierarchy (in this document referred to as hierarchy) are freely
-definable by the Service Provider. The OCCI implementation MUST
-implement the location path feature, which is required by the OCCI
-Query Interface. Location paths tell the client where all resource
-instances of one \hl{Kind} or \hl{Mixin} can be found regardless of
-the hierarchy the service provider defines. Location paths are defined
-through the HTTP Category rendering and MUST be present for all HTTP
-Categories that can be instantiated (i.e. provisioned). The location
-paths MUST end with a \emph{'/'}. These paths are discoverable by the
-client through the Query interface \ref{sec:query}.
-
-\subsection{Various Operations and their Prerequisites and Behaviors}
-\label{sec:behaviours}
-
-\todo{\emph{Remove this section and move to protocol.}}
-
-\textbf{As of OCCI 1.2, this section includes the specification of a
-deprecated filtering mechanism which will be removed in
-a future update of this document.}
-
-For the expected responses to all the behaviors specified in the
-sections below, please refer to the HTTP return codes table in section
-\ref{sec:return_codes}. This part of the OCCI specification introduces
-a filter mechanism. Filtering means that the OCCI implementation MUST
-only return resources which match the filtering patterns defined in
-the request. This allows clients to be more specific in their request
-and limit the amount of data transferred. Clients MAY currently only
-filter on \hl{Category} identifiers and resource instance attributes. For
-\hl{Category} the client MUST supply a valid Category rendering. For
-attributes the client MUST supply and attribute with a specific value.
-
-\subsubsection{Handling the Query Interface}
-\label{sec:query}
-The query interface MUST be implemented by all OCCI
-implementations. It MUST be found at the path \emph{/-/} off the root
-of the OCCI implementation. Implementations MAY also adopt RFC 5785
-\cite{rfc5785} compliance to advertise this location (see Section
-\ref{sec:rfc5785_compliance} for more details).  With the help of the
-query interface it is possible for the client to determine the
-capabilities of the OCCI implementation he refers to. The following
-Query Interface operations are listed below.
-
-\begin{description}
-  \item[Retrieval of all Registered \hl{Kind}s, \hl{Action}s and
-    \hl{Mixin}s] The HTTP verb GET MUST be used to retrieve all
-    \hl{Kind}s, \hl{Action}s and \hl{Mixin}s the service can
-    manage. This allows the client to discover the capabilities of the
-    OCCI implementation. The result MUST contain all information about
-    the \hl{Kind}s, \hl{Action}s and \hl{Mixin}s (including Attributes
-    and \hl{Actions} assigned).
-
-\begin{verbatim}
-> GET /-/ HTTP/1.1
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-< Category: compute;
-<           scheme="http://schemas.ogf.org/occi/infrastructure#";
-<           class="kind";
-<           title="Compute Resource type";
-<           rel="http://schemas.ogf.org/occi/core#resource";
-<           attributes="occi.compute.cores occi.compute.state{immutable} ...";
-<           actions="http://schemas.ogf.org/occi/infrastructure/compute/action#stop ...";
-<           location="http://example.com/compute/"
-< Category: storage;
-<           scheme="http://schemas.ogf.org/occi/infrastructure#";
-<           class="kind";
-<           title="Storage Resource type";
-<           rel="http://schemas.ogf.org/occi/core#resource";
-<           attributes="occi.storage.size{required} occi.storage.state{immutable}";
-<           actions="...";
-<           location="http://example.com/storage/"
-< Category: start;
-<           scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#";
-<           class="action";
-<           title="Start Compute Resource";
-<           attributes="method"
-< Category: stop;
-<           scheme="http://schemas.ogf.org/occi/infrastructure/compute/action#";
-<           class="action";
-<           title="Stop Compute Resource";
-<           attributes="method"
-< Category: my_stuff;
-<           scheme="http://example.com/occi/my_stuff#";
-<           class="mixin";
-<           location="http://example.com/my_stuff/"
-\end{verbatim}
-
-    An OCCI implementation MUST support a filtering mechanism. If one
-    or multiple \hl{Categories} are provided in the request the server
-    MUST only return the complete rendering of the requested
-    \hl{Kind}s or \hl{Mixin}s. The \emph{text/occi} rendering SHOULD
-    be used to define the filters in a request.
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request     = filter
-  filter    = *( Category CRLF )
-
-response        = categories
-  categories    = *( Category CRLF )
-\end{verbatim}
-
-  \item[Adding a \hl{Mixin} Definition] To add a
-    \hl{Mixin}\footnote{This can be used to 'tag' a set of resource
-      instances.} to the service the HTTP POST verb MUST be used. All
-    possible information for the \hl{Mixin} MUST be defined. At least
-    the HTTP Category term, scheme and location MUST be
-    defined. Actions and Attributes are not supported:
-
-\begin{verbatim}
-> POST /-/ HTTP/1.1
-> [...]
-> Category: my_stuff;
->           scheme="http://example.com/occi/my_stuff#";
->           class="mixin";
->           rel="http:/example.com/occi/something_else#mixin";
->           location="/my_stuff/"
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-    The service might reject this request if it does not allow
-    user-defined \hl{Mixin}s to be created. Also on name collisions of
-    the specified location, scheme, term or rel value the service
-    provider MAY reject this operation.
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request     = mixin
-  mixin     = 1( Category CRLF )
-
-response    = N/A
-\end{verbatim}
-
-  \item[Removing a \hl{Mixin} Definition] A user defined \hl{Mixin}
-    MAY be removed (if allowed) by using the HTTP DELETE verb. The
-    information about which \hl{Mixin} should be deleted MUST be
-    provided in the request:
-
-\begin{verbatim}
-> DELETE /-/ HTTP/1.1
-> [...]
-> Category: my_stuff;
-            scheme="http://example.com/occi/my_stuff#";
-            class="mixin";
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-    If a client attempts to remove a provider-defined Mixin category,
-    the implementation MUST respond with a HTTP error code of 403,
-    Forbidden.
-
-    When a user-defined Mixin is removed all associations with
-    resource instances must be removed by the implementation.
-
-\begin{verbatim}
-request     = mixin
-  mixin     = 1( Category CRLF )
-
-response    = N/A
-\end{verbatim}
-
-\end{description}
-
-\subsubsection{Operation on Paths in the Name-space}
-
-The following operations are defined when operating on paths in the
-name-space hierarchy which are not location paths nor resource
-instances. They MUST end with \emph{/} (For example
-\emph{http://example.com/vms/foo/}).
-
-\begin{description}
-
-   \item[Retrieving the State of the Name-space Hierarchy] The HTTP
-     verb GET MUST be used to retrieve the current state of the
-     name-space hierarchy. It MAY include URIs of resource instances,
-     Paths in the name-space as well as URLs for \hl{Kind} and
-     \hl{Mixin} collections.
-
-   It is RECOMMENDED to use the \emph{text/uri-list} Accept HTTP
-   header for this request.
-
-\begin{verbatim}
-> GET /vms/ HTTP/1.1
-> Accept: text/uri-list
-> [...]
-
-< HTTP/1.1 200 OK
-< Content-type: text/uri-list
-< [...]
-<
-http://example.com/vms/vm3
-http://example.com/vms/foo/
-http://example.com/vms/bar/
-\end{verbatim}
-
-  \item[Retrieving All resource instances Below a Path] The HTTP verb
-    GET MUST be used to retrieve all resource instances. The service
-    provider MUST return a listing containing all resource instances
-    which are children of the provided URI in the name-space
-    hierarchy:
-
-\begin{verbatim}
-> GET /vms/foo/ HTTP/1.1
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-<
-< X-OCCI-Location: http://example.com/vms/foo/vm1
-< X-OCCI-Location: http://example.com/vms/bar/vm2
-\end{verbatim}
-
-    An OCCI implementations MUST support a filtering mechanism. If a
-    Category is provided in the request the server MUST only return
-    the resource instances belonging to the provided \hl{Mixin} or
-    \hl{Kind}.
-
-    If an OCCI Entity attribute (X-OCCI-Attribute) is provided in the
-    request the server MUST only return the resource instances which
-    have a matching attribute value. The \emph{text/occi} rendering
-    SHOULD be used to define the filters in a request.
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request      = filter
-  filter     = *( Category CRLF )
-               *( Attribute CRLF )
-
-response                    = resource_representations
-  resource_representations  = *( Location CRLF )
-\end{verbatim}
-
-  \item[Deletion of All resource instances Below a
-    Path]\footnote{Note: this is a potentially dangerous operation!}
-    The HTTP verb DELETE MUST be used to delete all resource instances
-    under a hierarchy:
-
-\begin{verbatim}
-> DELETE /vms/foo/ HTTP/1.1 [...]
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-\begin{verbatim}
-request      = N/A
-
-response     = N/A
-\end{verbatim}
-
-\end{description}
-
-\subsubsection{Operations on \hl{Mixin}s or \hl{Kind}s}
-\label{sec:mixin_and_kind_operations}
-All of the following operations MUST only be be performed on location
-paths provided by \hl{Kind}s and \hl{Mixin}s. The path MUST end with
-an \emph{/}.
-
-In contrast to the last section it is valid for the operations defined
-here to return a 204 HTTP response code with no content. This is used
-when wanting to represent an empty collection of \hl{Mixin}s or
-\hl{Kind}s.
-
-
-\begin{description}
-  \item[Retrieving All resource instances Belonging to \hl{Mixin} or
-    \hl{Kind}] The HTTP verb GET MUST be used to retrieve all resource
-    instances. The service provider MUST return a listing containing
-    all resource instances which belong to the requested \hl{Mixin} or
-    \hl{Kind}:
-
-\begin{verbatim}
-> GET /compute/ HTTP/1.1
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-<
-< X-OCCI-Location: http://example.com/vms/foo/vm1
-< X-OCCI-Location: http://example.com/vms/foo/vm2
-< X-OCCI-Location: http://example.com/vms/bar/vm1
-\end{verbatim}
-
-    An OCCI implementation MUST support a filtering mechanism. If a
-    HTTP Category is provided in the request the server MUST only
-    return the resource instances belonging to the provided \hl{Kind}
-    or \hl{Mixin}. The provided HTTP Category definition SHOULD be
-    different from the \hl{Kind} or \hl{Mixin} definition which
-    defined the location path used in the request.
-
-    If an OCCI Entity attribute (X-OCCI-Attribute) is provided in the
-    request the server MUST only return the resource instances which
-    have a matching attribute value. The \emph{text/occi} rendering
-    SHOULD be used to define the filters in a request.
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request      = filter
-  filter     = *( Category CRLF )
-               *( Attribute CRLF )
-
-response                    = resource_representations
-  resource_representations  = *( Location CRLF )
-\end{verbatim}
-
-  \item[Triggering Actions on All Instances of a \hl{Mixin} or
-    \hl{Kind}] Actions can be triggered on all resource instances of
-    the same \hl{Mixin} or \hl{Kind}. The HTTP POST verb MUST be used
-    and the request MUST contain the \hl{Category} defining the
-    \hl{Action}.  Additionally the \hl{Action} MUST be defined by the
-    \hl{Kind} or \hl{Mixin} which defines the location path which is
-    used in the request:
-
-\begin{verbatim}
-> POST /compute/?action=stop HTTP/1.1
-> [...]
-> Category: stop; scheme="[...]"; class="action";
-> X-OCCI-Attribute: method="poweroff"
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request              = action_definition
-  action_definition  = 1( Category CRLF )
-                       *( Attribute CRLF )
-
-response     = N/A
-\end{verbatim}
-
-  \item[Associate resource instances With a \hl{Mixin}] One or
-    multiple resource instances can be associated with a \hl{Mixin}
-    using the HTTP POST verb. The URIs which uniquely define the
-    resource instance MUST be provided in the request:
-
-\begin{verbatim}
-> POST /my_stuff/ HTTP/1.1
-> [...]
-> X-OCCI-Location: http://example.com/vms/foo/vm1
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request      = 1*( resources )
-  resources  = *( Location CRLF )
-
-response     = N/A
-\end{verbatim}
-
-  \item[Full Update of a \hl{Mixin} Collection] A
-    collection consisting of \hl{Mixin}s can be updated
-    using the HTTP PUT verb. All URIs which are part of the
-    collection MUST be provided along with the request. The URIs which
-    uniquely define the resource instances MUST be provided in the
-    request:
-
-\begin{verbatim}
-> PUT /my_stuff/ HTTP/1.1
-> [...]
-> X-OCCI-Location: http://example.com/vms/foo/vm1
-> X-OCCI-Location: http://example.com/vms/foo/vm2
-> X-OCCI-Location: http://example.com/disks/foo/disk1
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request      = 1*( resources )
-  resources  = *( Location CRLF )
-
-response     = N/A
-\end{verbatim}
-
-  \item[Dissociate resource instance(s) From a \hl{Mixin}] One or
-    multiple resource instances can be removed from a \hl{Mixin} using
-    the HTTP DELETE verb. The URIs which uniquely define the resource
-    instance MUST be provided in the request:
-
-\begin{verbatim}
-> DELETE /my_stuff/ HTTP/1.1
-> [...]
-> X-OCCI-Location: http://example.com/vms/foo/vm1
-> X-OCCI-Location: http://example.com/vms/foo/vm2
-> X-OCCI-Location: http://example.com/disks/foo/disk1
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request      = 1*( resources )
-  resources  = *( Location CRLF )
-
-response     = N/A
-\end{verbatim}
-
-\end{description}
-
-\subsubsection{Operations on resource instances}
-\label{sec:ops_on_instances}
-The following operations MUST be implemented by the OCCI
-implementation for operations on resource instances, i.e.~instances of
-either OCCI \hl{Resource}, OCCI \hl{Link} or sub-types thereof. All
-resource instances MUST be handled equally (if not stated otherwise)
-independent of whether they are instances of the OCCI \hl{Resource}
-type or the OCCI \hl{Link} type. A resource instance is uniquely
-identified by an URI, for example
-\emph{http://example.com/vms/foo/vm1}. \footnote{The path MUST NOT end
-  with an '/' - that would mean that a client operates on a path in
-  the name-space hierarchy}
-
-\begin{description}
-  \item[Creating a resource instance] A request to create a resource
-    instance MUST contain one and only one HTTP Category rendering
-    which refers to a specific \hl{Kind} instance. This \hl{Kind}
-    MUST define the type of the resource instance.  A request
-    MAY also contain one or more HTTP Category
-    renderings which refer to different \hl{Mixin} instances. Any such
-    \hl{Mixin} instances MUST be applicable (if allowed) to the
-    resource instance.  A client MAY be REQUIRED to provide additional
-    information in the request based on whether the Kind indicates
-    \emph{required} attributes (see \ref{sec:render_cats}) or not.
-
-    A resource instance can be created using two ways - HTTP POST
-    or PUT:
-
-\begin{verbatim}
-> POST /compute/ HTTP/1.1
-> [...]
->
-> Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="kind";
-> X-OCCI-Attribute: occi.compute.cores=2
-> X-OCCI-Attribute: occi.compute.hostname="foobar"
-> [...]
-
-< HTTP/1.1 201 OK
-< [...]
-< Location: http://example.com/vms/foo/vm1
-\end{verbatim}
-
-    The path on which this POST verb is executed MUST be the location
-    path of the corresponding \hl{Kind}. The OCCI
-    implementation MUST return the URL of the newly created
-    resource instance in the HTTP Location header%
-    \footnote{The HTTP Location header \cite{rfc2616} must not be confused with
-    X-OCCI-Location.}.
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request                    = 1*( resource_representation )
-  resource_representation  = 1*( Category CRLF )
-                             *( Link CRLF )
-                             *( Attribute CRLF )
-
-response                   = 0*1( resource_representation )
-  resource_representation  = 1*( Category CRLF )
-                             *( Link CRLF )
-                             *( Attribute CRLF )
-\end{verbatim}
-
-    HTTP PUT can also be used to create a resource instance. In this
-    case the client asks the service provider to create a resource
-    instance at a unique path in the name-space hierarchy.\footnote{If
-      a Service Provider does not want the user to define the path of
-      a resource instance it can return a Bad Request return code -
-      See section \ref{sec:return_codes}. Service Providers MUST
-      ensure that the paths of REST resources stays unique in their
-      name-space.}
-
-\begin{verbatim}
-> PUT /vms/foo/my_first_virtual_machine HTTP/1.1
-> [...]
->
-> Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; "class=kind";
-> X-OCCI-Attribute: occi.compute.cores=2
-> X-OCCI-Attribute: occi.compute.hostname="foobar"
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request                    = 1*( resource_representation )
-  resource_representation  = 1*( Category CRLF )
-                             *( Attribute CRLF )
-
-response                   = 0*1( resource_representation )
-  resource_representation  = 1*( Category CRLF )
-                             *( Link CRLF )
-                             *( Attribute CRLF )
-\end{verbatim}
-
-    The OCCI implementation MAY either return 201 or 200 HTTP return
-    codes. If the OCCI implementation returns the 200 HTTP response
-    code the full representation (as described in 'Retrieving a
-    resource instance' in this section) MUST be
-    returned. \textbf{Please note} that the HTTP Location header used
-    when the service returns the 201 HTTP response code is defined in
-    RFC2616 \cite{rfc2616}.
-
-    A created resource instance MUST be added
-    to the collection defined by the \hl{Kind}.
-
-  \item[Retrieving a resource instance] The HTTP GET verb is used for
-    representation retrieval. It MUST return at least the HTTP
-    Category which defines the \hl{Kind} of the resource instance and
-    associated attributes. HTTP Links pointing to related resource
-    instances, other URI or Actions MUST be included if present. Only
-    Actions currently applicable\footnote{For example, it makes little
-      sense to render the start action of a resource instance if it is
-      already running.} SHOULD be rendered using HTTP Links. The
-    Attributes of the resource instance MUST be exposed to the client
-    if available.
-
-\begin{verbatim}
-> GET /vms/foo/vm1 HTTP/1.1
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-< Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="kind";
-< Category: my_stuff; scheme="http://example.com/occi/my_stuff#"; class="mixin";
-< X-OCCI-Attribute: occi.compute.cores=2
-< X-OCCI-Attribute: occi.compute.hostname="foobar"
-< Link: [...]
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request          = N/A
-
-response                 = resource_representation
-resource_representation  = 1( Category CRLF )
-                           *( Link CRLF )
-                           *( Attribute CRLF )
-\end{verbatim}
-
-  \item[Partial Update of a resource instance] As this
-    specification describes a RESTful service it is RECOMMENDED that
-    the client first retrieves the resource instance. Partial updating
-    is done using the HTTP POST verb. Only the information (HTTP
-    Links, HTTP X-OCCI-Attributes or HTTP categories), which are
-    updated MUST be provided along with the
-    request. \footnote{Changing the type of the resource instance MUST
-      NOT be possible.} If the resource instance updated is derived
-    from the OCCI Link type HTTP Links MUST NOT be allowed in the
-    request.
-
-\begin{verbatim}
-> POST /vms/foo/vm1 HTTP/1.1
-> [...]
->
-> X-OCCI-Attribute: occi.compute.memory=4.0
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request                    = 1*( resource_representation )
-  resource_representation  = 1*( Category CRLF )
-                             *( Link CRLF )
-                             *( Attribute CRLF )
-
-response     = N/A
-
-\end{verbatim}
-
-    The OCCI implementation MAY either return 201 or 200 HTTP return
-    codes. If the OCCI implementation returns the 200 HTTP response
-    code the full representation (as described in 'Retrieving a
-    resource instance' in this section) MUST be
-    returned. \textbf{Please note} that the HTTP Location header used
-    when the service returns the 201 HTTP response code is defined in
-    RFC2616 \cite{rfc2616}.
-
-  \item[Full Update of a resource instance] Before updating a resource
-    instance it is RECOMMENDED that the client first retrieves the
-    resource instance. Full updating is done using the HTTP PUT verb. The
-    client must PUT the full representation, along with modifications,
-    of the resource instance that the service supplied in the most
-    recent GET. Missing information will result in the deletion of the
-    same, if allowed by the implementation.
-
-    HTTP Links MUST NOT be allowed when using the HTTP PUT verb. A request
-    containing a HTTP Link MUST result in a 400 Bad Request HTTP response.
-    Any OCCI Links previously associated with a OCCI Resource MUST remain
-    associated after a successful Full Update operation. This is necessary
-    for the PUT operation to be idempotent.
-
-
-
-\begin{verbatim}
-> PUT /vms/foo/vm1 HTTP/1.1
-> [...]
->
-> X-OCCI-Attribute: occi.compute.memory=4.0
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request                    = 1*( resource_representation )
-  resource_representation  = *( Category CRLF )
-                             *( Attribute CRLF )
-
-response     = N/A
-\end{verbatim}
-
-    The OCCI implementation MAY either return 201 or 200 HTTP return
-    codes. If the OCCI implementation returns the 200 HTTP response
-    code the full representation (as described in 'Retrieving a
-    resource instance' in this section) MUST be
-    returned. \textbf{Please note} that the HTTP Location header used
-    when the service returns the 201 HTTP response code is defined in
-    RFC2616 \cite{rfc2616}.
-
-  \item[Deleting a resource instance] A resource instance can be
-    deleted using the HTTP DELETE verb. No other information SHOULD be
-    added to the request.\footnote{If the resource instances is an
-      OCCI \hl{Link} type the source and target \hl{Resource}s MUST be
-      updated accordingly.}
-
-\begin{verbatim}
-> DELETE /vms/foo/vm1 HTTP/1.1
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request      = N/A
-
-response     = N/A
-\end{verbatim}
-
-  \item[Triggering an Action on a resource instance] To trigger an
-    Action on a resource instance the request MUST containing the HTTP
-    Category defining the \hl{Action}. It MAY include HTTP
-    X-OCCI-Attributes which are the parameters of the Action. Actions
-    are triggered using the HTTP POST verb and by adding a query to
-    the URI. This query exposes the term of the \hl{Action}. If an
-    Action is not available a Bad Request should be returned.
-
-\begin{verbatim}
-> POST /vms/foo/vm1?action=stop HTTP/1.1
-> [...]
-> Category: stop; scheme="[...]"; class="action";
-> X-OCCI-Attribute: method="poweroff"
-
-< HTTP/1.1 200 OK
-< [...]
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request              = action_definition
-  action_definition  = 1( Category CRLF )
-                       *( Attribute CRLF )
-
-response     = N/A
-\end{verbatim}
-
-\end{description}
-
-\subsubsection{Handling \hl{Link} instances}
-Some exceptions on the creation and handling of \hl{Link} resource instances%
-\footnote{A \hl{Link} resource instance is an instance of the OCCI \hl{Link}
-type or a sub-type thereof.}
-are described in this section. They MUST be implemented by an OCCI
-implementation.
-
-\begin{description}
-  \item[Inline Creation of a \hl{Link} Instance] When creating an
-    instance of the OCCI \hl{Resource} type and \hl{Link}s are defined
-    in the request, those \hl{Link}s MUST be created implicitly. This
-    results in the creation of multiple REST resources. However, only
-    the Location of the REST resource which represents the requested
-    \hl{Kind} MUST be returned. The URIs of the \hl{Link}s can be
-    discovered by retrieving a rendering of the resource
-    instance. Attributes for the \hl{Link} resource instance MUST be
-    specified in the \hl{Link} rendering during the creation of the
-    resource instance. It is NOT recommended to supply the 'self'
-    parameter to inline Link representation.
-
-\begin{verbatim}
-> POST /compute/ HTTP/1.1
-> [...]
->
-> Category: compute;
-            scheme="http://schemas.ogf.org/occi/infrastructure#";
-            class="kind";
-> Link: </network/123>;
-        rel="http://schemas.ogf.org/occi/infrastructure#network";
-        category="http://schemas.ogf.org/occi/infrastructure#networkinterface";
-        occi.networkinterface.interface="eth0";
-        occi.networkinterface.mac="00:11:22:33:44:55";
-> X-OCCI-Attribute: occi.compute.cores=2
-> X-OCCI-Attribute: occi.compute.hostname="foobar"
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-< Location: http://example.com/vms/foo/vm1
-\end{verbatim}
-
-  \item[Retrieving \hl{Resource} instances With Defined \hl{Link}s]
-    When an resource instance of the OCCI \hl{Resource} type is
-    rendered it MUST expose all its owned \hl{Link}s. Since \hl{Link}s
-    are directed only those originating outward SHOULD be listed.
-
-\begin{verbatim}
-> GET /vms/foo/vm1 HTTP/1.1
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-< Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="kind";
-< Category: my_stuff; scheme="http://example.com/occi/my_stuff#"; class="mixin";
-< X-OCCI-Attribute: occi.compute.cores=2
-< X-OCCI-Attribute: occi.compute.hostname="foobar"
-< Link: </network/123>;
-        rel="http://schemas.ogf.org/occi/infrastructure#network";
-        self="/link/networkinterface/456";
-        category="http://schemas.ogf.org/occi/infrastructure#networkinterface";
-        occi.networkinterface.interface="eth0";
-        occi.networkinterface.mac="00:11:22:33:44:55";
-        occi.networkinterface.state="active";
-\end{verbatim}
-
-  \item[Creation of \hl{Link} resource instances] To directly create a
-    \hl{Link} between two existing resource instances the \hl{Kind} as
-    well as a occi.core.source and occi.core.target attribute MUST be
-    provided during creation of the \hl{Link} instance\footnote{See
-      section \ref{sec:ops_on_instances}}.
-
-\begin{verbatim}
-> POST /link/networkinterface/ HTTP/1.1
-> [...]
->
-> Category: networkinterface;
-            scheme="http://schemas.ogf.org/occi/infrastructure#";
-            class="kind";
-> X-OCCI-Attribute: occi.core.source="http://example.com/vms/foo/vm1"
-> X-OCCI-Attribute: occi.core.target="http://example.com/network/123"
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-< Location: http://example.com/link/networkinterface/456
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request                    = resource_representation
-resource_representation    = *( Category CRLF )
-                             *( Attribute CRLF )
-
-response                   = 0*1( resource_representation )
-\end{verbatim}
-
-  \item[Retrieval of \hl{Link} resource instances] Retrieval of a
-    \hl{Link} is the same to the retrieval of any other resource
-    instance. Please review section \ref{sec:ops_on_instances} for
-    more details.
-
-\begin{verbatim}
-> GET /link/networkinterface/456 HTTP/1.1
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-< Category: networkinterface;
-      scheme="http://schemas.ogf.org/occi/infrastructure#";
-      class="kind";
-< X-OCCI-Attribute: occi.networkinterface.interface="eth0";
-< X-OCCI-Attribute: occi.networkinterface.mac="00:11:22:33:44:55";
-< X-OCCI-Attribute: occi.networkinterface.state="active";
-< X-OCCI-Attribute: occi.core.source="/vms/foo/vm1"
-< X-OCCI-Attribute: occi.core.target="/network/123"
-\end{verbatim}
-
-    The information which needs to be present in the request and
-    response are defined as following and MUST be implemented by an
-    OCCI implementation.
-
-\begin{verbatim}
-request                    = N/A
-
-response                   =  1*( resource_representation )
-  resource_representation  = *( Category CRLF )
-                             *( Attribute CRLF )
-\end{verbatim}
-
-\end{description}
-
-\subsection{Syntax and Semantics of the Rendering}
-\label{sec:syntax}
-All data transferred using the \textit{text/occi} and
-\textit{text/plain} content types is structured text. These rendering
-structures are compliant with and follow the rules of HTTP headers
-\cite{rfc2616}.  Four specific rendering structures are only ever
-used:
-
-\begin{itemize}
-  \item Category
-  \item Link
-  \item X-OCCI-Attribute
-  \item X-OCCI-Location
-\end{itemize}
-
-The \textit{text/occi} content type renders these rendering structures
-as HTTP headers in the header portion of a HTTP request or
-response. The \textit{text/plain} content type renders the same
-rendering structures, with identical syntax, in the body of the HTTP
-request/response. See section \ref{sec:content_type} for more
-information on the use of different content types.
-
-Multiple field values per rendering structure MUST be supported as
-defined by RFC~2616 \cite{rfc2616}. This applies to both the
-\textit{text/occi} and \textit{text/plain} content types. RFC 2616
-defines two different methods to render multiple header field values,
-either a comma-separated list or multiple header lines. The following
-two rendering examples are identical and both formats MUST be
-supported by both OCCI client and server to be compliant.
-
-Comma-separated rendering of multiple HTTP header field values:
-
-\begin{verbatim}
-X-OCCI-Attribute: occi.compute.memory=2.0, occi.compute.speed=2.33
-X-OCCI-Location: /compute/123, /compute/456
-\end{verbatim}
-
-Separate header lines for each HTTP header field value:
-\begin{verbatim}
-X-OCCI-Attribute: occi.compute.memory=2.0
-X-OCCI-Attribute: occi.compute.speed=2.33
-X-OCCI-Location: /compute/123
-X-OCCI-Location: /compute/456
-\end{verbatim}
-
-\subsubsection{Rendering of the OCCI Category, Kind and Mixin Types}
-\label{sec:render_cats}
-Instances of the \hl{Category}, \hl{Kind} and \hl{Mixin} types
-\cite{occi:core} MUST be rendered using the Category header as defined
-by the Web Categories specification%
-\footnote{http://tools.ietf.org/html/draft-johnston-http-category-header-01}.
-
-The following syntax applies:
+The following syntax MUST be used for \hl{Category} renderings:
 
 \begin{verbatim}
 Category             = "Category" ":" #category-value
@@ -1183,47 +145,7 @@ Category             = "Category" ":" #category-value
   action             = type-identifier
 \end{verbatim}
 
-The {\tt attributes} parameter is used in the OCCI Query Interface,
-see section~\ref{sec:query}, to inform a client which attributes a
-particular \hl{Entity} sub-type supports. This information is used by
-the client to determine which attributes to include in an initial POST
-request to create a Resource.
-
-In addition to the existence of an attribute the Query Interface also
-informs a client whether an attribute is required or immutable, see
-the ``attribute-property'' in the syntax description above. The logic
-of attribute properties is as follows:
-
-\begin{itemize}
-  \item If no attribute properties are defined the attribute is
-    mutable and non-required, i.e. multiplicity is 0..x.
-  \item If the ``{\tt immutable}'' property is set the attribute is
-    immutable (not modifiable by the client).
-  \item If the ``{\tt required}'' property is set the attribute has a
-    multiplicity of 1..x, i.e.~it MUST be specified by the client.
-\end{itemize}
-
-The following example illustrates a rendering of the \hl{Kind}
-instance assigned to the \hl{Storage} type \cite{occi:infrastructure}:
-
-\begin{verbatim}
-Category: storage;
-    scheme="http://schemas.ogf.org/occi/infrastructure#";
-    class="kind";
-    title="Storage Resource";
-    rel="http://schemas.ogf.org/occi/core#resource";
-    location="/storage/";
-    attributes="occi.storage.size{required} occi.storage.state{immutable}";
-    actions="http://schemas.ogf.org/occi/infrastructure/storage/action#resize ...";
-\end{verbatim}
-
-\subsubsection{Rendering of OCCI Link Instance References}
-The rendering of a \hl{resource} instance \cite{occi:core} MUST
-represent any associated \hl{Link} instances using the HTTP Link
-header specified in the Web Linking RFC 5988 \cite{rfc5988}.  For
-example, rendering of a \hl{Compute} instance linked to a \hl{Storage}
-instance MUST include a Link header displaying the OCCI \hl{Link}
-instance of the relation.
+\subsection{Link CRLF}
 
 The following syntax MUST be used to represent OCCI \hl{Link} type
 instance references:
@@ -1246,33 +168,11 @@ Link               = "Link" ":" #link-value
   attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
 \end{verbatim}
 
-The following example illustrates the rendering of a
-\hl{NetworkInterface} \cite{occi:infrastructure} instance linking to a
-\hl{Network} resource instance:
-
-\begin{verbatim}
-Link: </network/123>;
-    rel="http://schemas.ogf.org/occi/infrastructure#network";
-    self="/link/networkinterface/456";
-    category="http://schemas.ogf.org/occi/infrastructure#networkinterface";
-    occi.networkinterface.interface="eth0";
-    occi.networkinterface.mac="00:11:22:33:44:55";
-    occi.networkinterface.state="active";
-\end{verbatim}
-
-\subsubsection{Rendering of References to OCCI Action Instances}
-The rendering of a \hl{Resource} instance \cite{occi:core} MUST
-represent any associated \hl{Action} instances using the HTTP Link
-header specified in the Web Linking RFC 5988 \cite{rfc5988}.  For
-example, rendering of a \hl{Compute} instance MUST include a Link
-header displaying any \hl{Action}s currently applicable to the
-resource instance.
-
 The following syntax MUST be used to represent OCCI \hl{Action}
 instance references:
 
 \begin{verbatim}
-Link               = "Link" ":" #link-value
+ActionLink         = "Link" ":" #link-value
   link-value       = "<" action-uri ">"
                     ";" "rel" "=" <"> action-type <">
   term             =  LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
@@ -1282,36 +182,13 @@ Link               = "Link" ":" #link-value
   action-uri       = URI "?" "action=" term
 \end{verbatim}
 
-The following example illustrates the rendering of a reference to the
-``start'' \hl{Action} defined for the \hl{Compute} type
-\cite{occi:infrastructure}. Such a reference would be present in the
-rendering of a \hl{Compute} instance.
-
-\begin{verbatim}
-Link: </compute/123?action=start>;
-    rel="http://schemas.ogf.org/occi/infrastructure/compute/action#start"
-\end{verbatim}
-
-\subsubsection{Rendering of OCCI Entity Attributes}
-Attributes defined for OCCI \hl{Entity} sub-types \cite{occi:core},
-i.e.~\hl{Resource} and \hl{Link}, MUST be rendered using the
-X-OCCI-Attribute HTTP header. For example the rendering of a
-\hl{Compute} instance MUST render the associated attributes, such as
-e.g. \texttt{occi.compute.memory}, using X-OCCI-Attribute headers.
-
-The X-OCCI-Attribute header uses a simple key-value format where each
-HTTP header field value represent a single attribute. The field value
-consist of an attribute name followed by the equal sign (``='') and an
-attribute value.
-
-The following syntax MUST be used to represent OCCI \hl{Entity}
-attributes:
+\subsection{Attribute CRLF}
 
 \begin{verbatim}
 Attribute          = "X-OCCI-Attribute" ":" #attribute-repr
   attribute-repr   = attribute-name "=" ( string | number | bool | enum_val )
   attribute-name   = attr-component *( "." attr-component )
-  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )	
   string           = quoted-string
   number           = (int | float)
   int              = *DIGIT
@@ -1320,340 +197,153 @@ Attribute          = "X-OCCI-Attribute" ":" #attribute-repr
   enum_val         = string
 \end{verbatim}
 
-Attribute names for the infrastructure types are defined in the OCCI
-Infrastructure document \cite{occi:infrastructure}.  The rules for
-defining new attribute names can be found in the ``Extensibility''
-section of the OCCI Core document \cite{occi:core}.
-
-The following example illustrates a rendering of the attributes
-defined by \hl{Compute} type \cite{occi:infrastructure}:
-
-\begin{verbatim}
-X-OCCI-Attribute: occi.compute.architecture="x86_64"
-X-OCCI-Attribute: occi.compute.cores=2
-X-OCCI-Attribute: occi.compute.hostname="testserver"
-X-OCCI-Attribute: occi.compute.speed=2.66
-X-OCCI-Attribute: occi.compute.memory=3.0
-X-OCCI-Attribute: occi.compute.state="active"
-\end{verbatim}
-
-\subsubsection{Rendering of Location-URIs}
-In order to render an OCCI representation solely in the HTTP header,
-i.e.~using the \textit{text/occi} content type, the X-OCCI-Location
-\footnote{This was introduced as the HTTP Location Header can have
-  only one value where as this can have multiple.}  HTTP header MUST
-be used to return a list of resource instance URIs. Each header field
-value correspond to a single URI. Multiple resource instance URIs are
-returned using multiple X-OCCI-Location headers.
+\subsection{Location CRLF}
 
 \begin{verbatim}
 Location      = "X-OCCI-Location" ":" location-value
   location-value  = URI-reference
 \end{verbatim}
 
-The following example illustrates the rendering of a list of
-\hl{Compute} resource instances:
-\begin{verbatim}
-X-OCCI-Location: http://example.com/compute/123
-X-OCCI-Location: http://example.com/compute/456
-X-OCCI-Location: http://example.com/compute/789
-\end{verbatim}
+\section{Renderings}
 
-\subsection{General HTTP Behaviors Adopted by OCCI}
-The following sections deal with some general HTTP features which are
-adopted by OCCI.
+\subsection{Entity Instance Rendering}
 
-\subsubsection{Security and Authentication}
-OCCI does not require that an authentication mechanism be used nor
-does it require that client to service communications are secured. It
-does RECOMMEND that an authentication mechanism be used and that where
-appropriate, communications are encrypted using HTTP over TLS. The
-authentication mechanisms that MAY be used with OCCI are those that
-can be used with HTTP and TLS. For further discussion see Section
-\ref{sec:sec_consid}.
+Entity instances MUST be rendered according to the following definitions.
 
-\subsubsection{Additional Headers (Caching Headers)}
-The responses from an OCCI implementation MAY include additional
-headers like those for caching purposes like E-Tags.
+\subsubsection{Resource Instance Rendering}
 
-\subsubsection{Asynchronous Operations}
-\label{sec:async_ops}
-OCCI implementations MAY implement a way to deal with asynchronous
-calls. Upon long-running operations the OCCI implementation MAY return
-a temporary resource (e.g. a task resource) using the HTTP Location
-header and a corresponding HTTP 202 return code. Clients can query
-that resource until the operation finishes. Upon completion of the
-operation this temporary result will redirect to the resulting REST
-resource using the HTTP Location header and return the HTTP 301 return
-code signalling the completion.
-
-\subsubsection{Batch operations}
-Batch operations, like the ones in described in section
-\ref{sec:mixin_and_kind_operations}, are atomic. All parts of the
-request MUST be processed - no partial execution is allowed.
-
-\subsubsection{Versioning}
-Information about what version of OCCI is supported by a OCCI
-implementation MUST be advertised to a client on each response to a
-client. The version field in the response MUST include the value
-OCCI/X.Y, where X is the major version number and Y is the minor
-version number of the implemented OCCI specification. The server
-response MUST relay versioning information using the HTTP Server
-header.
+A \hl{Resource} instance MUST be rendered using the following definition:
 
 \begin{verbatim}
-HTTP/1.1 200 OK
-Server: occi-server/1.1 (linux) OCCI/1.1
-[...]
+	resource_rendering = 1*( Category CRLF )
+    	                  *( Link CRLF )
+    	                  *( ActionLink CRLF )
+        	              *( Attribute CRLF )
 \end{verbatim}
 
-Complimenting the service-side behavior of an OCCI implementation, a
-client SHOULD indicate to the OCCI implementation the version it
-expects to interact with. For the clients, the information SHOULD be
-advertised in all requests it issues. A client request SHOULD relay
-versioning information in the 'User-Agent' header. The 'User-Agent'
-field MUST include the same value (OCCI/X.Y) as supported by the HTTP
-Server header.
+\paragraph{Action Invocation Rendering}
+
+Upon an \hl{Action} invocation the client MUST send along the following definition:
 
 \begin{verbatim}
-GET <Path> HTTP/1.1
-Host: example.com
-User-Agent: occi-client/1.1 (linux) libcurl/7.19.4 OCCI/1.1
-[...]
+	action_definition = 1( Category CRLF )
+        	            *( Attribute CRLF )
 \end{verbatim}
 
-If an OCCI implementation receives a request from a client that
-supplies a version number higher than the service supports, the
-service MUST respond back to the client with an exception indicating
-that the requested version is not implemented. Where a client
-implements OCCI using a HTTP transport, the HTTP code 501, not
-implemented, MUST be used.
+\subsubsection{Link Instance Rendering}
 
-OCCI implementations which implement this version of this Document
-MUST use the version string \emph{OCCI/1.1}. Versioning of extensions
-is out of scope for this version of the document.
-
-\subsubsection{Content-type and Accept headers}
-\label{sec:content_type}
-A server MUST react according to the Accept header the client
-provides. A client SHOULD provide the Accept header in a request. If
-none is given - or \textit{*/*} is used - the service MUST use the
-Content-type \emph{text/plain}. This is the default and fall-back
-rendering and MUST be implemented. Otherwise the according rendering
-MUST be used. Each Rendering SHOULD expose which Accept and
-Content-type header fields it can handle. Overall the service MUST
-support \textit{text/occi}, \textit{text/plain} and
-\textit{text/uri-list}.
-
-The server MUST return the proper Content-type header. A client MUST
-provide the proper Content-Type when data is send to the OCCI
-implementation - the information MUST be parsed accordingly.
-
-When the Client requests a Content-Type that will result in an
-incomplete or faulty rendering the Service MUST return the 406 'Not
-acceptable' HTTP code.
-
-The following examples demonstrate the behavior of an HTTP GET
-operations on the resource instance \emph{} using two different HTTP
-Accept headers:
+A \hl{Link} instance MUST be rendered using the following definition:
 
 \begin{verbatim}
-> GET /vms/foo/vm1 HTTP/1.1
-> Accept: text/plain
-> [...]
-
-< HTTP/1.1 200 OK
-< [...]
-<
-< Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="kind";
-< Category: my_stuff; scheme="http://example.com/occi/my_stuff#"; class="mixin";
-< X-OCCI-Attribute: occi.compute.cores=2
-< X-OCCI-Attribute: occi.compute.hostname="foobar"
-< Link: [...]
+	link_rendering = 1*( Category CRLF )
+    	              *( ActionLink CRLF )
+        	          *( Attribute CRLF )
 \end{verbatim}
 
-And with \emph{text/occi} as HTTP Accept header:
+% HERE I AM
+
+\subsection{Category Instance Rendering}
+\label{sec:format_category_instance_rendering}
+
+ABNF
+
+\subsubsection{Kind Instance Rendering}
+\label{sec:format_kind}
+
+ look above
+
+\subsubsection{Mixin Instance Rendering}
+\label{sec:format_mixin}
+
+look above
+
+\subsubsection{Action Instance Rendering}
+\label{sec:format_action}
+
+ABNF
+
+\subsection{Entity Collection Rendering}
 
 \begin{verbatim}
-> GET /vms/foo/vm1 HTTP/1.1
-> Accept: text/occi
-> [...]
-
-< HTTP/1.1 200 OK
-< Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="kind";,
-            my_stuff; scheme="http://example.com/occi/my_stuff#"; class="mixin";
-< X-OCCI-Attribute: occi.compute.cores=2, occi.compute.hostname=foobar
-< Link: [...]
-< [...]
-<
-< OK
+	resource_representations  = *( Location CRLF ) 
 \end{verbatim}
 
-\paragraph{The Content-type text/plain}
-While using this rendering with the Content-Type \textit{text/plain}
-the information described in section \ref{sec:syntax} MUST be placed
-in the HTTP Body.
+\subsubsection{Resource Collection Rendering}
 
-Each rendering of an OCCI base type will be placed in the body. Each
-entry consists of a name followed by a colon (":") and the field
-value. The format of the field value is specified separately for each
-of the three header fields, see section \ref{sec:syntax}.
+see above
 
-\paragraph{The Content-type text/occi}
-While using this rendering with the Content-Type \textit{text/occi}
-the information described in section \ref{sec:syntax} MUST be placed
-in the HTTP Header. The body MUST contain the string 'OK' on
-successful operations.
+\subsubsection{Link Collection Rendering}
 
-The HTTP header fields MUST follow the specification in RFC 2616
-\cite{rfc2616}. A header field consists of a name followed by a colon
-(":") and the field value. The format of the field value is specified
-separately for each of the header fields, see section
-\ref{sec:syntax}.
+see above
 
-\textbf{Limitations: } HTTP header fields MAY appear multiple times in
-a HTTP request or response. In order to be OCCI compliant, the
-specification of multiple message-header fields according to RFC 2616
-MUST be fully supported. In essence there are two valid representation
-of multiple HTTP header field values. A header field might either
-appear several times or as a single header field with a
-comma-separated list of field values. Due to implementation issues in
-many web frameworks and client libraries it is RECOMMENDED to use the
-comma-separated list format for best interoperability.
+\subsection{Category Collection Rendering}
 
-HTTP header field values which contain separator characters MUST be
-properly quoted according to RFC 2616.
-
-Space in the HTTP header section of a HTTP request is a limited
-resource. By this, it is noted that many HTTP servers limit the number
-of bytes that can be placed in the HTTP Header area. Implementers MUST
-be aware of this limitation in their own implementation and take
-appropriate measures so that truncation of header data does NOT occur.
-
-\paragraph{The Content-type text/uri-list}
-This Rendering can handle the \textit{text/uri-list} Accept Header. It
-will use the Content-type \textit{text/uri-list}.
-
-This rendering cannot render resource instances or \hl{Kind}s or
-\hl{Mixin}s directly but just links to them. For concrete rendering of
-Kinds and Categories the Content-types \textit{text/occi},
-\textit{text/plain} MUST be used. If a request is done with the
-\textit{text/uri-list} in the Accept header, while not requesting for
-a Listing a Bad Request MUST be returned. Otherwise a list of
-resources MUST be rendered in \emph{text/uri-list} format, which can
-be used for listing resource in collections or the name-space of the
-OCCI implementation.
-
-\subsubsection{RFC5785 Compliance}
-\label{sec:rfc5785_compliance}
-Should implementations wish to advertise the Query Interface using the
-.well-known mechanism defined by "Defining Well-Known Uniform Resource
-Identifiers" \cite{rfc5785} then they MUST use the following path
-served from the authority:
-
-/.well-known/org/ogf/occi/-/
-
-The functionality accessible at this location MUST exactly mirror that
-as defined in section \ref{sec:query} on the Query Interface.
-
-\subsubsection{Return Codes}
-\label{sec:return_codes}
-At any point the service provider MAY return any of the following HTTP
-Return Codes in table. These codes are for behaviors in section
-\ref{sec:behaviours} where appropriate \ref{tbl:http_codes}
-
-\mytablefloat{\label{tbl:http_codes}HTTP Return Codes}{
-\begin{tabular}{l|l|p{3in}}
-\toprule
-Code & Description & Notes \\
-\colrule
-200 & OK & Indicates that the request was successful. The response MUST contain the created resource instance's representation.\\
-201 & OK & Indicates that the request was successful. The response MUST contain a HTTP Location header to the newly created resource instance.\\
-202 & Accepted & Used for asynchronous non-blocking calls. See section \ref{sec:async_ops}.\\
-204 & OK, but no content returned. & This is used to indicate that a collection is empty.\\
-400 & Bad Request & Used to signal parsing errors or missing information (e.g. an attribute that is required is not supplied in the request). This applies also to filters.  \\
-401 & Unauthorized & The client does not have the required permissions/credentials.\\
-403 & Forbidden & Used to signal that a particular Mixin cannot be applied to a resource instance of a particular Kind. Used to signal that an attempt was made to modify an attribute that was marked as immutable.\\
-404 & Not Found & Used to signal that the request had information (e.g. a kind, mixin, action, attribute, location) that was unknown to the service and so not found.\\
-405 & Method Not Allowed & The service does not allow the client to issue the HTTP method against the requested path/location\\
-406 & Not Acceptable & See section \ref{sec:content_type} \\
-409 & Conflict & A request contains content (e.g. mixin, kind, action) that results in an internal service, non-unique result (e.g. two types of start actions are found for Compute). The client MUST resolve the conflict by re-trying with specific Category information in the request.\\
-410 & Gone & A client attempts to retrieve a resource instance that no longer exists (i.e. it was deleted).\\
-% 415 & Unsupported Media Type & See section \ref{sec:content_type}\\
-500 & Internal Server Error & The state before the request should be maintained in such an error condition. The implementation MUST roll-back any partial changes made during the erroneous execution.\\
-501 & Not Implemented & If an implementation chooses not to implement a particular OCCI feature, it MUST signal the lack of that feature with this code. This implicitly points to a non-compliant OCCI implementation.\\
-503 & Service Unavailable & If the OCCI service is taken down for maintenance, this error code should be reported from the root of the name-space the provider uses.\\
-\botrule
-\end{tabular}}
-
-\subsection{More Complete Examples}
-Since most examples are not complete due to space limitations this
-section will give some more complete examples.
-
-\subsubsection{Creating a Compute resource instance}
 \begin{verbatim}
-> POST /compute/ HTTP/1.1
-> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
-> Host: localhost:8080
-> Accept: */*
-> Content-Type: text/occi
-> Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="kind";
->
-< HTTP/1.1 200 OK
-< Content-Length: 2
-< Content-Type: text/plain; charset=UTF-8
-< Location: http://example.com/users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096
-< Server: example-occi OCCI/1.1
-<
-< OK
+	resource\_representations  = *( Category CRLF ) 
 \end{verbatim}
 
-\subsubsection{Retrieving a Compute resource instance}
-\begin{verbatim}
-> GET /users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096 HTTP/1.1
-> User-Agent: curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
-> Host: localhost:8080
-> Accept: */*
->
-< HTTP/1.1 200 OK
-< Content-Length: 642
-< Etag: "ef485dc7066745cb0fe1e31ecdd4895c356b5bd5"
-< Content-Type: text/plain
-< Server: example-occi OCCI/1.1
-<
-< Category: compute;
-<     scheme="http://schemas.ogf.org/occi/infrastructure#"
-<     class="kind";
-< Link: </users/foo/compute/b9ff813e-fee5-4a9d-b839-673f39746096?action=start>;
-<     rel="http://schemas.ogf.org/occi/infrastructure/compute/action#start"
-< X-OCCI-Attribute: occi.core.id="urn:uuid:b9ff813e-fee5-4a9d-b839-673f39746096"
-< X-OCCI-Attribute: occi.core.title="My Dummy VM"
-< X-OCCI-Attribute: occi.compute.architecture="x86"
-< X-OCCI-Attribute: occi.compute.state="inactive"
-< X-OCCI-Attribute: occi.compute.speed=1.33
-< X-OCCI-Attribute: occi.compute.memory=2.0
-< X-OCCI-Attribute: occi.compute.cores=2
-< X-OCCI-Attribute: occi.compute.hostname="dummy"
-\end{verbatim}
+\subsubsection{Kind Collection Rendering}
 
-\section{OCCI Compliance Tools}
-For the ease of generating compliant parsers an
-ANTLR\footnote{http://www.antlr.org} grammar is available
-from\footnote{http://github.com/dizz/occi-grammar} where it is updated
-and maintained. It is based on the ABNF grammars quoted through out
-the document. It can parse the OCCI text renderings of Category, Link,
-X-OCCI-Attribute and X-OCCI-Location. It is recommended that
-implementers use this grammar as a means to generate OCCI compliant
-parsers.
+see above
 
-To verify an implementations run-time behavior, the OCCI Compliance
-Testing Tool is provided
-\footnote{http://forge.ogf.org/sf/scm/do/listRepositories/projects.occi-wg/scm}.
-This tool uses the OCCI ANTLR generated parser along with various HTTP
-libraries to ensure that a OCCI implementation reacts and responds
-correctly to valid OCCI client requests. It is recommended that
-implementers use this tool to aid them in validating compliance with
-OCCI.
+\subsubsection{Mixin Collection Rendering}
+
+see above
+
+\subsubsection{Action Collection Rendering}
+
+see above
+
+\subsection{Attributes Rendering}
+
+\subsubsection{Entity Instance Attribute Rendering Specifics}
+
+\subsubsection{Attribute Description Rendering}
+\label{sec:format_attribute_description}
+
+\section{OCCI Text plain rendering}
+The OCCI Text plain rendering specifies a rendering of OCCI instance types in a simple text format.
+
+The rendering can be used to render OCCI instances independently of the
+protocol being used. Thus messages can be delivered by e.g. the HTTP
+protocol as specified in \cite{occi:protocol}.
+
+The following media-types MUST be used for the OCCI Text plain rendering:
+
+	{\tt text/occi+plain}
+
+and
+
+	{\tt text/plain}
+
+TODO: say stuff goes in the body. eithe rmultiple enties sep by "\\n" or by
+
+\section{OCCI header rendering}
+The OCCI Text plain rendering specifies a rendering of OCCI instance types in a simple text format.
+
+The rendering can be used to render OCCI instances independently of the
+protocol being used. Thus messages can be delivered by e.g. the HTTP
+protocol as specified in \cite{occi:protocol}.
+
+The following media-type MUST be used for the OCCI JSON Rendering:
+
+{\tt text/occi}
+
+All stuff goes in headers.
+
+\section{URI listening}
+The OCCI Text plain rendering specifies a rendering of OCCI instance types in a simple text format.
+
+The rendering can be used to render OCCI instances independently of the
+protocol being used. Thus messages can be delivered by e.g. the HTTP
+protocol as specified in \cite{occi:protocol}.
+
+The following media-types MUST be used for the OCCI JSON Rendering:
+
+{\tt text/occi+plain}
+{\tt text/plain}
+
+\subsection{Entity Collection Rendering}
 
 \section{Security Considerations}
 \label{sec:sec_consid}
