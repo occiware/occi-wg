@@ -130,11 +130,12 @@ The following kind MUST be present and represents the kind definition of an appl
 	occi.app.context & URL & 1 & Immutable & URL for contextualizing the app.\\
 	occi.app.url & URL & 1 & Immutable & DNS entry.\\
 	occi.app.state & Enum \{active, inactive, error\} & 1 & Immutable & State of the application.\\
+	occi.app.state.message & String & 0..1 & Immutable & Human-readable explanation of the current instance state.
 	\botrule
 	\end{tabular}
 }
 
-Table~\ref{tbl:app} describes the OCCI Attributes defined by \hl{Application} instance. These attributes MAY or MUST be exposed by an instance of the \hl{Application} type depending on the ``Multiplicity'' column in the aforementioned table.
+Table~\ref{tbl:app} describes the Attributes defined by \hl{Application} instance. These attributes MAY or MUST be exposed by an instance of the \hl{Application} type depending on the ``Multiplicity'' column in the aforementioned table.
 
 The \hl{Action}s are defined by the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/platform\#application}. Every \hl{Action} instance in the table uses the\textit{http://schemas.ogf.org/occi/platform/action\#} categorisation scheme. ``Action Term'' below refers to \hl{Action}.{\tt term}
 
@@ -176,11 +177,12 @@ The following kind MUST be present and represents the kind definition of an comp
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
 	occi.component.state & Enum \{active, inactive, error\} & 1 & Immutable & State of the component.\\
+	occi.component.state.message & String & 0..1 & Immutable & Human-readable explanation of the current instance state.
 	\botrule
 	\end{tabular}
 }
 
-Table~\ref{tbl:component} describes the OCCI Attributes defined by \hl{Component} instance. These attributes MAY or MUST be exposed by an instance of the \hl{Component} type depending on the ``Multiplicity'' column in the aforementioned table.
+Table~\ref{tbl:component} describes the Attributes defined by \hl{Component} instance. These attributes MAY or MUST be exposed by an instance of the \hl{Component} type depending on the ``Multiplicity'' column in the aforementioned table.
 
 The \hl{Action}s are defined by the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/platform\#Component}. Every \hl{Action} instance in the table uses the\textit{http://schemas.ogf.org/occi/platform/action\#} categorisation scheme. ``Action Term'' below refers to \hl{Action}.{\tt term}
 
@@ -212,7 +214,7 @@ The state model for the \hl{Component} instance is defined in \ref{fig:component
 
 The composition of a service is realized through the linkage of \hl{Application} and \hl{Component} instances with each other. 
 
-\hl{ComponentLink} inherits the \hl{Link} base type defined in OCCI Core Model \cite{occi:core}. \hl{ComponentLink} is assigned the \hl{Link} instance \textit{http://schemas.ogf.org/occi/platform\#componentLink}.
+\hl{ComponentLink} inherits the \hl{Link} base type defined in OCCI Core Model \cite{occi:core}. \hl{ComponentLink} is assigned the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/platform\#componentLink}. The \hl{Kind} instance assigned to the \hl{ComponentLink} type MUST be related to the \textit{http://schemas.ogf.org/occi/core\#link} \hl{Kind} by setting the \textit{parent} attribute.
 
 The componentLink kind can be further enhanced by the use of  provider specific Mixins. This can be used to expose details such as databased access URIs for an application linked up with a database component.
 
@@ -260,7 +262,7 @@ The following sections describe \hl{Mixin}s instances which SHOULD be implemente
 	\end{tabular}
 }
 
-Table~\ref{tbl:database} describes the OCCI Attributes defined by \hl{Database} instance. 
+Table~\ref{tbl:database} describes the Attributes defined by \hl{Database} instance. 
 
 \subsubsection{Database Link}
 In case that a \hl{Application} instance links to a \hl{Component} instance which has the \hl{Database} \hl{Mixin} instance applied the following \hl{Mixin} SHOULD be applied to the \hl{ComponentLink}.
@@ -282,7 +284,7 @@ In case that a \hl{Application} instance links to a \hl{Component} instance whic
 	\end{tabular}
 }
 
-Table~\ref{tbl:database_link} describes the OCCI Attributes defined by \hl{DatabaseLink} instance. 
+Table~\ref{tbl:database_link} describes the Attributes defined by \hl{DatabaseLink} instance. 
 
 % end platform content
 
