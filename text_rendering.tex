@@ -408,6 +408,7 @@ The following media-types MUST be used for the URI Rendering:
 {\tt text/uri-list}
 
 This rendering cannot render resource instances or Kinds or Mixins directly but just links to them. For concrete rendering of Kinds and Categories the Content-types text/occi, text/plain MUST be used. If a request is done with the text/uri-list in the Accept header, while not requesting for a Listing a Bad Request MUST be returned. Otherwise a list of resources MUST be rendered in {\\tt text/uri-list} format as defined in \cite{rfc2483}, which can be used for listing resource in collections or the name-space of the OCCI implementation.
+
 \section{Security Considerations}
 OCCI does not require that an authentication mechanism be used nor
 does it require that client to service communications are secured. It
