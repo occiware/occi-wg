@@ -1,6 +1,8 @@
 \documentclass[10pt,a4paper]{article}
-\usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true]{microtype}
+\usepackage[plainpages=false,pdfpagelabels,unicode]{hyperref}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -186,7 +188,7 @@ ActionLink         = "Link" ":" #link-value
 Attribute          = "X-OCCI-Attribute" ":" #attribute-repr
   attribute-repr   = attribute-name "=" ( string | number | bool | enum_val )
   attribute-name   = attr-component *( "." attr-component )
-  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )	
+  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
   string           = quoted-string
   number           = (int | float)
   int              = *DIGIT
@@ -271,7 +273,7 @@ Note that an \hl{Action} instance MUST NOT have \hl{Link} and \hl{Action}s refer
 A collection of \hl{Resource} or \hl{Link} instances MUST be rendered as following:
 
 \begin{verbatim}
-	entity_collection_rendering = *( Location CRLF ) 
+	entity_collection_rendering = *( Location CRLF )
 \end{verbatim}
 
 \subsubsection{Resource Collection Rendering}
@@ -287,7 +289,7 @@ see above
 For the Query interface the following \hl{Category} instance rendering MUST be used:
 
 \begin{verbatim}
-	category_collection_rendering = *( Category CRLF ) 
+	category_collection_rendering = *( Category CRLF )
 \end{verbatim}
 
 \subsubsection{Kind Collection Rendering}
@@ -415,7 +417,7 @@ does it require that client to service communications are secured. It
 does RECOMMEND that an authentication mechanism be used and that where
 appropriate, communications are encrypted using HTTP over TLS. The
 authentication mechanisms that MAY be used with OCCI are those that
-can be used with HTTP and TLS. For further discussion see the 
+can be used with HTTP and TLS. For further discussion see the
 appropiate section in \cite{occi:protocol}.
 
 \section{Glossary}

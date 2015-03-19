@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true]{microtype}
+\usepackage[plainpages=false,pdfpagelabels,unicode]{hyperref}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -114,7 +115,7 @@ These platform types inherit the OCCI Core Model Resource base type and all thei
 As REQUIRED by the OCCI Core Model specification, every type instantiated that is a  sub-type of \hl{Resource} or \hl{Link} MUST be assigned a Kind that identifies the instantiated type. Each such Kind instance MUST be related to the Resource or Link base type's Kind. That assigned Kind instance MUST always remain immutable to any client.
 
 \subsection{Application Kind Definition}
-The following kind MUST be present and represents the kind definition of an application resource. 
+The following kind MUST be present and represents the kind definition of an application resource.
 
 \hl{Application} inherits the \hl{Resource} base type defined in OCCI Core Model \cite{occi:core}. \hl{Application} is assigned the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/platform\#application}. A \hl{Application} instance MUST use and expose this \hl{Kind}.
 
@@ -164,7 +165,7 @@ The state model for the \hl{Application} instance is defined in \ref{fig:app_sta
 \end{figure}
 
 \subsection{Component Kind Definition}
-The following kind MUST be present and represents the kind definition of an component resource. 
+The following kind MUST be present and represents the kind definition of an component resource.
 
 \hl{Component} inherits the \hl{Resource} base type defined in OCCI Core Model \cite{occi:core}. \hl{Application} is assigned the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/platform\#component}. A \hl{Component} instance MUST use and expose this \hl{Kind}.
 
@@ -212,7 +213,7 @@ The state model for the \hl{Component} instance is defined in \ref{fig:component
 
 \subsection{Linking to Components}
 
-The composition of a service is realized through the linkage of \hl{Application} and \hl{Component} instances with each other. 
+The composition of a service is realized through the linkage of \hl{Application} and \hl{Component} instances with each other.
 
 \hl{ComponentLink} inherits the \hl{Link} base type defined in OCCI Core Model \cite{occi:core}. \hl{ComponentLink} is assigned the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/platform\#componentLink}. The \hl{Kind} instance assigned to the \hl{ComponentLink} type MUST be related to the \textit{http://schemas.ogf.org/occi/core\#link} \hl{Kind} by setting the \textit{parent} attribute.
 
@@ -222,7 +223,7 @@ The componentLink kind can be further enhanced by the use of  provider specific 
 Platform Templates allow for clients of an OCCI implementation to quickly and conveniently apply predefined configurations to OCCI Platform defined types. They are implemented using Mixin instances. There are two supported platform templates types in OCCI Platform.
 
 \subsubsection{Application Template}
-Application templates allow clients to define which underlying framework the application should use (e.g. Programming language). 
+Application templates allow clients to define which underlying framework the application should use (e.g. Programming language).
 
 The Application Template is defined by a Mixin. A provider specific defined Application Template Mixin MUST relate to the OCCI Application Template Mixin in order to give absolute type information. The OCCI Application Template is defined by the \textit{http://schemas.ogf.org/occi/platform\#app\_tpl} Mixin and MUST be supported SHOULD Application Templates be offered.
 
@@ -262,7 +263,7 @@ The following sections describe \hl{Mixin}s instances which SHOULD be implemente
 	\end{tabular}
 }
 
-Table~\ref{tbl:database} describes the Attributes defined by \hl{Database} instance. 
+Table~\ref{tbl:database} describes the Attributes defined by \hl{Database} instance.
 
 \subsubsection{Database Link}
 In case that a \hl{Application} instance links to a \hl{Component} instance which has the \hl{Database} \hl{Mixin} instance applied the following \hl{Mixin} SHOULD be applied to the \hl{ComponentLink}.
@@ -284,7 +285,7 @@ In case that a \hl{Application} instance links to a \hl{Component} instance whic
 	\end{tabular}
 }
 
-Table~\ref{tbl:database_link} describes the Attributes defined by \hl{DatabaseLink} instance. 
+Table~\ref{tbl:database_link} describes the Attributes defined by \hl{DatabaseLink} instance.
 
 % end platform content
 
