@@ -7,6 +7,8 @@
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{occi}
+
+
 \setlength{\headheight}{13pt}
 \pagestyle{fancy}
 
@@ -20,7 +22,7 @@
 
 % header
 \fancyhf{}
-\lhead{GFD-P-R.184}
+\lhead{GFD-R}
 \rhead{\today}
 
 % footer
@@ -61,11 +63,13 @@ OCCI-WG \hfill  \\
 
 \underline{Status of this Document}
 
+
 This document is a \underline{draft} providing information to the community regarding the specification of the Open Cloud Computing Interface.
+
 
 \underline{Copyright Notice}
 
-Copyright \copyright ~Open Grid Forum (2009-2015). All Rights
+Copyright \copyright ~Open Grid Forum (2009-2014). All Rights
 Reserved.
 
 \underline{Trademarks}
@@ -78,6 +82,9 @@ OCCI is a trademark of the Open Grid Forum.
 
 %--- occi slas contributors ---
 This document, part of a document series, produced by the OCCI working group within the Open Grid Forum (OGF), provides a high-level definition of a Protocol and API in relation with the Service Level Agreements extension of the OCCI Core Model. The document is based upon previously gathered requirements and focuses on the scope of important capabilities required to support modern service offerings.
+
+
+
 
 
 \newpage
@@ -153,7 +160,8 @@ The following sections describe the \hl{Agreement} and \hl{AgreementLink} types,
 
 The \hl{Agreement} type represents a generic contract resource which holds the information related to a SLA between a cloud service consumer and a provider for the provisioned resources (e.g. compute, storage, network etc.). The \hl{Agreement} type inherits the \hl{Resource} base-type defined in the OCCI Core Model \cite{occi:core}. The \hl{Kind} instance assigned to the \hl{Agreement} type is \textit{http://schemas.ogf.org/occi/sla\#agreement}. An \hl{Agreement} instance MUST relate and expose this \hl{Kind}.
 
-Table~\ref{tbl:agreement} describes the attributes defined by the \hl{Agreement} type through its \hl{Kind} instance. These attributes MUST be exposed by an instance of the \hl{Agreement} type. In Figure~\ref{fig:agreement-states} the allowed states of an \hl{Agreement} instance are presented. Those specific states MUST be assigned to an \hl{Agreement} instance by a cloud service provider SHOULD the implements the OCCI SLAs specification.
+Table~\ref{tbl:agreement} describes the attributes defined by the \hl{Agreement} type through its \hl{Kind} instance. These attributes MUST be exposed by an instance of the \hl{Agreement} type. In Figure~\ref{fig:agreement-states} the allowed states of an \hl{Agreement} instance are presented. Those specific states MUST be assigned to an \hl{Agreement} instance by a cloud service provider SHOULD the implements the OCCI SLAs specification. The \hl{agreedAt}, \hl{effectiveFrom} and \hl{effectiveUntil} attributes MUST have an absolute datetime value (data, time or combined format) but MUST NOT represent a duration or time interval formated value.
+
 
 
 \mytablefloat{
@@ -196,7 +204,7 @@ The actions that are applicable to \hl{Agreement} instances are presented in Tab
 	accept & Accepted & -- \\
 	reject & Rejected & -- \\
 	suspend & Suspended & -- \\
-	unsuspend & Accepted & -- \\
+	resume & Accepted & -- \\
 	terminate & Terminated & -- \\
 	\botrule
 	\end{tabular}
@@ -218,31 +226,32 @@ As can be seen in the example diagram bellow, the \hl{AgreementTemplate} mixin c
 \end{figure}
 
 \subsubsection{AgreementTerm Mixin}
-A necessary part of an agreement offer, as well as the consequent agreement, is the section of the agreement term. To this end, the OCCI SLAs suggests the introduction of the agreement terms through the \hl{Mixin} mechanism. The \hl{AgreementTerm Mixin} is assigned the “scheme” \textit{http://schemas.ogf.org/occi/sla\#} and the term \hl{agreement\_term}. An \hl{AgreementTerm} mixin MUST support these values. OCCI SLAs implementations SHOULD support this in order to provide a classification and definition mechanism for the various terms and conditions of the agreements. Therefore, the implementation of this functionality is OPTIONAL but RECOMMENDED.
+A necessary part of an agreement offer, as well as the consequent agreement, is the section of the agreement term. To this end, the OCCI SLAs introduces the agreement terms through the \hl{Mixin} mechanism. The \hl{AgreementTerm Mixin} is assigned the “scheme” \textit{http://schemas.ogf.org/occi/sla\#} and the term \hl{agreement\_term}. An \hl{AgreementTerm} mixin MUST support these values. OCCI SLAs implementations SHOULD support this in order to provide a classification and definition mechanism for the various terms and conditions of the agreements. Therefore, the implementation of this functionality is OPTIONAL but RECOMMENDED.
 
-Table~\ref{tbl:terms-attributes} shows the defined attributes for the \hl{AgreementTerm Mixin}. Following the rationale presented in the WS-Agreement specification \cite{ws-agreeement:2007} , OCCI SLAs defines two types of agreement terms: service terms and service level objectives (SLOs). The first includes information related with the service description and definition. The second refers to the guarantee terms that specify the service level which the two parties are agreeing to. A cloud service provider MAY introduce domain specific attributes to the \hl{AgreementTerm} mixin instances that he constructs, through the attributes set inherited from the \hl{Category} type. \hl{Mixin} relationships MAY be used in order to enforce classification of capabilities but also to allow resource specific instantiation of \hl{AgreementTerm}. For example, an availability \hl{Mixin} could be defined, which is depended on the \hl{AgreementTerm Mixin} type. The provider, then, MAY choose to instantiate different availability mixins for compute or storage resources (or any other offered resource) based on his own definition of availability for those resources.
+While the Agreement Term Mixin as defined does not include any generic attribute, a provider specific term (e.g. availability, compute service term etc.) SHOULD be depended from the OCCI SLAs \hl{AgreementTerm Mixin} and introduce a set of attributes that characterize those terms. In Table~\ref{tbl:terms-attributes} a list of attributes is presented that a provider MAY use for the definition of the custom terms mixins. Following the rationale presented in the WS-Agreement specification \cite{ws-agreeement:2007} , OCCI SLAs defines two types of agreement terms: service terms and service level objectives (SLOs). The first includes information related with the service description and definition. The second refers to the guarantee terms that specify the service level which the two parties are agreeing to. A cloud service provider MAY introduce more domain specific attributes to the \hl{AgreementTerm} mixin instances that he constructs, through the attributes set inherited from the \hl{Category} type. \hl{Mixin} relationships MAY be used in order to enforce classification of capabilities but also to allow resource specific instantiation of \hl{AgreementTerm}. For example, an availability \hl{Mixin} could be defined, which is depended on the \hl{AgreementTerm Mixin} type. The provider, then, MAY choose to instantiate different availability mixins for compute or storage resources (or any other offered resource) based on his own definition of availability for those resources.
 
 
 
 \mytablefloat{
 	\label{tbl:terms-attributes}
-	\hl{Attributes} for the AgreementTerm Mixin.
+	Suggested \hl{Attributes} for a provider-defined AgreementTerm Mixin.
 }
 {
 	\begin{tabular}{lp{2.5cm}p{1cm}lp{6cm}}
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
-	occi.agreement.term.type & Enum \{SERVICE-TERM,SLO, n/a\} & 1 & Mutable & The type of the term that is being defined.\\
-	occi.agreement.term.state & Enum \{Undefined,Fulfilled  Violated\} & 1 & Immutable & The state of fulfillment of the specific term. \\
-	occi.agreement.term.desc & String & 0\ldots1 & Mutable & The description of the agreement term defined with this mixin. \\
+	\{term\_name\}.term.type & Enum \{SERVICE-TERM,SLO-TERM, n/a\} & 1 & Immutable & The type of the term that is being defined.\\
+	\{term\_name\}.term.state & Enum \{Undefined, Fulfilled, Violated\} & 1 & Immutable & The state of fulfillment of the specific term. \\
+	\{term\_name\}.term.desc & String & 0\ldots1 & Immutable & The description of the agreement term defined with this mixin. \\
+	\{term\_name\}.term.remedy & String & 0\ldots1 & Immutable & The remedy value (e.g. price penalty) or action e.g. command) when an SLO term is being violated. \\
 	\botrule
 	\end{tabular}
 }
 
 
 
-The \hl{AgreementTerm} state can be either \textit{undefined}, \textit{fulfilled} or \textit{violated} (Figure~\ref{fig:terms-states}). The undefined state is the initial state of the term until an assessment is made. During runtime and while the service and SLA is being monitored the state MUST be fulfilled or violated. When multiple terms exist (e.g. provider specific terms) then if at least one term in an agreement has state violated, then the agreement is considered violated (\textit{occi.agreement.term.state=violated}).
+The \hl{AgreementTerm} state can be either \textit{undefined}, \textit{fulfilled} or \textit{violated} (Figure~\ref{fig:terms-states}). The undefined state is the initial state of the term until an assessment is made. During runtime and while the service and SLA is being monitored the state MUST be fulfilled or violated. When multiple terms exist (e.g. provider specific terms) then if at least one term in an agreement has state violated, then the agreement is considered violated (\textit{\{term\_name\}.term.state=violated}).
 
 \begin{figure}[!h]
 	{\centering \resizebox*{0.6\columnwidth}{!}{{\includegraphics{figs/terms-states.jpg}}} \par}
@@ -299,84 +308,7 @@ here.
 
 \section{Glossary}
 \label{sec:glossary}
-%\input{include/glossary}
-
-%--- occi slas glossary ---
-\begin{tabular}{l|p{12cm}}
-Term & Description \\
-\hline
-\hl{Action} & An OCCI base type. Represents an invocable operation on a \hl{Entity} sub-type instance or collection thereof. \\
-
-\hl{Attribute} & A type in the OCCI Core Model. Describes the name and properties of attributes found in \hl{Entity} types. \\
-
-\hl{Category} & A type in the OCCI Core Model and the basis of the OCCI type identification mechanism. The parent type of \hl{Kind}. \\
-
-capabilities & In the context of \hl{Entity} sub-types {\bf  capabilities} refer
-  to the OCCI \hl{Attribute}s and OCCI \hl{Action}s exposed by an {\bf entity
-  instance}. \\
-
-\hl{Client} & An OCCI client.\\
-
-\hl{Collection} & A set of \hl{Entity} sub-type instances all associated to a particular \hl{Kind} or \hl{Mixin} instance. \\
-
-\hl{Entity} & An OCCI base type. The parent type of \hl{Resource} and \hl{Link}. \\
-
-entity instance & An instance of a sub-type of \hl{Entity} but not an instance
-  of the \hl{Entity} type itself.  The OCCI model defines two sub-types of
-  \hl{Entity}, the \hl{Resource} type and the \hl{Link} type.  However, the
-  term {\em entity instance} is defined to include any instance of a
-  sub-type of \hl{Resource} or \hl{Link} as well. \\
-
-\hl{Kind} & A type in the OCCI Core Model. A core component of the OCCI classification system. \\
-
-\hl{Link} & An OCCI base type. A \hl{Link} instance associates one \hl{Resource} instance with another. \\
-
-\hl{Mixin} & A type in the OCCI Core Model. A core component of the OCCI classification system. \\
-
-mix-in & An instance of the \hl{Mixin} type associated with an {\em entity
- instance}. The ``mix-in'' concept as used by OCCI {\em only} applies to
- instances, never to \hl{Entity} types. \\
-
-model attribute & An internal attribute of a the Core Model which is {\em not}
-  client discoverable. \\
-
-\hl{OCCI} & Open Cloud Computing Interface. \\
-
-OCCI base type & One of \hl{Entity}, \hl{Resource}, \hl{Link} or \hl{Action}. \\
-
-OCCI Action & see \hl{Action}. \\
-OCCI Attribute & A client discoverable attribute identified by an instance of the \hl{Attribute} type. Examples are \hl{occi.core.title} and \hl{occi.core.summary}. \\
-OCCI Category & see \hl{Category}. \\
-OCCI Entity & see \hl{Entity}. \\
-OCCI Kind & see \hl{Kind}. \\
-OCCI Link & see \hl{Link}. \\
-OCCI Mixin & see \hl{Mixin}. \\
-
-OGF & Open Grid Forum. \\
-
-\hl{Resource} & An OCCI base type. The parent type for all domain-specific \hl{Resource} sub-types. \\
-
-resource instance & See {\em entity instance}. This term is considered obsolete. \\
-
-tag & A \hl{Mixin} instance with no attributes or actions defined. \\
-
-template & A \hl{Mixin} instance which if associated at instance
-creation-time pre-populate certain attributes. \\
-
-type & One of the types defined by the OCCI Core Model.  The Core Model types are
- \hl{Category}, \hl{Attribute},
- \hl{Kind}, \hl{Mixin}, \hl{Action}, \hl{Entity}, \hl{Resource}
- and \hl{Link}. \\
-
-concrete type/sub-type & A concrete type/sub-type is a type that can be instantiated. \\
-
-Cloud service provider & The entity who offers a resource/service. \\
-Cloud service consumer & The party which is in business relationship with the cloud service provider for using a cloud service/resource. \\
-SLA & Service Level Agreement: the contract or agreement that the two parties (provider, consumer) need to “sign”. It includes all the information about the services and the terms they both agree upon. \\
-SLO & Service Level Objective: the quality of service aspect of the agreement. Specifies a non-functional guarantee in the SLA. \\
-SLA Template & It is a resource that classifies set of terms and qualities for a provisioned service. \\
-\end{tabular}
-
+\input{include/glossary}
 
 \section{Contributors}
 %\input{include/contributors}
@@ -390,6 +322,8 @@ Name & Affiliation & Contact \\
 Gregory Katsaros & Intel & gregory.katsaros at intel.com \\
 Thijs Metsch & Intel & thijs.metsch at intel.com \\
 John Kennedy & Intel & john.m.kennedy at intel.com \\
+Alexander Stanik & TU Berlin & alexander.stanik at tu-berlin.de \\
+Wolfgang Ziegler & SCAI Fraunhofer & wolfgang.ziegler at scai.fraunhofer.de \\
 \end{tabular}
 
 Next to these individual contributions we value the contributions from the OCCI working group.

@@ -75,9 +75,7 @@ OCCI-WG \hfill Florian Feldhaus, GWDG\\
 
 \underline{Status of this Document}
 
-This document provides information to the community regarding the
-specification of the Open Cloud Computing Interface. Distribution is
-unlimited.
+This document is a \underline{draft} providing information to the community regarding the specification of the Open Cloud Computing Interface.
 
 \underline{Copyright Notice}
 
@@ -94,11 +92,6 @@ group within the Open Grid Forum (OGF), provides a high-level
 definition of a Protocol and API. The document is based upon
 previously gathered requirements and focuses on the scope of important
 capabilities required to support modern service offerings.
-
-\underline{Comments}
-\newcommand{\ralf}[1]{\textcolor{red}{RN: #1}}
-\newcommand{\andy}[1]{\textcolor{green}{AE: #1}}
-\newcommand{\florian}[1]{\textcolor{blue}{FF: #1}}
 
 \newpage
 \tableofcontents
@@ -432,8 +425,6 @@ immutable & 1 \\
 
 \end{lstlisting}
 
-
-
 \subsection{Entity Collection Rendering}
 Collections of Entity instances MUST be rendered as JSON arrays. The content of that array is a set of entity instance renderings.
 
@@ -516,18 +507,6 @@ following the Attribute Description Rendering (see
     }
 }
 \end{lstlisting}
-
-\subsubsection{Entity Instance Attribute Rendering Specifics}
-
-For Entity instances the following model attribute name to attribute name rendering mappings MUST be used
-
-Entity.id -> occi.core.id -> URN
-Entity.title -> occi.core.title -> string
-Resource.summary -> occi.core.summary -> string
-Link.target -> occi.core.target -> URI, string, internal to provider
-Link.source -> occi.core.source -> URI, string
-
-
 
 \subsubsection{Attribute Description Rendering}
 \label{sec:format_attribute_description}
