@@ -63,7 +63,7 @@ OCCI-WG \hfill  Mohamed Mohamed, Telecom SudParis\\
 
 % \input{include/status}
 
-This document is a \underline{draft} of the OCCI Platform \cite{occi:platform} specification.
+This document is a \underline{draft} of the OCCI Platform specification.
 
 \underline{Copyright Notice}
 
@@ -117,7 +117,7 @@ As REQUIRED by the OCCI Core Model specification, every type instantiated that i
 \subsection{Application Kind Definition}
 The following kind MUST be present and represents the kind definition of an application resource.
 
-\hl{Application} inherits the \hl{Resource} base type defined in OCCI Core Model \cite{occi:core}. \hl{Application} is assigned the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/platform\#application}. A \hl{Application} instance MUST use and expose this \hl{Kind}.
+\hl{Application} inherits the \hl{Resource} base type defined in OCCI Core Model \cite{occi:core}. \hl{Application} is assigned the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/platform\#application}. A \hl{Application} instance MUST use and expose this \hl{Kind}. The \hl{Kind} instance assigned to the \hl{Application} type MUST be related to the \textit{http://schemas.ogf.org/occi/core\#resource} \hl{Kind} by setting the \textit{parent} attribute.
 
 \mytablefloat{
 	\label{tbl:app}\hl{Attribute}s defined for the \hl{Application} type.
@@ -167,7 +167,7 @@ The state model for the \hl{Application} instance is defined in \ref{fig:app_sta
 \subsection{Component Kind Definition}
 The following kind MUST be present and represents the kind definition of an component resource.
 
-\hl{Component} inherits the \hl{Resource} base type defined in OCCI Core Model \cite{occi:core}. \hl{Application} is assigned the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/platform\#component}. A \hl{Component} instance MUST use and expose this \hl{Kind}.
+\hl{Component} inherits the \hl{Resource} base type defined in OCCI Core Model \cite{occi:core}. \hl{Application} is assigned the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/platform\#component}. A \hl{Component} instance MUST use and expose this \hl{Kind}. The \hl{Kind} instance assigned to the \hl{Component} type MUST be related to the \textit{http://schemas.ogf.org/occi/core\#resource} \hl{Kind} by setting the \textit{parent} attribute.
 
 \mytablefloat{
 	\label{tbl:component}\hl{Attribute}s defined for the \hl{Component} type.
@@ -225,14 +225,14 @@ Platform Templates allow for clients of an OCCI implementation to quickly and co
 \subsubsection{Application Template}
 Application templates allow clients to define which underlying framework the application should use (e.g. Programming language).
 
-The Application Template is defined by a Mixin. A provider specific defined Application Template Mixin MUST relate to the OCCI Application Template Mixin in order to give absolute type information. The OCCI Application Template is defined by the \textit{http://schemas.ogf.org/occi/platform\#app\_tpl} Mixin and MUST be supported SHOULD Application Templates be offered.
+The Application Template is defined by a Mixin. A provider specific defined Application Template Mixin MUST relate to the OCCI Application Template Mixin through the \textit{applies} attribute in order to give absolute type information. The OCCI Application Template is defined by the \textit{http://schemas.ogf.org/occi/platform\#app\_tpl} Mixin and MUST be supported SHOULD Application Templates be offered.
 
 Provider specific Application Templates are constructed using a “term” and “scheme” combination. Where the “term” is a provider specific description of the framework (e.g. python, ruby, …). Where an implementation requires additional information to be hold in the Templates Mixin, it MAY do so by using Category’s inherited Attributes.
 
 \subsubsection{Resource Template}
 The Resource Template Mixin builds upon the concept of Application Templates. A Resource Template is a provider defined Mixin instance that refers to a preset Resource configuration.
 
-This can be used to define the resource instance attributes of the application and component. The provider specific resource Templates are defined by using a "term" and "scheme" combination. Those provider specific Resource Template Mixin must relate to the OCCI Resource Template defined by \textit{http://schemas.ogf.org/occi/platform\#res\_tpl}. Where an implementation requires additional information to be hold in the Templates Mixin, it MAY do so by using Category’s inherited Attributes.
+This can be used to define the resource instance attributes of the application and component. The provider specific resource Templates are defined by using a "term" and "scheme" combination. Those provider specific Resource Template Mixin must relate to the OCCI Resource Template defined by \textit{http://schemas.ogf.org/occi/platform\#res\_tpl} through the \textit{applies} attribute. Where an implementation requires additional information to be hold in the Templates Mixin, it MAY do so by using Category’s inherited Attributes.
 
 An example of these templates is shown in the following UML diagram in Figure \ref{fig:templates}.
 
@@ -248,7 +248,7 @@ The following sections describe \hl{Mixin}s instances which SHOULD be implemente
 
 \subsection{Database Mixin}
 
-\hl{Database} inherits the \hl{Mixin} base type defined in OCCI Core Model \cite{occi:core}. \hl{Database} is assigned the \hl{Mixin} instance \textit{http://schemas.ogf.org/occi/platform\#database}. The \hl{Database} instance applies to the \hl{Component} instance defined above.
+\hl{Database} inherits the \hl{Mixin} base type defined in OCCI Core Model \cite{occi:core}. \hl{Database} is assigned the \hl{Mixin} instance \textit{http://schemas.ogf.org/occi/platform\#database}. The \hl{Database} instance \textit{applies} to the \hl{Component} instance defined above.
 
 \mytablefloat{
 	\label{tbl:database}\hl{Attribute}s defined for the \hl{Database} type.
@@ -268,7 +268,7 @@ Table~\ref{tbl:database} describes the Attributes defined by \hl{Database} insta
 \subsubsection{Database Link}
 In case that a \hl{Application} instance links to a \hl{Component} instance which has the \hl{Database} \hl{Mixin} instance applied the following \hl{Mixin} SHOULD be applied to the \hl{ComponentLink}.
 
-\hl{DatabaseLink} inherits the \hl{Mixin} base type defined in OCCI Core Model \cite{occi:core}. \hl{DatabaseLink} is assigned the \hl{Mixin} instance \textit{http://schemas.ogf.org/occi/platform\#databaseLink}. The \hl{DatabaseLink} instance applies to the \hl{ComponentLink} instance defined above.
+\hl{DatabaseLink} inherits the \hl{Mixin} base type defined in OCCI Core Model \cite{occi:core}. \hl{DatabaseLink} is assigned the \hl{Mixin} instance \textit{http://schemas.ogf.org/occi/platform\#databaseLink}. The \hl{DatabaseLink} instance \textit{applies} to the \hl{ComponentLink} instance defined above.
 
 \mytablefloat{
 	\label{tbl:database_link}\hl{Attribute}s defined for the \hl{Database} type.
