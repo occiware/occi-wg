@@ -227,8 +227,7 @@ behavior in such cases is not specified. The return codes are specified by
 \section{Pagination}
 \label{sec:pagin}
 
-To request partial results of an otherwise large collection message response, pagination SHOULD be used to reduce the load on
-both the client and the service provider. This is done in the following manner.
+To request partial results of an otherwise large collection message response, pagination SHOULD be used to reduce the load on both the client and the service provider.
 
 The HTTP GET verb is used when accessing a URL of a collection and the query parameters of {\em page} and {\em number} MUST be used. {\em page} is an indexed
 integer that refers to a sub-collection of the requested collection. {\em number} is an integer of items that SHOULD be displayed in one paged response.

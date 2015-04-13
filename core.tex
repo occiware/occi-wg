@@ -815,7 +815,7 @@ MUST implement to be compliant.
     id			& URI 		& 1 		& Immutable 		& A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
 	title	    & String	& 0..1		& Mutable			& The display name of the instance. \\
     kind 		& \hl{Kind}	& 1 		& Immutable 		& The \hl{Kind} instance uniquely identifying the particular \hl{Entity} sub-type of this instance. \\
-    mixins 		& \hl{Kind}	& 0..* 		& Mutable 		& The \hl{Mixin} instances associated to this entity instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\
+    mixins 		& \hl{Mixin}	& 0..* 		& Mutable 		& The \hl{Mixin} instances associated to this entity instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\
     \botrule
   \end{tabular}
 }
@@ -990,7 +990,7 @@ extensions of the OCCI Core and Model specification.
 \input{include/glossary}
 
 \section{Contributors}
-\include{include/contributors}
+\input{include/contributors}
 
 \section{Intellectual Property Statement}
 \input{include/ip}
