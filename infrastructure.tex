@@ -679,6 +679,13 @@ The OCCI OS Template is defined by the
 \hl{Mixin} and MUST be supported SHOULD OS Templates be offered by the
 OCCI implementation.
 
+If an OS Template is already associated with the given \hl{Resource}
+instance, associating a new OS Template (using mechanisms defined
+by the chosen rendering and transport protocol) MUST result in
+an immediate removal of the old OS Template and association of the new
+OS Template. The change must affect the operating system of the given
+\hl{Resource} instance, in a provider-specific way.
+
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=0.5]{figs/infra_template_obj_diag1}
@@ -733,6 +740,13 @@ The OCCI Resource Template is defined by the
 \textit{http://schemas.ogf.org/occi/infrastructure\#resource\_tpl} and
 MUST be supported SHOULD Resource Templates be offered by the OCCI
 implementation.
+
+If a Resource Template is already associated with the given \hl{Resource}
+instance, associating a new Resource Template (using mechanisms defined
+by the chosen rendering and transport protocol) MUST result in
+an immediate removal of the old Resource Template and association of the new
+Resource Template. The change must affect the the given \hl{Resource} instance, in
+a~provider-specific way (e.g., resizing the instance).
 
 \begin{figure}[!h]
 	\centering
