@@ -93,7 +93,7 @@ OCCI is a trademark of the Open Grid Forum.
 \section{Introduction}
 \input{include/introduction}
 
-OCCI makes an ideal interoperable boundary interface between the web
+OCCI makes an ideal inter-operable boundary interface between the web
 and the internal resource management system of infrastructure
 providers.
 
@@ -105,7 +105,7 @@ providers.
 \section{Infrastructure}
 The OCCI Infrastructure document details how an OCCI implementation
 can model and implement an Infrastructure as a Service API offering by
-utilising the OCCI Core Model. This API allows for the creation and
+utilizing the OCCI Core Model. This API allows for the creation and
 management of typical resources associated with an IaaS service, for
 example, creating a \hl{Compute} instance and \hl{Storage} instance
 and then linking them with \hl{StorageLink}. The main infrastructure
@@ -138,7 +138,7 @@ Supporting these Resource types are the following \hl{Link} sub-types:
 
 These infrastructure types inherit the OCCI Core Model \hl{Resource}
 base type and all their attributes. The HTTP Rendering document
-\cite{occi:http_rendering} defines how to serialise and interact with
+\cite{occi:http_rendering} defines how to serialize and interact with
 these types using RESTful communication. Implementers are free to
 choose what \hl{Resource} and \hl{Link} sub-types to implement. Those
 that are supported by an implementation will be discoverable through
@@ -242,7 +242,7 @@ depending on the ``Multiplicity'' column in the aforementioned table.
 	\textit{http://schemas.ogf.org/occi/infrastructure\#compute}. Every \hl{Action}
 	instance in the table uses the
 	\textit{http://schemas.ogf.org/occi/infrastructure/compute/action\#}
-	categorisation scheme. ``Action Term'' below refers to \hl{Action}.{\tt term}.
+	categorization scheme. ``Action Term'' below refers to \hl{Action}.{\tt term}.
 }
 {
 	\begin{tabular}{lll}
@@ -291,7 +291,7 @@ The \hl{Network} type is assigned the
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
 	occi.network.vlan & Integer: 0-4095 & 0\ldots1 & Mutable
-	& 802.1q VLAN Ientifier (e.g. 343).\\
+	& 802.1q VLAN Identifier (e.g. 343).\\
 	occi.network.label & Token & 0\ldots1 & Mutable
 	& Tag based VLANs (e.g. external-dmz).\\
 	occi.network.state & Enum \{active, inactive, error\} & 1 & Immutable
@@ -435,7 +435,7 @@ depending on the ``Multiplicity'' column in the aforementioned table.
 	\textit{http://schemas.ogf.org/occi/infrastructure\#storage}. Every \hl{Action}
 	instance in the table uses the
 	\textit{http://schemas.ogf.org/occi/infrastructure/storage/action\#}
-	categorisation scheme. ``Action Term'' below refers to \hl{Action}.{\tt term}.
+	categorization scheme. ``Action Term'' below refers to \hl{Action}.{\tt term}.
 }
 {
 	\begin{tabular}{lll}
@@ -467,7 +467,7 @@ management of the cloud computing storage and data. For storage
 managed through CDMI, see the section on \hl{StorageLink}
 
 \subsection{Linking Infrastructure Resources}
-In order to create entities like virtual data centres or virtual
+In order to create entities like virtual data centers or virtual
 clusters, it is necessary to allow the linkage of the previously
 defined infrastructure \hl{Resource} sub-types. This is accomplished
 by extending (sub-typing) the OCCI Core Model \hl{Link} base type.
@@ -697,7 +697,7 @@ A typical example of using such a \hl{Mixin} is shown in
 figure~\ref{fig:infra_template_obj_diag1} using a UML object diagram.
 In the example illustrated in
 figure~\ref{fig:infra_template_obj_diag1} a provider has defined an OS
-template which offers the ability to run Ubuntu Linux, verson 9.10,
+template which offers the ability to run Ubuntu Linux, version 9.10,
 upon a client's provisioned compute resource.
 
 How a provider manages their set of OS templates will be determined by
@@ -711,7 +711,7 @@ instance that refers to a preset \hl{Resource} configuration.
 The preset \hl{Resource} configuration is not visable through the OCCI
 Discovery mechanism. The \hl{Mixin}.{\tt attributes} (inherited from
 \hl{Category}) is empty for a Resource Template \hl{Mixin}.  The
-side-effect of initialising \hl{Resource} attributes with pre-defined
+side-effect of initializing \hl{Resource} attributes with pre-defined
 values is handled by the implementation.
 
 The OCCI implementation associates a set of Resource attributes (via
@@ -799,30 +799,30 @@ occi.credentials.ssh.publickey & String & 1 & Mutable & The contents of the publ
 \end{tabular}
 }
 
-\paragraph{Contextualisation Mixin}
+\paragraph{Contextualization Mixin}
 
 % new as of OCCI 1.2
 In order to ease automation, OCCI supports the means to execute a
 program once Resource has been instantiated. This feature is
-provided by the contextualisation mixin. On receipt of the
-contextualisation data the OCCI implementation MUST distinguish
+provided by the contextualization mixin. On receipt of the
+contextualization data the OCCI implementation MUST distinguish
 the type of data being presented and then supply that content to the
 Compute Resource being instantiated. That content is then executed
 by the Compute Resource as the last step in the Compute's boot-order.
 
 OCCI implementations SHOULD support this otherwise no
-contextualisation of a resource instance can be done.
-The OCCI contextualisation mixin has the term \textit{user\_data}
+contextualization of a resource instance can be done.
+The OCCI contextualization mixin has the term \textit{user\_data}
 and the schema \textit{http://schemas.ogf.org/occi/compute\#}
 
-Contextualisation mixin MUST only apply to the Compute Kind and therefore
+Contextualization mixin MUST only apply to the Compute Kind and therefore
 the mixin should have its  \textit{applies} attribute set to:
 
 \textit{http://schemas.ogf.org/occi/infrastructure\#compute}.
 
 \mytablefloat{
 	\label{tbl:contextmixin}%
-	\hl{Attribute}s defined by the \hl{Contextualisation} mixin. A \hl{Compute}
+	\hl{Attribute}s defined by the \hl{Contextualization} mixin. A \hl{Compute}
 	instance associated with this \hl{Mixin} instance MUST expose these
 	attributes.
 }{
@@ -831,7 +831,7 @@ the mixin should have its  \textit{applies} attribute set to:
 Attribute&Type&Multi\-plicity&Mutability&Description\\
 \colrule
 occi.compute.userdata & String & 1 & Mutable &
-Contextualisation data (e.g. script, executable) that the client supplies once
+Contextualization data (e.g. script, executable) that the client supplies once
 and only once. It cannot be updated.\\
 \botrule
 \end{tabular}
@@ -872,9 +872,9 @@ here.
 
 \begin{itemize}
 \item New credentials mixin - allows credentials to be supplied to the creation of a compute resource
-\item New contextualisation mixin - allows a script to be supplied with the creation request of a compute resource
+\item New contextualization mixin - allows a script to be supplied with the creation request of a compute resource
 \item Added error state to all resource state models
-\item Added occi.compute.share attribute to Compute. This allows for basic support of container virtualisation technologies.
+\item Added occi.compute.share attribute to Compute. This allows for basic support of container virtualization technologies.
 \item Added state.message to all infrastructure resources (Compute, Storage, Network, NetworkInterface, StorageLink)
 \item Added references to the core model parent, applies and depends for infrastructure mixins, kinds
 \item Updated figures to reflect new Core model
