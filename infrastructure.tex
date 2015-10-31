@@ -583,9 +583,10 @@ depicts how \hl{NetworkInterface} would be associated with an
 The \hl{StorageLink} type represents a link from a \hl{Resource} to a
 target \hl{Storage} instance. This enables a \hl{Storage} instance be
 attached to a \hl{Compute} instance, with all the prerequisite low-
-level operations handled by the OCCI implementation. \hl{Storage}
-inherits the \hl{Link} base type defined in the OCCI Core Model
-\cite{occi:core}.
+level operations handled by the OCCI implementation. This mechanism SHOULD NOT
+be used to choose an operating system for the given \hl{Compute} instance, see
+Section~\ref{subsubsec:os_tpl}. \hl{Storage} inherits the \hl{Link} base
+type defined in the OCCI Core Model~\cite{occi:core}.
 
 The \hl{StorageLink} type is assigned the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/infrastructure\#storagelink}.  A
@@ -648,6 +649,7 @@ instances. There are 2 supported infrastructure template types in OCCI
 Infrastructure.
 
 \subsubsection{OS Template}
+\label{subsubsec:os_tpl}
 OS (Operating System) Templates allow clients specific what operating
 system must be installed on a requested \hl{Compute} resource. OCCI
 implementations SHOULD support this, otherwise what they provision
@@ -706,7 +708,12 @@ the provider and implementation-specific.
 \subsubsection{Resource Template}
 The Resource Template \hl{Mixin} builds upon the concept of OS
 Templates. A Resource Template is a provider-defined \hl{Mixin}
-instance that refers to a preset \hl{Resource} configuration.
+instance that refers to a pre-set \hl{Resource} configuration.
+If a Resource Template \hl{Mixin} is not provided, the provider
+is free to choose a default pre-set \hl{Resource} configuration.
+If a \hl{Resource} instance carries its own ``size''-related
+attributes, an assigned Resource Template \hl{Mixin} will override them
+where applicable.
 
 The pre-set \hl{Resource} configuration is not fully visible through the OCCI
 Discovery mechanism, depending on the chosen OCCI rendering and necessary
