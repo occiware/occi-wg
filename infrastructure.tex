@@ -253,6 +253,7 @@ depending on the ``Multiplicity'' column in the aforementioned table.
 	stop & inactive & method=\{graceful, acpioff, poweroff\} \\
 	restart & active (via stop and start chain) & method=\{graceful, warm, cold\} \\
 	suspend & suspended & method=\{hibernate, suspend\} \\
+	save & active (via stop and start chain) & method=\{hot, deferred\}, name=\emph{String} \\
 	\botrule
 	\end{tabular}
 }
@@ -262,6 +263,14 @@ Table~\ref{tbl:compute_actions} describes the \hl{Action}s defined for
 exposed by an instance of the \hl{Compute} type of an OCCI
 implementation.  Figure~\ref{fig:compute_state} illustrates the state
 diagram for a \hl{Compute} instance.
+
+Action ``save'' is expected to create an OS Template~\ref{subsubsec:os_tpl} referencing
+an independent copy of the current state of the \hl{Compute} instance. The provider MAY choose to respect
+the ``name'' given by the client or override it according to its internal policies. A successful
+execution of this action MUST lead to a response containing the rendering of the newly
+created OS Template as defined by the chosen rendering and transport protocol.
+The provider MAY choose to include a reference to the original \hl{Compute} instance
+in {\tt Mixin}.{\tt Attributes} of the newly created OS Template.
 
 \begin{figure}[!h]
 	\centering
