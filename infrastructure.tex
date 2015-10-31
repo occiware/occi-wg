@@ -342,33 +342,33 @@ diagram for a \hl{Network} instance.
 	\label{fig:network_state}
 \end{figure}
 
-\subsubsection{IPNetworking Mixin}
+\subsubsection{IPNetwork Mixin}
 
 In order to support L3/L4 capabilities (e.g. IP, TCP etc.) an OCCI
 mixin is herewith defined.
 
-The \hl{IPNetworking} mixin is assigned%
+The \hl{IPNetwork} mixin is assigned%
 \footnote{Both assignments use data members from the inherited
   \hl{Category} type \cite{occi:core}.}  the ``{\tt scheme}'' of
 \textit{http://schemas.ogf.org/occi/infrastructure/network\#} and the
-``{\tt term}'' value \textit{ipnetwork}. An \hl{IPNetworking} mixin
+``{\tt term}'' value \textit{ipnetwork}. An \hl{IPNetwork} mixin
 MUST support these values.
 
-Table~\ref{tbl:ipnetworking} define the attributes introduced by the
-\hl{IPNetworking} mixin.
+Table~\ref{tbl:ipnetwork} define the attributes introduced by the
+\hl{IPNetwork} mixin.
 
-The \hl{IPNetworking} mixin MUST be related to the \hl{Network} kind
+The \hl{IPNetwork} mixin MUST be related to the \hl{Network} kind
 by setting the \textit{applies} attribute to:
 
 \textit{http://schemas.ogf.org/occi/infrastructure\#network}.
 
 A \hl{Network} instance associated with the
-\hl{IPNetworking} mixin \hl{Mixin} instance MUST implement these
+\hl{IPNetwork} mixin \hl{Mixin} instance MUST implement these
 attributes.
 
 \mytablefloat{
-	\label{tbl:ipnetworking}%
-	\hl{Attribute}s defined by the \hl{IPNetworking} mixin. A \hl{Network}
+	\label{tbl:ipnetwork}%
+	\hl{Attribute}s defined by the \hl{IPNetwork} mixin. A \hl{Network}
 	instance associated with this \hl{Mixin} instance MUST expose these
 	attributes.
 }{
