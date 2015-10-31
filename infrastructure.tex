@@ -668,7 +668,7 @@ Default values for OCCI Attributes defined by the \hl{Kind} or the OS
 Template \hl{Mixin} MAY be provided using the \hl{Attribute}.{\tt
   default} attribute property \cite{occi:core}.
 
-A implementation-defined OS Template \hl{Mixin} MUST be related to the
+An implementation-defined OS Template \hl{Mixin} MUST be related to the
 OCCI OS Template \hl{Mixin} in order to give absolute type
 information by setting the \textit{depends} attribute.
 
@@ -701,21 +701,22 @@ template which offers the ability to run Ubuntu Linux, version 9.10,
 upon a client's provisioned compute resource.
 
 How a provider manages their set of OS templates will be determined by
-themselves and so implementation-specific.
+the provider and implementation-specific.
 
 \subsubsection{Resource Template}
 The Resource Template \hl{Mixin} builds upon the concept of OS
 Templates. A Resource Template is a provider-defined \hl{Mixin}
 instance that refers to a preset \hl{Resource} configuration.
 
-The preset \hl{Resource} configuration is not visable through the OCCI
-Discovery mechanism. The \hl{Mixin}.{\tt attributes} (inherited from
-\hl{Category}) is empty for a Resource Template \hl{Mixin}.  The
-side-effect of initializing \hl{Resource} attributes with pre-defined
-values is handled by the implementation.
+The pre-set \hl{Resource} configuration is not fully visible through the OCCI
+Discovery mechanism, depending on the chosen OCCI rendering and necessary
+provider-specific implementation details. The \hl{Mixin}.{\tt attributes} (inherited from
+\hl{Category}) for a Resource Template \hl{Mixin} SHOULD contain relevant attributes
+and default attribute values. Provider-specific side-effects are handled by the
+implementation and MUST not be exposed.
 
 The OCCI implementation associates a set of Resource attributes (via
-\hl{Category}'s 'attributes') with a particular term identifier.
+\hl{Category}'s ``attributes'') with a particular term identifier.
 
 An implementation-defined Resource Template \hl{Mixin} MUST be related
 to the OCCI Resource Template \hl{Mixin} in order to give absolute
@@ -749,15 +750,13 @@ figure~\ref{fig:infra_template_obj_diag2}) using a UML object diagram.
 In this example, the provider offers \hl{Compute} \hl{Resource}s based
 on different sizes (i.e. small, medium, large). Each ``size'' of
 \hl{Compute} (i.e. the term) corresponds to a predetermined set of
-OCCI \hl{Resource}-specific attributes. In the example below a 'small'
-\hl{Compute} instance is created.  Specifying "small" as the term
+OCCI \hl{Resource}-specific attributes. In the example below a ``small''
+\hl{Compute} instance is created.  Specifying ``small'' as the term
 corresponds to an implementation-specific \hl{Compute}
-\hl{Resource}-specific attribute set%
-\footnote{This attribute set is implementation-specific and is {\em
-    not} related to \hl{Mixin}.{\tt attributes} inherited from the
-  \hl{Category} type \cite{occi:core}.}  that is shown by the object
-instance named ``attributes'' in
-figure~\ref{fig:infra_template_obj_diag2}.
+\hl{Resource}-specific attribute set that is shown by the object
+instance named ``attributes'' in figure~\ref{fig:infra_template_obj_diag2}.
+When this \hl{Mixin} is associated with a \hl{Compute} instance, the Compute
+instance will take on provided attributes and default attribute values.
 
 %\begin{verbatim}
 %Attribute: occi.compute.cores='2', occi.compute.share='200',
@@ -766,7 +765,7 @@ figure~\ref{fig:infra_template_obj_diag2}.
 
 From the administrative point of view, how an OCCI service provider
 manages their set of \hl{Resource} Templates will be determined by
-themselves and so is implementation-specific.
+the provider and so is implementation-specific.
 
 \paragraph{Credentials Mixin}
 
