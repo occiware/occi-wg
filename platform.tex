@@ -54,7 +54,7 @@ OCCI-WG \hfill  Mohamed Mohamed, Telecom SudParis\\
 \vspace*{0.5in}
 
 \begin{Large}
-\textbf{Open Cloud Computing Interface - Platform}
+\textbf{Open Cloud Computing Interface -- Platform}
 \end{Large}
 
 \vspace*{0.5in}
@@ -223,11 +223,11 @@ The componentLink kind can be further enhanced by the use of  provider specific 
 Platform Templates allow for clients of an OCCI implementation to quickly and conveniently apply predefined configurations to OCCI Platform defined types. They are implemented using Mixin instances. There are two supported platform templates types in OCCI Platform.
 
 \subsubsection{Application Template}
-Application templates allow clients to define which underlying framework the application should use (e.g. Programming language).
+Application templates allow clients to define which underlying framework the application should use (e.g., Programming language).
 
 The Application Template is defined by a Mixin. A provider specific defined Application Template Mixin MUST relate to the OCCI Application Template Mixin through the \textit{applies} attribute in order to give absolute type information. The OCCI Application Template is defined by the \textit{http://schemas.ogf.org/occi/platform\#app\_tpl} Mixin and MUST be supported SHOULD Application Templates be offered.
 
-Provider specific Application Templates are constructed using a “term” and “scheme” combination. Where the “term” is a provider specific description of the framework (e.g. python, ruby, …). Where an implementation requires additional information to be hold in the Templates Mixin, it MAY do so by using Category’s inherited Attributes.
+Provider specific Application Templates are constructed using a “term” and “scheme” combination. Where the “term” is a provider specific description of the framework (e.g., python, ruby, …). Where an implementation requires additional information to be hold in the Templates Mixin, it MAY do so by using Category’s inherited Attributes.
 
 \subsubsection{Resource Template}
 The Resource Template Mixin builds upon the concept of Application Templates. A Resource Template is a provider defined Mixin instance that refers to a preset Resource configuration.

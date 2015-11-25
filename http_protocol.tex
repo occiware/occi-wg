@@ -242,7 +242,7 @@ If there is no more content to be served, the response status code issued to the
 \section{HTTP Methods Applied to Query Interface}
 \label{sec:http_methods_qi}
 
-This section describes the HTTP methods used to retrieve and manipulate category instances.  With the help of the query interface it is possible for the client to determine the capabilities of the OCCI implementation he refers to.
+This section describes HTTP methods used to retrieve and manipulate category instances.  With the help of the query interface it is possible for the client to determine the capabilities of the OCCI implementation it refers to.
 
 The query interface MUST be implemented by all OCCI implementations. It MUST be found at:
 
@@ -250,13 +250,13 @@ The query interface MUST be implemented by all OCCI implementations. It MUST be 
 /-/
 \end{verbatim}
 
-Implementations MAY also adopt RFC5785~\cite{rfc5785} compliance to advertise this location. Should implementations wish to advertise the Query Interface using the .well-known mechanism then they MUST use the following path served from the authority:
+Implementations MAY also adopt RFC5785~\cite{rfc5785} compliance to advertise this location. Should implementations wish to advertise the Query Interface using the well-known mechanism then they MUST use the following path served from the authority:
 
 \begin{verbatim}
 	/.well-known/org/ogf/occi/-/
 \end{verbatim}
 
-The renderings for the {\em category} instance and category {\em collection} are defined in \cite{occi:text} and \cite{occi:json}.
+The renderings for the {\em Category} instance and Category {\em collection} are defined in \cite{occi:text} and \cite{occi:json}.
 
 \subsection{GET Method}
 
@@ -266,7 +266,7 @@ The request MAY include a possible filter rendering.
 \subsubsection*{Server GET response}
 The response MUST include a category collection rendering.
 
-Upon a successfully request a \emph{200 OK} status code MUST be used.
+Upon a successfull request a \emph{200 OK} status code MUST be used.
 
 \subsection{PUT Method}
 
@@ -288,16 +288,16 @@ The request MUST include at least one full category instance rendering. It MAY i
 \subsubsection*{Server DELETE response}
 Upon a successful processing of the request, the \emph{200 OK} status code MUST be returned.
 
-\section{HTTP Methods Applied to Entity Instance}
+\section{HTTP Methods Applied to Entity Instances}
 \label{sec:http_methods_ei}
 
-This section describes the HTTP methods used to retrieve and manipulate
+This section describes HTTP methods used to retrieve and manipulate
 individual entity instances. An {\em entity instance} refers to an instance
 of the OCCI \hl{Resource} type, OCCI \hl{Link} type or a sub-type thereof
 \cite{occi:core}.
 
 Each HTTP method described is assumed to operate on an URL referring to
-a single element in a collection, an URL such as the following:
+a single element in a collection, a URL such as the following:
 \begin{verbatim}
   http://example.com/compute/012d2b48-c334-47f2-9368-557e75249042
 \end{verbatim}
@@ -375,7 +375,7 @@ N/A
 \subsubsection*{Server DELETE response}
 Upon a successful processing of the request, the \emph{200 OK} status code MUST be returned.
 
-\section{HTTP Methods Applied to Collection}
+\section{HTTP Methods Applied to Collections}
 \label{sec:http_methods_coll}
 
 This section describes the HTTP methods used to retrieve and manipulate
@@ -476,7 +476,7 @@ Upon a successful processing of the request, the \emph{200 OK} status code MUST 
 \label{sec:sec_consid}
 The OCCI HTTP rendering assumes HTTP or HTTP-related mechanisms for
 security. As such, implementations SHOULD support
-TLS \footnote{http://datatracker.ietf.org/wg/tls/} for transport layer
+TLS\footnote{http://datatracker.ietf.org/wg/tls/} for transport layer
 security.
 
 Authentication SHOULD be realized by HTTP authentication mechanisms,
@@ -500,7 +500,7 @@ appropriate mechanisms as part of the HTTP protocol specification
 SHOULD be preferred.
 
 As long as specific extensions of the OCCI Core and Model
-specification do not impose additional security requirements than the
+specification do not impose additional security requirements on top of the
 OCCI Core and Model specification itself, the security considerations
 documented above apply to all (existing and future)
 extensions. Otherwise, an additional profile to this specification

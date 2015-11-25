@@ -67,7 +67,7 @@ OCCI-WG \hfill Thijs Metsch, Intel\\
 \vspace*{0.5in}
 
 \begin{Large}
-\textbf{Open Cloud Computing Interface - Text Rendering}
+\textbf{Open Cloud Computing Interface -- Text Rendering}
 \end{Large}
 
 \vspace*{0.5in}
@@ -106,7 +106,7 @@ capabilities required to support modern service offerings.
 
 This document presents the text based renderings. To be complaint, OCCI implementations MUST implement the three renderings defined in sections \ref{sec:text}, \ref{sec:header} and \ref{sec:urilist}.
 
-The document is structured by defining based ABNFs which can then be combined into renderings which will be rendered over a protocol (e.g. HTTP) by the specific rendering definitions.
+The document is structured by defining based ABNFs, which can then be combined into renderings, which will be rendered over a protocol (e.g., HTTP) by the specific rendering definitions.
 
 \section{ABNF Definitions}
 
@@ -334,7 +334,7 @@ For Entity instances the following model attribute name to attribute name render
 The OCCI Text plain rendering specifies a rendering of OCCI instance types in a simple text format. Using this rendering the renderings MUST be placed in the HTTP Body.
 
 The rendering can be used to render OCCI instances independently of the
-protocol being used. Thus messages can be delivered by e.g. the HTTP
+protocol being used. Thus messages can be delivered by, e.g., the HTTP
 protocol as specified in \cite{occi:protocol}.
 
 The following media-types MUST be used for the OCCI Text plain rendering:
@@ -377,15 +377,15 @@ While using this rendering the renderings MUST be placed in the HTTP Header. The
 
 The HTTP header fields MUST follow the specification in RFC 7230 \cite{rfc7230}. A header field consists of a name followed by a colon (”:”) and the field value.
 
-\textbf{Limitations}: HTTP header fields MAY appear multiple times in a HTTP request or response. In order to be OCCI compliant, the specification of multiple message-header fields according to RFC 7230 MUST be fully supported. In essence there are two valid representation of multiple HTTP header field values. A header field might either appear several times or as a single header field with a comma-separated list of field values. Due to implementation issues in many web frameworks and client libraries it is RECOMMENDED to use the comma-separated list format for best interoperability.
+\textbf{Limitations}: HTTP header fields MAY appear multiple times in a HTTP request or response. In order to be OCCI compliant, the specification of multiple message-header fields according to RFC 7230 MUST be fully supported. In essence there are two valid representations of multiple HTTP header field values. A header field might either appear several times or as a single header field with a comma-separated list of field values. Due to implementation issues in many web frameworks and client libraries it is RECOMMENDED to use the comma-separated list format for best interoperability.
 
-HTTP header field values which contain separator characters MUST be properly quoted according to RFC 7230.
+HTTP header field values, which contain separator characters, MUST be properly quoted according to RFC~7230.
 
-Space in the HTTP header section of a HTTP request is a limited resource. By this, it is noted that many HTTP servers limit the number of bytes that can be placed in the HTTP Header area. Implementers MUST be aware of this limitation in their own implementation and take appropriate measures so that truncation of header data does NOT occur.
+Space in the HTTP header section of a HTTP request is a limited resource. By this, it is noted that many HTTP servers limit the number of bytes that can be placed in the HTTP header area. Implementers MUST be aware of this limitation in their own implementations and take appropriate measures so that truncation of header data does NOT occur.
 
 \subsection{Example}
 
-The following example show an \hl{Entity} instance rendering using the Text header rendering.
+The following example shows an \hl{Entity} instance rendering using the Text header rendering.
 
 \begin{verbatim}
 < Category: compute; \
@@ -407,7 +407,7 @@ The following media-types MUST be used for the URI Rendering:
 
 {\tt text/uri-list}
 
-This rendering cannot render resource instances or Kinds or Mixins directly but just links to them. For concrete rendering of Kinds and Categories the Content-types text/occi, text/plain MUST be used. If a request is done with the text/uri-list in the Accept header, while not requesting for a Listing a Bad Request MUST be returned. Otherwise a list of resources MUST be rendered in {\\tt text/uri-list} format as defined in \cite{rfc2483}, which can be used for listing resource in collections or the name-space of the OCCI implementation.
+This rendering cannot render resource instances or Kinds or Mixins directly but just links to them. For concrete rendering of Kinds and Categories the Content-types \texttt{text/occi}, \texttt{text/plain} MUST be used. If a request is done with the \texttt{text/uri-list} in the Accept header, while not requesting for a Listing a Bad Request MUST be returned. Otherwise a list of resources MUST be rendered in \texttt{text/uri-list} format as defined in \cite{rfc2483}, which can be used for listing resource in collections or the name-space of the OCCI implementation.
 
 \section{Security Considerations}
 OCCI does not require that an authentication mechanism be used nor

@@ -68,7 +68,7 @@ OCCI-WG \hfill Florian Feldhaus, GWDG\\
 \vspace*{0.5in}
 
 \begin{Large}
-\textbf{Open Cloud Computing Interface - JSON Rendering}
+\textbf{Open Cloud Computing Interface -- JSON Rendering}
 \end{Large}
 
 \vspace*{0.5in}
@@ -109,7 +109,7 @@ The OCCI JSON Rendering specifies a rendering of OCCI instance types in the JSON
 data interchange format as defined in \cite{rfc4627}.
 
 The rendering can be used to render OCCI instances independently of the
-protocol being used. Thus messages can be delivered by e.g. the HTTP
+protocol being used. Thus messages can be delivered by, e.g., the HTTP
 protocol as specified in \cite{occi:protocol}.
 
 The following media-type MUST be used for the OCCI JSON Rendering:
@@ -231,11 +231,12 @@ Table~\ref{tbl:format_link} defines the object members.
             "id": String,
             "source": String,
             "target": String,
-            "rel": String,
+            "par": String,
             "title": String
         }
 
 \end{lstlisting}
+\todo{``par'' renamed from ``rel'' -- please check}
 
 \mytablefloat{
     \label{tbl:format_link}
@@ -265,11 +266,13 @@ source of the OCCI Link if this entry is omitted & immutable & 0..1\\
 
     target & String & URI of the target Resource & immutable & 1\\
 
-    rel & string & Type identifier of the target Resource, to be supplied if
+    par & string & Type identifier of the target Resource, to be supplied if
 the target is an OCCI Resource. & immutable & 0..1 \\
 	title & String & title of the Link & mutable & 0..1\\
     \botrule
     \end{tabularx}
+
+\flushleft\todo{``par'' renamed from ``rel'' -- please check}
 }
 
 
@@ -324,11 +327,12 @@ Entity itself & immutable & 0..1 \\
             "title": String,
             "attributes": Object,
             "actions": Array,
-            "parent": Array,
+            "parent": String,
             "location": String
         }
 
 \end{lstlisting}
+\todo{Parent fixed from ``Array'' to ``String'' -- please check}
 
 \subsubsection{Mixin Instance Rendering}
 \label{sec:format_mixin}
@@ -492,6 +496,8 @@ Collections of Category instances are rendered as JSON arrays.
 
 \subsection{Attributes Rendering}
 
+\todo{This needs to be completely redone}
+
 Attribute names consist of alphanumeric characters separated by dots. The dots
 define a namespace hierarchy. This hierarchy is reflected by stacked JSON
 objects as shown in the following example. The last object contains either a
@@ -551,8 +557,10 @@ present in the instantiated OCCI Entity & \\
     "type": String,
     "default": String | Number | Boolean,
     "description": String
+    "pattern": String
 }
 \end{lstlisting}
+\todo{Added member ``pattern'' -- please check}
 
 \section{Security Considerations}
 OCCI does not require that an authentication mechanism be used nor
