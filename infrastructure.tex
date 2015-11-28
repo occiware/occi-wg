@@ -253,7 +253,7 @@ depending on the ``Multiplicity'' column in the aforementioned table.
 	stop & inactive & method=\{graceful, acpioff, poweroff\} \\
 	restart & active (via stop and start chain) & method=\{graceful, warm, cold\} \\
 	suspend & suspended & method=\{hibernate, suspend\} \\
-	save & active (possibly via stop and start chain)\todo{Added ``possibly'', please check} & method=\{hot, deferred\}, name=\emph{String} \\
+	save & active (possibly via stop and start chain) & method=\{hot, deferred\}, name=\emph{String} \\
 	\botrule
 	\end{tabular}
 }
@@ -664,9 +664,10 @@ OS (Operating System) Templates allow clients to specify what operating
 system must be installed on a requested \hl{Compute} resource. OCCI
 implementations SHOULD support this, otherwise what they provision
 will be merely offer \hl{Resource}s without any available execution
-environment (e.g., operating system). They MAY, however, choose to define a default resource template that will be used if not explicitly specified. \todo{Please check the previous sentence.} Of the two supported template
-types, OS Template is the most basic and necessary template that a provider
-SHOULD offer.
+environment (e.g., operating system). They MAY, however, choose to define
+a default OS Template that will be used if not explicitly specified.
+Of the two supported template types, OS Template is the most basic
+and necessary template that a provider SHOULD offer.
 
 Its construction is a \hl{Mixin} instance consisting of a provider
 specific ``scheme'' and a descriptive ``title'' detailing the OS. The
@@ -897,7 +898,7 @@ here.
 \appendix
 
 \newpage
-\section{Change Log}
+\section{Errata}
 \label{sec:errata}
 
 \begin{itemize}
