@@ -647,7 +647,7 @@ cloud storage standard, Cloud Data Management Interface (CDMI)
 \cite{cdmi}, to provide enhanced management of the cloud computing
 storage and data. In order to integrate the two, the
 \hl{StorageLink} should be used. This will link OCCI managed Resources
-to CDMI resources. The 'occi.storagelink.deviceid' attribute of
+to CDMI resources. The ``occi.storagelink.deviceid'' attribute of
 \hl{StorageLink}, defined above, should be set to the CDMI Object ID
 of an exported CDMI Container.
 
@@ -802,7 +802,6 @@ the provider and so is implementation-specific.
 \paragraph{Credentials Mixin}
 
 % new as of OCCI 1.2
-
 When creating a Compute Resource a client normally supplies security credentials in the form of a public SSH key. This SSH key is injected into the Compute Resource by the provider on the client's behalf. This feature is provided by the Credentials Mixin.
 
 If a provider offers VMs with access secured by SSH then their OCCI implementation SHOULD support this. Otherwise no user-supplied public SSH key can be injected into the Compute Resource.
@@ -902,6 +901,9 @@ here.
 \label{sec:errata}
 
 \begin{itemize}
+\item Outlined expected behavior when replacing \hl{Mixin}s, specifically \hl{Resource Template}
+      and \hl{OS Template}
+\item New ``save'' action for \hl{Compute}
 \item New credentials mixin -- allows credentials to be supplied to the creation of a compute resource
 \item New contextualization mixin -- allows a script to be supplied with the creation request of a compute resource
 \item Added error state to all resource state models
