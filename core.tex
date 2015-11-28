@@ -322,8 +322,8 @@ A \hl{Category} instance is uniquely identified by concatenating the
 categorisation scheme with the category term,
 e.g.,~\textit{http://example.com/category/scheme\#term}.  This is done
 to enable discovery of \hl{Category} definitions in text-based
-renderings such as HTTP. All renderings MUST make use of and
-understand concatenated unique type identifiers of \hl{Category}
+renderings such as the OCCI Text Rendering~\cite{occi:text}. All renderings
+MUST make use of and understand concatenated unique type identifiers of \hl{Category}
 instances.
 %
 Sub-types of \hl{Category} such as \hl{Kind}, \hl{Mixin} and \hl{Action} inherit
@@ -634,7 +634,7 @@ table~\ref{tbl:category}.
     term 		& resize \\
     scheme 		& {\tt http://schemas.ogf.org/occi/infrastructure/storage/action\#} \\
     title 		& Resize virtual disk \\
-    attributes 		& Attribute({\tt "size"}) \todo{Please check if this fix is right}\\
+    attributes 		& Attribute({\tt "size"}) \\
   \botrule
   \end{tabular}
 }
@@ -698,8 +698,10 @@ A \hl{Mixin} instance MAY provide default values for \hl{Attribute}s already
 defined by a \hl{Kind}. A \hl{Mixin}'s \hl{Attribute}.{\tt default} overrides
 the default specified by the \hl{Kind}.
 
-\todo{Please check if it makes sense to add something like this. It provides a basis for replacing Resource templates :}\\
-The handling of templates with a common (transitive) parent \hl{Kind}, if assigned repeatedly, subsequently, during run time, MAY be defined case-by-case. A new template may, e.g., replace the previous one, or be rejected. An example of this is the definition of replacing Resource Templates in~\cite{occi:infrastructure}.
+The handling of \hl{Mixin}s with a common (transitive) parent \hl{Mixin}, if assigned
+repeatedly, MAY be defined case-by-case. A new \hl{Mixin} may, e.g., replace the previous
+one, be rejected, or be place alongside the previous one. An example of this is the
+definition of replacing Resource Templates in~\cite{occi:infrastructure}.
 
 
 \subsubsection{Collections}
@@ -717,7 +719,7 @@ of entity instances for a specific \hl{Entity} sub-type.
 
 A \hl{Kind}
 instance maintains the collection of all entity instances of the
-type identified by the \hl{Kind}. \todo{Please check that removing parentheses from here was correct.}
+type identified by the \hl{Kind}.
 
 Since a \hl{Mixin} instance can be associated to any entity
 instance, a collection can contain entity instances of different
@@ -804,7 +806,7 @@ For example \hl{Entity}.{\tt id} could be
 
 \subsubsection{Entity}
 \label{sec:entity}
-The \hl{Entity} type is an abstract parent\todo{ Check if this change from ``type'' to ``parent'' (or ``parent type''?) is correct} of the \hl{Resource} type and
+The \hl{Entity} type is an abstract parent type of the \hl{Resource} type and
 the \hl{Link} type. It MUST be implemented.
 %
 Table~\ref{tbl:entity} defines model attributes the \hl{Entity} type
@@ -1011,13 +1013,13 @@ extensions of the OCCI Core and Model specification.
 \appendix
 
 \newpage
-\section{Change Log}\todo{This is a list of changes, not Errata. But check and decide}
+\section{Errata}
 \label{sec:errata}
 
 The corrections introduced by the {\today} errata update are summarized below.
 The following sub-sections describe the possible impact of the corrections
 on existing implementations and associated dependent specifications such
-as OCCI HTTP Rendering \cite{occi:http_rendering} and  OCCI Infrastructure
+as OCCI Text Rendering \cite{occi:text} and OCCI Infrastructure
 \cite{occi:infrastructure}.
 
 \begin{itemize}
@@ -1028,12 +1030,12 @@ as OCCI HTTP Rendering \cite{occi:http_rendering} and  OCCI Infrastructure
 \item Correct the previously unclear definition of OCCI \hl{Action}. The
   \hl{Action} type inherits \hl{Category} and is only an identifier of
   an invocable operation. It does {\em not} represent the operation itself.
-  The \hl{Action} definition now aligns with its use in the OCCI HTTP Rendering
-  \cite{occi:http_rendering}.
+  The \hl{Action} definition now aligns with its use in the OCCI Text Rendering
+  \cite{occi:text}.
 
 \item Clarify the format of the unique entity instance identifier defined in
   OCCI \hl{Entity}. Incorporate the description and recommendations from the
-  OCCI HTTP Rendering \cite{occi:http_rendering}.
+  OCCI Text Rendering \cite{occi:text}.
 
 \item Clarify that an OCCI \hl{Mixin} instance is only a type identifier. The
   Core Model does not specify how a mixed-in attribute is implemented. The
@@ -1056,15 +1058,15 @@ as OCCI HTTP Rendering \cite{occi:http_rendering} and  OCCI Infrastructure
 \subsection{Action definition}
 
 The corrected definition of OCCI \hl{Action} has impact neither on discovery
-nor on invocation of \hl{Action}s in existing implementations. The OCCI HTTP Rendering
-\cite{occi:http_rendering} is better aligned with OCCI Core after the corrections
+nor on invocation of \hl{Action}s in existing implementations. The OCCI Text Rendering
+\cite{occi:text} is better aligned with OCCI Core after the corrections
 since it already uses {\tt type="action"} in its rendering of categories.
 
 \subsection{Rename ``resource instance'' to ``entity instance''}
 
 The change is editorial and does not affect existing implementations.
 %
-The glossary contains both terms for compatibility with the OCCI HTTP Rendering
-\cite{occi:http_rendering} specification.
+The glossary contains both terms for compatibility with the OCCI Text Rendering
+\cite{occi:text} specification.
 
 \end{document}
