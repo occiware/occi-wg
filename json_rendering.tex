@@ -256,8 +256,7 @@ Table~\ref{tbl:format_link} defines the object members.
     kind & String & Type identifier & immutable & 1 \\
 
     mixins & Array of Strings & List of type identifiers of associated OCCI
-Mixins &
-    mutable & 0..1 \\
+Mixins & mutable & 0..1 \\
 
     attributes & Object & Instance attributes (see
 \ref{sec:format_attribute_description}) & mutable & 0..1 \\
@@ -269,7 +268,7 @@ Action Categories applicable to the OCCI Link instance & mutable & 0..1 \\
 
     source & String & URI of the source OCCI Resource. If only one OCCI
 Resource is rendered in the same collection, this OCCI Resource is the
-source of the OCCI Link if this entry is omitted & immutable & 0..1\\
+source of the OCCI Link if this entry is omitted & immutable & 1\\
 
     source.type & string & Type identifier of the source Resource. & immutable & 0..1 \\
 
@@ -277,6 +276,7 @@ source of the OCCI Link if this entry is omitted & immutable & 0..1\\
 
     target.type & string & Type identifier of the target Resource, to be supplied if
 the target is an OCCI Resource. & immutable & 0..1 \\
+
 	title & String & title of the Link & mutable & 0..1\\
     \botrule
     \end{tabularx}
