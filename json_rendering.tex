@@ -60,8 +60,9 @@
 % header on first page is different
 \thispagestyle{empty}
 
-Draft \hfill Ralf Nyrén \\
+Draft \hfill Ralf Nyrén, Independent \\
 OCCI-WG \hfill Florian Feldhaus, GWDG\\
+\rightline {Boris Parák, CESNET}\\
 \rightline {February 25, 2011}\\
 \rightline {Updated: \today}
 
@@ -131,6 +132,8 @@ Entity instances MUST be rendered as JSON hashmaps.
 \subsubsection{Resource Instance Rendering}
 \label{sec:format_resource}
 
+\todo{Section EXAMPLE RESOURCE is missing.}
+
 The OCCI Resource Instance Rendering consists of a JSON object as shown in the
 following example. Section \ref{sec:example_resource} contains a detailed
 example.
@@ -162,17 +165,17 @@ Table~\ref{tbl:format_resource} defines the object members.
 
     mixins & Array of Strings & List of type identifiers of associated OCCI
 Mixins  &
-mutable & 0..* \\
+mutable & 0..1 \\
 
     attributes & Object & Instance Attributes (see
-\ref{sec:format_attribute_description}) & mutable & 0..* \\
+\ref{sec:format_attribute_description}) & mutable & 0..1 \\
 
     actions & Array of Strings & List of type identifiers of OCCI
-Actions applicable to the OCCI Resource instance & mutable & 0..* \\
+Actions applicable to the OCCI Resource instance & mutable & 0..1 \\
 
     id & String & ID of the OCCI Resource & immutable & 1\\
 
-    links & Array of Strings & List of URIs of OCCI Links & mutable & 0..*\\
+    links & Array of Strings & List of URIs of OCCI Links & mutable & 0..1\\
     summary & String & Summary text of resource & mutable & 0..1 \\
     title & String & Title of resource & mutable & 0..1 \\
     \botrule
@@ -185,6 +188,8 @@ Actions applicable to the OCCI Resource instance & mutable & 0..* \\
 The OCCI Action Invocation Rendering identifies an invocable operation on a OCCI Resource or
 OCCI Link instance. To trigger such an operation the OCCI Action Invocation
 Rendering is required.
+
+\todo{Section EXAMPLE ACTION INVOCATION is missing.}
 
 The OCCI Action Invocation Rendering consists of a top-level JSON object as shown in the
 following example. Section \ref{sec:example_action_invocation} contains a detailed example.
@@ -209,7 +214,7 @@ Table~\ref{tbl:format_action_invocation} defines the object members.
     action & String & Type identifier & immutable & 1 \\
 
     attributes & Object & Instance attributes (see
-\ref{sec:format_attribute_description}) & mutable & 0..* \\
+\ref{sec:format_attribute_description}) & mutable & 0..1 \\
     \botrule
     \end{tabularx}
 }
@@ -217,6 +222,8 @@ Table~\ref{tbl:format_action_invocation} defines the object members.
 
 \subsubsection{Link Instance Rendering}
 \label{sec:format_link}
+
+\todo{Section EXAMPLE LINK is missing.}
 
 The OCCI Link Instance Rendering consists of a JSON object as shown in the
 following example. Section \ref{sec:example_link} contains a detailed example.
@@ -230,13 +237,13 @@ Table~\ref{tbl:format_link} defines the object members.
             "actions": Array,
             "id": String,
             "source": String,
+            "source.type": String,
             "target": String,
-            "par": String,
+            "target.type": String,
             "title": String
         }
 
 \end{lstlisting}
-\todo{``par'' renamed from ``rel'' -- please check}
 
 \mytablefloat{
     \label{tbl:format_link}
@@ -250,13 +257,13 @@ Table~\ref{tbl:format_link} defines the object members.
 
     mixins & Array of Strings & List of type identifiers of associated OCCI
 Mixins &
-    mutable & 0..* \\
+    mutable & 0..1 \\
 
     attributes & Object & Instance attributes (see
-\ref{sec:format_attribute_description}) & mutable & 0..* \\
+\ref{sec:format_attribute_description}) & mutable & 0..1 \\
 
     actions & Array of Strings & List of type identifiers of OCCI
-Action Categories applicable to the OCCI Link instance & mutable & 0..* \\
+Action Categories applicable to the OCCI Link instance & mutable & 0..1 \\
 
     id & String & ID of the OCCI Link & immutable & 1\\
 
@@ -264,17 +271,16 @@ Action Categories applicable to the OCCI Link instance & mutable & 0..* \\
 Resource is rendered in the same collection, this OCCI Resource is the
 source of the OCCI Link if this entry is omitted & immutable & 0..1\\
 
+    source.type & string & Type identifier of the source Resource. & immutable & 0..1 \\
+
     target & String & URI of the target Resource & immutable & 1\\
 
-    par & string & Type identifier of the target Resource, to be supplied if
+    target.type & string & Type identifier of the target Resource, to be supplied if
 the target is an OCCI Resource. & immutable & 0..1 \\
 	title & String & title of the Link & mutable & 0..1\\
     \botrule
     \end{tabularx}
-
-\flushleft\todo{``par'' renamed from ``rel'' -- please check}
 }
-
 
 
 \subsection{Category Instance Rendering}
@@ -283,6 +289,8 @@ Category instances MUST be rendered as JSON hashmaps.
 
 \subsubsection{Kind Instance Rendering}
 \label{sec:format_kind}
+
+\todo{Section EXAMPLE KIND is missing.}
 
 The OCCI Kind Instance Rendering consists of a JSON object as shown in the
 following example. Section \ref{sec:example_kind} contains a detailed example.
@@ -296,21 +304,21 @@ Table~\ref{tbl:format_kind} defines the top-level object members.
     \toprule
     Object member & JSON type & Description & Mutability & Multiplicity \\
     \colrule
-    term & String & Unique identifier within the categorisation scheme &
+    term & String & Unique identifier within the categorization scheme &
 immutable & 1 \\
 
-    scheme & String & Categorisation scheme & immutable & 1 \\
+    scheme & String & Categorization scheme & immutable & 1 \\
 
     title & String & Title of the OCCI Kind & immutable & 0..1 \\
 
     attributes & Object & Attribute description, see
-~\ref{tbl:format_attribute_description} & immutable & 0..* \\
+~\ref{tbl:format_attribute_description} & immutable & 0..1 \\
 
     parent & String & OCCI Kind type identifier of the
 related ``parent'' \hl{Kind} instance & immutable & 0..1 \\
 
     actions & Array of Strings & List of OCCI Action type
-identifiers & immutable & 0..* \\
+identifiers & immutable & 0..1 \\
 
     location & string & Transport protocol specific URI bound to the OCCI Kind
 instance. MUST be supplied for the OCCI Kinds of all OCCI Entities except OCCI
@@ -332,10 +340,11 @@ Entity itself & immutable & 0..1 \\
         }
 
 \end{lstlisting}
-\todo{Parent fixed from ``Array'' to ``String'' -- please check}
 
 \subsubsection{Mixin Instance Rendering}
 \label{sec:format_mixin}
+
+\todo{Section EXAMPLE MIXIN is missing.}
 
 The OCCI Mixin Instance Rendering consists of a JSON object as shown in the following example. Section \ref{sec:example_mixin} contains a detailed example.
 Table~\ref{tbl:format_mixin} defines the top-level object members.
@@ -363,24 +372,24 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
     \toprule
     Object member & JSON type & Description & Mutability & Multiplicity \\
     \colrule
-    term & String & Unique identifier within the categorisation scheme &
+    term & String & Unique identifier within the categorization scheme &
 immutable & 1 \\
 
-    scheme & String & Categorisation scheme & immutable & 1 \\
+    scheme & String & Categorization scheme & immutable & 1 \\
 
     title & String & Title of the OCCI Mixin & immutable & 0..1 \\
 
     attributes & Object & Attribute description, see
-~\ref{tbl:format_attribute_description} & immutable & 0..* \\
+~\ref{tbl:format_attribute_description} & immutable & 0..1 \\
 
     depends & Array of Strings & List of type identifiers of the dependent
- \hl{Mixin} instances & immutable & 0..* \\
+ \hl{Mixin} instances & immutable & 0..1 \\
 
     applies & Array of Strings & List of OCCI Kind type identifiers this OCCI
-Mixin can be applied to \\
+Mixin can be applied to & immutable & 0..1 \\
 
     actions & Array of Strings & List of OCCI Action type identifiers
-& immutable & 0..* \\
+& immutable & 0..1 \\
 
     location & String & Transport protocol specific URI bound to the OCCI Mixin
 instance & immutable & 1 \\
@@ -405,15 +414,15 @@ top-level JSON object with name {\em actions} as an array of JSON Objects with
     \toprule
     Object member & JSON type & Description & Mutability & Multiplicity \\
     \colrule
-    term & String & Unique type identifier within the categorisation scheme &
+    term & String & Unique type identifier within the categorization scheme &
 immutable & 1 \\
 
-    scheme & String & Categorisation scheme & immutable & 1 \\
+    scheme & String & Categorization scheme & immutable & 1 \\
 
     title & String & Title of the OCCI Action & immutable & 0..1 \\
 
     attributes & Object & Attribute description, see
-~\ref{tbl:format_attribute_description} & immutable & 0..* \\
+~\ref{tbl:format_attribute_description} & immutable & 0..1 \\
     \botrule
     \end{tabularx}
 }
@@ -496,21 +505,16 @@ Collections of Category instances are rendered as JSON arrays.
 
 \subsection{Attributes Rendering}
 
-\todo{This needs to be completely redone}
-
 Attribute names consist of alphanumeric characters separated by dots. The dots
-define a namespace hierarchy. This hierarchy is reflected by stacked JSON
-objects as shown in the following example. The last object contains either a
-Number, String or Boolean value or, when used within a category, an Object
-following the Attribute Description Rendering (see
-\ref{sec:format_attribute_description}).
+define a logical namespace-like hierarchy. This hierarchy is NOT reflected in JSON
+objects. As shown in the following example, the attribute name is an opaque
+identifier rendered as hashmap \textit{key}. The hashmap \textit{value} contains either a
+Number, a String, a Boolean, an Array or an Object (as an attribute value or an attribute
+description, following the Attribute Description Rendering, see \ref{sec:format_attribute_description}).
 \begin{lstlisting}
 {
-    "one": {
-        "two": {
-            "three": Number|String|Boolean|Object
-        }
-    }
+    "one.two.three": Number|String|Boolean|Array|Object,
+    "one.two.four" : Number|String|Boolean|Array|Object
 }
 \end{lstlisting}
 
@@ -535,14 +539,14 @@ OCCI Entity.
     required & Boolean & Defines if the Attribute MUST be specified at
 instantiation of the OCCI Entity & false \\
 
-    type & String & Type of the Attribute. MUST be either string, number or
-boolean. & string \\
+    type & String & Type of the Attribute. MUST be either ``string'', ``number'',
+``boolean'', ``array'' or ``object''. & string \\
 
-%    Pattern & string & Posix Extended Regular Expression as defined in
-%\cite{iso9945:2009}. For interoperability reasons, POSIX character classes
-% (e.g. [:alpha:]) MUST NOT be used. & .* \\
+    pattern & string & POSIX Extended Regular Expression as defined in
+\cite{iso9945:2009}. For interoperability reasons, POSIX character classes
+ (e.g. [:alpha:]) MUST NOT be used. & .* \\
 
-    default & String, Number or Boolean & Attribute default. MUST be the same
+    default & String, Number, Boolean, Array, Object & Attribute default. MUST be the same
 type as defined in the type property and MUST  be used if the Attribute is not
 present in the instantiated OCCI Entity & \\
 
@@ -555,12 +559,11 @@ present in the instantiated OCCI Entity & \\
     "mutable": Boolean,
     "required": Boolean,
     "type": String,
-    "default": String | Number | Boolean,
-    "description": String
+    "default": String | Number | Boolean | Array | Object,
+    "description": String,
     "pattern": String
 }
 \end{lstlisting}
-\todo{Added member ``pattern'' -- please check}
 
 \section{Security Considerations}
 OCCI does not require that an authentication mechanism be used nor
