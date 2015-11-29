@@ -109,8 +109,8 @@ in the OCCI context:
     {\bf entity instance} is defined to include any instance of a
     {\em sub-type} of \hl{Resource} or \hl{Link} as well.
 
-  \item[mix-in] An instance of the \hl{Mixin} type associated with an
-    {\bf entity instance}. The \textbf{mix-in} concept as used by OCCI
+  \item[mixin] An instance of the \hl{Mixin} type associated with an
+    {\bf entity instance}. The \textbf{mixin} concept as used by OCCI
     {\em only} applies to instances, never to \hl{Entity} types.
     See section~\ref{sec:mixin}.
 
@@ -176,7 +176,7 @@ web-based OCCI client could easily be reused as the management tool
 for a wide variety of services.
 
 The OCCI Core Model can be extended through inheritance but also
-using a mix-in-like concept.
+using a mixin-like concept.
 
 \begin{quote}
   Mixins first appeared in the Symbolics' object-oriented
@@ -186,9 +186,9 @@ using a mix-in-like concept.
   \footnote{http://en.wikipedia.org/wiki/Mixin.}
 \end{quote}
 
-The mix-in model only applies at the instance level, i.e., the ``object
-level'', and thereby differs from the more common uses of the mix-in
-concept. A mix-in in OCCI can never be applied to a type, only to an
+The mixin model only applies at the instance level, i.e., the ``object
+level'', and thereby differs from the more common uses of the mixin
+concept. A mixin in OCCI can never be applied to a type, only to an
 instance.
 
 \subsection{Overview}
@@ -235,7 +235,7 @@ applicable to an entity instance.
 
 The last type defined by the OCCI Core Model is the \hl{Mixin}
 type. An instance of \hl{Mixin} can be associated with an entity
-instance to mix-in additional capabilities at run-time.
+instance to mixin additional capabilities at run-time.
 
 For compliance with OCCI Core, all of the types defined in the OCCI
 Core Model MUST be implemented.  The following sections of the
@@ -515,7 +515,7 @@ instantiation of the OCCI Core Model, with no extensions, no
 A \hl{Mixin} instance MAY be associated with an entity instance
 either at instance creation time or at run time.
 Restrictions on which entity instances a particular \hl{Mixin} can be associated
-to SHOULD be advertised through the \hl{Mixin}.{\tt applies} model attribute.
+with MUST be advertised through the \hl{Mixin}.{\tt applies} model attribute.
 
 When a client attempts to associate a \hl{Mixin} instance to an entity instance
 at a stage not supported by a particular provider's OCCI
@@ -526,7 +526,7 @@ For example a ``bandwidth'' \hl{Mixin} may only
 be applicable to instances of the \hl{Network}%
 \footnote{The \hl{Network} type is defined in OCCI
   Infrastructure~\cite{occi:infrastructure}.}  type.
-An OCCI provider SHOULD advertise such a restriction by setting
+An OCCI provider MUST advertise such a restriction by setting
 \hl{Mixin}.{\tt applies} to the \hl{Kind} instance of the \hl{Network} type%
 \footnote{\textit{http://schemas.ogf.org/occi/infrastructure\#network}}.
 
@@ -821,7 +821,7 @@ MUST implement to be compliant.
     id			& URI 		& 1 		& Immutable 		& A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
 	title	    & String	& 0..1		& Mutable			& The display name of the instance. \\
     kind 		& \hl{Kind}	& 1 		& Immutable 		& The \hl{Kind} instance uniquely identifying the particular \hl{Entity} sub-type of this instance. \\
-    mixins 		& \hl{Kind}	& 0..* 		& Mutable 		& The \hl{Mixin} instances associated to this entity instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\
+    mixins 		& \hl{Mixin}	& 0..* 		& Mutable 		& The \hl{Mixin} instances associated to this entity instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\
     \botrule
   \end{tabular}
 }
@@ -914,10 +914,10 @@ The OCCI Core Model has a flexible yet fairly simple extension
 mechanism based on the type classification system described in
 section~\ref{sec:classification}.
 
-The OCCI Core Model can be extended using two different methods:
-sub-typing and mix-in. Custom sub-typing require provider-specific
-\hl{Kind} instances and custom mix-ins require provider-specific
-\hl{Mixin} instances.  Both methods MAY involve the use of
+The OCCI Core Model can be extended using three different methods:
+provider-specific category instances, sub-typing and mixins. Custom sub-typing requires provider-specific
+\hl{Kind} instances and custom mixins require provider-specific
+\hl{Mixin} instances. Both methods MAY involve the use of
 provider-specific \hl{Action} instances.
 The following sections
 define the rules for extending the OCCI Core Model.
@@ -958,8 +958,8 @@ model attribute equal to the \hl{Kind} instance of the type extended.
 See figure~\ref{fig:kind_relationships} for an example of \hl{Kind}
 relationships.
 
-\subsubsection{Mix-ins}
-The OCCI Core Model MAY be extended using a mix-in like concept by
+\subsubsection{Mixins}
+The OCCI Core Model MAY be extended using a mixin like concept by
 defining provider-specific \hl{Mixin} instances.  A \hl{Mixin}
 instance can be associated with any entity instance although a
 provider MAY apply restrictions.
