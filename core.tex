@@ -891,7 +891,9 @@ table~\ref{tbl:link} in order to be compliant.
     Model attribute	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
     \colrule
     source 		& \hl{Resource} & 1 		& Mutable 		& The \hl{Resource} instances the \hl{Link} instance originates from. \\
+    source.type    & \hl{Kind} & 0..1     & Mutable     & The \hl{Kind} of {\tt source}. \\
     target 		& \hl{URI} & 1 		& Mutable 		& The unique identifier of an \hl{Object} this \hl{Link} instance points to. \\
+    target.type    & \hl{Kind} & 0..1    & Mutable     & The \hl{Kind} of {\tt target}, if applicable. \\
     \botrule
   \end{tabular}
 }
@@ -902,7 +904,8 @@ The \hl{Link} type is assigned the \hl{Kind} instance
 The {\tt source} attribute of a \hl{Link} instance
 MUST refer to \hl{Resource} {\em instance} within the service provider's
 namespace. The \hl{Link}'s {\tt target} attribute MUST point to a resource instance either within the provider's namespace or outside,
-hosted by a third-party.
+hosted by a third-party. {\tt source.type} and {\tt target.type} MAY be used to explicitly define the \hl{Kind} of the \hl{Resource}
+instance in {\tt source} and {\tt target} respectively.
 
 The \hl{Link} type is the second of three entry points to extend the
 OCCI Core Model, see section~\ref{sec:extensibility}.
@@ -1023,6 +1026,9 @@ as OCCI Text Rendering \cite{occi:text} and OCCI Infrastructure
 \cite{occi:infrastructure}.
 
 \begin{itemize}
+\item Added optional typed \hl{Link} (via {\tt source.type} and {\tt target.type}
+  attributes).
+
 \item Introduce an explicit \hl{Attribute} type to expose the discoverable
   attribute properties already defined for the OCCI base types \hl{Entity},
   \hl{Resource}, \hl{Link} and their sub-types.
