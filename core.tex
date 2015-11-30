@@ -8,6 +8,7 @@
 \usepackage{fancyhdr}
 \usepackage{comment}
 \usepackage{occi}
+\usepackage{tabularx}
 \setlength{\headheight}{13pt}
 \pagestyle{fancy}
 
@@ -307,15 +308,15 @@ MUST implement to be compliant.
 
 \mytablefloat{
   \label{tbl:category}Model attributes defined for the \hl{Category} type.}{
-  \begin{tabular}{llllp{2.7in}}
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute 	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
+    Model attribute 	& Type 		& Multiplicity 		& Required	& Client Mutability 	& Description \\
     \colrule
-    term 		& String 	& 1 			& Immutable 			& Unique identifier of the \hl{Category} instance within the categorisation scheme. \\
-    scheme 		& URI 		& 1 			& Immutable 			& The categorisation scheme. \\
-    title 		& String 	& 0..1 			& Immutable 			& The display name of an instance. \\
+    term 		& String 	& 1 			& Yes		& Immutable 			& Unique identifier of the \hl{Category} instance within the categorisation scheme. \\
+    scheme 		& URI 		& 1 			& Yes		& Immutable 			& The categorisation scheme. \\
+    title 		& String 	& 0..1 			& --		& Immutable 			& The display name of an instance. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 A \hl{Category} instance is uniquely identified by concatenating the
@@ -351,19 +352,19 @@ MUST implement to be compliant.
 
 \mytablefloat{
   \label{tbl:attribute}Model attributes defined for the \hl{Attribute} type.}{
-  \begin{tabular}{lp{23mm}llp{60mm}}
+  \begin{tabularx}{\textwidth}{lp{18mm}lllX}
     \toprule
-    Model attribute   &   Type    &   Multiplicity    &   Client Mutability   &   Description \\
+    Model attribute	&   Type      			&   Multiplicity & Required	&   Client Mutability   &   Description \\
     \colrule
-    name    &   String    &   1   &   Immutable   & Attribute name. \\
-    type    &   Enum \{Object, List, Hash\}   &   1   &   Immutable   &   Attribute type. \\
-    mutable   &   Boolean   &   1   &   Immutable   &   Attribute mutability. \\
-    required    &   Boolean   &   1   &   Immutable   &   Whether the Attribute must be supplied by the client at instance creation-time. \\
-    pattern   &   String    &   0..1    &   Immutable   &   Attribute pattern expressed as ERE \\
-    default   &   String    &   0..1    &   Immutable   &   Attribute default value. \\
-    description   &   String    &   0..1    &   Immutable   &   A description of the Attribute. \\
+    name    		&   String    			&   1		& Yes			&   Immutable   & Attribute name. \\
+    type    		&   Enum \{Object, List, Hash\} &   1   	& Yes			&   Immutable   &   Attribute type. \\
+    mutable   		&   Boolean   			&   1   	& Yes			&   Immutable   &   Attribute mutability. \\
+    required    	&   Boolean   			&   1   	& Yes			&   Immutable   &   Whether the Attribute must be supplied by the client at instance creation-time. \\
+    pattern   		&   String    			&   0..1    	& --			&   Immutable   &   Attribute pattern expressed as ERE \\
+    default   		&   String    			&   0..1    	& --			&   Immutable   &   Attribute default value. \\
+    description  	&   String    			&   0..1    	& --			&   Immutable   &   A description of the Attribute. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 An Attribute name MUST be defined by \hl{Attribute}.{\tt name}. The
@@ -427,15 +428,15 @@ for \hl{Entity}, another for \hl{Resource} and the last one for
 
 \mytablefloat{
   \label{tbl:kind}Model attributes defined for the \hl{Kind} type.}{
-  \begin{tabular}{llllp{2.7in}}
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute	& Type 		& Multiplicity 		& Client Mutability 		& Description \\
+    Model attribute	& Type 		& Multiplicity 	& Required	& Client Mutability 		& Description \\
     \colrule
-    actions 		& \hl{Action} 	& 0..* 			& Immutable 			& Set of \hl{Action} instances defined by the \hl{Kind} instance. \\
-    parent 		& \hl{Kind} 	& 0..1 			& Immutable 			& Another \hl{Kind} instance which this \hl{Kind} has an inheritance relationship with. \\
-    entities 		& \hl{Entity} 	& 0..* 			& Immutable 			& Set of entity instances. Instances of the particular \hl{Entity} sub-type which is uniquely identified by this \hl{Kind} instance. \\
+    actions 		& \hl{Action} 	& 0..* 		& --		& Immutable 			& List of \hl{Action} instances defined by the \hl{Kind} instance. \\
+    parent 		& \hl{Kind} 	& 0..1 		& --		& Immutable 			& Another \hl{Kind} instance which this \hl{Kind} has an inheritance relationship with. \\
+    entities 		& \hl{Entity} 	& 0..* 		& --		& Immutable 			& List of entity instances. Instances of the particular \hl{Entity} sub-type which is uniquely identified by this \hl{Kind} instance. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 The \hl{Kind} type inherits the \hl{Category} type. To be compliant
@@ -532,16 +533,16 @@ An OCCI provider SHOULD advertise such a restriction by setting
 
 \mytablefloat{
   \label{tbl:mixin}Model attributes defined for the \hl{Mixin} type.}{
-  \begin{tabular}{llllp{2.7in}}
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute	& Type 	& Multiplicity 	& Client Mutability 	& Description \\
+    Model attribute	& Type 	& Multiplicity 	& Required	& Client Mutability 	& Description \\
     \colrule
-    actions 	& \hl{Action} 	& 0..* 			& Immutable 			& Set of \hl{Action} instances defined by the \hl{Mixin} instance. \\
-    depends 	& \hl{Mixin} 	& 0..* 			& Immutable 	& Set of \hl{Mixin} instances this \hl{Mixin} instance depends on. \\
-    applies 	& \hl{Kind} 	& 0..* 			& Immutable 	& Set of \hl{Kind} instances this \hl{Mixin} instance applies to. \\
-    entities 	& \hl{Entity} 	& 0..* 			& Mutable 				& Set of entity instances associated with the \hl{Mixin} instance. \\
+    actions 	& \hl{Action} 	& 0..* 		& --		& Immutable 			& List of \hl{Action} instances defined by the \hl{Mixin} instance. \\
+    depends 	& \hl{Mixin} 	& 0..* 		& --		& Immutable 	& List of \hl{Mixin} instances this \hl{Mixin} instance depends on. \\
+    applies 	& \hl{Kind} 	& 0..* 		& --		& Immutable 	& List of \hl{Kind} instances this \hl{Mixin} instance applies to. \\
+    entities 	& \hl{Entity} 	& 0..* 		& --		& Mutable 				& List of entity instances associated with the \hl{Mixin} instance. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 The \hl{Mixin} type inherits the \hl{Category} type. To be compliant
@@ -808,16 +809,16 @@ MUST implement to be compliant.
 %
 \mytablefloat{
   \label{tbl:entity}Model attributes defined for the \hl{Entity} type.}{
-  \begin{tabular}{llllp{7.5cm}}
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
+    Model attribute	& Type 		& Multiplicity 	& Required	& Client Mutability 	& Description \\
     \colrule
-    id			& URI 		& 1 		& Immutable 		& A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
-	title	    & String	& 0..1		& Mutable			& The display name of the instance. \\
-    kind 		& \hl{Kind}	& 1 		& Immutable 		& The \hl{Kind} instance uniquely identifying the particular \hl{Entity} sub-type of this instance. \\
-    mixins 		& \hl{Kind}	& 0..* 		& Mutable 		& The \hl{Mixin} instances associated to this entity instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\
+    id			& URI 		& 1 		& Yes		& Immutable 		& A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
+	title	    & String	& 0..1			& --		& Mutable			& The display name of the instance. \\
+    kind 		& \hl{Kind}	& 1 		& Yes		& Immutable 		& The \hl{Kind} instance uniquely identifying the particular \hl{Entity} sub-type of this instance. \\
+    mixins 		& \hl{Kind}	& 0..* 		& --		& Mutable 		& \hl{Mixin} instances associated to this entity instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 Every sub-type of \hl{Entity} MUST be assigned a \hl{Kind} instance,
@@ -847,14 +848,14 @@ specialisation.
 
 \mytablefloat{
   \label{tbl:resource}Model attributes defined for the \hl{Resource} type.}{
-  \begin{tabular}{llllp{8cm}}
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute 	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
+    Model attribute 	& Type 		& Multiplicity 	& Required	& Client Mutability 	& Description \\
     \colrule
-    links 		& \hl{Link} & 0..* 			& Mutable 				& A set of \hl{Link} compositions. Being a composite relation the removal of a \hl{Link} from the set MUST also remove the \hl{Link} instance.\\
-    summary 	& String 	& 0..1 		& Mutable 		& A summarising description of the \hl{Resource} instance.\\
+    links 		& \hl{Link} 	& 0..*		& --		& Mutable 		& List of \hl{Link} compositions. Being a composite relation the removal of a \hl{Link} from the set MUST also remove the \hl{Link} instance.\\
+    summary 		& String 	& 0..1 		& --		& Mutable 		& A summarising description of the \hl{Resource} instance.\\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 The \hl{Resource} type is assigned the \hl{Kind} instance
@@ -880,14 +881,14 @@ table~\ref{tbl:link} in order to be compliant.
 
 \mytablefloat{
   \label{tbl:link}Model attributes defined for the \hl{Link} type.}{
-  \begin{tabular}{llllp{7.5cm}}
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
+    Model attribute	& Type 		& Multiplicity 	& Required	& Client Mutability 	& Description \\
     \colrule
-    source 		& \hl{Resource} & 1 		& Mutable 		& The \hl{Resource} instances the \hl{Link} instance originates from. \\
-    target 		& \hl{URI} & 1 		& Mutable 		& The unique identifier of an \hl{Object} this \hl{Link} instance points to. \\
+    source 		& \hl{Resource} & 1 		& Yes		& Mutable 		& The \hl{Resource} instances the \hl{Link} instance originates from. \\
+    target 		& \hl{URI} 	& 1 		& Yes		& Mutable 		& The unique identifier of an \hl{Object} this \hl{Link} instance points to. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 The \hl{Link} type is assigned the \hl{Kind} instance
