@@ -134,7 +134,7 @@ Entity instances MUST be rendered as JSON hashmaps.
 \label{sec:format_resource}
 
 The OCCI Resource Instance Rendering consists of a JSON object as shown in the
-following example. Section \ref{sec:example_resource} contains a detailed
+following declaration. Appendix~\ref{resouce_instance_rendering_example} contains a detailed
 example.
 Table~\ref{tbl:format_resource} defines the object members.
 \begin{lstlisting}
@@ -150,7 +150,6 @@ Table~\ref{tbl:format_resource} defines the object members.
         }
 \end{lstlisting}
 
-An example of a rendered Resource instance is given in Appendix~\ref{resouce_instance_rendering_example}.
 
 \mytablefloat{
     \label{tbl:format_resource}
@@ -189,7 +188,7 @@ OCCI Link instance. To trigger such an operation the OCCI Action Invocation
 Rendering is required.
 
 The OCCI Action Invocation Rendering consists of a top-level JSON object as shown in the
-following example. Section \ref{sec:example_action_invocation} contains a detailed example.
+following declaration. Appendix~\ref{action_invocation_rendering_example} contains a detailed example.
 Table~\ref{tbl:format_action_invocation} defines the object members.
 
 \begin{lstlisting}
@@ -198,8 +197,6 @@ Table~\ref{tbl:format_action_invocation} defines the object members.
     "attributes": Object
 }
 \end{lstlisting}
-
-An example of a rendered Action Invocation is given in Appendix~\ref{action_invocation_rendering_example}.
 
 \mytablefloat{
     \label{tbl:format_action_invocation}
@@ -223,7 +220,7 @@ An example of a rendered Action Invocation is given in Appendix~\ref{action_invo
 \label{sec:format_link}
 
 The OCCI Link Instance Rendering consists of a JSON object as shown in the
-following example. Section \ref{sec:example_link} contains a detailed example.
+following declaration. Appendix~\ref{link_instance_rendering_example} contains a detailed example.
 Table~\ref{tbl:format_link} defines the object members.
 \begin{lstlisting}
         {
@@ -239,9 +236,6 @@ Table~\ref{tbl:format_link} defines the object members.
             "title": String
         }
 \end{lstlisting}
-
-An example of a rendered Link instance is shown in Appendix~\ref{link_instance_rendering_example}.
-
 
 \mytablefloat{
     \label{tbl:format_link}
@@ -288,7 +282,7 @@ Category instances MUST be rendered as JSON hashmaps.
 \label{sec:format_kind}
 
 The OCCI Kind Instance Rendering consists of a JSON object as shown in the
-following example. Section \ref{sec:example_kind} contains a detailed example.
+following declaration. Appendix~\ref{kind_instance_rendering_example} contains a detailed example.
 Table~\ref{tbl:format_kind} defines the top-level object members.
 
 \mytablefloat{
@@ -334,13 +328,10 @@ Entity itself & immutable & 0..1 \\
         }
 \end{lstlisting}
 
-An example of a rendered Kind instance \texttt{compute} is shown in Appendix~\ref{kind_instance_rendering_example}.
-
-
 \subsubsection{Mixin Instance Rendering}
 \label{sec:format_mixin}
 
-The OCCI Mixin Instance Rendering consists of a JSON object as shown in the following example. Section \ref{sec:example_mixin} contains a detailed example.
+The OCCI Mixin Instance Rendering consists of a JSON object as shown in the following declaration. Appendix~\ref{mixin_instance_rendering_example} contains a detailed example.
 Table~\ref{tbl:format_mixin} defines the top-level object members.
 
 \begin{lstlisting}
@@ -355,8 +346,6 @@ Table~\ref{tbl:format_mixin} defines the top-level object members.
             "location": String
         }
 \end{lstlisting}
-
-An example of a rendered Mixin instance is shown in Appendix~\ref{mixin_instance_rendering_example}.
 
 \mytablefloat{
     \label{tbl:format_mixin}
@@ -395,7 +384,7 @@ instance & immutable & 1 \\
 \label{sec:format_action}
 
 The OCCI Action Instance Rendering consists of a JSON object as shown in the
-following example.
+following declaration. Appendix~\ref{action_instance_rendering_example} contains a detailed example.
 Table~\ref{tbl:format_action} defines the top-level object members.
 
 \mytablefloat{
@@ -429,9 +418,6 @@ immutable & 1 \\
             "attributes": Object,
         }
 \end{lstlisting}
-
-An example of a rendered Action instance is shown in Appendix~\ref{action_instance_rendering_example}.
-
 
 
 \subsection{Entity Collection Rendering}
@@ -502,7 +488,7 @@ Collections of Category instances are rendered as JSON arrays.
 
 Attribute names consist of alphanumeric characters separated by dots. The dots
 define a logical namespace-like hierarchy. This hierarchy is NOT reflected in JSON
-objects. As shown in the following example, the attribute name is an opaque
+objects. As shown in the following declaration, the attribute name is an opaque
 identifier rendered as hashmap \textit{key}. The hashmap \textit{value} contains either a
 Number, a String, a Boolean, an Array or an Object (as an attribute value or an attribute
 description, following the Attribute Description Rendering, see \ref{sec:format_attribute_description}).
@@ -606,7 +592,8 @@ The following is an example of a rendered \texttt{compute} resource instance as 
 {
     "kind": "http://schemas.ogf.org/occi/infrastructure#compute",
     "mixins": [
-        "http: //example.com/occi/templates#myosmixin"
+        "http://example.com/occi/infrastructure/os_tpl#debian9"
+        "http://example.com/occi/infrastructure/resource_tpl#medium"
     ],
     "attributes": {
         "occi.compute.speed": 2,
