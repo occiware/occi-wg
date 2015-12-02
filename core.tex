@@ -199,6 +199,8 @@ overview of the OCCI Core Model. It must be noted that the UML diagram
 in itself is not a complete definition of the model. The diagram is
 merely provided as an overview to help understanding the model.
 
+\todo{Re-generate core\_model from source!!!}
+
 \begin{figure}[!h]
   {\centering \resizebox*{0.9\columnwidth}{!}{%\rotatebox{270}
       {\includegraphics{figs/core_model.pdf}}} \par}
@@ -360,8 +362,8 @@ MUST implement to be compliant.
     type            & Enum \{Object, List, Hash\} & 1                   & Yes       & Immutable           & Attribute type. \\
     mutable         & Boolean                     & 1                   & Yes       & Immutable           & Attribute mutability. \\
     required        & Boolean                     & 1                   & Yes       & Immutable           & Whether the Attribute must be supplied by the client at instance creation-time. \\
-    pattern         & String                      & 0..1                & --        & Immutable           & Attribute pattern expressed as ERE. \\
-    default         & String                      & 0..1                & --        & Immutable           & Attribute default value. \\
+    pattern         & Object                      & 0..1                & --        & Immutable           & Attribute pattern expressed in a rendering-specific way. \\
+    default         & \{Object, List, Hash\}      & 0..1                & --        & Immutable           & Attribute default value. \\
     description     & String                      & 0..1                & --        & Immutable           & A description of the Attribute. \\
     \botrule
   \end{tabularx}
@@ -386,7 +388,8 @@ discoverable if used.
 \item[required] If an \hl{Attribute} is ``required'' a client MUST specify a
   value at instance creation-time.
 
-\item[pattern] MAY be specified in ERE \cite{ere} format, places additional restrictions on possibles values given.
+\item[pattern] MAY be specified in a rendering-specific format, places additional restrictions on acceptable attribute values. Detailed
+  information is provided in every OCCI rendering document.
 
 \item[default] The default value given to an \hl{Attribute} if the client does
   not specify a value at instance creation time.  The {\em default} property is used to implement templates, see section~\ref{sec:template}.
