@@ -8,6 +8,7 @@
 \usepackage{fancyhdr}
 \usepackage{comment}
 \usepackage{occi}
+\usepackage{tabularx}
 \setlength{\headheight}{13pt}
 \pagestyle{fancy}
 
@@ -109,8 +110,8 @@ in the OCCI context:
     {\bf entity instance} is defined to include any instance of a
     {\em sub-type} of \hl{Resource} or \hl{Link} as well.
 
-  \item[mixin] An instance of the \hl{Mixin} type associated with an
-    {\bf entity instance}. The \textbf{mixin} concept as used by OCCI
+  \item[mix-in] An instance of the \hl{Mixin} type associated with an
+    {\bf entity instance}. The \textbf{mix-in} concept as used by OCCI
     {\em only} applies to instances, never to \hl{Entity} types.
     See section~\ref{sec:mixin}.
 
@@ -153,7 +154,7 @@ at the same time maintaining a high level of interoperability.
 
 This document, the OCCI Core specification, defines the OCCI Core
 Model. This model is the core of the specification suite. Renderings
-(including associated behaviours) can interact with it and extensions
+(including associated behaviors) can interact with it and extensions
 can expand it. In itself, the core model is only useful
 for a very limited set of use cases. However, it provides the basis
 for renderings and extensions to build upon.
@@ -186,9 +187,9 @@ using a mixin-like concept.
   \footnote{http://en.wikipedia.org/wiki/Mixin.}
 \end{quote}
 
-The mixin model only applies at the instance level, i.e., the ``object
-level'', and thereby differs from the more common uses of the mixin
-concept. A mixin in OCCI can never be applied to a type, only to an
+The mix-in model only applies at the instance level, i.e., the ``object
+level'', and thereby differs from the more common uses of the mix-in
+concept. A mix-in in OCCI can never be applied to a type, only to an
 instance.
 
 \subsection{Overview}
@@ -225,7 +226,7 @@ inherit.  Each sub-type of \hl{Entity} is identified by a unique
 \hl{Kind} instance.
 
 The \hl{Kind} type is the core of the type classification system built
-into the OCCI Core Model. \hl{Kind} is a specialisation of
+into the OCCI Core Model. \hl{Kind} is a specialization of
 \hl{Category} and introduces additional capabilities in terms
 of \hl{Action}s.  An \hl{Action} identifies an invocable operation
 applicable to an entity instance.
@@ -235,7 +236,7 @@ applicable to an entity instance.
 
 The last type defined by the OCCI Core Model is the \hl{Mixin}
 type. An instance of \hl{Mixin} can be associated with an entity
-instance to mixin additional capabilities at run-time.
+instance to mix-in additional capabilities at run-time.
 
 For compliance with OCCI Core, all of the types defined in the OCCI
 Core Model MUST be implemented.  The following sections of the
@@ -246,7 +247,7 @@ specification contain the formal definition of the OCCI Core Model.
 \hl{Attribute}s of an OCCI Core Model type instance are either client
 mutable or client immutable. If an attribute is noted to be mutable
 this MUST be interpreted that a client can create an instance that is
-parametrised by the attribute. Likewise, if an attribute is mutable, a
+parametrized by the attribute. Likewise, if an attribute is mutable, a
 client can update that instance's mutable attribute value and the
 server side MUST support this. If an attribute is marked as immutable,
 it indicates that the server side implementation MUST manage these
@@ -261,7 +262,7 @@ allowing for safe extension towards domain-specific usage
 the means to be easily and transparently (i.e., no format translation
 required) exposed over either a text- or binary-based protocol.
 
-The classification system can be summarised with the following key
+The classification system can be summarized with the following key
 features:
 
 \begin{itemize}
@@ -307,19 +308,19 @@ MUST implement to be compliant.
 
 \mytablefloat{
   \label{tbl:category}Model attributes defined for the \hl{Category} type.}{
-  \begin{tabular}{llllp{2.7in}}
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute 	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
+    Model attribute   & Type    & Value Multiplicity  & Required  & Client Mutability   & Description \\
     \colrule
-    term 		& String 	& 1 			& Immutable 			& Unique identifier of the \hl{Category} instance within the categorisation scheme. \\
-    scheme 		& URI 		& 1 			& Immutable 			& The categorisation scheme. \\
-    title 		& String 	& 0..1 			& Immutable 			& The display name of an instance. \\
+    term              & String  & 1                   & Yes       & Immutable           & Unique identifier of the \hl{Category} instance within the categorization scheme. \\
+    scheme            & URI     & 1                   & Yes       & Immutable           & The categorization scheme. \\
+    title             & String  & 0..1                & --        & Immutable           & The display name of an instance. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 A \hl{Category} instance is uniquely identified by concatenating the
-categorisation scheme with the category term,
+categorization scheme with the category term,
 e.g.,~\textit{http://example.com/category/scheme\#term}.  This is done
 to enable discovery of \hl{Category} definitions in text-based
 renderings such as the OCCI Text Rendering~\cite{occi:text}. All renderings
@@ -329,7 +330,7 @@ instances.
 Sub-types of \hl{Category} such as \hl{Kind}, \hl{Mixin} and \hl{Action} inherit
 this property.
 
-The categorisation schemes defined in the OCCI specification all use
+The categorization schemes defined in the OCCI specification all use
 the \textit{http://schemas.ogf.org/occi/} base URL. This base URL is
 reserved for OCCI an MUST NOT be used by service provider extensions.
 
@@ -351,19 +352,19 @@ MUST implement to be compliant.
 
 \mytablefloat{
   \label{tbl:attribute}Model attributes defined for the \hl{Attribute} type.}{
-  \begin{tabular}{lp{23mm}llp{60mm}}
+  \begin{tabularx}{\textwidth}{lp{18mm}lllX}
     \toprule
-    Model attribute   &   Type    &   Multiplicity    &   Client Mutability   &   Description \\
+    Model attribute & Type                        & Value Multiplicity  & Required  & Client Mutability   & Description \\
     \colrule
-    name    &   String    &   1   &   Immutable   & Attribute name. \\
-    type    &   Enum \{Object, List, Hash\}   &   1   &   Immutable   &   Attribute type. \\
-    mutable   &   Boolean   &   1   &   Immutable   &   Attribute mutability. \\
-    required    &   Boolean   &   1   &   Immutable   &   Whether the Attribute must be supplied by the client at instance creation-time. \\
-    pattern   &   String    &   0..1    &   Immutable   &   Attribute pattern expressed as ERE \\
-    default   &   String    &   0..1    &   Immutable   &   Attribute default value. \\
-    description   &   String    &   0..1    &   Immutable   &   A description of the Attribute. \\
+    name            & String                      & 1                   & Yes       & Immutable           & Attribute name. \\
+    type            & Enum \{Object, List, Hash\} & 1                   & Yes       & Immutable           & Attribute type. \\
+    mutable         & Boolean                     & 1                   & Yes       & Immutable           & Attribute mutability. \\
+    required        & Boolean                     & 1                   & Yes       & Immutable           & Whether the Attribute must be supplied by the client at instance creation-time. \\
+    pattern         & String                      & 0..1                & --        & Immutable           & Attribute pattern expressed as ERE. \\
+    default         & String                      & 0..1                & --        & Immutable           & Attribute default value. \\
+    description     & String                      & 0..1                & --        & Immutable           & A description of the Attribute. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 An Attribute name MUST be defined by \hl{Attribute}.{\tt name}. The
@@ -427,15 +428,15 @@ for \hl{Entity}, another for \hl{Resource} and the last one for
 
 \mytablefloat{
   \label{tbl:kind}Model attributes defined for the \hl{Kind} type.}{
-  \begin{tabular}{llllp{2.7in}}
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute	& Type 		& Multiplicity 		& Client Mutability 		& Description \\
+    Model attribute & Type                  & Value Multiplicity  & Required  & Client Mutability     & Description \\
     \colrule
-    actions 		& \hl{Action} 	& 0..* 			& Immutable 			& Set of \hl{Action} instances defined by the \hl{Kind} instance. \\
-    parent 		& \hl{Kind} 	& 0..1 			& Immutable 			& Another \hl{Kind} instance which this \hl{Kind} has an inheritance relationship with. \\
-    entities 		& \hl{Entity} 	& 0..* 			& Immutable 			& Set of entity instances. Instances of the particular \hl{Entity} sub-type which is uniquely identified by this \hl{Kind} instance. \\
+    actions         & List of \hl{Action}   & 0..*                & --        & Immutable             & List of \hl{Action} instances defined by the \hl{Kind} instance. \\
+    parent          & \hl{Kind}             & 0..1                & --        & Immutable             & Another \hl{Kind} instance which this \hl{Kind} has an inheritance relationship with. \\
+    entities        & List of \hl{Entity}   & 0..*                & --        & Immutable             & List of \hl{Entity} instances. Instances of the particular \hl{Entity} sub-type which is uniquely identified by this \hl{Kind} instance. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 The \hl{Kind} type inherits the \hl{Category} type. To be compliant
@@ -465,7 +466,7 @@ of the \hl{Kind} type:
 \end{itemize}
 
 \paragraph*{Kind Relationships}
-A relationship between \hl{Kind} instances is defined by the ''{\tt parent}'' attribute. This implies a setup of a hierarchy where the capabilites of the parent MUST be inherited by the child \hl{Kind} instance.
+A relationship between \hl{Kind} instances is defined by the ``{\tt parent}'' attribute. This implies a setup of a hierarchy where the capabilities of the parent MUST be inherited by the child \hl{Kind} instance.
 
 \begin{figure}[!h]
   {\centering \resizebox*{0.9\columnwidth}{!}{\rotatebox{0}
@@ -532,16 +533,16 @@ An OCCI provider MUST advertise such a restriction by setting
 
 \mytablefloat{
   \label{tbl:mixin}Model attributes defined for the \hl{Mixin} type.}{
-  \begin{tabular}{llllp{2.7in}}
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute	& Type 	& Multiplicity 	& Client Mutability 	& Description \\
+    Model attribute & Type                  & Value Multiplicity  & Required  & Client Mutability   & Description \\
     \colrule
-    actions 	& \hl{Action} 	& 0..* 			& Immutable 			& Set of \hl{Action} instances defined by the \hl{Mixin} instance. \\
-    depends 	& \hl{Mixin} 	& 0..* 			& Immutable 	& Set of \hl{Mixin} instances this \hl{Mixin} instance depends on. \\
-    applies 	& \hl{Kind} 	& 0..* 			& Immutable 	& Set of \hl{Kind} instances this \hl{Mixin} instance applies to. \\
-    entities 	& \hl{Entity} 	& 0..* 			& Mutable 				& Set of entity instances associated with the \hl{Mixin} instance. \\
+    actions         & List of \hl{Action}   & 0..*                & --        & Immutable           & List of \hl{Action} instances defined by the \hl{Mixin} instance. \\
+    depends         & List of \hl{Mixin}    & 0..*                & --        & Immutable           & List of \hl{Mixin} instances this \hl{Mixin} instance depends on. \\
+    applies         & List of \hl{Kind}     & 0..*                & --        & Immutable           & List of \hl{Kind} instances this \hl{Mixin} instance applies to. \\
+    entities        & List of \hl{Entity}   & 0..*                & --        & Mutable             & List of \hl{Entity} instances associated with the \hl{Mixin} instance. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 The \hl{Mixin} type inherits the \hl{Category} type. To be compliant
@@ -565,7 +566,7 @@ of the \hl{Mixin} type:
     inherited from \hl{Category}.  E.g.,~a Location
     \hl{Mixin} defining the ``com.example.location'' \hl{Attribute} MUST
     have Location.{\tt attributes} populated with a single \hl{Attribute}
-    instance where \hl{Attribute}.{\tt name} is {\tt "com.example.location"}.
+    instance where \hl{Attribute}.{\tt name} is {\tt ``com.example.location''}.
 
   \item A \hl{Mixin} instance MAY define \hl{Action} instances that will
     identify additional invocable operations on any entity instance
@@ -629,12 +630,12 @@ table~\ref{tbl:category}.
   \label{tbl:action_example}Example of an \hl{Action} instance which identifies a ``resize'' operation.}{
   \begin{tabular}{ll}
     \toprule
-    Model attribute 	& Value \\
+    Model attribute   & Value \\
     \colrule
-    term 		& resize \\
-    scheme 		& {\tt http://schemas.ogf.org/occi/infrastructure/storage/action\#} \\
-    title 		& Resize virtual disk \\
-    attributes 		& Attribute({\tt "size"}) \\
+    term    & resize \\
+    scheme    & {\tt http://schemas.ogf.org/occi/infrastructure/storage/action\#} \\
+    title     & Resize virtual disk \\
+    attributes    & Attribute({\tt ``size''}) \\
   \botrule
   \end{tabular}
 }
@@ -666,7 +667,7 @@ defined for a Storage
 instance. The operation has a ``size'' parameter which represent the size
 argument of the resize operation. In that example the identifying
 \hl{Action} instance would have \hl{Action}.{\tt attributes} populated
-with an \hl{Attribute} instance where \hl{Attribute}.{\tt name = "size"}.
+with an \hl{Attribute} instance where \hl{Attribute}.{\tt name = ``size''}.
 
 
 \subsubsection{Instantiation}
@@ -674,14 +675,14 @@ with an \hl{Attribute} instance where \hl{Attribute}.{\tt name = "size"}.
 To create an entity instance a client MUST supply the concrete
 \hl{Entity} sub-type by submitting a reference to the
 type-identifying \hl{Kind}.  The reference MUST consist of the term
-and categorisation scheme, which uniquely identify the \hl{Kind}
+and categorization scheme, which uniquely identify the \hl{Kind}
 instance, see section~\ref{sec:category}.  All OCCI implementations
 MUST understand these requests.
 
 A client MAY also submit any number of references to \hl{Mixin}
 instances to be associated with the instance to be created. A
 \hl{Mixin} reference submitted by a client MUST consist of the term
-and categorisation scheme, which identify the \hl{Mixin} instance, see
+and categorization scheme, which identify the \hl{Mixin} instance, see
 section~\ref{sec:category}.
 
 \subsubsection{Templates}
@@ -812,18 +813,17 @@ the \hl{Link} type. It MUST be implemented.
 Table~\ref{tbl:entity} defines model attributes the \hl{Entity} type
 MUST implement to be compliant.
 %
-\mytablefloat{
-  \label{tbl:entity}Model attributes defined for the \hl{Entity} type.}{
-  \begin{tabular}{llllp{7.5cm}}
+\mytablefloat{\label{tbl:entity}Model attributes defined for the \hl{Entity} type.}{
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
+    Model attribute & Type                 & Value Multiplicity & Required  & Client Mutability   & Description \\
     \colrule
-    id			& URI 		& 1 		& Immutable 		& A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
-	title	    & String	& 0..1		& Mutable			& The display name of the instance. \\
-    kind 		& \hl{Kind}	& 1 		& Immutable 		& The \hl{Kind} instance uniquely identifying the particular \hl{Entity} sub-type of this instance. \\
-    mixins 		& \hl{Mixin}	& 0..* 		& Mutable 		& The \hl{Mixin} instances associated to this entity instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\
+    id              & URI                  & 1                  & Yes       & Immutable           & A unique identifier (within the service provider's name-space) of the \hl{Entity} sub-type instance. \\
+    title           & String               & 0..1               & --        & Mutable             & The display name of the instance. \\
+    kind            & \hl{Kind}            & 1                  & Yes       & Immutable           & The \hl{Kind} instance uniquely identifying the particular \hl{Entity} sub-type of this instance. \\
+    mixins          & List of \hl{Mixin}   & 0..*               & --        & Mutable             & \hl{Mixin} instances associated to this entity instance. Consumers can expect the \hl{Attribute}s and \hl{Action}s of the associated \hl{Mixin}s to be exposed by the instance. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 Every sub-type of \hl{Entity} MUST be assigned a \hl{Kind} instance,
@@ -849,18 +849,18 @@ resource that can be inspected and manipulated. It represents a
 general object in the OCCI model and MUST be implemented. A
 \hl{Resource} is suitable to represent real world resources,
 e.g., virtual machines, networks, services, etc.~through
-specialisation.
+specialization.
 
 \mytablefloat{
   \label{tbl:resource}Model attributes defined for the \hl{Resource} type.}{
-  \begin{tabular}{llllp{8cm}}
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute 	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
+    Model attribute     & Type              & Value Multiplicity  & Required  & Client Mutability   & Description \\
     \colrule
-    links 		& \hl{Link} & 0..* 			& Mutable 				& A set of \hl{Link} compositions. Being a composite relation the removal of a \hl{Link} from the set MUST also remove the \hl{Link} instance.\\
-    summary 	& String 	& 0..1 		& Mutable 		& A summarising description of the \hl{Resource} instance.\\
+    links               & List of \hl{Link} & 0..*                & --        & Mutable             & List of \hl{Link} compositions. Being a composite relation the removal of a \hl{Link} from the set MUST also remove the \hl{Link} instance.\\
+    summary             & String            & 0..1                & --        & Mutable             & A summarizing description of the \hl{Resource} instance.\\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 The \hl{Resource} type is assigned the \hl{Kind} instance
@@ -884,16 +884,16 @@ The \hl{Link} type MUST implement all attributes inherited from the
 \hl{Entity} type together with the model attributes defined in
 table~\ref{tbl:link} in order to be compliant.
 
-\mytablefloat{
-  \label{tbl:link}Model attributes defined for the \hl{Link} type.}{
-  \begin{tabular}{llllp{7.5cm}}
+\mytablefloat{\label{tbl:link}Model attributes defined for the \hl{Link} type.}{
+  \begin{tabularx}{\textwidth}{lllllX}
     \toprule
-    Model attribute	& Type 		& Multiplicity 	& Client Mutability 	& Description \\
+    Model attribute & Type          & Value Multiplicity  & Required  & Client Mutability  & Description \\
     \colrule
-    source 		& \hl{Resource} & 1 		& Mutable 		& The \hl{Resource} instances the \hl{Link} instance originates from. \\
-    target 		& \hl{URI} & 1 		& Mutable 		& The unique identifier of an \hl{Object} this \hl{Link} instance points to. \\
+    source          & \hl{Resource} & 1                   & Yes       & Mutable            & The \hl{Resource} instances the \hl{Link} instance originates from. \\
+    target          & \hl{URI}      & 1                   & Yes       & Mutable            & The unique identifier of an \hl{Object} this \hl{Link} instance points to. \\
+    target.type     & \hl{Kind}     & 0..1                & --        & Mutable            & The \hl{Kind} of {\tt target}, if applicable. \\
     \botrule
-  \end{tabular}
+  \end{tabularx}
 }
 
 The \hl{Link} type is assigned the \hl{Kind} instance
@@ -902,7 +902,8 @@ The \hl{Link} type is assigned the \hl{Kind} instance
 The {\tt source} attribute of a \hl{Link} instance
 MUST refer to \hl{Resource} {\em instance} within the service provider's
 namespace. The \hl{Link}'s {\tt target} attribute MUST point to a resource instance either within the provider's namespace or outside,
-hosted by a third-party.
+hosted by a third-party. {\tt target.type} MAY be used to explicitly define the \hl{Kind} of the \hl{Resource}
+instance referenced by {\tt target}. The {\tt source} \hl{Kind} is specified by the assigned \hl{Resource} instance.
 
 The \hl{Link} type is the second of three entry points to extend the
 OCCI Core Model, see section~\ref{sec:extensibility}.
@@ -915,8 +916,8 @@ mechanism based on the type classification system described in
 section~\ref{sec:classification}.
 
 The OCCI Core Model can be extended using three different methods:
-provider-specific category instances, sub-typing and mixins. Custom sub-typing requires provider-specific
-\hl{Kind} instances and custom mixins require provider-specific
+provider-specific category instances, sub-typing and mix-ins. Custom sub-typing requires provider-specific
+\hl{Kind} instances and custom mix-ins require provider-specific
 \hl{Mixin} instances. Both methods MAY involve the use of
 provider-specific \hl{Action} instances.
 The following sections
@@ -958,8 +959,8 @@ model attribute equal to the \hl{Kind} instance of the type extended.
 See figure~\ref{fig:kind_relationships} for an example of \hl{Kind}
 relationships.
 
-\subsubsection{Mixins}
-The OCCI Core Model MAY be extended using a mixin like concept by
+\subsubsection{Mix-ins}
+The OCCI Core Model MAY be extended using a mix-in like concept by
 defining provider-specific \hl{Mixin} instances.  A \hl{Mixin}
 instance can be associated with any entity instance although a
 provider MAY apply restrictions.
@@ -1023,6 +1024,10 @@ as OCCI Text Rendering \cite{occi:text} and OCCI Infrastructure
 \cite{occi:infrastructure}.
 
 \begin{itemize}
+\item Adjusted language and types in Model Attribute tables (using lists where applicable).
+
+\item Added optional typed \hl{Link} (via the {\tt target.type} attribute).
+
 \item Introduce an explicit \hl{Attribute} type to expose the discoverable
   attribute properties already defined for the OCCI base types \hl{Entity},
   \hl{Resource}, \hl{Link} and their sub-types.
@@ -1060,7 +1065,7 @@ as OCCI Text Rendering \cite{occi:text} and OCCI Infrastructure
 The corrected definition of OCCI \hl{Action} has impact neither on discovery
 nor on invocation of \hl{Action}s in existing implementations. The OCCI Text Rendering
 \cite{occi:text} is better aligned with OCCI Core after the corrections
-since it already uses {\tt type="action"} in its rendering of categories.
+since it already uses {\tt type=``action''} in its rendering of categories.
 
 \subsection{Rename ``resource instance'' to ``entity instance''}
 
