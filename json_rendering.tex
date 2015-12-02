@@ -26,6 +26,7 @@
 \lstset{
    language=json,
    basicstyle=\footnotesize,
+   xleftmargin=1.5cm
 }
 
 \setlength{\headheight}{13pt}
@@ -138,16 +139,16 @@ following declaration. Appendix~\ref{resouce_instance_rendering_example} contain
 example.
 Table~\ref{tbl:format_resource} defines the object members.
 \begin{lstlisting}
-        {
-            "kind": String,
-            "mixins": Array,
-            "attributes": Object,
-            "actions": Array,
-            "id": String,
-            "links": Array,
-            "summary": String,
-            "title": String,
-        }
+{
+    "kind": String,
+    "mixins": Array,
+    "attributes": Object,
+    "actions": Array,
+    "id": String,
+    "links": Array,
+    "summary": String,
+    "title": String,
+}
 \end{lstlisting}
 
 
@@ -223,18 +224,18 @@ The OCCI Link Instance Rendering consists of a JSON object as shown in the
 following declaration. Appendix~\ref{link_instance_rendering_example} contains a detailed example.
 Table~\ref{tbl:format_link} defines the object members.
 \begin{lstlisting}
-        {
-            "kind": String,
-            "mixins": Array,
-            "attributes": Object,
-            "actions": Array,
-            "id": String,
-            "source": String,
-            "source.type": String,
-            "target": String,
-            "target.type": String,
-            "title": String
-        }
+{
+    "kind": String,
+    "mixins": Array,
+    "attributes": Object,
+    "actions": Array,
+    "id": String,
+    "source": String,
+    "source.type": String,
+    "target": String,
+    "target.type": String,
+    "title": String
+}
 \end{lstlisting}
 
 \mytablefloat{
@@ -317,15 +318,15 @@ Entity itself & immutable & 0..1 \\
 }
 
 \begin{lstlisting}
-        {
-            "term": String,
-            "scheme": String,
-            "title": String,
-            "attributes": Object,
-            "actions": Array,
-            "parent": String,
-            "location": String
-        }
+{
+    "term": String,
+    "scheme": String,
+    "title": String,
+    "attributes": Object,
+    "actions": Array,
+    "parent": String,
+    "location": String
+}
 \end{lstlisting}
 
 \subsubsection{Mixin Instance Rendering}
@@ -335,16 +336,16 @@ The OCCI Mixin Instance Rendering consists of a JSON object as shown in the foll
 Table~\ref{tbl:format_mixin} defines the top-level object members.
 
 \begin{lstlisting}
-        {
-            "term": String,
-            "scheme": String,
-            "title": String,
-            "attributes": Object,
-            "actions": Array,
-            "depends": Array,
-            "applies": Array,
-            "location": String
-        }
+{
+    "term": String,
+    "scheme": String,
+    "title": String,
+    "attributes": Object,
+    "actions": Array,
+    "depends": Array,
+    "applies": Array,
+    "location": String
+}
 \end{lstlisting}
 
 \mytablefloat{
@@ -411,12 +412,12 @@ immutable & 1 \\
 }
 
 \begin{lstlisting}
-        {
-            "term": String,
-            "scheme": String,
-            "title": String,
-            "attributes": Object,
-        }
+{
+    "term": String,
+    "scheme": String,
+    "title": String,
+    "attributes": Object,
+}
 \end{lstlisting}
 
 
@@ -582,6 +583,13 @@ appropiate section in \cite{occi:protocol}.
 
 \clearpage
 \begin{appendices}
+
+\lstset{
+   language=json,
+   basicstyle=\footnotesize,
+   xleftmargin=0.0cm
+}
+
 \section{JSON Rendering Examples}
 \subsection{Resouce Instance Example}
 \label{resouce_instance_rendering_example}
@@ -592,7 +600,7 @@ The following is an example of a rendered \texttt{compute} resource instance as 
 {
     "kind": "http://schemas.ogf.org/occi/infrastructure#compute",
     "mixins": [
-        "http://example.com/occi/infrastructure/os_tpl#debian9"
+        "http://example.com/occi/infrastructure/os_tpl#debian9",
         "http://example.com/occi/infrastructure/resource_tpl#medium"
     ],
     "attributes": {
@@ -604,7 +612,7 @@ The following is an example of a rendered \texttt{compute} resource instance as 
         }
     },
     "actions": [
-        "http: //schemas.ogf.org/occi/infrastructure/compute/action#start"
+        "http://schemas.ogf.org/occi/infrastructure/compute/action#start"
     ],
     "id": "urn:uuid:996ad860-2a9a-504f-8861-aeafd0b2ae29",
     "links": [
@@ -639,16 +647,15 @@ The following is an example of a rendered \texttt{networkinterface} link as spec
     "mixins":[
         "http://schemas.ogf.org/occi/infrastructure/networkinterface#ipnetworkinterface"
     ],
-        "attributes":{
-            "occi.infrastructure.networkinterface.interface":"eth0",
-            "occi.infrastructure.networkinterface.mac":"00:80:41:ae:fd:7e",
-            "occi.infrastructure.networkinterface.address":"192.168.0.100",
-            "occi.infrastructure.networkinterface.gateway":"192.168.0.1",
-            "occi.infrastructure.networkinterface.allocation":"dynamic"
-        }
+    "attributes":{
+        "occi.infrastructure.networkinterface.interface":"eth0",
+        "occi.infrastructure.networkinterface.mac":"00:80:41:ae:fd:7e",
+        "occi.infrastructure.networkinterface.address":"192.168.0.100",
+        "occi.infrastructure.networkinterface.gateway":"192.168.0.1",
+        "occi.infrastructure.networkinterface.allocation":"dynamic"
     },
     "actions":[
-        "http://schemas.ogf.org/occi/infrastructure/networkinterface/action#up"
+        "http://schemas.ogf.org/occi/infrastructure/networkinterface/action#up",
         "http://schemas.ogf.org/occi/infrastructure/networkinterface/action#down"
     ],
     "id":"urn:uuid:22fe83ae-a20f-54fc-b436-cec85c94c5e8",
