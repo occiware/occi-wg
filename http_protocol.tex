@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{comment}
+\usepackage{tabularx}
 \usepackage{occi}
 \setlength{\headheight}{13pt}
 \pagestyle{fancy}
@@ -209,7 +210,8 @@ behavior in such cases is not specified. The return codes are specified by
 
 \begin{description}
 \item[200 OK] indicates that the request has succeeded.
-\item[201 CREATED] indicates that the request has been fulfilled and has resulted in one or more new resources being created.
+\item[201 Created] indicates that the request has been fulfilled and has resulted in one or more new resources being created.
+\item[204 No Content] indicates that the server has fulfilled the request but does not need to return a body, relevant headers MAY be present.
 \item[400 Bad Request] indicates that the server cannot or will not process the request due to something that is perceived to be a client error
 \item[401 Unauthorized] indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
 \item[403 Forbidden] indicates that the server understood the request but refuses to authorize it.
@@ -238,6 +240,63 @@ If {\em number} is too large for the provider to handle (policy, technical limit
 
 If there is no more content to be served, the response status code issued to the requesting client MUST be an \emph{HTTP 200 OK} and the response body MUST contain an empty collection.
 
+\section{Filtering}
+\todo{Add something about filtering on QI}
+
+\section{HTTP Methods Overview}
+\todo{Add text here}, Table~\ref{tbl:http_verbs}.
+
+\mytablefloat{
+  \label{tbl:http_verbs}
+  HTTP Verb Behavior Summary (* = Supports filtering mechanisms)
+  } {
+  \begin{tabularx}{\textwidth}{p{0.85in} p{0.85in} p{0.85in} p{0.85in} p{0.85in} p{0.85in}}
+  \toprule
+  Path
+  & GET
+  & POST
+  & POST (\hl{Action})
+  & PUT
+  & DELETE \\
+
+  \colrule
+  \hl{Entity} sub-type instance ({\tt /vms/foo/vm1}).
+  & Retrieve the instance representation.
+  & Partial update of the instance.
+  & Perform an action.
+  & Create/Update the instance, supplying the full
+    representation of the instance.
+  & Delete the instance. \\
+
+  \colrule
+  \hl{Entity} sub-type instance collection ({\tt /compute/}).
+  & Retrieve a collection of instances*.
+  & Create a new instance in this collection.
+  & Perform actions on a collection of instances.
+  & Not Defined.
+  & Remove instances (one, sub-set, all) from the collection. \\
+
+  \colrule
+  \hl{Mixin}-defined \hl{Entity} sub-type instance
+    collection ({\tt /my\_stuff/}).
+  & Retrieve a collection of instances*.
+  & Add an instance to this collection.
+  & Perform actions on a collection of instances.
+  & Update of the collection supplying the full representation
+    of the new collection. Including removal and addition of instances.
+  & Remove instances (one, sub-set, all) from the collection. \\
+
+  \colrule
+  Query interface ({\tt /-/}).
+  & Retrieve \hl{Category} instances*.
+  & Add a user-defined \hl{Mixin}.
+  & Not Defined.
+  & Not Defined.
+  & Remove a user-defined \hl{Mixin}. \\
+  \botrule
+  \end{tabularx}
+}
+
 \section{HTTP Methods Applied to Query Interface}
 \label{sec:http_methods_qi}
 
@@ -252,7 +311,7 @@ The query interface MUST be implemented by all OCCI implementations. It MUST be 
 Implementations MAY also adopt RFC5785~\cite{rfc5785} compliance to advertise this location. Should implementations wish to advertise the Query Interface using the well-known mechanism then they MUST use the following path served from the authority:
 
 \begin{verbatim}
-	/.well-known/org/ogf/occi/-/
+    /.well-known/org/ogf/occi/-/
 \end{verbatim}
 
 The renderings for the {\em Category} instance and Category {\em collection} are defined in \cite{occi:text} and \cite{occi:json}.
@@ -265,7 +324,7 @@ The request MAY include a possible filter rendering.
 \subsubsection*{Server GET response}
 The response MUST include a category collection rendering.
 
-Upon a successfull request a \emph{200 OK} status code MUST be used.
+Upon a successful request a \emph{200 OK} status code MUST be used.
 
 \subsection{PUT Method}
 
@@ -361,7 +420,8 @@ a key-value pair. The key MUST be `action'. The value MUST equal to the \hl{Acti
 The request MUST contain an action invocation rendering.
 
 \paragraph*{Server POST response}\hfill\\
-The response of the HTTP GET response MUST contain an entity instance rendering.
+The HTTP GET response MAY contain an entity instance rendering or a \hl{Category} instance rendering
+depending on the requirements of the specified \hl{Action}.
 
 Upon a successful processing of the request, the \emph{200 OK} status code MUST be returned.
 
@@ -372,7 +432,8 @@ The HTTP DELETE method deletes an entity instance
 N/A
 
 \subsubsection*{Server DELETE response}
-Upon a successful processing of the request, the \emph{200 OK} status code MUST be returned.
+Upon a successful processing of the request, the \emph{200 OK} or \emph{204 No Content} status
+code MUST be returned.
 
 \section{HTTP Methods Applied to Collections}
 \label{sec:http_methods_coll}
@@ -445,7 +506,8 @@ equal to the \hl{Action}'s term.
 The request MUST contain an action invocation rendering.
 
 \paragraph*{Server POST response}\hfill\\
-The response of the HTTP GET response MUST contain an entity collection rendering.
+The HTTP GET response MAY contain an entity collection rendering or a \hl{Category} collection rendering
+depending on the requirements of the specified \hl{Action}.
 
 Upon a successful processing of the request, the \emph{200 OK} status code MUST be returned.
 
@@ -460,7 +522,7 @@ by a \hl{Mixin}.
 N/A
 
 \paragraph*{Server DELETE response}\hfill\\
-Upon a successful processing of the request, the \emph{200 OK} status code MUST be returned.
+Upon a successful processing of the request, the \emph{200 OK} or \emph{204 No Content} status code MUST be returned.
 
 \subsubsection{Disassociate Mixin from Entity Instances}
 This operation MUST only be available for collections defined by a \hl{Mixin}.
