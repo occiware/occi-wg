@@ -630,10 +630,11 @@ The following is an example of a rendered \texttt{compute} resource instance as 
             "id":"urn:uuid:22fe83ae-a20f-54fc-b436-cec85c94c5e8",
             "target": {
                 "location:"/network/b7d55bf4-7057-5113-85c8-141871bf7635",
-                "kind":"http://schemas.ogf.org/occi/infrastructure#compute"
+                "kind":"http://schemas.ogf.org/occi/infrastructure#network"
             },
             "source": {
-                "location":"/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
+                "location":"/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29",
+                "kind":"http://schemas.ogf.org/occi/infrastructure#compute"
             }
         }
     ]
@@ -680,10 +681,11 @@ The following is an example of a rendered \texttt{networkinterface} link as spec
     "id":"urn:uuid:22fe83ae-a20f-54fc-b436-cec85c94c5e8",
     "target": {
         "location:"/network/b7d55bf4-7057-5113-85c8-141871bf7635",
-        "kind":"http://schemas.ogf.org/occi/infrastructure#compute"
+        "kind":"http://schemas.ogf.org/occi/infrastructure#network"
     },
     "source": {
-        "location":"/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
+        "location":"/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29",
+        "kind":"http://schemas.ogf.org/occi/infrastructure#compute"
     }
 }
 \end{lstlisting}
