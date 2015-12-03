@@ -223,10 +223,8 @@ Table~\ref{tbl:format_link} defines the object members.
     "attributes": Object,
     "actions": Array,
     "id": String,
-    "source": String,
-    "source.kind": String,
-    "target": String,
-    "target.kind": String,
+    "source": Object,
+    "target": Object,
     "title": String
 }
 \end{lstlisting}
@@ -249,15 +247,42 @@ Table~\ref{tbl:format_link} defines the object members.
 
     id            & String            & immutable   & 1             & ID of the OCCI Link.\\
 
-    source        & String            & immutable   & 1             & URI of the source OCCI Resource. If only one OCCI Resource is rendered in the same collection, this OCCI Resource is the source of the OCCI Link if this entry is omitted.\\
+    source        & Object            & immutable   & 1             & Hashmap of the link source (see \ref{par:format_link_src_trgt}). \\
 
-    source.kind   & String            & immutable   & 0..1          & Kind identifier of the source Resource. \\
-
-    target        & String            & immutable   & 1             & URI of the target Resource. \\
-
-    target.kind   & String            & immutable   & 0..1          & Kind identifier of the target Resource, to be supplied if the target is an OCCI Resource. \\
+    target        & Object            & immutable   & 1             & Hashmap of the link target (see \ref{par:format_link_src_trgt}). \\
 
     title         & String            & mutable     & 0..1          & Title of the Link \\
+    \botrule
+    \end{tabularx}
+}
+
+\paragraph{Link Instance Source/Target Rendering}
+\label{par:format_link_src_trgt}\hfill\\
+
+The OCCI Link Instance Source/Target Rendering consists of a JSON object as shown in the
+following declaration. Appendix~\ref{link_instance_rendering_example} contains a detailed example.
+Table~\ref{tbl:format_link_src_trgt} defines the object members. {\tt location} maps to OCCI
+Core's {\tt source} and {\tt target} model attributes and {\tt kind} maps to OCCI Core's {\tt target.kind}
+model attribute. The value of {\tt kind} for {\tt source} is implied by OCCI Core's model attribute value
+for {\tt source}.
+\begin{lstlisting}
+{
+    "location": String,
+    "kind": String
+}
+\end{lstlisting}
+
+\mytablefloat{
+    \label{tbl:format_link_src_trgt}
+    OCCI Link sources/targets are rendered with the following entries:
+    } {
+    \begin{tabularx}{\textwidth}{llllX}
+    \toprule
+    Object member & JSON type         & Mutability  & Multiplicity  & Description \\
+    \colrule
+    location      & String            & immutable   & 1             & URI of the link target/source. \\
+
+    kind          & String            & immutable   & 0..1          & Kind identifier, supplied if location points to an OCCI Resource. \\
     \botrule
     \end{tabularx}
 }
