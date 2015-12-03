@@ -611,7 +611,32 @@ The following is an example of a rendered \texttt{compute} resource instance as 
     ],
     "id": "urn:uuid:996ad860-2a9a-504f-8861-aeafd0b2ae29",
     "links": [
-        "/storage/22fe83ae-a20f-54fc-b436-cec85c94c5e8"
+        {
+            "kind":"http://schemas.ogf.org/occi/infrastructure#networkinterface",
+            "mixins":[
+                "http://schemas.ogf.org/occi/infrastructure/networkinterface#ipnetworkinterface"
+            ],
+            "attributes":{
+                "occi.infrastructure.networkinterface.interface":"eth0",
+                "occi.infrastructure.networkinterface.mac":"00:80:41:ae:fd:7e",
+                "occi.infrastructure.networkinterface.address":"192.168.0.100",
+                "occi.infrastructure.networkinterface.gateway":"192.168.0.1",
+                "occi.infrastructure.networkinterface.allocation":"dynamic"
+            },
+            "actions":[
+                "http://schemas.ogf.org/occi/infrastructure/networkinterface/action#up",
+                "http://schemas.ogf.org/occi/infrastructure/networkinterface/action#down"
+            ],
+            "id":"urn:uuid:22fe83ae-a20f-54fc-b436-cec85c94c5e8",
+            "target": {
+                "location:"/network/b7d55bf4-7057-5113-85c8-141871bf7635",
+                "kind":"http://schemas.ogf.org/occi/infrastructure#network"
+            },
+            "source": {
+                "location":"/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29",
+                "kind":"http://schemas.ogf.org/occi/infrastructure#compute"
+            }
+        }
     ]
 }
 \end{lstlisting}
@@ -654,9 +679,14 @@ The following is an example of a rendered \texttt{networkinterface} link as spec
         "http://schemas.ogf.org/occi/infrastructure/networkinterface/action#down"
     ],
     "id":"urn:uuid:22fe83ae-a20f-54fc-b436-cec85c94c5e8",
-    "target":"/network/b7d55bf4-7057-5113-85c8-141871bf7635",
-    "target.kind":"http://schemas.ogf.org/occi/infrastructure#compute",
-    "source":"/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
+    "target": {
+        "location:"/network/b7d55bf4-7057-5113-85c8-141871bf7635",
+        "kind":"http://schemas.ogf.org/occi/infrastructure#network"
+    },
+    "source": {
+        "location":"/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29",
+        "kind":"http://schemas.ogf.org/occi/infrastructure#compute"
+    }
 }
 \end{lstlisting}
 
@@ -752,7 +782,311 @@ The following is an example of a rendered \texttt{stop} Action instance as speci
 
 \section{OCCI JSON Schema}
 
-\todo{Finalize the schema and paste here}
+The JSON schema provided below validates any valid OCCI message courtesy of the \texttt{anyOf} construct below. Sub-schemas or fragments need to be used to validate specific OCCI classes.
+
+\lstset{
+   language=json,
+   basicstyle=\tiny,
+   xleftmargin=0.0cm
+}
+\begin{lstlisting}
+{
+	"id": "http://schemas.ogf.org/occi/OCCI-schema.json",
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "OCCI v. 1.2 JSON Rendering Schema",
+	"definitions": {
+
+		"array_of_strings": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+
+		"kinded_uri": {
+			"id": "#kinded_uri",
+			"type": "object",
+			"required": ["location"],
+			"additionalProperties": false,
+			"properties": {
+				"location": { "type": "string" },
+				"kind": { "type": "string" }
+			}
+		},
+
+		"resource": {
+			"id": "#resource",
+			"type": "object",
+			"required": ["kind", "id"],
+			"additionalProperties": false,
+			"properties": {
+				"kind": { "type": "string" },
+				"mixins": { "$ref": "#/definitions/array_of_strings" },
+				"attributes": { "$ref": "#/definitions/attributes" },
+				"actions": { "$ref": "#/definitions/array_of_strings" },
+				"id": { "type": "string" },
+				"links": {
+					"type": "array",
+					"items": {
+						"$ref": "#definitions/link"
+					}
+				},
+				"summary": { "type": "string" },
+				"title": { "type": "string" }
+			}
+		},
+
+		"action_invocation": {
+			"id": "#action_invocation",
+			"type": "object",
+			"required": ["action"],
+			"additionalProperties": false,
+			"properties": {
+				"action": { "type": "string" },
+				"attributes": { "$ref": "#/definitions/attributes" }
+			}
+		},
+
+		"link": {
+			"id": "#link",
+			"type": "object",
+			"required": ["kind", "id", "target", "source"],
+			"additionalProperties": false,
+			"properties": {
+				"kind": { "type": "string" },
+				"mixins": { "$ref": "#/definitions/array_of_strings" },
+				"attributes": { "$ref": "#/definitions/attributes" },
+				"actions": { "$ref": "#/definitions/array_of_strings" },
+				"id": { "type": "string" },
+				"source": { "$ref": "#/definitions/kinded_uri" },
+				"target": { "$ref": "#/definitions/kinded_uri" },
+				"rel": { "type": "string" },
+				"title": { "type": "string" }
+			}
+		},
+
+		"kind": {
+			"id": "#kind",
+			"type": "object",
+			"required": ["term", "scheme"],
+			"additionalProperties": false,
+			"properties": {
+				"term": { "type": "string" },
+				"scheme": { "type": "string" },
+				"title": { "type": "string" },
+				"attributes": { "$ref": "#/definitions/attribute_description" },
+				"actions": { "$ref": "#/definitions/array_of_strings" },
+				"parent": { "type": "string" },
+				"location": { "type": "string" }
+			}
+		},
+
+		"mixin": {
+			"id": "#mixin",
+			"type": "object",
+			"required": ["term", "scheme", "location"],
+			"additionalProperties": false,
+			"properties": {
+				"term": { "type": "string" },
+				"scheme": { "type": "string" },
+				"title": { "type": "string" },
+				"attributes": { "$ref": "#/definitions/attribute_description" },
+				"actions": { "$ref": "#/definitions/array_of_strings" },
+				"depends": { "$ref": "#/definitions/array_of_strings" },
+				"applies": { "$ref": "#/definitions/array_of_strings" },
+				"location": { "type": "string" }
+			}
+		},
+
+		"action": {
+			"id": "#action",
+			"type": "object",
+			"required": ["term", "scheme"],
+			"additionalProperties": false,
+			"properties": {
+				"term": { "type": "string" },
+				"scheme": { "type": "string" },
+				"title": { "type": "string" },
+				"attributes": { "$ref": "#/definitions/attribute_description" }
+			}
+		},
+
+		"resource_collection": {
+			"id": "#resource_collection",
+			"type": "object",
+			"required": ["resources"],
+			"additionalProperties": false,
+			"properties": {
+				"resources": {
+					"type": "array",
+					"items": {
+						"$ref": "#definitions/resource"
+					}
+				}
+			}
+		},
+
+		"link_collection": {
+			"id": "#link_collection",
+			"type": "object",
+			"required": ["links"],
+			"additionalProperties": false,
+			"properties": {
+				"links": {
+					"type": "array",
+					"items": {
+						"$ref": "#definitions/link"
+					}
+				}
+			}
+		},
+
+		"kind_collection": {
+			"id": "#kind_collection",
+			"type": "object",
+			"required": ["kinds"],
+			"additionalProperties": false,
+			"properties": {
+				"kinds": {
+					"type": "array",
+					"items": {
+						"$ref": "#definitions/kind"
+					}
+				}
+			}
+		},
+
+		"mixin_collection": {
+			"id": "#mixin_collection",
+			"type": "object",
+			"required": ["mixins"],
+			"additionalProperties": false,
+			"properties": {
+				"mixins": {
+					"type": "array",
+					"items": {
+						"$ref": "#definitions/mixin"
+					}
+				}
+			}
+		},
+
+		"action_collection": {
+			"id": "#action_collection",
+			"type": "object",
+			"required": ["actions"],
+			"additionalProperties": false,
+			"properties": {
+				"actions": {
+					"type": "array",
+					"items": {
+						"$ref": "#definitions/action"
+					}
+				}
+			}
+		},
+
+		"attributes": {
+			"id": "#attributes",
+			"type": "object",
+			"additionalProperties": {
+				"oneOf": [
+					{ "type": "number" },
+					{ "type": "boolean" },
+					{ "type": "string" },
+					{ "type": "object" },
+					{ "type": "array" }
+				]
+			}
+		},
+
+		"attribute_description": {
+			"id": "#attribute_description",
+			"oneOf": [
+				{
+					"type": "object",
+					"additionalProperties": false,
+					"minProperties": 1,
+					"properties": {
+						"mutable": { "type": "boolean" },
+						"required": { "type": "boolean" },
+						"type": { "type": "string" },
+						"default": {
+							"oneOf": [
+								{ "type": "number" },
+								{ "type": "string" },
+								{ "type": "boolean" }
+							]
+						},
+						"description": { "type": "string" },
+						"pattern": { "type": "object" }
+					}
+				},
+				{
+					"type": "object",
+					"additionalProperties": false,
+					"patternProperties": {
+						".+": {
+							"$ref": "#/definitions/attribute_description"
+						}
+					}
+				}
+			]
+		},
+
+		"model": {
+			"id": "#model",
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"resources": {
+					"type": "array",
+					"items": {
+						"$ref": "#definitions/resource"
+					}
+				},
+				"links": {
+					"type": "array",
+					"items": {
+						"$ref": "#definitions/link"
+					}
+				},
+				"mixins": {
+					"type": "array",
+					"items": {
+						"$ref": "#definitions/mixin"
+					}
+				},
+				"kinds": {
+					"type": "array",
+					"items": {
+						"$ref": "#definitions/kind"
+					}
+				},
+				"actions": {
+					"type": "array",
+					"items": {
+						"$ref": "#definitions/action"
+					}
+				}
+			}
+		}
+	},
+
+	"anyOf": [
+		{ "$ref": "#/definitions/kind" },
+		{ "$ref": "#/definitions/mixin" },
+		{ "$ref": "#/definitions/action" },
+		{ "$ref": "#/definitions/attributes" },
+		{ "$ref": "#/definitions/attribute_description" },
+		{ "$ref": "#/definitions/kind_collection" },
+		{ "$ref": "#/definitions/mixin_collection" },
+		{ "$ref": "#/definitions/action_collection" },
+		{ "$ref": "#/definitions/resource_collection" },
+		{ "$ref": "#/definitions/link_collection" },
+		{ "$ref": "#/definitions/model" }
+	]
+}
+\end{lstlisting}
+
 
 \end{appendices}
 
