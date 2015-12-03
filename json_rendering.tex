@@ -654,9 +654,13 @@ The following is an example of a rendered \texttt{networkinterface} link as spec
         "http://schemas.ogf.org/occi/infrastructure/networkinterface/action#down"
     ],
     "id":"urn:uuid:22fe83ae-a20f-54fc-b436-cec85c94c5e8",
-    "target":"/network/b7d55bf4-7057-5113-85c8-141871bf7635",
-    "target.kind":"http://schemas.ogf.org/occi/infrastructure#compute",
-    "source":"/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
+    "target": {
+        "location:"/network/b7d55bf4-7057-5113-85c8-141871bf7635",
+        "kind":"http://schemas.ogf.org/occi/infrastructure#compute"
+    },
+    "source": {
+        "location":"/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
+    }
 }
 \end{lstlisting}
 
