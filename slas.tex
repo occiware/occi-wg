@@ -63,9 +63,7 @@ OCCI-WG \hfill  \\
 
 \underline{Status of this Document}
 
-
-This document is a \underline{draft} providing information to the community regarding the specification of the Open Cloud Computing Interface.
-
+\input{include/status}
 
 \underline{Copyright Notice}
 
@@ -78,14 +76,9 @@ OCCI is a trademark of the Open Grid Forum.
 
 \underline{Abstract}
 
-%\input{include/abstract}
+\input{include/abstract}
 
-%--- occi slas contributors ---
 This document, part of a document series, produced by the OCCI working group within the Open Grid Forum (OGF), provides a high-level definition of a Protocol and API in relation with the Service Level Agreements extension of the OCCI Core Model. The document is based upon previously gathered requirements and focuses on the scope of important capabilities required to support modern service offerings.
-
-
-
-
 
 \newpage
 \tableofcontents
@@ -119,8 +112,8 @@ The OCCI Service Level Agreements (OCCI SLAs) document describes how the OCCI Co
 \end{figure}
 
 \todo{Please check next sentence:} The \hl{Agreement} type inherits the OCCI Core Model \hl{Resource}
-base type and all its attributes. The HTTP Rendering document
-\cite{occi:http_rendering} defines how to serialise and interact with
+base type and all its attributes. The HTTP Protocol \cite{occi:http_protocol} and Text
+Rendering \cite{occi:text_rendering} documents define how to serialize and interact with
 these types using RESTful communication. Implementers are free to
 choose what \hl{Resource} and \hl{Link} sub-types to implement. Those
 that are supported by an implementation will be discoverable through

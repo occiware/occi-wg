@@ -63,15 +63,7 @@ OCCI-WG \hfill  Andy Edmonds, ICCLab, ZHAW\\
 
 \underline{Status of this Document}
 
-% \input{include/status}
-
-This document is a \underline{draft} including proposed errata updates
-to the OCCI Infrastructure \cite{occi:infrastructure} specification.
-
-The errata updates are summarized in section~\ref{sec:errata}.
-
-Eventually this document will obsolete GFD-P-R.143. This document is
-fully backward compatible to \cite{occi:infrastructure}.
+\input{include/status}
 
 \underline{Copyright Notice}
 
@@ -137,8 +129,8 @@ Supporting these \hl{Resource} types are the following \hl{Link} sub-types:
 \end{figure}
 
 These infrastructure types inherit the OCCI Core Model \hl{Resource}
-base type and all its attributes. The HTTP Rendering document
-\cite{occi:http_rendering} defines how to serialize and interact with
+base type and all its attributes. The HTTP Protocol \cite{occi:http_protocol} and Text
+Rendering \cite{occi:text_rendering} documents define how to serialize and interact with
 these types using RESTful communication. Implementers are free to
 choose what \hl{Resource} and \hl{Link} sub-types to implement. Those
 that are supported by an implementation will be discoverable through
