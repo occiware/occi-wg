@@ -527,9 +527,7 @@ instantiation of the OCCI Entity & false \\
     type & String & Type of the Attribute. MUST be either ``string'', ``number'',
 ``boolean'', ``array'' or ``object''. & string \\
 
-    pattern & string & POSIX Extended Regular Expression as defined in
-\cite{iso9945:2009}. For interoperability reasons, POSIX character classes
- (e.g. [:alpha:]) MUST NOT be used. & .* \\
+    pattern & Object & JSON Schema \cite{json-schema} to validate the value of the attribute. It is recommended to specify the \texttt{\$schema} property for the schema used. & {} \\
 
     default & String, Number, Boolean, Array, Object & Attribute default. MUST be the same
 type as defined in the type property and MUST  be used if the Attribute is not
@@ -546,7 +544,7 @@ present in the instantiated OCCI Entity & \\
     "type": String,
     "default": String | Number | Boolean | Array | Object,
     "description": String,
-    "pattern": String
+    "pattern": Object
 }
 \end{lstlisting}
 
@@ -681,6 +679,11 @@ The following is an example of a rendered Kind instance as specified in section~
             "required":false,
             "type":"string",
             "description":"Hostname of the compute resource"
+            "pattern": {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "string",
+                "pattern": "\S+"
+            }
         },
         "occi.compute.state":{
             "mutable":false,
