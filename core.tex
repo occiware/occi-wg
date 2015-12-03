@@ -894,7 +894,7 @@ table~\ref{tbl:link} in order to be compliant.
     \colrule
     source          & \hl{Resource} & 1                   & Yes       & Mutable            & The \hl{Resource} instances the \hl{Link} instance originates from. \\
     target          & \hl{URI}      & 1                   & Yes       & Mutable            & The unique identifier of an \hl{Object} this \hl{Link} instance points to. \\
-    target.type     & \hl{Kind}     & 0..1                & --        & Mutable            & The \hl{Kind} of {\tt target}, if applicable. \\
+    target.kind     & \hl{Kind}     & 0..1                & --        & Mutable            & The \hl{Kind} of {\tt target}, if applicable. \\
     \botrule
   \end{tabularx}
 }
@@ -903,10 +903,10 @@ The \hl{Link} type is assigned the \hl{Kind} instance
 \textit{http://schemas.ogf.org/occi/core\#link}.
 
 The {\tt source} attribute of a \hl{Link} instance
-MUST refer to \hl{Resource} {\em instance} within the service provider's
+MUST refer to a \hl{Resource} {\em instance} within the service provider's
 namespace. The \hl{Link}'s {\tt target} attribute MUST point to a resource instance either within the provider's namespace or outside,
-hosted by a third-party. {\tt target.type} MAY be used to explicitly define the \hl{Kind} of the \hl{Resource}
-instance referenced by {\tt target}. The {\tt source} \hl{Kind} is specified by the assigned \hl{Resource} instance.
+hosted by a third-party. {\tt target.kind} MAY be used to explicitly define the \hl{Kind} of the \hl{Resource}
+instance referenced by {\tt target}. The {\tt source} \hl{Kind} is implied by the assigned \hl{Resource} instance.
 
 The \hl{Link} type is the second of three entry points to extend the
 OCCI Core Model, see section~\ref{sec:extensibility}.
@@ -1029,7 +1029,7 @@ as OCCI Text Rendering \cite{occi:text} and OCCI Infrastructure
 \begin{itemize}
 \item Adjusted language and types in Model Attribute tables (using lists where applicable).
 
-\item Added optional typed \hl{Link} (via the {\tt target.type} attribute).
+\item Added optional typed \hl{Link} (via the {\tt target.kind} attribute).
 
 \item Introduce an explicit \hl{Attribute} type to expose the discoverable
   attribute properties already defined for the OCCI base types \hl{Entity},
