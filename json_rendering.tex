@@ -231,9 +231,9 @@ Table~\ref{tbl:format_link} defines the object members.
     "actions": Array,
     "id": String,
     "source": String,
-    "source.type": String,
+    "source.kind": String,
     "target": String,
-    "target.type": String,
+    "target.kind": String,
     "title": String
 }
 \end{lstlisting}
@@ -263,11 +263,11 @@ Action Categories applicable to the OCCI Link instance & mutable & 0..1 \\
 Resource is rendered in the same collection, this OCCI Resource is the
 source of the OCCI Link if this entry is omitted & immutable & 1\\
 
-    source.type & string & Type identifier of the source Resource. & immutable & 0..1 \\
+    source.kind & String & Kind identifier of the source Resource. & immutable & 0..1 \\
 
     target & String & URI of the target Resource & immutable & 1\\
 
-    target.type & string & Type identifier of the target Resource, to be supplied if
+    target.kind & String & Kind identifier of the target Resource, to be supplied if
 the target is an OCCI Resource. & immutable & 0..1 \\
 
 	title & String & title of the Link & mutable & 0..1\\
@@ -658,6 +658,7 @@ The following is an example of a rendered \texttt{networkinterface} link as spec
     ],
     "id":"urn:uuid:22fe83ae-a20f-54fc-b436-cec85c94c5e8",
     "target":"/network/b7d55bf4-7057-5113-85c8-141871bf7635",
+    "target.kind":"http://schemas.ogf.org/occi/infrastructure#compute",
     "source":"/compute/996ad860-2a9a-504f-8861-aeafd0b2ae29"
 }
 \end{lstlisting}
