@@ -453,4 +453,23 @@ appropriate section in \cite{occi:http_protocol}.
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 
+\appendix
+
+\newpage
+\section{Errata}
+\label{sec:errata}
+
+The corrections introduced by the {\today} errata update are summarized below.
+This section describes the possible impact of the corrections on existing
+implementations and associated dependent specifications.
+
+\begin{itemize}
+  \item Added support for complex \hl{Attribute} values {\tt List} and {\tt Hash}. Both
+        rendered into text as string representations of {\tt Array} and {\tt Hashmap} respectively.
+  \item Relaxed rules on {\tt term} values allowing the use of: alphanumerical characters (a-zA-Z0-9),
+        ``\_'', ``-'' and ``.''.
+  \item Explicitly stated how {\tt Mixin.depends} and {\tt Mixin.applies} should be rendered to {\tt rel}
+        on \hl{Mixin} instances.
+\end{itemize}
+
 \end{document}
