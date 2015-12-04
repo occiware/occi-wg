@@ -100,13 +100,19 @@ OCCI is a trademark of the Open Grid Forum.
 
 \section{Text rendering}
 
-This document presents the text based renderings. To be complaint, OCCI implementations MUST implement the three renderings defined in sections \ref{sec:text}, \ref{sec:header} and \ref{sec:urilist}.
+This document presents the text-based renderings. To be complaint, OCCI implementations
+MUST implement the three renderings defined in sections \ref{sec:text}, \ref{sec:header} and \ref{sec:urilist}.
 
-The document is structured by defining based ABNFs, which can then be combined into renderings, which will be rendered over a protocol (e.g., HTTP) by the specific rendering definitions.
+\emph{The following specification of the text-based renderings is in the process of being
+deprecated and will be removed or significantly changed in the next MAJOR release of the standard.}
+
+The document is structured by defining base ABNFs, which can then be combined into renderings, which will
+be rendered over a protocol (e.g., HTTP) by the specific rendering definitions.
 
 \section{ABNF Definitions}
 
-For the following section of \ref{sec:renderings} these ABNF notations will be used. Implementations MUST hence implement the renderings according to these definitions.
+For the following section of \ref{sec:renderings} these ABNF notations will be used.
+Implementations MUST hence implement the renderings according to these definitions.
 
 \subsection{Category ABNF}
 
@@ -122,7 +128,7 @@ Category             = "Category" ":" #category-value
                       [ ";" "location" "=" <"> URI <"> ]
                       [ ";" "attributes" "=" <"> attribute-list <"> ]
                       [ ";" "actions" "=" <"> action-list <"> ]
-  term               = (LOALPHA|DIGIT) *( LOALPHA | DIGIT | "-" | "_" )
+  term               = ( ALPHA | DIGIT ) *( ALPHA | DIGIT | "-" | "_" | "." )
   scheme             = URI
   type-identifier    = scheme term
   class              = "action" | "mixin" | "kind"
@@ -132,8 +138,7 @@ Category             = "Category" ":" #category-value
                      | attribute-name
                        "{" attribute-property *( 1*SP attribute-property ) "}"
   attribute-property = "immutable" | "required"
-  attribute-name     = attr-component *( "." attr-component )
-  attr-component     = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  attribute-name     = term
   action-list        = action
                      | action *( 1*SP action )
   action             = type-identifier
@@ -146,20 +151,19 @@ instance references:
 
 \begin{verbatim}
 Link               = "Link" ":" #link-value
-  link-value       = "<" URI-Reference ">"
+  link-value       = "<" URI-reference ">"
                     ";" "rel" "=" <"> resource-type <">
                     [ ";" "self" "=" <"> link-instance <"> ]
                     [ ";" "category" "=" link-type
                       *( ";" link-attribute ) ]
-  term             = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  term             = ( ALPHA | DIGIT ) *( ALPHA | DIGIT | "-" | "_" | "." )
   scheme           = URI
   type-identifier  = scheme term
   resource-type    = type-identifier *( 1*SP type-identifier )
   link-type        = type-identifier *( 1*SP type-identifier )
   link-instance    = URI-reference
   link-attribute   = attribute-name "=" ( token | quoted-string )
-  attribute-name   = attr-component *( "." attr-component )
-  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  attribute-name   = term
 \end{verbatim}
 
 The following syntax MUST be used to represent OCCI \hl{Action}
@@ -169,8 +173,8 @@ instance references:
 ActionLink         = "Link" ":" #link-value
   link-value       = "<" action-uri ">"
                     ";" "rel" "=" <"> action-type <">
-  term             =  LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
-  scheme           = relativeURI
+  term             = ( ALPHA | DIGIT ) *( ALPHA | DIGIT | "-" | "_" | "." )
+  scheme           = URI
   type-identifier  = scheme term
   action-type      = type-identifier
   action-uri       = URI "?" "action=" term
@@ -180,15 +184,21 @@ ActionLink         = "Link" ":" #link-value
 
 \begin{verbatim}
 Attribute          = "X-OCCI-Attribute" ":" #attribute-repr
-  attribute-repr   = attribute-name "=" ( string | number | bool | enum_val )
-  attribute-name   = attr-component *( "." attr-component )
-  attr-component   = LOALPHA *( LOALPHA | DIGIT | "-" | "_" )
+  attribute-repr   = attribute-name "=" attribute-value
+  attribute-name   = ( ALPHA | DIGIT ) *( ALPHA | DIGIT | "-" | "_" | "." )
+  attribute-value  = ( string | number | bool | enum-val | array | hash )
   string           = quoted-string
   number           = (int | float)
   int              = *DIGIT
   float            = *DIGIT "." *DIGIT
   bool             = ("true" | "false")
-  enum_val         = string
+  enum-val         = string
+  array            = "[" *array-elm "]"
+  array-elm        = ( string | number | bool | enum-val ) ","
+  hash             = "{" *hash-elm "}"
+  hash-elm         = hash-key ":" "hash-value" ","
+  hash-key         = string
+  hash-value       = ( string | number | bool | enum-val )
 \end{verbatim}
 
 \subsection{Location ABNF}
@@ -212,9 +222,9 @@ Entity instances MUST be rendered according to the following definitions.
 A \hl{Resource} instance MUST be rendered using the following definition:
 
 \begin{verbatim}
-	resource_rendering = 1*( Category CRLF )
-    	                  *( Link CRLF )
-        	              *( Attribute CRLF )
+  resource_rendering = 1*( Category CRLF )
+                        *( Link CRLF )
+                        *( Attribute CRLF )
 \end{verbatim}
 
 The rendering of a \hl{Resource} instance MUST represent any associated Action instances using the {\tt ActionLink CRLF}.
@@ -224,8 +234,8 @@ The rendering of a \hl{Resource} instance MUST represent any associated Action i
 Upon an \hl{Action} invocation the client MUST send along the following definition:
 
 \begin{verbatim}
-	action_definition = 1( Category CRLF )
-        	            *( Attribute CRLF )
+  action_definition = 1( Category CRLF )
+                      *( Attribute CRLF )
 \end{verbatim}
 
 \subsubsection{Link Instance Rendering}
@@ -233,9 +243,9 @@ Upon an \hl{Action} invocation the client MUST send along the following definiti
 A \hl{Link} instance MUST be rendered using the following definition:
 
 \begin{verbatim}
-	link_rendering = 1*( Category CRLF )
-    	              *( ActionLink CRLF )
-        	          *( Attribute CRLF )
+  link_rendering = 1*( Category CRLF )
+                    *( ActionLink CRLF )
+                    *( Attribute CRLF )
 \end{verbatim}
 
 % HERE I AM
@@ -267,7 +277,7 @@ Note that an \hl{Action} instance MUST NOT have \hl{Link} and \hl{Action}s refer
 A collection of \hl{Resource} or \hl{Link} instances MUST be rendered as following:
 
 \begin{verbatim}
-	entity_collection_rendering = *( Location CRLF )
+  entity_collection_rendering = *( Location CRLF )
 \end{verbatim}
 
 \subsubsection{Resource Collection Rendering}
@@ -283,7 +293,7 @@ see above
 For the Query interface the following \hl{Category} instance rendering MUST be used:
 
 \begin{verbatim}
-	category_collection_rendering = *( Category CRLF )
+  category_collection_rendering = *( Category CRLF )
 \end{verbatim}
 
 \subsubsection{Kind Collection Rendering}
@@ -305,20 +315,28 @@ see above
 For Entity instances the following model attribute name to attribute name rendering mappings MUST be used:
 
 \mytablefloat{
-	\label{tbl:link}
-	Entity attributes naming convention } {
-	\begin{tabular}{ll}
-		\toprule
-			Attribute & Attribute name once rendered \\
-		\colrule
-			Entity.id & occi.core.id \\
-			Entity.title & occi.core.title \\
-			Resource.summary & occi.core.summary \\
-			Link.target & occi.core.target \\
-			Link.source & occi.core.source \\
-		\botrule
-	\end{tabular}
+  \label{tbl:link}
+  Entity attribute naming convention } {
+  \begin{tabular}{ll}
+    \toprule
+      Attribute         & Attribute name once rendered \\
+    \colrule
+      Entity.id         & occi.core.id \\
+      Entity.title      & occi.core.title \\
+      Resource.summary  & occi.core.summary \\
+      Link.target       & occi.core.target \\
+      Link.target.kind  & occi.core.target.kind \\
+      Link.source       & occi.core.source \\
+      Link.source.kind  & occi.core.source.kind \\
+    \botrule
+  \end{tabular}
 }
+
+\subsubsection{Mixin Instance Attribute Rendering Specifics}
+
+When rendering {\tt Mixin.depends} and {\tt Mixin.applies} to the {\tt rel} attribute in the \hl{Category} instance rendering,
+only {\tt Mixin.depends} value MUST be used. If {\tt Mixin.depends} contains multiple values, only the first value MUST
+be used.
 
 \subsubsection{Attribute Description Rendering}
 \label{sec:format_attribute_description}
@@ -328,7 +346,7 @@ MUST be represented as a string in the ERE \cite{ere} format.
 
 \section{OCCI Text Plain rendering}
 \label{sec:text}
-The OCCI Text plain rendering specifies a rendering of OCCI instance types in a simple text format. Using this rendering the renderings MUST be placed in the HTTP Body.
+The OCCI Text plain rendering specifies a rendering of OCCI instance types in a simple text format.
 
 The rendering can be used to render OCCI instances independently of the
 protocol being used. Thus messages can be delivered by, e.g., the HTTP
@@ -336,13 +354,13 @@ protocol as specified in \cite{occi:http_protocol}.
 
 The following media-types MUST be used for the OCCI Text plain rendering:
 
-	{\tt text/occi+plain}
+  {\tt text/occi+plain}
 
 and
 
-	{\tt text/plain}
+  {\tt text/plain}
 
-Each entry in the body consists of a name followed by a colon (”:”) and the field value.
+Each entry in the body consists of a name followed by a colon (``:'') and the field value.
 
 \subsection{Example}
 
@@ -370,9 +388,10 @@ The following media-type MUST be used for the OCCI header Rendering:
 
 {\tt text/occi}
 
-While using this rendering the renderings MUST be placed in the HTTP Header. The body MUST contain the string ’OK’ on successful operations.
+While using this rendering the HTTP Protocol \cite{occi:http_protocol} MUST be used and the renderings
+MUST be placed in the HTTP Header. The body MUST contain the string ``OK'' on successful operations.
 
-The HTTP header fields MUST follow the specification in RFC 7230 \cite{rfc7230}. A header field consists of a name followed by a colon (”:”) and the field value.
+The HTTP header fields MUST follow the specification in RFC 7230 \cite{rfc7230}. A header field consists of a name followed by a colon (``:'') and the field value.
 
 \textbf{Limitations}: HTTP header fields MAY appear multiple times in a HTTP request or response. In order to be OCCI compliant, the specification of multiple message-header fields according to RFC 7230 MUST be fully supported. In essence there are two valid representations of multiple HTTP header field values. A header field might either appear several times or as a single header field with a comma-separated list of field values. Due to implementation issues in many web frameworks and client libraries it is RECOMMENDED to use the comma-separated list format for best interoperability.
 
@@ -413,7 +432,7 @@ does RECOMMEND that an authentication mechanism be used and that where
 appropriate, communications are encrypted using HTTP over TLS. The
 authentication mechanisms that MAY be used with OCCI are those that
 can be used with HTTP and TLS. For further discussion see the
-appropiate section in \cite{occi:http_protocol}.
+appropriate section in \cite{occi:http_protocol}.
 
 \section{Glossary}
 \label{sec:glossary}
