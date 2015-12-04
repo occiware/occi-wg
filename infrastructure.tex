@@ -202,15 +202,15 @@ the \hl{Resource} base type defined in OCCI Core Model
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
-	occi.compute.architecture & Enum \{x86, x64\} & 0\ldots1
+	occi.compute.architecture & Enum \{x86, x64\} & 0..1
 	& Mutable & CPU Architecture of the instance.\\
-	occi.compute.cores & Integer & 0\ldots1
+	occi.compute.cores & Integer & 0..1
 	& Mutable & Number of virtual CPU cores assigned to the instance.\\
-	occi.compute.hostname & String & 0\ldots1
+	occi.compute.hostname & String & 0..1
 	& Mutable & Fully Qualified DNS hostname for the instance.\\
-	occi.compute.share & Integer & 0\ldots1
+	occi.compute.share & Integer & 0..1
 	& Mutable & Relative number of CPU shares for the instance.\\
-	occi.compute.memory & Float, $10^9$ (GiB) & 0\ldots1
+	occi.compute.memory & Float, $10^9$ (GiB) & 0..1
 	& Mutable & Maximum RAM in gigabytes allocated to the instance.\\
 	occi.compute.state & Enum \{active, inactive, suspended, error\} & 1
 	& Immutable & Current state of the instance.\\
@@ -291,9 +291,9 @@ The \hl{Network} type is assigned the
 	\toprule
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
-	occi.network.vlan & Integer: 0-4095 & 0\ldots1 & Mutable
+	occi.network.vlan & Integer: 0-4095 & 0..1 & Mutable
 	& 802.1q VLAN Identifier (e.g., 343).\\
-	occi.network.label & Token & 0\ldots1 & Mutable
+	occi.network.label & Token & 0..1 & Mutable
 	& Tag based VLANs (e.g., external-dmz).\\
 	occi.network.state & Enum \{active, inactive, error\} & 1 & Immutable
 	& Current state of the instance.\\
@@ -377,9 +377,9 @@ attributes.
 \toprule
 Attribute&Type&Multi\-plicity&Mutability&Description\\
 \colrule
-occi.network.address & IPv4 or IPv6 Address range, CIDR notation & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g., 192.168.0.1/24, fc00::/7)\\
-occi.network.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g., 192.168.0.1, fc00::)\\
-occi.network.allocation & Enum \{dynamic, static\} & 0\ldots1 & Mutable & Address allocation mechanism: \textit{dynamic} e.g.,~uses the dynamic host configuration protocol, \textit{static} e.g.,~uses user supplied static network configurations.\\
+occi.network.address & IPv4 or IPv6 Address range, CIDR notation & 0..1 & Mutable & Internet Protocol(IP) network address (e.g., 192.168.0.1/24, fc00::/7)\\
+occi.network.gateway & IPv4 or IPv6 Address & 0..1 & Mutable & Internet Protocol(IP) network address (e.g., 192.168.0.1, fc00::)\\
+occi.network.allocation & Enum \{dynamic, static\} & 0..1 & Mutable & Address allocation mechanism: \textit{dynamic} e.g.,~uses the dynamic host configuration protocol, \textit{static} e.g.,~uses user supplied static network configurations.\\
 \botrule
 \end{tabular}
 }
@@ -562,7 +562,7 @@ MUST expose these attributes.
 Attribute&Type&Multi\-plicity&Mutability&Description\\
 \colrule
 occi.networkinterface.address & IPv4 or IPv6 Address & 1 & Mutable & Internet Protocol(IP) network address (e.g., 192.168.0.1/24, fc00::/7) of the link\\
-occi.networkinterface.gateway & IPv4 or IPv6 Address & 0\ldots1 & Mutable & Internet Protocol(IP) network address (e.g.. 192.168.0.1/24, fc00::/7)\\
+occi.networkinterface.gateway & IPv4 or IPv6 Address & 0..1 & Mutable & Internet Protocol(IP) network address (e.g.. 192.168.0.1/24, fc00::/7)\\
 occi.networkinterface.allocation & Enum \{dynamic, static\} & 1 & Mutable & Address mechanism: \textit{dynamic} e.g., uses the dynamic host configuration protocol, \textit{static} e.g., uses user supplied static network configurations.\\
 \botrule
 \end{tabular}
@@ -607,7 +607,7 @@ related to the \textit{http://schemas.ogf.org/occi/core\#link}
 	\colrule
 	occi.storagelink.deviceid & String & 1 & Mutable
 	& Device identifier as defined by the OCCI service provider.\\
-	occi.storagelink.mountpoint & String & 0\ldots1 & Mutable
+	occi.storagelink.mountpoint & String & 0..1 & Mutable
 	& Point to where the storage is mounted in the guest OS.\\
 	occi.storagelink.state & Enum \{active, inactive, error\}& 1
 	& Immutable & Current status of the instance.\\
