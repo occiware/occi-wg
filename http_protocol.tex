@@ -241,10 +241,28 @@ If {\em number} is too large for the provider to handle (policy, technical limit
 If there is no more content to be served, the response status code issued to the requesting client MUST be an \emph{HTTP 200 OK} and the response body MUST contain an empty collection.
 
 \section{Filtering}
-\todo{Add something about filtering on QI}
+To request a sub-set of the given collection of \hl{Category} instances or \hl{Entity} sub-type instances, filtering SHOULD be used to
+specify the appropriate elements of the collection. Filtering can be performed via the HTTP GET verb on the {\tt Query Interface} and
+on various \hl{Entity} sub-type instance collections. The following specification of the filtering mechanism is in the process of being
+deprecated and will be replaced by a new mechanism in the next MAJOR release of the standard. In its current form, the availability of
+the filtering mechanism is restricted to rendering formats transportable in HTTP headers.
+
+\subsection{Query Interface}
+Filtering on the {\tt Query Interface} SHOULD be performed via the HTTP GET verb by including a \hl{Category} instance rendering
+in the HTTP request headers. If supported, the response MUST contain only \hl{Category} instances related to the given \hl{Category}
+instance. This includes \hl{Kind}s, \hl{Action}s and \hl{Mixin}s.
+
+\subsection{Entity Sub-type Instance Collection}
+Filtering on {\tt Entity} sub-type instance collections SHOULD be performed via the HTTP GET verb by including an \hl{Entity} sub-type
+instance rendering in the HTTP request headers. If supported, the response MUST contain only \hl{Entity} sub-type instances
+with \hl{Attribute} values matching the given \hl{Entity} sub-type instance \hl{Attribute} values.
+
+Filtering \hl{Entity} sub-type instances by assigned \hl{Mixin} instances is implemented via \hl{Mixin}-defined collections.
 
 \section{HTTP Methods Overview}
-\todo{Add text here}, Table~\ref{tbl:http_verbs}.
+Table~\ref{tbl:http_verbs} provides a brief overview of the HTTP verb usage. For details, please, see the sections below.
+
+\todo{Make sure the table does NOT clash with detailed descriptions below!}
 
 \mytablefloat{
   \label{tbl:http_verbs}
@@ -260,39 +278,40 @@ If there is no more content to be served, the response status code issued to the
   & DELETE \\
 
   \colrule
-  \hl{Entity} sub-type instance ({\tt /vms/foo/vm1}).
-  & Retrieve the instance representation.
-  & Partial update of the instance.
-  & Perform an action.
-  & Create/Update the instance, supplying the full
+  \hl{Entity} sub-type instance ({\tt /compute/1}).
+  & Retrieve the \hl{Entity} sub-type instance representation.
+  & Partial update of the \hl{Entity} sub-type instance.
+  & Perform an action on the \hl{Entity} sub-type instance.
+  & Create/Update the \hl{Entity} sub-type instance, supplying the full
     representation of the instance.
-  & Delete the instance. \\
+  & Delete the \hl{Entity} sub-type instance. \\
 
   \colrule
   \hl{Entity} sub-type instance collection ({\tt /compute/}).
-  & Retrieve a collection of instances*.
-  & Create a new instance in this collection.
-  & Perform actions on a collection of instances.
+  & Retrieve a collection of \hl{Entity} sub-type instances*.
+  & Create a new \hl{Entity} sub-type instance in this collection.
+  & Perform actions on a collection of \hl{Entity} sub-type instances.
   & Not Defined.
-  & Remove instances (one, sub-set, all) from the collection. \\
+  & Remove \hl{Entity} sub-type instances from the collection. \\
 
   \colrule
   \hl{Mixin}-defined \hl{Entity} sub-type instance
     collection ({\tt /my\_stuff/}).
-  & Retrieve a collection of instances*.
-  & Add an instance to this collection.
-  & Perform actions on a collection of instances.
-  & Update of the collection supplying the full representation
-    of the new collection. Including removal and addition of instances.
-  & Remove instances (one, sub-set, all) from the collection. \\
+  & Retrieve a collection of \hl{Entity} sub-type instances*.
+  & Add an \hl{Entity} sub-type instance to this collection.
+  & Perform actions on a collection of \hl{Entity} sub-type instances.
+  & Update the collection supplying the full representation
+    of the new collection. Including removal and addition of \hl{Entity}
+    sub-type instances.
+  & Remove \hl{Entity} sub-type instances from the collection. \\
 
   \colrule
   Query interface ({\tt /-/}).
   & Retrieve \hl{Category} instances*.
-  & Add a user-defined \hl{Mixin}.
+  & Add a user-defined \hl{Mixin} instance.
   & Not Defined.
   & Not Defined.
-  & Remove a user-defined \hl{Mixin}. \\
+  & Remove a user-defined \hl{Mixin} instance. \\
   \botrule
   \end{tabularx}
 }
