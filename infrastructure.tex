@@ -670,8 +670,8 @@ OS Template, it can do so using ``{\tt attributes}'' value inherited
 from the \hl{Category} type.
 
 Default values for OCCI \hl{Attribute}s defined by the \hl{Kind} or the OS
-Template \hl{Mixin} MAY be provided using the \hl{Attribute}.{\tt
-  default} attribute property \cite{occi:core}.
+Template \hl{Mixin} MAY be provided using the \hl{Attribute}.{\tt default}
+attribute property \cite{occi:core}.
 
 An implementation-defined OS Template \hl{Mixin} MUST be related to the
 OCCI OS Template \hl{Mixin} in order to give absolute type
@@ -682,12 +682,14 @@ The OCCI OS Template is defined by the
 \hl{Mixin} and MUST be supported should OS Templates be offered by the
 OCCI implementation.
 
-If an OS Template is already associated with the given \hl{Resource}
-instance, associating a new OS Template (using mechanisms defined
-by the chosen rendering and transport protocol) MUST result in
-an immediate removal of the old OS Template and association of the new
-OS Template. The change must affect the operating system of the given
-\hl{Resource} instance, in a provider-specific way.
+Associating a new OS Template with an existing \hl{Resource}
+instance MAY be supported depending on the limitations of the implementation
+and MUST result in an immediate removal of the old OS Template and
+association of the new OS Template. The change MUST affect the execution
+environment of the given \hl{Resource} instance, in a provider-specific way.
+If this functionality is not supported, an appropriate error MUST be
+returned to the client, using mechanisms defined by the chosen rendering
+and transport protocol.
 
 \begin{figure}[!h]
 	\centering
