@@ -186,19 +186,13 @@ ActionLink         = "Link" ":" #link-value
 Attribute          = "X-OCCI-Attribute" ":" #attribute-repr
   attribute-repr   = attribute-name "=" attribute-value
   attribute-name   = ( ALPHA | DIGIT ) *( ALPHA | DIGIT | "-" | "_" | "." )
-  attribute-value  = ( string | number | bool | enum-val | array | hash )
+  attribute-value  = ( string | number | bool | enum-val )
   string           = quoted-string
   number           = (int | float)
   int              = *DIGIT
   float            = *DIGIT "." *DIGIT
   bool             = ("true" | "false")
   enum-val         = string
-  array            = "[" *array-elm "]"
-  array-elm        = ( string | number | bool | enum-val ) ","
-  hash             = "{" *hash-elm "}"
-  hash-elm         = hash-key ":" "hash-value" ","
-  hash-key         = string
-  hash-value       = ( string | number | bool | enum-val )
 \end{verbatim}
 
 \subsection{Location ABNF}
@@ -464,8 +458,6 @@ This section describes the possible impact of the corrections on existing
 implementations and associated dependent specifications.
 
 \begin{itemize}
-  \item Added support for complex \hl{Attribute} values {\tt List} and {\tt Hash}. Both
-        rendered into text as string representations of {\tt Array} and {\tt Hashmap} respectively.
   \item Relaxed rules on {\tt term} values allowing the use of: alphanumerical characters (a-zA-Z0-9),
         ``\_'', ``-'' and ``.''.
   \item Explicitly stated how {\tt Mixin.depends} and {\tt Mixin.applies} should be rendered to {\tt rel}
