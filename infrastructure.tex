@@ -106,7 +106,7 @@ types defined within OCCI Infrastructure are:
 \begin{description}
 \item[\hl{Compute}] Information processing resources.
 \item[\hl{Network}] Interconnection resource that represents an L2
-  networking resource. This is complimented by the \hl{IPNetwork}
+  networking resource. This is complemented by the \hl{IPNetwork}
   \hl{Mixin}.
 \item[\hl{Storage}] Information recording resources.
 \end{description}
@@ -115,7 +115,7 @@ Supporting these \hl{Resource} types are the following \hl{Link} sub-types:
 
 \begin{description}
 \item[\hl{NetworkInterface}] connects a \hl{Compute} instance to a
-  \hl{Network} instance. This is complimented by an
+  \hl{Network} instance. This is complemented by an
   \hl{IPNetworkInterface} \hl{Mixin}.
 \item[\hl{StorageLink}] connects a \hl{Compute} instance to a
   \hl{Storage} instance.
@@ -256,7 +256,7 @@ exposed by an instance of the \hl{Compute} type of an OCCI
 implementation.  Figure~\ref{fig:compute_state} illustrates the state
 diagram for a \hl{Compute} instance.
 
-Action ``save'' is expected to create an OS Template (see section~\ref{subsubsec:os_tpl}) referencing
+Action ``save'' is expected to create an OS Template (see Section~\ref{subsubsec:os_tpl}) referencing
 an independent copy of the current state of the \hl{Compute} instance. The provider MAY choose to respect
 the ``name'' given by the client or override it according to its internal policies. A successful
 execution of this action MUST lead to a response containing the rendering of the newly
@@ -345,7 +345,7 @@ diagram for a \hl{Network} instance.
 
 \subsubsection{IPNetwork Mixin}
 
-In order to support L3/L4 capabilities (e.g., IP, TCP etc.) an OCCI
+In order to support L3/L4 capabilities (e.g., IP, TCP, etc.) an OCCI
 mixin is herewith defined.
 
 The \hl{IPNetwork} mixin is assigned%
@@ -377,8 +377,8 @@ attributes.
 \toprule
 Attribute&Type&Multi\-plicity&Mutability&Description\\
 \colrule
-occi.network.address & IPv4 or IPv6 Address range, CIDR notation & 0..1 & Mutable & Internet Protocol(IP) network address (e.g., 192.168.0.1/24, fc00::/7)\\
-occi.network.gateway & IPv4 or IPv6 Address & 0..1 & Mutable & Internet Protocol(IP) network address (e.g., 192.168.0.1, fc00::)\\
+occi.network.address & IPv4 or IPv6 Address range, CIDR notation & 0..1 & Mutable & Internet Protocol (IP) network address (e.g., 192.168.0.1/24, fc00::/7)\\
+occi.network.gateway & IPv4 or IPv6 Address & 0..1 & Mutable & Internet Protocol (IP) network address (e.g., 192.168.0.1, fc00::)\\
 occi.network.allocation & Enum \{dynamic, static\} & 0..1 & Mutable & Address allocation mechanism: \textit{dynamic} e.g.,~uses the dynamic host configuration protocol, \textit{static} e.g.,~uses user supplied static network configurations.\\
 \botrule
 \end{tabular}
@@ -465,7 +465,7 @@ diagram for a \hl{Storage} instance.
 OCCI can be used in conjunction with the SNIA cloud storage standard,
 Cloud Data Management Interface (CDMI) \cite{cdmi}, to provide enhanced
 management of the cloud computing storage and data. For storage
-managed through CDMI, see section \ref{subsec:storagelink}.
+managed through CDMI, see Section \ref{subsec:storagelink-cdmi}.
 
 \subsection{Linking Infrastructure Resources}
 In order to create entities like virtual data centers or virtual
@@ -481,7 +481,7 @@ sub-typing the \hl{Link} base type.
 \subsubsection{Linking to Network}
 The \hl{NetworkInterface} type represents an L2 client device (e.g.,
 network adapter). It can be extended using the mix-in mechanism or
-sub-typed to support L3/L4 capabilities such as TCP/IP etc.
+sub-typed to support L3/L4 capabilities such as TCP/IP, etc.
 \hl{NetworkInterface} inherits the \hl{Link} base type defined in the
 OCCI Core Model \cite{occi:core}.
 
@@ -501,9 +501,9 @@ be related to the \textit{http://schemas.ogf.org/occi/core\#link}
 	Attribute&Type&Multi\-plicity&Mutability&Description\\
 	\colrule
 	occi.networkinterface.interface & String & 1 & Immutable
-	& Identifier that relates the link to the link's device interface\\
+	& Identifier that relates the link to the link's device interface.\\
 	occi.networkinterface.mac & String & 1 & Mutable
-	& MAC address associated with the link's device interface\\
+	& MAC address associated with the link's device interface.\\
 	occi.networkinterface.state & Enum \{active, inactive, error\}& 1
 	& Immutable & Current status of the instance.\\
 	occi.networkinterface.state.message & String & 0..1 & Immutable
@@ -537,7 +537,7 @@ The \hl{IPNetworkInterface} mixin is assigned%
 \footnote{Both assignments use data members from the inherited \hl{Category}
 type \cite{occi:core}.}
 the ``{\tt scheme}'' of
-\textit{http://schemas.ogf.org/occi/infrastructure/networkinterface\#} and the ``{\tt term}'' value
+\textit{http://schemas.ogf.org/occi/infrastructure/} \textit{networkinterface\#} and the ``{\tt term}'' value
 \textit{ipnetworkinterface}.
 An \hl{IPNetworkInterface} mixin MUST support these attributes.
 
@@ -634,6 +634,7 @@ diagram for a \hl{StorageLink} instance.
 \end{figure}
 
 \subsubsection{Linking to CDMI Managed Storage}
+\label{subsec:storagelink-cdmi}
 As previously stated, OCCI can be used in conjunction with the SNIA
 cloud storage standard, Cloud Data Management Interface (CDMI)
 \cite{cdmi}, to provide enhanced management of the cloud computing
@@ -800,7 +801,7 @@ When creating a Compute Resource a client normally supplies security credentials
 
 If a provider offers VMs with access secured by SSH then their OCCI implementation SHOULD support this. Otherwise no user-supplied public SSH key can be injected into the Compute Resource.
 
-The OCCI credentials mixin has the term \texttt{ssh\_key} and the schema \textit{http://schemas.ogf.org/occi/credentials\#}.
+The OCCI credentials mixin has the term \texttt{ssh\_key} and the schema \textit{http://schemas.ogf.org/occi/infrastructure/} \textit{credentials\#}.
 
 The credentials mixin MUST only apply to the Compute Kind and therefore
 the mixin should have its \texttt{applies} attribute set to:
@@ -809,7 +810,7 @@ the mixin should have its \texttt{applies} attribute set to:
 
 
 \mytablefloat{
-	\label{tbl:contextmixin}%
+	\label{tbl:credentialsmixin}%
 	\hl{Attribute}s defined by the \hl{Credentials} mixin. A \hl{Compute}
 	instance associated with this \hl{Mixin} instance MUST expose these
 	attributes.
@@ -837,7 +838,7 @@ by the Compute Resource as the last step in the Compute's boot-order.
 OCCI implementations SHOULD support this otherwise no
 contextualization of a resource instance can be done.
 The OCCI contextualization mixin has the term \texttt{user\_data}
-and the schema \textit{http://schemas.ogf.org/occi/compute\#}.
+and the schema \textit{http://schemas.ogf.org/occi/} \textit{infrastructure/compute\#}.
 
 Contextualization mixin MUST only apply to the Compute Kind and therefore
 the mixin should have its \texttt{applies} attribute set to:
@@ -906,6 +907,7 @@ implementations and associated dependent specifications.
 \item New contextualization mixin -- allows a script to be supplied with the creation request of a compute resource
 \item Added error state to all resource state models
 \item Added \texttt{occi.compute.share} attribute to \hl{Compute}. This allows for basic support of container virtualization technologies.
+\item Removed \texttt{occi.compute.speed} attribute to \hl{Compute}.
 \item Added \texttt{state.message} to all infrastructure resources (\hl{Compute}, \hl{Storage}, \hl{Network}, \hl{NetworkInterface}, \hl{StorageLink})
 \item Added references to the core model \texttt{parent}, \texttt{applies} and \texttt{depends} for infrastructure \hl{Mixin}s and \hl{Kind}s.
 \item Updated figures to reflect new Core model
