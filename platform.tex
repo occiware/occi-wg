@@ -213,7 +213,16 @@ The state model for the \hl{Component} instance is defined in \ref{fig:component
 
 \subsection{Linking to Components}
 
-The composition of a service is realized through the linkage of \hl{Application} and \hl{Component} instances with each other.
+The composition of a service is realized through the linkage 
+of \hl{Application} and \hl{Component} instances with each 
+other. \hl{Application} can be linked to many \hl{Component} 
+instances. This allows \hl{Application} and \hl{Component}s 
+to form acyclic graphs. To illustrate this with an example, the 
+\hl{Application} is the frontend, perceived by the user, to a 
+composition of \hl{Component}s. To have a composition 
+of \hl{Component}s (e.g. microservices) those \hl{Components} 
+need to be related to one another (e.g. Applciation linking to 
+its DB or the DB linking to a monitoring service). 
 
 \hl{ComponentLink} inherits the \hl{Link} base type defined in OCCI Core Model \cite{occi:core}. \hl{ComponentLink} is assigned the \hl{Kind} instance \textit{http://schemas.ogf.org/occi/platform\#componentLink}. The \hl{Kind} instance assigned to the \hl{ComponentLink} type MUST be related to the \textit{http://schemas.ogf.org/occi/core\#link} \hl{Kind} by setting the \textit{parent} attribute.
 
