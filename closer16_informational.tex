@@ -1,0 +1,239 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true]{microtype}
+\usepackage[plainpages=false,pdfpagelabels,unicode]{hyperref}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{occi}
+\setlength{\headheight}{13pt}
+\pagestyle{fancy}
+
+%  just a test
+% default sans-serif
+\renewcommand{\familydefault}{\sfdefault}
+
+% no lines for headers and footers
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% header
+\fancyhf{}
+\lhead{GFD-R}
+\rhead{\today}
+
+% footer
+\lfoot{occi-wg@ogf.org}
+\rfoot{\thepage}
+
+% paragraphs need some space...
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+%\renewcommand\paragraph{%
+%  \@startsection{paragraph}{4}{0mm}%
+%     {-\baselineskip}%
+%     {.5\baselineskip}%
+%     {\normalfont\normalsize\bfseries}}
+
+% some space between header and text...
+\headsep 13pt
+
+\setcounter{secnumdepth}{4}
+
+\begin{document}
+	
+	% header on first page is different
+	\thispagestyle{empty}
+	
+	Draft \hfill Augusto Ciuffoletti, University of Pisa (Italy)\\
+	OCCI-WG  \hfill Silvio Cretti, Create-net (Italy)\\
+	\rightline{Andrew Edmonds, ZHAW (Switzerland)}\\
+	\rightline{Federico Facca, Martel Consulting (Switzerland)}\\
+	\rightline{Enol Fernandez, IFCA (Spain)}\\
+	\rightline{Philippe Merle, INRIA (France)}\\
+	\rightline{Thijs Metsch, Intel (Germany)}\\
+	\rightline{Boris Parak, CESNET (Czech Republic)}\\
+	\rightline{Jean Parpaillon, INRIA (France)}\\
+	\rightline {\today}
+	
+	\vspace*{0.5in}
+	
+	\begin{Large}
+		\textbf{A special session on OCCI at CLOSER 2016}
+	\end{Large}
+	
+	\vspace*{0.5in}
+	
+	\underline{Status of this Document}
+	
+	% \input{include/status}
+	
+	This document is a \underline{draft} providing information to the community regarding non-normative issues related with the Open Cloud Computing Interface.
+	
+	\underline{Copyright Notice}
+	
+	Copyright \copyright ~Open Grid Forum (2014-2015). All Rights
+	Reserved.
+	
+	\underline{Trademarks}
+	
+	OCCI is a trademark of the Open Grid Forum.
+	
+	\underline{Abstract}
+	
+%	\input{include/abstract}
+	On April 2016 the CLOSER conference hosted a special session entitled "Experiences with OCCI". This informational document reports about the organization of the event, contains the abstracts of the papers accepted to the event, and summarizes the topics covered during the discussions. Thus it is not intended to be a minute transcription, but a succinct report of the event. 
+	
+	\newpage
+	\tableofcontents
+	\newpage
+
+
+%\maketitle
+
+
+
+\section{Introduction}
+The CLOSER conference (International Conference on Cloud Computing and Services Science) is held every year in Europe, and is organized by the INSTICC (Institute for Systems and Technologies of Information, Control and Communication), a research institute based in Portugal. The conference is at its 6th edition in 2016, with a number of participants that appears to be steady year by year. Accepted papers are indexed in bibliography databases: Thomson Reuters Web of Science, Scopus, DBLP and more. Once published, the papers are freely available through the Scitepress portal: only the registration is required to access and download the papers.
+
+Since the first edition in 2011, CLOSER offers the participants the opportunity to organize, during the conference, very focused and small events, explicitly oriented to provide a venue to existing projects and working groups. Once the topic is approved by the conference Program Committee, Special Sessions organization follows a precise protocol, similar to that which is typical of a full conference: formation of a program committee, call for papers, selection of accepted papers, registration of the speaker and presentation during a dedicated time slot. The protocol is enforced by the Primoris Event Management System, developed by INSTICC, that keeps track and synchronizes all steps, and unfolds independently from the main conference organization until the last steps.
+
+In order to be accepted for final scheduling, the Special Session must have a minimal number of accepted papers, currently four. So the chair and the Program Committee are exposed to the hazard of a failure in case the number of accepted papers fails to reach the threshold, which happens only after major time and effort investments have been done. To limit a conflict of interest arising from the legitimate wish of seeing the Special Session to take place, the chair is excluded from the team of reviewers, and the review is carried out according to a {\em double blind} protocol. By the way, the acceptance of a paper written by a member of the working group is somewhat facilitated by the fact that the reviewer belongs to the same interest group. Depending on the quality of the working group, the bias may be positive or negative.
+
+\section{Organization of the Special Session "Experiences with OCCI"}
+
+The idea was raised by the evidence that a number of projects use the Open Cloud Computing Interface. The role of OCCI in such projects is variable: sometimes it is a tool, functional to a different target, sometimes it is itself the target. Such projects have in common a practical attitude: they implement a product, be it real of a proof of concept, that demonstrate OCCI applicability. The transition from 1.1 to 1.2 is in fact a product of such efforts, since the implementation of v1.1 unveiled ambiguous and incomplete specifications that 1.2 wants to amend. However, all such projects have little or no visibility. So the idea of providing a focus for those willing to find to publish their results in a venue dedicated to OCCI.
+
+To verify the soundness of all that, the chair of the Special Session (Augusto Ciuffoletti, University of Pisa) got in touch with potential Program Committee members. Once people demonstrated to appreciate the initiative and the willingness to contribute with a paper submission, the Special Session proposal was submitted (on November 19th) to the conference Program Committee with the following {\em scope}
+
+\begin{quote}
+	OCCI stands for Open Cloud Computing Interface. It is a standard proposal of the Open Grid forum that aims at fostering interoperability between different cloud infrastructures and providers. This Special Session gathers experiences about the utilization of OCCI, specifically addressing adoption stories and applications.
+\end{quote}
+
+The proposal was accepted one week later, and the Program Committee was formed during the following days with the people that already accepted to take part in the effort and others that joined later.
+
+\subsection*{The Program Committee}
+\begin{description}
+	\item[Augusto Ciuffoletti (PC chair)] University of Pisa (Italy)
+	Augusto Ciuffoletti is a Senior Researcher at the Department of Computer Science, in Pisa. He participated in European projects related with Grid and Cloud with INFN-CNAF. He is a member of the OCCI working group of the OGF, with a proposal for a "monitoring as a service" extension.
+	\item[Silvio Cretti (PC member)] Create-net (Italy)
+	Silvio Cretti joined CREATE-NET in 2010 working on many EU FP7 and H2020 funded projects in the context of Future Internet focusing on smart infrastructures deployment and management. He is leading the OPS Chapter in FIWARE (https://www.fiware.org/) where tools for automatic deployment, monitoring and management of OpenStack based Clouds are developed.
+	\item[Andrew Edmonds] (PC member)] ZHAW (Switzerland)
+	Andy Edmonds is a  senior researcher in the InIT Cloud Computing Lab. He acts as the deputy head of the ICCLab, where he is responsible for the IaaS research theme. His research interests include distributed and system architectures, virtualization, service-oriented architectures, and cloud computing. He is member of the OCCI working group of the OGF.
+	\item[Federico Facca] (PC member)] Martel Consulting (Switzerland)
+	Federico Facca obtained his Ph.D. in Information Technology and his M.Sc in Computer Science at the Politecnico di Milano. He worked as Area Head in CREATE-NET focusing on Cloud computing management solutions and as Area Head and Institute Manager at STI Innsbruck, focusing on service-oriented architectures and service middleware. He is currently Head of Martel Lab at Martel Innovate in Gudo (Canton of Ticino) Switzerland.
+	\item[Enol Fernandez] (PC member)] IFCA (Spain)
+	Enol Fernadez is a cloud technologist at the European Grid Infrastructure (EGI), and  a researcher at the Consejo Superior de Investigaciones Científicas (CSIC) in Spain. He is leader of the Contextualization Scenario in EGI Federated Cloud, and Coordinator of the IberCloud initiative.
+	\item[Philippe Merle] (PC member)] INRIA (France)
+	Philippe Merle is a Researcher at the Institut National di Recherche Scientifique (INRIA) in Lille, France. He is member of the Spiral Research Team and of the OCCIware project.
+	\item[Thijs Metsch] (PC member)] Intel (Germany)
+	Thijs Metsch is a senior researcher at Intel. He is the chair of the OCCI Working Group of the OGF.
+	\item[Boris Parak] (PC member)] CESNET (Czech Republic)
+	Boris Parak is the lead developer in the rOCCI project with numerous major commits and principal author of the rOCCI-server and rOCCI-cli. He is also a system administrator and a member of the team responsible for designing, building, developing and maintaining CESNET’s private HPC cloud — MetaCloud, as well as a member of the EGI Federated Cloud Task Force on behalf of CESNET, currently acting as the task leader for Virtual Machine Management. He is member of the OCCI Working Group of the OGF.
+	\item[Jean Parpaillon (PC member)] INRIA (France)
+	Jean Parpaillon is a Research Engineer at INRIA at Rennes in France. He is member of the board of the OW2 open-source sofware community, and chairman of the Strategic Committee of the OCCIware project. He is member of the OCCI working group of the OGF.
+\end{description}
+
+The dissemination of the CFP followed several paths. In addition to the utilization of specialized maillists, we used Twitter, Facebook and LinkedIn. Despite the strict timing, a one week extension of the submission deadline was granted after request of a prospective author
+
+The program committee received five submissions, of which 2 were rejected: the Primoris system prevented the assignment of reviews with evident conflicts of interest, and in one case a paper was reassigned after request of a reviewer.
+
+The CLOSER secretary offered the opportunity to include in the program one or more of the papers already accepted to the main conference, given that the authors agree to include the paper in teh Special Session. The opportunity was welcome, since a paper of the Special Session chair was already accepted to the conference, and fitting the topic of the Special Session. So that the session was ready to be scheduled. The four papers included in the session are the following:
+
+\subsection*{Evolution of The Open Cloud Computing Interface}
+
+\noindent {\bf Authors}: Boris Parák (CESNET) , Zdeněk Šustr (CESNET), Michal Kimle (CESNET), Pablo Orviz Fernández (CSIC-UC), \'Alvaro L\'opez Garc\`ia (CSIC-UC), Stavros Sachtouris (GR-net) and V\'ictor Méndez Muñoz (UAB)\\ 
+\noindent {\bf Speaker}: {\bf Boris Parak} (CESNET)
+
+\begin{quote}
+	The OCCI standard has been in use for half a decade, with multiple server-side and client-side implemen-
+	tations in use across the world in heterogeneous cloud environments. The real-world experience uncovered
+	certain peculiarities or even deficiencies which had to be addressed either with workarounds, agreements be-
+	tween implementers, or with updates to the standard. This article sums up implementers’ experience with the
+	standard, evaluating its maturity and discussing in detail some of the issues arising during development and
+	use of OCCI-compliant interfaces. It shows how particular issues were tackled at different levels, and what
+	the motivation was for some of the most recent changes introduced in the OCCI 1.2 specification.
+\end{quote}
+
+\subsection*{Easing Scientific Computing and Federated Management in the Cloud with OCCI}
+
+\noindent {\bf Authors}: Zdeněk Šustr (CESNET) , Diego Scardaci (EGI) , Ji\v{r}\'i Sitera (CESNET) , Boris Par\'{a}k (CESNET) and V\'ictor M\'endez Mu\~{n}oz (UAB)\\
+\noindent {\bf Speaker}: {\bf Victor Mendez Mu\~{n}oz} (Universitat Aut\`onoma de Barcelona)
+
+\begin{quote}
+	One of the benefits of OCCI stems form simplifying the life of developers aiming to integrate multiple cloud
+	managers. It provides them with a single protocol to abstract from differing cloud service implementations
+	used on sites run by different providers. This comes perticularly handy in federated clouds, such as the EGI
+	Federated Cloud Platform, which bring together providers who run different cloud management platforms on
+	their sites: most notably OpenNebula, OpenStack or Synnefo. Thanks to the wealth of approaches and tools
+	now available to developers of virtual resource managememt solutions, different paths may be chosen,
+	ranging from a small-scale use of an existing command line client or single-user graphical interface, to
+	libraries ready for integration with large workload management frameworks and job submission portals relied
+	on by large science communities across Europe. From lome wolves in the long-tail of science to virtual
+	organizations counting thousands of users, OCCI simplifies their life through standardization, unification and
+	simplification. Hence cloud applications based on OCCI can focus on user specifications, saving cost and
+	reaching a robust developing life cycle. To demonstrate this, the paper shows several EGI Federated Cloud
+	experiences, showing the possible approaches and design principles.
+\end{quote}
+
+\subsection*{SLAaaS: an OCCI compliant framework for cloud SLA provisioning and violation detection}
+
+\noindent {\bf Authors}: Gregory Katsaros, Thijs Metsch and John Kennedy (Intel Corporation)\\
+\noindent {\bf Speaker}: {\bf Gregory Katsaros} (Intel Corporation)
+
+\begin{quote}
+	SLAs are an integral part of all modern service provisioning operations. They have been a topic of discussion, research and
+	development for many years but still the norm is the use of rigid, complex and not easy to automate Service Level Agreements.
+	In this paper we are presenting a service framework that is leveraging the OCCI specification in order to facilitate standardized
+	SLA provisioning and violation detection. This SLA as a Service (SLAaaS) offering is provided as an open source framework to
+	any Service Provider that wants to efficiently enhance his infrastructure with SLA support.
+\end{quote}
+\subsection*{Beyond Nagios --- Design of a cloud monitoring system}
+
+\noindent {\bf Authors}: Augusto Ciuffoletti - University of Pisa\\
+\noindent {\bf Speaker}: {\bf Augusto Ciuffoletti} (University of Pisa)
+
+\begin{quote}
+	The paper describes a monitoring system specially designed for cloud infrastructures. We identify the features
+	that are relevant for the task: scalability, that allows utilization in systems of thousands of nodes, flexibility, to
+	be customized for a large number of applications, openness, to allow the coexistence of user and administration
+	monitoring. We take as a starting point the Nagios monitoring system, that has been successfully used for
+	Grid monitoring and is still used for clouds. We analyze its shortcomings when applied to cloud monitoring,
+	and propose a new monitoring system, that we call Rocmon, that sums up Nagios experience with a cloud
+	perspective. Like Nagios, Rocmon is plugin-oriented to be flexible. To be fully inter-operable and long-living,
+	it uses standard tools: the OGF OCCI for the configuration interface, the REST paradigm to take advantage
+	of Web tools, and HTML5 WebSockets for data transfers. The design is checked with an open source Ruby
+	implementation featuring the most relevant aspects.
+\end{quote}
+
+
+\subsection*{Scheduling of the special session}
+
+Soon after the communication that the special session was successfully scheduled come the request to extend it beyond the limits of a regular conference session, limited to a short discussion after the presentation of each paper. The main reason for that was that the meeting was a good occasion to exchange ideas and report about results other than those in the paper. Another was to take advantage of the CLOSER event to disseminate the basic concepts of OCCI.
+
+Therefore we asked, and successfully obtained, an extended schedule for the Special session: a further 45' slot just after the regular schedule, for dissemination and reporting, and another 2 hours slot for further discussion among members of the working group.
+
+\subsection{Unfolding of the Special Session}
+
+During the presentation of the four papers we had more than 10 people in the room, and the discussion after each presentation was lively participated. People gradually left the room at the end of the presentation of the papers, so that the extended time slot was less participated than the first part, although the participants took advantage of the opportunity to report about the issues they wanted to share. Many of the topics introduced during the briefs were in fact procrastinated to the next day.
+
+The extended schedule included three informal presentations:
+
+\begin{itemize}
+\item Review of OCCI 1.2 - summary, status of documents, feedback - Speaker: {\bf Boris Parak}
+\item Implementations of OCCI 1.2: short and long term plans, foresee-able challenges, project road-maps, OCCIware project - Speaker: {\bf Jean Parpaillon}
+\item Perspective on OCCI 2.0: XML rendering, filtering, transport, attribute types refinement - {\bf Augusto Ciuffoletti}
+\end{itemize}
+
+During the following day the three speakers met to have further discussion and plans for future meetings.
+
+\section{Outreach and follow-up}
+
+The event has been mostly advertised through tweets and mail on the OCCI maillist. A summary of the event with links to the slides of all the presentation, the papers and the minutes of the discussions is available at the following link:\\ \href{https://sites.google.com/site/occimeeting/}{https://sites.google.com/site/occimeeting/}.
+
+
+
+
+\end{document}
